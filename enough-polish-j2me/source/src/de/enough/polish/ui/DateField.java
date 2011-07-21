@@ -33,7 +33,9 @@ import javax.microedition.lcdui.Graphics;
 
 //#if polish.android
 	import android.app.DatePickerDialog;
+	import android.app.TimePickerDialog;
 	import android.widget.DatePicker;
+	import android.widget.TimePicker;
 //#endif
 
 import de.enough.polish.util.DateUtil;
@@ -110,7 +112,7 @@ implements
 	//#if false
 	,
 	//#endif
-	DatePickerDialog.OnDateSetListener 
+	DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener 
 //#endif
 {
 	/**
@@ -1267,9 +1269,15 @@ implements
 			} else {
 				tp = TimePoint.now();
 			}
-			//TODO use time picker or similar as well...
-			DatePickerDialog dateDialog = new DatePickerDialog(MidletBridge.getInstance(), this, tp.getYear(), tp.getMonth(), tp.getDay());
-			dateDialog.show();
+			if (this.inputMode == DATE || this.inputMode == DATE_TIME) {
+				DatePickerDialog dateDialog = new DatePickerDialog(MidletBridge.getInstance(), this, tp.getYear(), tp.getMonth(), tp.getDay());
+				dateDialog.show();
+			} else {
+				// this is a time only dialog:
+				boolean is24Hours = true; //TODO make this configurable
+				TimePickerDialog timerDialog = new TimePickerDialog(MidletBridge.getInstance(), this, tp.getHour(), tp.getMinute(), is24Hours );
+				timerDialog.show();
+			}
 		//#endif
 		//#if tmp.useMidp
 			if (this.midpDateField == null) {
@@ -1417,7 +1425,31 @@ implements
 	 * @see android.app.DatePickerDialog.OnDateSetListener#onDateSet(android.widget.DatePicker, int, int, int)
 	 */
 	public void onDateSet(DatePicker picker, int year, int month, int day) {
-		setTimePoint( new TimePoint(year, month, day));
+		TimePoint tp = new TimePoint( getDate() );
+		tp.setYear(year);
+		tp.setMonth(month);
+		tp.setDay(day);
+		setTimePoint( tp );
+		notifyStateChanged();
+		if (this.inputMode == DATE_TIME) {
+			boolean is24Hours = true; //TODO make this configurable
+			TimePickerDialog timerDialog = new TimePickerDialog(MidletBridge.getInstance(), this, tp.getHour(), tp.getMinute(), is24Hours );
+			timerDialog.show();
+		}
+	}
+	//#endif
+
+	//#if polish.android
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.TimePickerDialog.OnTimeSetListener#onTimeSet(android.widget.TimePicker, int, int)
+	 */
+	public void onTimeSet(TimePicker picker, int hour, int minute) {
+		TimePoint tp = new TimePoint( getDate() );
+		tp.setHour(hour);
+		tp.setMinute(minute);
+		setTimePoint( tp );
+		notifyStateChanged();
 	}
 	//#endif
 }
