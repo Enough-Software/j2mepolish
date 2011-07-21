@@ -1,28 +1,32 @@
 //#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.graphics.Region.Op;
+import android.graphics.Canvas;
+import android.os.Looper;
+import android.os.Parcelable;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
+import android.view.View.OnTouchListener;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
-import de.enough.polish.ui.Alert;
-import de.enough.polish.ui.AlertType;
-import de.enough.polish.ui.Command;
+import de.enough.polish.ui.Container;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.NativeDisplay;
 import de.enough.polish.ui.Screen;
 import de.enough.polish.util.ArrayList;
-import de.enough.polish.util.IdentityArrayList;
+
+//#if polish.javaplatform >= Android/1.5
+	import android.view.inputmethod.BaseInputConnection;
+	import android.view.inputmethod.CompletionInfo;
+	import android.view.inputmethod.EditorInfo;
+	import android.view.inputmethod.InputConnection;
+//#endif
 
 /**
  * <code>Display</code> represents the manager of the display and input
@@ -198,10 +202,7 @@ import de.enough.polish.util.IdentityArrayList;
  * 
  * @since MIDP 1.0
  */
-public class AndroidDisplay 
-extends ViewGroup 
-implements NativeDisplay //, OnTouchListener
-{
+public class AndroidDisplay extends View implements NativeDisplay, OnTouchListener{
 	
 	//#if polish.useFullScreen
 		//#define tmp.fullScreen
@@ -217,35 +218,29 @@ implements NativeDisplay //, OnTouchListener
 	
 	/** This instance may be null*/
 	private de.enough.polish.android.lcdui.Canvas currentPolishCanvas;
-	// following variables are implicitly defined by getter- or setter-methods:
+	// following variables are implicitely defined by getter- or setter-methods:
 	private ArrayList<Runnable> seriallyRunnables = new ArrayList<Runnable>();
 	DisplayUtil util;
 
-	private View mainView;
+	
+	//#if polish.skylight
+	private static final Object uiLock = new Object();
+	private static final Object paintLock = new Object();
+	//#endif
+	
+	@Override
+	protected void onRestoreInstanceState(Parcelable state) {
+		//#debug
+		System.out.println("onRestoreInstanceState");
+		
+	}
 
-	private boolean isTextInputEnabled;
-
-	private int positionRight;
-
-	private int positionLeft;
-
-	private int positionBottom;
-
-	private int positionTop;
-
-//	@Override
-//	protected void onRestoreInstanceState(Parcelable state) {
-//		//#debug
-//		System.out.println("onRestoreInstanceState");
-//		super.onRestoreInstanceState(state);
-//	}
-//
-//	@Override
-//	protected Parcelable onSaveInstanceState() {
-//		//#debug
-//		System.out.println("onSaveInstanceState");
-//		return super.onSaveInstanceState();
-//	}
+	@Override
+	protected Parcelable onSaveInstanceState() {
+		//#debug
+		System.out.println("onSaveInstanceState");
+		return null;
+	}
 
 	/**
 	 * Creates a view with the given context
@@ -253,12 +248,303 @@ implements NativeDisplay //, OnTouchListener
 	 */
 	public AndroidDisplay(Context context) {
 		super(context);
+		setOnTouchListener(this);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
+		if(instance == null) {
+			instance = this;
+		}
 		
+		//#if polish.skylight
+		Runnable runnable = new Runnable() {
+			public void run() {
+				while(true) {
+					paintInThread();
+					
+					// Wake up the UI thread.
+					synchronized (uiLock) {
+						uiLock.notify();
+					}
+					
+					// Put the Paint thread to sleep.
+					synchronized (paintLock) {
+						try {
+							paintLock.wait();
+						} catch (InterruptedException e) {
+							System.out.println("XXX The EnoughDrawThread was interrupted:"+e);
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};
+		// The Android Thread API is different from everything else so we hide it.
+		//# Thread painterThread = new Thread(new ThreadGroup("EnoughThreadGroup"),runnable,"EnoughDrawThread",32*1024);
+		//# painterThread.start();
+		//#endif
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.view.View#onDraw(android.graphics.Canvas)
+	 */
+	protected void onDraw(Canvas canvas) {
+		if(this.currentPolishCanvas != null)
+		{
+			if(this.currentPolishCanvas.graphics == null)
+			{
+				this.currentPolishCanvas.graphics = new Graphics(canvas);
+			}
+			//#if polish.skylight
+			synchronized (paintLock) {
+				paintLock.notify();
+			}
+			
+			synchronized (uiLock) {
+				try {
+					uiLock.wait();
+				} catch (InterruptedException e) {
+					System.out.println("XXX The EnoughDrawThread was interrupted:"+e);
+					e.printStackTrace();
+				}
+			}
+			//#else
+			//# paintInThread();
+			//#endif
+		}
+	}
+
+	protected void paintInThread() {
+		if(this.currentPolishCanvas != null) {
+			try {
+				this.currentPolishCanvas.paint(this.currentPolishCanvas.graphics);
+			} catch (Exception e) {
+				//#debug error
+				System.out.println("XXXWarning: unable to paint screen: " + this.currentPolishCanvas + ", dimension=" + this.currentPolishCanvas.getWidth() + "x" + this.currentPolishCanvas.getHeight() + ", isShown=" + this.currentPolishCanvas.isShown() + e );
+			}
+			if(this.seriallyRunnables.size() > 0) {
+				for(int i = 0; i < this.seriallyRunnables.size(); i++) {
+					Runnable runnable = this.seriallyRunnables.get(i);
+					runnable.run();
+				}
+				this.seriallyRunnables.clear();
+			}
+		}
+	}
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+//		if(this.bitmap != null) {
+			//TODO: uncomment if the exceptions remain when the unit test framework is used.
+//			this.bitmap.recycle();
+//		}
+		this.bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		if(this.currentPolishCanvas != null) {
+			//#debug
+			System.out.println("onSizeChanged with width '"+w+"' and height '"+h+"'");
+			this.currentPolishCanvas.sizeChanged(w,h);
+		}
+		MidletBridge.instance.onSizeChanged(w, h);
+	}
+	
+
+	private Screen getCurrentScreen() {
+		Display display = Display.getInstance();
+		if (display == null) {
+			return null;
+		}
+		Displayable disp = display.getNextOrCurrent();
+		if (disp == null || (!(disp instanceof Screen))) {
+			return null;
+		}
+		return (Screen) disp;
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		//#debug
+		System.out.println("AndroidDisplay.onKeyDown: keyCode=" + keyCode + ", flags=" + event.getFlags() + ", action=" + event.getAction() + ", isFromSoftKeyBoard=" + ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD));
+		if(this.currentPolishCanvas == null) {
+			return false;
+		}
+		//#if polish.javaplatform >= Android/1.5
+		if(keyCode == KeyEvent.KEYCODE_ENTER && ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD)) {
+			//#debug
+			System.out.println("Hiding Softkeyboard in onKeyUp");
+			return true;
+		}
+		//#endif
+		if(this.util == null)
+		{
+			this.util = new DisplayUtil(event.getDeviceId());
+		}
+		
+		int key = this.util.handleKey(keyCode, event, this.currentPolishCanvas);
+		//#debug
+		System.out.println("onKeyDown:converted android key code '" + keyCode+"' to ME code '"+key+"'");
+		
+		if(key == -13 || key == -14) {
+//			super.onKeyDown(keyCode, event);
+			return false;
+		}
+		
+		this.currentPolishCanvas.keyPressed(key);
+		//#if !tmp.fullScreen
+			Screen screen = getCurrentScreen();
+			if ((screen == null) || (!screen.keyPressedProcessed)) {			
+				if (keyCode == KeyEvent.KEYCODE_MENU) { // && this.addedCommandMenuItemBridges.size() > 0) {
+					return false;
+				}
+				if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER ) {
+					return MidletBridge.instance.onOK();
+				}
+			}
+		//#endif
+		return true;
+	}
+
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(this.currentPolishCanvas == null) {
+			return false;
+		}
+		//#if polish.javaplatform >= Android/1.5
+		if(keyCode == KeyEvent.KEYCODE_ENTER && ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD)) {
+			//#debug
+			System.out.println("Hiding Softkeyboard");
+			Screen screen = getCurrentScreen();
+			if (screen != null) {
+				boolean hideSoftKeyboard = true;				
+				Container rootContainer = screen.getRootContainer();
+				if (rootContainer != null) {
+					int offset = rootContainer.getScrollYOffset();
+					boolean handled = screen._keyPressed(de.enough.polish.android.lcdui.Canvas.KEY_ANDROID_DOWN)
+									| screen._keyReleased(de.enough.polish.android.lcdui.Canvas.KEY_ANDROID_DOWN);
+					rootContainer.setScrollYOffset(offset, false);
+					if (handled) {
+						Item item = rootContainer.getFocusedChild();
+						if (item != null) {
+							int absY = item.getAbsoluteY();
+							int screenHeight = screen.getScreenHeight();
+							if (absY > screenHeight / 3 || absY < rootContainer.relativeY) {
+								int newYOffset = - item.relativeY;
+								int contHeight = rootContainer.getItemAreaHeight();
+								if (contHeight < screen.getScreenContentHeight()) {
+									newYOffset -= rootContainer.relativeY - screen.getScreenContentY();
+								}
+								screen.setScrollYOffset( newYOffset, true);
+								rootContainer.resetLastPointerPressYOffset();
+							}
+							hideSoftKeyboard = false;
+							
+						}
+					}
+				}
+				if (hideSoftKeyboard){
+					MidletBridge.instance.hideSoftKeyboard();
+				}
+				return true;
+			} 
+		}
+		//#endif
+		if(this.util == null)
+		{
+			this.util = new DisplayUtil(event.getDeviceId());
+		}
+		
+		int key = this.util.handleKey(keyCode, event, this.currentPolishCanvas);
+		
+		
+		//#debug
+		System.out.println("onKeyUp:converted android key code '" + keyCode+"' to ME code '"+key+"'");
+		this.currentPolishCanvas.keyReleased(key);
+		//#if !tmp.fullScreen
+			if (keyCode == KeyEvent.KEYCODE_MENU) { // && this.addedCommandMenuItemBridges.size() > 0) {
+				Screen screen = getCurrentScreen();
+				if ((screen == null) || (!screen.keyPressedProcessed)) {			
+					return false;
+				}
+			}
+			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				return MidletBridge.instance.onBack();
+			}
+		//#endif
+		
+		return true;
 	}
 	
 	
+	
+	@Override
+	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event)
+	{
+		//#debug
+		System.out.println("onMultiple: key event: characters=[" + event.getCharacters() + "], number=[" + event.getNumber() + "], unicode/meta=[" + event.getUnicodeChar(event.getMetaState()) + "], isSystem=" + event.isSystem() + ",  keyCode=[" + keyCode + "/" + event.getKeyCode() + "], action=" + event.getAction() + ", repeat=" + repeatCount + ", metaState=" + event.getMetaState() + ", describeContents=" + event.describeContents() + ", flags=" + event.getFlags());
+		if(this.currentPolishCanvas == null) {
+			return false;
+		}
+		if(this.util == null)
+		{
+			this.util = new DisplayUtil(event.getDeviceId());
+		}
+		
+		int key = this.util.handleKey(keyCode, event, this.currentPolishCanvas);
+		if (repeatCount > 0) {
+			this.currentPolishCanvas.keyRepeated(key);
+		} else {
+			if (key == 0) {
+				String characters = event.getCharacters();
+				if (characters != null) {
+					for (int i=0; i<characters.length();i++) {
+						key = characters.charAt(i);
+						this.currentPolishCanvas.keyPressed(key);
+						this.currentPolishCanvas.keyReleased(key);
+					}
+					return true;
+				}
+			}
+			this.currentPolishCanvas.keyPressed(key);
+			this.currentPolishCanvas.keyReleased(key);
+		}
+		return true;
+		//return super.onKeyMultiple(keyCode, repeatCount, event);
+	}
+
+	/**
+	 * 
+	 * @param x physical x position
+	 * @param y physical y position
+	 */
+	private void onPointerPressed(float x, float y) {
+		//#debug
+		System.out.println("onPointerPressed.x="+x+".y="+y);
+		if(this.currentPolishCanvas == null) {
+			return;
+		}
+		int truncatedX = (int)x;
+		int truncatedY = (int)y;
+		this.currentPolishCanvas.pointerPressed(truncatedX,truncatedY);
+	}
+	
+	private void onPointerReleased(float x, float y) {
+		//#debug
+		System.out.println("onPointerReleased.x="+x+".y="+y);
+		if(this.currentPolishCanvas == null) {
+			return;
+		}
+		int truncatedX = (int)x;
+		int truncatedY = (int)y;
+		this.currentPolishCanvas.pointerReleased(truncatedX,truncatedY);
+	}
+	
+	private void onPointerDragged(float x, float y) {
+		//#debug
+		System.out.println("onPointerDragged.x="+x+".y="+y);
+		if(this.currentPolishCanvas == null) {
+			return;
+		}
+		int truncatedX = (int)x;
+		int truncatedY = (int)y;
+		this.currentPolishCanvas.pointerDragged(truncatedX,truncatedY);
+	}
 	
 	/////////////////////
 
@@ -416,11 +702,9 @@ implements NativeDisplay //, OnTouchListener
 			return instance;
 		}
 		if(m == null) {
-			//throw new NullPointerException("The display is requested without providing a MIDlet reference.");
-			instance = new AndroidDisplay(null);
-		} else {
-			instance = new AndroidDisplay(m._getMidletBridge());
+			throw new NullPointerException("The display is requested without providing a MIDlet reference.");
 		}
+		instance = new AndroidDisplay(m._getMidletBridge());
 		return instance;
 	}
 	
@@ -487,7 +771,8 @@ implements NativeDisplay //, OnTouchListener
 	 * @return number of colors
 	 */
 	public int numColors() {
-		return 65536;
+		return 32000;
+		// TODO implement numColors
 	}
 
 	/**
@@ -502,7 +787,8 @@ implements NativeDisplay //, OnTouchListener
 	 * @since MIDP 2.0
 	 */
 	public int numAlphaLevels() {
-		return 256;
+		return 64;
+		// TODO implement numAlphaLevels
 	}
 
 	/**
@@ -647,48 +933,30 @@ implements NativeDisplay //, OnTouchListener
 	 *            the Displayable requested to be made current; null is allowed
 	 * @see #getCurrent()
 	 */
-//	public void setCurrent(de.enough.polish.android.lcdui.Canvas nextDisplayable) {
-//		if (this.currentPolishCanvas != null) {
-//			this.currentPolishCanvas._hideNotify();
-//		}
-//		//#debug
-//		System.out.println("Setting currentCanvas to '"+nextDisplayable+"'");
-//		this.currentPolishCanvas = nextDisplayable;
-//		if(nextDisplayable != null) {
-//			nextDisplayable.setBitmap(this.bitmap);
-//			nextDisplayable._showNotify();
-//		}
-//		postInvalidate();
-//	}
-	
-	public void setCurrent(de.enough.polish.ui.Display nextDisplayable) {
-		setCurrent((Displayable)nextDisplayable);
+	public void setCurrent(de.enough.polish.android.lcdui.Canvas nextDisplayable) {
+		if (this.currentPolishCanvas != null) {
+			this.currentPolishCanvas._hideNotify();
+		}
+		//#debug
+		System.out.println("Setting currentCanvas to '"+nextDisplayable+"'");
+		this.currentPolishCanvas = nextDisplayable;
+		if(nextDisplayable != null) {
+			nextDisplayable.setBitmap(this.bitmap);
+			nextDisplayable._showNotify();
+		}
+		postInvalidate();
 	}
 	
 
 	public void setCurrent(Displayable nextDisplayable) {
-		//#debug
-		System.out.println("AndroidDisplay.setCurrent: "  + nextDisplayable);
-		if (nextDisplayable instanceof Canvas) {
-			Canvas androidCanvas = (Canvas)nextDisplayable;
-			CanvasBridge bridge = androidCanvas._getBridge();
-			if (bridge == null) {
-				bridge = new CanvasBridge(getContext());
-				bridge.setCanvas(androidCanvas);
+		if (nextDisplayable instanceof Dialog) {
+			if (Looper.myLooper() == null) {
+				Looper.prepare();
 			}
-			if (this.mainView != null) {
-				removeAllViews();
-				if (this.mainView instanceof CanvasBridge) {
-					((CanvasBridge)this.mainView).hideNotify();
-				}
-				removeView( this.mainView );
-			}
-			this.mainView = bridge;
-			bridge.showNotify();
-			addView( this.mainView, 0 );
-			this.mainView.requestFocus();
+			Dialog window = (Dialog) nextDisplayable;
+			window.show();
 			return;
-		}		
+		}
 	}
 
 	/**
@@ -864,19 +1132,6 @@ implements NativeDisplay //, OnTouchListener
 	public void callSerially(Runnable r) {
 		this.seriallyRunnables.add(r);
 	}
-	
-
-	public void callSeriallies() {
-		if (this.seriallyRunnables.size() > 0) {
-			Runnable[] runnables = this.seriallyRunnables.toArray(new Runnable[ this.seriallyRunnables.size()]);
-			this.seriallyRunnables.clear();
-			for (int i = 0; i < runnables.length; i++) {
-				Runnable runnable = runnables[i];
-				runnable.run();
-			}
-		}
-	}
-	
 
 	/**
 	 * Requests a flashing effect for the device's backlight. The flashing
@@ -999,75 +1254,15 @@ implements NativeDisplay //, OnTouchListener
 	}
 
 	public boolean notifyDisplayableChange(
-			de.enough.polish.ui.Displayable currentDisp,
-			de.enough.polish.ui.Displayable nextDisp) 
+			de.enough.polish.ui.Displayable currentDisplayable2,
+			de.enough.polish.ui.Displayable nextDisplayable) 
 	{
-		//#if polish.useNativeAlerts
-			if (nextDisp instanceof Alert) {
-				final Alert alert = (Alert) nextDisp;
-				alert.setNextDisplayable(currentDisp); 
-				AlertDialog.Builder builder = new AlertDialog.Builder(MidletBridge.getInstance());
-				builder.setTitle(alert.getTitle());
-				if (alert.getTitle() != alert.getString()) {
-					builder.setMessage(alert.getString());
-				}
-				if (alert.getType() == AlertType.INFO || alert.getType() == AlertType.CONFIRMATION) {
-					builder.setIcon(android.R.drawable.ic_dialog_info);
-				} else {
-					builder.setIcon(android.R.drawable.ic_dialog_alert);					
-				}
-				IdentityArrayList commandsList = alert._commands;
-				if (commandsList != null) {
-					int lastIndex = Math.min(3, commandsList.size()) - 1;
-					boolean positiveHandled = false;
-					boolean negativeHandled = false;
-					boolean neutralHandled = false;
-					for (int i=0; i <= lastIndex; i++) {
-						Command command = (Command) commandsList.get(i);
-						int type = command.getCommandType();
-						if (type == Command.OK || type == Command.SCREEN || type == Command.ITEM) {
-							if (!positiveHandled) {
-								positiveHandled = true;
-								builder.setPositiveButton(command.getLabel(), new CommandClickHandler(alert, command));
-							} else if (!neutralHandled) {
-								neutralHandled = true;
-								builder.setNeutralButton(command.getLabel(), new CommandClickHandler(alert, command));
-							}
-						} else {
-							if (!negativeHandled) {
-								negativeHandled = true;
-								builder.setNegativeButton(command.getLabel(), new CommandClickHandler(alert, command));
-							} else if (!neutralHandled) {
-								neutralHandled = true;
-								builder.setNeutralButton(command.getLabel(), new CommandClickHandler(alert, command));
-							}
-						}
-					}
-					//TODO handle cases when there are more than 3 commands or more than 2 positive/negative commands
-				}
-
-//				public void onClick(DialogInterface dialog, int which) {
-//				System.out.println("Neutral Button Clicked");
-//				AlertDialog ad=builder.create();
-//				ad.cancel();
-//				}
-
-//				builder.setOnCancelListener(new OnCancelListener() {
-//					public void onCancel(DialogInterface dialog) {
-//						System.out.println(" the cancel listner invoked");
-//					}
-//				});
-
-				builder.show();
-				return true;
-			}
-		//#endif
 		return false;
 	}
 
-//	public void setCurrent(de.enough.polish.ui.Display nextDisplayable) {
-//		//#= setCurrent((de.enough.polish.android.lcdui.Canvas)nextDisplayable);
-//	}
+	public void setCurrent(de.enough.polish.ui.Display nextDisplayable) {
+		//#= setCurrent((de.enough.polish.android.lcdui.Canvas)nextDisplayable);
+	}
 
 //	public static AndroidDisplay getInstance(MIDlet dlet) {
 //		if(instance == null) {
@@ -1076,25 +1271,25 @@ implements NativeDisplay //, OnTouchListener
 //		return instance;
 //	}
 
-//	public boolean onTouch(View arg0, MotionEvent event) {
-//		int action = event.getAction();
-//		float x = event.getX();
-//		float y = event.getY();
-//		//#debug
-//		System.out.println("onTouchEvent: action="+action + ", x=" + x + ", y=" + y);
-//		switch(action) {
-//			case MotionEvent.ACTION_DOWN:
-//				onPointerPressed(x,y);
-//				return true;
-//			case MotionEvent.ACTION_UP:
-//				onPointerReleased(x,y);
-//				return true;
-//			case MotionEvent.ACTION_MOVE:
-//				onPointerDragged(x,y);
-//				return true;
-//			default: return false;
-//		}
-//	}
+	public boolean onTouch(View arg0, MotionEvent event) {
+		int action = event.getAction();
+		float x = event.getX();
+		float y = event.getY();
+		//#debug
+		System.out.println("onTouchEvent: action="+action + ", x=" + x + ", y=" + y);
+		switch(action) {
+			case MotionEvent.ACTION_DOWN:
+				onPointerPressed(x,y);
+				return true;
+			case MotionEvent.ACTION_UP:
+				onPointerReleased(x,y);
+				return true;
+			case MotionEvent.ACTION_MOVE:
+				onPointerDragged(x,y);
+				return true;
+			default: return false;
+		}
+	}
 
 	public void shutdown() {
 		if(this.currentPolishCanvas != null) {
@@ -1112,268 +1307,52 @@ implements NativeDisplay //, OnTouchListener
 			setCurrent(this.currentPolishCanvas);
 		}
 	}
-	
-	public void onShow(AndroidItemView androidView) {
-		addView( androidView.getAndroidView() );
-	}
-	
-	public void onHide(AndroidItemView androidView) {
-		removeView( androidView.getAndroidView() );
-	}
 
-	
-//	//#if polish.javaplatform >= Android/1.5
-//	@Override
-//	public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-//		editorInfo.imeOptions |= EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_NONE;
-//        //return new PolishInputConnection(this, false);
-//		return new BaseInputConnection(this, false) {
-//			private boolean isTextInputEnabled;
-//
-//			public boolean deleteSurroundingText(int leftLength, int rightLength) {
-//				// Emulate the del key. This is needed for the Sony Ericsson Xperia X8 device which does not send the raw key event
-//				// but calls this method to communicate a deletion. No other device behaves like this.
-//				onKeyDown(KeyEvent.KEYCODE_DEL, delKeyDownEvent);
-//				onKeyUp(KeyEvent.KEYCODE_DEL, delKeyUpEvent);
-//				return super.deleteSurroundingText(leftLength, rightLength);
-//			}
-//		};
-//	}
-//	//#endif
-
-	/*
+	//#if polish.javaplatform >= Android/1.5
 	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		System.out.println("AndroidDisplay.onLayout: " + left + ", " + top + ", " + right + ", " + bottom);
-		this.positionLeft = left;
-		this.positionRight = right;
-		this.positionTop = top;
-		this.positionBottom = bottom;
-		int count = getChildCount();
-		System.out.println("layout: child count=" + count);
-		for (int i = 0; i < count; i++) {
-			View child = getChildAt(i);
-			if (i == 0) {
-				child.layout(left, 0, right, bottom - top);
-			} else if (child == this.editView){
-				TextField textField = this.editView.getTextField();
-				if (textField != null) {
-					this.editView.measure( this.positionRight - this.positionLeft, this.positionBottom - this.positionTop );
-					int absoluteX = textField.getAbsoluteX() + textField.getContentX();
-					int absoluteY = textField.getAbsoluteY() + textField.getContentY();
-					this.editView.layout( absoluteX, absoluteY, absoluteX + textField.getContentWidth(), absoluteY + textField.getContentHeight() );
-				}
-			} else {
-				System.out.println("AndroidDisplay: layouting child " + child);
-				int width = right-left;
-				int height = bottom-top;
-				LayoutParams params = child.getLayoutParams();
-				params.width = 100;
-				params.height = 100;
-				child.setLayoutParams(params);
-				child.measure(width, height);
-				System.out.println("AndroidDisplay: After measure child: dimension=" + child.getMeasuredWidth() + "x" + child.getMeasuredHeight());
-				child.layout(50, 50, 150, 150);
-				//child.layout(0, 0, 150, 150);
-				child.requestFocus();
-				bringChildToFront(child);
+	public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
+		editorInfo.imeOptions |= EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_NONE;
+        //return new PolishInputConnection(this, false);
+		return new BaseInputConnection(this, false) {
+			public boolean deleteSurroundingText(int leftLength, int rightLength) {
+				// Emulate the del key. This is needed for the Sony Ericsson Xperia X8 device which does not send the raw key event
+				// but calls this method to communicate a deletion. No other device behaves like this.
+				onKeyDown(KeyEvent.KEYCODE_DEL, delKeyDownEvent);
+				onKeyUp(KeyEvent.KEYCODE_DEL, delKeyUpEvent);
+				return super.deleteSurroundingText(leftLength, rightLength);
 			}
-		}
+
+			/* (non-Javadoc)
+			 * @see android.view.inputmethod.BaseInputConnection#commitCompletion(android.view.inputmethod.CompletionInfo)
+			 */
+			public boolean commitCompletion(CompletionInfo text) {
+				System.out.println("commitCompletion: " + text + ": " + text.getText());
+				return super.commitCompletion(text);
+			}
+
+			/* (non-Javadoc)
+			 * @see android.view.inputmethod.BaseInputConnection#commitText(java.lang.CharSequence, int)
+			 */
+			public boolean commitText(CharSequence text, int startPos) {
+				System.out.println("commitText: " + text + ", startPost=" + startPos);
+				return super.commitText(text, startPos);
+			}
+			
+		};
 	}
-	*/
 
-	
-	
-	//#if polish.useNativeAlerts
-		private static class CommandClickHandler implements DialogInterface.OnClickListener {
-			private Alert alert;
-			private Command command;
-			
-			
-			
-			public CommandClickHandler(Alert alert, Command command) {
-				this.alert = alert;
-				this.command = command;
-			}
+	@Override
+	public boolean onCheckIsTextEditor() {
+		return true;
+	}
 
-
-
-			public void onClick(DialogInterface dialog, int which) {
-				this.command.commandAction(null, this.alert);
-			}
-			
-		}
+	@Override
+	public boolean checkInputConnectionProxy(View view) {
+		//#debug
+		System.out.println("XXX checkInputconnectionProxy called with view '"+view+"'");
+		return true;
+	}
 	//#endif
 
-	@Override
-	public void dispatchDraw(android.graphics.Canvas canvas) {
-        final int count = getChildCount();
-        //int yOffset = 0;
-        Rect clip = null;
-        Screen screen = getCurrentPolishScreen();
-		if (screen != null) {
-			//yOffset = screen.getRootContainer().getScrollYOffset();
-			int contX = screen.getScreenContentX();
-			int contY = screen.getScreenContentY();
-    		clip = new Rect( contX, contY, contX + screen.getScreenContentWidth(), contY + screen.getScreenContentHeight() );
-		}
-    	this.mainView.draw(canvas);
-    	if (clip != null) {
-        	canvas.save();
-    		canvas.clipRect(clip, Op.REPLACE);
-    	}
-        for (int i = 1; i < count; i++) {
-            View child = getChildAt(i);
-            Item item = ((AndroidItemView) child).getPolishItem();
-            int x = item.getAbsoluteX() + item.getContentX();
-            int y = item.getAbsoluteY() + item.getContentY();
-            if (y != child.getTop()) {
-            	child.layout(x, y, x + child.getMeasuredWidth(), y + child.getMeasuredHeight());
-            }
-        	canvas.translate(x, y);
-        	child.draw(canvas);
-        	canvas.translate(-x, -y);
-        }
-		if (clip != null) {
-			canvas.restore();
-		}
-	}
-
-		
-		
-	 private Screen getCurrentPolishScreen() {
-		Displayable displayable = Display.getInstance().getCurrent();
-		if (displayable instanceof Screen) {
-			return (Screen) displayable;
-		}
-		return null;
-	}
-
-
-
-		private int line_height;
-
-		    public static class LayoutParams extends ViewGroup.LayoutParams {
-		        public final int horizontal_spacing;
-		        public final int vertical_spacing;
-
-		        /**
-		         * @param horizontal_spacing Pixels between items, horizontally
-		         * @param vertical_spacing Pixels between items, vertically
-		         */
-		        public LayoutParams(int horizontal_spacing, int vertical_spacing) {
-		            super(0, 0);
-		            this.horizontal_spacing = horizontal_spacing;
-		            this.vertical_spacing = vertical_spacing;     
-		        }
-		    }
-
-		   
-		    @Override
-		    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		        int width = MeasureSpec.getSize(widthMeasureSpec);
-		        int height = MeasureSpec.getSize(heightMeasureSpec);
-		        this.mainView.measure(width, height);
-		        // other views are measured by the J2ME Polish items
-		        setMeasuredDimension(width, height);
-//		        
-//		        final int count = getChildCount();
-//		        System.out.println("measuring " + count + " views");
-//		        for (int i = 0; i < count; i++) {
-//		            final View child = getChildAt(i);
-//		            System.out.println("view " + i + "=" + child);
-//		        }
-//		        int line_height = 0;
-//
-//		        int xpos = getPaddingLeft();
-//		        int ypos = getPaddingTop();
-//		        // measure main view:
-//		        getChildAt(0).measure(width, height);
-//		        // measure native AndroidItemViews and the main view:
-//		        for (int i = 1; 0 < count; i++) {
-//		            final View child = getChildAt(i);
-//		            AndroidItemView itemView = (AndroidItemView) child;
-//		            Item item = itemView.getPolishItem();
-//		            //if (child.getVisibility() != GONE) {
-//		                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-//		                int availableChildWidth;
-//		                if (item.getAvailableContentWidth() < item.itemWidth) {
-//		                	availableChildWidth = item.getAvailableContentWidth();
-//		                } else {
-//		                	availableChildWidth = item.getContentWidth();
-//		                }
-//		                int availableChildHeight = item.getContentHeight();
-//		                child.measure(
-//		                        MeasureSpec.makeMeasureSpec(availableChildWidth, MeasureSpec.EXACTLY),
-//		                        MeasureSpec.makeMeasureSpec(availableChildHeight, MeasureSpec.AT_MOST));
-//
-//		                final int childw = child.getMeasuredWidth();
-//		                System.out.println("child-width=" + childw + " of " + child);
-//		                line_height = Math.max(line_height, child.getMeasuredHeight() + lp.vertical_spacing);
-//
-//		                if (xpos + childw > width) {
-//		                    xpos = getPaddingLeft();
-//		                    ypos += line_height;
-//		                }
-//
-//		                xpos += childw + lp.horizontal_spacing;
-//		            //}
-//		        }
-//		        this.line_height = line_height;
-//
-//		        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED){
-//		            height = ypos + line_height;
-//
-//		        } else if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST){
-//		            if (ypos + line_height < height){
-//		                height = ypos + line_height;
-//		            }
-//		        }
-		    }
-
-		    @Override
-		    protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
-		        return new LayoutParams(1, 1); // default of 1px spacing
-		    }
-
-		    @Override
-		    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-		        if (p instanceof LayoutParams) {
-		            return true;
-		        }
-		        return false;
-		    }
-
-		    @Override
-		    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		    	int xpos, ypos;
-		        final int count = getChildCount();
-		        for (int i = 0; i < count; i++) {
-		            final View child = getChildAt(i);
-		            if (child == this.mainView) {
-		            	child.layout(0, 0, r-l, b-t);
-		            } else {
-			            AndroidItemView itemView = (AndroidItemView) child;
-			            Item item = itemView.getPolishItem();
-		                xpos = item.getAbsoluteX() + item.getContentX();
-		                ypos = item.getAbsoluteY() + item.getContentY();
-		                child.layout(xpos, ypos, xpos + child.getMeasuredWidth(), ypos + child.getMeasuredHeight());
-		            }
-		        }
-		    }
-
-		
-//		    public void addView(View view) {
-//		    	System.out.println("ADDING VIEW " + view);
-//		    	super.addView(view);
-//		    }
-//		    
-//		    
-//		    public void addView(View view, int pos) {
-//		    	System.out.println("ADDING VIEW " + view + " AT POS " + pos);
-//		    	super.addView(view, pos);
-//		    }
-		
+	
 }
-
-

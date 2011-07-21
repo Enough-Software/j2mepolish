@@ -4,6 +4,7 @@ package de.enough.polish.android.lcdui;
 import android.graphics.Bitmap;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
+import de.enough.polish.ui.Displayable;
 
 /**
  * The <code>Canvas</code> class is a base class for writing
@@ -305,7 +306,8 @@ import de.enough.polish.android.midlet.MidletBridge;
  * 
  * @since MIDP 1.0
  */
-public abstract class Canvas 
+public abstract class Canvas
+implements Displayable
 {
 	protected android.graphics.Canvas androidCanvas = new android.graphics.Canvas();
 	private boolean _isShown;
@@ -554,6 +556,7 @@ public abstract class Canvas
 	public static final int KEY_ANDROID_7 = 14;
     public static final int KEY_ANDROID_8 = 15;
     public static final int KEY_ANDROID_9 = 16;
+	private CanvasBridge canvasBridge;
     
     
 	//TODO: Check if we need to access the field directly. Whats wrong with getHeight?
@@ -593,6 +596,7 @@ public abstract class Canvas
 		
 		return 0;
 	}
+	
     /**
 	 * Gets the height in pixels of the displayable area available to the
 	 * application. The value returned is appropriate for the particular
@@ -605,10 +609,32 @@ public abstract class Canvas
 	 * @since MIDP 2.0
 	 */
 	public int getHeight() {
-		Bitmap bitmap = AndroidDisplay.getDisplay(MIDlet.midletInstance).bitmap;
-		int height = bitmap.getHeight();
-		return height;
+		if (this.canvasBridge != null) {
+			return this.canvasBridge.getAvailableHeight();
+		}
+		//TODO implement getHeight()
+		return 99;
 	}
+	
+	/**
+	 * Gets the width in pixels of the displayable area available to the
+	 * application. The value returned is appropriate for the particular
+	 * <code>Displayable</code> subclass. This value may depend on how the
+	 * device uses the display and may be affected by the presence of a title, a
+	 * ticker, or commands. This method returns the proper result at all times,
+	 * even if the <code>Displayable</code> object has not yet been shown.
+	 * 
+	 * @return width of the area available to the application
+	 * @since MIDP 2.0
+	 */
+	public int getWidth() {
+		if (this.canvasBridge != null) {
+			return this.canvasBridge.getAvailableWidth();
+		}
+		//TODO implement getWidth()
+		return 99;
+	}
+	
     /**
 	 * Gets a key code that corresponds to the specified game action on the
 	 * device.  The implementation is required to provide a mapping for every
@@ -683,24 +709,7 @@ public abstract class Canvas
 	public String getTitle() {
 		return this.title;
 	}
-    /**
-	 * Gets the width in pixels of the displayable area available to the
-	 * application. The value returned is appropriate for the particular
-	 * <code>Displayable</code> subclass. This value may depend on how the
-	 * device uses the display and may be affected by the presence of a title, a
-	 * ticker, or commands. This method returns the proper result at all times,
-	 * even if the <code>Displayable</code> object has not yet been shown.
-	 * 
-	 * @return width of the area available to the application
-	 * @since MIDP 2.0
-	 */
-	public int getWidth() {
-		Bitmap bitmap = AndroidDisplay.getDisplay(MIDlet.midletInstance).bitmap;
-		int width = bitmap.getWidth();
-		//#debug
-		System.out.println("AndroidDisplayable.getWidth:"+width);
-		return width;
-	}
+    
     /**
 	 * Checks if the platform supports pointer press and release events.
 	 * 
@@ -740,7 +749,7 @@ public abstract class Canvas
 	 */
 	public boolean isDoubleBuffered()
 	{
-		return false;
+		return true;
 		//TODO implement isDoubleBuffered
 	}
 
@@ -818,17 +827,20 @@ public abstract class Canvas
 	 */
 	public final void repaint()
 	{
-		AndroidDisplay display = AndroidDisplay.getInstance();
-		
-		if(display != null)
-		{
-			display.postInvalidate();
+		if (this.canvasBridge != null) {
+			this.canvasBridge.postInvalidate();
 		}
-		else
-		{
-			//#debug error
-			System.out.println("illegal call of Canvas.repaint(), canvas has no display, call setCurrent()");
-		}
+//		AndroidDisplay display = AndroidDisplay.getInstance();
+//		
+//		if(display != null)
+//		{
+//			display.postInvalidate();
+//		}
+//		else
+//		{
+//			//#debug error
+//			System.out.println("illegal call of Canvas.repaint(), canvas has no display, call setCurrent()");
+//		}
 	}
 
 	/**
@@ -876,17 +888,20 @@ public abstract class Canvas
 	 */
 	public final void repaint(int x, int y, int width, int height)
 	{
-		AndroidDisplay display = AndroidDisplay.getInstance();
-		
-		if(display != null)
-		{
-			display.postInvalidate();
+		if (this.canvasBridge != null) {
+			this.canvasBridge.postInvalidate( x, y, x + width, y + height );
 		}
-		else
-		{
-			//#debug error
-			System.out.println("illegal call of Canvas.repaint(), canvas has no display, call setCurrent()");
-		}
+//		AndroidDisplay display = AndroidDisplay.getInstance();
+//		
+//		if(display != null)
+//		{
+//			display.postInvalidate();
+//		}
+//		else
+//		{
+//			//#debug error
+//			System.out.println("illegal call of Canvas.repaint(), canvas has no display, call setCurrent()");
+//		}
 	}
 
 	/**
@@ -1243,14 +1258,31 @@ public abstract class Canvas
 	 * <code>showNotify</code>, <code>hideNotify</code>, and
 	 * <code>paint</code> methods.</p>
 	 * 
-	 * @param w - the new width in pixels of the drawable area of the Canvas
-	 * @param h - the new height in pixels of the drawable area of the Canvas
+	 * @param w the new width in pixels of the drawable area of the Canvas
+	 * @param h the new height in pixels of the drawable area of the Canvas
 	 * @see javax.microedition.lcdui.Displayable#sizeChanged(int, int)
 	 * @since  MIDP 2.0
 	 */
-	protected void sizeChanged(int w, int h)
+	public void sizeChanged(int w, int h)
 	{
-		//TODO implement sizeChanged
+		// let subclasses override this
+	}
+	
+	public void  setTicker(de.enough.polish.ui.Ticker ticker) {
+		//TODO implement setTicker
+	}
+	
+	public de.enough.polish.ui.Ticker getPolishTicker() {
+		return null;
+		//TODO implement getPolishTicker()
+	}
+
+	public void _setBridge(CanvasBridge bridge) {
+		this.canvasBridge = bridge;
+	}
+	
+	public CanvasBridge _getBridge() {
+		return this.canvasBridge;
 	}
 	
 	

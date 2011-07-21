@@ -38,6 +38,10 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
+//#if polish.android
+	import android.view.View.MeasureSpec;
+//#endif
+
 //#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android)
 	import de.enough.polish.predictive.TextBuilder;
 	import de.enough.polish.predictive.trie.TrieProvider;
@@ -72,6 +76,8 @@ import net.rim.device.api.ui.text.TextFilter;
 //#endif
 
 //#if polish.android
+import de.enough.polish.android.lcdui.AndroidDisplay;
+import de.enough.polish.android.lcdui.AndroidTextField;
 import de.enough.polish.android.midlet.MidletBridge;
 //#endif
 
@@ -780,7 +786,7 @@ public class TextField extends StringItem
   	/** valid input characters for domain names, apart from 0..9 and a..z. */
   	private static final String VALID_DOMAIN_CHARACTERS = "._-";
 	private int maxSize;
-	private int constraints;
+	private int constraints = -1;
 	//#ifdef polish.css.textfield-caret-color
 		private int caretColor = -1;
 	//#endif
@@ -963,6 +969,9 @@ public class TextField extends StringItem
 		private long deleteKeyRepeatCount;
 	//#endif
 	protected char emailSeparatorChar = ';';
+	//#if polish.android
+		private AndroidTextField _androidTextField;
+	//#endif
 	//#if polish.blackberry
 		private int originalContentWidth;
 		private PolishTextField editField;
@@ -1025,16 +1034,11 @@ public class TextField extends StringItem
 		//#define tmp.supportsAsciiKeyMap
 	//#endif
 	private boolean isKeyPressedHandled;
-	
-	//#if polish.javaplatform >= Android/1.5
-		private long androidFocusedTime;
-		private long androidLastPointerPressedTime;
-		private long androidLastInvalidCharacterTime;
-	//#endif
 	private int numberOfDecimalFractions = 2;
 
+
 	//#if polish.TextField.useVirtualKeyboard
-	static IntHashMap keyboardViews = new IntHashMap();
+		static IntHashMap keyboardViews = new IntHashMap();
 	//#endif
 
 	//#if tmp.useDynamicCharset
@@ -1256,7 +1260,6 @@ public class TextField extends StringItem
 				charactersKeyPound = " ";
 			}
 		//#endif
-		this.constraints = constraints;
 		this.maxSize = maxSize;
 		if (label != null) {
 			this.title = label;
@@ -1447,21 +1450,47 @@ public class TextField extends StringItem
 	{
 		//#debug
 		System.out.println("setString [" + text + "]"); // for textfield [" + (this.label != null ? this.label.getText() : "no label") + "].");
+		
+		//#if polish.android
+			int cursorAdjustment = 0;
+		//#endif
 		if (text != null && text.length() > 0) {
 			int fieldType = this.constraints & 0xffff;
 			if (fieldType == FIXED_POINT_DECIMAL) {
 				int lengthBefore = text.length();
 				text = convertToFixedPointDecimal(text, true);
-				//#if !polish.blackberry
-				if (text.length() > lengthBefore) {
-					setCaretPosition( getCaretPosition() + text.length() - lengthBefore);
-				}
+				int lengthAfter = text.length();
+				//#if polish.android
+					if (lengthAfter > lengthBefore) {
+						cursorAdjustment = lengthAfter - lengthBefore;
+					} else if (this.text != null && this.text.length() > 0 && this.text.charAt(0) == '0') {
+						cursorAdjustment = 1;
+					}
+				//#elif !polish.blackberry
+					if (lengthAfter > lengthBefore) {
+						setCaretPosition( getCaretPosition() + lengthAfter - lengthBefore);
+					}
 				//#endif
 			}
 		}
 		//#if tmp.useNativeTextBox
 			if (this.midpTextBox != null) {
 				this.midpTextBox.setString( text );
+			}
+		//#endif
+		//#if polish.android
+			if (this._androidTextField != null) {
+				if (text == null) {
+					text = "";
+				}
+				String currentText = this._androidTextField.getText().toString();
+				if (!currentText.equals(text)) {
+					System.out.println("SETTING TEXT [" + text + "]");
+					this._androidTextField.setTextKeepState(text);
+					if (cursorAdjustment != 0) {
+						this._androidTextField.moveCursor( cursorAdjustment );
+					}
+				}
 			}
 		//#endif
 		//#if polish.blackberry
@@ -1891,27 +1920,29 @@ public class TextField extends StringItem
 	 */
 	public int getCaretPosition()
 	{
-		//#ifdef tmp.allowDirectInput
+		int curPos = 0;
+		//#if polish.android
+			curPos = this._androidTextField.getCursorPosition();
+		//#elif tmp.allowDirectInput
 			if (this.enableDirectInput) {
-				return this.caretPosition;
+				curPos = this.caretPosition;
 			//#if tmp.useNativeTextBox
 			} else if (this.midpTextBox != null) {
-				return this.midpTextBox.getCaretPosition();
+				curPos = this.midpTextBox.getCaretPosition();
 			//#endif
 			}
-			//# return 0;
 		//#elif polish.blackberry
-			//# return this.editField.getInsertPositionOffset();
+			curPos = this.editField.getInsertPositionOffset();
 		//#elif tmp.forceDirectInput
-			//# return this.caretPosition;
+			curPos = this.caretPosition;
 		//#else
 			//#ifdef tmp.useNativeTextBox
 				if (this.midpTextBox != null) {
-					return this.midpTextBox.getCaretPosition();
+					curPos = this.midpTextBox.getCaretPosition();
 				}
 			//#endif
-			return 0;
 		//#endif
+		return curPos;
 	}
 	
 	/**
@@ -1921,7 +1952,13 @@ public class TextField extends StringItem
 	 * @param position the new caret position,  0 puts the caret at the start of the line, getString().length moves the caret to the end of the input.
 	 */
 	public void setCaretPosition(int position) {
-		//#if polish.blackberry
+		//#if polish.android
+			try {
+				this._androidTextField.setSelection(position);
+			} catch (IndexOutOfBoundsException e) {
+				// ignore
+			}
+		//#elif polish.blackberry
 			Object bbLock = Application.getEventLock();
 			synchronized ( bbLock )
 			{
@@ -1983,11 +2020,28 @@ public class TextField extends StringItem
 	 */
 	public void setConstraints(int constraints)
 	{
+		if (constraints == this.constraints) {
+			// ignore
+			return;
+		}
 		this.constraints = constraints;
 		int fieldType = constraints & 0xffff;
 		this.isUneditable = (constraints & UNEDITABLE) == UNEDITABLE;
 		//#if polish.css.text-wrap
 			this.animateTextWrap = this.isUneditable;
+		//#endif
+		//#if polish.android
+			if (this.isShown) {
+				if (this._androidView != null) {
+					// remove existing view first:
+					AndroidDisplay.getInstance().onHide(this._androidView);
+				}
+			}
+			this._androidTextField = new AndroidTextField(this); 
+			this._androidView = this._androidTextField;
+			if (this.isShown) {
+				AndroidDisplay.getInstance().onShow(this._androidView);
+			}
 		//#endif
 		//#if polish.blackberry
 						
@@ -2298,10 +2352,8 @@ public class TextField extends StringItem
 	}
 
 	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.Item#paint(int, int, javax.microedition.lcdui.Graphics)
+	 * @see de.enough.polish.ui.Item#paintContent(int, int, int, int, javax.microedition.lcdui.Graphics)
 	 */
-	
-	
 	public void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
 		//#if polish.blackberry
         	if (this.isFocused && getScreen().isNativeUiShownFor(this)) {
@@ -2320,6 +2372,17 @@ public class TextField extends StringItem
 				}else{
 					super.paintContent(x, y, leftBorder, rightBorder, g);
 				}
+			}
+        //#elif polish.android
+			//#if polish.TextField.showHelpText
+				if(this.text == null || this.text.length() == 0)
+				{
+					this.helpItem.paint(x, y, leftBorder, rightBorder, g);
+				} 
+			//#endif
+			super.paintContent(x, y, leftBorder, rightBorder, g);
+			if (true) {
+				return;
 			}
 		//#else
         
@@ -2541,130 +2604,140 @@ public class TextField extends StringItem
 				this.useSingleLine = false;
 			}
 		//#endif
-		super.initContent(firstLineWidth, availWidth, availHeight);
-		//#if polish.blackberry
-			this.originalContentWidth = this.contentWidth;
-		//#endif
-		//#if polish.TextField.showHelpText
-		UiAccess.init(this.helpItem, firstLineWidth, availWidth, availHeight);
-		//#endif
-		
-		//#if tmp.includeInputInfo
-			if (this.infoItem != null && this.isFocused && this.isShowInputInfo) {
-				this.contentWidth += this.infoItem.itemWidth;
-				if (this.contentHeight < this.infoItem.itemHeight) {
-					this.contentHeight = this.infoItem.itemHeight;
-				}
-			}
-		//#endif
-		if (this.font == null) {
-			this.font = Font.getDefaultFont();
-		}
-		if (this.contentHeight < getFontHeight()) {
-			this.contentHeight = getFontHeight();
-		}
-		//#if polish.blackberry
-			if (!this.isFocused) {
-				return;
-			}
-			if(this.editField != null)
-			{
-				if (this.style != null) {
-					this.editField.setStyle( this.style );
-				}
-				// allowing native field to expand to the fully available width,
-				// the content size does not need to be changed as the same font is being
-				// used.
-				this.editField.doLayout( availWidth, this.contentHeight );
-				
-				// On some devices, like the 9000, after layout() the native EditField
-				// grows larger than the maximum specified height, but only by a few
-				// pixels. When that happens, we have to increase the content height accordingly.
-				if ( this.editField.getExtent().height > this.contentHeight )
-                {
-                    this.contentHeight = this.editField.getExtent().height;
-                }
-				
-				updateInternalArea();
-			}
-		//#elif tmp.directInput
-			this.rowHeight = getFontHeight() + this.paddingVertical;			
-			if (this.textLines == null || this.text == null || this.text.length() == 0) {
-				this.caretX = 0;
-				this.caretY = 0;
-				this.caretPosition = 0;
-				this.caretColumn = 0;
-				this.caretRow = 0;
-				this.originalRowText = "";
-				this.realTextLines = null;
-				//#if polish.css.text-wrap
-					if (this.useSingleLine) {
-						this.xOffset = 0;
+		//#if polish.android
+			this._androidTextField.measure(
+					MeasureSpec.makeMeasureSpec(availWidth, MeasureSpec.EXACTLY),
+					MeasureSpec.makeMeasureSpec(availHeight, MeasureSpec.AT_MOST)
+			);
+			this.contentWidth = this._androidTextField.getMeasuredWidth();
+			this.contentHeight = this._androidTextField.getMeasuredHeight();
+		//#else	
+			super.initContent(firstLineWidth, availWidth, availHeight);
+			//#if polish.blackberry
+				this.originalContentWidth = this.contentWidth;
+			//#endif
+			//#if polish.TextField.showHelpText
+			UiAccess.init(this.helpItem, firstLineWidth, availWidth, availHeight);
+			//#endif
+			
+			//#if tmp.includeInputInfo
+				if (this.infoItem != null && this.isFocused && this.isShowInputInfo) {
+					this.contentWidth += this.infoItem.itemWidth;
+					if (this.contentHeight < this.infoItem.itemHeight) {
+						this.contentHeight = this.infoItem.itemHeight;
 					}
-				//#endif
-			} else {
-				// init the original text-lines with spaces and line-breaks:
- 				//System.out.println("TextField.initContent(): text=[" + this.text + "], (this.realTextLines == null): " + (this.realTextLines == null) + ", this.caretPosition=" + this.caretPosition + ", caretColumn=" + this.caretColumn + ", doSetCaretPos=" + this.doSetCaretPosition + ", hasBeenSet=" + this.caretPositionHasBeenSet);
-				int length = this.textLines.size();
-				int textLength = this.text.length();
-				String[] realLines = this.realTextLines;
-				if (realLines == null || realLines.length != length) {
-					realLines = new String[ length ];
 				}
-				boolean caretPositionHasBeenSet = false;
-				int cp = this.caretPosition;
-//				if (this.caretChar != this.editingCaretChar) {
-//					cp++;
-//				}
-				int endOfLinePos = 0;
-				for (int i = 0; i < length; i++) {
-					String line = this.textLines.getLine(i);
-					endOfLinePos += line.length();
-					if (endOfLinePos < textLength) {
-						char c = this.text.charAt( endOfLinePos );
-						if (c == ' '  || c == '\t'  || c == '\n') {
-							line += c;
-							endOfLinePos++;
+			//#endif
+			if (this.font == null) {
+				this.font = Font.getDefaultFont();
+			}
+			if (this.contentHeight < getFontHeight()) {
+				this.contentHeight = getFontHeight();
+			}
+			//#if polish.blackberry
+				if (!this.isFocused) {
+					return;
+				}
+				if(this.editField != null)
+				{
+					if (this.style != null) {
+						this.editField.setStyle( this.style );
+					}
+					// allowing native field to expand to the fully available width,
+					// the content size does not need to be changed as the same font is being
+					// used.
+					this.editField.doLayout( availWidth, this.contentHeight );
+					
+					// On some devices, like the 9000, after layout() the native EditField
+					// grows larger than the maximum specified height, but only by a few
+					// pixels. When that happens, we have to increase the content height accordingly.
+					if ( this.editField.getExtent().height > this.contentHeight )
+		            {
+		                this.contentHeight = this.editField.getExtent().height;
+		            }
+					
+					updateInternalArea();
+				}
+			//#elif tmp.directInput
+				this.rowHeight = getFontHeight() + this.paddingVertical;			
+				if (this.textLines == null || this.text == null || this.text.length() == 0) {
+					this.caretX = 0;
+					this.caretY = 0;
+					this.caretPosition = 0;
+					this.caretColumn = 0;
+					this.caretRow = 0;
+					this.originalRowText = "";
+					this.realTextLines = null;
+					//#if polish.css.text-wrap
+						if (this.useSingleLine) {
+							this.xOffset = 0;
 						}
+					//#endif
+				} else {
+					// init the original text-lines with spaces and line-breaks:
+					//System.out.println("TextField.initContent(): text=[" + this.text + "], (this.realTextLines == null): " + (this.realTextLines == null) + ", this.caretPosition=" + this.caretPosition + ", caretColumn=" + this.caretColumn + ", doSetCaretPos=" + this.doSetCaretPosition + ", hasBeenSet=" + this.caretPositionHasBeenSet);
+					int length = this.textLines.size();
+					int textLength = this.text.length();
+					String[] realLines = this.realTextLines;
+					if (realLines == null || realLines.length != length) {
+						realLines = new String[ length ];
 					}
-					realLines[i] = line;
-					if (!caretPositionHasBeenSet && ((endOfLinePos > cp) || (endOfLinePos == cp && i == length -1 )) ) {
-						//System.out.println("TextField: caretPos=" + this.caretPosition + ", line=" + line + ", endOfLinePos=" + endOfLinePos );
-						this.caretRow = i;
-						setCaretRow(line, line.length() - (endOfLinePos - cp) );
-						this.caretY = this.caretRow * this.rowHeight;
-						caretPositionHasBeenSet = true;
+					boolean caretPositionHasBeenSet = false;
+					int cp = this.caretPosition;
+		//				if (this.caretChar != this.editingCaretChar) {
+		//					cp++;
+		//				}
+					int endOfLinePos = 0;
+					for (int i = 0; i < length; i++) {
+						String line = this.textLines.getLine(i);
+						endOfLinePos += line.length();
+						if (endOfLinePos < textLength) {
+							char c = this.text.charAt( endOfLinePos );
+							if (c == ' '  || c == '\t'  || c == '\n') {
+								line += c;
+								endOfLinePos++;
+							}
+						}
+						realLines[i] = line;
+						if (!caretPositionHasBeenSet && ((endOfLinePos > cp) || (endOfLinePos == cp && i == length -1 )) ) {
+							//System.out.println("TextField: caretPos=" + this.caretPosition + ", line=" + line + ", endOfLinePos=" + endOfLinePos );
+							this.caretRow = i;
+							setCaretRow(line, line.length() - (endOfLinePos - cp) );
+							this.caretY = this.caretRow * this.rowHeight;
+							caretPositionHasBeenSet = true;
+						}
+					} // for each line
+					this.realTextLines = realLines;
+					if (!caretPositionHasBeenSet) {
+						//System.out.println("caret position has not been set before");
+						//this.caretPosition = this.text.length();
+						this.caretRow = 0; //this.realTextLines.length - 1;
+						String caretRowText = this.realTextLines[ this.caretRow ];
+						int caretRowLength = caretRowText.length();
+						if (caretRowLength > 0 && caretRowText.charAt( caretRowLength-1) == '\n' ) {
+							caretRowText = caretRowText.substring(0, caretRowLength-1);
+						}
+						setCaretRow( caretRowText, caretRowLength );						
+						this.caretPosition = this.caretColumn;
+						this.caretY = 0; // this.rowHeight * (this.realTextLines.length - 1);
+						//System.out.println(this + ".initContent()/font3: caretX=" + this.caretX);
+						//this.textLines[ this.textLines.length -1 ] += " "; 
+						this.textLines.setLine( 0, this.textLines.getLine(0) + " " );
 					}
-				} // for each line
-				this.realTextLines = realLines;
-				if (!caretPositionHasBeenSet) {
-					//System.out.println("caret position has not been set before");
-					//this.caretPosition = this.text.length();
-					this.caretRow = 0; //this.realTextLines.length - 1;
-					String caretRowText = this.realTextLines[ this.caretRow ];
-					int caretRowLength = caretRowText.length();
-					if (caretRowLength > 0 && caretRowText.charAt( caretRowLength-1) == '\n' ) {
-						caretRowText = caretRowText.substring(0, caretRowLength-1);
-					}
-					setCaretRow( caretRowText, caretRowLength );						
-					this.caretPosition = this.caretColumn;
-					this.caretY = 0; // this.rowHeight * (this.realTextLines.length - 1);
-					//System.out.println(this + ".initContent()/font3: caretX=" + this.caretX);
-					//this.textLines[ this.textLines.length -1 ] += " "; 
-					this.textLines.setLine( 0, this.textLines.getLine(0) + " " );
 				}
-			}
-			// set the internal information so that big TextBoxes can still be scrolled
-			// correctly:
-			this.internalX = 0;
-			this.internalY = this.caretY;
-			this.internalWidth = this.contentWidth;
-			this.internalHeight = this.rowHeight;
-			this.screen = getScreen();
-			if (this.isFocused && this.parent instanceof Container ) {
-				// ensure that the visible area of this TextField is shown:
-				((Container)this.parent).scroll(0, this, true); // problem: itemHeight is not yet set
-			}
+				// set the internal information so that big TextBoxes can still be scrolled
+				// correctly:
+				this.internalX = 0;
+				this.internalY = this.caretY;
+				this.internalWidth = this.contentWidth;
+				this.internalHeight = this.rowHeight;
+				this.screen = getScreen();
+				if (this.isFocused && this.parent instanceof Container ) {
+					// ensure that the visible area of this TextField is shown:
+					((Container)this.parent).scroll(0, this, true); // problem: itemHeight is not yet set
+				}
+			// end if !polish.android
+			//#endif
 		//#endif
 	}
 	
@@ -2786,7 +2859,10 @@ public class TextField extends StringItem
 					this.predictiveAccess.choiceOrientation = choiceorientation.intValue();
 				}
 			//#endif
-		//#endif			
+		//#endif
+		//#if polish.android
+			this._androidTextField.applyTextField();
+		//#endif
 	}
 	
 	
@@ -3609,11 +3685,6 @@ public class TextField extends StringItem
 						return true;								
 					}
 				}
-				//#if polish.javaplatform >= Android/1.5
-					if (this.isNumeric) {
-						this.androidLastInvalidCharacterTime = System.currentTimeMillis();
-					}
-				//#endif
 			}
 			if ( (!this.isNumeric) //this.inputMode != MODE_NUMBERS 
 					&& !this.isUneditable
@@ -3716,16 +3787,6 @@ public class TextField extends StringItem
 				}
 			//#endif			
 			if ( this.text != null && this.text.length() > 0) {
-				//#if polish.javaplatform >= Android/1.5
-					long invalidCharInputTime = this.androidLastInvalidCharacterTime;
-					if (invalidCharInputTime != 0) {
-						this.androidLastInvalidCharacterTime = 0;
-						if (invalidCharInputTime - System.currentTimeMillis() <= 10 * 1000) {
-							// consume clear, when the last invalid input is less then 10 seconds ago:
-							return true;
-						}
-					}
-				//#endif
 				return deleteCurrentChar();
 			}
 		//#endif
@@ -4181,10 +4242,7 @@ public class TextField extends StringItem
 	 */
 	protected boolean handlePointerPressed( int x, int y ) {
 		if (isInItemArea(x, y)) {
-			 
-			//#if polish.javaplatform >= Android/1.5
-				this.androidLastPointerPressedTime = System.currentTimeMillis();
-			//#elif !tmp.forceDirectInput
+			//#if !tmp.forceDirectInput
 				return notifyItemPressedStart();
 			//#endif
 		}
@@ -4214,12 +4272,6 @@ public class TextField extends StringItem
 					showTextBox();
 					return true;
 				}
-			//#elif polish.javaplatform >= Android/1.5
-				if (this.isFocused && ((System.currentTimeMillis() - this.androidFocusedTime) > 1000)) {
-					notifyItemPressedEnd();
-					MidletBridge.instance.toggleSoftKeyboard();
-					return true;
-				}
 			//#elif polish.TextField.useVirtualKeyboard
 				Form keyboardView = KeyboardView.getInstance(getLabel(), this, getScreen());
 				Display.getInstance().setCurrent(keyboardView);
@@ -4230,18 +4282,8 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if polish.hasPointerEvents && polish.javaplatform >= Android/1.5
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.Item#handlePointerDragged(int, int, ClippingRegion)
-	 */
-	protected boolean handlePointerDragged(int relX, int relY, ClippingRegion repaintRegion) {
-		return super.handlePointerDragged(relX, relY, repaintRegion) 
-		|| (((System.currentTimeMillis() - this.androidLastPointerPressedTime) < 500) && isInItemArea(relX, relY));
-	}
-	//#endif
 
-
-	//#if polish.hasPointerEvents
+	//#if polish.hasPointerEvents && (polish.showSoftKeyboardOnShowNotify != false)
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleOnFocusSoftKeyboardDisplayBehavior()
 	 */
@@ -4509,10 +4551,6 @@ public class TextField extends StringItem
 				notifyStateChanged();
 			}
 		//#endif
-		//#if polish.javaplatform >= Android/1.5 && polish.TextField.hideSoftKeyboardOnDefocus
-				MidletBridge.instance.hideSoftKeyboard();
-		//#endif
-
 	}
 	//#endif
 	
@@ -4545,13 +4583,7 @@ public class TextField extends StringItem
 		//#if tmp.updateDeleteCommand && !polish.blackberry
 			updateDeleteCommand( this.text );
 		//#endif
-		
-		//#if polish.javaplatform >= Android/1.5
-			if (this.isShown) {
-				this.androidFocusedTime = System.currentTimeMillis();
-			}
-		//#endif			
-			
+					
 		return unfocusedStyle;
 	}
 	//#endif
@@ -4646,7 +4678,7 @@ public class TextField extends StringItem
 				updateInfo();
 			}
 		//#endif
-		//#if (polish.blackberry && polish.hasPointerEvents) || polish.javaplatform >= Android/1.5
+		//#if polish.blackberry && polish.hasPointerEvents
 			//#if polish.showSoftKeyboardOnShowNotify != false
 				if (this.isFocused) {
 					DeviceControl.showSoftKeyboard();
@@ -4656,23 +4688,15 @@ public class TextField extends StringItem
 		super.showNotify();
 	}
 
-	//#if  (!polish.blackberry && tmp.directInput) || (polish.blackberry && polish.hasPointerEvents)
+	//#if  (!polish.blackberry && tmp.directInput)
 		/* (non-Javadoc)
 		 * @see de.enough.polish.ui.StringItem#hideNotify()
 		 */
 		protected void hideNotify() {
-			//#if !polish.blackberry
-				if (this.caretChar != this.editingCaretChar) {
-					commitCurrentCharacter();
-				}
-			//#endif
+			if (this.caretChar != this.editingCaretChar) {
+				commitCurrentCharacter();
+			}
 			super.hideNotify();
-			//#if polish.blackberry && polish.hasPointerEvents
-				// 2009-11-11: hiding the softkeyboard is not really necessary as we have a finer grained control about this in BaseScreen.notifyDisplayChange()
-				//# //Display.getInstance().getVirtualKeyboard().setVisibility(net.rim.device.api.ui.VirtualKeyboard.HIDE);
-			//#elif polish.javaplatform >= Android/1.5
-				MidletBridge.instance.hideSoftKeyboard();
-			//#endif
 		}	
 	//#endif
 		
@@ -4991,6 +5015,23 @@ public class TextField extends StringItem
 	public boolean isEditable() {
 		return ((this.constraints & TextField.UNEDITABLE) != TextField.UNEDITABLE);
 	}
+
+	public boolean isConstraintsPhoneNumber() {
+		return ((this.constraints & PHONENUMBER) == PHONENUMBER);
+	}
+
+	public boolean isConstraintsNumeric() {
+		return ((this.constraints & NUMERIC) == NUMERIC);
+	}
+	
+	public boolean isConstraintsDecimal() {
+		return ((this.constraints & DECIMAL) == DECIMAL) || ((this.constraints & FIXED_POINT_DECIMAL) == FIXED_POINT_DECIMAL);
+	}
+
+	public boolean isConstraintsPassword() {
+		return ((this.constraints & PASSWORD) == PASSWORD);
+	}
+
 	
 //#ifdef polish.TextField.additionalMethods:defined
 	//#include ${polish.TextField.additionalMethods}

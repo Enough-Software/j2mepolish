@@ -6,12 +6,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -47,7 +44,6 @@ import de.enough.polish.ui.Item;
 import de.enough.polish.ui.Screen;
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.IdentityArrayList;
-
 
 /**
  * A MIDlet is a MID Profile application.
@@ -110,8 +106,6 @@ public class MidletBridge extends Activity {
 	private boolean shuttingDown;
 	
 	private boolean isSoftkeyboardOpen;
-
-	private int currentScreenYOffset;
 
 	private boolean suicideOnExit =
 		//#if polish.android.killProcessOnExit:defined
@@ -219,6 +213,7 @@ public class MidletBridge extends Activity {
 			this.contentResolver = getContentResolver();
 		}
 		
+		
 		// read files directory and save it as a system property
 		String appDirectory = getApplicationContext().getFilesDir().getAbsolutePath();
 		setSystemProperty("fileconn.dir.private", appDirectory);
@@ -231,7 +226,7 @@ public class MidletBridge extends Activity {
 		// rickyn: This initialization fixes the bootstrap problem for GameCanvas.
 		new AndroidDisplay(this);
 		// This variable is needed to set the midlet to the display. Do not remove!
-		Display display = null; //Display.getDisplay(null);
+		Display display = Display.getDisplay(null);
 		
 		// now create MIDlet:
 		try {
@@ -241,14 +236,9 @@ public class MidletBridge extends Activity {
 				//#= midlet = (MIDlet) Class.forName("${polish.classes.midlet-1}").newInstance();		
 			//#endif
 			midlet._setMidletBridge(this);
-			//#if true
-				//# display = Display.getDisplay(midlet);
-			//#endif
 		} catch (Exception e) {
-			System.err.println("While loading MIDlet: " + e );
 			e.printStackTrace();
 			notifyDestroyed();
-			return;
 		}
 		
 		//#if polish.android.trapHomeButton
@@ -371,7 +361,7 @@ public class MidletBridge extends Activity {
 		
 		AndroidDisplay display = AndroidDisplay.getDisplay(midlet);
 		if(display.getParent() == null) {
-		setContentView(display);
+			setContentView(display);
 		}
 		// This should allow to control the audio volume with the volume keys on the handset when the application has focus.
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -391,15 +381,6 @@ public class MidletBridge extends Activity {
 		//#debug
 		System.out.println("onStart().");
 		super.onStart();
-		//Debug.startMethodTracing("skobbler");
-		// on resume will be called directly afterwards...
-//		try {
-//			midlet.startApp();
-//		} catch (Exception e) {
-//			//#debug fatal
-//			System.out.println("starApp() failed: " + e);
-//			//TODO: add fatal error handling here, e.g. by displaying system error message
-//		}
 	}
 
 	/*
@@ -701,8 +682,6 @@ public class MidletBridge extends Activity {
 				System.out.println("Canceling the display of the softkeyboard as no AndroidDisplay is available.");
 				return;
 			}
-			//display.showSoftKeyboard();
-			/*
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
 			boolean active;
 			active = inputMethodManager.isActive(display);
@@ -730,7 +709,6 @@ public class MidletBridge extends Activity {
 			configuration = getBaseContext().getResources().getConfiguration();
 			//#debug
 			System.out.println("Configuration after showing softkeyboard is '"+configuration+"'");
-			 */
 			// TODO: Find out the height of the soft input!!
 //				View rootView = display.getRootView();
 //				ArrayList<View> touchables = rootView.getTouchables();
@@ -776,8 +754,6 @@ public class MidletBridge extends Activity {
 		//#debug
 		System.out.println("About to hide softkeyboard");
 		AndroidDisplay display = AndroidDisplay.getDisplay(midlet);
-		//display.hideSoftKeyboard();
-		/*
 		InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
 		boolean active;
 		active = inputMethodManager.isActive(display);
@@ -791,8 +767,6 @@ public class MidletBridge extends Activity {
 		configuration = getBaseContext().getResources().getConfiguration();
 		//#debug
 		System.out.println("Configuration after hiding softkeyboard is '"+configuration+"'");
-		*/
-		
 		this.isSoftkeyboardOpen = false;
 		onSoftKeyboardClosed();
 		//#endif
@@ -884,8 +858,8 @@ public class MidletBridge extends Activity {
 						int contHeight = rootContainer.getItemAreaHeight();
 						if (contHeight < screen.getScreenContentHeight()) {
 							newYOffset -= rootContainer.relativeY - screen.getScreenContentY();
-	}
-
+						}
+						
 						screen.setScrollYOffset( newYOffset, true);
 						rootContainer.resetLastPointerPressYOffset();
 					}
@@ -904,7 +878,7 @@ public class MidletBridge extends Activity {
 					// only reset the scroll y offset for screens that use less space than is available:
 					rootContainer.setScrollYOffset(0, true);
 					rootContainer.resetLastPointerPressYOffset();
-	}
+				}
 			}
 		}
 	}
@@ -995,24 +969,7 @@ public class MidletBridge extends Activity {
 				break;
 			}
 			if (bridge.menuItem == item) {
-				final Command cmd = bridge.cmd;
-				if (cmd.hasSubCommands()) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(MidletBridge.getInstance());
-					builder.setTitle(cmd.getLabel());
-					String[] labels = new String[ cmd.getSubCommandsCount() ];
-					Object[] subCommands = cmd.getSubCommmandsArray();
-					for (int j = 0; j < labels.length; j++) {
-						labels[j] = ((Command)subCommands[j]).getLabel();
-					}
-					builder.setItems(labels, new DialogInterface.OnClickListener() {
-					    public void onClick(DialogInterface dialog, int itemIndex) {
-					    	Display.getInstance().commandAction(cmd.getSubCommands()[itemIndex], (de.enough.polish.ui.Displayable)null );
-					    }
-					});
-					builder.show();
-				} else {
-					Display.getInstance().commandAction(cmd, (de.enough.polish.ui.Displayable)null );
-				}
+				Display.getInstance().commandAction(bridge.cmd, (de.enough.polish.ui.Displayable)null );
 				return true;
 			}
 		}
@@ -1104,11 +1061,6 @@ public class MidletBridge extends Activity {
 			this.menuItem = menuItem;
 		}
 		
-	}
-
-
-	public static MidletBridge getInstance() {
-		return instance;
 	}
 
 

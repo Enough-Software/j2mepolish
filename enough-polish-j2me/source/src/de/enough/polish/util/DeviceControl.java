@@ -155,6 +155,8 @@ public class DeviceControl
 	 * Checks if backlight can be controlled by the application
 	 * 
 	 * @return true when the backlight can be controlled by the application
+	 * @see #lightOn()
+	 * @see #lightOff()
 	 */
 	public static boolean isLightSupported()
 	{

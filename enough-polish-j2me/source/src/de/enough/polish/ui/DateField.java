@@ -31,6 +31,11 @@ import java.util.TimeZone;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
+//#if polish.android
+	import android.app.DatePickerDialog;
+	import android.widget.DatePicker;
+//#endif
+
 import de.enough.polish.util.DateUtil;
 import de.enough.polish.util.DrawUtil;
 import de.enough.polish.util.Locale;
@@ -80,7 +85,7 @@ import de.enough.polish.calendar.CalendarItem;
  */
 public class DateField extends StringItem
 implements
-//#if polish.DateField.useDirectInput == true || polish.Bugs.dateFieldBroken || polish.blackberry || polish.android
+//#if (polish.DateField.useDirectInput == true || polish.Bugs.dateFieldBroken || polish.blackberry) && !polish.android
 	//#define tmp.directInput
 //#endif
 //#if (!tmp.directInput || (polish.hasPointerEvents && !polish.DateField.useDirectInputForPointer)) && (polish.midp && !polish.blackberry)
@@ -100,6 +105,12 @@ implements
 //#endif
 //#if polish.blackberry
 	, FieldChangeListener
+//#endif
+//#if polish.android
+	//#if false
+	,
+	//#endif
+	DatePickerDialog.OnDateSetListener 
 //#endif
 {
 	/**
@@ -162,10 +173,6 @@ implements
 	//#if polish.blackberry
 		private PolishDateField blackberryDateField;
 		private int bbYAdjust;	
-	//#endif
-	//#if polish.javaplatform >= Android/1.5
-		private long androidFocusedTime;
-		private long androidLastInvalidCharacterTime;
 	//#endif
 		
 	private String dateFormatPattern;
@@ -889,39 +896,18 @@ implements
 		return this.text.length();
 	}
 
-	//#if polish.javaplatform >= Android/1.5
-	/*
-	 * (non-Javadoc)
-	 * @see de.enough.polish.ui.Item#focus(de.enough.polish.ui.Style, int)
-	 */
-	protected Style focus(Style newStyle, int direction) {
-		if (this.isShown) {
-			MidletBridge.instance.showSoftKeyboard();
-			this.androidFocusedTime = System.currentTimeMillis();
-		}
-		return super.focus(newStyle, direction);
-	}
-	//#endif
-	
-	//#if polish.javaplatform >= Android/1.5
-	/*
-	 * (non-Javadoc)
-	 * @see de.enough.polish.ui.StringItem#showNotify()
-	 */
-	protected void showNotify() {
-		if (this.isFocused) {
-			MidletBridge.instance.showSoftKeyboard();
-		}
-		super.showNotify();
-	}
-	//#endif
 
 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleKeyPressed(int, int)
 	 */
 	protected synchronized boolean handleKeyPressed(int keyCode, int gameAction) {
-		//#if polish.blackberry
+		//#if polish.android
+			if (gameAction == Canvas.FIRE) {
+				showDateForm();
+				return true;
+			}
+		//#elif polish.blackberry
 			if (true) {
 				return false;
 			}
@@ -987,18 +973,6 @@ implements
 				//#else
 					-8;
 				//#endif
-			//#if polish.javaplatform >= Android/1.5
-				if (keyCode == clearKey) {
-					long invalidCharInputTime = this.androidLastInvalidCharacterTime;
-					if (invalidCharInputTime != 0) {
-						this.androidLastInvalidCharacterTime = 0;
-						if (invalidCharInputTime - System.currentTimeMillis() <= 10 * 1000) {
-							// consume clear, when the last invalid input is less then 10 seconds ago:
-							return true;
-						}
-					}
-				}
-			//#endif
 
 			// check for input of numbers 
 			if ( ( keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9 )
@@ -1024,17 +998,13 @@ implements
 			} else if ( this.date != null && gameAction == Canvas.RIGHT ) {
 				moveForward(true);
 			} else if (gameAction != Canvas.FIRE){
-				//#if polish.javaplatform >= Android/1.5
-					this.androidLastInvalidCharacterTime = System.currentTimeMillis();
-				//#else
-					// force check before leaving this date=-field:
-					if (this.date != null) {
-						moveForward(true);
-						this.currentField = 0;
-						this.currentFieldStartIndex = 0;
-						this.editIndex = 0;
-					}
-				//#endif
+				// force check before leaving this date=-field:
+				if (this.date != null) {
+					moveForward(true);
+					this.currentField = 0;
+					this.currentFieldStartIndex = 0;
+					this.editIndex = 0;
+				}
 				return false;
 			} 
 
@@ -1285,35 +1255,48 @@ implements
 	}
 	//#endif
 
-	//#if tmp.useMidp
+	//#if tmp.useMidp || polish.android
 	/**
 	 * Shows the TextBox for entering texts.
 	 */
 	private void showDateForm() {
-		if (this.midpDateField == null) {
-			this.midpDateField = new javax.microedition.lcdui.DateField( getLabel(), this.inputMode, this.timeZone );
-			//#ifdef polish.Bugs.dateFieldAcceptsNoNullDate
-				if (this.date == null) {
-					if (this.inputMode == TIME) {
-						this.midpDateField.setDate( new Date(0) );
+		//#if polish.android
+			TimePoint tp; 
+			if (this.date != null) {
+				tp = new TimePoint(this.date);
+			} else {
+				tp = TimePoint.now();
+			}
+			//TODO use time picker or similar as well...
+			DatePickerDialog dateDialog = new DatePickerDialog(MidletBridge.getInstance(), this, tp.getYear(), tp.getMonth(), tp.getDay());
+			dateDialog.show();
+		//#endif
+		//#if tmp.useMidp
+			if (this.midpDateField == null) {
+				this.midpDateField = new javax.microedition.lcdui.DateField( getLabel(), this.inputMode, this.timeZone );
+				//#ifdef polish.Bugs.dateFieldAcceptsNoNullDate
+					if (this.date == null) {
+						if (this.inputMode == TIME) {
+							this.midpDateField.setDate( new Date(0) );
+						} else {
+							this.midpDateField.setDate( new Date() );
+						}
 					} else {
-						this.midpDateField.setDate( new Date() );
+						this.midpDateField.setDate( this.date );
 					}
-				} else {
+				//#else
 					this.midpDateField.setDate( this.date );
-				}
-			//#else
-				this.midpDateField.setDate( this.date );
-			//#endif
-			this.form = new de.enough.polish.midp.ui.Form( StyleSheet.currentScreen.getTitle() );
-			this.form.append( this.midpDateField );
-			//TODO add i18n support
-			this.form.addCommand(StyleSheet.OK_CMD);
-			this.form.addCommand(StyleSheet.CANCEL_CMD);
-			this.form.setCommandListener( this );
-		}
-		this.screen = StyleSheet.currentScreen;
-		Display.getInstance().setCurrent( this.form );
+				//#endif
+				this.form = new de.enough.polish.midp.ui.Form( StyleSheet.currentScreen.getTitle() );
+				this.form.append( this.midpDateField );
+				//TODO add i18n support
+				this.form.addCommand(StyleSheet.OK_CMD);
+				this.form.addCommand(StyleSheet.CANCEL_CMD);
+				this.form.setCommandListener( this );
+			}
+			this.screen = StyleSheet.currentScreen;
+			Display.getInstance().setCurrent( this.form );
+		//#endif
 	}
 	//#endif
 
@@ -1378,11 +1361,6 @@ implements
 				showPolishCalendar();
 			//#elif tmp.useMidp 
 				showDateForm();
-			//#elif polish.javaplatform >= Android/1.5
-				if (this.isFocused && ((System.currentTimeMillis() - this.androidFocusedTime) > 200)) {
-					MidletBridge.instance.toggleSoftKeyboard();
-					return true;
-				}
 			//#endif
 			return true;
 		}
@@ -1430,6 +1408,16 @@ implements
 			}
 			notifyStateChanged();
 		}
+	}
+	//#endif
+
+	//#if polish.android
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.DatePickerDialog.OnDateSetListener#onDateSet(android.widget.DatePicker, int, int, int)
+	 */
+	public void onDateSet(DatePicker picker, int year, int month, int day) {
+		setTimePoint( new TimePoint(year, month, day));
 	}
 	//#endif
 }
