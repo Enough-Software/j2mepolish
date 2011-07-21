@@ -1,0 +1,16 @@
+<backgrounds>
+
+	<background>
+		<identifier>round-rect, roundrect</identifier>
+		<class>de.enough.polish.ui.backgrounds.RoundRectBackground</class>
+		<parameters>
+			<parameter>
+				<attribute>color</attribute>
+				<type>color</type>
+				<default>black</default>
+			</parameter>
+		</parameters>
+		<creator>default/com.company.backgrounds.BackgroundConverter</creator>
+	</background>
+	
+</backgrounds>

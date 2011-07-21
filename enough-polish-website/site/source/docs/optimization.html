@@ -1,0 +1,100 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.optimization %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Device Optimization</h1>
+	<%index %>
+	<p>J2ME Polish includes a <a href="../devices-overview.html">device database</a> 
+	which revolutionizes the way
+	applications are optimized for specific devices.
+	</p>
+	<p>Programmers need to create only standards compliant
+	J2ME applications. J2ME Polish optimizes this code and incorporates
+	device specific APIs to deliver the best possible user experience. 
+	Designers can easily adjust and change designs for specific devices
+	or device-groups, just by organizing the appropriate resources into
+	<a href="resource-assembling.html">folders</a>.
+	</p>
+	<h2 id="manual">Manual Optimization</h2>
+	<p>Manual device optimization is made easy with the device database and
+	the powerful <a href="preprocessing.html">preprocessing</a> capabilities. Just consider
+	   the following examples:</p>
+<p>Checking if a device supports an API:
+<pre>
+//#if polish.api.mmapi
+	import javax.microedition.media.*;
+//#endif
+</pre>
+</p>
+<p>Checking how many colors a device supports:
+<pre>
+//#if polish.BitsPerPixel >= 8
+	// okay this device supports at least 2^8= 256 colors
+//#endif
+</pre>
+</p>
+<p>Combining both examples:
+<pre>
+//#if polish.api.mmapi && (polish.BitsPerPixel >= 8)
+	// okay this device supports at least 2^8= 256 colors 
+	// and supports the Mobile Media API
+//#endif
+</pre>
+</p>
+<p>Checking for a specific vendor:
+<pre>
+//#if polish.Vendor == Nokia
+	// this device is by Nokia
+//#endif
+</pre>
+</p>
+<p>Checking for the MIDP platform:
+<pre>
+//#if polish.midp1
+	// this device supports the MIDP/1.0 platform
+//#elif polish.midp2
+	// this device supports the MIDP/2.0 platform
+//#endif
+</pre>
+</p>
+<p>Extending a full-screen-class, but only when the device supports this:
+<pre>
+public class MyCanvas
+//#if polish.useFullScreen && polish.classes.fullscreen:defined
+	//#= extends ${polish.classes.fullscreen}
+//#else
+	extends Canvas
+//#endif
+</pre>
+</p>
+
+	<h2 id="database">Device Database</h2>
+	<p>J2ME Polish includes a <a href="../devices-overview.html">device database</a> 
+	in which the capabilities
+	of the known devices are defined.
+	The device-definitions are stored in following files:
+	</p>
+	<ul>
+		<li>devices.xml: main file for the devices.</li>
+		<li>groups.xml: definition of the device-groups.</li>
+		<li>vendors.xml: definition of the device vendors.</li>
+	</ul>
+	<p>These files can be extended easiliy to incorporate new devices. 
+	The structure of theses files is documented in the (almost)
+	<a href="../downloads/Complete_Guide_to_J2ME_Polish.pdf">Complete Guide to J2ME Polish</a>.
+	</p>
+	
+	<h2 id="resources">Resource Assembling</h2>
+	<p>It is easy to assemble resources for specific devices or device-groups.
+	How this is done is described in the <a href="resource-assembling.html">assembling resources</a>-documentation
+	and in the <a href="css-groups.html">designing for specific devices</a>-documentation.
+	</p>
+	
+	<h2 id="automatic">Automatic Optimization</h2>
+	<p>Most optimization tasks are needed for the user interface
+	of an application. The <a href="css.html">J2ME Polish GUI</a> adjusts automatically
+	to the specific capabilities of a device and removes the need
+	for work-intensive manual optimization.</p>
+<%include end.txt %>

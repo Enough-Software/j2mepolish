@@ -1,0 +1,53 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Outline Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+	The outline text-effect draws only the outline of the text - the outline will have the color specified with the
+	<code>font-color</code> CSS attribute.
+	</p>
+	<h2 id="Outline-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-outline.png"  width="135" height="24" alt="the outline text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with following settings:
+	</p>
+<pre>
+title {
+        text-effect: outline;
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+                color: #990033;
+        }
+        background {
+                type: simple;
+                color: #ffffffff;
+        }
+}	
+</pre>
+<p>
+	Specific design attributes of the outline text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.OutlineTextEffect %>
+	
+		
+	<h2 id="Shadow-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/OutlineTextEffect.html">OutlineTextEffect</a>.
+	</p>
+
+<%include end.txt %>

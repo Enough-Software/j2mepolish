@@ -1,0 +1,165 @@
+/**
+  * In this file we change the base styles taken from resources/base/polish.css
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(248,39,186);
+	highlightedBgColor:  rgb(185,26,138);
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2px;
+	margin-bottom: 5px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: white;
+	background-color: highlightedBgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+
+/**
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  * An interesting feature is the used background, which is 
+  * animated. It starts with a white backgrounds which is
+  * transformed in 30 steps to a pink one. After that the animation
+  * is stopped.
+  */
+.mainScreen {
+	inherit: false;
+	padding: 5;
+	padding-left: 15;
+	padding-right: 15;
+	background {
+		type: pulsating; 
+		start-color: white;
+		end-color: #f8b;
+		steps: 30;
+		repeat: false;
+		back-and-forth: false;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	columns: 0;
+}
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * An interesting attribute is the "icon-image" URL, which uses
+  * the %INDEX% keyword. The first list-item will use the image
+  * "icon0.png", the second "icon1.png" and so on. 
+  */
+.mainCommand {
+	margin: 2px; 
+	padding: 3px;
+	padding-left: 10px;
+	padding-right: 5px;
+	padding-horizontal: 10px;
+	font-color: #333;
+	font-style: bold;
+	font-size: small;
+	layout: left;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: left;
+}
+
+.mainCommand:hover {
+	margin: 2px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: bgColor;
+		border-width: 0px;
+	}
+	font {
+		style: bold;
+		color: #fff;
+		size: small;
+	}
+	font-color-animation {
+		on: focus;
+		range: #333..white;
+	}
+	layout: expand | left;
+	after: url(dot.png); 
+}
+
+
+
+/****************  Commands Menu ******************************************************************************************************/
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  * The font-settings (font-color,
+  * font-face, font-style and font-size)
+  * are used to design the menu-texts
+  * (like Options, Select, or Cancel).
+  * With the focused-style attribute
+  * another style than the default "focused"
+  * style is used for the menu. 
+  * The menubar-color can be set to any
+  * color. When "transparent" is used,
+  * the background shines through.
+  */
+menu {
+	max-width: 65%;
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: white;
+		border-width: 2;
+		border-color: yellow;
+	}
+	menubar-color: highlightedBgColor;
+	font-color: white;
+	font-style: bold;
+}
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: black;
+		size: medium;
+		style: bold;
+	}
+	layout: left | expand;
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+menuItem:hover {
+	background-color: black;
+	font-color: white;
+	layout: left | horizontal-expand;
+	after: url(dot.png);
+}

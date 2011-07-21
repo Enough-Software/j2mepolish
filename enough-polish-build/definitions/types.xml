@@ -1,0 +1,39 @@
+<types>
+	<type>
+		<name>rgbColor</name>
+		<primitive>int</primitive>
+		<range>0x0..0xFFFFFF</range>
+		<!-- additional notations apart from the direct one -->
+		<notations>
+			<notation>
+				<name>composed</name>
+				<output>sum<output>
+				<values>
+					<value>
+						<name>red</name>
+						<primitive>int</primitive>
+						<range>0x0..0xFF</range>
+						<output>[value]<<16</output>
+					</value>
+					<value>
+						<name>green</name>
+						<primitive>int</primitive>
+						<range>0x0..0xFF</range>
+						<output>[value]<<8</output>
+					</value>
+					<value>
+						<name>blue</name>
+						<primitive>int</primitive>
+						<range>0x0..0xFF</range>
+						<output>[value]</output>
+					</value>
+				</values>
+			</notation>
+		</notations>
+	</type>
+	<type>
+		<name>positiveInt</name>
+		<primitive>int</primitive>
+		<range>0..MAX</range>
+	</type>
+</types>

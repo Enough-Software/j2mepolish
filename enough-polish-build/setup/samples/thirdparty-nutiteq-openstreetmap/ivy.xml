@@ -1,0 +1,32 @@
+<ivy-module version="1.0">
+  <info organisation="Nutiteq LCC" module="gps-tracking" />
+  <dependencies>
+    <dependency org="sun" name="midp" rev="2.0" />
+    <dependency org="sun" name="cldc" rev="1.1" />
+    <dependency org="sourceforge" name="proguard" rev="4.3" />
+    <dependency org="nutiteq" name="tools" rev="200808070741" />
+    <dependency org="sun" name="bluetoothapi" rev="jsr082"/>
+    <dependency org="sun" name="pdaapi" rev="jsr75"/>
+    <dependency org="sun" name="locationapi" rev="jsr179"/>
+    <dependency org="siemens" name="j2me-ext-siemens" rev="1.0"/>
+    <dependency org="motorola" name="j2me-ext-motorola" rev="1.0"/>
+    
+    <dependency org="junit" name="junit" rev="4.5" />
+    <dependency org="nutiteq" name="j2me-stub" rev="200810061313" />
+    
+    <dependency org="sourceforge" name="checkstyle" rev="5.0-beta01" />   
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="1.8.0" />
+    <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
+    <dependency org="antlr" name="antlr" rev="2.7.7" />
+    <dependency org="google" name="collect" rev="20080321" />
+    <dependency org="objectweb" name="asm" rev="2.2.3" />
+    
+    <dependency org="cobertura" name="cobertura" rev="1.8" />
+    <dependency org="log4j" name="log4j" rev="1.2.15" />
+    <dependency org="objectweb" name="asm" rev="2.2.3" />
+    <dependency org="oro" name="oro" rev="2.0.8" />
+
+    <dependency org="nutiteq" name="tools" rev="200808070741" />
+	<dependency org="nokia" name="nokiaui" rev="1.1" />
+  </dependencies>
+</ivy-module>

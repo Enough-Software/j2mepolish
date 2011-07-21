@@ -1,0 +1,36 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: xx Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">xx Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Surround an item or a screen with a  using the <code>xx</code> border:
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-border-xx.png"  width="98" height="31" alt="xx border" />	
+	</p>
+<pre>
+.itemMain {
+	border {
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings border xx%>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/XXBorder.html">XXBorder</a></li>
+	</ul>
+
+<%include end.txt %>

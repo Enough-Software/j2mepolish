@@ -1,0 +1,107 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: MIDP Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Developing for MIDP Devices</h1>
+<p>
+MIDP or &quot;Mobile Information Device Profile&quot; is the most widly supported mobile platform, which allows
+you to create your application for various operating systems like Symbian, Motorola OS, Nokia OS, Samsung OS, and more.
+</p>
+
+<h2 id="configurations">Configurations</h2>
+<p>
+All MIDP devices support either the CLDC 1.0 or CLDC 1.1 configurations. The &quot;Connected Limited Device Configuration&quot;
+provides basic Java mechanisms like Threading and some mobile extensions like the Generic Connection Framework. The most
+notable extension of CLDC 1.1 is the support of floating point calculations, which need to be emulated with tools like
+<a href="floater.html">Floater</a> on CLDC 1.0 devices. Fortunately, CLDC 1.0 devices are quite rare in most markets nowadays.
+<br />
+Some MIDP devies additionally support the much more powerful CDC / &quot;Connected Device Configuration&quot;, which provides
+a nearly full blown Java Virtual Machine like Java SE 1.3.
+</p>
+
+<h2 id="versions">MIDP Versions</h2>
+<p>
+MIDP comes in 3 different flavors:
+</p>
+<ul>
+	<li><b>MIDP 1.0</b>: The initial version is now universally and very stable supported but has little multimedia and graphical options.</li>
+	<li><b>MIDP 2.0</b>: Most phones nowadays support the MIDP 2.0 standard, which provides interesting yet basic graphical, multimedia 
+		and security options. 
+		Almost all phones support different additional APIs that are defined by the 
+		<a href="http://www.jcp.org" target="_blank">Java Community Process</a>.
+		The multimedia (e.g. sound playback) and graphical extensions (e.g. <code>Graphics.drawRGB()</code>) suffer from 
+		different implementations and device bugs. The 
+		<a href="http://www.jcp.org" target="_blank">Java Technology for the Wireless Industry</a>
+		and the <a href="http://www.jcp.org" target="_blank">Mobile Service Architecture</a> standards limit
+		the fragmentation.
+	</li>
+	<li><b>MIDP 3.0</b>: The MIDP 3.0 standard is currently under public review, 
+		no commercially available devices are known to support this standard yet.
+	</li>
+</ul>
+<p>
+When using the J2ME Polish UI, you can use all MIDP 2.0 components like <a href="gui-item-customitem.html">CustomItem</a> on
+MIDP 1.0 devices as well. You can even use the gaming API <code>javax.microedition.lcdui.game</code> with some limitations
+on MIDP 1.0 phones.
+</p>
+<h2 id="javafx">Java FX and Java FX Mobile</h2>
+<p>
+Java FX and Java FX Mobile are Sun's competition to Flash/Flash Lite and Microsoft's Silverlight. Java FX is currently under
+development and it remains to be seen if it catches on. Java FX Mobile does currently run only on CDC, not on mainstream CLDC
+devices. While Java FX provides a very interesting environment, it remains to be seen how it copes with device fragmentation and
+if it can compete with Flash and Silverlight.
+</p>
+
+<h2 id="programming">Programming with MIDP</h2>
+<p>
+Programming MIDP applications is very simple:
+</p>
+<ul>
+	<li>Extend <code>javax.microedition.midlet.MIDlet</code> and implement the <code>startApp()</code>, 
+		<code>pauseApp()</code> and <code>destroyApp(boolean unconditional)</code> methods.</li>
+	<li>Create a user interface using the highlevel <code>javax.microedition.lcdui</code> API, for example with 
+	<a href="gui-screen-list.html">List</a> or <a href="gui-screen-form.html">Form</a>.</li>
+	<li>You can store data on the device using the lowlevel <code>javax.microedition.rms</code> API or the 
+		highlevel <a href="persistence.html">Persistence framework</a> of J2ME Polish.</li>
+	<li>Access network resources using the lowlevel <code>javax.microedition.io</code> Generic Connection API
+		or the highlevel <a href="rmi.html">RMI and XML-RPC framework</a> of J2ME Polish.</li>
+</ul>
+<p>
+Depending on your application you need to reserve 50% up to 90% of your work for porting your application.
+When you use J2ME Polish components and APIs, however, you don't need to port these, as they are automatically 
+adjusted to your target devices during the build time.
+</p>
+
+<h2 id="building">Building MIDP Applications</h2>
+<p>
+Building your mobile application means that you <a href="build-build.html#compiler">compile</a> 
+your optionally <a href="preprocessing.html">preprocessed</a>
+Java source code, <a href="resource-assembling.html">add resources</a> like images to it, 
+<a href="build-build.html#obfuscator">obfuscate</a> your
+application and <a href="build-build.html#packager">package</a> your application into a JAR/JAD bundle.
+<br />
+These steps along with <a href="localization.html">localization</a>, <a href="serialization.html">serialization</a>
+and more are automated with J2ME Polish. Pushing a button is enough.
+</p>
+
+<h2 id="future">Future of MIDP</h2>
+<p>
+While MIDP is almost universally supported it is also notorisly known for its fragmentation. While tools
+like J2ME Polish help you to overcome this fragmentation barrier, you still have to consider differences and 
+device bugs of the various platforms. In the long run it is expected that the mobile Java ME standard gradually
+fades away and is replaced by the standard Java SE platform, as mobile devices become more and more powerful.
+For the next 5 years, however, we expect that Java ME will keep being the most widly supported platform there is for 
+mobile development.
+</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>
+MIDP programming itself is very simple and effective. Using the highlevel User Interface API you can realize comlex UIs very quickly.
+MIDP is a very good general purpose platform for realizing mobile applications, but you have to deal with device fragmentation in 
+varying degrees.
+</p>
+
+
+
+<%include end.txt %>

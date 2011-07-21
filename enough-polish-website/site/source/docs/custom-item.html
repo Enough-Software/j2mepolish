@@ -1,0 +1,150 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.extending %>
+<%set title = J2ME Polish: Extending J2ME Polish %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Adding a Custom Item By Extending CustomItem</h1>
+<%index %>
+<p>
+You can integrate custom items to J2ME&nbsp;Polish by extending the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/CustomItem.html" target="_blank">javax.microedition.lcdui.CustomItem</a> class. 
+</p>
+<h2 id="initialisation">Initialisation</h2>
+<p>
+J2ME Polish calls the <code>getPrefContentWidth()</code>-method first with an 
+open height (-1). 
+Then the <code>getPrefContentHeight()</code>-method is called with the actual granted width. 
+When the width had to be adjusted, the custom item will be notified again 
+with the <code>setSize(width. height)</code>-method. 
+</p><p>
+Please note that the <code>Display.getColor( int )</code> and <code>Font.getFont( int )</code> 
+are only available on MIDP/2.0 devices. Such calls should be surrounded by #ifdef-directives:
+<pre>
+//#ifdef polish.midp2
+	Font font = Font.getFont( Font.FONT_STATIC_TEXT );
+//#else
+	//# Font font = Font.getDefaultFont();
+//#endif
+</pre></p>
+<h2 id="interaction">Interaction Modes</h2>
+<p>
+The J2ME&nbsp;Polish implementation supports the interaction modes KEY_PRESS,  TRAVERSE_HORIZONTAL and TRAVERSE_VERTICAL.
+</p>
+<h2 id="traversal">Traversal</h2>
+<p>
+When the custom item gains the focus for the first time, the 
+traverse-method will be called with the CustomItem.NONE direction. 
+Subsequent calls will include the direction (either Canvas.UP, DOWN, LEFT or RIGHT).
+</p>
+<h2 id="css">Using CSS for Designing the CustomItem</h2>
+<p>
+When the CSS-styles should be used for designing the CustomItem, please make sure that the project-classpath contains the &quot;enough-j2mepolish-client.jar&quot;, which can be found in the &quot;import&quot; folder of the J2ME&nbsp;Polish installation directory.
+</p><p>
+When the J2ME&nbsp;Polish GUI is used, the preprocessing-symbol &quot;polish.usePolishGui&quot; is defined. This can be used when the CustomItem should be used in the J2ME&nbsp;Polish GUI as well in a plain MIDP/2.0 based UI:
+<pre>
+//#ifdef polish.usePolishGui
+	import de.enough.polish.ui.*;
+//#endif
+</pre>
+</p>
+<p>
+There are several ways to integrate a CSS-style into the CustomItem:
+</p>
+<ol>
+<li>Defining a static style before the super-constructor is called:
+<pre>
+public MyItem( String label ) {
+  //#style myitem
+  super( label );
+}
+</pre>
+</li>
+<li>
+Allowing the setting of the style in a second constructor:
+<pre>
+//#ifdef polish.usePolishGui
+  public MyItem( String label, Style style ) {
+    super( label, style );
+  }
+//#endif
+</pre>
+</li>
+<li>
+Specifying the name of the dynamic style:
+<pre>
+//#ifdef polish.useDynamicStyles
+	protected String createCssSelector() {
+	  return "myitem";
+	}
+//#endif
+</pre>
+</li>
+</ol>
+<p>
+The second variant is the most flexible one and is encouraged, therefore. 
+When the item MyItem is now used within the code, the appropriate style can 
+specified with the #style directive:
+<pre>
+//#style coolStyle
+MyItem coolItem = new MyItem( label );
+</pre>
+</p>
+<p>
+For reading the specific style settings, the method setStyle( Style ) needs to be overridden:
+<pre>
+//#ifdef polish.usePolishGui
+  public void setStyle( Style style ) {
+	super.setStyle( style );
+	this.font = style.font;
+	this.fontColor = style.fontColor;
+	// now read specific attributes:
+	//#ifdef polish.css.myitem-color
+		String colorStr = style.getProperty( "myitem-color" );
+		if (colorStr != null) {
+			this.color = Integer.parseInt( colorStr );
+		} else {
+			this.color = 0xFF0000;
+		}
+	//#else
+		this.color = 0xFF0000;
+	//#endif
+  }
+//#endif
+</pre></p>
+<p>
+The setStyle()-method will be called before the preferred content width and height is requested, when the CustomItem has a style associated with it.
+</p>
+<p>
+Please note that the variable needs to be called &quot;style&quot; or needs to end with &quot;style&quot;, so that J2ME Polish can process all styles correctly. This is required, since instead of String-based attribute-names numerical short-values will be used in the actual code. This approach significantly reduces the runtime-performance and minimizes the heap-usage.
+</p>
+<p>
+There are 3 different ways to retrieve a property from a style:
+</p>
+<ul>
+	<li><i>style.getProperty( String name )</i> returns either a String representing that value or null when the property is not defined.</li>
+	<li><i>style.getIntProperty( String name )</i> returns either an Integer representing that value or null when the property is not defined. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be either &quot;integer&quot; or &quot;color&quot;.</li>
+	<li><i>style.getBooleanProperty( String name )</i> returns either a Boolean representing that value or null when the property is not defined. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be &quot;boolean&quot;.</li>
+</ul>
+<h2 id="backgroundandborders">Background and Borders</h2>
+<p>
+Background and border settings will be enforced by J2ME&nbsp;Polish, the CustomItem merely needs to 
+paint its contents.
+It is advisable, therefore, that a background is only painted, when the J2ME Polish-GUI is not used:
+<pre>
+//#ifndef polish.usePolishGui
+	// draw default background:
+	g.setColor( this.backgroundColor );
+	g.fillRect( 0, 0, this.width, this.height );
+//#endif
+</pre>
+</p>
+
+<h2 id="javadoc">JavaDoc Resources</h2>
+<p>Please refer to these JavaDoc resources for detailed information:</p>
+<ul>
+	<li><b>CustomItem</b>: <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/CustomItem.html" target="_blank">de.enough.polish.ui.CustomItem</a></li>
+</ul>
+
+<%include end.txt %>

@@ -1,0 +1,118 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: Popup Screens %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using Popup Screens</h1>
+	<p>You can turn any screen into a popup screen that overlays the previous shown screen. This contruct is
+	typically used for alerts or for opening a subset of a current selection.
+	<br />
+	<img src="<%= basedir%>images/gui-screen-popup.png" width="352" height="418" alt="showing an alert as popup"/>
+	<br />
+	The above design has been realized with following CSS code:
+<pre>
+.mailForm {
+	padding: 5;
+	padding-left: 5;
+	padding-right: 5;
+	background {
+		type: horizontal-stripes;
+		top: title;
+		bottom: menubar;
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+	}
+	layout: horizontal-expand | horizontal-center | top;
+}
+
+.mailAlert extends .mailForm {
+	<b>margin-right: 10;</b>
+	<b>margin-left: 10;</b>
+	<b>layout: horizontal-center | bottom | horizontal-shrink | vertical-shrink;</b>
+	<b>repaint-previous-screen: true;</b>
+	//#if polish.midp2 || polish.api.nokia-ui
+		border {
+			type: drop-shadow;
+			width: 6;
+			inner-color: #aff0;
+			outer-color: #2002;
+			orientation: top-right;
+		}
+	//#endif
+}
+</pre>
+</p>
+<h2 id="design">Design</h2>
+<p> 
+Any screen with a margin or a shrink layout becomes a popup screen. When the screen is interactive or when you want
+to dim the previous screen you should additionally specify the &quot;repaint-previous-screen&quot; attribute.
+</p>
+<p>These CSS attributes finetune your design:</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>margin</td><td>0</td><td>integer</td><td>screen</td>
+		<td>
+		The margin in pixels between the physical screen's border and the painted screen's border. Use <code>margin-left</code>,
+		<code>margin-right</code>, <code>margin-top</code> and <code>margin-bottom</code> to specify different
+		margins for each side.
+		</td>
+	</tr>
+	<tr>
+		<td>padding</td><td>1</td><td>integer</td><td>screen</td>
+		<td>
+		The padding in pixels between a screen's border and the screen's content.
+		Use <code>padding-left</code>,
+		<code>padding-right</code>, <code>padding-top</code> and <code>padding-bottom</code> to specify different
+		paddings for each side.
+		</td>
+	</tr>
+	<tr>
+		<td>layout</td><td>top | left</td><td>layout</td><td>screen</td>
+		<td>
+		The layout of the screen. By default the screen is extended as far as possible, but you can use 
+		<code>horizontal-shrink</code> for mimizing it's width and <code>vertical-shrink</code> for minimizing it's height.
+		<br />The <code>layout</code> attribute accepts a mix of values:
+		<ul>
+		<li><b>left</b>: move the screen's content to the left</li>
+		<li><b>right</b>: move the screen's content to the right</li>
+		<li><b>center</b> (or horizontal-center or h-center): center the content horizontally</li>
+		<li><b>top</b>: align the screen's content to the top</li>
+		<li><b>bottom</b>: move the screen's content to the bottom</li>
+		<li><b>vertical-center</b> (or v-center): center the content vertically</li>
+		<li><b>shrink</b>(or horizontal-shrink or h-shrink): limit the width of the screen to the height of it's content width plus the screen's padding</li>
+		<li><b>vertical-shrink</b>(or v-shrink): limit the height of the screen to the height of it's content height plus the screen's padding</li>
+		</ul>
+Example:
+<pre>
+layout: horizontal-center | bottom | horizontal-shrink | vertical-shrink;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>repaint-previous-screen</td><td>false</td><td>boolean</td><td>screen</td>
+		<td>
+		Set <code>repaint-previous-screen</code> to <code>true</code> for drawing the previous screen's content in the background
+		of the popup screen. When set to <code>false</code> the behavior depends on the native platform. On Nokia the previous screen
+		is painted for example, but on Sony-Ericsson phones it is not. The previous screen is dimmed by painting a 
+		translucent layer above it. You can specify the color by defining the <code>overlay</code> color within the 
+		<code>colors</code> section:
+<pre>
+colors {
+	overlay: argb( 150, 255, 255, 255 );
+}
+
+.mailAlert extends .mailForm {
+	layout: horizontal-center | bottom | horizontal-shrink | vertical-shrink;
+	repaint-previous-screen: true;
+}
+</pre>
+		</td>
+	</tr>
+	</table>
+
+
+<%include end.txt %>

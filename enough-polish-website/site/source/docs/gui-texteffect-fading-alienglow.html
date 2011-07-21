@@ -1,0 +1,67 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Fading-Alien-Glow Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Fading-Alien-Glow Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The fading-alien-glow effect provides an animated glow around the text on MIDP 2.0 devices with floating point support 
+	(either by supporting the CLDC&nbsp;1.1 configuration or by using the <a href="floater.html">Floater</a> tool).
+	</p>
+	<h2 id="Fading-Alien-Glow Text-Effect-Design">Usage</h2>
+	<p>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-fading-alien-glow.mov">
+	        <param name='autoplay' value="true">
+	        <param name='controller' value="false">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-fading-alien-glow.mov" autoplay="true" 
+	        controller="false" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="148" height="24"
+	        >
+	        </embed>
+		</object>
+	</p>
+<pre>
+title {
+        //#if polish.midp2 and polish.hasFloatingPoint
+			text-effect: fading-alien-glow;
+			text-fading-alien-glow-duration-in: 15;
+	        text-fading-alien-glow-outer-in-color: #ff80ff00;
+	        text-fading-alien-glow-outer-out-color: #ff0080ff;
+	        text-fading-alien-glow-steps: 4;
+        //#endif
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+                color: #fff;
+        }
+        background-color: #fff;
+}
+</pre>	
+	<p>
+	Specific design attributes of the Fading-Alien-Glow Text-Effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.FadingAlienGlowTextEffect %>
+	
+	
+	<h2 id="Fading-Alien-Glow Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/FadingAlienGlowTextEffect.html">FadingAlienGlowTextEffect</a>.
+	</p>
+
+<%include end.txt %>

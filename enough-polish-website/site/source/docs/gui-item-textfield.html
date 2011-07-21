@@ -1,0 +1,959 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: TextField %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">TextField</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-choicetextfield.html">ChoiceTextField</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-item-filteredchoicegroup.html">FilteredChoiceGroup</a></li>
+		<li><a href="gui-screen-filteredlist.html">FilteredList</a></li>
+		<li><a href="gui-item-datefield.html">DateField</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The TextField allows you to enter data in your application in different modes:
+	</p>
+	<ul>
+		<li><b>Native Input Mode</b>: When the native mode  is activated, 
+			a new input screen will pop up for the user and special input modes like native T9 or handwriting recognition can be used. 
+			This allows your user to utilize all native input mechanisms that the target device supports but it does interrupt
+			the visual flow within the application. The Native Input Mode is used by default.
+		</li>
+		<li><b>Direct Input Mode</b>: With the Direct Input Mode J2ME Polish accepts input directly without showing a new popup screen. 
+			Unless the device contains a full keyboard, the user
+			has to press keys several times for accessing specific characters - for example press '2' twice for getting a 'b'.
+		</li>
+		<li><b>Predictive Input Mode</b>: Use the Predictive Input Mode for allowing your users to enter words conveniently - for
+			example enter 'hello' by pressing '43556'.
+		</li>
+	</ul>
+	<h2 id="Design">Design</h2>
+	<p>
+	Since J2ME Polish's TextFields internally extend <a href="gui-item-stringitem.html">StringItems</a> you can use any
+	StringItem design settings as well, for example text-effects. 
+	<br /><img src="<%= basedir%>images/gui-item-textfield2.png"  width="228" height="163" alt="A textfield in action" />
+	</p>
+	<p>
+	The above TextField has been designed with the following styles:
+	</p>
+<pre>
+.itemTextInput {
+	font-color: black;
+	text-effect: smiley;
+}
+.itemTextInput:hover {
+	background-color: #7196B7;
+}
+info {
+	font-color: gray;
+}
+</pre>	
+	<p>Additionally, the following variables can be set:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+&lt;variable name=&quot;polish.TextField.usePredictiveInput&quot; value=&quot;true&quot;/&gt;
+&lt;variable name=&quot;polish.TextField.includeInputInfo&quot; value=&quot;true&quot;/&gt;
+&lt;variable file=&quot;configuration/smileys.properties&quot; /&gt;
+</pre>	
+	<p>In the corresponding <i>configuration/smileys.properties</i> the following settings are made:
+	</p>
+<pre>
+smileys={new Smiley(new String[]{":-)",":)"},"/smiley_1.png","smile"),new Smiley(new String[]{":-P",":P"},"/smiley_2.png","cheekie"),new Smiley(new String[]{":-(",":("},"/smiley_3.png","ouch")}
+</pre>
+
+	<p>
+	Specific CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.TextField %>
+	
+	<p>
+	The following example shows the use of the TextField attributes:
+	</p>
+<pre>
+.itemInput {
+	padding: 2;
+	background-color: silver;
+	border-color: gray;
+	textfield-direct-input: true;
+	textfield-caret-color: red;
+	textfield-show-length: true;
+}
+.itemInput:hover {
+	background-color: white;
+	border-color: black;
+}
+</pre>
+
+	<h2 id="textfield-commands">TextField-Commands</h2>
+	<p>
+	A TextField adds the &quot;Clear&quot; and &quot;Delete&quot; commands to the menu by default. 
+	The names of these commands can be <a href="localization.html#localization-gui">changed easily</a>. 
+	To suppress all commands, specify the <code>polish.TextField.suppressCommands</code> variable in 
+	your <a href="build-build.html#variables">build.xml</a> script:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.suppressCommands&quot; value=&quot;true&quot;/&gt;
+</pre>
+	<p>
+	You can also solely supress the &quot;Delete&quot; command, which you should only do for cases when the device in question
+	has a known hardware clear key for deleting characters:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.suppressDeleteCommand&quot; value=&quot;true&quot; if=&quot;polish.key.ClearKey:defined&quot; /&gt;
+</pre>
+	<p>
+	The &quot;Delete&quot; command is removed in the default configuration when all characters are deleted from the TextField or
+	when the user moves the input caret to the beginning of the TextField. It will then be shown again when input is added
+	or the caret is moved by the user. You can choose to show the command all the time by specifying the
+	<code>polish.TextField.keepDeleteCommand</code> variable:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.keepDeleteCommand&quot; value=&quot;true&quot; /&gt;
+</pre>
+	<p>When using the direct input mode and in case you allow the input of symbols, you can suppress the &quot;Add Symbol&quot;
+	command as well:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.supportSymbolsEntry&quot; value=&quot;true&quot;/&gt;
+&lt;variable name=&quot;polish.TextField.suppressAddSymbolCommand&quot; value=&quot;true&quot; if=&quot;polish.key.AddSymbolKey:defined&quot; /&gt;
+</pre>
+	<h2 id="textfield-DirectInputMode">Direct Input Mode</h2>
+	<p>
+	The direct input mode can be activated for TextFields as well as for TextBoxes using the CSS attribute 
+	<code>textfield-direct-input</code>:
+	</p>
+<pre>
+.itemInput {
+	padding: 2;
+	background-color: silver;
+	border-color: gray;
+	textfield-direct-input: true;
+	textfield-caret-color: red;
+	textfield-show-length: true;
+	<b>textfield-direct-input: true;</b>
+}
+</pre>
+	<p>
+	 Alternatively you can activate the direct input mode globally for all TextFields by defining the preprocessing 
+	 <a href="build-build.html#variables">variable</a> <code>polish.TextField.useDirectInput</code> in your <i>build.xml</i> file:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+</pre>
+	<p>
+	When the direct input mode is used, no extra screen will be used for editing the text and all  designing possibilities of J2ME Polish can be used. When the TextField is used within a Form, the associated ItemStateListener will be notified after each change of the text.
+	</p>
+	<p>
+	On stylus-based and Windows devices you should not use the direct input mode, 
+	since these devices often rely on native input methods like handwriting recognition. 
+	This can be ensured by setting the preprocessing variable only for devices which have no pointer-events and which are not Windows based:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; unless=&quot;polish.hasPointerEvents or ${isOS(Windows)}&quot;/&gt;
+</pre>
+	<p>
+	The direct input should not be used for editing longs texts (i.e. TextBoxes), since T9 and similar input helpers 
+	cannot be used in this mode. You might want to use the <a href="#textfield-PredictiveInputMode">predictive input mode</a> for 
+	entering long texts.
+	</p>
+	<p>
+	When you use the direct input mode, J2ME Polish will map the numeric keys to the characters given in the following table.
+	By pressing the key <code>2</code> twice you will get the character <code>b</code>, for example.
+	</p>
+	<p>
+	You can change the mappings by specifying the preprocessing variables <code>polish.TextField.charactersKey1</code>, 
+	<code>polish.TextField.charactersKey2</code> etc in your <i>build.xml</i> script.
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+		<tr><th>1</th><th>2</th><th>3</th></tr>
+		<tr>
+		 <td>.,!?&#191;/()@_-+1'\&quot;;</td>
+		 <td>abc2&#224;&#225;&#226;&#227;&#228;&#229;&#230;&#231;</td>
+		 <td>def3&#232;&#233;&#234;&#235;</td>
+		</tr>
+		<tr>
+		 <td>polish.TextField.charactersKey1</td>
+		 <td>polish.TextField.charactersKey2</td>
+		 <td>polish.TextField.charactersKey3</td>
+		</tr>
+		<tr><th>4</th><th>5</th><th>6</th></tr>
+		<tr>
+		 <td>ghi4&#261;&#262;&#263;&#264;</td>
+		 <td>jkl5</td>
+		 <td>mno6&#266;&#267;&#268;&#269;&#270;&#271;</td>
+		</tr>
+		<tr>
+		 <td>polish.TextField.charactersKey4</td>
+		 <td>polish.TextField.charactersKey5</td>
+		 <td>polish.TextField.charactersKey6</td>
+		</tr>
+		<tr><th>7</th><th>8</th><th>9</th></tr>
+		<tr>
+		 <td>pqrs7&#248;</td>
+		 <td>tuv8&#274;&#275;&#276;&#277;</td>
+		 <td>wxyz9&#278;</td>
+		</tr>
+		<tr>
+		 <td>polish.TextField.charactersKey7</td>
+		 <td>polish.TextField.charactersKey8</td>
+		 <td>polish.TextField.charactersKey9</td>
+		</tr>
+		<tr><th>*</th><th>0</th><th>#</th></tr>
+		<tr>
+		 <td>.,!?&#191;/()@_-+1'\&quot;;</td>
+		 <td>&nbsp;0</td>
+		 <td>(none)</td>
+		</tr>
+		<tr>
+		 <td>polish.TextField.charactersKeyStar</td>
+		 <td>polish.TextField.charactersKey0</td>
+		 <td>polish.TextField.charactersKeyPound</td>
+		</tr>
+	</table>
+
+<h3 id="textfield-info">The Input Mode Information Indicator</h3>
+<p>
+The user can change the input mode from lowercase (&quot;abc&quot;), to initial-letter uppercase (&quot;Abc&quot;),
+  to uppercase (&quot;ABC&quot;) and to numeric (&quot;123&quot;). 
+  The current input mode is shown below the title in an extra StringItem. 
+  This item can be designed using the predefined CSS-style &quot;info&quot;:
+</p>
+<pre>
+info {
+	padding-right: 10;
+	background: none;
+	border-color: black;
+	font-style: plain; 
+	font-face: proportional; 
+	font-size: small; 
+	font-color: fontColor; /* a color defined in the &quot;colors&quot; section */
+	layout: right;
+}
+</pre>
+	<h4 id="textfield-embedded">Embedded Input Indicator</h4>
+<p>You can include the info item in the TextField instead of showing it at the top of the screen by specifying 
+<code>polish.TextField.includeInputInfo</code> in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.includeInputInfo&quot; value=&quot;true&quot; /&gt;
+</pre>
+	<p>For aligning the input indicator to the right side of the textfield, just specify a 'right' layout within the &quot;info&quot; style.</p>
+	<h4 id="textfield-external">External Input Indicator</h4>
+	<p>
+	Some requirements need to display the current input info in another place.
+	For these cases you can call <code>TextField.setInfoItem(StringItem)</code> or <code>UiAccess.setTextfieldInfoItem(TextField, StringItem)</code>:
+	</p>
+<pre>
+//#style externalInputIndicator
+StringItem external = new StringItem( null, null );
+UiAccess.setTextfieldInfoItem( textField, external);
+</pre>
+	<p>
+	You simply create a StringItem, add it to your screen layout and call the method with the given StringItem.
+	To use the method the following variable has to be set to <code>true</code>:
+</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.useExternalInfo&quot; value=&quot;true&quot; /&gt;	
+</pre>
+	<p>
+	Note: On BlackBerry platforms this feature is not available.
+	</p>
+	<h4 id="textfield-deactivate">Deactivate Input Indicator</h4>
+<p>
+The info item can be deactivated globally by setting the &quot;polish.TextField.showInputInfo&quot; variable to &quot;false&quot;:
+</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.showInputInfo&quot; value=&quot;false&quot; /&gt;
+</pre>
+	
+	<h3 id="textfield-help">Help text</h3>
+	
+	<p>
+	To display a text to an empty TextField to indicate the required input (e.g. &quot;Enter username here ...&quot;) 
+	you can use <code>TextField.setHelpText(String)</code> or <code>UiAccess.setTextfieldHelp(TextField, String)</code>:
+	</p>
+<pre>
+UiAccess.setTextfieldHelp( textField,  Locale.get("input.help.userName" ) );
+</pre>
+	<p>
+	To use the method the following variable has to be set:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.showHelpText&quot; value=&quot;true&quot; /&gt;
+</pre>
+	<p>	
+	To style the help text you can set the style <code>.help</code> which will apply to help texts in all TextField instances:
+	</p>
+<pre>
+.help { 
+	font-color: grey; 
+	font-size: normal; 
+} 
+</pre>
+<p>Alternatively you can call <code>TextField.setHelpStyle(Style)</code> for specifying a custom style.</p>
+	
+<h3 id="textfield-symbols">Adding Symbols in the TextField</h3>
+<p>
+The user can also add special symbols into a TextField, when the <code>polish.TextField.supportSymbolsEntry</code> preprocessing
+variable is set to <code>true</code>:
+</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.supportSymbolsEntry&quot; value=&quot;true&quot; /&gt;
+</pre>
+<p>You can define your own set of symbols by defining the variable <code>polish.TextField.Symbols</code>.
+</p>
+
+<h2 id="textfield-fixed_point_decimal">Fixed Point Decimal Constraint</h2>
+<p>
+	J2ME Polish textfields with activated <a href="#textfield-DirectInputMode">direct input mode</a> can make use of a cash register like input
+	constraint. With that constraint the result will always be a decimal number with a fixed number of digital places behind the point. Entering a 
+	&quot;1&quot; results in &quot;0.01&quot;, &quot;123&quot; in &quot;1.23&quot;, and so on. You can create such a TextField with the help
+	of <code>de.enough.polish.ui.UiAccess</code>:
+</p>
+<pre>
+TextField field = new TextField("Price: ", null, 6, UiAccess.CONSTRAINT_FIXED_POINT_DECIMAL );
+// allow 3 decimal places (2 is the default):
+UiAccess.setNumberOfDecimalFractions(field, 3);
+</pre>
+
+<h2 id="textfield-PredictiveInputMode">Predictive Input Mode</h2>
+	<p>
+	The predictive input mode can be activated by setting the variable <code>polish.TextField.usePredictiveInput</code> to true.
+	<br/>
+	NOTE: On BlackBerry phones native EditFields are used which provide predictive input.
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.usePredictiveInput&quot; value=&quot;true&quot; /&gt;
+</pre>
+
+	<h3 id="textfield-predictive-install">Installation</h3>
+	
+	<p>
+	To use the predictive input in the application, the dictionary must be installed first. To do this,
+	please select "Install Predictive" from the menu of the application using predictive input:
+	</p>
+		
+	<p>
+	There are two different installation modes depending on the device using the application: 
+	</p>
+	<ul>
+		<li>
+		The first mode installs the dictionary in a shared record store for all applications to use the same unique dictionary.
+		This mode is available to most of the devices supporting MIDP2 (exceptions are listed in the second mode).
+		The dictionary is contained within a setup that will be downloaded and installed as an j2me application to the
+		user's device. The user just needs to follow the instructions. (NOTE: Some devices will download the application
+		but will not automatically launch the setup. In this case, just start the setup manually)
+		</li>
+		<li>
+		The second mode is used for devices that need signing or are just not capable to use a shared record store.
+		These devices include all MIDP1 and Motorola devices.
+		In this case, the dictionary is downloaded directly to the application without a setup and installed in a local record store. 
+		Every application using the predictive mode has to install its own dictionary.
+		</li>
+	</ul>
+	
+	<h3 id="textfield-predictive-usage">Usage</h3>
+	
+	<p>
+	After the installation of the dictionary has finished, the predictive mode can be used.
+	The user just types the numbers equivalent to the letters of the word he would like to see in the textfield.
+	For each typed number the predictive mode will display the matching words. For example, the combination
+	668437 will return the results "mother" and "videos" to choose from.
+	</p>
+		
+	<p>
+	To choose one of the possibilities, just press UP and select the desired word by pressing FIRE. The dictionary
+	remembers the most used selected words and resorts the list the next time the results are shown. For example, if 
+	you choose "videos" in the example above, the next time you type 668437 "videos" will be the first option.
+	</p>
+	
+	<p>
+	The user can choose different input modes the enter the words, like "abc", "ABC" ... To indicate the predictive
+	mode a double arrow is heading the input mode in the info box.
+	</p>
+	
+	<p>
+	To disable and enable the predictive input of a single textfield, the commands "Disable Predicitive Input" and 
+	"Enable Predicitive Input" can be used. The user can also add new words to the dictionary by using the "Add Word" 
+	command in the menu. The added words will be available in all applications using the predictive input unless the 
+	second installation mode was used (see above).
+	</p>
+			
+	<h3 id="textfield-predictive-design">Design</h3>
+	
+	<p>
+	There are predefined styles to design the list of your predictive results in a textfield. 
+	</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>predictive-containerstyle</td>
+	 <td>Points to a style to design the list of predictive results itself.
+	 </td>
+	</tr>
+	<tr>
+	 <td>predictive-choicestyle</td>
+	 <td>Points to a style to design the entry in a list of predictive results.
+	 </td>
+	</tr>
+	<tr>
+	 <td>predictive-choice-orientation</td>
+	 <td>Sets the orientation of the list of predictive results. Two values are permitted: "top" and "bottom".
+	 The default is "bottom" which draw the list in an descending order below the textfield. "top" draws
+	 the list in an ascending order above the textfield. This can be useful for textfields that 
+	 don't provide enough space below them to display the list.
+	 </td>
+	</tr>
+	</table>
+	
+	<p>
+	Here's an example how to style a predictive textfield:
+	</p>
+	
+	<pre>
+.myTextfield {
+	font-color: blue;
+	font-size: small;
+	predictive-containerstyle: myTextFieldContainer;
+	predictive-choicestyle:	myTextFieldChoice;
+	predictive-choicestyle: top;	
+}
+	</pre>
+
+	<pre>
+.myTextFieldContainer {
+	border-color: blue;
+	border-size: 1;
+}
+	</pre>
+	
+	<pre>
+.myTextfieldChoice {
+	font-color: blue;
+	font-size: small;
+	font-style: bold;
+}
+	</pre>	
+	
+	<h2>Array mode</h2>
+	
+	<p>
+	To initialize the array mode, the method <code>setPredictiveDictionary(TextField field, String[] words)</code>
+	of <code>UIAccess</code> must be called. The method takes two arguments: the array of <code>String</code> objects
+	and the textfield that should be used to provide the input to filter strings. A call with <code>null</code> as the array
+	resets the source for the given textfield to the RMS dictionary.
+	</p>
+	
+	<pre>
+TextField myField = new TextField("city: ","",100,TextField.ANY);
+
+String[] cities = new String[] {
+ "Amsterdam",
+ "Bombay",
+ "Bremen",
+ "London",
+ "Paris",
+ "New York"
+ };
+
+UIAccess.setPredictiveDictionary(myField,cities);
+</pre>
+	
+	<p>
+	If the user enters a sequence of numbers (similar to the normal dictionary mode) the predictive input mode internally
+	filters out the strings that don't match. To obtain the results the method <code>getResults()</code> of the
+	<code>UiAccess</code>  must be called which returns an <code>ArrayList</code> of strings. 
+	</p>
+	
+<pre>
+ArrayList results = UiAccess.getPredictiveMatchingWords(mytextfield);
+</pre>
+	
+	<p>
+	The method to obtain the results is usually called in the <code>itemStateChanged()</code> callback of the interface 
+	<code>ItemStateListener</code> so that everytime the user enters a number the results are obtained and processed.
+	The source set of strings for the array mode can be changed everytime by calling 
+	<code>UiAccess.setPredictiveDictionary(TextField field, String[] words)</code>.
+	</p>
+	
+	<h2 id="textfield-virtualkeyboard">Virtual keyboard</h2>
+	
+	<p>
+	To ease the input of text to TextField on touch device the virtual keyboard can be used.
+	This is basically an on-screen keyboard which can be styled and suited to the developers needs. 
+	To activate the keyboard simply add the following variable to the variables section of your projects
+	build.xml:
+	</p>
+	
+	<code>polish.TextField.useVirtualKeyboard</code>
+	
+	<p>
+	When you know select a TextField it will create and display a simple virtual keyboard with default key layouts.
+	The layouts displayed are chosen by the type of a text field. Currently these types are supported:
+	</p>
+	
+	<code>TextField.ANY</code></br>
+	<code>TextField.NUMERIC</code></br>
+	<code>TextField.PHONENUMBER</code>
+	
+	<p>
+	For each of these modes, the suitable default layouts are selected and displayed.
+	</p>
+	
+	<h3>Layouts</h3>
+	
+	<p>
+	While the default layouts should be sufficient for most tasks when writing an english-based application, you might want
+	to create your own layouts to support i.e. other languages.
+	</p>
+	
+	<p>
+	Here's a simple example of how the default layout of the type TextField.NUMBER is created:
+	</p>
+	
+	<p>
+	<code>
+	0,0=1</br>
+	0,1=2</br>
+	0,2=3</br>
+	1,0=4</br>
+	1,1=5</br>
+	1,2=6</br>
+	2,0=7</br>
+	2,2=8</br>
+	2,2=9</br>
+	3,0=[]</br>
+	3,1=0</br>
+	3,2=[]</br>
+	</code>
+	</p>
+	
+	<p>
+	The layouts are written in the syntax of a Java .properties file. Each line represents a key. 
+	The first part (e.g. <code>0,0</code>) defines the position of the key inside the layout. The
+	second part defines the value. The value can be any UTF8 character.
+	</p>
+	
+	<h3>Special Keys</h3>
+	
+	<p>At the position 3,2 in the above example there is one of the placeholders to use special keys
+	in your layouts. Here's an overview of the placeholders you can use:</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+		<tr><th>Placeholder</th><th>Description</th></tr>
+		<tr>
+		 <td>[SPACE]</td>
+		 <td>inserts a space bar to your layout.</td>
+		</tr>
+		<tr>
+		 <td>[SHIFT]</td>
+		 <td>inserts a shift key to your layout.</td>
+		</tr>
+		<tr>
+		 <td>[MODE]</td>
+		 <td>inserts a mode key to your layout. This is used e.g. for the TextField.ANY type where two layouts are present and the user needs to switch between these two</td>
+		</tr>
+		<tr>
+		 <td>[DELETE]</td>
+		 <td>inserts a delete key to your layout which will remove the last character of the written text</td>
+		</tr>
+		<tr>
+		 <td>[CLEAR]</td>
+		 <td>inserts a clear key to your layout which will clear the written text</td>
+		</tr>
+		<tr>
+		 <td>[]</td>
+		 <td>inserts a blank to your layout</td>
+		</tr>
+	</table>
+	
+	<h3>Using your own layouts</h3>
+	
+	<p>
+	To use your own layouts you need to overwrite the default mappings for the TextField types you wish to use with another layout.
+	There are 3 variables that can be set to a path of a layout .properties file within your JAR file. 
+	</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+		<tr><th>Name</th><th>Description</th></tr>
+		<tr>
+		 <td>virtualKeyboard.KeyMap.Any.Alpha</td>
+		 <td>the URL of a .properties file that describes the layout of the alphabetic (abcdef) section of the TextField.ANY type</td>
+		</tr>
+		<tr>
+		 <td>virtualKeyboard.KeyMap.Any.Numeric</td>
+		 <td>the layout of the numeric (0123.,()) section of the TextField.ANY type</td>
+		</tr>
+		<tr>
+		 <td>virtualKeyboard.KeyMap.Numeric</td>
+		 <td>the layout for the TextField.NUMERIC type</td>
+		</tr>
+		<tr>
+		 <td>virtualKeyboard.KeyMap.Phonenumber</td>
+		 <td>the layout for the TextField.PHONENUMBER type</td>
+		</tr>
+	</table>
+	
+	<h3>Styling</h3>
+	
+	<p>
+	To style your keyboard there are several styles that can be overwritten:
+	</p>
+	
+	 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+		<tr><th>Style</th><th>Description</th></tr>
+		<tr>
+		 <td>keyDimension</td>
+		 <td>serves as the base style for general key styles. It defines the minimum width of a key which defaults to 15% of the screen</td>
+		</tr>
+		<tr>
+		 <td>keySpaceDimension</td>
+		 <td>serves as the base style for the space key style. It defines the minimum width of the space key which defaults to 45% of the screen</td>
+		</tr>
+		<tr>
+		 <td>key</td>
+		 <td>serves as the style for all standard style.</td>
+		</tr>
+		<tr>
+		 <td>key</td>
+		 <td>serves as the style for all standard style.</td>
+		</tr>
+		<tr>
+		 <td>keySpace</br>keyShift</br>keyClear</br>keyDelete</br>keyMode</br>keyBlank</br></td>
+		 <td>the styles for the spcial keys</td>
+		</tr>
+		<tr>
+		 <td>keyRow</td>
+		 <td>the style for a row of keys inside a keyboard layout. Defaults to a horizontal list which should be inherited</td>
+		</tr>
+		<tr>
+		 <td>keyboard</td>
+		 <td>the overall style of the keyboard</td>
+		</tr>
+		<tr>
+		 <td>keyboardView</td>
+		 <td>the style of the screen which hold the keyboard, the text display and the submit button</td>
+		</tr>
+		<tr>
+		 <td>keyboardViewHeader</td>
+		 <td>the style of the header of the keyboard view which holds the text display and the submit button. Defaults to a 2-column layout which should be inherited</td>
+		</tr>
+		<tr>
+		 <td>keyboardViewDisplay</td>
+		 <td>the style of the text display of the keyboard view</td>
+		</tr>
+		<tr>
+		 <td>keyboardViewSubmit</td>
+		 <td>the style of the submit button of the keyboard view</td>
+		</tr>
+	</table>
+	
+	<h2 id="textfield-Programming">Programming</h2>
+	<p>
+	You can use 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a> for accessing J2ME Polish specific 
+	functionalities of the TextField:
+	</p>
+	
+	<ul>
+		<li><code>UiAccess.setCaretPosition( TextField field, int position )</code>: Sets the position of the input caret.</li>
+		<li><code>UiAccess.setInputMode( javax.microedition.lcdui.TextField field, int inputMode )</code>: Sets the input mode to either 
+			<code>UiAccess.MODE_NUMBERS</code>, <code>UiAccess.MODE_LOWERCASE</code>, <code>UiAccess.MODE_UPPERCASE</code>, 
+			<code>UiAccess.MODE_FIRST_UPPERCASE</code>,  or <code>UiAccess.MODE_NATIVE</code>.
+		</li>
+		<li><code>int UiAccess.getInputMode( TextField field )</code>: Gets the current input mode.</li>
+		<li><code>String UiAccess.getDotSeparatedDecimalString( TextField field )</code>: Retrieves the 
+			contents of a DECIMAL TextField as a number with floating numbers separated by a dot, no matter what locale is being used.
+		</li>
+		<li><code>UiAccess.setPredictiveDictionary(TextField field, String[] words)</code>: Allows the user only to enter any 
+			of the given words - can only be used when the predictive mode has been anabled.
+		</li>
+		<li><code>UiAccess.setTextfieldHelp(TextField field, String text)</code>: Sets the helper text that is being shown 
+			when the text of a TextField is empty - can only be used when <code>polish.TextField.showHelp</code> is <code>true</code>.
+		</li>
+		<li><code>UiAccess.setTextfieldInfo(TextField field, String info)</code>: 
+			Sets the strings that should be displayed to guide the user what to do with the textfield (like "type text here").
+			A value of <code>null</code> shows no info in the field.
+		</li>
+		<li><code>UiAccess.setSuppressCommands(TextField field, boolean suppress)</code>: Suppresses the textfields standard 
+		and predictive commands like Clear, Add Word etc.
+		</li>
+		<li><code>UiAccess.setWordNotFound(TextField field, Alert alert)</code>: 
+		Sets an custom alert to show the "Word not found" message of the predictive input.
+		</li>
+		<li><code>UiAccess.CONSTRAINT_FIXED_POINT_DECIMAL</code>: constant for applying a <a href="#textfield-fixed_point_decimal">fixed point decimal</a> constraint on TextFields with direct input mode.</li>
+		<li><code>UiAccess.setNumberOfDecimalFractions( TextField field, int number )</code>: for allowing a different number than 2 decimal places for fixed point decimal fields.</li>
+		<li><code>int UiAccess.getNumberOfDecimalFractions( TextField field )</code>: for retrieving the number of decimal places of fixed point decimal field.</li>
+		
+		<!-- 
+		<li><code>UiAccess.</code>: </li>
+		<li><code>UiAccess.</code>: </li>
+		<li><code>UiAccess.</code>: </li>
+		<li><code>UiAccess.</code>: </li>
+		<li><code>UiAccess.</code>: </li>
+		 -->
+	</ul>
+	<h2 id="textfield-Configuration">Configuration</h2>
+	<p>As explained in the above sections, following configurations can be done within the &lt;variables&gt; variables section
+	of your build.xml script:
+	</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>polish.command.clear</td>
+	 <td>Clear</td>
+	 <td>Command text for deleting the complete text.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.clear.priority</td>
+	 <td>8</td>
+	 <td>Priority of the clear command.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.clear.type</td>
+	 <td>Command.ITEM</td>
+	 <td>Type of the clear command.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.delete</td>
+	 <td>Delete</td>
+	 <td>Command text for deleting a single character.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.delete.priority</td>
+	 <td>1</td>
+	 <td>Priority of the delete command.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.delete.type</td>
+	 <td>Command.CANCEL | Command.ITEM</td>
+	 <td>Type of the delete command. On devices with a return/back key or when the device supports pointer events and you use popup screens this is Command.ITEM, otherwise its Command.CANCEL.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.entersymbol</td>
+	 <td>Add Symbol</td>
+	 <td>Command text for adding symbols, only applicable when <code>polish.TextField.supportSymbolsEntry</code> is <code>true</code>.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.entersymbol.priority</td>
+	 <td>9</td>
+	 <td>Priority of the command for adding symbols.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.AddSymbolKey, polish.key.AddSymbolKey2</td>
+	 <td>Device dependent</td>
+	 <td>Device key that triggers the symbols entry screen when pressed longer.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.backspace</td>
+	 <td>Device dependent</td>
+	 <td>Alternativ key for deleting a character.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.ChangeInputModeKey</td>
+	 <td>Device dependent</td>
+	 <td>The key which is used for changing the input mode between lowercase (&quot;abc&quot;), uppercase (&quot;ABC&quot;), initial-letter uppercase (&quot;Abc&quot;) and numeric (&quot;123&quot;). On Sony-Ericsson devices Canvas.KEY_STAR (42), on Motorola devices Canvas.KEY_NUM0 (48) and on all other devices Canvas.KEY_POUND (35) is used.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.ChangeNumericalAlphaInputModeKey</td>
+	 <td>Device dependent</td>
+	 <td>Device key for switching between numerical and alphabet input, usually only used on Motorola handsets.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.ClearKey</td>
+	 <td>Device dependent</td>
+	 <td>Device key for deleting a character, it is often -8.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.enter</td>
+	 <td>Device dependent</td>
+	 <td>Device key for entering new lines.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.shift</td>
+	 <td>Device dependent</td>
+	 <td>Device key for entering upper case character.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.supportsAsciiKeyMap</td>
+	 <td>Device dependent</td>
+	 <td>If true the user can use a keyboard for entering characters.</td>
+	</tr>
+	<!-- 
+	<tr>
+	 <td></td>
+	 <td></td>
+	 <td>.</td>
+	</tr>
+	 -->
+	<tr>
+	 <td>polish.TextField.allowNativeModeSwitch</td>
+	 <td>false</td>
+	 <td>Allows to switch back to the native mode when the <code>polish.TextField.useDirectInput</code> is being used.</td>
+	</tr>
+	
+	<tr>
+	 <td>polish.TextField.charactersKey1</td>
+	 <td>.,!?&#191;/()@_-+1'\&quot;;</td>
+	 <td>The characters which are available when the key &quot;1&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey2</td>
+	 <td>abc2&#224;&#225;&#226;&#227;&#228;&#229;&#230;&#231;</td>
+	 <td>The characters which are available when the key &quot;2&quot; is pressed. It might be useful to add local specific umlauts here.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey3</td>
+	 <td>def3&#232;&#233;&#234;&#235;</td>
+	 <td>The characters which are available when the key &quot;3&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey4</td>
+	 <td>ghi4&#261;&#262;&#263;&#264;</td>
+	 <td>The characters which are available when the key &quot;4&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey5</td>
+	 <td>jkl5</td>
+	 <td>The characters which are available when the key &quot;5&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey6</td>
+	 <td>mno6&#266;&#267;&#268;&#269;&#270;&#271;</td>
+	 <td>The characters which are available when the key &quot;6&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey7</td>
+	 <td>pqrs7&#248;</td>
+	 <td>The characters which are available when the key &quot;7&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey8</td>
+	 <td>tuv8&#274;&#275;&#276;&#277;</td>
+	 <td>The characters which are available when the key &quot;8&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey9</td>
+	 <td>wxyz9&#278;</td>
+	 <td>The characters which are available when the key &quot;9&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey0</td>
+	 <td>&nbsp;0</td>
+	 <td>The characters which are available when the key &quot;0&quot; is pressed. On Motorola devices this key is used for switching the input mode.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKeyStar</td>
+	 <td>.,!?&#191;/()@_-+1'\&quot;;</td>
+	 <td>The characters which are available when the key &quot;*&quot; is pressed. On Motorola devices this key is used for entering spaces (&quot; &quot;).</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKeyPound</td>
+	 <td>(none)</td>
+	 <td>The characters which are available when the key &quot;#&quot; is pressed. On Sony-Ericsson devices this key is used for entering spaces (&quot; &quot;).</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.help</td>
+	 <td>type text here</td>
+	 <td>Text that is being shown when the TextField is empty - the <code>polish.TextField.showHelpText</code> variable needs to be set as well.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.includeInputInfo</td>
+	 <td>false</td>
+	 <td>Includes the input mode indicator into the TextField instead of showing it at the top of the screen, only applicable when the <code>polish.TextField.useDirectInput</code> is active.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.InputTimeout</td>
+	 <td>&quot;1000&quot;</td>
+	 <td>The timeout in milliseconds after which a chosen character is inserted into the text automatically.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.showInputInfo</td>
+	 <td>&quot;true&quot;</td>
+	 <td>Defines whether the box showing the current input mode (e.g. &quot;123&quot;, &quot;Abc&quot;, &quot;abc&quot;, &quot;ABC&quot;) should be shown at all. You can deactivate the box globally by setting the &quot;polish.TextField.showInputInfo&quot; variable to &quot;false&quot;.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.suppressAddSymbolCommand</td>
+	 <td>false</td>
+	 <td>Surpresses the command for adding symbols when <code>polish.TextField.supportSymbolsEntry</code> is <code>true</code>.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.suppressAutoInputModeChange</td>
+	 <td>false</td>
+	 <td>If <code>true</code> the TextField will not change the input mode automatically, e.g. after the user enters a dot (in that case the TextField switches into the 'Abc' mode by default.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.suppressCommands</td>
+	 <td>false</td>
+	 <td>Deactivates all TextField commands.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.suppressDeleteCommand</td>
+	 <td>false</td>
+	 <td>Deactivates the &quot;Delete&quot; command of a TextField.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.supportSymbolsEntry</td>
+	 <td>false</td>
+	 <td>Allows users to enter special symbols from within a TextField, only applicable when the direct input mode is activated using <code>polish.TextField.useDirectInput</code>.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.Symbols</td>
+	 <td>&amp;@/\&lt;&gt;(){}[].,+-*:_\#$%</td>
+	 <td>A string with of symbols that the user can select when symbol entry has been activated using <code>polish.TextField.supportSymbolsEntry</code>.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.showHelpText</td>
+	 <td>false</td>
+	 <td>Displays a text for empty TextFields - defaults to &quot;type text here&quot;.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.useDirectInput</td>
+	 <td>false</td>
+	 <td>Activates the direct input mode.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.usePredictiveInput</td>
+	 <td>false</td>
+	 <td>Enables the predictive input mode, the <code>polish.TextField.useDirectInput</code> mode needs to be active, too.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.keepCaretPosition</td>
+	 <td>false</td>
+	 <td>Keeps the caret position when a TextField is focused - by default the cursor jumps to the end of the text.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.jumpToStartOnFocus</td>
+	 <td>false</td>
+	 <td>Jumps to the beginning of the text when a TextField is focused - by default the cursor jumps to the end of the text.</td>
+	</tr>
+	<!-- 
+	
+	<tr>
+	 <td></td>
+	 <td>false</td>
+	 <td>.</td>
+	</tr>
+	<tr>
+	 <td></td>
+	 <td>false</td>
+	 <td>.</td>
+	</tr>
+	 -->
+</table>	
+	<h2 id="textfield-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextField.html">TextField</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

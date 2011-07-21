@@ -1,0 +1,76 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI Localization %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+	<h1 id="top">GUI Localization</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="localization.html">Localization</a></li>
+		<li><a href="customization.html">Customization</a></li>
+	</ul>
+
+<p>
+The J2ME Polish GUI uses several texts, which can be localized using variables. The following variables can be set either in the build.xml or within the messages.txt file:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>polish.command.ok</td>
+	 <td>OK</td>
+	 <td>The label for the OK-menu-item, which is used Screen-menus when the &quot;menu&quot;-fullscreen-mode is used.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.cancel</td>
+	 <td>Cancel</td>
+	 <td>The label for the Cancel-menu-item.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.select</td>
+	 <td>Select</td>
+	 <td>The label for the Select-menu-item, which is used by an implicit or exclusive List or ChoiceGroup.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.mark</td>
+	 <td>Mark</td>
+	 <td>The label for the Mark-menu-item of a multiple List or ChoiceGroup.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.unmark</td>
+	 <td>Unmark</td>
+	 <td>The label for the Unmark-menu-item of a multiple List or ChoiceGroup.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.options</td>
+	 <td>Options</td>
+	 <td>The label for the menu when several menu-items are available.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.delete</td>
+	 <td>Delete</td>
+	 <td>The label for the Delete-menu-item, which is used by TextFields.</td>
+	</tr>
+	<tr>
+	 <td>polish.command.clear</td>
+	 <td>Clear</td>
+	 <td>The label for the Clear-menu-item, which is used by TextFields.</td>
+	</tr>
+	<tr>
+	 <td>polish.title.input</td>
+	 <td>Input</td>
+	 <td>The title of the native TextBox which is used for the actual input of text. This title is only used, when the corresponding TextField-item has no label. When the TextField has a label, that label is used as a title instead.</td>
+	</tr>
+</table>
+<p>
+The following example shows the definition of some of these variables within a messages.txt file:
+<pre>
+var:polish.command.cancel=Abbruch
+var:polish.command.delete=L&ouml;schen
+var:polish.title.input=Eingabe
+</pre>
+</p>
+
+	
+<%include end.txt %>

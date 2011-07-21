@@ -1,0 +1,73 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">CSS Syntax</h1>
+	<p>Following rules do apply for CSS styles:</p>
+	<h2>Structure of a CSS Declaration</h2>
+	<p>
+<pre>
+.myStyle   {   font-color: black;   }
+
+SELECTOR/      ATTRIBUTE   VALUE
+NAME
+</pre></p>
+	<p>
+Every style starts with the selector followed by an opening curved parenthesis, a number of attribute-value pairs and a closing  curved parenthesis.
+The selector can consist of several item-names and contain an &quot;extends&quot; clause.
+Each attribute-value pair needs to be finished by a semicolon.
+</p>
+<h2>Naming</h2>
+<p>
+Styles can use any names, as long as they consist of alphanumeric and underline (_) characters only. Names are not case-sensitive. Static styles need to start with a dot. Static styles must not use the names of dynamic or predefined styles. All Java keywords like &quot;class&quot;, &quot;int&quot; or &quot;boolean&quot; etcetera are not allowed as style names.
+</p>
+<h2>Grouping of Attributes</h2>
+<p>Attributes can be grouped for easier handling:
+<pre>
+.mainScreen {
+	font-color: black;
+	font-size: medium;
+	font-style: italic;
+	font-face: system;
+}
+</pre>
+</p><p>
+The above code is equivalent with the following:
+<pre>
+.mainScreen {
+	font {
+		color: black;
+		size: medium;
+		style: italic;
+		face: system;
+	}
+}
+</pre>
+</p><p>
+The grouping makes the declarations better readable for humans.
+</p>
+<h2>Referring to Other Styles</h2>
+<p>
+When another style is referred, the dots of static styles do not need to be written. Styles can be referred in attributes or after the extends keyword in the selector of a style.
+</p>
+<h2>Comments</h2>
+<p>
+Comments can be inserted at any place and start with &quot;/*&quot; and stop with &quot;*/&quot;. Everything between these boundaries is ignored:
+<pre>
+/* this style designs the main screen: */
+.mainScreen {
+	/* defining the color of a font: */
+	font-color: black;
+	/* sizes are small, medium and large: */
+	font-size: medium;
+	/* styles are plain, bold, italic or underlined: */
+	font-style: italic;
+	/* the face can either be system, proportional or monospace: */
+	font-face: system;
+}	
+</pre>
+</p>
+
+<%include end.txt %>

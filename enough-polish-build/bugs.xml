@@ -1,0 +1,759 @@
+<!-- 
+	bugs.xml contains the definitions of bugs which are used in devices.xml. 
+
+    Copyright (c) 2004, 2005 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+<bugs>
+	<bug>
+		<name>drawRgbOrigin</name>
+		<description>The Graphics.drawRGB(..) method does not use a translated origin, 
+		 but starts always at the top-left 0,0 origin.
+		</description>
+		<area>ui</area>
+		<solution>
+		Use the top-left 0,0 origin for devices with this bug:\n
+		//#ifdef polish.Bugs.drawRgbOrigin\n
+			x += g.getTranslateX();\n
+			y += g.getTranslateY();\n
+		//#endif\n
+		g.drawRGB( rgbData, offset, scanlength, x, y, width, height, processAlpha);
+		</solution>
+	</bug>
+
+	<bug>
+		<name>drawRgbNeedsFullBuffer</name>
+		<description>The Graphics.drawRGB(..) method does not accept only one row which
+		then can be repeated several times. Usually this trick saves some memory as well as work.
+		</description>
+		<area>ui</area>
+		<solution>
+		Give a full buffer (rows * columns) in the drawRGB method instead of only one row.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>ImageIOStreamAutoClose</name>
+		<description>The Image.createImage( InputStream in ) should not close
+		the given input stream according to the specification. Devices with this
+		bug close the input stream.
+		</description>
+		<area>io</area>
+		<solution>Move any image which should be loaded from an input stream to 
+		the last position in the corresponding stream.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>fullScreenInPaint</name>
+		<description>Calling the Canvas.setFullScreenMode(boolean) method results
+		in an error, unless it is called in the paint()-method.
+		</description>
+		<area>ui</area>
+		<solution>Track the state of the fullscreen mode and set it in the paint method.
+		</solution>
+	</bug>
+	<bug>
+		<name>losesFullScreen</name>
+		<description>Canvas.setFullScreenMode(boolean) is needed regularily,
+		</description>
+		<area>ui</area>
+		<solution>Call it in every paint() method.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>fullScreenInShowNotify</name>
+		<description>Calling the Canvas.setFullScreenMode(boolean) method results
+		in an error, unless it is called in the showNotify()-method.
+		</description>
+		<area>ui</area>
+		<solution>Set it the fullscreen mode in the showNotify() method.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>NoSpriteRotation</name>
+		<description>The MIDP/2.0 Sprite Rotation does not work on this device.
+		</description>
+		<area>game, ui</area>
+	</bug>
+
+	<bug>
+		<name>DisplayGetColor</name>
+		<description>The MIDP/2.0 Display-method getColor( int specification ) does not work
+		on this device. This method is often used for CustomItems.
+		</description>
+		<area>ui</area>
+		<solution>Define and use your own colors for this device.
+		A possible (but untested) solution might be to call getColor() after the first
+		screen has been set, so that the UI graphics system has the chance to initialize.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>needsGCinPaint</name>
+		<description>When you encounter a DISCONTINUED error on such a device,
+		you might need to call the garbage collection in each paint(Graphics g)-call.
+		</description>
+		<area>ui</area>
+		<solution>Call the Runtime.getRuntime().gc()-method in your paint(Graphics g)-methods.</solution>
+	</bug>
+
+	<bug>
+		<name>inaccessibleFirstRow</name>
+		<area>ui</area>
+		<description>The first top row of pixels is not accsessible for developers. Painting the whole screen with a fullsize image will result in the last row of pixels out of screen. </description>
+		<solution></solution>
+	</bug>
+
+	<bug>
+		<name>umlautsInSmallFont</name>
+		<area>ui</area>
+		<description>Some special characters are not displayed correctly in small fonts.</description>
+		<solution>Using medium, large or bitmap fonts.</solution>
+	</bug>
+
+	<bug>
+		<name>dateFieldAcceptsNoNullDate</name>
+		<area>ui</area>
+		<description>The javax.microedition.lcdui.DateField must not get a null Date, otherwise it cannot be changed by the user.</description>
+		<solution>Provide a new Date instance with the setDate( java.util.Date ) after creating the DateField or use the J2ME Polish GUI.</solution>
+	</bug>
+
+	<bug>
+		<name>dateFieldBroken</name>
+		<area>ui</area>
+		<description>The javax.microedition.lcdui.DateField always returns the initial value, even when the value has been changed by the user.</description>
+		<solution>Use the J2ME Polish GUI (which assumes a &quot;true&quot; polish.DateField.directInputMode when this error is present from J2ME Polish 1.3 onwards).</solution>
+	</bug>
+
+	<bug>
+		<name>layerManagerSetViewWindow</name>
+		<area>game</area>
+		<description>The setViewWindow( viewX, viewY, viewWidth, viewHeight ) method moves all layers in the manager instead of setting the view window.</description>
+		<solution>Don't set the view window's viewX and viewY coordinates  when this bug is present and adjust the paint-call of the layer-manager: 
+		 instead of calling layerManager.paint( g, x, y ) call layerManager.paint( g, x - viewX, y - viewY ).
+		</solution>
+	</bug>
+
+	<bug>
+		<name>needsNokiaUiForSystemAlerts</name>
+		<area>ui</area>
+		<description>When using the MIDP/2.0 based fullscreen mode devices with this error do not show system screens properly. 
+		 System screens are usually shown automatically when security sensitive operations are undertaken,
+		 e.g. sending a short message.
+		</description>
+		<solution>Use the com.nokia.mid.ui.FullCanvas instead for having a fullscreen mode. The J2ME Polish GUI does this automatically when this error is present.</solution>
+	</bug>
+
+	<bug>
+		<name>stringWidthLineBreak</name>
+		<area>ui</area>
+		<description>The Font.stringWidth( String ) method disregards any characters after a line-break character (\n).</description>
+		<solution>When calculating the complete width of a string with line-breaks, you need to split the string at the line-breaks first and then add up the widths of the single parts.</solution>
+	</bug>
+	
+	<bug>
+		<name>ConnectorNokiaComm</name>
+		<area>io</area>
+		<description>Infrared ports cannot be opend with Connector.open(&quot;comm:IR0&quot;).</description>
+		<solution>Use instead the &quot;nokiacomm&quot; connector: Connector.open(&quot;nokiacomm:IR0&quot;).</solution>
+	</bug>
+	
+	<bug>
+		<name>PlatformRequestHttpLaunchRequiresExit</name>
+		<area>io</area>
+		<description>Normally a platformRequest( &quot;http://www.xxx.com&quot;) should launch the browser immediately, 
+		  with either leaving the application running or destroying the application first. On the affected devices
+		  you need to exit the application manually, however. Initialising voice calls via platformRequest() is working
+		  however with putting the application to the background.
+		</description>
+		<solution>Exit the application manually after issuing a HTTP platform request when this bug is present.</solution>
+	</bug>
+
+	<bug>
+		<name>ExitCommandAlwaysPresent</name>
+		<area>ui</area>
+		<description>On Series 60 phones there is always an &quot;Exit&quot; command present for closing the application.</description>
+		<solution>Use the J2ME Polish GUI instead.</solution>
+	</bug>
+
+	<bug>
+		<name>PlatformRequestRequiresQuit</name>
+		<area>io</area>
+		<description>When a non-voice-call platform request is issued, the application needs to be exited manually before the request is launched.</description>
+		<solution>Exit the application when this bug is present.</solution>
+	</bug>
+
+
+	<bug>
+		<name>GaugeNoProgessIndicatorOnAlerts</name>
+		<area>ui</area>
+		<description>When you update a Gauge item within an Alert this update is not shown. Also the title of the Alert is not shown.</description>
+		<solution>Do not use a Gauge as a progress indicator in Alerts when this bug is present.</solution>
+	</bug>
+	
+	<bug>
+		<name>BluetoothRfcommInputStream</name>
+		<area>io</area>
+		<description>When an RFCOMM-protocol InputStream is read over a bluetooth connection on the affected devices,
+			an IOException is thrown when the the other end has closed the stream while it is still being read.
+			Also the application crashes when the input stream uses an array bigger than 512 bytes.
+		</description>
+		<solution>Make sure that the other end does not close the connection before the application has finished
+			reading the input stream. Also do not use a larger array than 512 for the input stream.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>OverrideGetWidthGetHeightInFullCanvas</name>
+		<area>ui</area>
+		<description>When you extend the com.nokia.mid.ui.FullCanvas class you can experience strange behaviors and crashes 
+			when you override either the getWidth() or the getHeight() method. Nokia canvas classes don't seem to
+			like that in general.
+		</description>
+		<solution>Use other method names if you need to provide your own height and width.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>drawStringOver200Chars</name>
+		<area>ui</area>
+		<description>The Graphics.drawString() and Graphics.drawSubstring() methods crash when the given String contains 
+			more than 200 characters.
+		</description>
+		<solution>Use Graphics.drawChars() instead.</solution>
+	</bug>
+
+	<bug>
+		<name>getResourceAsStreamMemoryLeak</name>
+		<area>io, ui</area>
+		<description>When you call getResourceAsStream() memory will be leaked in the same size as the resource.
+		     This is also the case when it is used indirectly, e.g. in Image.createImage().
+		</description>
+		<solution>
+			Don't load the same resource more than once and hope it all fits into the memory.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>setClipForFullScreenNeeded</name>
+		<area>ui</area>
+		<description>This devices requires that the Graphics clip is set to 
+		the full canvas dimensions, otherwise only part of available space can be used.</description>
+		<solution>call setClip( ${polish.FullCanvasWidth}, ${polish.FullCanvasHeight }) in each paint() method.</solution>
+	</bug>
+
+	<bug>
+		<name>stringsInOffscreenAlwaysBlack</name>
+		<area>ui</area>
+		<description>Strings that are drawn in an image-buffer are always black.</description>
+		<solution>
+			Use a bright background color or paint strings only directly on the Graphics element
+			given in the Canvas.paint() method.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>displaySetCurrentFlickers</name>
+		<area>ui</area>
+		<description>
+			Each time when a new screen is shown a white flash is seen. Also when an existing canvas is shown, 
+			apparently an internal buffer is shown first before paint() of that canvas is called.
+		</description>
+		<solution>
+			Use the J2ME Polish GUI (in fullscreen mode) or use a single canvas.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>GameCanvasGetGraphicsNotInConstructor</name>
+		<area>game</area>
+		<description>
+			When you get the Graphics instance of a GameCanvas in fullscreen mode, you must not get it in the constructor, 
+			because in that case you cannot draw the complete available height.
+		</description>
+		<solution>
+			Retrieve the Graphics object at a later state, e.g. in the game loop.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>ReducedMessageLength</name>
+		<area>wmapi</area>
+		<description>
+			In older firmware versions the length of messages is reduced to 89%, ie if you send 100 chars, 
+			it will only send 89, if you send 150 it will send 133.
+		</description>
+		<solution>
+			Set the length of the message to actualLength * 1.123 or arrange for a firmware update.
+		</solution>
+		<infoUrl>https://motocoder.custhelp.com/cgi-bin/motocoder.cfg/php/enduser/std_adp.php?p_faqid=658&amp;p_created=1115735150</infoUrl>
+	</bug>
+	<bug>
+		<name>FontGetBaseline</name>
+		<area>ui</area>
+		<description>font.getBaselinePosition() returns wrong values, e.g. 1.</description>
+		<solution>use font.getHeigth() for getting an approximate value.</solution>
+	</bug>
+	
+	<bug>
+		<name>VersionNumberMustNotExceed99</name>
+		<area>build</area>
+		<description>Each version number must not exceed 99. The version 1.0.99 is valid, whereas 1.0.100 will not be accepted.</description>
+		<solution>Always use lower version numbers than 100.</solution>
+	</bug>
+        
+	<bug>
+		<name>getHeightReturnsCompleteScreenHeight</name>
+		<area>ui</area>
+		<description>canvas.getHeight() always returns the height of the screen, not matter whether the fullscreen mode is activated or not.</description>
+		<solution>Call graphics.getClipHeight() instead.</solution>
+	</bug>
+	
+	<bug>
+		<name>sizeChangedReportsWrongHeight</name>
+		<area>ui</area>
+		<description>canvas.sizeChanged(int width, int height) delivers the height of the screen in non-fullscreen mode, not matter whether the fullscreen mode is activated or not.</description>
+		<solution>Ignore the sizeChanged() call on such devices.</solution>
+	</bug>
+	
+	<bug>
+		<name>requiresHardcodedCanvasDimensionsInFullScreenMode</name>
+		<area>ui</area>
+		<description>canvas.getHeight() returns the height of the screen in non-fullscreen mode, not matter whether the fullscreen mode is activated or not.</description>
+		<solution>Use hardcoded values on such devices when you are using the fullscreen mode.</solution>
+	</bug>
+	
+	<bug>
+		<name>TransparencyNotWorkingInNokiaUiApi</name>
+		<area>ui</area>
+		<description>Nokia-UI-API: After creating a transparent image with DirectUtils nothing can be rendered on that image buffer.</description>
+		<solution>Use MIDP 2.0 drawRGB instead.</solution>
+	</bug>
+	
+	<bug>
+		<name>FillPolygonRequiresPositiveXYInNokiaUiApi</name>
+		<area>ui</area>
+		<description>Nokia-UI-API: In DirectGraphics.fillPolygon each x and y point needs to be at least 1 or higher, otherwise the rendering is aborted without error message.</description>
+		<solution>Use x/y points that are 1 or higher, or use MIDP 2.0 drawRGB instead.</solution>
+	</bug>
+
+	<bug>
+		<name>ItemStateListenerCalledTooEarly</name>
+		<area>ui</area>
+		<description>The item state listener is called too early, e.g. when the user has pressed a key
+		             in a TextField without the key being added to the field already. Subsequent calls
+		             to textField.getString() will then append the pressed key to the field. This
+		             restricts user input to only the first character of a group, e.g. only
+		             'a' instead of 'abc2'.
+		</description>
+		<solution>Use the J2ME Polish GUI and enable the direct input mode for TextFields.
+		          Alternatively wait some time before processing the item state event and
+		          calling textField.getString().
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>noTranslucencyWithDrawRgb</name>
+		<area>ui</area>
+		<description>Translucency is not supported with Graphics.drawRGB.</description>
+		<solution>Use either fully transparent of fully opaque colors.</solution>
+	</bug>
+
+	<bug>
+		<name>usesVideoRam</name>
+		<area>ui</area>
+		<description>A specialized memory section (the video RAM) is used for storing images. Image data is not necissarily gargbage collected from here and images larger thant the video RAM size might be loadable, but cannot be displayed, since they have to be copied into the video RAM first.</description>
+		<solution>Not a bug. Load images that are needed often first.</solution>
+	</bug>
+	
+	<bug>
+		<name>NoPermanentBacklight</name>
+		<area>ui</area>
+		<description>The backlight cannot be turned on permanently.</description>
+		<solution>Run a thread for turning the light on every 60 seconds or so.</solution>
+	</bug>
+	
+	<bug>
+		<name>NoBacklight</name>
+		<area>ui</area>
+		<description>The backlight cannot be turned on at all.</description>
+		<solution>Add native application that controls backlight.</solution>
+	</bug>
+	
+
+	<bug>
+		<name>ReservedKeywordSerializable</name>
+		<area>io</area>
+		<description>Classes called Serializable confuse the device</description>
+		<solution>The J2ME polish build process works around this by auto-renaming the de.enough.polish.io.Serializable interface.</solution>
+	</bug>
+
+	<bug>
+		<name>ignoreTitleCall</name>
+		<area>ui</area>
+		<description>
+		When going into the fullscreen mode, the JVM calls screen.setTitle(null), which prevents
+		J2ME Polish to run an application in fullscreen while showing the title.
+		</description>
+		<solution>Just ignore the scren.setTitle(null) call after entering the fullscreen mode.</solution>
+	</bug>
+	
+	<bug>
+		<name>SingleCapturePlayer</name>
+		<area>multimedia</area>
+		<description>
+			For capturing photos only one single Player instance can be used within an application.
+		</description>
+		<solution>
+			Use only one capture player.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>MaxCommunnicationVolume</name>
+		<area>io</area>
+		<description>
+			The communication volume send in one request and/or response over a connection is limited.
+		</description>
+		<solution>
+			Don't send more than the maximum available volume (use the polish.io.MaxCommunicationVolume property).
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>MaxUrlLength</name>
+		<area>io</area>
+		<description>
+			The length of URLs limited.
+		</description>
+		<solution>
+			Don't send use URLs longer than the maximum allowed length (in bytes!) (use the polish.io.MaxUrlLength property).
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>RmsLimited</name>
+		<area>io, rms</area>
+		<description>
+			The record store system is limited in either the size of a single record store and/or the number of possible recordstores.
+		</description>
+		<solution>
+			Do not store more than the allowed memory in a single recordstore (use the MaxRecordStoreSize property) and do not create more
+			than the number of allowed record stores (MaxRecordStoreNumber property, if this applies to the current device).
+		</solution>
+	</bug>
+
+
+	<bug>
+		<name>SoftKeyMappedToFire</name>
+		<area>ui</area>
+		<description>
+			The softkeys are associated with the Canvas.FIRE game action.
+		</description>
+		<solution>
+			Be careful when processing FIRE game events.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>HttpIfModifiedSince</name>
+		<area>io</area>
+		<description>
+			When doing HTTP requests and the IF-Modified-Since request header does not contain the current date you get an exception
+			<code>IOException: -33</code>
+		</description>
+		<solution>
+			Set the value of the IF-Modified-Since request header to System.currentTimeMillis().
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>noNetworking</name>
+		<area>io</area>
+		<description>
+			Event though MIDP mandates support of at least HTTP, affected devices do not even allow HTTP connections nor other networking.
+		</description>
+		<solution>
+			None, except not doing any network stuff.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>needsAbsoluteUrlToJar</name>
+		<area>jad</area>
+		<description>
+			Some devices cannot handle relative URLs to the JAR file in the JAD file.
+		</description>
+		<solution>
+			Use absolute URL to JAR in JAD file.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>ImageCaptureNotWithVideo</name>
+		<area>mmapi</area>
+		<description>
+			capture://video cannot be used for taking image snapshots.
+		</description>
+		<solution>
+			Use capture://image instead.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>TransparencyNotWorkingInDrawPolygon</name>
+		<area>ui</area>
+		<description>
+			Translucent polygons cannot be drawn using the Nokia-UI-API on this device.
+		</description>
+		<solution>
+			Use Graphics.drawRGB() or the J2ME Polish DrawUtil instead.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>getTitleRequiresNull</name>
+		<area>ui</area>
+		<description>
+			The getTitle() method of canvas subclasses need to return null, when the fullscreen mode should work correctly.
+		</description>
+		<solution>
+			Use the J2ME Polish UI or return null in getTitle()
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>ImageCuttingFails</name>
+		<area>ui</area>
+		<description>
+			Can't cut images properly. For example smallImage=Image.createImage(bigImage,0,0,10,10,Sprite.TRANS_NONE);
+			does not work.
+		</description>
+		<solution>
+			Use clipping instead (Graphics.setClip() and Graphics.clipRect()).
+		</solution>
+	</bug>
+	<bug>
+		<name>IncomingCallDoesNotCallPause</name>
+		<area>system</area>
+		<description>
+			Incoming calls do not call the Midlet.pauseApp() method.
+		</description>
+		<solution>
+			Use Canvas.hideNotify()/showNotify() instead for manually detecting interruptions.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>GetKeyStatesFails</name>
+		<area>game</area>
+		<description>
+			GameCanvas.getKeyStates() does not work.
+		</description>
+		<solution>
+			use keyPressed()/keyReleased() instead.
+		</solution>
+	</bug>
+	<bug>
+		<name>sharedRmsRequiresSigning</name>
+		<area>io,rms</area>
+		<description>
+			Shared recordstores require a permission, e.g. &quot;com.jblend.rms.share&quot; on some JBlend handsets. 
+		</description>
+		<solution>
+			Sign your application when you want to share recordstores.
+		</solution>
+	</bug>
+	<bug>
+		<name>unknownSystemPropertiesThrowExceptions</name>
+		<area>system</area>
+		<description>
+			When calling System.getProperty(name) with a property name that is not defined, a NullPointerException will be thrown.
+		</description>
+		<solution>
+			Only access known System properties or catch any exceptions that might occur during System.getProperty(name).
+		</solution>
+	</bug>
+
+	<bug>
+		<name>inversedGameActions</name>
+		<area>ui</area>
+		<description>
+			On some phones the game actions UP and DOWN are mapped to the keys 8 and 2, instead of 2 and 8. 
+		</description>
+		<solution>
+			Check for game action and according keycode.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>fullRepaintRequired</name>
+		<area>ui</area>
+		<description>
+			Canvas.reqpaint(x,y,w,h) does not work reliable. 
+		</description>
+		<solution>
+			Use Canvas.repaint() instead.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>needsBottomOrientiationForStringDrawing</name>
+		<area>ui</area>
+		<description>
+			Graphics.drawString(str,x,y,orientation) does not position the string correctly
+			if orientation includes Graphics.TOP.
+		</description>
+		<solution>
+			Always use Graphics.BOTTOM and calculate the y-position accordingly.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>noSoftKeyReleasedEvents</name>
+		<area>ui</area>
+		<description>
+			No keyReleased(int) event is triggered when a softkey has been released. Only the keyPressed(int) event is 
+			forwarded.
+		</description>
+		<solution>
+			Use the J2ME Polish UI or only react to keyPressed(int) events for softkey values.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>noSystemArrayCopy</name>
+		<area>system</area>
+		<description>
+			When using System.arraycopy(..) array length might get modified and the application crashes.
+		</description>
+		<solution>
+			Use your own implementation instead of System.arraycopy(). J2ME Polish works around this bug automatically.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>NormalKeyMappedToFire</name>
+		<area>ui</area>
+		<description>
+			The '#', '*', 'a' and 'j' keys are mapped to the game action FIRE.
+			Other keys are mappend randomly to UP, DOWN, LEFT, RIGHT, GAME_A, GAME_B,
+			GAME_C and GAME_D. 
+		</description>
+		<solution>
+			Be careful when evaluating game actions.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>videoControlBeforePlayer</name>
+		<area>ui</area>
+		<description>
+			Display size of a video cannot be influenced before starting a player.			 
+		</description>
+		<solution>
+			When setting the display size of a video player, make sure to start the player first and then specify
+			the dimensions with VideoControl.setDisplaySize() and Location, e.g.:
+			 }
+			this.player.realize();
+			this.videoControl = (VideoControl) this.player.getControl("VideoControl");
+			if (this.videoControl != null) {
+				this.videoControl.initDisplayMode(VideoControl.USE_DIRECT_VIDEO, Display.getInstance());
+				int width = this.contentWidth;//getWidth() - 5;
+				int height = this.contentHeight; //getHeight() - (this.titleHeight + 2);
+				this.videoControl.setVisible(true);
+				this.player.prefetch();
+				// it's a bit weird to first start the player before setting the size and location,
+				// but in this way it works fine on Nokia Series 60 as well:
+				this.player.start();
+				this.videoControl.setDisplaySize( width, height );
+				this.videoControl.setDisplayLocation(this.contentX, this.contentY );
+			}
+			
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>BacklightRequiresLightOff</name>
+		<area>ui</area>
+		<description>
+			Before turning on the backlight it needs to be switched off.
+		</description>
+		<solution>
+			Switch off the backlight shortly before turning it on again.
+		</solution>
+	</bug>
+	
+	<bug>
+		<name>keyRepeatOverload</name>
+		<area>UI</area>
+		<description>
+			When pressing more than 3 keys simultanously, the currently shown canvas receives a never ending stream of
+			keyRepeat events, even though no physical keys are pressed. 
+		</description>
+		<solution>
+			To workaround this set a new native displayable
+			(which might result in flickering) or use J2ME Polish.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>SnapshotRequiresScreenChange</name>
+		<area>UI</area>
+		<description>
+			When starting a capture://video player, no preview window is shown when no new canvas is being used. 
+		</description>
+		<solution>
+			Show another physical screen and then return to the snapshot screen or use the J2ME Polish SnapshotScreen.
+		</solution>
+	</bug>
+
+	<bug>
+		<name>ClosedInputstreamWhenEmptyHttpResponseBody</name>
+		<area>io</area>
+		<description>
+			When the body of a HTTP response is empty a closed InputStream is returned on openInputStream()
+			call of HttpConnection.
+		</description>
+		<solution>
+			The first read() on the InputStream throws a ConnectionClosedException instead of returning -1.
+			This needs to be catched and handled as if -1 would have been directly returned.
+		</solution>
+	</bug>
+	
+	<!--
+	<bug>
+		<name></name>
+		<area></area>
+		<description>
+			
+		</description>
+		<solution>
+			
+		</solution>
+	</bug>
+	-->
+</bugs>

@@ -1,0 +1,92 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Horizontal-Gradient Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+	</ul>
+	<p>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The <code>vertical-gradient</code> background paints a linear, horizontal gradient.
+	<br /><img src="<%= basedir%>images/gui-background-radial-gradient.png" width="264" height="262" />
+<pre>
+.myItem {
+	type: radial-gradient;
+	outer-color: blue;
+	inner-color: white;
+}
+</pre>
+	</p>
+	<p>
+	You can also adjust the center position of the gradient using the <code>center-x</code> and <code>center-y</code>
+	attributes, which are given in percentage - <code>0</code> corresponds to the center, <code>-100</code> corresponds to the
+	most left or top edge of the square that surrounds the circle, <code>+100</code> the right/top edge:
+	</p>
+	<table class="table" cellspacing="0" cellpadding="3" border="0">
+	<tr>
+	<td valign="center">
+	<img src="<%= basedir%>images/gui-background-radial-gradient2.png" width="255" height="260" alt="-70,70" />
+	</td>
+	<td valign="center">
+<pre>
+.myItem {
+	type: radial-gradient;
+	outer-color: blue;
+	inner-color: white;
+	center-x: -70;
+	center-y: -70;
+}
+</pre>
+	</td>
+	</tr>
+	<tr>
+	<td valign="center">
+	<img src="<%= basedir%>images/gui-background-radial-gradient3.png" width="265" height="260" alt="-100,-100" />
+	</td>
+	<td valign="center">
+<pre>
+.myItem {
+	type: radial-gradient;
+	outer-color: blue;
+	inner-color: white;
+	center-x: -100;
+	center-y: -100;
+}
+</pre>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<img src="<%= basedir%>images/gui-background-radial-gradient4.png" width="260" height="290" alt="0,-130" />
+	</td>
+	<td valign="center">
+<pre>
+.myItem {
+	type: radial-gradient;
+	outer-color: blue;
+	inner-color: white;
+	center-x: 0;
+	center-y: -130;
+}
+</pre>
+	</td>
+	</tr>
+	</table>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background radial-gradient %>
+
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/GradientRadialBackground.html">GradientRadialBackground</a>.
+	</p>
+
+<%include end.txt %>

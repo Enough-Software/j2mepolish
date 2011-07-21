@@ -1,0 +1,45 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.mepose %>
+<%set title = J2ME Polish: Mepose %>
+<%set basedir = ../ %>
+<%include start.txt %>
+					
+	
+	<h1 id="top">Converting an existing J2ME project</h1>
+	
+	<p>
+		Choose the J2ME Polish Wizard from the New Project menu.
+	</p>
+	
+	<img src="../images/mepose-wizard_01_choose.png" />
+	
+	<p>
+		Enter the name of your existing project.
+	</p>
+	
+	<img src="../images/mepose-convert_01_useSameName.png" />
+	
+	<p>
+		Alter the paths you want to use in this project. At least WTK Home and J2ME Polish Home must be set.
+	</p>
+	
+	<img src="../images/mepose-wizard_03_paths.png" />
+	
+	<p>
+		Select the devices you want to support with this project. Currently you need to convert a J2ME Polish project again for changing the target devices.
+	</p>
+	
+	<img src="../images/mepose-wizard_04_deviceSelection.png" />
+	
+	<p>
+		Alter the Java settings if you like. You need to adjust the source setting when you have not stored you Jasva source code files within the &quot;source/src&quot; folder. Note that all possible jars for the selected devices are already included in the project.
+	</p>
+	
+	<img src="../images/mepose-wizard_05_javaSettings.png" />
+	
+	<p>
+		Click "Finish" to convert the project. If you already had a build.xml script, that script will be backed up and replaced by a J2ME Polish/Mepose specific script. Please copy any settings over to the new script, as Mepose relies on the given target names and property loading mechanisms.
+	</p>
+	
+	<%include end.txt %>

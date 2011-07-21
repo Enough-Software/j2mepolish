@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-sample-serialization">
+
+	<property file="${user.name}.properties" />
+	<!-- the device used for test builds:                         -->
+	<property  name="device" value="Nokia/Series60E2" />
+
+
+	<property name="wtk.home" location="/home/enough/dev/WTK2.2" />
+	<property name="nokia.home" location="/home/enough/dev/Nokia" />
+	<property name="polish.home" location="../enough-polish-build" />
+	<property  name="mpp.home" location="/home/enough/dev/mpp-sdk"/>
+
+	
+	<!-- task definitions -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+	/>
+
+		
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+
+<target name="test">
+	<property name="test" value="true"/>
+</target>
+	
+<target name="deploy">
+	<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+</target>
+		
+<target name="init">
+  	<property name="test" value="false"/>
+	<property name="deploy-url" value=""/>
+</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info copyright="Copyright 2006 Enough Software. All rights reserved." 
+			description="A serialization example." 
+			infoUrl="http://www.enough.de" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-serialization.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			license="GPL" 
+			name="Notes" 
+			vendorName="Enough Software" 
+			version="1.0.4"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build fullscreen="menu" 
+                polishDir="../enough-polish-j2me/source/src" 
+                symbols="polish.skipArgumentCheck" 
+                usePolishGui="true"
+			>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.serialization.NotesMidlet" name="Notes"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<!-- activate text input over J2ME Polish TextFields (without opening a new TextBox for each input: -->
+				<variable name="polish.TextField.useDirectInput" value="true" />
+				<!-- activate input of symbols: -->
+				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+				<!-- activate switching to the native (e.g.T9) input mode: -->
+				<variable name="polish.TextField.allowNativeModeSwitch" value="true" />
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.useScrollBar" value="true" />
+			</variables>
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator useDefaultPackage="false" name="ProGuard" unless="test">
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test" level="error" showLogOnError="true" verbose="true">
+				<filter level="debug" package="de.enough.polish.sample.mail"/>
+				<filter level="info" pattern="de.enough.polish.ui.*"/>
+			</debug>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+			</resources>
+		</build>
+		<emulator if="test" />
+	</j2mepolish>
+</target>
+
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

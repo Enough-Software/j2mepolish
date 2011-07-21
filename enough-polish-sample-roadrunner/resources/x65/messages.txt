@@ -1,0 +1,14 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application, specialized   #
+#   for Siemens x65 devices.          #
+#   Keys and values are separated     #
+#   by the equals-sign "=".           #
+#   You can include parameters with   #
+#   the standard {0}, {1} etc         #
+#   mechanism.                        #
+#                                     #
+#######################################
+
+title.About=About

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/enough-polish-j2me"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/midp-2.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/rickyn/eclipse/workspace/xorhosting-phonecash/source/lib/midp-src.zip!/midp"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/enough-polish-build/import/cldc-1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/enough-polish-build"/>
+	<classpathentry kind="lib" path="/enough-polish-build/lib/javax.servlet.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

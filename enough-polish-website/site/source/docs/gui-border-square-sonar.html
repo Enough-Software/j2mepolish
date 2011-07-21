@@ -1,0 +1,67 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: square-sonar Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">square-sonar Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Add moving rectangular lines around an item with the <code>square-sonar</code> border.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-square-sonar.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-square-sonar.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+	</p>
+<pre>
+.itemMain {
+	layout: expand | left;
+	font {
+		face: system;
+		size: medium;
+		style: bold;
+		color: #000000;
+	}
+}
+.itemMain:hover {
+	background {
+		type: round-rect-translucent;
+		color: #adffffff;
+		arc-width: 8;
+		arc-height: 8;
+	}
+	<b>border {
+		type: square-sonar;
+		inner-color: #d2d2;
+		outer-color: #4161;
+	}</b>
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	
+	<%cssmappings border square-sonar %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/SquareSonarBorder.html">SquareSonarBorder</a>.
+	</p>
+
+<%include end.txt %>

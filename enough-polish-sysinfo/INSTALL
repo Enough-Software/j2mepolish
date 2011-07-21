@@ -1,0 +1,12 @@
+How to Build the SysInfo-MIDlet
+===============================
+
+From the command-line:
+go into this directory and call "ant".
+
+From any IDE:
+rightclick the "build.xml" file and select "Run > Ant", "Execute" or similar.
+
+You will find the generated JAR und JAD file in the "dist" folder.
+
+Note that you will need J2ME Polish for building the MIDlet - see http://www.j2mepolish.org

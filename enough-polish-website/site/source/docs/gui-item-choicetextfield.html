@@ -1,0 +1,138 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: ChoiceTextField %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChoiceTextField</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-textfield.html">TextField</a></li>
+		<li><a href="gui-item-choicegroup.html">ChoiceGroup</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A <code>ChoiceTextField</code> allows the user to enter data and then shows a 
+	selection of matching items from which the user can choose.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-choicetextfield.png"  width="343" height="222" alt="A ChoiceTextField" />
+	<br />
+	The above design has been realized with these CSS settings:
+	</p>
+<pre>
+
+.addressInput {
+	text-wrap: false;
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	include-label: true;
+	choicetextfield-choicestyle: .addressChoice;
+	choicetextfield-containerstyle: .addressChoicesContainer;
+	layout: left | expand;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+.addressInput:hover {
+	padding: 3;
+	padding-left: 3;
+	background {
+		type: round-rect;
+		color: white;
+	}
+	layout: left | expand;	
+}
+
+.addressChoice {
+	padding: 2;
+	font-size: small;
+	font-style: plain;
+	font-color: gray;
+	layout: left | expand;
+}
+
+.addressChoice:hover {
+	padding: 2;
+	font-size: small;
+	font-style: plain;
+	font-color: red;
+	layout: left | expand;
+}
+
+.addressChoicesContainer {
+	background-color: argb( 210, 255, 255, 255 );
+	layout: left | expand;
+}
+</pre>
+	<p>
+	Use following CSS attributes for designing your ChoiceTextField:
+	</p>
+	<%cssattributes de.enough.polish.ui.ChoiceTextField %>
+	
+	
+	<h2 id="Programming">Programming</h2>
+	<p>
+	You can configure the <code>ChoiceTextField</code> in various ways to your needs using the constructor:
+	</p>
+<pre>
+public ChoiceTextField(String label, String text, int maxSize, int constraints, 
+String[] availableChoices, boolean allowFreeTextEntry, boolean appendChoice, String appendChoiceDelimiter)
+</pre>
+	<p>The first part of the constructor is the same as for <a href="gui-item-textfield.html">TextFields</a>,
+		in the second part you use following parameters:
+	</p>
+	<ul>
+		<li><code>String[] availableChoices</code>: a list of available texts for the user</li>
+		<li><code>boolean allowFreeTextEntry</code>: true when the user should be allowed to enter any text that does not match any existing choice</li>
+		<li><code>boolean appendChoice</code>: true when the selected choices should be appended to the text rather than replacing the text</li>
+		<li><code>String appendChoiceDelimiter</code>: the character that separates several selections, e.g. '\n' or ';'</li>
+	</ul>
+	<p>You can also specify a character that opens the available choices automatically when it is entered.
+	In the following example we ease the entering of an email address by opening a list of commonly used
+	mail domains after the user enters an '@':
+	</p>
+<pre>
+String[] mailServices = = new String[] { "google.com", "yahoo.com", "msn.com", "somewhere.com" };
+boolean allowFreeText = false;
+boolean appendSelectedChoice = true;
+String appendDelimiter = ";";
+//#style addressInput
+this.receiver = new ChoiceTextField( "to: " , null, 255, TextField.EMAILADDR, 
+	mailServices, allowFreeText, appendSelectedChoice, appendDelimiter );
+char choiceTriggerChar = '@';
+boolean allowChoicesBeforeChoiceTriggerHasBeenEntered = false;
+this.receiver.setChoiceTrigger( choiceTriggerChar, allowChoicesBeforeChoiceTriggerHasBeenEntered );
+</pre>
+	<p>
+	Please refer to the &quot;mail&quot; sample application for a working example.
+	</p>
+
+	<h2 id="configuration">Configuration</h2>
+	<p>
+	Using the <code>ChoiceTextField</code> makes only sense when you have enabled the <a href="gui-item-textfield.html">direct input mode for
+	TextFields</a>:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+</pre>
+	<p>
+	For other configuration options please refer to the <a href="gui-item-textfield.html">TextFields</a> documentation.
+	</p>
+
+
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ChoiceTextField.html">ChoiceTextField</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextField.html">TextField</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

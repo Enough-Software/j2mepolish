@@ -1,0 +1,173 @@
+<!-- important: you might need to set the doja.home property! -->
+
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish-target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created and so on.                                    -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+<project 
+	name="enough-j2mepolish-doja" 
+	default="j2mepolish">
+	
+	<!-- import user specific properties                          -->
+	<property file="${user.name}.properties" />
+	
+	<!-- The polish.home property needs to point to the directory -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" location="%{INSTALL_PATH}" />
+	
+	<!-- import global properties                                 -->
+	<property file="${polish.home}/global.properties" />
+		
+	<!-- the device for the test mode - you can define it on the command-line
+	     using the -D switch, e.g. ant -Ddevice=Generic/midp2 emulator -->
+	<property name="device" value="DoJa/os25"/>
+	<property name="devices" value="DoJa/os25"/>
+	
+	<!-- Definition of the J2ME Polish task:                      -->
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar"
+	/>
+	
+		
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="setdeploy" 
+		description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+		>
+		<property name="deploy-url" value="http://www.company.com/download/" />
+	</target>
+	
+	<target name="enableDebug" 
+		description="Call this target first to skip the obfuscation step, call the emulator and start the debugger, e.g. ant enableDebug j2mepolish"
+		>
+		<property name="debug" value="true" />
+	</target>
+	
+		
+	<target name="test" 
+		description="Call this target first to skip the obfuscation step and call the emulator, e.g. ant test j2mepolish"
+		>
+		<property name="test" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false" />
+		<property name="dir.work" value="build/real" />
+		<property name="deploy-url" value="" />
+	</target>
+	 
+	<!-- In this target the J2ME Polish task is used.             -->
+	<!-- It has 3 sections:                                       -->
+	<!--    1. The info-section defines some general information  -->
+	<!--    2. The deviceRequirements-section chooses the devices -->
+	<!--       for which the application is optimized.            -->
+	<!--    3. The build-section controls the actual build        -->
+	<!--       process.                                           -->	
+	<target name="j2mepolish" 
+			depends="init"
+			description="This is the controller for the J2ME build process." 
+			>
+		<j2mepolish>
+		    <!-- general settings, these settings basically form the JAD-attributes. -->
+		    <!-- Have a look at the <jad>-section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files -->
+			<info
+				name="Tetris"
+				version="1.0.0"
+				description="Sun's Tetris sample project"
+				vendorName="Sun"
+				jarName="${polish.vendor}-${polish.name}-${polish.locale}-tetris.jar" 
+				jarUrl="${deploy-url}${polish.jarName}"
+				copyright="Copyright 2005 Sun. All rights reserved."
+			/>
+			<!-- selection of supported devices -->
+			<deviceRequirements if="test">
+				<requirement name="Identifier" value="${device}" />
+			</deviceRequirements>
+			<deviceRequirements unless="test">
+				<requirement name="Identifier" value="${devices}" />
+			</deviceRequirements>
+		    <!-- build settings -->
+			<build
+				symbols=""
+				fullscreen="menu"
+				usePolishGui="true"
+				workDir="${dir.work}"
+			>
+				<!-- iApplication definition -->
+				<iappli class="tetris.Tetris" />
+				<!-- project-wide variables - used for preprocessing.  -->
+				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+				<variables includeAntProperties="true" >
+					<!-- reserve a size of 5120 bytes =5Kbytes for the scratch pad: -->
+					<variable name="doja.SPsize" value="5120" />
+				</variables>
+				<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
+				<resources
+					dir="resources"
+					defaultexcludes="yes"
+					excludes="readme.txt"
+				>
+					<localization locales="en_US" />
+				</resources>
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator name="ProGuard" unless="test" >
+					<!--
+					You can set additional parameters here, e.g.:
+					<parameter name="optimize" value="false" />
+					-->
+				</obfuscator>
+				<!-- debug settings: only include debug setting when the test-property is true -->
+				<debug if="test or log" verbose="true" level="error">
+					<filter pattern="de.enough.polish.example.*" level="debug" />
+					<filter pattern="de.enough.polish.ui.*" level="warn" />
+				</debug>
+			</build>
+			
+			<!-- execution of emulator(s) -->
+			<emulator
+				wait="true"
+				if="test"
+			>
+			</emulator>
+		</j2mepolish>
+	</target>
+	
+	<target 
+		name="emulator"
+		depends="test,j2mepolish"
+		description="invokes the emulator"
+	>
+	</target>
+
+	<target name="clean" 
+	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+		<delete dir="build" />
+		<mkdir dir="dist" />
+		<delete dir="dist" includes="**/*" />
+	</target>
+
+	<target  
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant cleanbuild] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+		depends="clean, j2mepolish"
+	/>
+	
+</project>

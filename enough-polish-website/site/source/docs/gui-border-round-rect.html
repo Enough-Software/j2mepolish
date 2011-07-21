@@ -1,0 +1,39 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: round-rect Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">round-rect Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Surround an item or a screen with a rectangle with rounded corners using the <code>round-rect</code> border:
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<br /><img src="<%= basedir%>images/gui-border-round-rect.png"  width="98" height="31" alt="round-rect border" />	
+	</p>
+<pre>
+.itemMain {
+	border {
+		type: round-rect;
+		color: green;
+		arc: 10;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings border round-rect%>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/RoundRectBorder.html">RoundRectBorder</a>.
+	</p>
+
+<%include end.txt %>

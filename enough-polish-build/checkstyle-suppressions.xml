@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+<suppressions>
+  <suppress checks="AvoidStarImport" files="StyleCache.java" lines="34"/>
+  <suppress checks="UnusedImport" files="StyleCache.java" lines="29,30,32,36,37"/>
+</suppressions>

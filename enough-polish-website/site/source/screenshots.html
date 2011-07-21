@@ -1,0 +1,93 @@
+<%define inScreenshotsSection %>
+<%set title = J2ME Polish: Screenshots %>
+<%include start.txt %>
+	
+	<h1 id="top">Screenshots</h1>
+		<table>
+		<tr>
+		 <td><img src="images/screenshot-example-enough.png" alt="design example 1"  width="205" height="277"/></td>
+		 <td><img src="images/screenshot-example-pink.png" alt="design example 2"  width="202" height="271"/></td>
+		 <td><img src="images/screenshot-example-roadrunner.png" alt="design example 3"  width="205" height="277"/></td>
+		</tr>
+		<tr>
+ 		 <td colspan="3" class="figuretext">These screenshots show the optional GUI of J2ME Polish in action. 
+			These pictures show the same application with different
+			designs on a Nokia Series 60 phone. Absolutely no changes were made in the source code
+			of the application. Please note the usage of a bitmap font on 
+			the screenshot on the right: with J2ME Polish you can use
+			bitmap fonts instead of the usual &quot;system&quot;, &quot;proportional&quot; or &quot;monospace&quot; fonts.
+			You can convert and use any true type font with the provided font-editor.
+			<br /><br /><br />
+		 </td>
+		</tr>
+		<tr>
+		 <td><img src="images/screenshot-motorola-example-enough.png" alt="The same application on a Motorola phone"  width="215" height="258" /></td>
+		 <td><img src="images/screenshot-motorola-example-pink.png" alt="design example 2 on Motorola"  width="215" height="258"/></td>
+		 <td><img src="images/screenshot-motorola-example-roadrunner.png" alt="design example 3 on Motorola"  width="215" height="258"/></td>
+		</tr>
+		<tr>
+ 		 <td colspan="3" class="figuretext">The same application on a Motorola V600 phone. 
+			<br /><br /><br />
+		 </td>
+		</tr>
+		<tr>
+		 <td><img src="images/screenshot-sonyericsson-example-enough.png" alt="The same application on a Sony-Ericsson phone"  width="232" height="293" /></td>
+		 <td><img src="images/screenshot-sonyericsson-example-pink.png" alt="design example 2 on Sony-Ericsson"  width="232" height="293"/></td>
+		 <td><img src="images/screenshot-sonyericsson-example-roadrunner.png" alt="design example 3 on Sony-Ericsson"  width="232" height="293"/></td>
+		</tr>
+		<tr>
+ 		 <td colspan="3" class="figuretext">Once more the same application - this time on a Sony Ericsson K700 phone. 
+			<br /><br /><br />
+		 </td>
+		</tr>
+	</table>
+	<p>J2ME Polish makes it easy to adjust the design to specific devices or
+	device groups. You can try completely different designs just
+	by using a different resources-folder. For the application
+	screen-shots a simple <a href="screenshot-application.html">application</a> is used, which just shows
+	a main menu with the standard <code>javax.microedition.lcdui.List</code> 
+	class.</p>
+	<h2 id="enough">A Design Featuring a Turtle</h2>
+	<table><tr>
+		<td><img src="images/screenshot-example-enough.png" alt="enough design" width="205" height="277"/></td>
+		<td><img src="images/screenshot-example-enough-menu.png" alt="enough design with menu open"  width="203" height="270"/></td>
+	</tr><tr>
+		<td colspan="2">The enough design uses two columns and a transparent menu-bar.
+		<br /><a href="screenshots-turtle.html">Show polish.css</a>
+		<br /><a href="downloads/resources-turtle.zip">Download resources</a>.
+		</td>
+	</tr></table>
+	<h2 id="barbie">A Barbie Design</h2>
+	<table><tr>
+		<td><img src="images/screenshot-example-pink.png" alt="barbie design"  width="202" height="271"/></td>
+		<td><img src="images/screenshot-example-pink-menu.png" alt="barbie design with menu open"  width="204" height="271"/></td>
+	</tr><tr>
+		<td colspan="2">The barbie design uses the after attribute for the focused-style.
+		<br /><a href="screenshots-pink.html">Show polish.css</a>
+		<br /><a href="downloads/resources-pink.zip">Download resources</a>.
+		</td>
+	</tr></table>
+	<h2 id="items">GUI Items</h2>
+	<p>J2ME Polish supports all MIDP items, e.g. the choice-group and the gauge item:<br/>
+	<img src="images/screenshot-gauge-plain.png" alt="Gauge and ChoiceGroup."  width="176" height="209" align="right" />
+	</p>
+	<p>
+	The text- and date-input fields can be layouted to get a clear and good looking form.
+	This example uses - as every other one on this page - only the standard MIDP GUI widgets.
+	The programmer does not need to learn a new API.<br/>
+	<img alt="TextField and DateField in action." src="images/screenshot-input.png" width="201" height="268" />
+	<img alt="The label and the textfield are on the same height." src="images/screenshot-input-line.png" width="542" height="168" />
+	<br />
+	In this example the label and the input text are set on one height, this makes the design
+	much clearer and calm.
+	</p>
+	<h2 id="items">Custom Items, Backgrounds and Borders</h2>
+	<p>
+	The GUI J2ME Polish can be extended easily, so you can use custom items, 
+	backgrounds and borders in your application:<br/>
+	<img src="images/screenshot-custom-background-circle2.png" width="200" height="269" alt="a custom background" />
+	<img src="images/screenshot-custom-border-circle.png" width="198" height="270" alt="a custom border" />
+	</p>
+
+	
+<%include end.txt %>

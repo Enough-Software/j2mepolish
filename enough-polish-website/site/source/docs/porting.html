@@ -1,0 +1,24 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.programming %>
+<%set title = J2ME Polish: Porting %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+	<h1 id="top">Porting</h1>
+
+<p>
+Porting is done in J2ME Polish in various ways:
+</p>
+<ul>
+	<li><b>Rich APIs</b>: our APIs are programmed in a defensive way and adapt themselves automatically to different devices, platforms and known issues.</li>
+	<li><b>PostCompiler</b>: PostCompiler use compiled classes and search for problematic code. An specific example includes accessing <code>System.arrayCopy()</code> on a Nokia N80 with Vodafone firmware version - such devices behave very badly to such calls and thus we replace them during the build process.</li>
+	<li><b>Preprocessing</b>: You can adjust and control your source code using <a href="preprocessing.html">Preprocessing</a>.</li>
+	<!-- 
+	<li><b></b>: </li>
+	 -->
+</ul>
+
+
+	
+<%include end.txt %>

@@ -1,0 +1,306 @@
+colors {
+	borderColor: #1e5556;
+	browserFontColor: #1e5556;
+	focusedBorderColor: #000000;
+	fontColor: #1e5556;
+	focusedBgColor: #ffffff;
+	browserFontColorFocused: #142850;
+	focusedFontColor: #000000;
+	bgColor: #eeeeee;
+}
+
+backgrounds {
+	mainBackground {
+		type: horizontal-stripes;
+		first-top-color: #ffff66;
+		first-bottom-color: #008000;
+		second-top-color: #ffffff;
+		second-bottom-color: #33ff00;
+	}
+	
+}
+
+/************************** general styles  ********************************************************************************/
+
+title {
+	layout: horizontal-center | horizontal-expand;
+	font {
+		face: proportional;
+		size: large;
+		style: bold;
+		color: #222;
+	}
+	text-effect: alien-glow;
+	background {
+		type: simple;
+		color: #fff;
+	}
+}
+
+focused {
+	layout: expand | left;
+	font-style: bold;
+	background {
+		type: round-rect-translucent;
+		color: #adffffff;
+		arc-width: 8;
+		arc-height: 8;
+	}
+}
+
+label {
+	layout: left | top | newline-after;
+	font {
+		size: small;
+		style: plain;
+	}
+}
+
+/************************** main screen  **********************************************************************************/
+.screenMain {
+	layout: horizontal-center | vertical-center;
+	margin: 0;
+	padding: 10;
+	padding-vertical: 5;
+	background: mainBackground;
+	/*
+	screen-orientation-change-animation: fade-out-fade-in;
+	*/
+}
+
+.itemMain {
+	layout: expand | left;
+	padding: 2px;
+	padding-left: 10%;
+	font-color: #222;
+	//#if polish.name==iPhone
+		font-style: bold;
+		background {
+			type: round-rect-translucent;
+			color: #adffffff;
+			arc-width: 8;
+			arc-height: 8;
+		}
+	//#endif
+}
+
+.itemMain:hover {
+	font-style: bold;
+	background {
+		type: round-rect-translucent;
+		color: #adffffff;
+		arc-width: 8;
+		arc-height: 8;
+	}
+}
+
+.itemMain:pressed {
+	font-style: bold;
+	font-color: #eee;
+	background {
+		type: round-rect-translucent;
+		color: #a333;
+		arc-width: 8;
+		arc-height: 8;
+	}
+}
+
+/************************** about screen  *********************************************************************************/
+
+.aboutAlert {
+	layout: horizontal-center | vertical-center;
+	margin: 0;
+	padding: 1;
+	background {
+		type: horizontal-stripes;
+		first-top-color: #ffff66;
+		first-bottom-color: #008000;
+		second-top-color: #ffffff;
+		second-bottom-color: #33ff00;
+	}
+	//#if polish.midp2
+	    screen-change-animation: zoomInAndHide;
+	//#else
+	    screen-change-animation: right;
+	//#endif
+}
+
+alertcontent {
+	font-color: white;
+	text-effect: shadow;
+	text-shadow-color: #222;
+}
+
+/************************** settings screen  ******************************************************************************/
+.screenSettings extends screenMain {
+	screen-change-animation: right;
+}
+
+.itemInput {
+	layout: left | top | horizontal-expand;
+	margin: 0;
+	padding: 2;
+	background {
+		type: simple;
+		color: #ffffff;
+	}
+}
+
+/************************** RSS browser screen ****************************************************************************/
+
+
+.rssBrowserForm {
+	padding-left: 10;
+	padding-right: 10;
+	padding-top: 10;
+	background-color: #cec;
+	title-style: rssBrowserTitle;
+	screen-change-animation: right;	
+}
+
+.rssBrowserTitle extends title {
+	text-wrap: false;
+	text-wrap-animate: false;
+	layout: left;
+}
+
+.rssBrowser {
+	view-type: midp2;
+}
+
+.browserdownloadindicator {
+	layout: vertical-shrink | horizontal-shrink | top | right;
+}
+
+.browserlink {
+	font {
+		face: system;
+		size: medium;
+		style: bold;
+		color: #ff4f4fe3;
+	}
+}
+
+.browserlink:hover {
+	//#if polish.name != iPhone
+		font-color: #f00;
+	//#endif
+}
+
+.browserlink:pressed {
+	font-color: #333;
+}
+
+
+/************************** RSS item alert screen ****************************************************************************/
+
+.rssDescriptionAlert extends aboutAlert {
+	title-style: .rssDescriptionAlertTitle;
+	content-style: .rssDescriptionAlertContent;
+	screen-change-animation: right;
+}
+
+.rssDescriptionAlertTitle  {
+	font-color: #222;
+	background-color: #fff;
+	text-wrap: false;
+	border {
+		type: bottom;
+		border-color: #222;
+	}
+}
+
+.rssDescriptionAlertContent {
+	font-color: black;
+}
+
+
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #2d2;
+	scrollbar-slider-width: 6;
+	scrollbar-fadeout: true;
+	opacity: 180;
+	background-color: white;
+}
+
+
+/****************   commands menu          **********************************************************************************************/
+menubar {
+	background {
+		type: simple;
+		color: bgColor;
+	}
+}
+
+
+leftcommand {
+	layout: left;
+	font {
+		style: bold;
+		color: black;
+	}
+}
+rightcommand extends leftcommand {
+	layout: right;
+}
+
+menu {
+	padding: 0px;
+	min-width: 65%;
+	/* you can slide the menu when it is opened:
+	view-type: slide;
+	*/
+	background {
+		type: round-tab;
+		color: #fff;
+	}
+	focused-style-first: menuItemFocusedFirst;
+	expand-items: true;
+}
+
+menuItem {
+	padding: 2px;
+	layout: left;
+	font-color: #333;
+	border {
+		type: bottom;
+		color: #666;
+	}
+}
+
+
+menuItem:hover {
+	layout: left | horizontal-expand;
+	font-color: #eee;
+	background-color: #111;
+}
+
+
+/**
+  * The focused style for the first menu item uses a round-tab background:  
+  */
+.menuItemFocusedFirst extends menuItem {
+	layout: left | horizontal-expand;
+	font-color: #eee;
+	background {
+		type: round-tab;
+		color: #111;
+	}
+}
+
+/**************** screen info *********/
+screeninfo {
+	background-color: white;
+	font-color: black;
+	layout: right;
+	margin-top: 20;
+}
+
+/**************** input info *********/
+info {
+	layout: right;
+	background-color: #afff;
+}

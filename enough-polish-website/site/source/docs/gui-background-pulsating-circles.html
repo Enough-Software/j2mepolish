@@ -1,0 +1,61 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: pulsating-circles Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">pulsating-circles Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Paint several ever growing circles.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating-circles.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="83">
+        <embed src="<%= basedir%>images/gui-background-pulsating-circles.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="83"
+        >
+        </embed>
+	</object>
+	</p>
+<pre>
+.itemMain {
+	padding: 2;
+}
+
+.itemMain:hover {
+	layout: expand | left;
+	font-style: bold;
+	background {
+		type: pulsating-circles;
+		first-color: #0e0;
+		second-color: #dfd;
+		min-diameter: 5;
+		max-diameter: 40;
+		number-of-circles: 5;
+		step: 2;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background pulsating-circles %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PulsatingCirclesBackground.html">PulsatingCirclesBackground</a></li>
+	</ul>
+
+<%include end.txt %>

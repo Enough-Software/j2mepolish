@@ -1,0 +1,103 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.extending %>
+<%set title = J2ME Polish: Extending J2ME Polish %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Integrating a Custom Obfuscator</h1>
+<%index %>
+<p>
+For integrating another obfuscator, you need to first create a class which extends the 
+<a href="<%= javadocdir %>../javadoc/build/de/enough/polish/obfuscate/Obfuscator.html" target="_blank">de.enough.polish.obfuscate.Obfuscator</a> class. Secondly you need to integrate your 
+obfuscator in the &quot;build.xml&quot; file.
+</p>
+
+<h2 id="preparations">Preparations</h2>
+<p>
+Create a new project in your IDE and set the classpath so that it includes the &quot;enough-j2mepolish-build.jar&quot;, which can be found in the &quot;import&quot; folder of the installation directory. Also include the &quot;ant.jar&quot; file from your Ant-installation into the classpath.
+</p>
+<h2 id="creating">Creating the Obfuscator Class</h2>
+<p>
+Create a new class which extends 
+<a href="<%= javadocdir %>../javadoc/build/de/enough/polish/obfuscate/Obfuscator.html" target="_blank">de.enough.polish.obfuscate.Obfuscator</a>
+ and implement the &quot;obfuscate&quot; method:
+<pre>
+	/**
+	 * Obfuscates a jar-file for the given device.
+	 * 
+	 * @param device The J2ME device
+	 * @param sourceFile The jar-file containing the projects classes
+	 * @param targetFile The file to which the obfuscated classes should be copied to 
+	 * @param preserve All names of classes which should be preserved,
+	 *                 that means not renamed or removed.
+	 * @param bootClassPath A path to the library containing either the MIDP/1.0
+ 	 *                 or MIDP/2.0 environment.
+	 * @throws BuildException when the obfuscation failed
+	 */
+	public abstract void obfuscate( 	Device device, 
+						File sourceFile, 
+						File targetFile, 
+						String[] preserve, 
+						Path bootClassPath )
+	throws BuildException;
+</pre></p>
+<p>
+You can make use of following protected variables:</p>
+<ul>
+	<li>de.enough.polish.LibraryManager libraryManager: a manager for device-APIs</li>
+	<li>java.io.File libDir: the path to the &quot;import&quot; folder</li>
+	<li>org.apache.tools.ant.Project project: the Ant project in which the obfuscator is embedded</li>
+</ul>
+</p><p>
+If you need further configuration settings, you can add them with the &lt;parameter&gt; construct, which is discussed below.
+<p>
+To call the obfuscator, you typically need to accomplish these tasks in the &quot;obfuscate&quot;-method:
+<p>
+<ol>
+	<li>Set the classpath for the given device: You can get the device-specific APIs by calling device.getClasspath() which returns a String array containing the locations of the device-API-Jars. The usual behavior is to set the classpath for the obfuscator to the given bootClassPath and the device-specific APIs.</li>
+	<li>Specify which classes should be spared from obfuscation: the classes specified by the preserve-array should not be obfuscated at all. These always include the MIDlet classes and maybe some other classes which are loaded with the Class.forName()-mechanism.</li>
+	<li>Start the obfuscator: set the input to the provided sourceFile and the output to the specified targetFile. Both of these files are Jars.tart the obfuscator: set the input to the provided sourceFile and the output to the specified targetFile. Both of these files are Jars.</li>
+</ol>
+<p>
+When there is an exception, abort the build by throwing a org.apache.tools.ant.BuildException explaining the details why the obfuscation was aborted.
+</p>
+
+<h2 id="integrate">Integrating the Obfuscator into the build.xml</h2>
+<p></p>
+You can integrate any thirdparty obfuscator with the usual &lt;obfuscator&gt; element in 
+the build.xml file 
+(compare the <a href="build-build.html#obfuscator">&lt;obfuscator&gt; documentation</a>).
+<pre>
+&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; 	
+	class=&quot;com.company.obfuscate.MyObfuscator&quot;
+	classPath=&quot;../obfuscator-project/bin/classes&quot;
+	&gt;
+	&lt;keep class=&quot;com.company.dynamic.SomeDynamicClass&quot; /&gt;
+	&lt;keep class=&quot;com.company.dynamic.AnotherDynamicClass&quot; /&gt;
+	&lt;parameter name=&quot;scriptFile&quot; value=&quot;../scripts/obfuscate.script&quot; /&gt;
+&lt;/obfuscator&gt;
+</pre>
+</p><p>
+The &quot;class&quot;-attribute needs to be set to the new class. The classPath-attribute can be used for pointing out the location of the obfuscator. This is only needed when the obfuscator is not on the Ant-classpath.
+</p>
+<h2 id="parameters">Configuring the Obfuscator with Parameters</h2>
+<p>
+The obfuscator can be configured using &lt;parameter&gt; subelements in the build.xml. For each &lt;parameter&gt; a corresponding 
+&quot;set[parameter-name]&quot;-method needs to be implemented, which either needs to have one File parameter, one boolean or one String parameter:
+<pre>
+	&lt;parameter name=&quot;scriptFile&quot; value=&quot;../scripts/obfuscate.script&quot; /&gt;
+</pre>
+</p><p>
+For the using the above parameter, the obfuscator needs to implement either the 
+public method <code>setScriptFile( File file )</code> or the public method 
+<code>setScriptFile( String value )</code>. When a method with a File-parameter is used, relative file paths are resolved relative to the location of the build.xml file (or to be more precise relative to the project.getBaseDir() location). The file given as a parameter in the set-method uses an absolute path in that case.
+</p>
+
+<h2 id="javadoc">JavaDoc Resources</h2>
+<p>Please refer to these JavaDoc resources for detailed information:</p>
+<ul>
+	<li><b>Obfuscator</b>: <a href="<%= javadocdir %>../javadoc/build/de/enough/polish/obfuscate/Obfuscator.html" target="_blank">de.enough.polish.obfuscate.Obfuscator</a></li>
+</ul>
+
+<%include end.txt %>

@@ -1,0 +1,45 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Extending Styles</h1>
+	<p>
+A style can extend another style. It inherits all the attributes of the extended style. With this mechanism a lot of writing work can be saved:
+<pre>
+.mainScreen {
+	margin: 10;
+	font-color: black;
+	font-size: medium;
+	font-style: italic;
+	background-color: gray;
+}
+.highscoreScreen extends mainScreen {
+	font-color: white;
+	background-color: black;
+}
+</pre></p><p>
+In the above example the style &quot;highscoreScreen&quot; inherits all attributes of the &quot;mainScreen&quot; style, but &quot;font-color&quot; and &quot;background-color&quot; are specified differently. 
+Circle inheritance is not allowed, so the following example results in a build error:
+<pre>
+.baseScreen extends highscoreScreen {  /* this extends is invalid! */
+	margin: 5;
+	font-color: white;
+}
+.mainScreen extends baseScreen {
+	margin: 10;
+	font-color: black;
+	font-size: medium;
+	font-style: italic;
+	background-color: gray;
+}
+.highscoreScreen extends mainScreen {
+	font-color: white;
+	background-color: black;
+}
+</pre>
+</p>
+The above example would be valid, when the style &quot;baseScreen&quot; would not extend the &quot;highscoreScreen&quot;-style.
+</p>
+<%include end.txt %>

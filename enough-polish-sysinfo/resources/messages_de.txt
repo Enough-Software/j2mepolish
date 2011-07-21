@@ -1,0 +1,46 @@
+title.main=SysInfo
+title.credits=Mitwirkende
+title.display=Anzeigeinformationen
+title.multimedia=Multimediainformationen
+title.system=Systeminformationen
+title.libraries=APIs
+title.keys=Tasteninformationen
+title.arithmeticBenchmark=Benchmark Test
+
+cmd.credits=Mitwirkende Info
+cmd.display=Anzeige Info
+cmd.multimedia=Multimedia Info
+cmd.system=System Info
+cmd.libraries=APIs Info
+cmd.keys=Tasten Info
+cmd.arithmeticBenchmark=Benchmark
+cmd.events=Events Viewer
+cmd.credits=Mitwirkende
+cmd.back=Zur\u00fcck
+cmd.exit=Beenden
+cmd.select=W\u00e4hlen
+cmd.upload=Systeminformationen hochladen
+cmd.update=Auf updates pr\u221a\u00bafen
+cmd.sysprops=SystemProperties
+
+msg.thanks=Danke
+msg.uploaded=Die Ger\u00e4teinformationen wurden erfolgreich gesendet!
+msg.uploadfailed=Die Informationen konnten leider nicht an den Server gesendet werden!
+msg.uploadfailedtitle=Fehler!
+msg.deviceident=Ger\u00e4teangaben
+msg.userif=Login
+msg.user=Benutzer
+msg.pwd=Passwort
+msg.wait=Bitte einen Moment Geduld
+msg.vendor=Hersteller
+msg.device=Modell
+msg.identinfo=Bitte geben Sie den Hersteller und das Modell ein
+msg.logininfo=Sie k\u00f6nnen die Informationen online auf http://devices.j2mepolish.org/ einsehen und bearbeiten
+msg.update=Pr\u00fcfe auf updates
+msg.remoteversion=Version online:
+msg.localversion=Lokale Version:
+msg.updateavailable=Es ist ein neues SysInfoMIDlet verf\u00fcgbar!
+msg.updatevisitaddress=Bitte laden Sie das MIDlet von http://dl.j2mepolish.org/ und ersetzen Sie die lokale Version!
+msg.updatenotavailable=Kein Update verf\u00fcgbar.
+
+text.credits=Urspr\u00fcnglich entwickelt von Waldemar Baraldi (Grimo Software),\n< waldemar.baraldi @grimo-software.com >.\nErweitert von Mark Schrijver,\n< mark.schrijver @mobillion.nl >\nund Robert Virkus,\n< j2mepolish @enough.de >

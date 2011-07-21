@@ -1,0 +1,27 @@
+menu {
+	background {
+		type: fade-in;
+		color: argb( 200, 20, 121, 8 );
+		restart-on-position-change: false;
+		restart-on-time: true;
+	}
+	border {
+		type: drop-shadow;
+		width: 5;
+		inner-color: argb( 200, 30, 30, 30 );
+		outer-color: argb( 50, 50, 50, 50 );
+		orientation: top-right;
+		offset: 6;
+	}
+}
+
+.menuFocused extends focused {
+	border {
+		type: drop-shadow;
+		width: 3;
+		inner-color: argb( 200, 30, 30, 30 );
+		outer-color: argb( 50, 50, 50, 50 );
+		orientation: top-right;
+		offset: 3;
+	}
+}

@@ -1,0 +1,585 @@
+<!-- 
+	apis.xml describes some often used device libraries. 
+
+    Copyright (c) 2004, 2005 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+<apis>
+
+	<api>
+		<name>Nokia User Interface API</name>
+		<description>The Nokia User Interface API provides
+			some advanced drawing functionalities.
+		</description>
+		<names>nokia-ui,nokia-ui-api, nokiaui, nokiauiapi</names>
+		<symbol>nokia-ui</symbol>
+		<files>nokia-ui.jar, nokiaui.zip</files>
+		<path>import/nokia-ui.jar</path>
+		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+	</api>
+	
+	<api>
+		<name>Mobile Media API</name>
+		<description>The Mobile Media API provides
+			functionalities for playing and capturing sounds and videos.
+		</description>
+		<!-- 
+		     The MIDP 2.0 standard supports a subset of the MMAPI, so when the 
+		     MMAPI is present, it needs to be prepended to the bootclasspath
+		     otherwise there will be compile errors when MMAPI-only features
+		     are used such as the Manager.MIDI_DEVICE_LOCATOR constant.
+		-->
+		<position>bootclasspath/p</position>
+		<names>mmapi,mm-api, JSR-135, JSR135</names>
+		<symbol>mmapi</symbol>
+		<files>mmapi.jar,j2me-mmapi.jar, mma.zip</files>
+		<path>import/mmapi.jar</path>
+	</api>
+
+	<api>
+		<name>Mobile Media API 1.1</name>
+		<description>The Mobile Media API 1.1 provides
+			functionalities for playing and capturing sounds and videos.
+		</description>
+		<!-- 
+		     The MIDP 2.0 standard supports a subset of the MMAPI, so when the 
+		     MMAPI is present, it needs to be prepended to the bootclasspath
+		     otherwise there will be compile errors when MMAPI-only features
+		     are used such as the Manager.MIDI_DEVICE_LOCATOR constant.
+		-->
+		<position>bootclasspath/p</position>
+		<parent>mmapi</parent>
+		<names>mmapi1.1,mm-api1.1,mmapi-1.1</names>
+		<symbol>mmapi1.1</symbol>
+		<files>mmapi.jar,j2me-mmapi.jar, mma.zip</files>
+		<path>import/mmapi.jar</path>
+	</api>
+	
+	<api>
+		<name>Mobile Media API 1.2</name>
+		<description>The Mobile Media API 1.2 provides
+			functionalities for playing and capturing sounds and videos.
+		</description>
+		<!-- 
+		     The MIDP 2.0 standard supports a subset of the MMAPI, so when the 
+		     MMAPI is present, it needs to be prepended to the bootclasspath
+		     otherwise there will be compile errors when MMAPI-only features
+		     are used such as the Manager.MIDI_DEVICE_LOCATOR constant.
+		-->
+		<position>bootclasspath/p</position>
+		<parent>mmapi</parent>
+		<names>mmapi1.2,mm-api1.2,mmapi-1.2</names>
+		<symbol>mmapi1.2</symbol>
+		<files>mmapi.jar,j2me-mmapi.jar, mma.zip</files>
+		<path>import/mmapi.jar</path>
+	</api>
+	
+	<api>
+		<name>Wireless Messaging API</name>
+		<description>The Wireless Messaging API provides
+			functionalities for sending and receiving messages (SMS).
+		</description>
+		<names>wmapi, wm-api, JSR-120, JSR120, wma, wmapi-1.1, wmapi1.1,wmapi-1.0,wmapi1.0</names>
+		<symbol>wmapi</symbol>
+		<files>j2me-wmapi.jar, wma.zip</files>
+		<path>import/wmapi.jar</path>
+	</api>
+	
+	<api>
+		<name>Wireless Messaging API 2.0</name>
+		<description>The Wireless Messaging API 2.0 provides
+			functionalities for sending and receiving text and multimedia messages (SMS and MMS).
+		</description>
+		<names>wmapi2.0, wmapi2, JSR-205, JSR205</names>
+		<symbol>wmapi2.0</symbol>
+		<parent>wmapi</parent>
+		<files>wmapi-2.0.jar,j2me-wmapi-2.0.jar, wma_2_0.zip</files>
+		<path>import/wmapi-2.0.jar</path>
+	</api>
+	
+	<api>
+		<name>Location API</name>
+		<description>The Location API provides
+			functionalities for determing the position of the user.
+		</description>
+		<names>locationapi, location-api, JSR-179,location,JSR179</names>
+		<symbol>locationapi</symbol>
+		<files>j2me-locationapi.jar, location.jar, locationapi-1.0.jar</files>
+		<path>import/locationapi-1.0.jar</path>
+	</api>
+
+	<api>
+		<name>Bluetooth API</name>
+		<description>The Bluetooth API provides
+			functionalities for data exchange with other bluetooth devices.
+		</description>
+		<names>btapi,bt-api, bluetooth, bluetooth-api, JSR-082, JSR-82, JSR82</names>
+		<symbol>btapi</symbol>
+		<files>btapi.jar, j2me-btapi.jar, bluetooth.zip</files>
+		<path>import/btapi.jar</path>
+	</api>
+
+	<api>
+		<name>3D API</name>
+		<description>The Mobile 3D Graphics API provides 3D functions for J2ME.
+		</description>
+		<names>3d, 3d-api,3dapi, JSR-184, JSR184, m3g, m3gapi</names>
+		<symbol>3dapi</symbol>
+		<features>api.m3g</features>
+		<files>j2me-3dapi.jar, m3g.jar, jsr184.jar</files>
+		<path>import/m3g.jar</path>
+	</api>
+
+	<api hasPackage="false">
+		<name>Java Technology for the Wireless Industry.</name>
+		<description>
+		A JSR-185 compatible device supports the the WMAPI
+		as well as the MIDP/2.0 platform. The MMAPI is only conditionally
+		required (when the device has J2ME Multimedia APIs). 
+		</description>
+		<names>JSR-185, JSR185, JTWI</names>
+		<symbol>jtwi</symbol>
+	</api>
+
+	<api>
+		<name>PDA Optional Packages</name>
+		<description>The PDA Optional Packages API defines one package for Personal Information Management (PIM) access, and one package for accessing file systems through the Generic Connection Framework (GCF).
+		</description>
+		<features>api.pimapi, api.pim, api.fileconnectionapi, api.fileconnection</features>
+		<names>pdaapi, pda-api, JSR-075, JSR-75, JSR75,pdapi</names>
+		<symbol>pdaapi</symbol>
+		<files>j2me-pdaapi.jar</files>
+		<path>import/pdaapi.jar</path>
+	</api>
+	
+	<api>
+		<name>PIM API</name>
+		<description>Package for Personal Information Management (PIM) access.
+		</description>
+		<names>pimapi, pim-api, pim</names>
+		<features>api.pim</features>
+		<symbol>pimapi</symbol>
+		<files>j2me-pimapi.jar</files>
+		<path>import/pim.jar</path>
+	</api>
+
+	<api>
+		<name>FileConnection API</name>
+		<description>Package for accessing file systems through the Generic Connection Framework (GCF).
+		</description>
+		<names>fileconnectionapi, fileconnection-api, fcapi, fc-api, fileconnection</names>
+		<features>api.fileconnectionapi</features>
+		<symbol>fileconnection</symbol>
+		<files>j2me-fileconnection.jar</files>
+		<path>import/fileconnection.jar</path>
+	</api>
+
+	<api>
+		<name>Motorola Lightweight Windowing Toolkit</name>
+		<description>
+		Motorola specific graphical user interface (GUI) extension for J2ME technology-enabled wireless phones.
+		</description>
+		<names>motorola-lwt, motorola lwt, lwt</names>
+		<symbol>motorola-lwt</symbol>
+		<files>motorola-lwt.jar</files>
+		<path>import/motorola-lwt.jar</path>
+	</api>
+
+	<api>
+		<name>Vodafone Service Class Library</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL</names>
+		<symbol>vscl</symbol>
+		<files>vscl.jar</files>
+		<path>import/vscl.jar</path>
+	</api>
+
+	<api>
+		<name>Vodafone Service Class Library 1.0</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL-1.0</names>
+		<parent>VSCL</parent>
+		<symbol>vscl-1.0</symbol>
+		<files>vscl-1.0.jar</files>
+		<path>import/vscl-1.0.jar</path>
+	</api>
+
+	<api>
+		<name>Vodafone Service Class Library 1.0.1</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL-1.0.1</names>
+		<parent>VSCL-1.0</parent>
+		<symbol>vscl-1.0.1</symbol>
+		<files>vscl-1.0.1.jar</files>
+		<path>import/vscl-1.0.1.jar</path>
+	</api>
+	
+	<api>
+		<name>Vodafone Service Class Library 1.1.0</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL-1.1.0</names>
+		<parent>VSCL-1.0.1</parent>
+		<symbol>vscl-1.1.0</symbol>
+		<files>vscl-1.1.0.jar</files>
+		<path>import/vscl-1.1.0.jar</path>
+	</api>
+
+	<api>
+		<name>Vodafone Service Class Library 2.0</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL-2.0, vslc2.0</names>
+		<parent>VSCL-1.1.0</parent>
+		<symbol>vscl-2.0</symbol>
+		<files>vscl-2.0.jar</files>
+		<path>import/vscl-2.0.jar</path>
+	</api>
+
+	<api>
+		<name>Vodafone Service Class Library 2.1</name>
+		<description>
+		A JBlend extension for some devices of the Vodafone operator.
+		</description>
+		<names>VSCL-2.1, vslc2.1</names>
+		<parent>VSCL-2.0</parent>
+		<symbol>vscl-2.1</symbol>
+		<files>vscl-2.1.jar</files>
+		<path>import/vscl-2.1.jar</path>
+	</api>
+
+	<api>
+		<name>Siemens Game API</name>
+		<description>An obsolete b/w gaming API.
+		</description>
+		<names>siemens-game-api, siemens-game</names>
+		<symbol>siemens-game-api</symbol>
+		<files>siemens-game-api.jar</files>
+		<path>import/siemens-game-api.jar</path>
+	</api>
+
+	<api>
+		<name>Siemens Color Game API</name>
+		<description>A predecessor of the MIDP/2.0 game API without
+		transformations.
+		</description>
+		<names>siemens-color-game-api, siemens-color-game</names>
+		<symbol>siemens-color-game-api</symbol>
+		<files>siemens-color-game-api.jar</files>
+		<path>import/siemens-color-game-api.jar</path>
+	</api>
+
+	<api>
+		<name>Siemens Extension API</name>
+		<description>A collection of additional classes for Siemens MIDP/1.0 devices.
+		</description>
+		<names>siemens-extension-api,siemens-extension</names>
+		<symbol>siemens-extension-api</symbol>
+		<features>supportsWMAPIWrapper</features>
+		<files>siemens-extension-api.jar</files>
+		<path>import/siemens-extension-api.jar</path>
+	</api>
+
+	<api>
+		<name>Scalable 2D Vector Graphics</name>
+		<description>
+		A library that allows you to use vector graphics in your application.
+		</description>
+		<names>JSR-226, JSR226, S2VG, m2g, svg, svgapi, svg-api</names>
+		<symbol>svg</symbol>
+		<files>m2g.jar</files>
+		<path>import/m2g.jar</path>
+	</api>
+
+	<api>
+		<name>Advanced Multimedia Supplements</name>
+		<description>
+		Extensions for handling multimedia content as a supplement to the MMAPI.
+		</description>
+		<names>JSR-234, JSR234, advancedmultimedia, advanced-multimedia, advancedmmapi, ams</names>
+		<symbol>advancedmultimedia</symbol>
+		<files>advancedmultimedia.jar</files>
+		<path>import/jsr234.jar</path>
+	</api>
+
+	<api>
+		<name>DoJa 1.5 Overseas</name>
+		<description>DoJa is a Japanese Java version for mobile devices.</description>
+		<names>doja-15</names>
+		<symbol>doja-15</symbol>
+		<files>doja1.5.jar, doja_classes.zip</files>
+		<path>import/doja_classes.zip</path>
+	</api>
+
+	<api>
+		<name>J2ME Polish SE Runtime</name>
+		<description>J2ME Polish Runtime</description>
+		<names>j2seRuntime</names>
+		<symbol>j2seRuntime</symbol>
+		<files>enough-j2mepolish-runtime.jar</files>
+		<path>import/enough-j2mepolish-runtime.jar</path>
+	</api>
+
+	<api>
+		<name>Webservices API</name>
+		<description>
+		Allows to access SOAP webservices.
+		</description>
+		<names>webservice, webservices, webserviceapi, JSR-172, JSR172</names>
+		<symbol>webservice</symbol>
+		<files>webservice.jar</files>
+		<path>import/jsr172.jar</path>
+	</api>
+
+	<api>
+		<name>Security and Trust Services API</name>
+		<description>
+		Provides J2ME applications with APIs for security and trust services through the integration of a Security Element.
+		</description>
+		<names>security, security-api, security-and-trust-api, JSR-177, JSR177</names>
+		<symbol>security</symbol>
+		<files>security.jar</files>
+		<path>import/jsr177.jar</path>
+	</api>
+
+	<api>
+		<name>Security and Trust Services API - APDU</name>
+		<description>
+		Provides J2ME applications with APDU APIs for security and trust services through the integration of a Security Element.
+		</description>
+		<names>satsa-apdu</names>
+		<symbol>satsa-apdu</symbol>
+		<files>satsa-apdu.jar</files>
+		<path>import/satsa-apdu.jar</path>
+	</api>
+	
+	<api>
+		<name>Security and Trust Services API - CRYPTO</name>
+		<description>
+		Provides J2ME applications with CRYPTO APIs for security and trust services through the integration of a Security Element.
+		</description>
+		<names>satsa-crypto</names>
+		<symbol>satsa-crypto</symbol>
+		<files>satsa-crypto.jar</files>
+		<path>import/satsa-crypto.jar</path>
+	</api>
+	
+	<api>
+		<name>Security and Trust Services API - JCRMI</name>
+		<description>
+		Provides J2ME applications with JCRMI APIs for security and trust services through the integration of a Security Element.
+		</description>
+		<names>satsa-jcrmi</names>
+		<symbol>satsa-jcrmi</symbol>
+		<files>satsa-jcrmi.jar</files>
+		<path>import/satsa-jcrmi.jar</path>
+	</api>
+	
+	<api>
+		<name>Security and Trust Services API - PKI</name>
+		<description>
+		Provides J2ME applications with PKI APIs for security and trust services through the integration of a Security Element.
+		</description>
+		<names>satsa-pki</names>
+		<symbol>satsa-pki</symbol>
+		<files>satsa-pki.jar</files>
+		<path>import/satsa-pki.jar</path>
+	</api>
+	
+	<api>
+		<name>SIP API</name>
+		<description>
+		The SIP API enables SIP applications to be executed in memory limited terminals, especially targeting to mobile phones.
+		</description>
+		<names>sip, sipapi, sip-api, JSR-180, JSR180</names>
+		<symbol>sip</symbol>
+		<files>sip.jar, sip-1.0.jar</files>
+		<path>import/jsr180.jar</path>
+	</api>
+	
+	<api>
+		<name>Content Handler API</name>
+		<description>
+		Enabling J2ME applications to handle multi-media and web content can give developers and users a seamless and integrated user environment on mobile phones and wireless devices.
+		</description>
+		<names>content, contentapi, content-api, contenthandlerapi,chapi, contenthandler, contenthandler-api, JSR-211, JSR211</names>
+		<symbol>contenthandler</symbol>
+		<files>contenthandler.jar,contenthandler-1.0.jar</files>
+		<path>import/jsr211.jar</path>
+	</api>
+
+	<api>
+		<name>Payment API</name>
+		<description>
+		Enabling application developers to initiate mobile payment transactions in J2ME applications.
+		</description>
+		<names>payment, paymentapi, payment-api, JSR-229, JSR229</names>
+		<symbol>payment</symbol>
+		<files>payment.jar,payment-1.0.jar</files>
+		<path>import/jsr229.jar</path>
+	</api>
+
+	<api>
+		<name>Mobile Internationalization API</name>
+		<description>
+		Enabling application developers to initiate mobile payment transactions in J2ME applications.
+		</description>
+		<names>internationalization, internationalization-api, i18n, i18n-api, JSR-238, JSR238,global, global-api</names>
+		<symbol>i18n</symbol>
+		<files>i18n.jar,i18n-1.0.jar,global.jar</files>
+		<path>import/jsr238.jar</path>
+	</api>
+
+	<api>
+		<name>OpenGL ES Bindings</name>
+		<description>
+		Java bindings to the OpenGL ES (Embedded Subset) native 3D graphics library.
+		</description>
+		<names>JSR239,JSR-239,opengl,opengles,openglesbindings</names>
+		<symbol>opengl</symbol>
+		<files>opengl-1.0.jar</files>
+		<path>import/jsr239.jar</path>
+	</api>
+	
+	<api>
+		<name>Samsung API</name>
+		<description>
+		Classes for sms, audio, light etc. for Samsung devices
+		</description>
+		<names>samsung-vibration, samsung-backlight, samsung-sms, samsung-audio</names>
+		<symbol>samsung</symbol>
+		<files>samsung-api.jar</files>
+		<path>import/samsung-api.jar</path>
+	</api>
+
+	<api>
+		<name>Mobile Sensor API</name>
+		<description>
+		Classes for sensors
+		</description>
+		<names>sensor, sensorapi, JSR256, JSR-256</names>
+		<symbol>sensor</symbol>
+		<files>sensor.jar</files>
+		<path>import/sensor.jar</path>
+	</api>
+
+	<api>
+		<name>Sprint API</name>
+		<description>
+		Classes for sms, audio, light, etc. for Sprint devices
+		</description>
+		<names>sprint-api</names>
+		<symbol>sprint</symbol>
+		<files>SprintApi.jar</files>
+		<path>import/SprintApi.jar</path>
+	</api>
+
+	<api>
+		<name>Motorola game API</name>
+		<description>
+		Classes for sms, audio, light, etc. for Motorola devices
+		</description>
+		<names>motorola-game</names>
+		<symbol>motogame</symbol>
+		<files>motogame.jar</files>
+		<path>import/motogame.jar</path>
+	</api>
+	
+	<api>
+		<name>LG API</name>
+		<description>
+		Classes for light, graphical effects, etc. for LG devices
+		</description>
+		<names>lg,lgapi,lgextension,lg-api</names>
+		<symbol>lg</symbol>
+		<files>lg.jar</files>
+		<path>import/lgapi.jar</path>
+	</api>
+	
+	<api>
+		<name>Contactless Communication API</name>
+		<description>Contactless communication can be used to provide a small amount of information to applications from some other medium, for example, links to some content or identifiers for services etc. Contactless communication can be based on e.g. Radio Frequency Identification (RFID), Near Field Communication (NFC) or bar codes.
+		</description>
+		<names>JSR257,JSR-257,contactless,nfc,rfid</names>
+		<symbol>nfc</symbol>
+		<files>jsr257.jar,jsr257-1.0.jar</files>
+		<path>import/jsr257.jar</path>
+	</api>
+
+	<api>
+		<name>Contactless Communication API Extension</name>
+		<description>Extension of JSR 257.
+		</description>
+		<names>JSR257extension,JSR-257extension,contactlessextension,nfcextension</names>
+		<symbol>nfcextension</symbol>
+		<files>jsr257extension.jar</files>
+		<path>import/jsr257extension.jar</path>
+	</api>
+		
+	<api>
+		<name>Enough Software Windows Helper API</name>
+		<description>
+		Classes to interact with Windows/.Net environment from within Java.
+		</description>
+		<names>windows</names>
+		<symbol>windows</symbol>
+		<files>windows.jar</files>
+		<path>import/windows.jar</path>
+	</api>
+
+	<api>
+		<name>Enough Software iPhone Helper API</name>
+		<description>
+		Classes to interact with Apple iPhone environment from within Java.
+		</description>
+		<names>iphone</names>
+		<symbol>iphone</symbol>
+		<files>iphone.jar</files>
+		<path>import/iphone.jar</path>
+	</api>
+
+<!--
+	You can use this block to define a new API
+	( remove these XML-comments ):
+
+	<api>
+		<name></name>
+		<description>
+		</description>
+		<names>JSR,JSR-</names>
+		<symbol></symbol>
+		<files>-1.0.jar</files>
+		<path>import/-1.0.jar</path>
+	</api>
+-->
+</apis>
+

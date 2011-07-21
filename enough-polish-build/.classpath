@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/src"/>
+	<classpathentry kind="src" output="bin/extensions" path="source/extensions"/>
+	<classpathentry kind="src" output="bin/test" path="source/test"/>
+	<classpathentry kind="src" output="bin/website" path="source/website"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry kind="lib" path="lib/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="lib/retroweaver-all.jar"/>
+	<classpathentry kind="lib" path="lib/asm-all.jar" sourcepath="/asm-2.2/src">
+		<attributes>
+			<attribute name="javadoc_location" value="http://asm.objectweb.org/current/doc/javadoc/user/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/enough-bytecode.jar" sourcepath="/enough-bytecode/source/src"/>
+	<classpathentry kind="lib" path="lib/enough-floater.jar" sourcepath="/enough-floater/source/src"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jode-1.1.2-pre1.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/kenv.zip"/>
+	<classpathentry kind="lib" path="lib/proguard.jar"/>
+	<classpathentry kind="lib" path="lib/retroguard.jar"/>
+	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
+	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/ZKM.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/enough-license.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/yguard-lib.jar"/>
+	<classpathentry kind="lib" path="lib/enough-webprocessor.jar"/>
+	<classpathentry kind="lib" path="lib/bluecove-2.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/osgi-3.0.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/enough-polish-j2me"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

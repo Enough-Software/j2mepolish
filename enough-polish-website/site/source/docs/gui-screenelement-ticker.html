@@ -1,0 +1,66 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design: Ticker %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Ticker</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-iconcustomitem.html">IconCustomItem</a> for further design options</li>
+		<li><a href="gui-item-stringitem.html">Text Design</a> for specifying fonts and text-effects</li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A ticker scrolls information over a screen and can include images in J2ME Polish.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-screenelement-ticker.png"  width="240" height="320" alt="A ticker in action" />	
+	<br />The above example has been realized with the following CSS code:
+<pre>
+colors {
+	fontColor: #222;
+	fontShadowColor: #fff;
+}
+.mailTicker {
+	ticker-step: 1;
+	padding-horizontal: 5;
+	layout: vertical-center;
+	icon-image: url( sending.png );
+	font-color: fontColor;
+	font-size: small;
+	text-effect: shadow;
+	text-shadow-color: fontShadowColor;
+}
+</pre>
+	</p>
+	<p>
+	Specific design attributes:
+	</p>
+	<%cssattributes Ticker %>
+
+		
+	<h2 id="Programming">Programming</h2>
+	<p>
+	You can exchange the image of the ticker by calling <code>UiAccess.setTickerImage( Ticker ticker, Image image )</code>.
+	You can also apply a style to a ticker by calling the screen's <code>setTicker( Ticker ticker )</code> method
+	with a <code>#style</code> preprocessing directive:
+<pre>
+//#style alarmTicker
+form.setTicker( ticker );
+</pre>
+	</p>
+	<p>You can also add Ticker as a normal, yet constantly animated item by calling 
+	<code>UiAccess.appendTicker( Ticker ticker, Form form )</code>.
+	</p>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Ticker.html">Ticker</a></li>
+	</ul>
+
+<%include end.txt %>

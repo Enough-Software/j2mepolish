@@ -1,0 +1,24 @@
+<?xml  version="1.0"  encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<meta name="description" content="J2ME Polish is an advanced build tool and GUI for J2ME applications." />
+	<meta name="author" content="Robert Virkus" />
+	<meta name="keywords" content="midlet, ant, tool, enough, robert, virkus, software, j2me, java, programming, programmierer, freiberufler, Germany, Deutschland, Bremen, Europe" />
+	<%ifdef title:defined %>
+		<title><%= title %></title>
+	<%else %>
+		<title>J2ME Polish</title>
+	<%endif %>
+	<link rel="Shortcut Icon" href="<%= basedir %>images/favicon.gif" type="image/ico" />
+	<link href="<%= basedir %>enough.css" rel="stylesheet" type="text/css" />
+	<link href="<%= basedir %>mainmenu.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript" src="<%= basedir %>niftycube/niftycube.js"></script>
+	<script type="text/javascript">
+	window.onload=function(){
+		Nifty("pre","tl br big");
+		Nifty("ul.relatedtechnologies","tl br big");
+		//Nifty("header-in","tl tr big");
+	}
+	</script>

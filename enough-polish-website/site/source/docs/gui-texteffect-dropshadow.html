@@ -1,0 +1,118 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Drop-Shadow Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Drop-Shadow Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The drop-shadow text-effect draws a soft shadow around the text. This effect requires MIDP 2.0 with floating point support 
+	(either by supporting the CLDC&nbsp;1.1 configuration or by using the <a href="floater.html">Floater</a> tool).
+	</p>
+	<h2 id="Shadow-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-drop-shadow.png"  width="141" height="23" alt="the drop-shadow text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with following settings:
+	</p>
+<pre>
+title {
+        //#if polish.midp2 and polish.hasFloatingPoint
+			text-effect: drop-shadow;
+			text-drop-shadow-inner-color: #a0909090;
+			text-drop-shadow-outer-color: #20cccccc;
+			text-drop-shadow-size: 3;
+        //#endif
+        layout: horizontal-center | horizontal-expand;
+        font {
+			face: proportional;
+			size: large;
+			style: bold;
+			color: #eef1e5;
+        }
+        background {
+			type: simple;
+			color: #ffffffff;
+        }
+}	
+</pre>
+<p>
+	Specific design attributes of the drop-shadow text-effect:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>text-drop-shadow-inner-color</td>
+		<td>#A0909090</td>
+		<td>ARGB color definition</td>
+		<td>
+		The color of the shadow close to the text.
+<pre>
+text-drop-shadow-inner-color: #a333;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-drop-shadow-outer-color</td>
+		<td>#20909090</td>
+		<td>ARGB color definition</td>
+		<td>
+		The color of the outer shadow, which must be less opaque than the start-color and the 
+		difference between them should be at least the size of the shadow.
+<pre>
+text-drop-shadow-inner-color: #a333;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-drop-shadow-size</td>
+		<td>6</td>
+		<td>integer</td>
+		<td>
+		The size of the shadow (in all directions).
+<pre>
+text-drop-shadow-size: 3;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-drop-shadow-offsetx</td>
+		<td>1</td>
+		<td>integer</td>
+		<td>
+		Sets the x-offset in pixels of the shadow. 
+		Positive x-values move the shadow towards the right.
+<pre>
+text-drop-shadow-offsetx: -1;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-drop-shadow-offsety</td>
+		<td>2</td>
+		<td>integer</td>
+		<td>
+		Sets the y-offset in pixels of the shadow. 
+		Positive y-values move the shadow towards the bottom.
+<pre>
+text-shadow-offsety: 2;
+</pre>
+		</td>
+	</tr>
+	</table>
+		
+	<h2 id="Shadow-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/DropShadowTextEffect.html">DropShadowTextEffect</a>.
+	</p>
+
+<%include end.txt %>

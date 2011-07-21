@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>J2ME Polish</title>
+<meta name="version" content="S5 1.0" />
+<link rel="stylesheet" href="../s5/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="../s5/opera.css" type="text/css" media="projection" id="operaFix" />
+<link rel="stylesheet" href="../s5/print.css" type="text/css" media="print" id="slidePrint" />
+<script src="../s5/slides.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="layout">
+
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer">
+<!--
+<h1>Bremen/Germany, 2004-12-15</h1>
+-->
+<h2><a class="homelink" href="introduction.html">J2ME Polish</a></h2>
+<div id="controls"></div>
+</div>
+
+</div>
+
+
+<div class="presentation">
+
+<div class="slide">
+<h1>Un recorrido por J2ME Polish</h1>
+<h3>Robert Virkus</h3>
+<h4>Enough Software</h4>
+<p>
+Esta presentaci&oacute;n se ha creado con <a href="http://www.meyerweb.com/eric/tools/s5" target="_blank">S5</a>. 
+<br />Gracias a <i>Eric Meyer</i> por crear esta fant&aacute;stica herramienta! 
+</p>
+<p>
+Navegaci&oacute;n:
+<br />Simplemente haz click con el rat&oacute;n o utiliza las flechas de direcci&oacute;n para cambiar de p&aacute;gina. 
+<br />Pincha sobre el v&iacute;nculo &quot;J2ME Polish&quot;(debajo) para volver.
+</p>
+</div>
+
+
+<div class="slide">
+<h1>Qu&eacute; es J2ME Polish?</h1>
+<p>J2ME Polish es una colecci&oacute;n de herramientas para el desarrollo de aplicaciones J2ME:</p>
+<ul>
+<li>Herramientas para la construcci&oacute;n de aplicaciones empaquetadas a partir de un &uacute;nico proyecto fuente con m&uacute;ltiples m&oacute;viles y regionalizaciones destino.</li>
+<li>Una base de datos de dispositivos que puede utilizarse para ajustar la construcci&oacute;n de aplicaciones a diferentes dispositivos mediante Preprocesamiento.</li>
+<li>Una interfaz de usuario (GUI), que se dise&ntilde;a fuera del c&oacute;digo de la aplicaci&oacute;n mediante simples archivos de texto.</li>
+<li>Clases utilitarias tales como BitMapFont o ArrayList. </li>
+<li>Un conjunto de herramientas independientes, como el editor de archivos binarios. </li>
+<li>...y esto es solo el comienzo!</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Contrucci&oacute;n de aplicaciones J2ME</h1>
+<p>Es f&aacute;cil construir aplicaciones con J2ME Polish:</p>
+<ul>
+<li>Elige los dispositivos destino, ya sea list&aacute;ndolos o describiendo las capacidades que deben poseer (por ejemplo &quot;soporta WMAPI y MIDP/2.0&quot;).</li>
+<li>J2ME Polish preprocesa, compila, ofusca y empaqueta la aplicaci&oacute;n.</li>
+<li>Adem&aacute;s puedes hacer que autom&aacute;ticamente inicie el emulador apropiado durante la fase de desarrollo.</li>
+<li>Y como las herramientas de construcci&oacute;n est&aacute;n basadas en Ant, J2ME Polish  es muy configurable y se integra perfectamente en todos los IDEs de Java.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Inclusi&oacute;n de recursos</h1>
+<ul>
+<li>J2ME Polish incluye autom&aacute;ticamente los recursos correspondientes a la aplicaci&oacute;n. </li>
+<li>Coloca los recursos comunes en el directorio &quot;resources&quot;.</li>
+<li>Luego podr&aacute;s utilizar recursos espec&iacute;ficos coloc&aacute;ndolos en el subdirectorio apropiado, por ejemplo &quot;resources/Nokia&quot;, &quot;resources/Siemens/S65&quot; o &quot;resources/BitPerPixel.16+&quot;.</li>
+<li>Es f&aacute;cil afinar la inclusi&oacute;n de recursos, puedes por ejemplo incluir ficheros MIDI solo cuando el m&oacute;vil soporta sonido MIDI, y no MP3.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Regionalizaci&oacute;n</h1>
+<ul>
+<li>La regionalizaci&oacute;n se hace necesaria cuando la aplicaci&oacute;n ser&aacute; comercializada en varias regiones.</li>
+<li>Con J2ME Polish puedes ajustar los recursos, ya sean textos, im&aacute;genes o sonidos, a las diferentes regiones.</li>
+<li>Regionalizar con J2ME Polish no genera sobrecarga (en comparaci&oacute;n con las aplicaciones no-regionalizadas) porque las traducciones se incluyen directamente dentro de la aplicaci&oacute;n.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>La base de datos de dispositivos</h1>
+<p>La Base de datos de Dispositivos te ayuda a ajustar tu aplicaci&oacute;n para diferentes m&oacute;viles:</p>
+<ul>
+<li>Se listan m&aacute;s de 300 dispositivos J2ME y sus respectivas capacidades J2ME tales como tama&ntilde;o del Canvas, APIs, formatos soportados, etc.</li>
+<li>Puedes utilizarla no solo leyendo las capacidades de los dispositivos sino tambi&eacute;n en tu c&oacute;digo fuente durante la etapa de preprocesamiento. </li>
+<li>Y al estar escrita en XML puedes ampliarla muy f&aacute;cilmente. </li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Preprocesamiento</h1>
+<ul>
+<li>En la etapa de preprocesamiento se cambia el c&oacute;digo antes de ser compilado.</li>
+<li>Utiliz&aacute;ndola, puedes ajustar la construcci&oacute;n de la aplicaci&oacute;n a diferentes dispositivos sin afectar la portabilidad.</li>
+<li>J2ME Polish te provee de poderosas directivas de procesamiento y un esquema de nombres estandarizado.</li>
+<li>Y puedes utilizar cualquiera de las capacidades definidas en la base de datos de dispositivos.</li>
+</ul>
+<p>
+<pre>
+//#if polish.midp2 || polish.api.mmapi
+	// okay, se puede utilizar la MMAPI para reproducir audio:
+	Player player = ...
+//#endif
+</pre>
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>GUI (1/2)</h1>
+<ul>
+<li>J2ME Polish te permite dise&ntilde;ar la GUI de alto nivel simplemente utilizando archivos de texto de tipo CSS.</li>
+<li>No es dif&iacute;cil: <code>background-color: rgb(123, 54, 233);</code></li>
+<li>Dependiendo del &iacute;tem o de la pantalla puedes utilizar atributos especializados. </li>
+<li>Puedes usar im&aacute;genes, fuentes de mapa de bits, diferentes fondos, animaciones, etc.</li>
+<li>El dise&ntilde;o se realiza completamente fuera del c&oacute;digo de la aplicaci&oacute;n. </li>
+<li>Por lo que podr&aacute;s crear varios &quot;temas&quot; sin cambiar el c&oacute;digo fuente.</li>
+<li>Con la GUI puedes usar caracter&iacute;sticas de MIDP/2.0, como CustomItems, en tel&eacute;fonos MIDP/1.0!</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>GUI (2/2)</h1>
+<p>
+<img src="../images/screenshot-example-enough.png" alt="An application using a List." />
+<img src="../images/screenshot-example-pink.png" alt="The same application with another theme." />
+<img src="../images/screenshot-example-roadrunner.png" alt="Yet another theme." />
+<br />
+Estas im&aacute;genes muestran la misma aplicaci&oacute;n utilizando diferentes &quot;temas&quot;. 
+<br />Por supuesto puedes crear tus propios &iacute;tems, fondos, etc.
+
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Motor de Juegos (Game Engine)</h1>
+<ul>
+<li>Con el Motor de Juegos de J2ME Polish puedes utilizar el API de juegos de MIDP/2.0 en tel&eacute;fonos MIDP/1.0.</li>
+<li>Puedes llevar a cabo, adem&aacute;s, diferentes estrategias de optimizaci&oacute;n como el backbuffer para TiledLayer.</li>
+<li>El motor de juegos est&aacute; altamente optimizado en velocidad para lograr que tu juego rinda al m&aacute;ximo.</li>
+<li>Y solo utilizas un &uacute;nico c&oacute;digo fuente para todos los dispositivos donde quieras que corra la aplicaci&oacute;n.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Clases Utilitarias</h1>
+<ul>
+<li>J2ME Polish cuenta con utilidades que muchas veces son necesarias y que no se encuentran disponibles en J2ME est&aacute;ndar.</li>
+<li><code>de.enough.polish.util.BitMapFont</code> muestra mensajes usando una fuente bitmap.</li>
+<li><code>de.enough.polish.util.ArrayList</code> ofrece una eficiente alternativa al Vector. </li>
+<li><code>de.enough.polish.util.TextUtil</code> provee operaciones generales de String y parte cadenas de texto para poder visualizarlas en un canvas.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Entorno de Bit&aacute;cora</h1>
+<ul>
+<li>Con el entorno de bit&aacute;cora puedes ver los mensajes generados v&iacute;a <code>System.out.println()</code>cuando tu aplicaci&oacute;n corre en dispositivos reales.</li>
+<li>Puedes habilitar diferentes niveles de mensajes, tales como &quot;debug&quot;, &quot;warn&quot; o &quot;error&quot; en clases espec&iacute;ficas o paquetes.</li>
+<li>Puedes definir tus propios niveles, como por ejemplo &quot;performance&quot;.</li>
+<li>Y en la aplicaci&oacute;n  definitiva puedes desactivar la bit&aacute;cora por completo para que no quede rastro de tus trazas.</li>
+</ul>
+<p>
+<pre>
+try {
+	Connection con = Connector.open( url );
+	...
+} catch (Exception e) {
+	//#debug error
+	System.out.println("No es posible conectarse" + e );
+}
+</pre>
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Herramientas independientes</h1>
+<ul>
+<li>Utiliza el <i>binary-editor</i> para crear y modificar datos binarios como los archivos de niveles del juego.</li>
+<li>El <i>font-editor</i> crea fuentes bitmap a partir de fuentes true type.</li>
+</ul>
+<p><img src="../images/binaryeditor-osx.png" alt="The binary editor in action." /></p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Gracias!</h1>
+<p>Has completado el recorrido.<br />Siguientes pasos:</p>
+<ul>
+	<li>La p&aacute;gina de <a href="features.html">Caracter&iacute;sticas</a> que describe las caracter&iacute;sticas m&aacute;s importantes y contiene links a la documentaci&oacute;n detallada.</li>
+	<li>El <a href="tutorial.html">Tutorial</a> que explica la aplicaci&oacute;n para que puedas dar tus primeros pasos.</li>
+	<li>Busca en la <a href="../documentation.html">Documentation</a> para obtener informaci&oacute;n completa.</li>
+	<li>Y no olvides de <a href="../download.html">descargar</a> J2ME Polish.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

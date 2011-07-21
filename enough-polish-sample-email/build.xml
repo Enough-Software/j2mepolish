@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-example">
+
+	<property file="${user.name}.properties" />
+	<property name="polish.home" location="../enough-polish-build" />
+	<property  name="device" value="Nokia/Series60E2" />
+	<property  name="devices" value="${device}, Nokia/Series60E2, Sony-Ericsson/W900" />
+	<property file="../blackberry/blackberry.properties"/>
+
+
+	<property name="wtk.home" location="C:/WTK22" />
+	<property name="nokia.home" location="C:/Nokia" />
+
+	
+	<!-- task definitions -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+	/>
+
+		
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+
+<target name="test">
+	<property name="test" value="true"/>
+</target>
+	
+<target name="deploy">
+	<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+</target>
+		
+<target name="init">
+  	<property name="test" value="false"/>
+	<property name="deploy-url" value=""/>
+</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info copyright="Copyright 2008 Enough Software. All rights reserved." 
+			description="A TreeItem example." 
+			infoUrl="http://www.enough.de" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-email.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			license="GPL" 
+			name="MobileMail" 
+			vendorName="Enough Software" 
+			version="1.0.4"
+			icon="icon.png"
+	    />
+	    <!--
+		<lifeCycleManager name="mea" />
+		-->
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+			<!--
+			<requirement name="Name" value="MppPhone"/>
+			-->
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${devices}"/>
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build fullscreen="menu" 
+                polishDir="../enough-polish-j2me/source/src" 
+                symbols="polish.skipArgumentCheck" 
+                usePolishGui="true"
+			>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.email.EmailMidlet" name="MobileMail"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.TextField.includeInputInfo" value="false" />
+				<variable name="polish.TextField.usePredictiveInput" value="true" />
+				<variable name="polish.TextField.useDirectInput" value="true" />
+				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+				<variable name="polish.Screen.ManualOrientationChange" value="true" />
+				<!--
+				<variable name="polish.TextField.suppressCommands" value="true"/>
+				<variable name="polish.MenuBar.PaddingLeft" value="5" />
+				<variable name="polish.MenuBar.PaddingRight" value="5" />
+				<variable name="polish.MenuBar.PaddingTop" value="5" />
+				<variable name="polish.MenuBar.PaddingBottom" value="1" />
+				<variable name="polish.Container.allowCycling" value="false" />
+				<variable name="polish.MenuBar.OptionsPosition" value="" />
+				<variable name="polish.MenuBar.OkPosition" value="" />
+				-->
+				<variable name="polish.useScrollBar" value="true" />
+				<variable name="polish.ScreenInfo.enable" value="true" />
+			</variables>
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator useDefaultPackage="false" name="ProGuard" unless="test or polish.blackberry">
+				<keep class="de.enough.polish.example.Dummy" />
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug level="error" showLogOnError="false" verbose="true" if="test">
+				<filter level="debug" package="de.enough.polish.sample.email"/>
+				<!--
+				<handler name="rms" />
+				<filter level="debug" class="de.enough.polish.ui.ChoiceTextField" />
+				<filter level="debug" class="de.enough.polish.ui.FilteredChoiceGroup" />
+				<filter level="debug" class="de.enough.polish.ui.FilteredList" />
+				<filter level="debug" class="de.enough.polish.ui.Screen" />
+				<filter level="debug" class="de.enough.polish.ui.ChoiceGroup" />
+				<filter level="debug" package="de.enough.polish.ui"/>
+				<filter level="debug" class="de.enough.polish.ui.Container" />
+				<filter level="debug" class="de.enough.polish.ui.TextField"/>
+				<filter level="debug" class="de.enough.polish.ui.StringItem"/>
+				<filter level="debug" class="de.enough.polish.ui.ChoiceTextField" />
+				<filter level="debug" class="de.enough.polish.ui.Screen"/>
+				<filter level="debug" class="de.enough.polish.ui.Ticker"/>
+				<filter level="debug" class="de.enough.polish.ui.AnimationThread"/>
+				<filter level="debug" class="de.enough.polish.ui.TreeItem" />
+				-->
+			</debug>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<localization>
+					<locale name="en" encoding="UTF8"/>
+				</localization>
+			</resources>
+		</build>
+		<!-- execution of emulator(s) -->
+		<emulator
+			wait="true"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="test and not debug"
+			>
+		</emulator>
+	
+		<emulator
+			wait="false"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="debug">
+			<debugger port="8000" />
+		</emulator>
+	</j2mepolish>
+</target>
+
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

@@ -1,0 +1,115 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: FilteredChoiceGroup %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">FilteredChoiceGroup</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-filteredlist.html">FilteredList</a></li>
+		<li><a href="gui-screen-list.html">List</a></li>
+		<li><a href="gui-item-choicegroup.html">ChoiceGroup</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A <code>FilteredChoiceGroup</code> displays several items which can be selected depending on it's choice type (either <code>Choice.EXCLUSIVE</code>,
+	<code>Choice.MULTIPLE</code> or <code>Choice.IMPLICIT</code>).
+	It behaves like a normal <a href="gui-item-choicegroup.html">ChoiceGroup</a> but it will open up a 
+	<a href="gui-screen-filteredlist.html">FilteredList</a> when the user wants to select different choices.
+	</p>
+	<h2 id="FilteredChoiceGroup-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-filteredchoicegroup.png" width="341" height="86" alt="A closed FilteredChoiceGroup" />	
+	<br />
+	The above design has been realized with these CSS settings:
+	</p>
+<pre>
+.from {
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	include-label: true;
+	layout: left | expand;
+	/** style of the filter-textfield of a FilteredList/FilteredChoiceGroup */
+	filter-style: filterTextFieldStyle;
+	/** style of the popup screen for a FileredChoiceGroup */
+	popup-style: filterPopupStyle;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+.from:hover {
+	padding: 3;
+	padding-left: 3;
+	background {
+		type: round-rect;
+		color: white;
+	}
+	layout: left | expand;	
+}
+
+.filterTextFieldStyle {
+	margin-left: 2;
+	margin-right: 2;
+	before: url( search.png );
+	background {
+		color: white;
+		border-color: black;
+	}
+	layout: expand | left;
+}
+
+.filterPopupStyle {
+	repaint-previous-screen: true;
+	margin: 10;
+	margin-bottom: 0;
+	padding: 5;
+	background-color: bgColor;
+}
+</pre>
+	<h3 id="attributes-filteredchoicegroup">FilteredChoiceGroup CSS Attributes</h3>
+	<p>
+	Here's a list of all FilteredChoiceGroup specific design attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.FilteredChoiceGroup %>
+	
+	<h3 id="attributes-choiceitem">Choice Item CSS Attributes</h3>
+	<p>
+	Use the following CSS attributes for the styles of FilteredChoiceGroup items:
+	</p>
+	<%cssattributes de.enough.polish.ui.ChoiceItem %>
+	
+	<h2 id="FilteredChoiceGroup-Programming">Programming</h2>
+	<p>
+	You can use FilteredChoiceGroups like a <code>javax.microedition.lcdui.ChoiceGroup</code> with the
+	exception that you can use the <code>Choice.IMPLICIT</code> mode and cannot use the <code>Choice.POPUP</code> mode:
+	</p>
+<pre>
+//#style from
+this.sender = new FilteredChoiceGroup( &quot;from: &quot;, &quot;select sender...&quot;, Choice.MULTIPLE );
+this.sender.addCommand(this.cmdChoose);
+this.sender.setItemCommandListener( this );
+for (int i = 0; i &lt; SENDERS.length; i++) {
+	String senderAddress = SENDERS[i];
+	//#style senderOption
+	this.sender.append( senderAddress, null );
+}
+form.append( this.sender );
+</pre>
+	<p>
+	Refer to the <a href="gui-screen-filteredlist.html">FilteredList documentation</a> for learning
+	how to deal with the commands added to a <code>FilteredChoiceGroup</code>.
+	</p>
+	
+	<h2 id="FilteredChoiceGroup-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/FilteredChoiceGroup.html">FilteredChoiceGroup</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,1 @@
+Shows how to use CSS animations within your application. The intro screen is actually a form!

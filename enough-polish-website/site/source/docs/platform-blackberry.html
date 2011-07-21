@@ -1,0 +1,415 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%define inDocumentationSection.blackberry %>
+<%set title = J2ME Polish: BlackBerry Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Developing for BlackBerry Devices</h1>
+	<%index %>
+<p>
+The BlackBerry platform of Research in Motion is quite popular for business applications. 
+You can develop normal MIDlets as well as BlackBerry specific applications with J2ME Polish.
+</p>
+<h2 id="blackberry-preparation">Preparations</h2>
+<p>
+For transforming and signing the JAR files to the BlackBerry proprietary COD format, you need to install either 
+the BlackBerry Java Development Environment (JDE) or the BlackBerry Component Packages. The component packages are sufficient,
+though the JDE eases the debugging of your applications.
+</p>
+<p>
+Please note that your should install the corresponding versions of the JDE/Component Packages for each BlackBerry handset version 
+that you want to target. So if you are targeting 4.1, 4.2 and 4.3 BlackBerry devices, you need to install each of the corresponding JDEs.
+J2ME Polish will then select the appropriate JDE for converting a JAR file into a COD file. This is necessary since COD files
+generated with new JDE versions will not run on older platforms, and COD files generated with older JDE versions will not allow you
+(and J2ME Polish) to take advantage of features of later versions.
+</p>
+<p>
+Download the JDEs or the Component Packages from <a target="_blank" href="http://www.blackberry.com/developers" target="_blank">http://www.blackberry.com/developers</a>. 
+On Unix systems these can be installed using an windows emulator like <a href="http://www.winehq.org/" target="_blank">Wine</a>. 
+You can also install the Component Packages under Windows and then copy the installed directories to other operation systems.
+</p>
+<p>
+After the installation you should define the <code>blackberry.home</code> in either <i>${polish.home}/global.properties</i>, 
+${project.home}/${user.name}.properties or in your <i>build.xml</i> script.
+<code>blackberry.home</code> should point to the directory that contains all JDEs or Component Packages. By default this points to
+&quot;C:/Program Files/Research In Motion&quot;. In your <i>build.xml</i> script the definitition could look like this:
+</p>
+<pre>
+&lt;property 
+	name=&quot;blackberry.home&quot; 
+	location=&quot;C:/Program Files/Research In Motion&quot; 
+/&gt;
+</pre>
+
+<h2 id="blackberry-samplesetup">Sample JDE Installation Structure</h2>
+<p>
+If you work in a team, it is a good idea to install the Component Packages into a shared project. In this way you can use one installation
+setup for several projects and teams easily. It also eases the sharing of signing certificates considerably (see below).
+For our projects we do have installed all Component Packages into the "blackberry" project with following directory structure:
+</p>
+<pre>
+blackberry                           (root directory)
+blackberry/blackberry.properties     (signing properties)
+blackberry/certificate               (certificate directory)
+blackberry/certificate/sigtool.csk   (private key)
+blackberry/certificate/sigtool.db    (signing services)
+blackberry/certificate/client-RBB-XXXX.csi (certificate)
+blackberry/certificate/client-RCR-XXXX.csi (certificate)
+blackberry/certificate/client-RRT-XXXX.csi (certificate)
+blackberry/BlackBerry JDE Component Package 4.5.0 (for 4.5 devices)
+blackberry/BlackBerry JDE Component Package 4.6.0 (for 4.6 devices)
+blackberry/BlackBerry JDE Component Package 4.7.0 (for 4.7 devices)
+blackberry/BlackBerry JDE Component Package 5.0.0 (for 5.0 devices)
+blackberry/BlackBerry JDE Component Package 6.0.0 (for 6.0 devices)
+</pre>
+<p>
+In project's we then use following property definitions in the <i>build.xml</i> scripts for BlackBerry support:
+</p>
+<pre>
+&lt;project basedir=&quot;.&quot; default=&quot;j2mepolish&quot; name=&quot;myproject&quot;&gt;
+	&lt;property file=&quot;${user.name}.properties&quot; /&gt;
+	&lt;property name=&quot;polish.home&quot; location=&quot;C:\Program Files\J2ME-Polish&quot; /&gt;
+	&lt;property file=&quot;${polish.home}/global.properties&quot; /&gt;
+	&lt;property name=&quot;blackberry.home&quot; location=&quot;../blackberry&quot; /&gt;
+	&lt;property file=&quot;${blackberry.home}/blackberry.properties&quot; /&gt;
+</pre>
+<p>
+The above property structure allows you to use user-specific settings in case you cannot deal with the general team-settings, while
+easing the life of all team members considerably.
+You can change <code>blackberry.home</code> for example by specifying it in <i>${project.home}/${user.name}/properties</i>, e.g. when
+your login name is "dave", you can define it in <i>${project.home}/dave.properties</i> like this:
+</p>
+<pre>
+blackberry.home=E:\\dev\\Research in Motion
+</pre>
+<p>You can also define the variable <code>blackberry.emulator.home</code> in case you want to use different JDEs for building
+and for simulating. This is handy if you have the certification keys in one place and fullblown JDEs in a different place.
+</p>
+<pre>
+blackberry.emulator.home=E:\\dev\\Research in Motion
+</pre>
+
+
+<h2 id="blackberry-jar2cod">Converting JARs into CODs</h2>
+<p>
+When you target BlackBerry devices like the BlackBerry/8100 device and have set the <code>blackberry.home</code> property, 
+J2ME Polish will automatically invoke the rapc compiler for converting the JAR file into a COD file in the finalize step 
+of the build process.
+Remember that resources should be less than 64 kb in size for older BlackBerry platforms, otherwise the rapc process will
+ abort the processing. 
+</p>
+<p>If rapc fails because there is not enough heapspace, you can specify the preprocessing variable or Ant property 
+<code>blackberry.rapc.opts</code>, e.g.:<br />
+<code>&lt;property name=&quot;blackberry.rapc.opts&quot; value=&quot;-Xmx512m&quot;/&gt;</code><br />
+This example will set the maximum usable heapspace to 512 MB, which is actually the default setting.
+</p>
+
+<h2 id="blackberry-signing">Signing COD Files</h2>
+<p>
+J2ME Polish can also automate the requesting of signatures during the build process. 
+</p>
+<h3 id="blackberry-signing-obtaining">Obtaining and Installing Certificates</h3>
+<p>
+Signatures are required for accessing some Blackberry specific security sensitive APIs and require a certificate that can be obtained
+at <a href="https://www.blackberry.com/SignedKeys/" target="_blank">https://www.blackberry.com/SignedKeys</a>. 
+After signing up with BlackBerry you will receive 3 certificates, for example:
+</p>
+<ol>
+	<li>client-RBB-34343989.csi</li>
+	<li>client-RCR-34343989.csi</li>
+	<li>client-RRT-34343989.csi</li>
+</ol>
+<p>
+Each certificate is responsible for specific API usages, usually the RRT (secure runtime API access) is the most important.
+You now need to register the certificates by following the installation 
+instructions - usually double clicking the certificate does the trick. After the installation you will obtain the two text files
+<i>sigtool.csk</i> and <i>sigtool.db</i> that will be stored in <i>${jde.home}/bin</i>.
+</p>
+<h3 id="blackberry-signing-using">Automating the Application Signing</h3>
+<p>
+In your Ant <i>build.xml</i> script, <i>${polish.home}/global.properties</i> or <i>${project.home}/${user.name}.properties</i>
+ you then need to define the <code>blackberry.certificate.dir</code> property, e.g.:
+</p>
+<pre>
+&lt;property name=&quot;blackberry.certificate.dir&quot; location=&quot;${blackberry.home}/certificates&quot;/&gt;
+</pre>
+<p>
+In case the sigtool.csk and sigtool.db files are not included in the same location like the certificates, you also need to define the <code>blackberry.sigtool.dir</code> property:
+</p>
+<pre>
+&lt;property name=&quot;blackberry.sigtool.dir&quot; location=&quot;${blackberry.home}/sigtool&quot;/&gt;
+</pre>
+<p>
+When you specify the password as well, J2ME Polish uses this for requesting the signatures without manual intervention. 
+For such cases the password needs to contain only ASCII characters, otherwise J2ME Polish can't include the password automatically.
+</p>
+<pre>
+&lt;property name=&quot;blackberry.certificate.password&quot; value=&quot;secret&quot;/&gt;
+</pre>
+<p>Note that BlackBerry only provides a GUI based tool for JDEs before 2.0.1.
+For successfully signing your application automatically you
+need to run the build process in the foreground, so that the J2ME Polish can send key events to the foreground window 
+of the BlackBerry SigTool during the build with such JDEs.
+</p>
+<p>
+Note also that the blackberry SigTool application does not work on Unix systems. This shlashdev guide describes 
+<a href="http://www.slashdev.ca/2008/03/16/using-sigtool-in-linux" target="_blank">how to run the SigTool on Unix</a>.
+</p>
+<h2 id="blackberry-debugging">Debugging</h2>
+<p>
+An blackberry project file (.jdp) gets created automatically with every blackberry build. You can debug by building and running
+the project in the BlackBerry JDE with this generated project file. You will find the file in the <i>build/BlackBerry/${device}/{language}/</i> folder.
+<br />
+To import a project right-click on the workspace in the <i>files</i> view of the JDE and select &quot;Add Project...&quot;.
+</p>
+<p>
+In case you use <a href="build-build.html#libraries">binary libraries</a> in your project, J2ME Polish will generate two projects - one library project and another CLDC application 
+project that depends on the generated library project. You will need to add both projects to the JDE - the library project will be called like your application 
+with an additional &quot;LIB&quot; at the end.
+</p>
+<p>
+When you are using the <a href="serialization.html">serialization</a> or <a href="rmi.html">RMI</a> features of J2ME Polish, you should not rely on 
+<code>de.enough.polish.io.Serializable</code> but instead implement <code>de.enough.polish.io.Externalizable</code> when using running projects from
+within the JDE. This is required since Serializable classes are processed within the class files in byte code, but in the JDE only the source code is used.
+</p>
+<h2 id="blackberry-verification-erros">Verification error</h2>
+<p>
+It may happen that a blackberry build can't be executed due to a verification error. The device will respond to the execution of the application with something like this :
+</p>
+<pre>
+Error starting appname: Module 'appname' has verification error XXXX at offset XXXX
+</pre>
+<p>
+There are numerous reasons for this behaviour:
+</p>
+<ul>
+  <li>The signing went wrong. Please check the signing of the application.</li>
+  <li>A derived or subclass of another class tries to access a static variable directly.
+  Create a get() method for this variable to access it.</li>
+  <li>Remove unused imports</li>
+  <li>Remove System.out.println() calls</li>
+  <li>Make sure every method has a valid qualifier like private/public/protected
+</ul>
+<p>
+To identify the class and method which causes the error, you can do the following :
+</p>
+<ol>
+<li>Open the emulator of the BlackBerry JDE</li>
+<li>Load the application</li>
+<li>Open the application</li>
+<li>An error screen should appear stating something like this : <pre>jvm error 104 uncaught runtime exception</pre></li>
+<li>Choose from the underlying menu (using the arrow keys) the option "catfail"</li>
+<li>Now choose the right most point to save a file named "failure.zip" to your disk</li>
+<li>Extract the files within failure.zip to your disk and open the .bug file</li>
+</ol>
+<p>
+There are three interesting values in the .bug file:
+</p>
+<pre>VM:VECPs</pre>
+<p>(the package)</p>
+<pre>VM:VECCs</pre>
+<p>(the class)</p>
+<pre>VM:VECMm</pre>
+<p>(and the method which causes the error)</p>
+<h2 id="blackberry-gui">Using the J2ME Polish UI on BlackBerry Devices</h2>
+<p>
+The J2ME Polish UI can be used normally on BlackBerry devices as well. In order to make most of the system, 
+J2ME Polish converts your MIDlet into a native BlackBerry UiApplication. 
+This allows J2ME Polish to process trackwheel/trackball events and so on correctly. 
+The successful conversion requires that your MIDlet uses a public constructor. 
+</p>
+<h3 id="blackberry-gui-textfield">BlackBerry TextFields</h3>
+<p>
+On BlackBerry devices native BlackBerry <code>EditFields</code> are used for text input. These native fields
+work in the same way like in other BlackBerry applications, but they do not offer the same wealth of design options
+like J2ME Polish <a href="gui-item-textfield.html">TextFields</a>.
+<br />
+Therefore, J2ME Polish displays normal <code>TextFields</code> that you can fully design when the field is not focused.
+When the <code>TextField</code> is focused, however, we switch to the native BlackBerry <code>EditFields</code>. You can still
+specify the background, border and font styles of a focused <code>TextField</code>, but advanced designs like 
+<a href="gui-visualguide-texteffects.html">text effects</a> will not be supported.
+</p>
+<h3 id="blackberry-gui-datefield">BlackBerry DateFields</h3>
+<p>
+Similar to <code>TextFields</code>, J2ME Polish uses native BlackBerry  <code>DateFields</code> when a J2ME Polish
+<a href="gui-item-datefield.html">DateField</a> is focused. 
+This is why the visualization of the  <code>DateField</code> might change when it is focused.
+</p>
+
+<h3 id="blackberry-gui-menubar">BlackBerry Menubar</h3>
+<p>
+J2ME Polish uses the <code>fullscreen</code> attribute of the <code>&lt;build&gt;</code> element of the <code>&lt;j2mepolish&gt;</code> task to determine
+whether commands should be rendered by J2ME Polish or natively by BlackBerry. We recommend to use native command rendering on BlackBerry which is achieved 
+with one of the following settings:
+</p>
+<pre>&lt;build fullscreen=&quot;false&quot; ...&gt;</pre>
+<p>or use the <code>&lt;variables&gt;</code> section:</p>
+<pre>&lt;variable
+  name=&quot;polish.FullScreen&quot;
+  value=&quot;false&quot; if=&quot;polish.blackberry || polish.android&quot; /&gt;
+</pre>
+<p>
+	You can also add separators to the native menu by adding a <code>Command.SEPARATOR</code> command (the style is only used for other platforms):
+</p>
+<pre>
+import de.enough.polish.ui.Command;
+[...]
+	
+	//#style menuSeparator
+	Command cmdSeparator = new Command("", Command.SEPARATOR, 5 );
+	myScreen.addCommand( cmdSeparator );
+</pre>
+
+<h3 id="blackberry-gui-alerts">BlackBerry Alerts</h3>
+<p>
+You can instruct J2ME Polish so that it uses native BlackBerry alerts instead of ones rendered by J2ME Polish. This improves the integration into the 
+BlackBerry platform and is a recommended setting in your <i>build.xml</i> script:
+</p>
+<pre>&lt;variable
+  name=&quot;polish.useNativeAlerts&quot;
+  value=&quot;true&quot; if=&quot;polish.blackberry || polish.android&quot; /&gt;
+</pre>
+
+<h2 id="blackberry-gui-platform">Platform Requests in J2ME Polish Applications</h2>
+<p>
+For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to specify the
+preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
+</pre>
+<p>
+Note that this functionality requires a signed application.
+</p>
+
+<h2 id="blackberry-native">Developing Native BlackBerry Applications</h2>
+<p>
+You can also develop native BlackBerry applications by defining the blackberry.main variable that contains the name of the class that extends net.rim.device.api.system.Application.
+</p>
+<pre>
+&lt;variable name=&quot;blackberry.main&quot; value=&quot;com.company.product.ProductApplication&quot; /&gt;
+</pre>
+<p>
+Please note that the currently provided BlackBerry library does not contain all available classes, compare the following Troubleshooting section.
+</p>
+
+<h2 id="blackberry-ota">Deploying a BlackBerry Application Over The Air</h2>
+<p>
+The BlackBerry platform supports delivery of applications over the air (OTA).
+These are the steps to get this kind of provisioning to work:
+
+<ul>
+  <li><a href="#blackberry-jar2cod">Create</a> a <i>.cod</i> file</li>
+  <li>Unpack the <i>.cod</i> file. The 'outer' <i>.cod</i> file is a <i>.zip</i> file in disguise and you can unpack it
+  with every unzip program available. Beware that the outer <i>.cod</i> file contains
+  inner <i>.cod</i> files and that one inner <i>.cod</i> file has the same name as the outer
+  <i>.cod</i> file. It is imperative that <em>every</em> inner <i>.cod</i> file is
+  extracted, even if you need to overwrite the outer <i>.cod</i> file in the process.</li>
+  <li>While building for a BlackBerry device, the created JAD file contains modified 
+  URL safe entries. In case you require the original JAD file, use the <i>.jad.bak</i> one.
+  The original <i>.jad</i> file which is generated from the rapc compiler contains
+  entries of the form
+   <code>RIM-COD-URL-1: BlackBerry$2d8100$2den_US$2dblank-1.cod</code>. Note the
+   sequence <code>&quot;&#36;2d&quot;</code>. This should encode the charater
+   <code>&quot;&#0045;&quot;</code> but the webserver will need the sequence
+   <code>&quot;&#37;2d&quot;</code> to find the correct file. The file
+   <i>.jad.alt.jad</i> contains corrected entries.</li>
+   <li>Make all inner <i>.cod</i> files and the corrected <i>.jad</i> file
+   available on a web server.
+   The mimetype for the <i>.cod</i> file should be
+   <code>application/vnd.rim.cod</code> and for the <i>.jad</i> file
+   <code>text/vnd.sun.j2me.app-descriptor</code>.</li>
+</ul>
+
+<h2 id="blackberry-virtualdevices">Useful Virtual Devices</h2>
+<p>
+The J2ME Polish device database contains several virtual devices that you can target for limiting the number of BlackBerry builds.
+Instead of building for BlackBerry/8100 and BlackBerry/8800 for example, you can generate one build for the virtual 
+<code>BlackBerry/4.2TrackBall</code> device.
+Note, however, that these virtual devices do not contain a screen size definition, so if you have resources that depend on the
+screen resolution, you should target real devices instead.
+<br />
+Following virtual devices are available:
+</p>
+<ul>
+	<li><b>BlackBerry/4.1</b>: for devices like the 8700, 7290 etc</li>
+	<li><b>BlackBerry/4.2</b>: for 4.2 devices without trackball</li>
+	<li><b>BlackBerry/4.2TrackBall</b>: for 4.2 devices with trackball like the 8100, 8800 etc</li>
+	<li><b>BlackBerry/4.3</b>: for devices like the 8120, 8130 etc</li>
+	<li><b>BlackBerry/4.5</b>: for OS 4.5 devices like the BlackBerry Curve</li>
+	<li><b>BlackBerry/4.6</b>: for OS 4.6 devices like the BlackBerry Bold</li>
+	<li><b>BlackBerry/4.7</b>: for OS 4.7 devices (like the BlackBerry/Storm)</li>
+	<li><b>BlackBerry/5.0</b>: for OS 5.0 devices</li>
+	<li><b>BlackBerry/6.0</b>: for OS 6.0 devices</li>
+</ul>
+
+
+<h2 id="blackberry-troubleshooting">Troubleshooting</h2>
+<h3 id="blackberry-obfuscation">Deactivate Obfuscation</h3>
+<p>
+You should deactivate <a href="build-build.html#obfuscator">obfuscation</a> for BlackBerry devices, since the rapc compiler already removes any unneeded fields, classes etc. 
+Also you can get verification errors on the BlackBerry devices when you enable the obfuscation. 
+You can skip the obfuscation for test builds as well as for BlackBerry devices with this definition in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test || polish.blackberry&quot; /&gt;
+</pre>
+<h3 id="blackberry-jadproperties">Rewriting JAD Properties</h3>
+<p>
+The BlackBerry tools do embedd application/JAD properties into the application during the build process. During OTA installation 
+over the air, any rewritten or appended JAD properties will be ignored. You can consider building or converting the application
+upon request for personalizing it.
+</p>
+
+<h3 id="blackberry-phonecalls">Phone Calls with DTMF</h3>
+<p>
+When using the J2ME Polish UI, you can send DTMF tones after initiating a phonecall by separating the MSISDN and the DTMF part with a 
+backslash or a 'p':
+</p>
+<pre>
+	myMidlet.platform.request(&quot;tel:001232878/88779&quot;);
+	myMidlet.platform.request(&quot;tel:001232878p88779&quot;);
+</pre>
+
+<h3 id="blackberry-platformrequests">Platform Requests</h3>
+<p>
+For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to specify the
+preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
+</pre>
+<p>
+Note that this functionality requires a signed application.
+</p>
+
+<h3 id="blackberry-spacekey">0/Space Is Mapped To Fire</h3>
+<p>
+By default the '0' and 'space' key will be mapped to a 'FIRE' game action on BlackBerry devices. This will allow your users
+to select entries and trigger OK commands with 0/space. You can deactivate this behavior by specifying the preprocessing 
+<a href="build-build.html#variables">variable</a> <code>polish.BlackBerry.mapSpaceToFire</code>:
+</p>
+<pre>
+&lt;variable name=&quot;polish.BlackBerry.mapSpaceToFire&quot; value=&quot;false&quot; /&gt;
+</pre>
+
+<h3 id="blackberry-usinglcduiandpolish">Using Native High Level LCDUI Components</h3>
+<p>
+Normally you can mix native highlevel LCDUI components like <code>javax.microedition.lcdui.TextBox</code> with J2ME Polish
+in your application by using fully qualified class names. This is not supported on BlackBerry devices, because the native BlackBerry
+user interface API is used by J2ME Polish. On BlackBerry devices you cannot mix LCDUI components with BlackBerry user interface components
+in the same application. Therefore you either either must not fully qualify native LCDUI components in your application or you
+need to deactive the J2ME Polish UI for BlackBerry. 
+<br />
+Please note: In most cases you use a native <code>TextBox</code> so that the user can edit 
+long texts - since J2ME Polish uses native <code>EditFields</code> on BlackBerry when a <code>TextField</code> is focused, there 
+is no benefit in using a native <code>TextBox</code> anyhow.
+</p>
+<pre>
+&lt;variable name=&quot;polish.BlackBerry.mapSpaceToFire&quot; value=&quot;false&quot; /&gt;
+</pre>
+
+
+<%include end.txt %>

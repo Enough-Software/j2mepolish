@@ -1,0 +1,312 @@
+<!-- When you are using NetBeans 5, just rename this file     -->
+<!-- to build.xml. You can then use the normal menu items     -->
+<!-- run, debug, build and so forth from within NetBeans.     -->
+
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish-target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created and so on.                                    -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+<project 
+	name="enough-j2mepolish-rmi" 
+	default="j2mepolish">
+	
+	<!-- extend the default NetBeans build script:           -->
+	<import file="nbproject/build-impl.xml"/>
+	
+	<!-- import user specific properties                          -->
+	<property file="${user.name}.properties" />
+	
+	<!-- The polish.home property needs to point to the directory -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" location="%{INSTALL_PATH}" />
+	
+	<!-- import global properties                                 -->
+	<property file="${polish.home}/global.properties" />
+
+			
+	<!-- the home of the server based web application - is needed in the deploy-war target -->
+	<property name="webapps.home" location="/Users/robertvirkus/dev/apache-tomcat-5.5.17/webapps" />
+
+
+	<!-- Definition of the J2ME Polish task:                      -->
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar"
+	/>
+	
+	<!-- Definition of the present helper task:                      -->
+	<taskdef name="present" 
+		classname="de.enough.polish.ant.PresentTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar"/>
+
+		
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="setdeploy" 
+		description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+		>
+		<property name="deploy-url" value="http://www.company.com/download/" />
+	</target>
+	
+	<target name="enableDebug" 
+		description="Call this target first to skip the obfuscation step, call the emulator and start the debugger, e.g. ant enableDebug j2mepolish"
+		>
+		<property name="debug" value="true" />
+	</target>
+	
+		
+	<target name="test" 
+		description="Call this target first to skip the obfuscation step and call the emulator, e.g. ant test j2mepolish"
+		>
+		<property name="test" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+			
+	<target name="j2mepolish-init"
+		    depends="init"
+		>
+	  	<property name="test" value="false" />
+		<property name="dir.work" value="build/real" />
+		<property name="deploy-url" value="" />
+	</target>
+	 
+	<!-- In this target the J2ME Polish task is used.             -->
+	<!-- It has 3 sections:                                       -->
+	<!--    1. The info-section defines some general information  -->
+	<!--    2. The deviceRequirements-section chooses the devices -->
+	<!--       for which the application is optimized.            -->
+	<!--    3. The build-section controls the actual build        -->
+	<!--       process.                                           -->	
+	<target name="j2mepolish" 
+			depends="j2mepolish-init"
+			description="This is the controller for the J2ME build process." 
+			>
+		<j2mepolish>
+		    <!-- general settings -->
+			<info
+				name="WordTracker"
+				version="1.0.0"
+				description="A demonstration of the RMI Framework."
+				vendorName="Enough Software"
+				infoUrl="http://www.j2mepolish.org"
+				jarName="${ nospace(polish.vendor) }-${ nospace(polish.name) }-xmlrpc.jar" 
+				jarUrl="${deploy-url}${polish.jarName}"
+				copyright="Copyright 2011 Enough Software. All rights reserved."
+			/>
+			<!-- selection of supported devices -->
+            <deviceRequirements if="config.active:defined and (test or enableCompilerMode)" >		
+                <requirement name="Identifier" value="${config.active}" />
+			</deviceRequirements>
+			<deviceRequirements if="device:defined and (test or enableCompilerMode)" unless="config.active:defined">
+				<requirement name="Identifier" value="${device}" />
+			</deviceRequirements>
+			<deviceRequirements unless="test or enableCompilerMode">
+				<requirement name="Identifier" value="${devices}" />
+			</deviceRequirements>
+
+		    <!-- build settings -->
+			<build  
+	                symbols="polish.skipArgumentCheck" 
+	                usePolishGui="true"
+				>
+				<!-- midlets definition -->
+				<midlet class="de.enough.polish.sample.rmi.WordTrackerMidlet" name="Word Tracker"/>
+				<!-- project-wide variables - used for preprocessing.  -->
+				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+				<variables includeAntProperties="true" >
+					<!-- use the advanced menubar mode that offers near-native command handling and positioning, on BB and Android use native commands: -->
+					<variable
+						name="polish.FullScreen"
+						value="menu" 
+						unless="polish.blackberry || polish.android" 
+					/>
+					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					<variable name="polish.useScrollBar" value="true" />
+					<!-- activate text input over J2ME Polish TextFields (without opening a new TextBox for each input: 
+					<variable name="polish.TextField.useDirectInput" value="true" />
+					- activate input of symbols: -
+					<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+					<variable name="polish.TextField.Symbols" value="&quot;@#()&lt;&gt;&amp;;,.:!/\~$%^*" />
+					- activate switching to the native (e.g.T9) input mode: -
+					<variable name="polish.TextField.allowNativeModeSwitch" value="true" />
+					- use the advanced menubar mode that offers near-native command handling and positioning -
+					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					- suppress List-select commands -
+					<variable name="polish.List.suppressSelectCommand" value="true" />
+					-
+					You can also suppress ir rename the Add Symbol command:
+					<variable name="polish.TextField.suppressAddSymbolCommand" value="true" if="polish.key.AddSymbolKey:defined" />
+					<variable name="polish.command.entersymbol" value="Add Symbol" />
+					-->
+					<variable name="polish.TextField.useDirectInput" value="true" />
+					<variable name="polish.rmi.redirects" value="false" />
+					<variable name="polish.rmi.xmlrpc" value="true" />
+					<variable name="polish.useScrollBar" value="true" />
+					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				</variables>
+				<!-- obfuscator settings: always obfuscate -->
+				<obfuscator name="ProGuard" unless="test or dontobfuscate" />
+				<!-- debug/log settings: only include debug setting when the test-property is true -->
+				<debug level="info" verbose="true" logTimestamp="true" if="test">
+					<filter level="debug" package="de.enough.polish.sample.rmi"/>
+					<!--
+					<filter level="debug" class="de.enough.polish.ui.TabbedForm"/>
+					<filter level="debug" class="de.enough.polish.ui.Container"/>
+					<filter level="debug" class="de.enough.polish.ui.Screen"/>
+					<filter level="debug" class="de.enough.polish.ui.MenuBar"/>
+					-->
+				</debug>
+				<resources
+					dir="resources"
+					defaultexcludes="yes"
+					excludes="readme.txt"
+				>
+				</resources>
+			</build>
+			
+			<!-- execution of emulator(s) -->
+			<emulator
+				wait="true"
+				trace="none"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="test and not debug"
+				>
+				<!--
+				<parameter name="-Xjam" value="transient=http://localhost:8080/${polish.jadName}" />
+				-->
+			</emulator>
+                        
+			<emulator
+				wait="true"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="debug"
+				>
+				<!-- Attach the emulator to the NetBeans debugger:	-->
+				<debugger name="antcall" target="connect-debugger" port="6001" />
+			</emulator>
+		</j2mepolish>
+	</target>
+	
+	<target name="build-war" description="builds the server war file for Tomcat or other J2EE/Servlet Containers.">
+		<present file="dist/client-rmi-classes.jar" failMessage="Please run either the j2mepolish or the build-all target first." />
+		<copy file="${polish.home}/lib/enough-j2mepolish-rmi.jar" todir="dist" />
+		<delete dir="bin/server" />
+		<mkdir dir="bin/server" />
+		<javac srcdir="source/server" destdir="bin/server" classpath="dist/client-rmi-classes.jar:dist/enough-j2mepolish-rmi.jar" />
+		<jar destfile="dist/gameserver.jar" basedir="bin/server" excludes="**/CVS" />
+	 	<war 
+			destfile="dist/gameserver.war"
+	 		webxml="source/server/web.xml"
+		>
+	 		<lib dir="dist" includes="client-rmi-classes.jar,enough-j2mepolish-rmi.jar,gameserver.jar" />
+		</war>
+	</target>
+	
+	<target name="deploy-war" depends="build-war" description="builds and deploys the war file to $webapps.home">
+		<copy file="dist/gameserver.war" todir="${webapps.home}" />
+	</target>
+		
+
+	<target name="build-all" depends="clean,j2mepolish,build-war" description="builds both the client and the server code of the application"/>
+	<target 
+		name="emulator"
+		depends="test,j2mepolish"
+		description="invokes the emulator"
+	>
+	</target>
+
+	<target name="clean" 
+	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+		<delete dir="build" />
+		<delete dir="dist" includes="**/*" />
+	</target>
+
+	<target  
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant cleanbuild] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+		depends="clean, j2mepolish"
+	/>
+	
+    <target name="debug" description="debugs the project" depends="enableDebug, test, j2mepolish" />
+	
+	<target name="deploy"
+			description="Deploys the applications. Currently empty."
+			depends="j2mepolish"
+	/>
+	        
+
+	        
+	<!-- NetBeans specific build targets: -->
+	        
+	        <target name="run" 
+	                depends="test, j2mepolish"
+	        >
+	        </target>
+
+	        <target name="rebuild" 
+	                depends="clean, j2mepolish"
+	        >
+	        </target>
+
+	        <target name="rebuild-all" 
+	                depends="clean, j2mepolish"
+	        >
+	        </target>
+	        
+	        <target name="jar" 
+	                depends="j2mepolish"
+	        >
+	        </target>
+
+	        <target name="jar-all" 
+	                depends="j2mepolish"
+	        >
+	        </target>
+
+	        <target name="clean-all" 
+	                depends="clean"
+	        >
+	        </target>
+	                
+	        <target name="deploy-all" 
+	                depends="deploy"
+	        >
+	        </target>
+	        
+	        <target name="enable-compiler-mode">
+	            <property name="enableCompilerMode" value="true" />
+	        </target>
+
+	        <target name="compile-single" 
+	                depends="enable-compiler-mode, j2mepolish"
+	        >
+	        </target>
+	        
+	    <target name="connect-debugger">
+	        <property name="jpda.port" value="${polish.debug.port}" />
+	        <antcall target="nbdebug"/>
+	    </target>
+
+
+</project>

@@ -1,0 +1,408 @@
+<!-- 
+	platforms.xml defines all known J2ME platforms. 
+	You can add or change the existing specifications and
+	use the changed settings in the code.
+
+    Copyright (c) 2005 - 2011 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+
+<platforms>
+	
+	<platform>
+		<identifier>MIDP/1.0</identifier>
+		<features>midp, midp1</features>
+		<description>Mobile Information Device Profile 1.0.</description>
+		<capability name="build.BootClassPath" value="midp-1.0.jar" />
+		<capability name="build.ImplicitGroups" value="midp1" />
+	</platform>
+
+	<platform>
+		<identifier>MIDP/2.0</identifier>
+		<features>midp, midp2</features>
+		<description>Mobile Information Device Profile 2.0.</description>
+		<capability name="build.BootClassPath" value="midp-2.0.jar" />
+		<capability name="build.ImplicitGroups" value="midp2" />
+	</platform>
+
+	<platform>
+		<identifier>MIDP/2.1</identifier>
+		<features>midp, midp21, midp2</features>
+		<description>Mobile Information Device Profile 2.1.</description>
+		<capability name="build.BootClassPath" value="midp-2.1.jar" />
+		<capability name="build.ImplicitGroups" value="midp21" />
+	</platform>
+
+	<platform>
+		<identifier>JTWI/1.0</identifier>
+		<parent>MIDP/2.0</parent>
+		<description>Java Technology for the Wireless Industry 1.0 aims to lessen the device fragmentation.</description>
+		<features>jtwi</features>
+		<capability name="build.ImplicitGroups" value="jtwi" />
+	</platform>
+
+
+	<platform>
+		<identifier>MSA/1.0</identifier>
+		<parent>JTWI/1.0</parent>
+		<description>The Mobile Service Architecture clarifies specifications and mandates support of additional technologies.</description>
+		<features>msa</features>
+		<capability name="build.ImplicitGroups" value="msa" />
+		<capability name="JavaPackage" value="pdaapi, btapi, mmapi, 3dapi, wmapi2.0, svg" />
+	</platform>
+	
+	
+	<platform>
+		<identifier>FP/1.0</identifier>
+		<features>fp</features>
+		<description>Foundation Profile 1.0 is based on the CDC configuration.</description>
+		<capability name="build.BootClassPath" value="fp-1.0.jar" />
+	</platform>
+
+	<platform>
+		<identifier>PP/1.0</identifier>
+		<parent>FP/1.0</parent>
+		<features>fp</features>
+		<description>Personal Profile 1.0 is based on the CDC configuration and extends the Foundation Profile.</description>
+		<capability name="build.BootClassPath" value="pp-1.0.jar" />
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry</identifier>
+		<features>blackberry, hasCommandKeyEvents</features>
+		<description>BlackBerry provides a platform that supplements CLDC 1.0 and MIDP 2.0 by BlackBerry specific APIs.</description>
+		<capability name="Bugs" value="drawRgbNeedsFullBuffer, ClosedInputstreamWhenEmptyHttpResponseBody" />
+		<capability name="key.EscapeKey" value="1769472" />
+		<capability name="key.ReturnKey" value="1769472" />
+		<capability name="key.RightSoftKey" value="1769472" />
+		<capability name="key.ClearKey" value="524288" />
+		<capability name="key.EnterKey" value="655360" />
+		<capability name="key.MoveLeftKey" value="5177410" />
+		<capability name="key.MoveRightKey" value="5242946" />
+		<capability name="polish.MenuBar.useExtendedMenuBar" value="true" />
+		<capability name="polish.MenuBar.Position" value="invisible" />
+		<capability name="polish.IconSize" value="28x28,55x55" />
+		<capability name="SoundFormat" value="mp3"/>
+		<capability name="build.Obfuscator" value="blackberry" />
+		<capability name="build.ImplicitGroups" value="blackberry" />
+		<capability name="Emulator.Class" value="BlackBerryEmulator" />
+		<capability name="Display.baseclass" value="de.enough.polish.blackberry.ui.BaseScreen" />
+		<capability name="build.classes.screen" value="net.rim.device.api.ui.container.MainScreen" />
+		<capability name="build.classes.fullscreen" value="net.rim.device.api.ui.container.FullScreen" />
+		<capability name="build.classes.NativeDisplay" value="de.enough.polish.blackberry.ui.NativeDisplayImpl" />
+		<capability name="build.classes.NativeFont" value="de.enough.polish.blackberry.ui.Font" />
+		<capability name="build.classes.NativeImage" value="de.enough.polish.blackberry.ui.Image" />
+		<capability name="build.classes.NativeGraphics" value="de.enough.polish.blackberry.ui.Graphics" />
+		<capability name="polish.usePolishTitle" value="true" />
+	</platform>
+	
+	<platform>
+		<identifier>BlackBerry/4.0</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.BootClassPath" value="blackberry-4.0.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.0" />
+		<capability name="JavaPackage" value="wmapi,mmapi,pim" />
+	</platform>
+	
+	<platform>
+		<identifier>BlackBerry/4.1</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.BootClassPath" value="blackberry-4.1.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.1" />
+		<capability name="JavaPackage" value="location,wmapi,pim,mmapi" />
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/4.2</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.BootClassPath" value="blackberry-4.2.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.2" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="key.LeftSoftKey" value="268566528" />
+		<capability name="key.RightSoftKey" value="1769472" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/4.3</identifier>
+		<parent>BlackBerry</parent>
+		<features>hasTrackBallEvents</features>
+		<capability name="build.BootClassPath" value="blackberry-4.3.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.3" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi, btapi" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/4.5</identifier>
+		<parent>BlackBerry</parent>
+		<features>hasTrackBallEvents</features>
+		<capability name="build.BootClassPath" value="blackberry-4.5.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.5" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/4.6</identifier>
+		<parent>BlackBerry</parent>
+		<features>hasTrackBallEvents</features>
+		<capability name="build.BootClassPath" value="blackberry-4.6.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.6" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/4.7</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.BootClassPath" value="blackberry-4.7.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="4.7" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/5.0</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.BootClassPath" value="blackberry-5.0.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="5.0" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi" />	
+	</platform>
+	
+	<platform>
+		<identifier>BlackBerry/6.0</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.Obfuscator" value="" />
+		<capability name="build.BootClassPath" value="blackberry-6.0.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="6.0" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi,jsr234,jsr211,jsr238,jsr239,svg" />	
+	</platform>
+
+	<platform>
+		<identifier>BlackBerry/7.0</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.Obfuscator" value="" />
+		<capability name="build.BootClassPath" value="blackberry-7.0.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="7.0" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi,jsr234,jsr211,jsr238,jsr239,svg" />	
+	</platform>
+
+	<platform>
+		<identifier>DotNetCF/1.1</identifier>
+		<features>dotNetCF1.1</features>
+		<capability name="build.Finalizer" value="jar2dotnet" />
+		<capability name="Emulator.Class" value="DotNetCFEmulator" />
+	</platform>
+
+	<platform>
+		<identifier>WIPI/1.2</identifier>
+		<features>wipi1.2</features>
+		<description>The Korean Wireless Internet Platform for Interoperability 1.2 is mostly compatible to MIDP 1.0.</description>
+		<capability name="build.BootClassPath" value="midp-1.0.jar" />
+		<capability name="build.Preverifier" value="none" />
+		<capability name="build.ImplicitGroups" value="wipi, wipi1.2" />
+	</platform>
+
+	<platform>
+		<identifier>WIPI/2.0</identifier>
+		<features>wipi2.0, midp, midp2</features>
+		<description>The Korean Wireless Internet Platform for Interoperability 2.0 is compatible to MIDP 2.0.</description>
+		<capability name="build.BootClassPath" value="midp-2.0.jar" />
+		<capability name="build.Preverifier" value="none" />
+		<capability name="build.ImplicitGroups" value="wipi, wipi2.0" />
+	</platform>
+	
+	<platform>
+		<identifier>DoJa/1.5</identifier>
+		<features>doja, doja1.5, doja-15</features>
+		<description>The Japanese DoJa or iAppli standard is based on CLDC 1.0.</description>
+		<capability name="build.BootClassPath" value="doja-1.5.jar" />
+		<capability name="build.ImplicitGroups" value="doja, doja1.5" />
+		<capability name="build.ManifestCreator" value="none" />
+		<capability name="build.DescriptorCreator" value="doja" />
+		<capability name="Emulator.Class" value="DoJaEmulator" />
+		<capability name="key.LeftSoftKey" value="21" />
+		<capability name="key.RightSoftKey" value="22" />
+		<capability name="needsManualMenu" value="true" />
+	</platform>
+
+	<platform>
+		<identifier>DoJa/2.5</identifier>
+		<features>doja, doja2.5, doja-25</features>
+		<description>The Japanese DoJa or iAppli standard is based on CLDC 1.0.</description>
+		<capability name="build.BootClassPath" value="doja-2.5.jar" />
+		<capability name="build.ImplicitGroups" value="doja, doja2.5" />
+		<capability name="build.ManifestCreator" value="none" />
+		<capability name="build.DescriptorCreator" value="doja" />
+		<capability name="Emulator.Class" value="DoJaEmulator" />
+		<capability name="key.LeftSoftKey" value="21" />
+		<capability name="key.RightSoftKey" value="22" />
+		<capability name="needsManualMenu" value="true" />
+	</platform>
+	
+	<platform>
+		<identifier>JavaSE/1.0</identifier>
+		<features>JavaSE, j2seRuntime</features>
+		<description>Includes some classes of the Jave Standard Edition for compilation.</description>
+		<capability name="build.compile.dontSetBootClassPath" value="true" />
+		<capability name="build.BootClassPath" value="midp-2.0.jar,${polish.home}/lib/AppleJavaExtensions.jar,${java.home}/jre/lib/rt.jar,${java.home}/lib/rt.jar,${java.home}/../Classes/classes.jar" />
+		<capability name="build.obfuscator.ignorewarnings" value="true" />
+		<capability name="build.obfuscator.KeepClasses" value="de.enough.polish.runtime.swing.SwingSimulator,de.enough.polish.runtime.swing.SwingAppletSimulator" />
+		<capability name="build.Preverifier" value="none" />
+		<capability name="build.PostCompiler" value="j2se" />
+		<capability name="build.ManifestCreator" value="j2se" />
+		<capability name="build.DescriptorCreator" value="none" />
+		<capability name="build.Finalizer" value="applet" />
+	</platform>
+
+	<platform>
+		<identifier>Android/1.1</identifier>
+		<features>android, android1.1, midp2, hasPointerEvents, hasPointerMotionEvents, hasFloatingPoint</features>
+		<description>Android is a java platform for mobile devices by Google</description>
+		<capability name="key.Menu" value="-111" />
+	    <capability name="key.ReturnKey" value="4" />
+	    <capability name="key.supportsAsciiKeyMap" value="true" />
+		<capability name="build.BootClassPath" value="android-1.1.jar" />
+		<capability name="build.ImplicitGroups" value="android" />
+		<capability name="polish.MenuBar.useExtendedMenuBar" value="true" />
+		<capability name="polish.MenuBar.Position" value="invisible" />
+		<capability name="Display.baseclass"        value="de.enough.polish.android.lcdui.Canvas" />
+		<capability name="build.classes.screen"     value="de.enough.polish.android.lcdui.Canvas" />
+		<capability name="build.classes.fullscreen" value="de.enough.polish.android.lcdui.Canvas" />
+		<capability name="build.classes.NativeDisplay" value="de.enough.polish.android.lcdui.AndroidDisplay" />
+		<capability name="build.classes.NativeFont" value="de.enough.polish.android.lcdui.Font" />
+		<capability name="build.classes.NativeImage" value="de.enough.polish.android.lcdui.Image" />
+		<capability name="build.classes.NativeGraphics" value="de.enough.polish.android.lcdui.Graphics" />
+		<!-- use a J2ME Polish title even when fullscreen mode is deactivated -->
+		<capability name="usePolishTitle" value="true" />
+		<capability name="javac.source" value="1.5" /> 
+		<capability name="javac.target" value="1.5" />
+		<capability name="javac.srcdir" value="activity/src" /> 
+		<capability name="javac.destdir" value="activity/bin/classes" />
+		<capability name="polish.java5" value="true" />
+		<capability name="build.Preverifier" value="none" />
+		<capability name="Emulator.Class" value="AndroidEmulator" />
+		<capability name="JavaPackage" value="mmapi,pdaapi,wmapi,location" />
+		<capability name="TextField.useDirectInput" value="true" />
+		<capability name="build.Android.Platform.Version" value="1.1" />
+		<capability name="build.Android.Platform.Target" value="android-2" />
+		<capability name="build.Android.Platform.Api" value="2" />
+	    <capability name="IconSize" value="48x48" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET" />
+	</platform>
+	
+	<platform>
+		<identifier>Android/1.5</identifier>
+		<features>android, android1.5, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+		<parent>Android/1.1</parent>
+		<capability name="build.BootClassPath" value="android-1.5.jar" />
+		<capability name="build.Android.Platform.Version" value="1.5" />
+		<capability name="build.Android.Platform.Target" value="android-3" />
+		<capability name="build.Android.Platform.Api" value="3" />
+		<capability name="android1.1" value="" />
+	</platform>
+	
+	<platform>
+        <identifier>Android/1.6</identifier>
+        <features>android, android1.6, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-1.6.jar" />
+        <capability name="build.Android.Platform.Version" value="1.6" />
+        <capability name="build.Android.Platform.Target" value="android-4" />
+        <capability name="build.Android.Platform.Api" value="4" />
+        <capability name="android1.1" value="" />
+    </platform>
+    
+    <platform>
+        <identifier>Android/2.0</identifier>
+        <features>android, android2.0, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.0.jar" />
+        <capability name="build.Android.Platform.Version" value="2.0" />
+        <capability name="build.Android.Platform.Target" value="android-5" />
+        <capability name="build.Android.Platform.Api" value="5" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+
+    <platform>
+        <identifier>Android/2.1</identifier>
+        <features>android, android2.1, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.1.jar" />
+        <capability name="build.Android.Platform.Version" value="2.1" />
+        <capability name="build.Android.Platform.Target" value="android-7" />
+        <capability name="build.Android.Platform.Api" value="7" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+
+    <platform>
+        <identifier>Android/2.2</identifier>
+        <features>android, android2.2, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.2.jar" />
+        <capability name="build.Android.Platform.Version" value="2.2" />
+        <capability name="build.Android.Platform.Target" value="android-8" />
+        <capability name="build.Android.Platform.Api" value="8" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+	
+	    <platform>
+        <identifier>Android/2.3</identifier>
+        <features>android, android2.3, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.3.jar" />
+        <capability name="build.Android.Platform.Version" value="2.3" />
+        <capability name="build.Android.Platform.Target" value="android-9" />
+        <capability name="build.Android.Platform.Api" value="9" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+	
+	    <platform>
+        <identifier>Android/3.0</identifier>
+        <features>android, android3.0, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-3.0.jar" />
+        <capability name="build.Android.Platform.Version" value="3.0" />
+        <capability name="build.Android.Platform.Target" value="android-10" />
+        <capability name="build.Android.Platform.Api" value="10" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+		
+</platforms>

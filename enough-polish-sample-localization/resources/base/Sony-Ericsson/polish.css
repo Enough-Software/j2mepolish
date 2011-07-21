@@ -1,0 +1,27 @@
+/** 
+  * This file defines changes to the default design 
+  * for all Sony-Ericsson phones.
+  */
+
+colors {
+	bgColor:  rgb(90,121,239);
+	brightBgColor:  rgb(165,190,247);
+	brightFontColor: white;
+	fontColor: rgb( 66, 85, 148 ); 
+}
+
+title {
+	background-color: bgColor;
+}
+
+menu {
+	menubar-color: bgColor;
+}
+
+.mainScreen {
+	background {
+		type: simple;
+		color: brightBgColor;
+	}
+}
+

@@ -1,0 +1,495 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: MenuBar Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Menubar &amp; Menu Design</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screenelement-scrollbar.html">Scrollbar</a></li>
+		<li><a href="gui-screenelement-screenbackground.html">Screen Background</a></li>
+		<li><a href="gui-viewtype-numbered.html">numbered view-type</a></li>
+		<li><a href="gui-viewtype-slide.html">slide-up view-type</a></li>
+		<li><a href="gui-item-stringitem.html">Text Design</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	J2ME Polish allows you to choose between 3 different options for realizing the menu:
+	</p>
+	<ul>
+	<li><b>Default Menu</b>: The default menu uses a structure similar to Nokia implementations and offers the same look and feel on all devices.</li>
+	<li><b>Extended Menu</b>: The extended menu offers additional design options and provides device dependent implementations, so that the &quot;feel&quot; does not differ from native menus. This brings an overhead of around 2kb for the JAR size.</li>
+	<li><b>Native Menu</b>: The native menu uses the device-dependent implementation, which provides the best native integration but no design options at all.</li>
+	</ul>
+	<h2 id="Default-Menubar">Default Menu</h2>
+	<h3 id="Design-Default-Menubar">Design of the Default Menubar</h3>
+	<p>
+	The default menubar uses a structure similar to Nokia implementations and offers the same look and feel on all devices.
+	<br /><img src="<%= basedir%>images/gui-screenelement-menubar-default.png"  width="240" height="24" alt="Default Menubar" />	
+	<br />The above design has been realized with these <i>polish.css</i> and <i>build.xml</i> settings:
+<pre>
+<i>polish.css:</i>
+colors {
+	fontColor: #333;
+}
+menu {
+	font-color: fontColor;
+	font-style: bold;
+	menubar-color: yellow;
+}
+
+<i>build.xml:</i>
+&lt;variable name=&quot;polish.MenuBar.PaddingLeft&quot; value=&quot;5&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingRight&quot; value=&quot;5&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingTop&quot; value=&quot;5&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingBottom&quot; value=&quot;1&quot; /&gt;
+</pre>
+	<p>
+	The font of the default menubar is defined in the &quot;menu&quot; style, which is also responsible for the command popup screen.
+	Additionally you can specify the menubar-color in either the &quot;menu&quot; style or in the corresponding screen's style:
+	</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>menubar-color</td><td>white</td><td>color or <code>transparent</code></td><td><code>menu</code> or screen's style</td>
+		<td>
+		The color of the menubar. You might want to set it to transparent when using an image <a href="gui-background-image.html">screen background</a>.
+		</td>
+	</tr>
+	<tr>
+		<td>font-color</td><td>black</td><td>color definition</td><td><code>menu</code> style</td>
+		<td>
+		The color of the menubar font.
+		</td>
+	</tr>
+	<tr>
+		<td>font-size</td><td>medium</td><td>small, medium, large</td><td><code>menu</code> style</td>
+		<td>
+		The size of the menubar font.
+		</td>
+	</tr>
+	<tr>
+		<td>font-style</td><td>plain</td><td>plain, bold, italic, underlined</td><td><code>menu</code> style</td>
+		<td>
+		The style of the menubar font.
+		</td>
+	</tr>
+	</table>
+	
+	
+	<h3 id="Configuration-Default-Menubar">Configuration of the Default Menubar</h3>
+	<p>
+	The default menu has to be activated by setting the &quot;fullscreen&quot; attribute of the &lt;build&gt; element to true in your <i>build.xml</i>
+	script:
+<pre>
+&lt;build 
+	usePolishGui=&quot;true&quot; 
+	<b>fullscreen=&quot;menu&quot;</b>
+	...&gt;
+</pre>	
+	</p>
+	<p>
+	Alternatively you can set the &quot;polish.useMenuFullScreen&quot; variable to true:
+<pre>
+&lt;variable name=&quot;polish.useMenuFullScreen&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</p>
+	<p>You can specify the used paddings between the screen's border and the default menubar by defining &quot;polish.MenuBar.PaddingLeft&quot; etc:
+<pre>
+&lt;variable name=&quot;polish.MenuBar.PaddingLeft&quot; value=&quot;3&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingRight&quot; value=&quot;3&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingTop&quot; value=&quot;3&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.PaddingBottom&quot; value=&quot;3&quot; /&gt;
+</pre>
+
+
+
+	<h2 id="Extended-Menubar">Extended Menubar</h2>
+	<h3 id="Design-Extended-Menubar">Design of the Extended Menubar</h3>
+	<p>
+	The extended menubar offers some additional design options and provides device dependent implementations, so that the &quot;feel&quot; does not differ from native menus. 
+	You can use any backgrounds for the extended menubar:
+	<br /><img src="<%= basedir%>images/gui-screenelement-menubar-extended.png"  width="240" height="26" alt="Extended Menubar" />	
+	<br />It's also possible to use advanced <a href="gui-css-text.html">text designs</a> like the shadow text-effect for the extended menubar:
+	<br /><img src="<%= basedir%>images/gui-screenelement-menubar-extended-closeup.png"  width="204" height="104" alt="Extended Menubar" />	
+	<br />The above design has been realized with these <i>polish.css</i> settings:
+<pre>
+colors {
+	fontColor: #333;
+}
+
+/** The extended menu bar */
+menubar
+{
+	margin: 0;
+	padding: 2;
+	padding-top: 3;
+	background {
+		type: vertical-gradient;
+		top-color: #ccc;
+		bottom-color: #fff;
+		start: 10%;
+		end: 90%;
+	}
+}
+
+/**
+ * Commands within the extended menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: fontColor;
+	font-style: bold;
+	text-effect: shadow;
+	text-shadow-color: #ff0;
+}
+
+/**
+ * Commands within the extended menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+</pre>
+	<p>
+	The background, paddings, margins and borders of the menubar are designed within the <code>menubar</code> style. Note that the CSS attribute <code>menubar-color</code> has
+	no effect, when using the extended menubar, as you can now use any background. The text on the left side within the menubar is 
+	designed with the <code>leftcommand</code>, the one on the right side accordingly with the <code>rightcommand</code> style.
+	</p>
+	
+	<%cssattributes de.enough.polish.ui.MenuBar %>
+		 
+	<p>Following further CSS attributes can be used to adjust the menubar design:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>overlay</td><td>#a000</td><td>ARGB color definition</td><td><code>colors</code> section</td>
+		<td>
+		When the extended menubar is opened, it will dim the screen's contents with the <code>overlay</code> color defined within the 
+		<code>colors</code> section of your polish.css file.
+<pre>
+colors {
+	/* create a white translucent overlay: */
+	overlay: argb( 80, 255, 255, 255 );
+}
+</pre>
+		</td>
+	<tr>
+		<td>overlay-background</td><td>-</td><td>Reference to background defined in the <code>backgrounds</code> section.</td><td>Screens</td>
+		<td>
+		You can also defined a screen specific overlay background.
+		</td>
+	</tr>
+	<tr>
+		<td>menubar-style</td><td>menubar</td><td>style reference</td><td>screen's style</td>
+		<td>
+		Changes the style of the menubar for the affected screens.
+		</td>
+	</tr>
+	</table>
+	<p>
+	For the design options for <code>leftcommand</code> and <code>rightcommand</code>, please refer to the design guide for 
+	<a href="gui-item-stringitem.html">StringItem</a>.
+	</p>
+	
+	<h3 id="Configuration-Extended-Menubar">Configuration of the Extended Menubar</h3>
+	<p>The extended menubar has to be activated in your <i>build.xml</i> script by setting the &quot;polish.MenuBar.useExtendedMenuBar&quot;
+	to &quot;true&quot;:
+<pre>
+&lt;variable name=&quot;polish.MenuBar.useExtendedMenuBar&quot; value=&quot;true&quot; /&gt;
+</pre>
+</p>
+	<p>
+	Additionally the general usage of the menu has to be activated by setting the &quot;fullscreen&quot; attribute of the &lt;build&gt; element to true in your <i>build.xml</i>
+	script:
+<pre>
+&lt;build 
+	usePolishGui=&quot;true&quot; 
+	<b>fullscreen=&quot;menu&quot;</b>
+	...&gt;
+</pre>	
+	</p>
+	<p>
+	Alternatively you can set the &quot;polish.useMenuFullScreen&quot; variable to true:
+<pre>
+&lt;variable name=&quot;polish.useMenuFullScreen&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</p>
+	<p>You can specify the positioning of the menu for the extended menubar by setting the appropriate preprocessing variables:
+<pre>
+&lt;variable name=&quot;polish.MenuBar.OptionsPosition&quot; value=&quot;left&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.OkPosition&quot; value=&quot;left&quot; /&gt;
+</pre>
+</p>
+	
+
+  <h2 id="Menu">Menu</h2>
+  <h3 id="Menu-Design">Designing the Menu</h3>
+  <p>When you have activated the default or the extended menubar, you can also design your menu using the <code>menu</code> and <code>menuitem</code>
+  styles in your <i>polish.css</i> file.
+  </p>
+  <p>
+  When the menu is opened (and you use the extended menubar), the shown screen will be dimmed by painting the screen with a translucent overlay color,
+  if the device supports translucency. The default overlay color is <code>argb( 136, 0, 0, 0 )</code>, you can specify it differently within the
+  colors section of your <i>polish.css</i> file:
+  <br />
+  <img src="<%= basedir%>images/gui-screenelement-menu.png" alt="menu" width="240" height="318" />
+<pre>
+colors {
+	overlay: argb( 136, 0, 0, 0 );
+}
+menu {
+	margin-left: 4;
+	margin-right: 4;
+	margin-bottom: -4; /* for the border */
+	min-width: 100;
+	padding: 2;
+	font-color: focusedFontColor;
+	font-size: small;
+	view-type: slide-up;
+	border {
+		type: drop-shadow;
+		width: 4;
+		start-color: #aeee;
+		end-color: #2222;
+		orientation: top-right;
+	}
+	background {
+		type: horizontal-stripes;
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+	}
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	padding: 3;
+	padding-left: 10;
+	padding-right: 10;
+	font {
+		color: fontColor;
+		size: small;
+		style: bold;
+	}
+	layout: left;
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+.menuItem:hover {
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: focusedBackgroundColor;
+		border-color: focusedBorderColor;
+	}
+	font {
+		style: bold;
+		size: small;
+		color: focusedFontColor;
+	}
+	layout: left | horizontal-expand;
+}
+</pre>
+	</p>
+	<p>All comand- / menu-items do support normal text design. Additionally you can design the indicators that show the availability of subcommands with
+	the <code>child-indicator</code> CSS attributes:
+	</p>
+	
+		<%cssattributes de.enough.polish.ui.CommandItem %>
+	
+	<h3 id="Menu-Animation">Animating the Menu</h3>
+	<p>
+	You can use any <a href="gui-visualguide.html#animations">animation</a> for animating the menu. A commonly used animation is the
+	&quot;slide-up&quot; animation, that scrolls the menu upwards when the user opens the menu:
+<pre>
+menu {
+	margin-left: 4;
+	margin-right: 4;
+	margin-bottom: -4; /* for the border */
+	min-width: 100;
+	padding: 2;
+	font-color: focusedFontColor;
+	font-size: small;
+	<b>view-type: slide-up;</b>
+	border {
+		type: drop-shadow;
+		width: 4;
+		start-color: #aeee;
+		end-color: #2222;
+		orientation: top-right;
+	}
+	background {
+		type: horizontal-stripes;
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+	}
+}
+</pre>
+	</p>
+	
+		<h3 id="Configuration-Menu">Configuration of the Menu</h3>
+	<p>The position of the menu is defined within the device dabatase with following capabilities:
+<pre>
+&lt;capability name=&quot;MenuBar.OptionsPosition&quot; value=&quot;right&quot; /&gt;
+&lt;capability name=&quot;MenuBar.OkPosition&quot; value=&quot;left&quot; /&gt;
+</pre>
+</p>
+<p>You can override the positioning of the menu for the extended menubar by setting the appropriate preprocessing variables:
+<pre>
+&lt;variable name=&quot;polish.MenuBar.OptionsPosition&quot; value=&quot;left&quot; /&gt;
+&lt;variable name=&quot;polish.MenuBar.OkPosition&quot; value=&quot;left&quot; /&gt;
+</pre>
+</p>
+
+	<h2 id="Localization">Localization of the Menu</h2>
+	<p>
+	Since the menu implementation uses some texts like &quot;Select&quot; and &quot;Cancel&quot;, you might want to localize or change these
+	text. Please refer to the <a href="localization.html">Localization Guide</a> for detailed information. Following localization properties
+	are used by the J2ME Polish Menu in the <i>messages.txt</i> file:
+<pre>
+polish.command.ok=OK
+polish.command.cancel=Cancel
+polish.command.select=Select
+polish.command.options=Options
+</pre>
+	</p>
+	
+	<h2 id="Programming">Programming</h2>
+	<h3 id="commandsstyle">Styling Specific Commands</h3>
+	<p>
+	When adding commands or subcommands you can use the <code>#style</code> preprocessing directive for applying specialized styles:
+<pre>
+Form form = new Form("Hello World");
+//#style helloCommand
+form.addCommand( this.cmdHello );
+// using the default "menuitem" style:
+form.addCommand( this.cmdExit );
+</pre>
+	</p>
+	<p>You can add subcommands by calling 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess.addSubCommand( Command child, Command parent, Screen screen )</a>:
+</p>
+<pre>
+//#style onlineCmd
+UiAccess.addSubCommand( this.cmdStatusOnline, this.cmdStatus, form );
+// using the default "menuitem" style:
+UiAccess.addSubCommand( this.cmdStatusOffline, this.cmdStatus, form );
+</pre>
+	<p>You can use the <code>.menu1</code> style for designing the background and layout of the first layer of subcommands, 
+	<code>.menu2</code> for the second, and <code>.menu3</code> for the third level of subcommands:
+	</p>
+<pre>
+/** design the first level of subcommands: */
+.menu1 extends menu {
+	background-color: #ddd;
+}
+</pre>
+ 
+	<h3 id="commandsorder">Ordering of Commands</h3>
+	<p>
+	The order of commands is specified using the priorities of commands. A command with a higher numerical value will be placed below a command with
+	a lower value.
+	</p>
+	<h3 id="commandsdeactivate">Deactivate Commands</h3>
+	<p>
+	You can deactivate specific commands by calling 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess.setAccessible( Screen screen, Command command, boolean accessible )</a>:
+	<pre>
+//#style commandInactive
+UiAccess.setAccessible( myForm, cmdForward, false );
+	</pre>
+	</p>
+	<p>
+	Please note that you need to use the extended menubar when you want to deactivate commands that are shown directly (not within the Options menu).
+	</p>
+	
+	<h3 id="commandseparator">Command Separators</h3>
+<p>
+	You can also add separators to the native menu by adding a <code>Command.SEPARATOR</code> command:
+</p>
+<pre>
+import de.enough.polish.ui.Command;
+[...]
+	
+//#style menuSeparator
+Command cmdSeparator = new Command("", Command.SEPARATOR, 5 );
+myScreen.addCommand( cmdSeparator );
+</pre>
+<p>
+	The style <code>.menuSeparator</code> can then include your specific design.
+</p>
+	<h3 id="commandglobal">Global Commands</h3>
+	<p>
+		If you are using the same command with the same logic in different locations of your applications, you can register a <code>CommandListener</code> or a <code>ItemCommandListener</code> 
+		directly on a <code>Command</code> as well:
+	</p>
+<pre>
+import de.enough.polish.ui.Command;
+[...]
+
+final MIDlet midlet = this;
+Command cmdExit = new Command("Exit", Command.EXIT, 10 );
+cmdExit.setCommandListener( new CommandListener() { 
+	public void commandAction( Command cmd, Screen scr) { 
+		midlet.notifyDestroyed(); 
+	}
+} );
+</pre>
+
+
+	<h3 id="commanddefault">Default Commands</h3>
+	<p>
+		If you want to trigger a specific action when the user tabs an <code>Item</code> or presses FIRE on an <code>Item</code>, you can
+		register a default command on the <code>Item</code>:
+	</p>
+<pre>
+import de.enough.polish.ui.Command;
+import de.enough.polish.ui.StringItem;
+[...]
+//#style button
+StringItem item = new StringItem(null, "Start")
+item.setDefaultCommand( this.cmdStart);
+</pre>
+	<p>
+	You can hide default commands from the menubar by setting the <code>polish.Item.suppressDefaultCommand</code> preprocessing variable 
+	in your <i>build.xml</i> script:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.Item.suppressDefaultCommand&quot; value=&quot;true&quot; /&gt;
+</pre>	
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/MenuBar.html">Extended MenuBar</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Command.html">Command</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a> (for Item.setDefaultCommand())</li>
+	</ul>
+
+<%include end.txt %>

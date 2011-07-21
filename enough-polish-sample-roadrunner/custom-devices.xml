@@ -1,0 +1,14 @@
+<devices>
+	<device
+		supportsPolishGui="true" >
+		<identifier>Nokia/Series46</identifier>
+		<features>isVirtual</features>
+		<groups>Series40</groups>
+		<capability name="OS" value="Symbian"/>
+		<capability name="ScreenSize" value="128x128"/>
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="SoundFormat" value="midi" />
+		<capability name="HeapSize" value="200kb" />
+		<capability name="MaxJarSize" value="64kb" />
+	</device>
+</devices>

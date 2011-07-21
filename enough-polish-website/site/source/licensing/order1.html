@@ -1,0 +1,58 @@
+<%define inLicensingSection %>
+<%define inLicensingSection.order %>
+<%set title = J2ME Polish: Order %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<div id="content">
+	<h1 id="top">Ordering J2ME Polish (1/4)</h1>
+	<p>Please select your desired base license and enter the number of
+	developers or designers which work commercially with J2ME Polish:</p>
+
+<form action="http://193.22.164.185:8080/order2.jsp">
+<table  class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Number of Base Licenses</th><th>License&nbsp;Type</th><th>Explanation</th><th>Price</th></tr>
+	
+<tr><td rowspan="3"><input name="number" type="text" maxlength="3" size="3" value="1"/></td>
+<td><input type="radio" name="lic" value="single" checked="checked" />Single License</td>
+<td>Develop one application and sell as many copies as you want of that application.</td>
+<td>199,- Euro</td>
+</tr>
+
+<tr>
+<td><input type="radio" name="lic" value="runtime"/>Runtime License</td>
+<td>Develop as many applications as you want, but only sell up to 100 copies of those applications altogether.</td>
+<td>199,- Euro</td>
+</tr>
+	
+<tr>
+<td><input type="radio" name="lic" value="enterprise"/>Enterprise License</td>
+<td>Develop and sell as many applications as you want.</td>
+<td>2990,- Euro</td>
+</tr>
+
+<tr><th>Number of Developers/Designers</th><th>License&nbsp;Type</th><th>Explanation</th><th>Price</th></tr>
+	
+<tr><td><input name="developers" type="text" maxlength="3" size="3" value="1"/>Developers</td>
+<td><input type="radio" name="devlic" value="devlic" checked="checked" />Developer Seats</td>
+<td>A license for one developer. When two programmers of your
+		company work with J2ME Polish commercially, you need to obtain 2 developer
+		seat-licenses. Additionally you need to obtain either a Single, Runtime
+		or Enterprise License.</td>
+<td>99,- Euro</td>
+</tr>
+
+<tr><td colspan="4"><input type="submit" value="Proceed to Step 2" /></td></tr>
+	
+</form>
+	
+	<p>Each single, runtime and enterprise license includes upgrades up to the next 
+	major-release and support for one month after the purchase.</p>
+	<p>Customers from Germany, Austria and Switzerland can also
+	order J2ME Polish by <a href="Order-Form-de.pdf">fax with the order-form</a>.
+	</p>
+
+</table>
+
+	
+<%include end.txt %>

@@ -1,0 +1,39 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: bottom Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">bottom Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Draw a line underneath an item or a screen with using the <code>bottom</code> border:
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-border-bottom.png"  width="98" height="31" alt="bottom border" />	
+	</p>
+<pre>
+.itemMain {
+	border {
+		type: bottom;
+		color: green;
+		width: 2;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings border bottom%>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/BottomBorder.html">BottomBorder</a>.
+	</p>
+
+<%include end.txt %>

@@ -1,0 +1,144 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: TableItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">TableItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The TableItem allows you to organize data in tabular form. It will automatically scroll sideways if it doesn't fit on the
+	screen. 
+	</p>
+	<h2 id="TableItem-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-tableitem.png"  width="352" height="415" alt="Two table items in a Form." />
+	<br />
+	The above tables have been designed with this CSS code:	
+	</p>
+<pre>
+.defaultTable {
+	padding: 3;
+	padding-horizontal: 6;
+	font-color: gray;
+	font-size: small;
+	background {
+		type: round-rect;
+		color: #dfdfaa;
+	}
+}
+
+.defaultTable:hover {
+	padding: 1;
+	padding-vertical: 3;
+	border {
+		type: round-rect;
+		width: 2;
+		color: #333;
+	}
+}
+
+.heading {
+	font-color: #333;
+	font-style: bold;
+	font-size: small;
+}
+
+.centeredCell {
+	padding: 0;
+	font-color: gray;
+	font-size: small;
+	layout: center;
+}
+</pre>
+	<p>
+	If the line color is not specified programatically or using CSS, the font-color will be used by default.
+	</p>
+	<p>
+	Use these attributes to design the TableItem:
+	</p>
+	<%cssattributes de.enough.polish.ui.TableItem %>
+	
+	<h2 id="TableItem-Programming">Programming</h2>
+	
+	<p>You can create tables in different ways:</p>
+	<h3 id="TableItem-static">Static Tables</h3>
+	<p>
+	You can specify the dimension of the table in the constructor and then specify each cell:
+	</p>
+<pre>
+//#style defaultTable
+table = new TableItem(3, 2);
+//#style centeredCell
+table.set( 1, 0, "1,0");
+//#style centeredCell
+table.set( 2, 0, "2,0");
+//#style centeredCell
+table.set( 0, 1, "0,1");
+//#style centeredCell
+table.set( 1, 1, "xxxx1,1");
+//#style centeredCell
+table.set( 2, 1, "2,1");
+ // set the line color to black:
+table.setLineStyle( TableItem.LINE_STYLE_SOLID, 0x000000 ); 
+this.form.append( table );
+</pre>	 
+	<h3 id="TableItem-tabledata">Using TableData</h3>
+	<p>
+	You can also construct a table using <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/TableData.html">de.enough.polish.util.TableData</a>.
+	This can be useful as you can easily <a href="persistence.html">persist</a> the data or send it over the <a href="rmi.html">network</a>.
+	</p>
+<pre>
+TableData data = new TableData(3,2);
+data.set( 1, 0, "1,0");
+data.set( 2, 0, "2,0");
+data.set( 0, 1, "0,1");
+data.set( 1, 1, "xxxx1,1");
+data.set( 2, 1, "2,1");
+//#style defaultTable
+table = new TableItem(data);
+this.form.append( table );
+</pre>	 
+	<h3 id="TableItem-dynamic">Dynamic Tables</h3>
+	<p>
+	You can also use the <code>addColumn()</code>, <code>addRow()</code>, <code>removeColumn(int column)</code> and
+	<code>removeRow( int row )</code> method in either <code>TableItem</code> or <code>TableData</code> for dynamically
+	constructing a table on by one:
+	</p>
+<pre>
+//#style defaultTable
+table = new TableItem();
+Object[] data;
+while ( (data = getNextData()) != null ) {
+	int row = table.addRow();
+	for (int i=0; i&lt;data.length; i++ ) {
+		if (i  &gt;= table.getNumberOfColumns() ) {
+			table.addColumn();
+		}
+		table.set( i, row, data[i] );
+	}
+}
+</pre>	 
+	
+	<h3 id="TableItem-Contents">TableItem Contents</h3>
+	<p>
+	You can add any Object as well as Items into a TableItem. Objects are converted into StringItems by calling their
+	respective <code>toString()</code> method.
+	</p>
+	
+	<h3 id="TableItem-Sample">Sample Application</h3>
+	<p>
+	Please compare the <i>tableitem</i> sample application for a full example.
+	</p>
+	<h2 id="TableItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TableItem.html">de.enough.polish.ui.TableItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/TableData.html">de.enough.polish.util.TableData</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,56 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: midp2 view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">midp2 view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-container">Container View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>midp2</code> view-type aligns all fitting items on a single row before starting a new row.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+			<img src="<%= basedir%>images/gui-viewtype-midp2.png" width="347" height="415" alt="The midp2 view-type" />		
+	</p>
+<pre>
+.mainScreen {
+	padding: 2;
+	padding-left: 10;
+	padding-right: 10;
+	background {
+		type: horizontal-stripes;
+		first-top-color: rgb(165,190,247);
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	<b>view-type: midp2;</b>
+}
+</pre>
+	<p>
+	Items with an <code>expand</code> layout will occupy the rest of a started row.
+	You can force line breaks by using <code>newline-after</code> or <code>newline-before</code> layouts:
+	</p>
+<pre>
+.myItem {
+	layout: newline-before;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.containerviews.MIDP2LayoutView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/containerviews/MIDP2LayoutView.html">MIDP2LayoutView</a></li>
+	</ul>
+
+<%include end.txt %>

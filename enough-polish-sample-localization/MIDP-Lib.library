@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+  <!--JBuilder Library Definition File-->
+  <fullname>MIDP-Lib</fullname>
+  <class>
+    <path>[import/midp2.jar]</path>
+  </class>
+  <lastmodsaved>1088961925478</lastmodsaved>
+</library>

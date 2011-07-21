@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/src"/>
+	<classpathentry kind="src" path="nutiteq_maps_library_0.10.0_src/src"/>
+	<classpathentry kind="src" path="nutiteq_maps_library_0.10.0_src/thirdparty/src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/enough-polish-j2me"/>
+	<classpathentry exported="true" kind="lib" path="nutiteq_maps_library_0.10.0_src/ivy-libs/j2me-ext-motorola-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/enough-polish-build/import/fileconnection.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/btapi.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/cldc-1.0.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/location.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/midp-2.0.jar" />
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

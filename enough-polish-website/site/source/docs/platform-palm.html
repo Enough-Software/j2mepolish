@@ -1,0 +1,100 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%define inDocumentationSection.palm %>
+<%set title = J2ME Polish: Palm Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Developing for Palm Devices</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="platform-windowsmobile.html">Windows Mobile</a></li>
+	</ul>
+	<%index %>
+<p>
+Note: most Palm devices use <a href="platform-windowsmobile.html">Windows Mobile</a> nowadays.
+</p>
+<p>
+Palm handhelds also support J2ME applications when the IBM WebSphere Everyplace Micro Environment (WEME) has been installed. MIDP applications can be installed normally over the air (OTA) as any other application. If you want to install applications directly via the USB connection or if you want to use the complete screen size, the JAR file has to be converted into the proprietary PRC format.
+</p>
+<h2 id="palm-preparations">Preparations</h2>
+<p>
+The Palm converter and simulator can be downloaded from <a href="https://pdn.palm.com/" target="_blank">https://pdn.palm.com/</a>. When you extract the WEME tools you will find additional libraries in the Tools/lib folder. You need to adjust the CLASSPATH environment variable of your system to include those libraries or you need to copy them to ${java.home}/lib.
+</p><p>
+In your build.xml script you then need to define the palm.weme.home property that points to the folder into which you have extracted the WEME tools:
+<pre>
+&lt;property 
+	name=&quot;palm.weme.home&quot; 
+	location=&quot;C:/Program Files/Palm/WEME57&quot; 
+/&gt;
+</pre>
+</p>
+
+<h2 id="palm-jar2prc">Converting JARs into PRCs</h2>
+<p>
+J2ME Polish  automatically converts JAR files into the Palm PRC format when you target Palm devices. You can fine tune the conversion process by adding following Ant properties or J2ME Polish variables to the build.xml script:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Name</th><th>Default</th><th>Explanation</th></tr>
+	<tr>
+	 <td>palm.vendorId</td>
+	 <td>&nbsp;</td>
+	 <td>A 4 character long vendor ID. When no ID is defined, an ID will be created automatically.</td>
+	</tr>
+	<tr>
+	 <td>palm.smallIcon</td>
+	 <td>&nbsp;</td>
+	 <td>URL of the file that contains a small application icon.</td>
+	</tr>
+	<tr>
+	 <td>palm.largeIcon</td>
+	 <td>&nbsp;</td>
+	 <td>URL of the file that contains a large application icon.</td>
+	</tr>
+	<tr>
+	 <td>palm.splash</td>
+	 <td>&nbsp;</td>
+	 <td>URL of the file that contains a splash image.</td>
+	</tr>
+	<tr>
+	 <td>palm.enableHighRes</td>
+	 <td>true</td>
+	 <td>Enable the high resolution mode, so that your application can use the complete available screen.</td>
+	</tr>
+	<tr>
+	 <td>palm.enableDebug</td>
+	 <td>false</td>
+	 <td>Enables the debug mode of the Palm. In this mode all System.out.println() message are stored on the memory card.</td>
+	</tr>
+	<tr>
+	 <td>palm.enableInstall</td>
+	 <td>false</td>
+	 <td>Automatically installs the generated PRC file on the connected Palm handheld.</td>
+	</tr>
+</table>
+<p>
+
+The following example adds a splash image to the application and defines a vendor ID:
+<pre>
+&lt;variable name=&quot;palm.largeIcon&quot; value=&quot;resources/native/splash.jpg&quot; /&gt;
+&lt;variable name=&quot;palm.vendorId&quot; value=&quot;ENSW&quot; /&gt;
+</pre>
+</p><p>
+When you target only a generic device like the Generic/multi one, you can invoke the converter by adding the jar2prc finalizer to the &lt;build&gt; section of your build.xml script:
+<pre>
+&lt;finalizer name=&quot;jar2prc&quot; /&gt;
+</pre>
+</p>
+
+<h2 id="palm-emulator">Starting the Palm Simulator</h2>
+<p>
+As with many other vendors you can start the Palm simulator by using the &lt;emulator&gt; section. You need to define the Ant property palm.simulator.home that points to the folder that contains the PalmSim.exe executable:
+<pre>
+&lt;property 
+	name=&quot;palm.simulator.home&quot; 
+	location=&quot;C:/Program Files/Palm/Simulator&quot; 
+/&gt;
+</pre>
+</p>
+
+<%include end.txt %>

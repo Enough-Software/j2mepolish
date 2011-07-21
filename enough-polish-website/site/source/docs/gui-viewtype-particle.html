@@ -1,0 +1,79 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: particle view-type %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">particle view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>particle</code> view-type scales an item in an explosion like manner.
+	You can use this to indicate that the user is holding down a button and a corresponding
+	<a href="gui-screenelement-pressed.html">pressed</a> style.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<div id="id_particle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-particle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_particle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-particle.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="231">
+        <embed src="<%= basedir%>images/gui-viewtype-particle.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="231"
+        >
+        </embed>
+	</object>
+	</p>
+<pre>
+.mainCommand {
+	padding: 0;
+	padding-vertical: 0;
+	icon-image: url( iconlarge%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+}
+
+.mainCommand:hover {
+	font-style: bold;
+	font-size: small;
+	font-color: white;
+	text-effect: shadow;
+}
+
+.mainCommand:pressed {
+	<b>view-type: particle;</b>
+}
+</pre>
+	<p>
+	<!-- 
+	CSS attributes:
+	 -->
+	</p>
+	<%cssattributes de.enough.polish.ui.itemviews.ExplodingParticlesItemView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/itemviews/ExplodingParticlesItemView.html">ExplodingParticlesItemView</a></li>
+	</ul>
+
+<%include end.txt %>

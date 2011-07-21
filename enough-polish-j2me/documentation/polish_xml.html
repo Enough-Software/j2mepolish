@@ -1,0 +1,47 @@
+<?xml  version="1.0"  encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>polish.xml</title>
+	<link href="polish.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<h1>polish.xml</h1>
+	<p>
+	The <code>polish.xml</code> file describes the project and is used to define
+	all relevant properties and variables.
+	</p>
+	<p>Following tags are used:
+	<table>
+		<tr><th>Tag</th><th>Attributes</th><th>description</th></tr>
+		<tr>
+			<td>imageLoadStrategy</td>
+			<td>background</td>
+			<td>Determines whether images of Widgets, Backgrounds and Canvasses should
+				be loaded in the background or in the foreground thread. The background-attribute
+				should be either set to "yes" or "no".
+				<br/>
+				When images are loaded in the background the responsiveness of an application can
+				improve dramatically, but it also means that
+				some images are set while the user is in a screen.
+				<br/>
+				When images are loaded in the foreground, all images will be shown when the user
+				is entering a screen. The responsiveness of the application might suffer, but the screens
+				will not change without the user's input.
+				<br/>
+				Example:
+				<br/>
+				<code>
+				&lt;imageLoadStrategy background="yes" /&gt;
+				</code>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	</p>
+</body>
+</html>

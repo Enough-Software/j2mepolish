@@ -1,0 +1,41 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: polygon Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">polygon Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Renders a filled polygon.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-polygon.png"  width="230" height="52" alt="polygon background" />	
+</p>
+<pre>
+.itemMain {
+	background {
+		type: polygon;
+		points: 10,50 50,10 90,50 50,90;
+		color: #8f8;
+		scale-mode: proportional;
+		anchor: left | vcenter;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background polygon %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PolygonBackground.html">PolygonBackground</a></li>
+	</ul>
+
+<%include end.txt %>

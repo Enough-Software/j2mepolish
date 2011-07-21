@@ -1,0 +1,293 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Scrollbar Design %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Scrollbar Design</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screenelement-menubar.html">Menubar</a></li>
+		<li><a href="gui-screenelement-screenbackground.html">Screen Background</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	There are 4 different options to indicate possible scrolling:
+	</p>
+	<ol>
+		<li><b>Default</b>: In the default mode, scroll indicators are drawn in the middle of the menubar.</li>
+		<li><b>ScrollBar</b>: You can activate the scrollbar mode, in which the scrollbar will be shown on the right side of the screen.</li>
+		<li><b>None</b>: You can also deactivate the indication of possible scrolling completely.</li>
+		<li><b>scroll-up/down-background</b>: Additionally you can use the CSS attributes <code>scroll-down-background</code> and <code>scroll-up-background</code> for showing
+	subtle scrolling hints.</li>
+	</ol>
+	
+	<h2 id="Design">Design</h2>
+	<h3 id="default-scrollindicators">Default Scroll Indicators</h3>
+	<p>
+	By default scroll arrows are painted in the menubar to indicate possible scrolling. You can specify the color or the images used for the indicators:
+	<br />
+	<img src="<%= basedir%>images/gui-screenelement-scrollindicator.png"  width="240" height="320" alt="Default Scroll Indicators" />	
+	</p>
+	<p>The example above is realized with two images and following CSS code:
+<pre>
+.mailForm {
+	padding: 5;
+	padding-left: 5;
+	padding-right: 5;
+	background {
+		type: horizontal-stripes;
+		top: title;
+		bottom: menubar;
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+	}
+	layout: horizontal-expand | horizontal-center | top;
+	//#if !polish.useScrollBar
+		<b>scrollindicator-up-image: url( arrowUp.png );
+		scrollindicator-down-image: url( arrowDown.png );</b>
+	//#endif
+}
+</pre>
+	</p>
+	<p>
+	Specific design attributes:
+	</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>scrollindicator-color</td><td>black</td>color<td></td><td>screen styles</td>
+		<td>
+		The color of the scrolling indicators.
+<pre>
+.myForm {
+	scrollindicator-color: #a00;
+}
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>scrollindicator-up-image</td><td>-</td><td>image-URL</td><td>screen styles</td>
+		<td>
+		The image indicating that the user can scroll upwards.
+		</td>
+	</tr>
+	<tr>
+		<td>scrollindicator-down-image</td><td>-</td><td>image-URL</td><td>screen styles
+		<td>
+		The image indicating that the user can scroll downwards.
+		</td>
+	</tr>
+	</table>
+	
+	<h3 id="scrollbar">ScrollBar</h3>
+	<p>
+	You can activate the ScrollBar by setting the variable &quot;polish.useScrollBar&quot; to &quot;true&quot; in your <i>build.xml</i> script.
+	The scrollbar is then drawn at the right side of the screen and can operate in different modes:
+	</p>
+	<ul>
+		<li><b>page</b>: In the &quot;page&quot; mode the position and height of the currently visible area is shown relative to the complete height of that screen.</li>
+		<li><b>area</b>: In the &quot;area&quot; mode the slider represents the position of the current selection relativ to the complete width and height.</li>
+		<li><b>item</b>: In the &quot;item&quot; mode the index of currently selected item is taken into account relative to the number of items.</li>
+	</ul>
+	<p>
+	This example shows the ScrollBar in the default &quot;page&quot; scrollmode: <br />
+	<img src="<%= basedir%>images/gui-screenelement-scrollbar.png"  width="240" height="320" alt="ScrollBar" />	
+	</p>
+	<p>You can design the scrollbar by using the <code>scrollbar</code> CSS selector:
+	</p>
+<pre>
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 3;
+	/* You can also define background, border, padding, etc */
+}
+</pre>
+	<p>You can also automatically hide the scrollbar so that it does not occopy screen space. The scrollbar will then be
+	made visible each time the user scrolls on the screen:
+	<br />
+		<div id="id_scrollbar">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenelement-scrollbar.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_scrollbar", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+			
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-screenelement-scrollbar.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="176">
+	        <param name='height' value="227">
+	        <embed src="<%= basedir%>images/gui-screenelement-scrollbar.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="176" height="227"
+	        >
+	        </embed>
+		</object>
+	</p>
+<pre>
+scrollbar {
+	scrollbar-slider-color: #2d2;
+	scrollbar-slider-width: 6;
+	<b>scrollbar-fadeout: true;
+	opacity: 80%;</b>
+	background-color: white;
+}
+</pre>
+	<p>
+	Specific design attributes:
+	</p>
+	
+	<%cssattributes de.enough.polish.ui.ScrollBar %>
+	
+	<!-- 
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>scrollbar-slider-color</td><td>black</td><td>color</td><td>scrollbar style</td>
+		<td>
+		The color of the slider used to indicate the position, ignored when slider image is used.
+		</td>
+	</tr>
+	<tr>
+		<td>scrollbar-slider-width</td><td>2</td><td>integer</td><td>scrollbar style</td>
+		<td>
+		The width of the slider used to indicate the position, ignored when slider image is used.
+		</td>
+	</tr>
+	<tr>
+		<td>scrollbar-slider-image</td><td>-</td><td>image URL</td><td>scrollbar style</td>
+		<td>
+		The image used for the scrollbar's slider.
+		</td>
+	</tr>
+	<tr>
+		<td>scrollbar-slider-image-repeat</td><td>false</td><td>true, false</td><td>scrollbar style</td>
+		<td>
+		When &quot;true&quot; is given, the slider image is repeated vertically, if necessary.
+		</td>
+	</tr>
+	<tr>
+		<td>scrollbar-slider-mode</td><td>page</td><td>page, area, item</td><td>scrollbar style</td>
+		<td>
+		The mode of the scrollbar (see above).
+		</td>
+	</tr>	
+	</table>
+	 -->
+	
+	
+	<h3 id="deactivate-scrollindicators">Deactivate Scroll Indicators</h3>
+	<p>
+	You can deactivates scroll indicators completely by setting the variable 
+	&quot;polish.deactivateScrollIndicator&quot; to &quot;true&quot; in your <i>build.xml</i> script.
+	</p>
+	<p>When using the scrollbar, you can also hide the scrollbar for specific screens by using the
+	<code>show-scrollbar</code> CSS attribute within the corresponding screen's style:
+	</p>
+<pre>
+.screenMain {
+	show-scrollbar: false;
+}
+</pre>
+
+	<h3 id="scroll-backgrounds">Use Backgrounds as Scroll Indicators</h3>
+	<p>
+	You can use the CSS attributes <code>scroll-down-background</code> and <code>scroll-up-background</code> for showing
+	subtle scrolling hints like in the following example:
+	<br />
+	<img src="<%= basedir%>images/gui-screenelement-scrollbackground.png"  width="350" height="413" alt="Using Backgrounds as Scroll Indicators" /> 
+	</p>
+	<pre>
+backgrounds {
+	
+	rssScrollUpBg {
+		type: partial-gradient;
+		top-color: #2f2f2f;
+		bottom-color: #ececec;
+		start: 0%;
+		end: 6%;
+	}
+	
+	rssScrollDownBg {
+		type: partial-gradient;
+		top-color: #ececec;
+		bottom-color: #2f2f2f;
+		start: 94%;
+		end: 100%;
+	}
+}	
+
+
+.rssBrowserForm {
+	padding-top: 3%;
+	padding: 0px;
+	background-color: #ececec;
+	<b>
+	background-top: title;
+	background-bottom: menubar;
+	scroll-up-background: rssScrollUpBg;
+	scroll-down-background: rssScrollDownBg;
+	</b>	
+	screen-change-animation: right;	
+}
+</pre>
+	<p>
+	The <code>scroll-up-background</code> will be drawn over the screen's normal background when the user is able to scroll up, likewise the 
+	<code>scroll-down-background</code> is drawn when the user can scroll down.
+	<br />
+	If you use the fullscreen mode and you do have backgrounds for the <code>title</code> and / or <code>menubar</code> you should specify that the screen's background is painted from below
+	the title down to the beginning of the menubar, instead from the very top to the very bottom of the screen. Realize this with 
+	<code>background-top: title;</code> and <code>background-bottom: menubar;</code>.
+	</p>
+	<p>
+	For the scroll background you should ensure that not the whole background area is covered by the background - in that case the screen's original background
+	would not be visible and the scroll-down-background would cover the scroll-up-background. Also note that only parts of the scroll backgrounds
+	are painted when only small parts can be scrolled. These backgrounds are recommended for scroll backgrounds:
+	</p>
+	<ul>
+		<li><a href="gui-background-partial-gradient.html">partial-gradient</a>: paints a vertical gradient</li>
+		<li><a href="gui-background-image.html">image</a>: paints an image, use 'transparent' for its color</li>
+		<li><a href="gui-background-partial.html">partial</a>: paints a simple background in a specified vertical region</li>
+	</ul>
+	
+	
+	
+	<h2 id="Configuration">Configuration</h2>
+	<ul>
+	<li>
+	To activate the scrollbar:
+<pre>
+&lt;variable name=&quot;polish.useScrollBar&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</li>
+	<li>
+	To deactivate all scrollindicators:
+<pre>
+&lt;variable name=&quot;polish.deactivateScrollIndicator&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</li>
+	</ul>
+	
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScrollBar.html">ScrollBar</a>.
+	</p>
+
+<%include end.txt %>

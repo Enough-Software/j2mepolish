@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="source/src" kind="src"/>
+	<classpathentry path="/enough-polish-build/import/mmapi.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/midp-2.0.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/cldc-1.1.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/btapi.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/m2g.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/m3g.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/nokia-ui.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/pdaapi.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/siemens-color-game-api.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-build/import/wmapi.jar" kind="lib"/>
+	<classpathentry path="/enough-polish-j2me" combineaccessrules="false" kind="src"/>
+	<classpathentry path="bin/classes" kind="output"/>
+</classpath>

@@ -1,0 +1,71 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: zoomout Screen-Change-Animation %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="zoomout">zoomout Screen-Change-Animation</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Other Screen-Change-Animations</a></li>
+		<li><a href="extending-screenchangeanimation.html">Create Your Own Screen-Change-Animation</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+		<div id="id_zoomout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-zoomout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_zoomout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-screenchangeanimation-zoomout.mov">
+	        <param name='autoplay' value="true">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="175">
+	        <param name='height' value="225">
+	        <embed src="<%= basedir%>images/gui-screenchangeanimation-zoomout.mov" autoplay="true" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="176" height="225"
+	        >
+	        </embed>
+		</object>
+
+	</p>
+	
+	<p>
+		Zoom in the next screen
+		with the 
+		<code>zoomout</code>
+		screen-change-animation.	
+	</p>
+	<h2 id="Screen-Change-Animation-Design">Usage</h2>
+	<p>
+	Use this animation like this:
+	</p>
+<pre>
+.myScreen {
+	screen-change-animation: zoomout;
+}
+</pre>
+	<%cssattributes de.enough.polish.ui.screenanimations.ZoomOutScreenChangeAnimation %>
+
+	
+	
+	<h2 id="Screen-Change-Animation-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/screenanimations/ZoomOutScreenChangeAnimation.html">ZoomOutScreenChangeAnimation</a>.
+	</p>
+
+<%include end.txt %>

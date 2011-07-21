@@ -1,0 +1,61 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: grayout view-type %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">grayout view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-container">Container View Types</a></li>
+		<li><a href="gui-visualguide.html#gui-viewtypes">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>grayout</code> view-type grays out all but the currently focused item and aligns the items horizontally on MIDP 2.0+ devices.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<div id="id_grayout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-grayout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_grayout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+	</p>
+<pre>
+.mainScreen {
+	padding: 2;
+	padding-left: 10;
+	padding-right: 10;
+	background {
+		type: horizontal-stripes;
+		first-top-color: rgb(165,190,247);
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	<b>view-type: grayout;</b>
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.containerviews.HorizontalGrayOutContainerView %>
+	<!--            de.enough.polish.ui.containerviews.HorizontalGrayOutContainerView  -->
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/containerviews/HorizontalGrayOutContainerView.html">HorizontalGrayOutContainerView</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,26 @@
+#####################################################################################
+##                                                                                 ##
+## This file contains translations.                                                ##
+## See http://www.j2mepolish.org/cms/leftsection/documentation/localization.html   ##
+## for details.                                                                    ##
+##                                                                                 ##
+#####################################################################################
+
+# define this as a variable so that we re-use it later onwards within messages.txt itself:
+var:main.news=News
+
+# gestures:
+gestures.title=Touch Support
+gestures.text=J2ME Polish supports touch events in various ways. This application demonstrates some of the supported features.
+gestures.back.title=Back Gesture
+gestures.back.text=On screens that overlay a previous screen you can directly go back to the previous screen by clicking outside of the current screen's area.\nOn this screen you can see the previous screen on the top. Just tap on the top area to return to the main menu.
+gestures.click.title=Click Gesture
+gestures.click.text=When tapping an item quickly, the default action for that item is triggered. Go to the ${main.news} section and click a RSS headline quickly - you will then trigger the default 'show' command of that element.
+gestures.hold.title=Hold Gesture
+gestures.hold.text=The hold gesture is triggered when you tap an item and hold your finger on it. You can specify that J2ME Polish handles the hold gesture by displaying all command actions that are associated with an item. Go to the ${main.news} section and tap and hold your finger on a RSS headline to see this in action.
+gestures.swipe.title=Swipe Right/Left Gesture
+gestures.swipe.text=J2ME Polish also recognizes swipe left and swipe right touch gestures that you can use within your application easily. Go to the ${main.news} section and and swipe your finger from left to right to mark a headline as read. Swipe from right to left to mark a headline as unread.
+gestures.test.title=Try it out
+gestures.test.text=You can test the different gestures with this button:
+gestures.test.button=click me
+gestures.test.click=clicked

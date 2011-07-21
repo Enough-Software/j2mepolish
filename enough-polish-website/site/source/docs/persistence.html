@@ -1,0 +1,58 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.persistence %>
+<%set title = J2ME Polish: Persistence with Serialization  %>
+<%set basedir = ../ %>
+<%include start.txt %>
+			
+	<h1 id="top">Persisting Objects with J2ME Polish</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Technologies:</li>
+		<li><a href="serialization.html">Serialization</a></li>
+		<li><a href="rmi.html">Remote Method Invocation (RMI)</a></li>
+		<li><a href="../trunk/index.html">Trunk (Persistence)</a></li>
+	</ul>
+	
+	<p>
+	Based on of J2ME Polish' serialization framework, the persistence framework allows you to store data easily on the handset.
+		<br/><img src="../images/persistence-overview.gif" width="500" height="257" alt="Persistence Overview" />
+
+	</p>
+		
+		<p>
+			Use the  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/RmsStorage.html">RmsStorage</a> to read and save data to the record store in the easiest possible way!
+		</p>
+		
+
+		<h2 id="example">Example</h2>
+		<p>
+<pre>
+import de.enough.polish.io.RmsStorage;
+import java.io.IOException;
+public class AddressBook {
+	Vector contacts;
+	RmsStorage storage;
+	
+	public AddressBook() {
+		<b>this.storage = new RmsStorage();</b>
+		try {
+			<b>this.contacts = 
+				(Vector) this.storage.read( "AddressBook" );
+			</b>
+		} catch (IOException e) {
+			// no address book has been saved before, so create new one:
+			this.contacts = new Vector();
+		}
+		
+		public void save() throws IOException {
+			<b>this.storage.save( this.contacts, "AddressBook" );</b>
+		}
+	}
+}
+</pre>
+		</p>
+		<p>Please refer to the &quot;serialization&quot; sample application in <i>${polish.home}/samples/serialization</i>
+			for the full example how to use these concepts.
+		</p>
+		
+							
+<%include end.txt %>

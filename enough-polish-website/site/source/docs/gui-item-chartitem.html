@@ -1,0 +1,108 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: ChartItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChartItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-chartitem">ChartItem View Types</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Use the <code>ChartItem</code> for visualizing numerical data in different ways.
+	</p>
+	<h2 id="ChartItem-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-chartitem.png" width="313" height="209" alt="A ChartItem" />
+	<br />
+	The above design has been realized with these CSS settings:
+	</p>
+<pre>
+backgrounds {
+	chartItemBackground {
+		type: round-rect-translucent;
+		color: #9fff;
+	}
+}
+
+.lineChart {
+	background: chartItemBackground;
+	padding: 3;
+	font-color: gray;
+	font-size: small;
+}
+</pre>
+	<h3 id="attributes-choicegroup">ChartItem CSS Attributes</h3>
+	<p>
+	Use following attributes to design ChartItems:
+	</p>
+	<%cssattributes de.enough.polish.ui.ChartItem %>
+	
+	<h3 id="viewtypes">View-Types</h3>
+	<p>
+	You can choose the visualization mode with the <code>view-type</code> CSS attribute.
+	</p>
+	<h4 id="view-type-line">Lines</h4>
+	<p>Using lines like in the screenshot above is the default visualization mode.</p>
+	<h4 id="view-type-bars">Bars</h4>
+	<p>Use bars in your visualization with the <a href="gui-viewtype-chartverticalbars.html">chart-vertical-bars</a> <code>view-type</code>:
+	<br />
+		<img src="<%= basedir%>images/gui-item-chartitem-verticalbars.png"  width="322" height="165" alt="A ChartItem with vertical bars" />
+	</p>
+<pre>
+.verticalBarChart {
+	background: chartItemBackground;
+	padding: 3;
+	view-type: chart-vertical-bars;
+	chart-vertical-bars-shadow-color: gray;
+}
+</pre>
+	<h4 id="view-type-pie">Pie</h4>
+	<p>Use a pie diagram in your visualization with the <a href="gui-viewtype-chartpie.html">chart-pie</a> <code>view-type</code>:
+	<br />
+		<img src="<%= basedir%>images/gui-item-chartitem-pie.png"  width="307" height="315" alt="A ChartItem with a pie visualization" />
+	</p>
+<pre>
+.pieChart {
+	background: chartItemBackground;
+	padding: 3;
+	view-type: chart-pie;
+}
+</pre>
+	
+	
+	<h2 id="ChartItem-Programming">Programming</h2>
+	<p>
+	Following sample code illustrates the usage of ChartItems:
+	</p>
+<pre>
+// the data that should be visualized:
+int[][] dataSequences = new int[][] {
+		new int[]{ 12, 0, 5, 20, 25, 40 }, // profits category A
+		new int[]{ 0, 2, 4, 8, 16, 32 },   // profits category B
+		new int[]{ 1, 42, 7, 12, 16, 1 }   // profits category C
+};
+int[] colors = new int[]{ 0xFF0000, 0x00FF00, 0x0000FF }; // colors for each category
+//#style .lineChart
+ChartItem chart = new ChartItem( "Profits:", dataSequences, colors, style );
+chart.setLabelX( "years" );
+chart.setLabelY( "profits" );
+this.form.append( chart );
+</pre>
+	<p>
+	Please refer to the &quot;chart&quot; sample application for a complete example.
+	</p>
+
+
+	
+	<h2 id="ChartItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ChartItem.html">ChartItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,47 @@
+title.main=SysInfo
+title.credits=Credits
+title.display=Display
+title.multimedia=Multimedia
+title.system=System
+title.libraries=APIs
+title.keys=Keys
+title.arithmeticBenchmark=Arithmetic Benchmark
+
+cmd.credits=Credits Info
+cmd.display=Display Info
+cmd.multimedia=Multimedia Info
+cmd.system=System Info
+cmd.libraries=APIs Info
+cmd.keys=Keys Info
+cmd.platformRequest=Platform Request
+cmd.arithmeticBenchmark=Arithmetic Benchmark
+cmd.events=Events Viewer
+cmd.credits=Credits
+cmd.back=Back
+cmd.exit=Exit
+cmd.select=Select
+cmd.upload=Upload system information
+cmd.update=Check for updates
+cmd.sysprops=SystemProperties
+
+msg.thanks=Thank you!
+msg.uploaded=The device information was successfully uploaded!
+msg.uploadfailed=Could not send device information!
+msg.uploadfailedtitle=Error!
+msg.deviceident=Device Identity
+msg.userif=Login
+msg.user=user
+msg.pwd=password
+msg.wait=Please wait
+msg.vendor=vendor
+msg.device=model
+msg.identinfo=Please enter vendor and model of this device
+msg.logininfo=You can browse and edit the information devices.j2mepolish.org
+msg.update=Checking for updates
+msg.remoteversion=remote version:
+msg.localversion=local version:
+msg.updateavailable=There is a new SysInfoMIDlet available!
+msg.updatevisitaddress=Please visit http://dl.j2mepolish.org and replace this application!
+msg.updatenotavailable=No update available.
+
+text.credits=Originally developed by Waldemar Baraldi of Grimo Software,\n< waldemar.baraldi @grimo-software.com >.\nExtended by Mark Schrijver,\n< mark.schrijver @mobillion.nl >\nand Robert Virkus,\n< j2mepolish @enough.de >

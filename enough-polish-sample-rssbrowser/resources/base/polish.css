@@ -1,0 +1,667 @@
+backgrounds {
+	mainBackground {
+		color: black;
+	}
+	
+	rssScrollUpBg {
+		type: partial-gradient;
+		top-color: #2f2f2f;
+		bottom-color: #ececec;
+		start: 0%;
+		end: 6%;
+	}
+	
+	rssScrollDownBg {
+		type: partial-gradient;
+		top-color: #ececec;
+		bottom-color: #2f2f2f;
+		start: 94%;
+		end: 100%;
+	}
+}
+
+/************************** general styles  ********************************************************************************/
+
+title {
+	layout: left | horizontal-expand;
+	padding-left: 4%;
+	font {
+		face: proportional;
+		size: large;
+		style: bold;
+		color: #00aeef;
+	}
+	background {
+		type: split;
+		top-color: #fff;
+		bottom-color: #c8c8c8; 
+	}
+}
+
+label {
+	layout: left | top | expand;
+	font {
+		size: small;
+		style: plain;
+		color: #00aeef;
+	}
+}
+
+/************************** main screen  **********************************************************************************/
+.screenMain {
+	layout: horizontal-center | vertical-center;
+	padding: 0px;
+	padding-vertical: 2%;
+	background: mainBackground;
+	/*
+	screen-orientation-change-animation: fade-out-fade-in;
+	*/
+}
+
+.screenMain:landscape {
+	columns: 2;
+	columns-width: equal;
+}
+
+.itemMain {
+	layout: expand | left;
+	padding: 2px;
+	padding-left: 10%;
+	padding-right: 10%;
+	//#if polish.hasPointerEvents
+		padding-top: 4%;
+		padding-bottom: 4%;
+	//#endif
+	font-color: #00aeef;
+	font-style: bold;
+}
+
+.itemMain:hover {
+	font-color: #fff;
+	background-color: #f26522;
+	background-width-animation {
+		on: show;
+		range: 0%..100%;
+	}
+	background-width-animation {
+		on: focus;
+		range: 100%..90%..100%;
+		duration: 140ms, 140ms;
+	}
+}
+
+.itemMain:pressed {
+	font-color: #222;
+	background-color: #f26522;
+}
+
+/************************** about screen  *********************************************************************************/
+
+.aboutAlert {
+	margin-top: 15%;
+	repaint-previous-screen: true;
+	layout: horizontal-center | vertical-center;
+	padding: 5%;
+	background-color: #000;
+	//#if polish.midp2
+	    screen-change-animation: zoomInAndHide;
+	//#else
+	    screen-change-animation: right;
+	//#endif
+}
+
+alertcontent {
+	font-color: #00aeef;
+	icon-image-align: top;
+	layout: expand | center;
+}
+
+/************************** settings screen  ******************************************************************************/
+.screenSettings extends screenMain {
+	margin-top: 15%;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	padding-left: 3px;
+	padding-right: 3px;
+	repaint-previous-screen: true;
+	screen-change-animation: right;
+	layout: vertical-shrink | bottom;
+}
+
+.updateIntervalGroup {
+	view-type: horizontal;
+}
+
+.updateIntervalGroup:hover {
+	background-color: #f26522;
+}
+
+.updateIntervalItem {
+	padding: 2px;
+	font-color: #666;
+	font-size: large;
+	font-style: bold;
+	radiobox-selected: none;
+	radiobox-plain: none;
+}
+//#if polish.hasPointerEvents
+.updateIntervalItem:hover {
+}
+//#endif
+
+//#if polish.vendor == Generic
+/** CSS media query example: when not using a touchscreen then we need to highlight the focused updateIntervalItem: */
+@media not touchscreen {
+	.updateIntervalItem:hover {
+		background-color: white;
+	}
+}
+//#endif
+
+.updateIntervalItem:checked {
+	font-color: #00aeef;
+}
+
+.volumeGauge {
+	gauge-color:  #00aeef;
+}
+
+.volumeGauge:hover {
+	background-color: #f26522;
+}
+
+.itemInput {
+	layout: left | horizontal-expand;
+	padding: 2px;
+	font-color: #00aeef;
+	background {
+		type: simple;
+		color: #c8c8c8;
+	}
+}
+
+
+.itemInput:hover {
+	font-color: #fff;
+	background-color: #f26522;
+}
+
+/************************** gestures screen  ******************************************************************************/
+.sectionHeader {
+	font-color: #00aeef;
+	font-style: bold;
+	font-size: large;
+}
+
+.sectionText {
+	font-color: #fff;
+	font-size: small;
+}
+
+.testButton {
+	padding: 3px;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	max-width: 70%;
+	layout: expand | center;
+	background {
+		type: round-rect;
+		color: #666;
+	}
+}
+
+.testButton:hover {
+	background {
+		type: round-rect;
+		color: #fff;
+	}
+}
+
+/************************** RSS browser screen ****************************************************************************/
+
+
+.rssBrowserForm {
+	padding-top: 3%;
+	padding: 0px;
+	background-color: #ececec;
+	background-top: title;
+	background-bottom: menubar;
+	scroll-up-background: rssScrollUpBg;
+	scroll-down-background: rssScrollDownBg;	
+	screen-change-animation: right;	
+}
+
+.rssBrowserTitle extends title {
+}
+
+.rssBrowser {
+	view-type: midp2;
+}
+
+.browserdownloadindicator {
+	layout: vertical-shrink | horizontal-shrink | top | right;
+}
+
+/** style for the RSS elements: */
+
+.browserlink {
+	padding-left: 4%;
+	padding-right: 4%;
+	layout: expand;
+	font {
+		style: bold;
+		color: #00aeef;
+	}
+}
+
+/** a focused RSS element: */
+
+.browserlink:hover {
+	//#if polish.name != iPhone
+		font-color: #fff;
+		background-color: #f26522;
+	//#endif
+	commands-style: popupCommands;
+}
+
+.browserlink:pressed {
+	//#if polish.name != iPhone
+		background-color: #f26522;
+	//#endif
+	font-color: #333;
+}
+
+/** define visited styles for unfocused RSS items: **/
+.browserlink:visited {
+	font-color: #999;
+}
+
+/** 
+  * Here we define a visited style for the currently selected item (which is focused):
+  */
+.browserlink:hover:visited {
+	font-color: #999;
+}
+
+.browserLinkOdd extends browserLink {
+	background-color: #8aaa;	
+}
+
+.browserlink:visited:hover {
+	//#if polish.name != iPhone
+		font-color: #999;
+		background-color: #f26522;
+	//#endif
+	commands-style: popupCommands;
+}
+
+
+.popupCommands {
+	padding: 0px;
+	background {
+		type: round-rect;
+		color: #bfff;
+	}
+	border {
+		type: round-rect;
+		color: #666;
+		width: 1px;
+	}
+	layout: horizontal-center | vertical-center;
+	child-style: popupCommandWithBorder;
+	child-style-last: popupCommand;
+	focused-style-first: popupCommandFocusedFirst;
+	focused-style-last: popupCommandFocusedLast;
+}
+
+.popupCommand {
+	padding: 2px;
+	padding-left: 10%;
+	padding-right: 10%;
+	font-size: large;
+	font-color: #00aeef;
+	font-style: bold;
+	layout: left | expand;
+	max-width: 60%;
+}
+
+.popupCommandWithBorder extends popupCommand {
+	padding-bottom: 1px;
+	border {
+		type: bottom;
+		color: #666;
+	}
+}
+
+.popupCommand:hover {
+	background-color: #00aeef;
+	font-color: #fff;
+}
+
+.popupCommandFocusedFirst extends popupCommandFocused {
+	background {
+		type: round-rect-cornered;
+		color: #00aeef;
+		straight-corners: bottom-left, bottom-right;
+	}
+}
+
+.popupCommandFocusedLast extends popupCommandFocused {
+	background {
+		type: round-rect-cornered;
+		color: #00aeef;
+		straight-corners: top-left, top-right;
+	}
+}
+
+/************************** RSS item alert screen ****************************************************************************/
+
+.rssDescriptionAlert extends aboutAlert {
+	repaint-previous-screen: true;
+	margin-top: 15%;
+	content-style: .rssDescriptionAlertContent;
+	title-style: .rssDescriptionAlertTitle;
+	screen-change-animation: right;
+	background-color: #fff;
+	background-top: title;
+	background-bottom: menubar;
+	scroll-up-background: rssScrollUpBg;
+	scroll-down-background: rssScrollDownBg;	
+	layout: vertical-shrink | bottom;
+}
+
+.rssDescriptionAlertTitle extends title {
+	max-lines: 1;
+}
+
+.rssDescriptionAlertContent {
+	font-color: #111;
+}
+
+
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #00aeef;
+	scrollbar-slider-width: 6;
+	scrollbar-fadeout: true;
+	opacity: 180;
+}
+
+
+/****************   commands menu          **********************************************************************************************/
+menubar {
+	background {
+		type: split;
+		top-color: #2f2f2f;
+		bottom-color: #000;
+	}
+}
+
+
+leftcommand {
+	font-size: large;
+	font-style: bold;
+	font-color: #00aeef;
+}
+leftcommand:pressed {
+	font-color: #fff;
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+rightcommand:pressed {
+	font-color: #fff;
+}
+middlecommand extends leftcommand {
+	layout: center;
+}
+middlecommand:pressed {
+	font-color: #fff;
+}
+
+menu {
+	padding: 0px;
+	max-width: 65%;
+	/* you can slide the menu when it is opened:
+	view-type: slide;
+	*/
+	background {
+		type: round-tab;
+		color: #fff;
+	}
+	focused-style-first: menuItemFocusedFirst;
+}
+
+menuItem {
+	padding: 2px;
+	layout: left;
+	font-color: #00aeef;
+	font-size: large;
+	border {
+		type: bottom;
+		color: #666;
+	}
+	layout: expand | left;
+}
+
+
+menuItem:hover {
+	layout: left | horizontal-expand;
+	font-color: #fff;
+	background-color: #f26522;
+}
+
+menuItem:pressed {
+	layout: left | horizontal-expand;
+	font-color: #222;	
+	background-color: #f26522;
+}
+
+
+/**
+  * The focused style for the first menu item uses a round-tab background:  
+  */
+.menuItemFocusedFirst extends menuItem {
+	layout: left | horizontal-expand;
+	font-color: #fff;
+	background {
+		type: round-tab;
+		color: #f26522;
+	}
+}
+
+.menuItemFocusedFirst:pressed {
+	layout: left | horizontal-expand;
+	font-color: #222;
+	background {
+		type: round-tab;
+		color: #f26522;
+	}
+}
+
+/**************** screen info *********/
+screeninfo {
+	background-color: white;
+	font-color: black;
+	layout: right;
+	margin-top: 20;
+}
+
+/**************** input info *********/
+info {
+	layout: right;
+	background-color: #afff;
+}
+
+/**************** keyboard *********/
+
+keyboardView {
+	padding: 0;
+	
+	background-color: #fff;	
+		
+	layout: vcenter | hcenter;	
+}
+
+keyboardViewSubmit {
+	margin: 1%;
+	min-height: 15%;
+	min-width: 15%;
+	background-color: #f26522;
+	border-color: #f26522;
+	border-width: 1;
+	font-color: #fff;
+	font-size: large;
+	text-layout: center | vcenter;
+	layout: vcenter;
+}
+
+keyboardViewDisplay {
+	margin: 1%;
+	text-layout: left | vcenter;
+	layout: expand | vcenter;
+	border-color: #f26522;
+	border-width: 1;
+	font-color: #f26522;
+	font-size: large;
+	max-lines: 1;
+	max-lines-appendix-position: before;
+}
+
+keyboardViewSubmit:hover {}
+
+keyboardViewSubmit:pressed {}
+
+//#if polish.TextField.useVirtualKeyboard
+	key extends keyDimension {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: #00aeef;
+		font-size: large;
+		
+		text-layout: center | vcenter;
+		layout: center | vcenter;
+	}
+	
+	key:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	key:hover {}
+	
+	keySpace extends keySpaceDimension {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: #00aeef;
+		font-size: large;
+		
+		layout: center | vcenter;
+	}
+	
+	keySpace:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keySpace:hover{}
+	
+	keyShift {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		background-color: #00aeef; 
+		
+		layout: center | vcenter;
+	}
+	
+	keyShift:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keyShift:hover {}
+	
+	keyMode {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		background-color: #00aeef; 
+		
+		layout: center | vcenter;
+	}
+	
+	keyMode:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keyMode:hover {}
+	
+	keyDelete {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		background-color: #00aeef; 
+		
+		layout: center | vcenter;
+	}
+	
+	keyDelete:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keyDelete:hover {}
+	
+	keyClear {
+		margin: 1%;
+		
+		border-color: #00aeef;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		background-color: #00aeef; 
+		
+		layout: center | vcenter;
+	}
+	
+	keyClear:pressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keyClear:hover {}
+//#endif

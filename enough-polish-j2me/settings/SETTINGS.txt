@@ -1,0 +1,10 @@
+This Document describes the settings necessary or recommended for the use with eclipse 3.0.
+
+1. Create Classpath-Variabel "Workspace".
+    Go to Window-> Preferences -> Java -> Java Classpath Variables.
+    Select "new..." and enter a new Variable with the name "Workspace" pointing
+    to your eclipse-workspace (e.g. /home/user/workspace).
+    
+ 2. Import CommentsForCodeGeneration.xml:
+    Go to Window-> Preferences -> Java -> Code Generation -> Code and Comments.
+    Select "Import..." and load CommentsForCodeGeneration.xml from the settings-folder of this project.

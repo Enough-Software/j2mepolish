@@ -1,0 +1,423 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Visual Guide</h1>
+	<p>
+	This guide shows you the available screens, items and screen components that you can use with J2ME Polish. 
+	Click on the UI components to learn more about them.
+	</p>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Visual Guide to Backgrounds</a></li>
+		<li><a href="gui-visualguide-borders.html">Visual Guide to Borders</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Visual Guide to Text Effects</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">Visual Guide to Item Views</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Visual Guide to Screen Transitions</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+		<li><a href="../lush/index.html">Lush (UI)</a></li>
+	</ul>
+	<%index %>
+<h2 id="gui-overview">Screen Elements</h2>
+	<!--  CSS for image map below, original from http://www.frankmanno.com/ideas/css-imagemap/ -->
+<style type="text/css" media="screen">
+
+img.imagemap{display:none}
+dl#screenElements1{margin:0;padding:0;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) top left no-repeat;height:320px;width:240px;position:relative}
+dt{margin:0;padding:0;position:absolute;font-size:85%;display:none}
+dd{margin:0;padding:0;position:absolute;font-size:85%}
+dd#titleDef{top:0px;left:40px}
+dd#titleDef a{position:absolute;width:200px;height:30px;text-decoration:none}
+dd#titleDef a span{display:none}
+dd#titleDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) -40px -320px no-repeat;top: 0px;left:0px}
+dd#titleDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold; position:absolute;bottom:100%;border:1px solid #BCBCBC;margin:0px;margin-left:20px;padding:10px;width: 150px;}
+
+dd#screenInfoDef{top:0px;left:0px}
+dd#screenInfoDef a{position:absolute;width:40px;height:30px;text-decoration:none}
+dd#screenInfoDef a span{display:none}
+dd#screenInfoDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) 0px -320px no-repeat;top: 0px;left:0px}
+dd#screenInfoDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold;position:absolute;border:1px solid #BCBCBC;bottom:100%;margin:0;padding:10px;width:150px}
+
+dd#screenbackgroundDef{top:30px;left:0px}
+dd#screenbackgroundDef a{position:absolute;width:235px;height:300px;text-decoration:none}
+dd#screenbackgroundDef a span{display:none}
+dd#screenbackgroundDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) 0px -670px no-repeat;top: 0px;left:0px}
+dd#screenbackgroundDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold; position:absolute; bottom:100%; border:1px solid #BCBCBC;margin:0px;margin-bottom:-150px;margin-left:75px;padding:10px;width:150px;}
+
+dd#scrollbarDef{top:40px;left:220px}
+dd#scrollbarDef a{position:absolute;width:20px;height:250px;text-decoration:none}
+dd#scrollbarDef a span{display:none}
+dd#scrollbarDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) -220px -360px no-repeat;top: 0px;left:0px}
+dd#scrollbarDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold; border:1px solid #BCBCBC;margin:0;margin-left:-150px;margin-top:100px;padding:10px;/*position:absolute;*/bottom:100%;width:150px;}
+
+dd#menubarDef{top:290px;left:0px}
+dd#menubarDef a{position:absolute;width:240px;height:30px;text-decoration:none}
+dd#menubarDef a span{display:none}
+dd#menubarDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_closedmenu.png) 0px -610px no-repeat;top: 0px;left:0px}
+dd#menubarDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold;position:absolute;border:1px solid #BCBCBC;bottom:100%;margin:0px;margin-left:60px;padding:10px;width: 150px;}
+
+dl#screenElements2{margin:0;padding:0;background:transparent url(<%= basedir%>images/vg_screenelements_openmenu.png) top left no-repeat;height:320px;width:240px;position:relative}
+dd#menuDef{top:205px;left:8px}
+dd#menuDef a{position:absolute;width:228px;height:87px;text-decoration:none}
+dd#menuDef a span{display:none}
+dd#menuDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_openmenu.png) -8px -524px no-repeat;top: 0px;left:0px}
+dd#menuDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold;position:absolute;border:1px solid #BCBCBC;bottom:100%;margin:0;margin-left:45px;padding:10px;width: 150px;}
+
+dl#screenElements3{margin:0;padding:0;background:transparent url(<%= basedir%>images/vg_screenelements_ticker.png) top left no-repeat;height:320px;width:240px;position:relative}
+dd#focusedDef{top:120px;left:5px}
+dd#focusedDef a{position:absolute;width:230px;height:55px;text-decoration:none}
+dd#focusedDef a span{display:none}
+dd#focusedDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_ticker.png) -5px -445px no-repeat;top: 0px;left:0px}
+dd#focusedDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold; position:absolute; bottom:100%; border:1px solid #BCBCBC;margin:0;margin-left:65px;margin-bottom:-30px;padding:10px;width:150px;}
+
+dd#tickerDef{top:240px;left:0px}
+dd#tickerDef a{position:absolute;width:240px;height:54px;text-decoration:none}
+dd#tickerDef a span{display:none}
+dd#tickerDef a:hover{position:absolute;background:transparent url(<%= basedir%>images/vg_screenelements_ticker.png) 0px -565px no-repeat;top: 0px;left:0px}
+dd#tickerDef a:hover span{display:block;text-indent:0;vertical-align:top;color:#000;background-color:#F4F4F4;font-weight:bold;position:absolute;border:1px solid #BCBCBC;bottom:100%;margin:0;margin-left:65px;margin-bottom:-30px;padding:10px;width:150px;}
+
+</style>
+
+<p>
+	There are several typical components in each application's user interface. Hover your mouse over the areas of interest to find out more about them.
+</p>
+<!--  image map -->
+<table><tr>
+<td>
+<img src="<%= basedir%>images/vg_screenelements_closedmenu.png"  width="240" height="320" class="imagemap" alt="Screen Elements 1/3" />
+	<dl id="screenElements1">
+		<dt id="screenInfo">1. ScreenInfo</dt><dd id="screenInfoDef"><a href="gui-screenelement-screeninfo.html"><span>1. Use the ScreenInfo element to display information consistently over all screens of your application.</span></a></dd>
+		<dt id="title">2. Title</dt><dd id="titleDef"><a href="gui-screenelement-title.html"><span>2. There are various options to design screen titles, including text effects.</span></a></dd>
+		<dt id="screenbackground">3. Screen Background</dt><dd id="screenbackgroundDef"><a href="gui-screenelement-screenbackground.html"><span>3. Screen backgrounds usually range from the very top to the bottom of the screen, but you can also let them start under the title and stop at the menubar.</span></a></dd>
+		<dt id="scrollbar">4. ScrollBar</dt><dd id="scrollbarDef"><a href="gui-screenelement-scrollbar.html"><span>4. J2ME Polish uses either a scrollbar (as shown here) or simple scrollindicators to inform the user about possible scrolling.</span></a></dd>
+		<dt id="menubar">5. MenuBar</dt><dd id="menubarDef"><a href="gui-screenelement-menubar.html"><span>5. Choose between two menubar options that provide different design possibilities.</span></a></dd>
+	</dl>
+</td>
+<td>
+	<img src="<%= basedir%>images/vg_screenelements_openmenu.png"  width="240" height="320" class="imagemap" alt="Screen Elements 2/3" />
+	<dl id="screenElements2">
+		<dt id="menu">6. MenuBar</dt><dd id="menuDef"><a href="gui-screenelement-menubar.html#Menu"><span>6. With J2ME Polish you can use sub menus as well.</span></a></dd>
+	</dl>
+</td>
+<td>
+	<img src="<%= basedir%>images/vg_screenelements_ticker.png"  width="240" height="320" class="imagemap" alt="Screen Elements 3/3" />
+	<dl id="screenElements3">
+		<dt id="focused">7. Focused Item</dt><dd id="focusedDef"><a href="gui-screenelement-focused.html"><span>7. Use the <code>focused</code> or the <code>[style-name]:hover</code> style selector to design interactive elements when they are focused by the user.</span></a></dd>
+		<dt id="ticker">8. Ticker</dt><dd id="tickerDef"><a href="gui-screenelement-ticker.html"><span>8. A ticker scrolls information over a screen and can include images in J2ME Polish.</span></a></dd>
+	</dld>
+</td>
+<td>
+		<div id="id_particle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-particle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_particle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+			
+	<!-- 
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-particle.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="231">
+        <embed src="<%= basedir%>images/gui-viewtype-particle.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="231"
+        >
+        </embed>
+	</object>
+	 -->
+	<br />
+	You can optionally give users a <a href="gui-screenelement-pressed.html">visual feedback when they press an item</a> using the <code>[style-name]:pressed</code> construct.
+</td>
+</tr></table>
+	<p>Direct links to all screen elements:</p>
+	<ul>
+		<li><a href="gui-screenelement-title.html">Title</a>: design the title of a screen</li>
+		<li><a href="gui-screenelement-screenbackground.html">Background</a>: design the screen's background</li>
+		<li><a href="gui-screenelement-menubar.html">Menu Bar</a>: design the commands and the menubar</li>
+		<li><a href="gui-screenelement-scrollbar.html">Scroll Bar</a>: design scroll indicators</li>
+		<li><a href="gui-screenelement-focused.html">Focused Item</a>: design the currently focused element</li>
+		<li><a href="gui-screenelement-pressed.html">Pressed Item</a>: design the currently pressed element</li>
+		<li><a href="gui-screenelement-ticker.html">Ticker</a>: add an automatically scrolled information to a single screen</li>
+		<li><a href="gui-screenelement-screeninfo.html">ScreenInfo</a>: add a static information on all screens</li>
+	</ul>
+<h2 id="gui-screens">Screens</h2>
+	<p>
+	J2ME Polish provides standard as well as advanced screens:
+	</p>
+	<h3 id="gui-screen-alert">Alert</h3>
+	<table><tr>
+		<td><a href="gui-screen-alert.html"><img src="<%= basedir%>images/gui-screen-alert.png" width="352" height="413" alt="showing an Alert as popup"/></a></td>
+		<td valign="center">Use the <a href="gui-screen-alert.html">Alert</a> to notify your user about anything important.</td>
+	</tr></table>
+	<h3 id="gui-screen-filteredlist">FilteredList</h3>
+	<table><tr>
+		<td><a href="gui-screen-filteredlist.html"><img src="<%= basedir%>images/gui-screen-filteredlist.png" width="352" height="417" alt="A FilteredList."/></a></td>
+		<td valign="center">The <a href="gui-screen-filteredlist.html">FilteredList</a> allows you to limit the number of shown entries 
+		by entering some text. This speeds up the time for finding a specific entry in a long result list, for example.
+		</td>
+	</tr></table>
+	<h3 id="gui-screen-form">Form</h3>
+	<table><tr>
+		<td><a href="gui-screen-form.html"><img src="<%= basedir%>images/gui-screen-form.png" width="354" height="416" alt="A Form in action."/></a></td>
+		<td valign="center">In a <a href="gui-screen-form.html">form</a> you can embedd any kind of items for building a rich UI.</td>
+	</tr></table>
+	<h3 id="gui-screen-framedform">FramedForm</h3>
+	<table><tr>
+		<td><a href="gui-screen-framedform.html"><img src="<%= basedir%>images/gui-screen-framedform.png" width="354" height="421" alt="FramedForm"/></a></td>
+		<td valign="center">The <a href="gui-screen-framedform.html">FramedForm</a> allows you to use one scrollable main area and several fixed frames.</td>
+	</tr></table>
+	<h3 id="gui-screen-list">List</h3>
+	<table><tr>
+		<td><a href="gui-screen-list.html"><img src="<%= basedir%>images/gui-screen-list.png" width="352" height="414" alt="A List with a fisheye view-type."/></a></td>
+		<td valign="center">Use <a href="gui-screen-list.html">Lists</a> for displaying a menu or for selecting options.</td>
+	</tr></table>
+	<h3 id="gui-screen-popup">Popup Screens</h3>
+	<table><tr>
+		<td><a href="gui-screen-popup.html"><img src="<%= basedir%>images/gui-screen-popup.png" width="352" height="418" alt="showing an Alert as popup"/></a></td>
+		<td valign="center">Use any screen as a <a href="gui-screen-popup.html">popup screen</a>.</td>
+	</tr></table>
+	<h3 id="gui-screen-processing" >Processing Screen</h3>
+<table><tr>
+	<td><a href="gui-processing.html#screen"><img src="<%= basedir%>images/processing.jpg" width="240" height="240" alt="Processing"/></a></td>
+	<td valign="center">The <a href="gui-processing.html#screen">ProcessingScreen</a> renders a <a href="gui-processing.html">Processing</a> visualization.</td>
+</tr></table>
+
+	<h3 id="gui-screen-snapshotscreen">SnapshotScreen</h3>
+	<table><tr>
+		<td><a href="gui-screen-snapshotscreen.html"><img src="<%= basedir%>images/gui-screen-snapshotscreen.png" width="351" height="414" alt="SnapshotScreen"/></a></td>
+		<td valign="center">Take camera photos on your phone with the <a href="gui-screen-snapshotscreen.html">SnapshotScreen</a>.</td>
+	</tr></table>
+	<h3 id="gui-screen-tabbedform">TabbedForm</h3>
+	<table><tr>
+		<td><a href="gui-screen-tabbedform.html"><img src="<%= basedir%>images/gui-screen-TabbedForm.png" alt="TabbedForm" width="354" heigth="419" /></a></td>
+		<td valign="center">The <a href="gui-screen-tabbedform.html">TabbedForm</a> can contain any kind of items in several tabs.</td>
+	</tr></table>
+	<h3 id="gui-screen-tabbedlist">TabbedList</h3>
+	<table><tr>
+		<td>Browse a complex set of options with the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedList.html">TabbedList</a>.
+		(Better documentation follows)
+		</td>
+		<!-- 
+		<td><a href="gui-item-picturebrowseritem.html"><img src="<%= basedir%>images/gui-item-picturebrowseritem.png"  width="70" height="58" alt="A PictureBrowserItem" /></a></td>
+		<td valign="center">Browse images with the <a href="gui-item-picturebrowseritem.html">PictureBrowserItem</a>.</td>
+		 -->
+	</tr></table>
+	<h3 id="gui-screen-tabbedpane">TabbedPane</h3>
+	<table><tr>
+		<td><a href="gui-screen-tabbedpane.html"><img src="<%= basedir%>images/gui-screen-tabbedpane.png" alt="TabbedPane" width="240" heigth="319" /></a></td>
+		<td valign="center">The <a href="gui-screen-tabbedpane.html">TabbedPane</a> manages different screens in tabs.</td>
+	</tr></table>
+	<h3 id="gui-screen-textbox">TextBox</h3>
+	<table><tr>
+		<td>&nbsp;</td>
+		<td valign="center">The TextBox is used for text input, refer to <a href="#gui-item-textfield">TextField</a> for more information.
+		<br />
+		In case you want to use a native TextBox within a J2ME Polish UI based application, just use the class name fully qualified, e.g.:
+<pre>
+javax.microedition.lcdui.TextBox box = new javax.microedition.lcdui.TextBox("Message", null, 120, TextField.ANY );
+</pre>	
+	Note that you should not use this approach for non MIDP platforms like BlackBerry.
+		</td>
+		
+	</tr></table>
+	
+
+<h2 id="gui-items">Items</h2>
+	<p>
+	You can include Items in any Form-based screens like the <a href="gui-screen-tabbedform.html">TabbedForm</a> in J2ME Polish.
+	</p>
+	
+		<h3 id="gui-item-calendaritem">CalendarItem</h3>
+	<table><tr>
+		<td><a href="gui-item-calendaritem.html"><img src="<%= basedir%>images/gui-item-calendaritem.png"  width="240" height="318" alt="A CalendarItem" /></a></td>
+		<td valign="center">Enter dates with a <a href="gui-item-calendaritem.html">CalendarItem</a>.</td>
+	</tr></table>
+	
+	
+<h3 id="gui-item-chartitem">ChartItem</h3>
+	<table><tr>
+		<td><a href="gui-item-chartitem.html"><img src="<%= basedir%>images/gui-item-chartitem.png" width="313" height="209" alt="A ChartItem" /></a></td>
+		<td valign="center">Visualize numerical data with the <a href="gui-item-chartitem.html">ChartItem</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-choicegroup">ChoiceGroup</h3>
+	<table><tr>
+		<td><a href="gui-item-choicegroup.html">
+		<img src="<%= basedir%>images/gui-viewtype-horizontalchoice.png" width="316" height="79" alt="A ChoiceGroup with a horizontal-choice view-type" />		
+		</a></td>
+		<td valign="center">Let the user select from a number of choices with a <a href="gui-item-choicegroup.html">ChoiceGroup</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-choicetextfield">ChoiceTextField</h3>
+	<table><tr>
+		<td><a href="gui-item-choicetextfield.html"><img src="<%= basedir%>images/gui-item-choicetextfield.png"  width="343" height="222" alt="A ChoiceTextField" /></a></td>
+		<td valign="center">The <a href="gui-item-choicetextfield.html">ChoiceTextField</a> helps you to enter correct data.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-clockitem">ClockItem</h3>
+	<table><tr>
+		<td><a href="gui-item-clockitem.html"><img src="<%= basedir%>images/gui-item-clockitem.png"  width="245" height="52" alt="A ClockItem" /></a></td>
+		<td valign="center">The <a href="gui-item-clockitem.html">ClockItem</a> displays the time.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-custom">CustomItem</h3>
+	<table><tr>
+		<td><a href="gui-item-customitem.html"><img src="<%= basedir%>images/extend.png" width="76" height="68" alt="Create Your Own CustomItem" /></a></td>
+		<td valign="center">Realize your own vision with a <a href="gui-item-customitem.html">CustomItem</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-datefield">DateField</h3>
+	<table><tr>
+		<td><a href="gui-item-datefield.html"><img src="<%= basedir%>images/gui-item-datefield.png"  width="235" height="85" alt="A DateField" /></a></td>
+		<td valign="center">Enter dates and times with a <a href="gui-item-datefield.html">DateField</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-filteredchoicegroup">FilteredChoiceGroup</h3>
+	<table><tr>
+		<td><a href="gui-item-filteredchoicegroup.html"><img src="<%= basedir%>images/gui-item-filteredchoicegroup.png" width="341" height="86" alt="A closed FilteredChoiceGroup" /></a></td>
+		<td valign="center">Let the user select easily from a large number of choices with a <a href="gui-item-filteredchoicegroup.html">FilteredChoiceGroup</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-gauge">Gauge</h3>
+	<table><tr>
+		<td><a href="gui-item-gauge.html"><img src="<%= basedir%>images/gui-viewtype-gauge-cycling-icons.png"  width="61" height="59" alt="A Gauge" /></a></td>
+		<td valign="center">The <a href="gui-item-gauge.html">Gauge</a> visualizes activity or let the user select a value from a given range.</td>
+	</tr></table>	
+	
+	<h3 id="gui-item-htmlbrowser">HtmlBrowser</h3>
+	<table><tr>
+		<td><a href="gui-item-htmlbrowser.html"><img src="<%= basedir%>images/gui-item-htmlbrowser.png"  width="334" height="260" alt="The HtmlBrowser with search results from Wikipedia." /></a></td>
+		<td valign="center">The <a href="gui-item-htmlbrowser.html">HtmlBrowser</a> displays an image or an alternative text.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-iconcustomitem">IconCustomItem</h3>
+	<table><tr>
+		<td><a href="gui-item-iconcustomitem.html"><img src="<%= basedir%>images/gui-item-iconcustomitem.png"  width="137" height="94" alt="An IconCustomItem" /></a></td>
+		<td valign="center">Display an image together with text using the <a href="gui-item-iconcustomitem.html">IconCustomItem</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-imageitem">ImageItem</h3>
+	<table><tr>
+		<td><a href="gui-item-imageitem.html"><img src="<%= basedir%>images/gui-item-imageitem.png"  width="70" height="58" alt="An ImageItem" /></a></td>
+		<td valign="center">The <a href="gui-item-imageitem.html">ImageItem</a> displays an image or an alternative text.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-label">Label</h3>
+	<table><tr>
+		<td><a href="gui-item-label.html"><img src="<%= basedir%>images/gui-item-label-completebackground.png" width="325" height="94" alt="A choice group with complete-background" /></a></td>
+		<td valign="center">Most items support <a href="gui-item-label.html">labels</a> which are drawn in front or on top of the actual content of an item.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-messageitem">MessageItem</h3>
+	<table><tr>
+		<td><a href="gui-item-messageitem.html"><img src="<%= basedir%>images/gui-item-messageitem.png"  width="290" height="94" alt="A MessageItem" /></a></td>
+		<td valign="center">The <a href="gui-item-messageitem.html">MessageItem</a> displays two different texts and an optional image.</td>
+	</tr></table>
+	<h3 id="gui-item-picturebrowseritem">PictureBrowserItem</h3>
+	<table><tr>
+		<td>Browse images with the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/PictureBrowserItem.html">PictureBrowserItem</a>.
+		(Better documentation follows)
+		</td>
+		<!-- 
+		<td><a href="gui-item-picturebrowseritem.html"><img src="<%= basedir%>images/gui-item-picturebrowseritem.png"  width="70" height="58" alt="A PictureBrowserItem" /></a></td>
+		<td valign="center">Browse images with the <a href="gui-item-picturebrowseritem.html">PictureBrowserItem</a>.</td>
+		 -->
+	</tr></table>
+	<h3 id="gui-item-processing" >ProcessingItem</h3>
+<table><tr>
+	<td><a href="gui-processing.html#item"><img src="<%= basedir%>images/processing.jpg" width="240" height="240" alt="Processing"/></a></td>
+	<td valign="center">The <a href="gui-processing.html#item">ProcessingItem</a> renders a <a href="gui-processing.html">Processing</a> visualization.</td>
+</tr></table>
+	<h3 id="gui-item-rssbrowser">RssBrowser</h3>
+	<table><tr>
+		<td><a href="gui-item-rssbrowser.html">
+		<img src="<%= basedir%>images/gui-item-rssbrowser.png"  width="353" height="417" alt="The RssBrowser dislaying a digg feed." />
+		</a></td>
+		<td valign="center">Use the <a href="gui-item-rssbrowser.html">RssBrowser</a> to display RSS feeds.</td>
+	</tr></table>
+	<h3 id="gui-item-spriteitem">SpriteItem</h3>
+	<table><tr>
+		<td>
+		<!-- 
+		<div id="id_spriteitem">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-item-spriteitem.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_spriteitem", "72", "75", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		 -->
+ 
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-item-spriteitem.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="72">
+	        <param name='height' value="100">
+	        <embed src="<%= basedir%>images/gui-item-spriteitem.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="72" height="100"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">Show an animated <code>javax.microedition.lcdui.game.Sprite</code> 
+			with the <a href="gui-item-spriteitem.html">SpriteItem</a>.</td>
+	</tr></table>
+	<h3 id="gui-item-stringitem">StringItem</h3>
+	<table><tr>
+		<td><a href="gui-item-stringitem.html"><img src="<%= basedir%>images/gui-texteffect-alienglow.png"  width="137" height="24" alt="A StringItem with an alien-glow text-effect" /></a></td>
+		<td valign="center">Display and design text with <a href="gui-item-stringitem.html">StringItem</a>.</td>
+	</tr></table>
+
+	<h3 id="gui-item-tableitem">TableItem</h3>
+	<table><tr>
+		<td><a href="gui-item-tableitem.html"><img src="<%= basedir%>images/gui-item-tableitem.png"  width="352" height="415" alt="Two table items in a Form." /></a></td>
+		<td valign="center">Organize date with the <a href="gui-item-tableitem.html">TableItem</a>.</td>
+	</tr></table>
+		
+	
+	<h3 id="gui-item-textfield">TextField</h3>
+	<table><tr>
+		<td><a href="gui-item-textfield.html"><img src="<%= basedir%>images/gui-item-textfield2.png"  width="228" height="163" alt="A TextField in action" /></a></td>
+		<td valign="center">You can enter input using a <a href="gui-item-textfield.html">TextField</a>.</td>
+	</tr></table>
+	
+	<h3 id="gui-item-ticker">Ticker</h3>
+	<p>
+	Show animated information on a screen using a <a href="gui-screenelement-ticker.html">Ticker</a>. In J2ME&nbsp;Polish
+	you can use Tickers like Items, as well.
+	</p>
+	<h3 id="gui-item-treeitem">TreeItem</h3>
+	<table><tr>
+		<td><a href="gui-item-treeitem.html">
+		<img src="<%= basedir%>images/gui-item-treeitem.png"  width="347" height="301" alt="A TreeItem in action" />
+		</a></td>
+		<td valign="center">Interact with hierarchical data with the <a href="gui-item-treeitem.html">TreeItem</a>.</td>
+	</tr></table>
+
+<%include end.txt %>

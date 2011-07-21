@@ -1,0 +1,59 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Screen Background Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Designing Screen Backgrounds</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="gui-screenelement-title.html">Title</a></li>
+		<li><a href="gui-screenelement-menubar.html">Menubar</a></li>
+		<li><a href="gui-screenelement-scrollbar.html">Scrollbar</a></li>
+		<li><a href="gui-screenelement-ticker.html">Ticker</a></li>
+		<li><a href="gui-screenelement-screeninfo.html">ScreenInfo</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	You can use any <a href="gui-visualguide-backgrounds.html">background</a> for screens, which fill out the complete screen by default.
+	This includes the title and the menubar areas, which is not desirable in every case. You can, therefore, specify the vertical start and
+	end points in your <i>polish.css</i> file by setting the &quot;top&quot; and &quot;bottom&quot; CSS attributes accordingly:
+<pre>
+.mailForm {
+	padding: 5;
+	padding-left: 5;
+	padding-right: 5;
+	background {
+		type: horizontal-stripes;
+		<b>top: title;
+		bottom: menubar;</b>
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+	}
+	layout: horizontal-expand | horizontal-center | top;
+}
+</pre>
+	</p>
+
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>background-top</td><td>top</td><td>top, title</td><td>screen style</td>
+		<td>
+		The top border of the background for this screen. Usually the background reaches from the very top of the screen which includes the title. By setting background-top: title; this background starts after the title.
+		</td>
+	</tr>
+	<tr>
+		<td>background-bottom</td><td>bottom</td><td>bottom, menubar</td><td>screen style</td>
+		<td>
+		The bottom border of the background for this screen. Usually the background reaches to the very bottom of the screen which includes the menubar. By setting background-bottom: menubar; this background only reaches until the menubar.
+		</td>
+	</tr>
+	</table>
+	
+
+<%include end.txt %>

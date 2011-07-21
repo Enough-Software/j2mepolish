@@ -1,0 +1,345 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+
+backgrounds {	
+	snowflakes {
+		type: snowflakes;
+		color: transparent;
+		flake-color: white;
+	}
+	gradient {
+		type: vertical-gradient;
+		top-color: #009;
+		bottom-color: #99f;
+	}
+	
+	maskGradient {
+		type: vertical-gradient;
+		top-color: #333;
+		bottom-color: red;
+	}
+	maskBackground {
+		type: round-rect;
+		color: red;
+	}
+}
+
+/*************************************** Intro Screen *******************************************************************************/
+
+.introScreen {
+	layout: vertical-center;
+	padding: 2%;
+	padding-top: 8%;
+	background {
+		type: combined;
+		foreground: snowflakes;
+		background: gradient;
+	}
+	/*
+	background-snowflakes-color-animation {
+		on: show;
+		range: white..#400;
+		duration: 10s;
+	}
+	*/
+	background-snowflakes-flake-color-animation {
+		on: show;
+		range: white..#600;
+		duration: 12s;
+		delay: 3s;
+		repeat: once;
+	}
+	background-snowflakes-number-of-flakes-animation {
+		on: show;
+		range: 5..10;
+		duration: 10s;
+		repeat: once;
+	}
+	background-snowflakes-max-flake-size-animation {
+		on: show;
+		range: 10..16;
+		duration: 10s;
+		repeat: once;
+	}
+	background-vertical-gradient-top-color-animation {
+		on: show;
+		range: #eef..#a00..#200..#000;
+		duration: 6s, 4s, 2s;
+		fire-event: intro-finish;
+		repeat: once;
+	}
+	background-vertical-gradient-bottom-color-animation {
+		on: show;
+		range: #009..black;
+		duration: 10s;
+		repeat: once;
+	}
+}
+
+.introText {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	/*
+	background-color: #fff;
+	*/
+	font-color: #d00;
+	font-style: bold;
+}
+
+.introText1 extends introText {
+	x-adjust: -110%;
+	x-adjust-animation {
+		on: intro-finish;
+		range: -100%..0%;
+		duration: 3s;
+		fire-event: intro-text1-finish;
+	}
+}
+
+.introText2  extends introText {
+	layout: right;
+	x-adjust: 110%;
+	x-adjust-animation {
+		on: intro-text1-finish;
+		range: 100%..0%;
+		duration: 3s;
+		fire-event: intro-text2-finish;
+	}
+}
+
+.introImage {
+	/*
+	layout: right;
+	padding-right: 10%;
+	x-adjust: 110%;	
+	x-adjust-animation {
+		on: intro-text1-finish;
+		range: 100%..0%;
+		duration: 500ms;
+		delay: 1500ms;
+	}
+	*/
+	padding-left: 20%;
+	opacity: 0;
+	opacity-animation {
+		on: intro-text1-finish;
+		range: 0..200..0..180..0..255;
+		duration: 100ms,100ms,100ms,100ms, 300ms;
+		delay: 1500ms,0ms, 500ms, 300ms,100ms;
+	}
+}
+
+.introText3  extends introText {
+	layout: center;
+	x-adjust: -200%;
+	x-adjust-animation {
+		on: intro-text2-finish;
+		delay: 1s;
+		range: -100%..0%;
+		duration: 0s;
+		fire-event: show-press-key;
+	}
+	background {
+		type: polygon;
+		points: -13,110 100,90 110,-10 -5,0;
+		color: #553;
+		scale-mode: scale;
+	}
+}
+
+.pressKeyText {
+	padding-top: 3px;
+	layout: center | expand;
+	x-adjust: -120%;
+	x-adjust-animation {
+		on: show-press-key;
+		range: -100%..0%;
+		duration: 0ms;
+		delay: 3s;		
+	}
+	font-color: red;
+	font-style: bold;
+	text-effect: flash;
+	/*
+	*/
+	
+}
+
+.pressKeyText:hover {
+	font-color: #c00;
+}
+
+.pressKeyText:pressed {
+	font-color: #cc0;
+}
+
+
+/*****************************   main menu screen **********************************************************************************/
+
+.mainMenuScreen {
+	background-color: #010101;
+	padding: 5%;
+	layout: vertical-center;
+	screen-change-animation: left;
+}
+
+.mainMenuItem {
+	padding: 4px;
+	layout: center | expand;
+	font-color: #eee;
+	filter: opacity;
+	filter-opacity: 50%;
+	filter-opacity-animation {
+		on: defocus;
+		range: 100%..20%;
+	}
+	/*
+	opacity: 50%;
+	opacity-animation {
+		on: defocus;
+		range: 100%..50%;
+	}
+	*/
+	
+}
+
+.mainMenuItem:hover {
+	text-effect: drop-shadow;
+	font-color: #dfdfdf;
+	text-drop-shadow-inner-color: #afff;
+	text-drop-shadow-outer-color: #4fff;
+	text-drop-shadow-outer-color-animation {
+		on: focus;
+		range: #4fff..#4dd3..#4d33..#4fff;
+		duration: 800ms,2300ms,1200;
+		delay: 0ms,600ms,0ms;
+		repeat: always;
+	}
+	background {
+		type: mask;
+		mask: maskBackground;
+		mask-color: red;
+		background: maskGradient;
+		opacity: 200;
+	}
+	background-width-animation {
+		on: focus;
+		range: 0%..100%;
+	}
+	filter-opacity-animation {
+		on: focus;
+		range: 50%..100%;
+	}
+	/*
+	opacity-animation {
+		on: focus;
+		range: 50%..100%;
+	}
+	*/
+			
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	padding-bottom: 2;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: black;
+	text-effect: shadow;
+	text-shadow-color: white;
+	background {
+		type: vertical-gradient;
+		top-color: #600;
+		bottom-color: #000;
+		start: 0%;
+		end: 100%;
+	}
+	border: none;
+	layout: horizontal-center | horizontal-expand;	
+}
+
+/*************   MENU BAR *************/
+
+menubar
+{
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+}
+
+menu {
+	margin-left: 2;
+	margin-right: 2;
+	min-width: 120;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: #666;
+	}
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: #eee;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	screen-change-animation: left;
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+.menuItem:hover {
+	background-color: #eee;
+	font-color: #222;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: #eee;
+	font-style: bold;
+	layout: left;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+
+
+

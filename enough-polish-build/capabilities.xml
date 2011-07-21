@@ -1,0 +1,152 @@
+<!-- 
+	capabilities.xml defines all known J2ME capabilities. 
+	You can add or change the existing specifications and
+	use the changed settings in the code.
+
+    Copyright (c) 2005 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+
+<capabilities>
+	
+	<capability>
+		<identifier>JavaPlatform</identifier>
+		<extension-mode>overwrite</extension-mode>
+		<group>Platform</group>
+		<required>yes</required>
+		<type>version</type>
+		<description>Defines the platform of the device, e.g. MIDP/1.0 or WIPI/2.0</description>
+	</capability>
+
+	<capability>
+		<identifier>JavaConfiguration</identifier>
+		<extension-mode>overwrite</extension-mode>
+		<group>Platform</group>
+		<required>yes</required>
+		<type>version</type>
+	</capability>
+
+	<capability>
+		<identifier>JavaPackage</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Platform</group>
+		<required>no</required>
+		<type>list</type>
+		<implicit-group>api</implicit-group>
+	</capability>
+
+	<capability>
+		<identifier>SoundFormat</identifier>
+		<extension-mode>overwrite</extension-mode>
+		<group>Multimedia</group>
+		<required>no</required>
+		<type>list</type>
+		<implicit-group>audio</implicit-group>
+	</capability>
+
+	<capability>
+		<identifier>VideoFormat</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Multimedia</group>
+		<required>no</required>
+		<type>list</type>
+		<implicit-group>video</implicit-group>
+	</capability>
+
+	<capability>
+		<identifier>ImageFormat</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Multimedia</group>
+		<required>no</required>
+		<type>list</type>
+		<implicit-group>image</implicit-group>
+	</capability>
+
+	<capability>
+		<identifier>Bugs</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Issues</group>
+		<required>no</required>
+		<type>list</type>
+	</capability>
+
+	<capability>
+		<identifier>build.BootClassPath</identifier>
+		<extension-mode>prepend</extension-mode>
+		<group>Build</group>
+		<required>no</required>
+		<type>list</type>
+	</capability>
+
+	<capability>
+		<identifier>build.Preverifier</identifier>
+		<extension-mode>overwrite</extension-mode>
+		<group>Build</group>
+		<required>no</required>
+		<type>extension</type>
+	</capability>
+
+	<capability>
+		<identifier>build.Finalizer</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Build</group>
+		<required>no</required>
+		<type>extension</type>
+	</capability>
+
+	<capability>
+		<identifier>build.Emulator.Skin</identifier>
+		<extension-mode>prepend</extension-mode>
+		<extension-mode-separator>:</extension-mode-separator>
+		<group>Build</group>
+		<required>no</required>
+		<type>list</type>
+	</capability>
+	
+	<capability>
+		<identifier>wap.userAgent</identifier>
+		<extension-mode>appendZero</extension-mode>
+		<required>no</required>
+		<description>Defines the user agent string submitted in a wap request. This is a '\1' delimited list.</description>
+		<type>singleValue</type>
+	</capability>
+	
+	<capability>
+		<identifier>vendor.alias</identifier>
+		<extension-mode>append</extension-mode>
+		<required>no</required>
+		<description>An alias name for a given vendor name</description>
+		<type>list</type>
+	</capability>
+	
+	<capability>
+		<identifier>build.android.permissions</identifier>
+		<extension-mode>append</extension-mode>
+		<required>no</required>
+		<description>The permissions for the Android device</description>
+		<type>list</type>
+	</capability>
+	
+	
+	
+</capabilities>

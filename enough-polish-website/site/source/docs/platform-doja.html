@@ -1,0 +1,133 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%define inDocumentationSection.doja %>
+<%set title = J2ME Polish: DoJa Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Developing DoJa Applications with J2ME Polish</h1>
+	<%index %>
+<p>
+DoJa is the Japanese J2ME standard created by NTT DoCoMo that also uses CLDC as its foundation. This standard provides similar capabilities as the MIDP platform. J2ME Polish includes a DoJa sample application in <i>${polish.home}/samples/doja</i>.
+</p>
+<h2 id="doja-preparations">Preparations</h2>
+<p>
+You can download DoJa emulators from the DoJa Developer Network at 
+<a href="http://www.doja-developer.net" target="_blank">http://www.doja-developer.net</a>. There are currently two versions of DoJa for the international market: 1.5 and 2.5. J2ME Polish already includes libraries for both versions. In Japan DoJa 4.0 is the current standard.
+</p><p>
+In your IDE you need to include either <i>${polish.home}/import/doja-1.5.jar</i> or <i>${polish.home}/import/doja-2.5.jar</i> to the classpath of your project.
+</p>
+<h2 id="doja-setup">J2ME Polish Setup</h2>
+<p>
+In your build.xml script you might need to specify the <code>doja.home</code> Ant property in case you have not installed the DoJa SDK to either <i>C:\jDKDoJa2.5</i> or <i>C:\iDK</i> 
+</p><p>
+You then need to adjust your device requirements, so that your application is build for DoJa devices. J2ME Polish includes some virtual devices like the <code>DoJa/os15</code> or <code>DoJa/os25</code> ones:
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;DoJa/os25&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+</p><p>
+Last but not least you need to specify your IApplication class with the <a href="build-build.html#iappli">&lt;iappli&gt;</a> element inside of the &lt;build&gt; element:
+<pre>
+&lt;build&gt;
+	&lt;iappli class=&quot;tetris.Tetris&quot; /&gt;
+	&lt;obfuscator name=&quot;ProGuard&quot; /&gt;
+	&lt;!-- ... --&gt;
+&lt;/build&gt;
+</pre>
+</p><p>
+You can now build your application and launch the emulator, e.g. by calling ant emulator from the command line. J2ME Polish creates the JAR file without a Manifest and a JAM instead of a JAD descriptor.
+</p>
+
+
+<h2 id="doja-jamattributes">Optional JAM Attributes</h2>
+<p>
+Several JAM attributes are optional, so you can set them by specifying Ant properties or J2ME Polish variables in your build.xml script. In the following example a scratchpad size of 5,120 bytes (= 5 KB)  is reserved:
+<pre>
+&lt;variables&gt;
+	&lt;variable name=&quot;doja.SPsize&quot; value=&quot;5120&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+</p><p>
+The following table lists the available optional attributes.
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Name</th><th>Explanation</th></tr>
+	<tr>
+	 <td>doja.AppParam</td>
+	 <td>Any startup parameters. These can be retrieved using com.nttdocomo.ui.IApplication.getArgs().  Multiple parameters should be separated by a space.</td>
+	</tr>
+	<tr>
+	 <td>doja.ConfigurationVer</td>
+	 <td>The J2ME configuration version, e.g. CLDC-1.0</td>
+	</tr>
+	<tr>
+	 <td>doja.ProfileVer</td>
+	 <td>The i-mode Java Application runtime environment profile version. e.g. DoJa-1.5oe </td>
+	</tr>
+	<tr>
+	 <td>doja.SPsize</td>
+	 <td>The size of the ScratchPad in bytes.</td>
+	</tr>
+	<tr>
+	 <td>doja.UseNetwork</td>
+	 <td>Set to <code>http</code> for applications which use network functionality. </td>
+	</tr>
+	<tr>
+	 <td>doja.TargetDevice</td>
+	 <td>Set to a model name if the application is targeted to a particular model. Example setting: X430i,Y430i
+Do not set this key for applications targeted to all models. </td>
+	</tr>
+	<tr>
+	 <td>doja.LaunchAt</td>
+	 <td>To launch the i-mode Java Application automatically at a specified time, set the time here. </td>
+	</tr>
+	<tr>
+	 <td>doja.AppTrace</td>
+	 <td>When the value is set to on, any information output with System.out.println() or System.err.println() will be displayed after the i-Appli is terminated. </td>
+	</tr>
+	<tr>
+	 <td>doja.DrawArea</td>
+	 <td>The size of the i-mode Java Application drawing area, e.g. 120x130</td>
+	</tr>
+	<tr>
+	 <td>doja.GetUtn</td>
+	 <td>Declares that the i-mode Java Application refers to the handset identification code and IC chip information on its SIM or UIM card. 
+Example setting: terminalid,userid
+This information can be retrieved using the com.nttdocomo.util.Phone.getProperty() method. </td>
+	</tr>
+</table>
+
+<h2 id="doja-unix">Developing DoJa Applications under Linux and Mac OS X</h2>
+<p>
+You can build DoJa applications without restrictions under Linux and Mac OS X with J2ME Polish. The DoJa Emulator/SDK is only needed for starting the emulator. 
+</p><p>
+The easiest way is to install the DoJa emulator under Windows and then copy the complete folder into your Unix file system, since the installer won't work together with wine. J2ME Polish will use wine then automatically for executing the emulator under Unix systems. Remember to specify the <code>doja.home</code> Ant property in your build.xml script.
+</p>
+
+<h2 id="doja-preprocessing">Developing for MIDP and DoJa at the Same Time</h2>
+<p>
+Since both MIDP and DoJa use the Connected Limited Device Configuration as their foundation, you can share some code between your DoJa and your MIDP release of your application. You can use the <code>polish.midp</code> and <code>polish.doja</code> preprocessing symbols for distinguishing between your releases. You can exclude a source file for the DoJa release by specifying that it requires an MIDP device, for example. Just use the appropriate #condition preprocessing directive in your Java source file:
+<pre>
+//#condition polish.midp
+</pre>
+</p><p>
+Of course you can also use these symbols in #if directives to branch within an utility class for example:
+<pre>
+//#if polish.midp
+   // store the data in a record store:
+   RecordStore store = RecordStore.openRecordStore( &quot;name&quot;, true );
+   // ...
+//#elif polish.doja
+   // store data in the scratch pad:
+   Connection con = Connector.open(&quot;scratchpad:///0; pos=0&quot;, Connector.WRITE );
+   // ...
+//#endif
+</pre>
+</p><p>
+Remember that you need to do this for your import statements as well.
+</p>
+
+
+<%include end.txt %>

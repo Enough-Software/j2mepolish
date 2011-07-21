@@ -1,0 +1,133 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download 1.1 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.1</h1>
+	<%index %>
+	<h2 id="improvements11">Improvements of J2ME Polish 1.1</h2>
+	<p>
+	J2ME Polish 1.1 contains several bugfixes and improvements compared to the last release:
+	</p>
+<ul>
+	<li><b>Mac OS X Support</b>: 
+	OS X is now officially supported by J2ME Polish, which makes it the
+	premium choice for Windows, Linux and Mac OS X developers.
+	<hr/>
+	</li>
+	<li><b>MIDlet Signing</b>: 
+	The <a href="../docs/how-tos.html#howto-signing">signing of MIDlets</a> is now 
+	supported by J2ME Polish.
+	<hr/>
+	<li><b>New &lt;java&gt; Element</b>: 
+	With the new <a href="../docs/build-build.html#java">&lt;java&gt; element</a> 
+	J2ME Polish can be extended even more.
+	<hr/>
+	</li>
+	<li><b>Binary Third Party Libraries</b>: you can now include third party
+	APIs which are available in binary-only form with the 
+	&quot;binaryLibraries&quot; attribute of the &lt;build&gt; element.
+	<hr/>
+	</li>
+	<li><b>GUI and Device Database</b>: PointerEvents are now support by J2ME Polish.
+	<hr/>
+	Devices can define the &quot;polish.needsManualMenu&quot; symbol when the
+	menu-bar should be painted by J2ME Polish, even though no fullscreen mode is
+	used. This is required for Sony Ericsson P900 for example.  
+	<hr/>
+	Devices can now define the &quot;polish.usePolishTitle&quot; variable. When this
+	variable is set to true, the title will be painted by J2ME Polish, even when
+	the MIDP/2.0 environment is available.
+	<hr/>
+	The labels of commands can now be changed with defining the variables
+	&quot;polish.command.ok&quot;, &quot;polish.command.cancel&quot;, &quot;polish.command.options&quot; and &quot;polish.command.select&quot;.
+	<hr/>
+	Updated and added device definitions. 
+	<hr/>
+	</li>
+	<li><b>JAD & MANIFEST Attributes</b>: 
+	The install-notify, delete-notify and delete-confirm attributes
+	are now added by default to both the JAD as well as the MANIFEST.
+	<hr/>
+	<li><b>build.xml and Integration</b>: 
+	The sample build.xml file has been improved, so that no clean
+	rebuild is needed when the test mode is enabled or disabled.
+	A sample for signing MIDlets has also be included.
+	<hr/>
+	J2ME Polish now integrates much nicer into new and existing projects,
+	since only the &quot;build.xml&quot; file and the &quot;resources&quot;-folder 
+	need to be copied into the project.
+	<hr/>
+	<li><b>Game-Engine</b>: 
+	Thomas Broyer improved the GameCanvas implementation in performance
+	and memory footprint.
+	<hr/>
+	</li>
+	<li><b>Bugs</b>: 
+	J2ME Polish ran into an ArrayIndexOutOfBoundsException when
+	several MIDlets were defined. This problem has been resolved.
+	<hr/>
+	The variable &quot;polish.TiledLayer.TransparentTileColor&quot; was ignored
+	by the TiledLayer implementation. It now works as advertised.
+	<hr/>
+	</li>
+	<li><b>Documentation</b>: 
+	The documentation now offers <a href="../docs/how-tos.html">How-tos</a>,
+	which give some tips and tricks about the usage of J2ME Polish.
+	<hr/>
+	</li>
+	<li><b>Thanks</b>: 
+	Thanks for this release goes to Kostas Kakoulis and J&uuml;gen Schlierf for 
+	testing pointer events, Thomas Broyer for his optimizations of the
+	GameCanvas, Michael Powers for his support on porting J2ME Polish to Mac OS X,
+	Mat Williams for bringing the install-notify etc JAD & MANIFEST attributes to attention 
+	and for his suggestions of adding support for the nested &lt;java&gt; element,
+	Sebastian Szczygiel for improvements of the device database,
+	and Thomas Kappen for the bug-report regarding several MIDlets and a casting problem.
+	And thanks to all you users of J2ME Polish!
+	<hr/>
+	</li>
+</ul>
+
+<h2 id="install">Installation</h2>
+	<p>Depending on your system setup, please doubleclick the downloaded installer 
+	or call &quot;java -jar j2mepolish-1.1.jar&quot; on the command line to
+	start the installation.</p>
+	<p>A complete instruction is available in the 
+	<a href="../docs/install.html">installation documentation</a>.</p>
+
+<h2 id="update">Update</h2>
+	<p>When you are updating J2ME Polish, please have a look at the 
+	included build.xml. A new Ant-property &quot;polish.home&quot; now eases
+	the integration of J2ME Polish into your projects.</p>
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license need to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.1.jar">I accept the above rules (download the full installer).</a><br/>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.1.zip">I accept the above rules (download only the update).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a>
+	</p>
+	
+<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 4.23 MB / 4.339 kb / 4.442.228 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package.
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_05)</a>. 
+	This update is officially recommended for security
+	reasons as well.
+	</p>
+
+<%include end.txt %>

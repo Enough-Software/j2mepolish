@@ -1,0 +1,38 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: circle Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">circle Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Displays a circle or an elipse as a background.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-circle.png"  width="197" height="49" alt="circle background" />	
+</p>
+<pre>
+.itemMain {
+	background {
+		type: circle;
+		color: #0e0;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background circle %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/CircleBackground.html">CircleBackground</a></li>
+	</ul>
+
+<%include end.txt %>

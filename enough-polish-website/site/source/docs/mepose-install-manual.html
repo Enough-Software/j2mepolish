@@ -1,0 +1,69 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.mepose %>
+<%set title = J2ME Polish: Mepose %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+<h1 id="top">Installing Mepose Manually</h1>
+	<%index %>
+<h2 id="prequisites">Prerequisites</h2>
+<p>You need the following components on your system:</p>
+<ul>
+	<li>Eclipse 3.2 
+	<a href="http://www.eclipse.org" target="_blank">http://www.eclipse.org</a>
+	<br/>Note: Eclipse 3.1.x is NOT supported.
+	</li>
+	<li>J2ME Polish 2.0 or higher
+	<a href="../download.html">http://www.j2mepolish.org</a>
+	</li>
+	<li>Java Wireless Toolkit, 
+	<a href="http://java.sun.com/products/j2mewtoolkit/index.html" target="_blank">http://java.sun.com/products/j2mewtoolkit/index.html</a> (for Windows and Linux),
+	<br/>
+	or the Mobile Power Player SDK <a href="http://mpowerplayer.com/products-sdk.php" target="_blank">http://sdk.mpowerplayer.com</a> (for Mac OS X)	
+	</li>
+	<li>Java 2 Standard Edition SDK 1.4  or higher, 
+	<a href="http://java.sun.com/j2se/" target="_blank">http://java.sun.com/j2se/</a>
+	</li>
+</ul>
+<h2 id="installoverview">Overview</h2>
+<p>You can install Mepose by using the J2ME Polish installer (when you have writing rights to your Eclipse installation) or by using the Eclipse Update Manager.
+</p>
+<p>Installing Mepose without the update manager is pretty straight forward:</p>
+<ul>
+	<li>Get the plugins archive from http://www.j2mepolish.org/eclipse/de.enough.mepose.zip</li>
+	<li>Unpack the archive in your eclipse directory</li>
+	<li>Call eclipse with the clean parameter to reread the plugin cache</li>
+</ul>
+<p>Detailed information for these steps are given below.</p>
+
+
+<h2 id="manual">Installing Mepose Manually</h2>
+<p>
+You need Eclipse 3.2 to get this thing to work. Let's start.
+</p>
+<p>
+Download all needed plugins and features as a ZIP archive.
+</p>
+
+<img src="../images/mepose-install_manual_01_download.png" />
+<p>
+After you have downloaded the archive, unpack it into your eclipse directory. E.g. if your
+eclise installation directory is at <i>C:\Program Files\eclipse</i>, unpack the contents of the archive into this
+directory.
+</p>
+
+<p>
+When you start eclipse the next time, you have to call the parameter clean on its invocation. This need to be done
+only once. One possible way whould be oben up a console, navigate to the eclipse directory and issue the command.
+</p>
+
+<img src="../images/mepose-install_manual_02_console.png" />
+<p>
+We assume linux users know how to call their eclipse with a command line parameter :)
+</p>
+<p>
+<em>You are done.</em>
+</p>
+<%include end.txt %>

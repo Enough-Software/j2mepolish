@@ -1,0 +1,161 @@
+/**
+  * In this file we change the base styles taken from resources/base/polish.css
+  */
+
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: #fff;
+	background-color: #333;
+	layout: horizontal-center | horizontal-expand;
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+}
+
+
+
+
+/** 
+  * The .mainMenu style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  */
+.mainScreen {
+	background-color: #ddd;
+	layout: vertical-center;
+	show-delay: 200ms;
+}
+
+
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  */
+.mainCommand {
+	margin-top: 2px;
+	padding: 5px;
+	padding-left: 20%;
+	font-color: #333;
+	font-style: bold;
+	font-size: medium;
+	layout: expand;
+	x-adjust: -100%;
+	x-adjust-animation {
+		on: show-first;
+		range: -100%..0%;
+	}
+}
+
+/**
+  * the focused style of mainCommand inherits all mainCommand attributes:
+  */
+.mainCommand:hover {
+	font-color: #ccc;
+	background-color: #ddd;
+	background-color-animation {
+		on: focus;
+		range: #ddd..#333;
+		duration: 1s;
+	} 
+}
+
+/**
+  * the pressed style of mainCommand inherits all mainCommand attributes:
+  */
+.mainCommand:pressed {
+	font-color: #ee0;
+	background-color: #333;
+	x-adjust: 0%;
+}
+
+/****************  Alert  ******************************************************************************************************/
+
+
+.loadGameAlert {
+	margin: 20px;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	background-color: #aeee;
+	show-dismiss-command: false;
+}
+
+
+/****************  Commands Menu ******************************************************************************************************/
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  */
+menu {
+	min-width: 65%;
+	max-width: 65%;
+	margin-left: 2px;
+	padding: 0px;
+	background-color: #fff;
+}
+
+menubar {
+	background-color: #333;
+}
+
+leftcommand {
+	font-color: #ddd;
+	font-style: bold;
+}
+
+leftcommand:pressed {
+	font-color: #ee0;
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+
+rightcommand:pressed {
+	font-color: #ee0;
+}
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  */
+menuItem {
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: #333;
+		size: medium;
+		style: bold;
+	}
+	layout: left | expand;
+}
+
+.menuItem:hover {
+	background-color: #ddd;
+	font-color: #ddd;
+	background-color-animation {
+		on: focus;
+		range: #ddd..#333;
+		duration: 1s;
+	}
+}
+
+.menuItem:pressed {
+	font-color: #ee0;
+	background-color: #333;
+}
+

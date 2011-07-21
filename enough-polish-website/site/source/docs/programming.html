@@ -1,0 +1,108 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.programming %>
+<%set title = J2ME Polish: Programming %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+	<h1 id="top">Programming</h1>
+	
+		<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="gui-css-basics.html">UI Basics</a></li>
+	<li><a href="gui-visualguide.html">Visual Guide</a></li>
+	</ul>
+	
+<p>
+J2ME Polish provides many APIs to rapdily develop mobile apps.
+</p>
+
+<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		You can find general documentation within the JavaDocs of J2ME Polish:
+		<br />
+		<a href="<%= javadocdir %>/javadoc/index.html" target="_blank">JavaDoc</a>.
+	</p>
+
+<h2 id="UI">UI Programming</h2>
+<p>
+You can use normal MIDP programming when using J2ME Polish, as the J2ME Polish
+UI is compatible with the <a href="http://jcp.org/en/jsr/detail?id=118" target="_blank">MIDP 2.0 standard</a>. On MIDP
+devices you can also mix MIDP UI and J2ME Polish UI classes by using classes such as  
+<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/midp/ui/TextBox.html">de.enough.polish.midp.ui.TextBox</a>.
+<br />
+Please also check out the <a href="gui-css-basics.html">UI Basics</a> documentation as well as the 
+<a href="gui-visualguide.html">Visual Guide</a>.
+<br >
+Use <code>#style</code> <a href="preprocessing.html">preprocessing</a> directives for binding UI components to CSS styles
+defined in <i>resources/polish.css</i>:
+</p>
+<pre>
+package de.enough.polish.sample.browser;
+
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+import de.enough.polish.browser.html.HtmlBrowser;
+
+public class BrowserMidlet 
+	extends MIDlet
+	implements CommandListener
+{
+	private Command cmdBack = new Command("Back", Command.BACK, 9);
+	private Command cmdExit = new Command("Exit", Command.EXIT, 10 );
+	private Form browserScreen;
+	private HtmlBrowser htmlBrowser;
+
+     protected void startApp() throws MIDletStateChangeException{
+          Display display = Display.getDisplay( this );
+          if (this.browserScreen == null) {
+	          <b>//#style browserScreen</b>
+	          Form form = new Form("HTML Browser");
+	          <b>//#style browser</b>
+	          this.htmlBrowser = new HtmlBrowser();
+	          // you can add a gzip resource handler for reading gzipped resources:
+	          //this.htmlBrowser.addProtocolHandler( new GZipResourceProtocolHandler() );
+	          new ChartTagHandler( this.htmlBrowser.getTagHandler("div")).register(this.htmlBrowser);
+	          form.append(this.htmlBrowser);
+	          this.htmlBrowser.go( "resource://index.html");
+	          this.htmlBrowser.setBackCommand( this.cmdBack );
+	          form.addCommand( this.cmdExit );
+	          form.setCommandListener( this );
+	          this.browserScreen = form;
+          }
+          display.setCurrent( this.browserScreen );
+     }
+
+     protected void pauseApp(){
+          // ignore
+     }
+
+     protected void destroyApp(boolean unconditional) throws MIDletStateChangeException{
+          // just exit
+     }
+
+	public void commandAction(Command cmd, Displayable disp) {
+	    //#debug
+		System.out.println("BrowserMidlet.commandAction for cmd=" + cmd.getLabel() );
+		if (cmd == this.cmdBack) {
+			this.htmlBrowser.goBack();
+		} else if (cmd == this.cmdExit) {
+			//destroyApp( true );
+			notifyDestroyed();
+		}
+	}
+
+}
+</pre>
+<p>
+Note that J2ME Polish includes many sample applications which you should look at.
+</p>
+
+	
+<%include end.txt %>

@@ -1,0 +1,56 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: IconCustomItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">IconCustomItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Display an image together with text using the <code>IconCustomItem</code>.
+	</p>
+	<h2 id="IconCustomItem-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-iconcustomitem.png"  width="137" height="94" alt="An IconCustomItem" />
+	<br />
+	The above design has been realized with these CSS settings:
+	</p>
+<pre>
+.myIconItem {
+	font-color: rgb( 30, 85, 86 );
+	icon-image-align: bottom;
+}
+</pre>
+	<h3 id="attributes-choicegroup">IconCustomItem CSS Attributes</h3>
+	<p>
+	Use following attributes to design IconCustomItems:
+	</p>
+	<%cssattributes de.enough.polish.ui.IconItem %>
+
+	
+	<h2 id="IconCustomItem-Programming">Programming</h2>
+	<p>
+	Programming the IconCustomItem is trivial as you can only specify the label, text and icon-image:
+	</p>
+<pre>
+Image startGameImage = Image.createImage(&quot;/icon_start.png&quot;);
+//#style myIconItem
+IconCustomItem item = new IconCustomItem(null, &quot;Start Game&quot;, startGameImage );
+this.form.append( item );
+</pre>
+
+
+	
+	<h2 id="IconCustomItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/IconCustomItem.html">IconCustomItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

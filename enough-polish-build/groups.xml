@@ -1,0 +1,509 @@
+<!-- 
+    This file defines the device-groups.
+    Each device can belong to an arbitrary number of groups.
+
+    Copyright (c) 2004 - 2008 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+<groups>
+	<group>
+		<name>UEI</name>
+		<description>Devices belonging to the UEI group provide UEI compatible emulators.</description>
+		<!--
+		<capability name="polish.debug.commandline"
+					value="-Xdebug;;-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${polish.debug.port}" />
+		-->
+	</group>
+
+	<group>
+		<name>Nokia-UI</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>
+		<capability name="JavaPackage" value="nokia-ui" />
+		<capability name="key.LeftSoftKey" value="-6" />
+		<capability name="key.RightSoftKey" value="-7" />
+		<capability name="Bugs" value="OverrideGetWidthGetHeightInFullCanvas" />
+	</group>
+
+	<group>
+		<name>Series40</name>
+		<parent>Nokia-UI</parent>
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="ScreenSize" value="128x128" />
+		<capability name="CanvasSize" value="128x96" />
+		<capability name="FullCanvasSize" value="128x128" />
+		<capability name="mmapi.ImageCaptureLocator" value="capture://image" />
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_S40_DP20_SDK_1_1" />
+		<capability name="Emulator.Skin.2" value="\Devices\Nokia_Prototype_SDK_3_0\devices\Prototype_3_0_S40_128x128_MIDP_Emulator" />
+		<!-- repeat first skin, so that devices can set the primary skin without
+		     loosing the normal emulator skin -->
+		<capability name="Emulator.Skin.3" value="\Devices\S40_SDK_3rd_Edition" />
+		<capability name="Emulator.Skin.4" value="Nokia_S40_DP20_SDK_1_1" />
+		<capability name="Emulator.Skin.5" value="Nokia_S40_DP20_SDK_1_0" />
+		<capability name="Font.small" value="9" />
+		<capability name="Font.medium" value="12" />
+		<capability name="Font.large" value="16" />
+		<capability name="Bugs" value="ImageCaptureNotWithVideo" />
+		<capability name="dtmf.separator" value="p"/>
+	</group>
+
+	<group>
+		<name>Series40E1</name>
+		<parent>Series40</parent>
+		<capability name="Emulator.Skin" value="Nokia_S40_DP10_SDK_1_0" />
+		<capability name="Font.medium.oldFirmware" value="16" />
+		<capability name="Font.large.oldFirmware" value="23" />
+		<capability name="RMS.MaxRecordSize" value="20 kb" />
+		<capability name="Bugs" value="stringWidthLineBreak,IncomingCallDoesNotCallPause" />
+	</group>
+	
+	<group>
+		<name>Series40DP1</name>
+		<parent>Series40E1</parent>
+	</group>
+
+	<group>
+		<name>Series40E2</name>
+		<parent>Series40</parent>
+		<capability name="ScreenSize" value="" />
+		<capability name="FullCanvasSize" value="" />
+		<capability name="Emulator.Skin" value="Nokia_S40_DP20_SDK_1_0" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi" />
+		<capability name="Bugs" value="PlatformRequestRequiresQuit,IncomingCallDoesNotCallPause" />
+	</group>
+
+	<group>
+		<name>Series40DP2</name>
+		<parent>Series40E2</parent>
+	</group>
+
+	<group>
+		<name>Series40E3</name>
+		<parent>Series40</parent>
+		<capability name="ScreenSize" value="240x320" />
+		<capability name="FullCanvasSize" value="240x320" />
+		<capability name="Emulator.Skin" value="Devices/S40_SDK_3rd_Edition_Feature_Pack_2" />
+		<capability name="Emulator.Skin.2" value="Nokia_S40_DP30_SDK_1_0" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, btapi, pdaapi, m3gapi" />
+		<capability name="Bugs" value="PlatformRequestRequiresQuit,IncomingCallDoesNotCallPause" />
+	</group>
+
+	<group>
+		<name>Series40DP3</name>
+		<parent>Series40E3</parent>
+	</group>
+
+	<group>
+		<name>Series40E3FP1</name>
+		<parent>Series40E3</parent>
+	</group>
+
+	<group>
+		<name>Series40E3FP2</name>
+		<parent>Series40E3FP1</parent>
+	</group>
+
+	<group>
+		<name>Series40E4</name>
+		<parent>Series40E3</parent>
+	</group>
+
+	<group>
+		<name>Series40E5</name>
+		<parent>Series40E4</parent>
+	</group>
+
+	<group>
+		<name>Series40E5FP1</name>
+		<parent>Series40E5</parent>
+	</group>	
+
+	<group>
+		<name>Series40E5DP1</name>
+		<parent>Series40E5</parent>
+	</group>
+	
+	<group>
+		<name>Series60</name>
+		<parent>Nokia-UI</parent>
+		<capability name="OS" value="Symbian OS 6.1" />
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="JavaPackage" value="wmapi, mmapi" />		
+		<capability name="ScreenSize" value="176x208" />
+		<capability name="FullCanvasSize" value="176x208" />
+		<capability name="CanvasSize" value="176x144" />
+		<capability name="Font.small" value="14" />
+		<capability name="Font.medium" value="15" />
+		<capability name="Font.large" value="19" />
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="\Devices\Nokia_Prototype_SDK_4_0\devices\Prototype_4_0_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.2" value="\Devices\Nokia_Prototype_SDK_4_0_Beta\devices\Prototype_4_0_Beta_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.3" value="\Devices\Nokia_Prototype_SDK_4_0_Beta\devices\Prototype_4_0_Beta_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.4" value="\Devices\Nokia_Prototype_SDK_3_0\devices\Prototype_3_0_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.5" value="Nokia_Prototype_SDK_3_0_Beta" />
+		<capability name="Emulator.Skin.6" value="\Devices\Nokia_Prototype_SDK_3_0" />
+		<capability name="Emulator.Skin.7" value="Series_60_MIDP_SDK_2_1" />
+		<capability name="Emulator.Skin.8" value="Series_60_MIDP_SDK_2_1_Beta" />
+		<capability name="Emulator.Skin.9" value="Series_60_MIDP_Concept_SDK_Beta_0_3_1_Nokia_edition" />
+		<capability name="Emulator.Skin.10" value="Nokia_Prototype_SDK_4_0_Beta\devices\Prototype_4_0_Beta_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.11" value="Nokia_Prototype_SDK_4_0\devices\Prototype_4_0_S60_MIDP_Emulator" />
+		<capability name="Emulator.Skin.12" value="\Devices\Nokia_Prototype_SDK_2_0" />
+		<capability name="Emulator.Control" value="Series60" />
+		<capability name="Bugs" value="ExitCommandAlwaysPresent, drawRgbOrigin, sizeChangedReportsWrongHeight, TransparencyNotWorkingInNokiaUiApi, displaySetCurrentFlickers, requiresHardcodedCanvasDimensionsInFullScreenMode" />
+		<capability name="dtmf.separator" value="/"/>
+	</group>
+
+	<group>
+		<name>Series60E1</name>
+		<parent>Series60</parent>
+		<capability name="Bugs" value="dateFieldAcceptsNoNullDate, dateFieldBroken, displaySetCurrentFlickers, NoBacklight" />	
+	</group>
+
+	<group>
+		<name>Series60E2</name>
+		<parent>Series60</parent>
+		<capability name="OS" value="Symbian OS 7.0s" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="VideoFormat" value="3gpp" />
+		<capability name="SoundFormat" value="midi, amr" />
+		<capability name="JavaPackage" value="btapi" />		
+		<capability name="Bugs" value="GaugeNoProgessIndicatorOnAlerts, GameCanvasGetGraphicsNotInConstructor, displaySetCurrentFlickers, NoBacklight" />
+		<!--
+		<capability name="Bugs" value="GaugeNoProgessIndicatorOnAlerts, GameCanvasGetGraphicsNotInConstructor" />
+		<capability name="Bugs" value="GaugeNoProgessIndicatorOnAlerts, GameCanvasGetGraphicsNotInConstructor, displaySetCurrentFlickers" />
+		-->
+	</group>
+	
+	<group>
+		<name>Series60E2FP1</name>
+		<parent>Series60E2</parent>
+	</group>
+
+	<group>
+		<name>Series60E2FP2</name>
+		<parent>Series60E2</parent>
+		<capability name="OS" value="Symbian OS 8.0a" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="m3g, pdaapi" />		
+		<capability name="Bugs" value="videoControlBeforePlayer" />
+	</group>
+
+	<group>
+		<name>Series60E2FP3</name>
+		<parent>Series60E2FP2</parent>
+		<capability name="OS" value="Symbian OS 8.0a" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="m3g, pdaapi, webservice" />		
+		<capability name="Emulator.Skin" value="S60_2nd_FP3_MIDP_SDK" />
+		<capability name="Bugs" value="" />
+		<!--  add E2FP3 specific bugs 	-->
+		<capability name="Bugs" value="displaySetCurrentFlickers, NoBacklight, videoControlBeforePlayer" />
+	</group>
+	
+	<group>
+		<name>Series60E3</name>
+		<parent>Series60E2FP3</parent>
+		<capability name="OS" value="Symbian OS 9.1" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="m3g, pdaapi, webservice, sipapi, svgapi, securityapi" />		
+		<capability name="build.Emulator.Skin" value="S60_3rd_MIDP_SDK" />
+		<capability name="Bugs" value="needsBottomOrientiationForStringDrawing" />
+	</group>
+
+	<group>
+		<name>Series60E3FP1</name>
+		<parent>Series60E3</parent>
+		<capability name="IconSize" value="32x32" />
+		<capability name="build.Emulator.Skin" value="S60_3rd_MIDP_SDK_FP1" />
+	</group>
+
+	<group>
+		<name>Series60E3FP2</name>
+		<parent>Series60E3</parent>
+		<capability name="IconSize" value="32x32" />
+		<capability name="build.Emulator.Skin" value="S60_3rd_FP2_SDK" />
+	</group>
+
+	<group>
+		<name>Series60E5</name>
+		<parent>Series60E2FP2</parent>
+		<features>hasPointerEvents</features>
+		<capability name="OS" value="Symbian OS 9.1" />
+		<capability name="JavaPlatform" value="MIDP/2.0, MSA/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="m3g, pdaapi, webservice, sipapi, svgapi, securityapi" />		
+		<capability name="build.Emulator.Skin" value="S60_5th_MIDP_SDK" />
+		<capability name="Bugs" value="" />
+		<capability name="Bugs" value="GaugeNoProgessIndicatorOnAlerts, GameCanvasGetGraphicsNotInConstructor, ExitCommandAlwaysPresent, drawRgbOrigin, TransparencyNotWorkingInNokiaUiApi, displaySetCurrentFlickers, requiresHardcodedCanvasDimensionsInFullScreenMode, OverrideGetWidthGetHeightInFullCanvas, needsBottomOrientiationForStringDrawing, NoBacklight, videoControlBeforePlayer" />
+	</group>
+
+	<group>
+		<name>Series80</name>
+		<parent>Nokia-UI</parent>
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="\Devices\Nokia_Prototype_SDK_3_0\devices\Prototype_3_0_S80_MIDP_Emulator" />
+		<capability name="Emulator.Skin.2" value="Series80_MIDP_SDK_1_0b" />
+		<capability name="OS" value="Symbian OS 7.0s" />
+		<capability name="JavaPackage" value="mmapi, wmapi, btapi, pdaapi" />		
+		<capability name="key.supportsAsciiKeyMap" value="true" />
+		<capability name="key.backspace" value="8" />
+		<capability name="key.escape" value="27" />
+		<capability name="key.shift" value="-50" />
+		<capability name="key.enter" value="10" />
+		<capability name="key.MiddleSoftKey" value="-14" />
+		<capability name="key.MiddleSoftKey2" value="-15" />
+		<capability name="MenuBar.Position" value="right" />
+		<capability name="MenuBar.NumberOfSoftKeys" value="4" />
+	</group>
+
+	<group>
+		<name>Series80E1</name>
+		<parent>Series80</parent>
+		<capability name="Bugs" value="displaySetCurrentFlickers, requiresHardcodedCanvasDimensionsInFullScreenMode,sizeChangedReportsWrongHeight, NoBacklight" />
+	</group>
+	
+
+	<group>
+		<name>Series80E2</name>
+		<parent>Series80E1</parent>
+		<capability name="Bugs" value="displaySetCurrentFlickers, requiresHardcodedCanvasDimensionsInFullScreenMode,sizeChangedReportsWrongHeight" />
+	</group>
+	
+	
+	<group>
+		<name>Series90</name>
+		<parent>Nokia-UI</parent>
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CDC/1.0, CLDC/1.0" />
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Series_90_MIDP_Concept_SDK_Beta_0_1" />
+		<capability name="OS" value="Symbian OS 7.0s" />
+		<capability name="JavaPackage" value="mmapi, wmapi, btapi, pdaapi" />		
+	</group>
+
+	<group>
+		<name>x55</name>
+		<features>hasCommandKeyEvents</features>
+		<capability name="OS" value="Siemens OS" />		
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="JavaPackage" value="siemens-color-game-api" />
+		<capability name="key.LeftSoftKey" value="-1" />
+		<capability name="key.RightSoftKey" value="-4" />
+		<capability name="key.MiddleSoftKey" value="-26" />
+	</group>
+	
+	<group>
+		<name>x65</name>
+		<features>hasCommandKeyEvents</features>
+		<capability name="OS" value="Siemens OS" />		
+		<capability name="ScreenSize" value="132x176" />		
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, siemens-color-game-api" />
+		<capability name="key.LeftSoftKey" value="-1" />
+		<capability name="key.RightSoftKey" value="-4" />
+		<capability name="key.MiddleSoftKey" value="-26" />
+		<capability name="key.ReturnKey" value="-12" />
+		<capability name="key.ClearKey" value="-12" />
+		<capability name="Bugs" value="layerManagerSetViewWindow, displaySetCurrentFlickers" />		
+	</group>
+	
+	<group>
+		<name>x75</name>
+		<features>hasCommandKeyEvents</features>
+		<capability name="OS" value="Siemens OS" />		
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, siemens-color-game-api" />
+		<capability name="key.LeftSoftKey" value="-1" />
+		<capability name="key.RightSoftKey" value="-4" />
+		<capability name="key.MiddleSoftKey" value="-26" />
+		<capability name="property.microedition.media.version" value="1.1" />
+		<capability name="property.supports.mixing" value="false" />
+		<capability name="property.supports.audio.capture" value="true" />
+		<capability name="property.supports.video.capture" value="true" />
+		<capability name="property.supports.recording" value="true" />
+		<capability name="property.audio.encodings" value="encoding=audio/AMR" />
+		<capability name="property.video.encodings" value="encoding=video/3gpp" />
+		<capability name="property.video.snapshot.encodings" value="encoding=jpeg encoding=image/jpeg" />		
+		<capability name="mmapi.protocol.http" value="audio/amr, audio/3gpp, video/mpeg4, video/3gpp" />
+		<capability name="SoundFormat" value="amr, 3gpp" />
+		<capability name="SoundFormat" value="mpeg4, mp4, 3gpp" />
+	</group>
+	
+	<group>
+		<name>SE-JavaPlatform1</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="JavaPackage" value="mmapi" />
+		<capability name="ScreenSize" value="128x160" />
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+	
+	<group>
+		<name>SE-JavaPlatform2</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, nokia-ui" />
+		<capability name="ScreenSize" value="176x220" />
+		<capability name="CanvasSize" value="176x176"/>
+		<capability name="FullCanvasSize" value="176x220" />
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+	
+	<group>
+		<name>SE-JavaPlatform3</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, nokia-ui, m3g" />
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform4</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, nokia-ui, m3g" />
+		<capability name="ScreenSize" value="176x220" />
+		<capability name="FullCanvasSize" value="176x220" />
+		<capability name="CanvasSize" value="176x176"/>
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform5</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="mmapi, wmapi, nokia-ui, m3g, mascot, pdaapi, btapi" />
+		<capability name="ScreenSize" value="176x220" />
+		<capability name="FullCanvasSize" value="176x220" />
+		<capability name="CanvasSize" value="176x176"/>
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="key.ReturnKey" value="-11"/>
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform6</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="wmapi2.0, webservice" />
+		<capability name="ScreenSize" value="176x220" />
+		<capability name="FullCanvasSize" value="176x220" />
+		<capability name="CanvasSize" value="176x176"/>
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="key.ReturnKey" value="-11"/>
+		<capability name="key.ReturnKey" value="-11"/>
+		<capability name="dtmf.separator" value=";postd=" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform7</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui, jsr75, jsr82, jsr120, jsr135, jsr184, jsr172, jsr205, jsr234" />
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="key.ReturnKey" value="-11"/>
+		<capability name="ScreenSize" value="" />
+		<capability name="FullCanvasSize" value="" />
+		<capability name="CanvasSize" value=""/>
+		<capability name="dtmf.separator" value=";postd=" />
+		<capability name="Bugs" value="NoPermanentBacklight, BacklightRequiresLightOff, SnapshotRequiresScreenChange" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform8</name>
+		<capability name="OS" value="Sony-Ericsson OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0, MSA/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui, jsr75, jsr82, jsr120, jsr135, jsr184, jsr172, jsr205, jsr234, jsr226, jsr177, jsr179, jsr180, jsr211, jsr229, jsr238, jsr239, jsr256" />
+		<capability name="ScreenSize" value="" />
+		<capability name="FullCanvasSize" value="" />
+		<capability name="CanvasSize" value=""/>
+		<capability name="key.MiddleSoftKey" value="-5" />
+		<capability name="MenuBar.OptionsPosition" value="left" />
+		<capability name="MenuBar.OkPosition" value="" />
+		<capability name="command.options" value="Options" />
+		<capability name="dtmf.separator" value=";postd=" />
+		<capability name="Bugs" value="usesVideoRam" />
+		<capability name="Bugs" value="displaySetCurrentFlickers, NoPermanentBacklight, BacklightRequiresLightOff, keyRepeatOverload" />
+	</group>
+		
+	<group>
+		<name>SE-JavaPlatform1Symbian</name>
+		<capability name="OS" value="Symbian UIQ OS" />
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="ScreenSize" value="208x320" />
+		<capability name="dtmf.separator" value="p" />
+	</group>
+
+	<group>
+		<name>SE-JavaPlatform2Symbian</name>
+		<capability name="OS" value="Symbian UIQ OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="JavaPackage" value="mmapi, wmapi, btapi" />
+		<capability name="ScreenSize" value="208x320" />
+		<capability name="dtmf.separator" value="p" />
+	</group>
+		
+	<group>
+		<name>DotNetCF1.1</name>
+		<capability name="OS" value="Windows Mobile 5.0" />
+		<capability name="JavaPlatform" value="MIDP/2.0, DotNetCF/1.1" />
+		<capability name="JavaConfiguration" value="CLDC/1.0" />
+		<capability name="JavaPackage" value="mmapi, wmapi" />
+	</group>
+
+	<group>
+		<name>android</name>
+		<capability name="OS" value="android" />
+	</group>
+
+</groups>

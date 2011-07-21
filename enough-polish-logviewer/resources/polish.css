@@ -1,0 +1,159 @@
+colors {
+	bgColor:  rgb(132,143,96);
+	highlightedBgColor:  rgb(238,241,229);
+	highlightedFontColor: rgb(238,241,229);
+	fontColor: black; /* rgb( 30, 85, 86 );  */
+}
+
+fonts {
+	smallFont {
+		font-color: fontColor;
+		font-size: small;
+		font-style: plain;
+	}
+}
+
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: highlightedBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	font-style: bold;
+	font-color: highlightedFontColor;
+	menubar-color: bgColor;
+	focused-style: menuFocused;
+} 
+
+.menuFocused {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	background {
+		color: bgColor;
+	}
+	font-color: highlightedFontColor;
+	font-style: bold;
+	layout: left | expand;
+}
+
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: bgColor;
+		size: medium;
+		style: plain;
+	}
+	layout: left;
+}
+
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: highlightedFontColor;
+	background-color: bgColor;
+	layout: horizontal-center | horizontal-expand;
+}
+
+focused {
+	padding: 5;
+	padding-vertical: 5;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: highlightedBgColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	/*
+	font: smallFont;
+	*/
+	layout: expand | center;
+}
+
+.message {
+}
+
+.logView {
+	padding: 5;
+	background-color: highlightedBgColor;
+}
+
+.logEntry {
+	/*
+	font: smallFont;
+	*/
+	
+}
+
+.errorForm {
+}
+
+bottomframe {
+	margin: 1;
+	padding: 1;
+	padding-left: 5;
+	padding-right: 5;
+	background-color:highlightedBgColor;
+	layout: expand;
+}
+
+.filterField {
+	background-color: white;
+	focused-style: .filterFocused;
+	font: smallFont;
+	min-width: 40;
+}
+
+.filterFocused {
+	font: smallFont;
+	background {
+		color: white;
+		border-width: 2;
+	}
+	layout: expand;
+	min-width: 40;
+}
+
+.activityMonitor {
+}
+
+.uploadScreen {
+	background-color: highlightedBgColor;
+}
+
+.uploadSettingsForm {
+	background-color: highlightedBgColor;
+}
+
+.input {
+	font-color: black;
+	background-color: white;
+	layout: left | expand;
+}
+
+info {
+	margin: 3;
+	margin-right: 10;
+	padding: 2;
+	background {
+		color: white;
+		border-color: bgColor;
+	}
+	font-style: plain; 
+	font-face: proportional; 
+	font-size: small; 
+	font-color: fontColor; /* a color defined in the "colors" section */
+	layout: right;
+}

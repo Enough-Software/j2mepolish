@@ -1,0 +1,26 @@
+<!-- created by J2ME Polish on Sat Nov 13 16:31:15 CET 2004 -->
+<data-definition>
+	<description>A sample definition of level-data.</description>
+	<extension>.data</extension>
+	<type name="BytePosition"><subtype type="byte" /><subtype type="byte" /></type>
+	<type name="ShortPosition"><subtype type="short" /><subtype type="short" /></type>
+	<entry name="playerX" type="short" count="1" />
+	<entry name="playerY" type="short" count="1" />
+	<entry name="numberOfRoads" type="byte" count="1" />
+	<entry name="roadYPositions" type="short" count="numberOfRoads" />
+	<entry name="carSpeed" type="byte" count="1" />
+	<entry name="numberOfCars" type="byte" count="1" />
+	<entry name="carPositions" type="BytePosition" count="numberOfCars" />
+	<entry name="vanSpeed" type="byte" count="1" />
+	<entry name="numberOfVans" type="byte" count="1" />
+	<entry name="vanPositions" type="BytePosition" count="numberOfVans" />
+	<entry name="truckSpeed" type="byte" count="1" />
+	<entry name="numberOfTrucks" type="byte" count="1" />
+	<entry name="truckPositions" type="BytePosition" count="numberOfTrucks" />
+	<entry name="numberOfTargets" type="byte" count="1" />
+	<entry name="targetPositions" type="ShortPosition" count="numberOfTargets" />
+	<entry name="numberOfCols" type="byte" count="1" />
+	<entry name="numberOfRows" type="byte" count="1" />
+	<entry name="cells" type="byte" count="numberOfCols * numberOfRows" />
+	<entry name="levelTime" type="short" count="1" />
+</data-definition>

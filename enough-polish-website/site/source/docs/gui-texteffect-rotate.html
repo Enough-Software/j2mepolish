@@ -1,0 +1,56 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Rotate Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Rotate Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The rotate text-effect rotates the text. This effect requires MIDP 2.0 with floating point support 
+	(either by supporting the CLDC&nbsp;1.1 configuration or by using the <a href="floater.html">Floater</a> tool).
+	</p>
+	<h2 id="Shadow-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-rotate.png"  width="135" height="35" alt="the rotate text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with following settings:
+	</p>
+<pre>
+title {
+        //#if polish.midp2 and polish.hasFloatingPoint
+			text-effect: rotate;
+			text-rotate-angle: 8;
+        //#endif
+        layout: horizontal-center | horizontal-expand;
+        font {
+			face: proportional;
+			size: large;
+			style: bold;
+			color: #333;
+        }
+        background {
+			type: simple;
+			color: #ffffffff;
+        }
+}	
+</pre>
+<p>
+	Specific design attributes of the rotate text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.RotateTextEffect %>
+		
+	<h2 id="Rotate-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/RotateTextEffect.html">RotateTextEffect</a>.
+	</p>
+
+<%include end.txt %>

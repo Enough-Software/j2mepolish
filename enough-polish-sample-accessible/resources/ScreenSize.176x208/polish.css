@@ -1,0 +1,22 @@
+/** 
+  * This file defines changes to the default design 
+  * for phones that have a screen resolution of 176x208 pixels
+  */
+
+title {
+	background: none;
+	border: none;
+}
+
+menu {
+	menubar-color: transparent;
+}
+
+.mainScreen {
+	background {
+		type: image;
+		color: transparent;
+		image: url( bg.png );
+	}
+}
+

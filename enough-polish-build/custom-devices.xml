@@ -1,0 +1,51 @@
+<!--
+This is just an example how you can extend the device database without
+interfering with the core files "devices.xml", "groups.xml", "apis.xml" and "vendors.xml".
+By using "custom-devices.xml", "custom-groups.xml", "custom-apis.xml" and "custom-vendors.xml"
+you can extend the database without needing to merge the file every time you update J2ME Polish.
+
+You can use this file either in the installation folder of J2ME Polish or in your project folder.
+
+Please have a look at the PDF documentation for a in-depth description of the device database.
+
+You must not define any device here that has already been defined in the ${polish.home}/devices.xml.
+
+Please consider to publish your device-definitions when they could be of use for the community
+at large.
+-->
+<devices>
+
+	<!--
+	This device is outcommented because it is already defined in the general "devices.xml" file.
+	You can use this device as a blueprint for your own definitions.
+	
+	<device>
+		<identifier>Sony-Ericsson/K700, Sony-Ericsson/K700i, Sony-Ericsson/K700c</identifier>
+		<groups>Nokia-UI</groups>
+		<features>hasCamera, hasVideo, hasCommandKeyEvents</features>
+		<capability name="ScreenSize" value="176x208"/>
+		<capability name="FullCanvasSize" value="176x208"/>
+		<capability name="CanvasSize" value="176x176"/>
+		<capability name="BitsPerPixel" value="16"/>
+		<capability name="JavaPackage" value="jtwi, mmapi, wmapi1.1, 3d-api" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="SoundFormat" value="iMelody, iMelody-1.2, midi, midi40, amr, mp3, aac" />
+		<capability name="VideoFormat" value="mpeg-4, 3gpp, h.263" />
+		<capability name="ImageFormat" value="gif, gif87a, gif89a, png, png1.0, bmp, bmp3, wbmp" />
+		<capability name="CaptureImageFormat" value="jpeg" />
+		<capability name="JavaProtocol" value="http, https, ssl, tls, tcp, udp" />
+		<capability name="StorageSize" value="40 MB" />
+		<capability name="HeapSize" value="1.5 MB" />
+		<capability name="VideoHeapSize" value="500 kb" />
+		<capability name="DRM" value="OMA Phase 1" />
+		<capability name="CameraZoom" value="4" />
+		<capability name="Emulator.Skin" value="SonyEricsson_K700" />
+		<capability name="DebugInterface" value="KDWP" />
+		<capability name="Bugs" value="drawRgbOrigin, ImageIOStreamAutoClose, needsNokiaUiForSystemAlerts" />
+		<capability name="Font.small" value="15" />
+		<capability name="Font.medium" value="18" />
+		<capability name="Font.large" value="22" />
+	</device>
+	-->
+</devices>

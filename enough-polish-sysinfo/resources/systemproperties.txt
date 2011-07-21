@@ -1,0 +1,128 @@
+# System properties to read capabilities from.
+# Use the '#' to comment a line
+
+#CLDC 1.0 & 1.1, MIDP 1.0 & 2.0, and JTWI 1.0
+microedition.profiles:JavaPlatform + $value
+microedition.configuration:JavaConfiguration=$value
+microedition.locale
+microedition.platform:JavaPlatform + $value
+microedition.encoding
+microedition.commports
+microedition.hostname
+microedition.jtwi.version:JavaPlatform + $value
+microedition.msa.version
+
+#Package discovery
+microedition.media.version:JavaPackage + mmapi
+microedition.pim.version:JavaPackage + pim
+microedition.m3g.version:JavaPackage + m3gapi
+microedition.location.version:JavaPackage + locationapi
+bluetooth.api.version:JavaPackage + btapi
+microedition.io.file.FileConnection.version:JavaPackage + fileconnection
+microedition.global.version:JavaPackage + global
+microedition.chapi.version:JavaPackage + contenthandler
+microedition.sip.version:JavaPackage + sip
+wireless.messaging.version:JavaPackage + wmapi
+microedition.amms.version:JavaPackage + advancedmultimedia
+microedition.m2g.version:JavaPackage + m2g
+microedition.payment.version:JavaPackage + payment
+microedition.sensor.version:JavaPackage + sensor
+obex.api.version
+microedition.contactless.version:JavaPackage + nfc
+
+#Mobile Media API (JSR-135)
+supports.mixing
+supports.audio.capture:mmapi.SupportsAudioCapture=true
+supports.video.capture:mmapi.SupportsVideoCapture=true
+supports.recording
+audio.encodings:mmapi.audio.encodings=$value:mmapi.SupportsAudioCapture=true
+video.encodings:mmapi.video.encodings=$value:mmapi.SupportsVideoCapture=true
+video.snapshot.encodings
+streamable.contents
+
+#Wireless Messaging API (JSR-120, JSR-205)
+wireless.messaging.sms.smsc
+wireless.messaging.mms.mmsc
+
+#FileConnection API (JSR-75)
+fileconn.dir.photos
+fileconn.dir.videos
+fileconn.dir.tones
+fileconn.dir.memorycard
+fileconn.dir.private
+fileconn.dir.photos.name
+fileconn.dir.videos.name
+fileconn.dir.tones.name
+file.separator
+fileconn.dir.memorycard.name
+
+#Java APIs for Bluetooth Wireless Technology (JSR-82)
+bluetooth.l2cap.receiveMTU.max
+bluetooth.connected.devices.max
+bluetooth.connected.inquiry
+bluetooth.connected.page
+bluetooth.connected.inquiry.scan
+bluetooth.connected.page.scan
+bluetooth.master.switch
+bluetooth.sd.trans.max
+bluetooth.sd.attr.retrievable.max
+
+#Scalable 2D Vector Graphics API (JSR-226)
+microedition.m2g.svg.version
+microedition.m2g.svg.baseProfile
+
+#Mobile 3D Graphics API for J2ME (JSR-184)
+supportAntialiasing
+supportTrueColor
+supportDithering
+supportMipmapping
+supportPerspectiveCorrection
+supportLocalCameraLighting
+maxLights
+maxViewportWidth
+maxViewportHeight
+maxViewportDimension
+maxTextureDimension
+m3gRelease
+maxSpriteCropDimension
+numTextureUnits
+maxTransformsPerVertex
+
+#Security and Trust Services API (SATSA) for Java 2 Platform, Micro Edition (JSR-177)
+microedition.smartcardslots
+microedition.satsa.apdu.version
+microedition.satsa.crypto.version
+microedition.satsa.pki.version
+
+#Location API for J2ME (JSR-179)
+fileconn.dir.landmarks
+fileconn.dir.landmarks.name
+
+#Advanced Multimedia Supplements API (JSR-234)
+supports.mediacapabilities
+tuner.modulations
+audio.samplerates
+audio3d.simultaneouslocations
+camera.orientations
+camera.resolutions
+
+#J2ME Web Services API (JSR-172)
+xml.jaxp.subset.version
+xml.rpc.subset.version
+
+#S60 3rd Edition, FP2 system properties
+com.nokia.mid.imei
+com.nokia.mid.imsi
+com.nokia.mid.networkid
+com.nokia.mid.networksignal
+com.nokia.mid.networkavailability
+com.nokia.mid.batterylevel
+com.nokia.mid.countrycode
+com.nokia.mid.dateformat
+com.nokia.mid.timeformat
+
+#Others
+com.nokia.mid.dateformat
+com.nokia.mid.timeformat
+com.nokia.network.access
+com.nokia.mid.imei 

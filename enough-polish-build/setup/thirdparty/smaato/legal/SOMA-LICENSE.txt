@@ -1,0 +1,5 @@
+smaato SOMA is granted to you under followoing conditions:
+
+1) You must not reverse engineer any parts of SOMA
+2) For commercial use you need to register with smaato on http://smaato.com/dev_zone.php
+3) Full licensing conditions can be found at http://smaato.com/

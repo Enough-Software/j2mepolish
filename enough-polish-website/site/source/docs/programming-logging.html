@@ -1,0 +1,103 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.programming %>
+<%set title = J2ME Polish: Logging %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Logging</h1>
+	<p class="pullquote">
+	Logging can be essential for tracking down errors. The J2ME Polish log system is optimized for mobile usage
+	and provides real world solutions for typical requirements.
+	</p>
+	
+<p>
+	With J2ME Polish you can selectively activate and deactivate logging levels
+	for specific classes and packages. Log data is printed out to the system's output by default, but you can add
+	further log handlers for storing data to the record management system, sending log entries to your remote
+	server or even realize your own log handlers.
+	<br />
+	And best of all: you can deactivate all logging traces completely from your application once it is ready
+	for deployment.
+</p>
+<p>
+	Main features include:
+</p>
+<ul>
+  <li>Activate or deactivate log levels like debug, info, warn, error for single classes or packages. </li>
+  <li>Use your own log levels.</li>
+  <li>View log messages on real devices as well.</li>
+  <li>When log messages are not active, they will not be compiled and use, therefore, no resources at all.</li>
+  <li>The complete logging can be deactivated.</li>
+  <li>Simple <code>System.out.println()</code> calls are used for logging.</li>
+</ul>
+<%index %>
+
+<h2 id="logging-programming">Log with #debug</h2>
+<p>
+<!-- 
+To include debugging information in a J2ME application is not without problems. 
+The main problem is that any debugging slows down an application unnecessarily. 
+Another problem is that nobody wants the debugging information in an application 
+which should be deployed &quot;in the wild&quot;. With J2ME&nbsp;Polish debugging statements 
+can be included into the applications without having the above disadvantages. 
+ -->
+Use the <code>#debug</code> directive to log some debugging information:
+</p>
+<pre>
+//#debug
+System.out.println("debugging is enabled for this class.");
+</pre>
+<p>
+You can define what debugging level is used by adding the log level to  the <code>#debug</code> directive. When no level is specified the <code>debug</code> level is assumed.
+</p>
+<pre>
+//#debug info
+System.out.println("the info debugging level is enabled for this class.");
+</pre>
+<p>
+Use the <code>#mdebug</code> (multi-line debug) directive to add multiple lines of debugging information. 
+Mark the end of such sections with the <code>#enddebug</code> directive:
+</p>
+<pre>
+//#mdebug error
+e.printStackTrace();
+System.out.println("unable to load something: " + e.getMessage() );
+//#enddebug
+</pre>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Directive&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>//#debug [level]</td>
+	 <td>The next line is only compiled when the debugging setting for the class in which the debugging information is enabled for the specified level. When no level is specified, the &quot;debug&quot; level is assumed.</td>
+	</tr>
+	<tr><td>//#mdebug [level]</td>
+	 <td>The next lines up to the #enddebug directive will be compiled only when the debugging setting for the class in which the debugging information is enabled for the specified level. When no level is specified, the &quot;debug&quot; level is assumed.</td>
+	</tr>
+	<tr><td>//#enddebug</td>
+	 <td>Marks the end of the #mdebug section.</td>
+</table>
+
+<h3 id="levels">Debug Levels</h3>
+<p>
+Following debug levels are predefined:
+&quot;debug&quot;, &quot;info&quot;, &quot;warn&quot;, &quot;error&quot; and &quot;fatal&quot;. The specific level for a class can be defined with the <debug> element of the J2ME&nbsp;Polish-task:
+<pre>
+&lt;debug showLogOnError=&quot;true&quot; verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test&quot;  &gt;
+	&lt;filter pattern=&quot;com.company.package.*&quot; level=&quot;info&quot; /&gt;
+	&lt;filter pattern=&quot;com.company.package.MyClass&quot; level=&quot;debug&quot; /&gt;
+&lt;/debug&gt;
+</pre></p><p>
+Please see the section <a href="build-build.html#debug">&lt;debug&gt;</a> for further information. The levels are weighted, meaning that the debug level is lower than the info level, which is in turn lower than the error level and so forth:
+<pre>
+debug &lt; info &lt; warn &lt; error &lt; fatal &lt; user-defined
+</pre></p><p>
+Thus when the info level is activated for a class, all debugging information with the level &quot;warn&quot;, &quot;error&quot;, &quot;fatal&quot; and with a user-defined level will also be compiled. 
+User specific debugging levels can be useful for accomplishing specific tasks. For example a level &quot;benchmark&quot; could be defined to allow the measurement of the performance:
+<pre>
+//#debug benchmark
+long startTime = System.currentTimeMilis();
+callComplexMethod();
+//#debug benchmark
+System.out.println("complex method took [" + (System.currentTimeMilis() - startTime) + "] ms.");
+</pre></p>
+
+<%include end.txt %>

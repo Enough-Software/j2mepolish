@@ -1,0 +1,22 @@
+<!-- definition of device-groups -->
+<groups>
+	<group>
+		<name>Nokia-UI</name>
+		<features></features>
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="classes.fullscreen.menu" value="de.enough.polish.nokia.FullMenuCanvas" />
+		<capability name="JavaPackage" value="nokia-ui" />
+	</group>
+
+	<group>
+		<name>Series60</name>
+		<parent>Nokia-UI</parent>
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+	</group>
+
+	<group>
+		<name>Series90</name>
+		<parent>Nokia-UI</parent>
+	</group>
+		
+</groups>

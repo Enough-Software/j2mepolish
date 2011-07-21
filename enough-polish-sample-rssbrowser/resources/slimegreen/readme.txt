@@ -1,0 +1,1 @@
+This folder provides an alternative design. You can build for it by calling the 'slimegreen' target or by adding the folder as a root resource directory within the <resources> section of the build.xml script.

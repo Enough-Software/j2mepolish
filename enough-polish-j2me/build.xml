@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="enough-polish" default="doc">
+
+    <target name="doc">
+        <javadoc 
+        	destdir="doc" 
+        	access="public" 
+        	use="true" 
+        	notree="false" 
+        	nonavbar="false" 
+        	noindex="false" 
+        	splitindex="true" 
+        	author="true" 
+        	version="true" 
+        	nodeprecatedlist="false" 
+        	nodeprecated="false" 
+        	packagenames="de.enough.*" 
+        	sourcepath="source/src" 
+        	classpath="bin/classes:import/midpapi.zip:import/bluetooth.zip:import/mma.zip:import/nokiaui.zip:import/wma.zip:import/junit.jar" 
+        	doctitle="the J2ME Polish framework"/>
+    </target>
+    
+</project>

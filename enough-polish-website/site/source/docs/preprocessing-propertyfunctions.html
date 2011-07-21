@@ -1,0 +1,66 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Property Functions %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+	<h1 id="top">Property Functions</h1>
+<p>
+Property functions can be used within preprocessing statements in your source code or in your <i>polish.css</i> file, or conditions within your <i>build.xml</i> script. These functions take values and convert them according to your needs.
+<br />
+You access a preprocessing function with this syntax: <code>${functioname(parameters)}</code>. In the <i>polish.css</i> file you don't need to use the full syntax, it is enough
+to use <code>functionname(parameters);</code>.
+</p>
+<p>
+Here are some often used property functions:
+</p>
+<ul>
+	<li><b>bytes</b>: converts a memory value into bytes</li>
+	<li><b>calculate</b>: calculates the given - simple - mathematical term: <code>//#= int w = ${calculate( 3 + imagewidth(icon.png) + 3) };</code></li>
+	<li><b>color</b>: the given color value taken from your <i>polish.css</i> settings: <code>//#= int color = ${color(bgFocused)};</code></li>
+	<li><b>contains</b>: checks if the given capability contains a specific word: <code>//#if ${contains(polish.JavaPlatform, BlackBerry)}</code></li>
+	<li><b>containsIgnoreCase</b>: same as contains but is not case sensitive.</li>
+	<li><b>imagewidth</b>: Calculates the width of a resource: <code>min-width: imagewidth( icon.png );</li>
+	<li><b>imageheight</b>: Calculates the height of a resource: <code>min-height: imageheight( icon.png ) + 4;</li>
+	<li><b>isOS</b>: Checks if the current target device supports the specified operating system: <code>&lt;capability name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; unless=&quot;isOS(windows)&quot; /&gt;</code></li>
+	<li><b>version</b>: extracts a version number out of a capability or value and makes them comparable: <code>//#if ${ version(polish.JavaPlatform, BlackBerry) } &gt;= ${version(4.3)}</code></li>
+	<!-- 
+	<li><b></b>: </li>
+	<li><b></b>: </li>
+	<li><b></b>: </li>
+	<li><b></b>: </li>
+	
+ContentTypeFunction.java
+DisplayCountryFunction.java
+DisplayLanguageFunction.java
+EncodeUrlFunction.java
+EscapeFunction.java
+ExistsFunction.java
+FileSizeFunction.java
+GigaBytesFunction.java
+ImageHeightFunction.java
+ImageResourceFunction.java
+ImageWidthFunction.java
+KiloBytesFunction.java
+LocaleFileNameFunction.java
+LowerCaseFunction.java
+MegaBytesFunction.java
+NoSpaceFunction.java
+NumberFunction.java
+OsFunction.java
+PropertyFunction.java
+RelativePercentFunction.java
+ReplaceFunction.java
+ResourceFuntion.java
+StringArrayFunction.java
+TimeFunction.java
+UpperCaseFunction.java
+
+-->
+</ul>
+
+
+
+	
+<%include end.txt %>

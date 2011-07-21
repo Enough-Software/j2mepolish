@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    This file defines all vendors of J2ME devices.
+
+    Copyright (c) 2004 - 2008 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+-->
+<vendors>
+  <vendor>
+    <name>Nokia</name>
+    <groups>UEI</groups>
+    <features>hasCommandKeyEvents</features>
+    <capability name="key.ChangeInputModeKey" value="35" />
+    <!-- use the star for triggering input of symbols in direct input mode: -->
+    <capability name="key.AddSymbolKey" value="42" />
+    <capability name="MenuBar.OptionsPosition" value="left" />
+  </vendor>
+  <vendor>
+    <name>Siemens</name>
+    <features />
+    <capability name="Emulator.Class" value="SiemensEmulator" />
+    <capability name="key.LeftSoftKey" value="-1" />
+    <capability name="key.RightSoftKey" value="-4" />
+    <capability name="Property.imei" value="com.siemens.mp.imei" />
+    <capability name="Bugs" value="GetKeyStatesFails" />
+  </vendor>
+  <vendor>
+    <name>Motorola</name>
+    <features>hasCommandKeyEvents</features>
+    <capability name="JavaConfiguration" value="CLDC/1.0" />
+    <capability name="key.LeftSoftKey" value="-21" />
+    <capability name="key.RightSoftKey" value="-22" />
+    <capability name="key.MiddleSoftKey" value="-23" />
+    <capability name="key.ReturnKey" value="-8" />
+    <!--  use '0' to switch between input modes on TextFields: -->
+    <capability name="key.ChangeInputModeKey" value="48" />
+    <!--  use '#' to switch between numerical and alphanumerical input modes on TextFields: -->
+    <capability name="key.ChangeNumericalAlphaInputModeKey" value="35" />
+    <capability name="TextField.charactersKeyStar" value=" " />
+    <capability name="IconSize" value="15x15" />
+    <capability name="Property.imsi" value="IMSI" />
+    <capability name="MenuBar.OptionsPosition" value="left" />
+    <capability name="Bugs" value="ignoreTitleCall,sharedRmsRequiresSigning" />
+    <capability name="Emulator.Class" value="MotorolaEmulator" />
+  </vendor>
+  <vendor>
+    <name>Sony-Ericsson</name>
+    <features>hasCommandKeyEvents</features>
+    <capability name="Emulator.Class" value="SonyEricssonEmulator" />
+    <capability name="key.LeftSoftKey" value="-6" />
+    <capability name="key.RightSoftKey" value="-7" />
+    <capability name="key.ClearKey" value="-8" />
+    <capability name="key.ChangeInputModeKey" value="42" />
+    <capability name="TextField.charactersKeyPound" value=" " />
+    <capability name="Property.imei" value="com.sonyericsson.imei" />
+    <capability name="vendor.alias" value="SonyEricsson" />
+    <capability name="vendor.alias" value="Sony Ericsson Mobile Communications" />
+    <capability name="MenuBar.OptionsPosition" value="right" />
+    <capability name="MenuBar.OkPosition" value="left" />
+    <capability name="command.options" value="Menu" />
+    <capability name="Bugs" value="TransparencyNotWorkingInDrawPolygon,unknownSystemPropertiesThrowExceptions" />
+  </vendor>
+  <vendor>
+    <name>Samsung</name>
+    <features />
+    <capability name="key.LeftSoftKey" value="-6" />
+    <capability name="key.RightSoftKey" value="-7" />
+    <capability name="Bugs" value="SoftKeyMappedToFire" />
+    <!--  use '*' to switch between input modes on TextFields: -->
+    <capability name="key.ChangeInputModeKey" value="42" />
+    <!--  use '#' to enter spaces on TextFields: -->
+    <capability name="polish.TextField.charactersKeyPound" value=" " />
+    <!--  use '#' to open Symbol Table on TextFields: -->
+    <capability name="key.OpenSymbolTable" value="35" />
+  </vendor>
+  <vendor>
+    <name>Sagem</name>
+    <features>hasCommandKeyEvents</features>
+    <capability name="key.LeftSoftKey" value="-7" />
+    <capability name="key.RightSoftKey" value="-6" />
+  </vendor>
+  <vendor>
+    <name>Generic</name>
+    <features />
+    <groups>UEI</groups>
+  </vendor>
+  <vendor>
+    <name>Alcatel</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>LG</name>
+    <capability name="vendor.alias" value="LG Electronics" />
+    <features>hasCommandKeyEvents</features>
+  </vendor>
+  <vendor>
+    <name>NEC</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Sharp</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Sanyo</name>
+    <features />
+    <capability name="key.LeftSoftKey" value="-6" />
+    <capability name="key.RightSoftKey" value="-7" />
+  </vendor>
+  <vendor>
+    <name>Panasonic</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Casio</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Kyocera</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Hitachi</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Mitsubishi</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>BlackBerry</name>
+    <features />
+    <capability name="vendor.alias" value="RIM" />
+    <capability name="vendor.alias" value="Research In Motion Ltd." />
+    <capability name="IconSize" value="44x44" />
+  </vendor>
+  <vendor>
+    <name>Toshiba</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>TTPCom</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Mio</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Vodafone</name>
+    <features>isOperator</features>
+  </vendor>
+  <vendor>
+    <name>Sendo</name>
+  </vendor>
+  <vendor>
+    <name>BenQ</name>
+    <capability name="vendor.alias" value="BenQ-Siemens" />
+  </vendor>
+  <vendor>
+    <name>Palm</name>
+    <capability name="build.Finalizer" value="jar2prc" />
+    <capability name="Emulator.Class" value="PalmEmulator" />
+    <capability name="vendor.alias" value="PalmOne" />
+  </vendor>
+  <vendor>
+    <name>Qtek</name>
+    <features />
+    <capability name="key.LeftSoftKey" value="-6" />
+    <capability name="key.RightSoftKey" value="-7" />
+    <capability name="key.ClearKey" value="-8" />
+    <capability name="key.ChangeInputModeKey" value="35" />
+    <capability name="TextField.charactersKeyPound" value=" " />
+  </vendor>
+  <vendor>
+    <name>O2</name>
+  </vendor>
+  <vendor>
+    <name>T-Mobile</name>
+  </vendor>
+  <vendor>
+    <name>HTC</name>
+  </vendor>
+  <vendor>
+    <name>DoJa</name>
+  </vendor>
+  <vendor>
+    <name>Vertu</name>
+  </vendor>
+  <vendor>
+    <name>Imate</name>
+  </vendor>
+  <vendor>
+    <name>Verizon</name>
+  </vendor>
+  <vendor>
+    <name>NTT-DoCoMo</name>
+    <capability name="vendor.alias" value="NTT DoCoMo" />
+  </vendor>
+  <vendor>
+    <name>Native</name>
+  </vendor>
+  <vendor>
+    <name>Pantech</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Elson</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>DBTEL</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Dopod</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>HP</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>i-mate</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Spice</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Cingular</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Skyspring</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Grundig</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Asmobile</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>SoftBank</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Voxtel</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Asus</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Huawei</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Medion</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Fly</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Orange</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Innostream</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Emobile</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Toplux</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Vitelcom</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Lenovo</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Uriver</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Lobster</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Ezze</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Onda</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Bird</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>TCL</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Amoi</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>UTStarcom</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Lexus</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>ZTE</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>PhoneOne</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>B-Mobile</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Audiovox</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>RT</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>CHT</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Konka</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Haier</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Myphone</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Philips</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>KPT</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Neonode</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Kisen</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Sprint</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Capitel</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>DoCoMo</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>IM</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Gradiente</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Dallab</name>
+    <features />
+  </vendor>
+  <vendor>
+    <name>Modelabs</name>
+    <features />
+  </vendor>
+</vendors>
+

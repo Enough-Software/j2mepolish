@@ -1,0 +1,76 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Alien-Glow Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Alien-Glow Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The alien-glow effect provides an eerie glow around the text on MIDP 2.0 devices with floating point support 
+	(either by supporting the CLDC&nbsp;1.1 configuration or by using the <a href="floater.html">Floater</a> tool).
+	</p>
+	<h2 id="Alien-Glow Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-alienglow.png"  width="137" height="24" alt="the alien-glow text-effect" />
+	<br />
+<pre>
+title {
+        //#if polish.midp2 and polish.hasFloatingPoint
+               text-effect: alien-glow;
+        //#endif
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+                color: #fff;
+        }
+        background-color: #fff;
+}
+</pre>	
+	</p>
+	<p>
+	Specific design attributes of the Alien-Glow Text-Effect:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>text-alien-glow-inner-color</td>
+		<td>#FFFFFFFF</td>
+		<td>ARGB color definition</td>
+		<td>
+		The inner part color of the glow.
+<pre>
+text-alien-glow-inner-color: #c00f;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-alien-glow-outer-color</td>
+		<td>#FF00FF00</td>
+		<td>ARGB color definition</td>
+		<td>
+		The outer part color of the glow.
+<pre>
+text-alien-glow-outer-color: #af00;
+</pre>
+		</td>
+	</tr>
+	</table>
+	
+	
+	<h2 id="Alien-Glow Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/AlienGlowTextEffect.html">AlienGlowTextEffect</a>.
+	</p>
+
+<%include end.txt %>

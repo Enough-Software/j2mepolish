@@ -1,0 +1,32 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: Java SE Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Developing for Java SE</h1>
+<p>
+You can create a project for Java SE just by adding the device 
+<a href="http://devices.j2mepolish.org/interactivedb/searchdevices.faces?term=polish.Identifier.Generic/Java" target="_blank">Generic/Java</a> 
+to the list of target devices in your 
+<a href="build-deviceRequirements.html">build.xml</a> script.
+</p>
+<p>
+J2ME Polish will then integrate the <a href="http://microemu.org"  target="_blank">microemulator</a>, so that
+you can just double click the generated JAR file for starting the application - you only need to have Java installed for that.
+</p>
+<h2 id="knownlimitations">Known Limitations</h2>
+<p>
+There are a couple of limitations of this approach at the moment:
+</p>
+<ul>
+	<li><b>MIDlet.getAppProperty()</b>: JAD or MANIFEST attributes are not supported.</li>
+	<li><b>API Limitations</b>: Currently only following APIs are supported: wmapi, mmapi, btapi and pdaapi.</li>
+	<li><b>Full Emulator</b>: The emulator menu is visible and no device skin is integrated.</li>
+	<!-- 
+	<li><b></b>: </li>
+	-->
+</ul>
+
+
+<%include end.txt %>

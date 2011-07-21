@@ -1,0 +1,4 @@
+<langpack>
+	<str id="installer.quit.reversemessage" txt="Are you sure you want to cancel the installation of J2ME Polish?"/>
+	<str id="installer.quit.reversetitle" txt="$APP_NAME $APP_VER"/>
+</langpack>

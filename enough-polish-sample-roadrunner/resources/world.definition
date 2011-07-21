@@ -1,0 +1,14 @@
+<!-- created by J2ME Polish on Fri Nov 05 14:32:34 CET 2004 -->
+<data-definition>
+	<entry name="idleSequenceLength" type="byte" count="1" />
+	<entry name="idleSequence" type="byte" count="idleSequenceLength" />
+	<entry name="tiltedIdleSequenceLength" type="byte" count="1" />
+	<entry name="tiltedIdleSequence" type="byte" count="tiltedIdleSequenceLength" />
+	<entry name="jumpSequenceLength" type="byte" count="1" />
+	<entry name="jumpSequence" type="byte" count="jumpSequenceLength" />
+	<entry name="jumpDistances" type="byte" count="jumpSequenceLength" />
+	<entry name="targetReachedSequenceLength" type="byte" count="1" />
+	<entry name="targetReachedSequence" type="byte" count="targetReachedSequenceLength" />
+	<entry name="dyingSequenceLength" type="byte" count="1" />
+	<entry name="dyingSequence" type="byte" count="dyingSequenceLength" />
+</data-definition>

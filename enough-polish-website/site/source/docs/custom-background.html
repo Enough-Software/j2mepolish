@@ -1,0 +1,216 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.extending %>
+<%set title = J2ME Polish: Extending J2ME Polish %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Adding a Custom Background</h1>
+<%index %>
+<p>
+For adding a new background, please create a new project called &quot;background-project&quot; and make sure that the files &quot;enough-j2mepolish-build.jar&quot;, &quot;enough-j2mepolish-client.jar&quot; and the &quot;midp2.jar&quot; are on the classpath of the project. These files can be found in the &quot;import&quot; folder of the J2ME&nbsp;Polish installation directory.
+</p><p>
+Each background needs two implementation classes: one class for the client-side which is responsible for the actual painting and another one for the server-side which is responsible for creating the client-background-class and reading the parameters from the CSS definitions.
+</p><p>
+As an example we create and integrate an animated background, which paints a &quot;pulsating&quot; circle.
+Please note that this background is now directly available in J2ME Polish from version 1.0 onwards.
+</p>
+<h2 id="client">Creating the Client-Side Background-Class</h2>
+<p>
+For using a new background, just create a new class which extends the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/Background.html" target="_blank">de.enough.polish.ui.Background</a> class.
+</p><p>
+We are starting with a simple background, which paints a filled out circle. For the constructor we only need one parameter - the desired color of the circle:
+<pre>
+//#condition polish.usePolishGui
+
+package com.company.backgrounds;
+
+import javax.microedition.lcdui.Graphics;
+import de.enough.polish.ui.Background;
+
+public class PulsatingCircleBackground extends Background {
+	
+	private final int color;
+
+	public PulsatingCircleBackground( int color ) {
+		super();
+		this.color = color;
+	}
+
+	public void paint(int x, int y, int width, int height, Graphics g) {
+		g.setColor( this.color );
+		g.fillArc( x, y, width, height, 0, 360 );
+	}
+
+}
+</pre></p><p>
+The paint method is used to render the background and needs to be implemented by all subclasses of Background. The #condition-directive at the top ensures that the PulsatingCircleBackground is included only when the GUI of J2ME&nbsp;Polish is actually used.
+</p><p>
+This background is useful, but a bit boring, so we add an animation to it: the background-diameter should grow and shrink constantly. For doing this we need to override the animate()-method, which is used to implement animations. When this method returns &quot;true&quot;, a repaint will be triggered resulting in a call of the paint()-method. With returning false the background indicates that no repaint is necessary.
+<pre>
+public class PulsatingCircleBackground extends Background {
+	
+	private final int color;
+	private final int maxDiameter;
+	private final int minDiameter;
+	private int currentDiameter;
+	private boolean isGrowing = true;
+
+	public PulsatingCircleBackground( int color, int minDiameter, int maxDiameter ) {
+		super();
+		this.color = color;
+		this.minDiameter = minDiameter;
+		this.maxDiameter = maxDiameter;
+		this.currentDiameter = minDiameter;
+	}
+
+	public void paint(int x, int y, int width, int height, Graphics g) {
+		g.setColor( this.color );
+		int centerX = x + width / 2;
+		int centerY = y + height / 2;
+		int offset = this.currentDiameter / 2;
+		x = centerX - offset;
+		y = centerY - offset;
+		g.fillArc( x, y, this.currentDiameter, this.currentDiameter, 0, 360 );
+	}
+
+	public boolean animate() {
+		if (this.isGrowing) {
+			this.currentDiameter++;
+			if (this.currentDiameter == this.maxDiameter) {
+				this.isGrowing = false;
+			}
+		} else {
+			this.currentDiameter--;
+			if (this.currentDiameter == this.minDiameter) {
+				this.isGrowing = true;
+			}
+		}
+		return true;
+	}
+}
+</pre></p><p>
+The implementation uses the field &quot;currentDiameter&quot;, which is either decreased or increased in each run of the animate()-method. The constructor now has two additional parameters: the minimum diameter and the maximum diameter for the circle.
+</p>
+
+<h2 id="server">Creating the Server-Side Background-Class</h2>
+<p>
+For converting CSS-style information into the appropriate background object, we need to 
+implement a converter class which extends 
+<a href="<%= javadocdir %>../javadoc/build/de/enough/polish/preprocess/BackgroundConverter.html" target="_blank">de.enough.polish.preprocess.BackgroundConverter</a>.
+</p><p>
+This class reads the provided CSS information and creates the source-code for creating a new instance:
+<pre>
+//#condition false
+
+package com.company.backgrounds;
+
+import java.util.HashMap;
+import org.apache.tools.ant.BuildException;
+import de.enough.polish.preprocess.BackgroundConverter;
+import de.enough.polish.preprocess.Style;
+import de.enough.polish.preprocess.StyleSheet;
+
+public class PulsatingCircleBackgroundConverter extends BackgroundConverter {
+
+	public PulsatingCircleBackgroundConverter() {
+		super();
+	}
+
+	protected String createNewStatement(
+			HashMap background, 
+			Style style,
+			StyleSheet styleSheet ) 
+	throws BuildException {
+		String minDiameterStr = (String) background.get( "min-diameter");
+		if (minDiameterStr == null) {
+			throw new BuildException("Invalid CSS: the pulsating-circle background needs the attribute [min-diameter].");
+		}
+		String maxDiameterStr  = (String) background.get( "max-diameter");
+		if (maxDiameterStr == null) {
+			throw new BuildException("Invalid CSS: the pulsating-circle background needs the attribute [max-diameter].");
+		}
+		// now check if these diameters have valid values:
+		int minDiameter = parseInt("min-diameter", minDiameterStr);
+		int maxDiameter = parseInt("max-diameter", maxDiameterStr);
+		if (maxDiameter &lt;= minDiameter ) {
+			throw new BuildException("Invalid CSS: the [min-diameter] attribute of the pulsating-circle background needs to be smaller than the [max-diameter].");
+		}
+		if (minDiameter &lt; 0 ) {
+			throw new BuildException("Invalid CSS: the [min-diameter] attribute of the pulsating-circle background needs to be greater or equals 0.");
+		}
+		// okay, the min- and max-diameter parameters are okay:
+		return "new com.company.backgrounds.PulsatingCircleBackground( "
+			+ this.color + ", " + minDiameterStr + ", " + maxDiameterStr + ")";
+	}
+
+}
+</pre></p><p>
+ 
+In the method &quot;createNewStatement&quot; we read the provided values from the HashMap. To parse these values we can the helper-method 
+parseInt( String attributeName, String attributeValue ), parseFloat( String attributeName, String attributeValue ), parseColor( String colorValue ) and getUrl( String url ). 
+</p><p>
+In our example we want to use the attribute &quot;color&quot;, &quot;min-diameter&quot; and &quot;max-diameter&quot;. The color value is parsed by the super-class already and can be accessed with &quot;this.color&quot;. In case no color has been defined, the background color defaults to white. When a required value is missing or a value is set wrong, we throw a BuildException explaining the details of what went wrong. When everything is okay, we return a String in which a new instance of our background is created.
+</p><p>
+We included the #condition &quot;false&quot;, so that this file is never included in the J2ME application. This is useful when the same source folder is used for the client-background-class as well as the server-background-class.
+</p>
+<h2 id="integrate">Integrating the Custom Background</h2>
+<p>
+To use our background, we need to ensure that the classes can be found and to use it in the polish.css file:
+</p><p>
+At first we make sure, that the classpath includes our background-project. The easiest way is to do this in the definition of the J2ME&nbsp;Polish task within the build.xml:
+<pre>
+&lt;taskdef 
+	name=&quot;j2mepolish&quot; 
+	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+	classpath=&quot;import/enough-j2mepolish-build.jar:import/jdom.jar: import/proguard.jar:../background-project/bin/classes&quot;
+/&gt;
+</pre></p><p>
+Secondly we need to inform J2ME&nbsp;Polish about the additional source-folder.We do this by specifying the &quot;srcDir&quot;-attribute of  the <build>-element in the build.xml. Several directories can be specified by separating them with colons:
+<pre>
+&lt;j2mepolish&gt;
+	    [...]
+	&lt;build
+		symbols=&quot;ExampleSymbol, AnotherExample&quot;
+		imageLoadStrategy=&quot;background&quot;
+		fullscreen=&quot;menu&quot;
+		usePolishGui=&quot;true&quot;
+		srcDir=&quot;source/src:../background-project/source/src&quot;
+		&gt;
+	    [...]
+	&lt;/build&gt;
+&lt;/j2mepolish&gt;
+</pre>
+</p><p>
+Thirdly and lastly we need to use the new background in the &quot;resources/polish.css&quot; file of our application. As the type we need to define the SERVER-side converting class:
+<pre>
+focused {
+	padding: 5;
+	background {
+		type: com.company.backgrounds.PulsatingCircleBackgroundConverter;
+		color: white;
+		min-diameter: 20;
+		max-diameter: 70;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | center;
+}
+</pre></p><p>
+Now we can build the application by calling Ant to check the result:
+<br/>
+<img src="../images/screenshot-custom-background-circle1.png" width="204" height="276" alt="The custom background in action."/>
+<img src="../images/screenshot-custom-background-circle2.png" width="200" height="269" alt="Now with a big diameter."/>
+</p>
+
+<h2 id="javadoc">JavaDoc Resources</h2>
+<p>Please refer to these JavaDoc resources for detailed information:</p>
+<ul>
+	<li><b>Background</b>: <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/Background.html" target="_blank">de.enough.polish.ui.Background</a></li>
+	<li><b>BackgroundConverter</b>: <a href="<%= javadocdir %>../javadoc/build/de/enough/polish/preprocess/BackgroundConverter.html" target="_blank">de.enough.polish.preprocess.BackgroundConverter</a></li>
+</ul>
+
+<%include end.txt %>

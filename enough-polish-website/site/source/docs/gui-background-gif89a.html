@@ -1,0 +1,61 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: gif89a Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">gif89a Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Display animated GIF89a images on devices with MMAPI support.
+	Note that nothing can be painted in front of the animated image, as this is usually rendered natively and directly by the operating system.
+	</p>
+	<h2 id="Design">Design</h2>
+	<!-- 
+	<p>
+	<img src="<%= basedir%>images/gui-background-gif89a.png"  width="" height="" alt="gif89a background" />	
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-gif89a.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="43">
+        <embed src="<%= basedir%>images/gui-background-gif89a.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="43"
+        >
+        </embed>
+	</object>
+</p>
+	 -->
+<pre>
+title {
+	font-color: black;
+	//#if polish.api.mmapi
+		min-height: imageheight( love.gif );
+		background {
+			type: animated-gif;
+			color: white;
+			image: url( love.gif );
+			anchor: right | vertical-center;
+			x-offset: 3;
+		}
+	//#endif
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background gif89a %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/AnimatedGifBackground.html">AnimatedGifBackground</a></li>
+	</ul>
+
+<%include end.txt %>

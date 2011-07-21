@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/src"/>
+	<classpathentry output="bin/test" kind="src" path="source/test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="import/junit.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/lib/ant.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

@@ -1,0 +1,91 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: numbered view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">numbered view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-container">Container View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+		<li><a href="gui-screenelement-menubar.html">Commands Menu</a></li>
+	</ul>
+	<p>
+	The <code>numbered</code> view-type adds the position of each item as it's label.
+	It is typically used for the <a href="gui-screenelement-menubar.html">commands menu</a>.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<img src="<%= basedir%>images/gui-viewtype-numbered.png" width="347" height="414" alt="The numbered view-type" />		
+		<br />
+		Since the <code>numbered</code> view-type adds the numbers as labels, you might want to use
+		the <code>label-style</code> attribute to adjust the style of numbers as shown in the example
+		below:
+	</p>
+<pre>
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	font-color: brightFontColor;
+	font-style: bold;
+	view-type: slide-up;
+	<b>view-type: numbered;</b>
+}
+
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	<b>label-style: menuLabel;</b>
+}
+
+menuItem:hover {
+	background-color: bgColor;
+	font-color: brightFontColor;
+	layout: left | horizontal-expand;
+	<b>label-style: menuLabelFocused;
+	include-label: true;</b>
+}
+
+.menuLabel {
+	padding: 3;
+	font-color: fontColor;
+	font-style: bold;
+}
+
+.menuLabelFocused {
+	padding: 2;
+	font-color: brightFontColor;
+	font-style: bold;
+	border {
+		type: circle;
+		width: 1;
+		color: brightFontColor;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.containerviews.NumberedContainerView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/containerviews/NumberedContainerView.html">NumberedContainerView</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,204 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: List %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using Lists</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-filteredlist.html">FilteredList</a></li>
+		<li><a href="gui-visualguide.html#gui-overview">Screen Elements</a></li>
+		<li><a href="gui-item-choicegroup.html">ChoiceGroup</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-screen-list.png" width="352" height="414" alt="A List with a fisheye view-type."/>
+	<br />
+	A <code>List</code> displays several items which can be selected depending on it's choice type (either <code>Choice.EXCLUSIVE</code>,
+	<code>Choice.MULTIPLE</code> or <code>Choice.IMPLICIT</code>).
+	</p>
+	
+<h2 id="design">Design</h2>
+
+<p>The List in the screenshot above utilizes the <a href="gui-viewtype-fisheye.html">fisheye</a> <code>view-type</code> 
+and has been realized using the following CSS settings (without <a href="gui-screenelement-title.html">title</a> 
+and <a href="gui-screenelement-menubar.html">menubar</a> settings):</p>
+<pre>
+.mainScreen {
+	padding: 2;
+	padding-left: 10;
+	padding-right: 10;
+	background {
+		type: horizontal-stripes;
+		first-top-color: brightBgColor;
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	//#if polish.midp2
+		view-type: fisheye;
+		fisheyeview-scale-start: 70%;
+		fisheyeview-scale-end: 40%;
+		fisheyeview-alpha-start: 200;
+		fisheyeview-alpha-end: 80;
+		fisheyeview-remove-text: true;		
+	//#endif
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#endif
+}
+</pre>
+<h3 id="design-List">CSS Attributes for Lists</h3>
+<p>You can use the following CSS attributes for Lists:</p>
+<%cssattributes de.enough.polish.ui.List %>
+
+<h3 id="design-ListItems">CSS Attributes for List-Items</h3>
+<p>For styles of List items you can use following the CSS attributes:</p>
+<%cssattributes de.enough.polish.ui.ChoiceItem %>
+
+<h2 id="programming">Programming</h2>
+<p>
+Please use and import the normal <code>javax.microedition.lcdui.List</code> for dealing with Lists. For connecting the List and 
+it's items with your style definitions in <i>polish.css</i> use <code>style</code> preprocessing directives:
+</p>
+<pre>
+import javax.microedition.lcdui.List;
+import de.enough.polish.ui.UiAccess;
+
+public class MenuMidlet extends MIDlet implements CommandListener {	
+	List menuScreen;
+	public MenuMidlet() {
+		//#style mainScreen
+		this.menuScreen = new List("Title", List.IMPLICIT);
+		//#style mainCommand
+		this.menuScreen.append( "Chat", null);
+		//#style mainCommand
+		this.menuScreen.append("Mail", null);
+		//#style mainCommand
+		this.menuScreen.append("Settings", null);
+		//#style mainCommand
+		this.menuScreen.append("Applications", null);
+		//#style mainCommand
+		this.menuScreen.append("Help", null);
+		//#style mainCommand
+		this.menuScreen.append("Quit", null);
+		//#style mainCommand
+		this.menuScreen.append("Documents", null);
+		
+		this.menuScreen.setCommandListener(this);
+		this.menuScreen.addCommand( this.startGameCmd ); 
+		this.menuScreen.addCommand( this.quitCmd );
+	}
+	
+	public startApp() {
+		Display display = Display.getDisplay(this);
+		display.setCurrent( this.menuScreen );
+		// pre-select Help:
+		UiAccess.setCurrentListIndex( display, this.menuScreen, 4 );
+	}
+	
+	[...]
+}
+</pre>
+<p>For accessing J2ME Polish specific List functionalities use following static <code>de.enough.polish.ui.UiAccess</code> methods:</p>
+<ul>
+	<li><code>addItemCommand( List list, int index, Command command )</code>: Adds a command to the specifed List item.</li>
+	<li><code>setCurrentListIndex( Display display, List list, int index )</code>: Selects the specified List item and shows the List.</li>
+	<li><code>setListItem( List list, int index, ChoiceItem item )</code>: Sets a <code>de.enough.polish.ui.ChoiceItem</code> or a subclass for the given List.</li>
+	<li><code>ChoiceItem getListItem( List list, int index )</code>: Retrieves the specified <code>de.enough.polish.ui.ChoiceItem</code> from the List.</li>
+	<li><code>appendListItem( List list, ChoiceItem item )</code>:  Appends a <code>ChoiceItem</code> to the List.</li>
+	<li><code>setStyle(List list, int itemIndex)</code>: Sets a style for the specified List item - use this call together with a <code>style</code> preprocessing directive</li>
+	<li><code>setStyle(List list, int itemIndex, Style style)</code>: Sets a style programmatically for the specified List item.</li>
+	<li><code>setAttribute( List list, int index, Object key, Object value )</code>: Sets an arbitrary attribute for the specified List item.</li>
+	<li><code>getAttribute( List list, int index, Object key )</code>: Gets an previously set attribute value for the specified List item</li>
+	<li><code>HashMap getAttributes( List list, int index )</code>: Retrieves all previously registered attributes from the specified List</li>
+	<li><code>setAccessible(List list, int itemIndex, boolean isAccessible)</code>: Makes a List item selectable or inaccessible - can be used with a <code>style</code> preprocessing directive. Make sure another List item is selected before ddeactivating a List item or call <code>UiAccess.setCurrentListIndex()</code> before (see above).</li>
+	<li><code>setAccessible(List list, int itemIndex, boolean isAccessible, Style style)</code>: Same as above with a programmatically selected style.</li>
+	<li><code>setVisible( List list, int index, boolean visible )</code>: Toggles the visiblity of the specified List item. Note that you need to activate visible items by setting the preprocessing variable <code>polish.supportInvisibleItems</code> to <code>true</code> before this call can succeed. </li>
+	<li><code>boolean isVisible( List list, int index )</code>: Determines if a List item is visible.</li>
+	<!-- 
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	 -->
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+<p>
+You can configure if List should not show commands like &quot;Select&quot; for implicit and exclusive Lists or &quot;Mark&quot;
+for multiple lists. By default such commands are shown. Specify these configuration settings in the <code>variables</code>
+section of your <i>build.xml</i> script.
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.List.suppressCommands</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates all commands.
+<pre>
+&lt;variable name=&quot;polish.List.suppressCommands&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.List.suppressSelectCommand</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates the Select command for implicit and exclusive Lists.
+<pre>
+&lt;variable name=&quot;polish.List.suppressSelectCommand&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.List.suppressMarkCommands</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates the Mark/Unmark commands for multiple Lists.
+<pre>
+&lt;variable name=&quot;polish.List.suppressMarkCommands&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+<!-- 
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>
+<pre>
+&lt;variable name=&quot;polish.List.&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+ -->
+
+</table>
+<p>You can also change or translate the default commands used in a List with the following settings
+in either <i>messages.txt</i> or using variables in your <i>build.xml</i> script.
+For more information about translations please refer to the <a href="localization.html">localization section</a>.
+</p>
+<pre>
+# text for the 'Select' command:
+polish.command.select=Choose;
+# texts for'Mark' and 'Unmark' commands:
+polish.command.mark=Select
+polish.command.unmark=Deselect
+</pre>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/List.html">List</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

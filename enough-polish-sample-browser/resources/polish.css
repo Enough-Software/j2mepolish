@@ -1,0 +1,459 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(132,143,96);
+	focusedBgColor:  rgb(238,241,229);
+	translucentBgColor:  argb(130, 238,241,229);
+	fontColor: rgb( 30, 85, 86 );
+	focusedFontColor: rgb(238,241,229);
+	
+	browserFontColor: rgb( 30, 85, 86 );
+	browserFontColorFocused: rgb(20,40,80);
+}
+
+
+borders {
+	squareFocusedBorder {
+		color: black;
+		width: 1;
+	}
+}
+
+backgrounds {
+	completeBg {
+		type: round-rect;
+		color: #ccc;
+	}
+	gradientTop {
+		type: partial-gradient;
+		start: 0%;
+		end: 10%;
+		top-color: rgb(132,143,96);
+		bottom-color: #ccc;
+	}
+	gradientBottom {
+		type: partial-gradient;
+		start: 90%;
+		end: 100%;
+		top-color: #ccc;
+		bottom-color: rgb(132,143,96);
+	}
+}
+
+/*************   Browser specific styles - the outcommented styles just replicate the default behavior  *************/
+
+.browserScreen {
+	padding: 0;
+	padding-left: 5;
+	padding-right: 5;
+	background-color: #ccc;
+	background-top: title;
+	background-bottom: menubar;
+	scroll-up-background: gradientTop;
+	scroll-down-background: gradientBottom;
+	layout: horizontal-expand | horizontal-center | top;
+}
+
+.illustrate {
+	always-include: true; /* include this style even though it is not referenced in the source code, but only within HTML pages */
+	font-color: #333;
+	font-style: italic;
+}
+
+.invisible {
+	always-include: true;
+	visible: false; /* the <div> block and its contents are not shown */
+	view-type: midp2;
+	layout: expand;
+}
+
+.visible extends invisible {
+	visible: true;
+}
+
+
+.result {
+	always-include: true;
+	margin: 2;
+	background-color: silver;
+	view-type: midp2;
+	view-type-sequential-traversal: true;
+	layout: expand;
+	change-styles: visible > invisible;  /* when the result <div> block is unfocused, apply the .invisible style to all child items having the .visible style */
+}
+
+.result:hover {
+	margin: 0;
+	border-color: #222;
+	border-width: 2;
+	change-styles: invisible > visible; /* when the result <div> block is focused, apply the .visible style to all child items having the .invisible style */
+	background {
+		type: horizontal-gradient;
+		left-color: white;
+		right-color: #ccc;
+	}
+}
+
+
+.smalltext {
+	always-include: true; /* include this style even though it is not referenced in the source code, but only within HTML pages */
+	font-color: #222;
+	font-size: small;
+}
+
+ 
+.browserChart {
+	background-color: white;
+	padding: 3;
+	font-color: gray;
+	font-size: small;
+}
+
+.verticalBarChart {
+	always-include: true; /* include this style even though it is not referenced in the source code */
+	padding: 3;
+	view-type: chart-vertical-bars;
+	chart-vertical-bars-shadow-color: gray;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+.browser {
+	view-type: midp2;
+	layout: center | expand;
+}
+
+.browser:hover {
+}
+
+.choiceGroupLabel {
+	font-style: italic;
+	font-size: small;
+	layout: newline-after;
+}
+
+.browserChoiceGroupMultiple {
+	label-style: choiceGroupLabel;
+}
+
+.browserChoiceGroupPopup {
+	label-style: choiceGroupLabel;
+	background-color: white;
+}
+
+.browserChoiceGroupPopup:hover {
+	background-color: silver;
+}
+
+
+.browserCheckBox {
+	padding-horizontal: 6px;
+	font-color: fontColor;
+	layout: expand | vertical-center;	
+}
+
+.browserCheckBox:hover {
+	font-color: focusedFontColor;
+	background-color: silver;
+}
+
+.paymentschoicegroup {
+	always-include: true;
+	label-style: choiceGroupLabel;
+	include-label: false;
+	layout: expand;
+	view-type: exclusive-choice;
+	exclusiveview-arrow-color: bgColor;
+	exclusiveview-left-arrow: url( arrow-left.png );
+	exclusiveview-right-arrow: url( arrow-right.png );
+	exclusiveview-expand-background: false;	
+}
+
+.paymentschoicegroup:hover {
+	background-type: round-rect;
+	complete-background: completeBg;
+}
+
+.paymentitem {
+	always-include: true;
+	padding-horizontal: 6px;
+	font-color: fontColor;
+	layout: expand | vertical-center;	
+}
+
+.paymentitem:hover {
+	background-color: yellow;
+}
+
+.textinput {
+	padding: 2px;
+	background-color: silver;
+	layout: expand;
+}
+
+.textinput:hover {
+	padding: 1px;
+	background-color: white;
+	border-color: black;
+}
+
+
+/*
+
+.browserText {
+	font-color: black;
+}
+
+.browserText:hover {
+	font-color: red;
+}
+
+.browserTextBold {
+	font-color: black;
+	font-style: bold;
+}
+
+.browserTextBold:hover {
+	font-color: red;
+}
+
+.browserTextItalic {
+	font-color: black;
+	font-style: italic;
+}
+
+.browserTextItalic:hover {
+	font-color: red;
+	font-style: italic;
+}
+
+.browserTextBoldItalic {
+	font-color: black;
+	font-style: bold | italic;
+}
+
+.browserTextBoldItalic:hover {
+	font-color: red;
+}
+
+.browserLink {
+	font-color: blue;
+	font-style: bold;
+}
+
+.browserLink:hover {
+	font-color: red;
+}
+
+.browserInput extends .browserText {
+	padding: 2px;
+	layout: expand | left;
+	border {
+		type: round-rect;
+		width: 1;
+		color: browserFontColor;
+	}
+}
+
+.browserInput:hover  {
+	padding: 1px;
+	border {
+		type: round-rect;
+		width: 2;
+		color: browserFontColorFocused;
+	}
+}
+
+.browserDownloadIndicator {
+	inherit: false;
+	layout: vertical-shrink | horizontal-shrink | top | right;
+}
+*/
+
+
+/*************   Other styles  *************/
+
+label {
+	font-size: small;
+	margin: 2;
+	margin-left: 5;
+	layout: left | newline-after;
+}
+
+/**
+  * The element that displays the current input mode, e.g. "abc" or "Abc" or "123"
+  */
+info {
+	layout: right;
+	margin-right: 10;
+	background-color: argb( 170, 255, 255, 255 );
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+	padding: 1;
+	border {
+		type: round-rect;
+		arc: 4;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | left;	
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2px;
+	padding-bottom: 4px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: focusedFontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 180;
+}
+
+
+/*************   MENU BAR *************/
+
+menubar
+{
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2;
+	margin-right: 2;
+	min-width: 120;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: focusedBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	focused-style: .menuFocused;
+	font-color: focusedFontColor;
+	font-style: bold;
+	menubar-color: bgColor;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+.menuFocused extends .menuItem {
+	background-color: bgColor;
+	font-color: focusedFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: black;
+	font-style: bold;
+	layout: left;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+
+.serviceResultListItem {
+    always-include: true;
+    margin: 2;
+    //#if polish.ScreenSize == 480x320
+       margin-left: 75;
+       margin-right: 75;
+    //#endif
+    background-color: blue;
+  layout: horizontal-expand;
+  view-type: midp2;
+}
+
+.serviceResultListItem:hover {
+    margin: 0;
+    //#if polish.ScreenSize == 480x320
+       margin-left: 75;
+       margin-right: 75;
+    //#endif
+    border-color: #f66;
+    border-width: 2;
+    layout: horizontal-expand;
+    background-color: white;
+    view-type: midp2;
+}
+

@@ -1,0 +1,51 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Segment Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Segment Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The segment text-effect segments the text.
+	</p>
+	<h2 id="Shadow-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-segment.png"  width="125" height="24" alt="the segment text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with following settings:
+	</p>
+<pre>
+title {
+        text-effect: segment;
+        text-segment-color: white;
+        text-segment-gap: 3;
+        layout: horizontal-center | horizontal-expand;
+        font {
+           face: proportional;
+           size: large;
+           style: bold;
+           color: #333;
+        }
+        background-color: white;
+}	
+</pre>
+<p>
+	Specific design attributes of the segment text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.SegmentTextEffect %>
+		
+	<h2 id="Segment-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/SegmentTextEffect.html">SegmentTextEffect</a>.
+	</p>
+
+<%include end.txt %>

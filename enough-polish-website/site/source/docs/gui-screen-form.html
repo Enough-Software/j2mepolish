@@ -1,0 +1,116 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: Form %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using Forms</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-framedform.html">FramedForm</a></li>
+		<li><a href="gui-screen-tabbedform.html">TabbedForm</a></li>
+		<li><a href="gui-visualguide.html#gui-overview">Screen Elements</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A Form allows you to place any <a href="gui-visualguide.html#gui-items">items</a> on the display and let the user interact with them.
+	<br />
+	<img src="<%= basedir%>images/gui-screen-form.png" width="354" height="416" alt="A Form in action."/>
+	</p>
+	
+<h2 id="design">Design</h2>
+<p>You can use following CSS attributes for the Form:</p>
+<%cssattributes de.enough.polish.ui.Form %>
+
+
+<h2 id="programming">Programming</h2>
+<p>
+Use a <code>javax.microedition.lcdui.Form</code> as you would normally in your application and
+use <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a> for
+using J2ME Polish specific functionalities like:
+</p>
+<ul>
+	<li><code>setStyle( Screen screen )</code>: Sets a style in conjuntion with a <code>style</code> preprocessing directive.</li>
+	<li><code>setStyle( Screen screen, Style style )</code>: Sets a style programmatically.</li>
+	<li><code>getContentHeight( Screen screen )</code>: Retrieves the height in pixels available for content on the specified screen.</li>
+</ul>
+
+<!-- 
+<h2 id="configuration">Configuration</h2>
+<p>You can specify some global behaviors using preprocessing variables that you can define within the 
+<code>variables</code> section of your <i>build.xml</i> script.
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.FullScreen</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Activates the fullscreen mode without commands support, usually you specify this by setting
+		<code>&lt;build fullscreen=&quot;true&quot; ...&lt;</code> in your <i>build.xml</i> script.
+		Use the variable to finetune this setting.
+<pre>
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.useMenuFullScreen</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Activates the fullscreen mode with commands support, usually you specify this by setting
+		<code>&lt;build fullscreen=&quot;menu&quot; ...&lt;</code> in your <i>build.xml</i> script.
+		Use the variable to finetune this setting.
+<pre>
+&lt;variable name=&quot;polish.useMenuFullScreen&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.MenuBar.useExtendedMenuBar</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Activate the <a href="gui-screenelement-menubar.html">extended menubar</a>.
+<pre>
+&lt;variable name=&quot;polish.MenuBar.useExtendedMenuBar&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.useScrollBar</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Activate the <a href="gui-screenelement-scrollbar">scrollbar</a>.
+<pre>
+&lt;variable name=&quot;polish.useScrollBar&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>
+<pre>
+&lt;variable name=&quot;polish.List.&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+</table>
+ -->
+
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Form.html">Form</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+<%include end.txt %>

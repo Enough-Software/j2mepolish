@@ -1,0 +1,103 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Shadow Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The shadow text-effect draws a sharp shadow around the text.
+	</p>
+	<h2 id="Shadow-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-shadow.png"  width="144" height="24" alt="the shadow text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with the following settings:
+	</p>
+<pre>
+title {
+        text-effect: shadow;
+        text-shadow-color: black; /* = default */
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+                color: #eef1e5;
+        }
+        background {
+                type: simple;
+                color: #ffffffff;
+        }
+}	
+</pre>
+<p>
+	Specific design attributes of shadow text-effect:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>text-shadow-color</td>
+		<td>black</td>
+		<td>color definition</td>
+		<td>
+		The color of the shadow.
+<pre>
+text-shadow-color: #333;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-shadow-orientation</td>
+		<td>bottom-right</td>
+		<td>bottom-right, bottom-left, top-right, top-left, bottom, top, right, left</td>
+		<td>
+		Position of the shadow relative to the text.
+<pre>
+text-shadow-orientation: bottom-left;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-shadow-x</td>
+		<td>1</td>
+		<td>integer</td>
+		<td>
+		Sets the x-orientation in pixels of a shadow for the shadow font-effect. 
+		The <code>text-shadow-orientation</code> attribute is ignored when the x value is set directly.
+		Positive x-values move the shadow towards the right.
+<pre>
+text-shadow-x: -1;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-shadow-y</td>
+		<td>1</td>
+		<td>integer</td>
+		<td>
+		Sets the y-orientation in pixels of a shadow for the shadow font-effect. 
+		The <code>text-shadow-orientation</code> attribute is ignored when the y value is set directly.
+		Positive y-values move the shadow towards the bottom.
+<pre>
+text-shadow-y: 2;
+</pre>
+		</td>
+	</tr>
+	</table>
+		
+	<h2 id="Shadow-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/ShadowTextEffect.html">ShadowTextEffect</a>.
+	</p>
+
+<%include end.txt %>

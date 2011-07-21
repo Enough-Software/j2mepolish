@@ -1,0 +1,120 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Text Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Text Design</h1>
+	<%index %>
+	<p>You can design text ion various ways with J2ME Polish. NOTE: additional information and examples are pending.
+	</p>
+	<h2 id="text-general">General Design</h2>
+	<p>
+	The mobile Java standard provides three different font-sizes, font-faces and font-styles:
+	</p>
+	<ul>
+	<li><b>size</b>: small, normal/medium, large/big</li>
+	<li><b>style</b>: normal/plain, bold, italic/cursive, underlined or a mixture of these elements like <code>bold | italic</code></li>
+	<li><b>face</b>: system/default, monospace, proportional</li>
+	</ul>
+	<p>
+	Additionally you can specify the color of the font.
+	The following example illustrates the standard font design options for the <code>title</code> style:
+<pre>
+title {
+	font-size: large;
+	font-face: proportional;
+	font-style: bold | underlined;
+	font-color: green;
+}
+</pre>
+	</p>
+	<p>Note that on some phones only one font size, one style and one font-type might be supported, like on some (all?) Motorola phones. 
+	The system font is an most systems the same as the proportional font.
+	</p>
+	<h2 id="text-bitmap">Bitmap/True Type Fonts</h2>
+	<p>
+	You can convert any true type font to a bitmap font with the font creator tool that you can find in <i>${polish.home}/bin/fontcreator</i>.
+	After that you can use the bitmap-font by specifying the <code>font-bitmap</code> CSS attribute:
+<pre>
+title {
+	font-bitmap: arialBig;
+}
+</pre>
+	</p>
+	<p>Note that you cannot use any other font-setting when you are using a bitmap font.
+	</p>
+	
+	<h2 id="text-effects">Text Effects</h2>
+	<p>
+	Bitmap fonts have the drawback that you can only use them in one style, size and color and that you have to add all characters 
+	that your application uses into the bitmap. J2ME Polish provides text effects as an alternative solution:
+	</p>
+	<ul>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/ShadowTextEffect.html">shadow</a>: adds a simple shadow to your text.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/OutlineTextEffect.html">outline</a>: shows the outline of the text only.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/SegmentTextEffect.html">segment</a>: cuts the text into horizontal slides, similar to the IBM logo.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/TypeWriterTextEffect.html">typewriter</a>: animates your text by showing one character more in each animation phase.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/LighthouseTextEffect.html">lighthouse</a>: animates the text by showing one character with its direct neighbours in a different color.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/VerticalGradientTextEffect.html">gradient</a>: adds a vertical gradient to your text.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/VerticalMirrorTextEffect.html">mirror-shadow</a>: a MIDP 2.0 only effect that adds the vertically mirrored text as a shadow to the original text.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/FadeTextEffect.html">fade</a>: 
+		You can smoothly fade in or fade our your text on MIDP 2.0 devices.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/DropShadowTextEffect.html">drop-shadow</a>: 
+			Adds a soft drop shadow for MIDP 2.0, CLDC 1.1 devices.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/AlienGlowTextEffect.html">alien-glow</a>: 
+			Use the spooky alien-glow effect for your texts on MIDP 2.0, CLDC 1.1 devices.
+		</li>
+		<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/FadingAlienGlowTextEffect.html">fading-alien-glow</a>: You can enhance the alien glow even further by fading it in and out.
+		</li>
+	</ul>
+	<p>
+	The following example illustrates the text effect for the <code>title</code> and <code>focused</code> styles:
+<pre>
+title {	
+	//#if polish.midp2 and cldc1.1
+		text-effect: alien-glow;
+	//#else
+		text-effect: gradient;
+		text-vertical-gradient-start-color: white;
+		text-vertical-gradient-end-color green;
+	//#endif
+	font-size: large;
+	font-style: bold;
+	font-color: green;
+}
+focused {
+	text-effect: shadow;
+	text-shadow-color: red;
+}
+</pre>
+	</p>
+	<p>Note that animated text effects are only animated for the currently focused item, the title and the ScreenInfo element.</p>
+	
+	<h2 id="text-wrapping">Text Wrapping</h2>
+	<p>
+	Usually text is wrapped automatically when it is too long for a single row. You can deactivate this default behavior by setting the
+	<code>text-wrap</code> CSS attribute to false. In TextFields with enabled direct input mode the cursor will be kept in the visible
+	area, for other texts only parts remain visible. You could use this feature to show only the beginning of a message when an item is not
+	focused and show the complete text (by turning on text-wrap again) when an item is focused, for example:
+	</p>	
+<pre>
+.messageItem {
+	text-wrap: false;
+}
+.messageItem:hover {
+	text-wrap: true;
+}
+</pre>
+	
+
+<%include end.txt %>

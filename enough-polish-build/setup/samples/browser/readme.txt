@@ -1,0 +1,1 @@
+Learn how to use and to extend the J2ME Polish HTML browser in this project.

@@ -1,0 +1,176 @@
+colors {
+	browserfontcolorfocused: #142850;
+	browserFontColorFocused: #142850;
+	bgColor: #848f60;
+	browserfontcolor: #1e5556;
+	translucentbgcolor: #82eef1e5;
+	brightfontcolor: #eef1e5;
+	brightbgcolor: #eef1e5;
+	browserFontColor: #1e5556;
+	brightFontColor: #eef1e5;
+	translucentBgColor: #82eef1e5;
+	fontColor: #1e5556;
+	brightBgColor: #eef1e5;
+	bgcolor: #848f60;
+	fontcolor: #1e5556;
+}
+
+focused {
+	layout: expand | center;
+	margin: 0;
+	padding: 5;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		arc-width: 4;
+		arc-height: 4;
+	}
+}
+.itemInput {
+	padding: 2;
+	layout: left | horizontal-expand | newline-before;
+	background {
+		type: simple;
+		color: white;
+	}
+}
+.itemInput:hover {
+	padding: 1;
+	border {
+		type: simple;
+		color: #000000;
+		border-width: 1;
+	}
+}
+
+.result {
+	
+}
+
+.resultError {
+	font-color: red;
+}
+
+/**
+  * The element that displays the current input mode, e.g. "abc" or "Abc" or "123"
+  */
+info {
+	layout: right;
+	/* margin-right: 10; */
+	background-color: argb( 170, 255, 255, 255 );
+}
+
+
+.mainScreen {
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	margin: 0;
+	padding-left: 1;
+	padding-right: 1;
+	padding-top: 1;
+	padding-bottom: 1;
+	padding-horizontal: 1;
+	padding-vertical: 1;
+	background {
+		type: simple;
+		color: brightBgColor;
+	}
+}
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #fff;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 180;
+}
+
+/*************    Screen Title       ***************************************************************************************************/
+
+
+title {
+	text-effect: shadow;
+	text-shadow-color: #ff164020;
+	layout: horizontal-center | horizontal-expand;
+	margin: 0;
+	padding: 1;
+	font {
+		face: proportional;
+		size: large;
+		style: bold;
+		color: #eef1e5;
+	}
+	background {
+		type: horizontal-stripes;
+		first-top-color: #ffff66;
+		first-bottom-color: #008000;
+		second-top-color: #ffffff;
+		second-bottom-color: #33ff00;
+	}
+}
+
+/*************    Menubar         ***************************************************************************************************/
+
+menubar
+{
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	//#if polish.MenuBar.Position == right
+		background-color: silver;
+	//#else
+		background {
+			type: horizontal-stripes;
+			first-top-color: #33ff00;
+			first-bottom-color: #ffffff;
+			second-top-color: #008000;
+			second-bottom-color: #ffff66;
+		}
+	//#endif
+}
+
+/**
+ * Commands within the menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+    padding: 2;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: small;
+}
+
+/**
+ * Commands within the menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+menu {
+	padding: 2;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		arc-width: 4;
+		arc-height: 4;
+	}
+}
+menuItem {
+	layout: left;
+}
+
+menuItem:hover {
+	layout: left | horizontal-expand;
+	padding: 1;
+	background {
+		type: simple;
+		color: bgColor;
+	}
+}
+
+

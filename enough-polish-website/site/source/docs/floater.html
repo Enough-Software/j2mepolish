@@ -1,0 +1,65 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.floater %>
+<%set title = J2ME Polish: Floater %>
+<%set basedir = ../ %>
+<%include start.txt %>
+				
+
+	<h1 id="top">Floater</h1>
+	<table><tr>
+			<td valign="middle">
+				<%index %>
+				<br />
+				Floater allows you to use floating point calculations as well as Math.sin() etc calls on CLDC 1.0 devices as well.</td>
+			<td><img src="../images/floater.png" alt="Floater Logo"/></td>
+		</tr>
+	</table>
+	<h2 id="intro">Introduction</h2>
+	<p>		
+		J2ME environments often suffer from certain features in the JVM because of the constraints of the hardware. This means that code needs to be specially written for or ported to a special target environment.
+		Support for double/float primitive data types is not mandatory in the J2ME specification. On CLDC 1.0 devices all methods and classes that use floating points are missing in the API. For many applications this is a huge disadvantage as a lot of arithmetic should be carried out on floating point numbers. 
+		To follow the Java paradigm &quot;write once, run everywhere&quot; Floater allows the programmer to write code
+		using these primitive datatypes and transform the generated classes later to not use them anymore by replacing them with operations using long or int. This transformation is done only for target devices that do not support the CLDC 1.1 configuration, of course. This is done by utilizing the MathFP library that provides floating point operations based on integer primitive types.
+	</p>
+	<p>		
+		MathFP is a small and fast library using a fixed-point format to represent doubles and floats. 
+	</p>
+	<h2 id="usage">Usage</h2>
+	<p>
+		Floater is very easy to activate: just add a <code>&lt;postcompiler name=&quot;floater&quot; /&gt;</code> tag to your build.xml script:
+	<pre>
+&lt;target name=&quot;j2mepolish&quot;&gt;
+  ...
+  &lt;j2mepolish&gt;
+    ...
+    &lt;build&gt;
+      ...
+      <b>
+      &lt;postcompiler name=&quot;floater&quot;&gt;
+		&lt;parameter name=&quot;verbose&quot; value=&quot;false&quot; /&gt;
+      &lt;/postcompiler&gt;
+</b>
+      ...
+    &lt;/build&gt;
+    ...
+  &lt;/j2mepolish&gt;
+  ...
+&lt;/target&gt;
+</pre>
+	</p>
+	<p>You can use the optional &quot;verbose&quot; parameter to print out more information about the actions of Floater.</p>
+	
+	<h2 id="limitations">Limitations</h2>
+	<p>Floater has two limiations:</p>
+	<ul>
+		<li>Math.ceil(), Math.floor() are not supported.</li>
+		<li>Having identical methods that only differ by one float/int or one double/long parameter cannot be resolved correctly, since Floater uses internally int-values to simulate floats and long-values to simulate doubles. Following example will fail and abort the build process:
+<pre>
+public void doSomething( float f ) {...}
+public void doSomething( int i ) {...}
+</pre>
+		</li>
+	</ul>
+	<p>&nbsp;</p>
+		
+<%include end.txt %>

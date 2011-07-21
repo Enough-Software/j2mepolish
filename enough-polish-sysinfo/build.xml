@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-example">
+	
+<!-- task definitions -->
+<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<!-- read user properties first -->
+	<property file="${user.name}.properties"/>
+	<property name="device" value="Generic/multi" />
+	<property name="wtk.home" value="/home/enough/dev/WTK2.2"/>
+	<!-- The polish.home property should point to the directory   -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" value="/home/enough/workspace/enough-polish-build"/>
+	<property name="nokia.home" value="/home/enough/dev/Nokia" />
+	<property name="remotebuild" value="true" />
+	
+	<taskdef 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+		name="j2mepolish"/>
+
+			
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="test">
+		<property name="test" value="true"/>
+		<property name="dir.work" value="build/test" />
+	</target>
+		
+	<target name="deploy">
+		<property name="deploy-url" value="http://dl.j2mepolish.org"/>
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false"/>
+		<property name="deploy-url" value=""/>
+		<property name="dir.work" value="build/real" />
+	</target>
+    
+	<target depends="init" name="j2mepolish">
+		<j2mepolish>
+			<lifeCycleManager name="mea" unless="test">
+			    <parameter name="fallbackDevice" value="Generic/multi" />
+			    <parameter name="tags" value="test" />
+			    <parameter name="access" value="pseudoprivate" />
+		  </lifeCycleManager>
+			<!-- general settings -->
+					<info 
+						copyright="Copyright 2004 - 2007 Grimo Software, Enough Software and Mark Schrijver. All rights reserved." 
+						description="Extracts information from MIDP capable devices." 
+						icon="icon.png" 
+						infoUrl="www.grimo-software.com" 
+						jarName="sysinfo.jar" 
+						jarUrl="${deploy-url}${polish.jarName}" 
+						name="MIDPSysInfo" 
+						vendorName="Enough Software" 
+						version="0.9.10"
+						profile="MIDP-1.0" 
+						configuration="CLDC-1.0" 
+					/>
+					<!-- Enough Software and Mark Schrijver	-->
+					<!-- selection of supported devices -->
+					<deviceRequirements>
+						<requirement name="Identifier" value="${device}" />
+					</deviceRequirements>
+					<!-- build settings -->
+					<build polishDir="../enough-polish-j2me/source/src" 
+						usePolishGui="false" 
+						workDir="${dir.work}" 
+						sourceDir="source/src"
+					>
+						<sources>
+							<source dir="source/src" />
+						</sources>
+						
+						<!-- midlets definition -->
+						<midlet class="de.enough.sysinfo.MIDPSysInfoMIDlet" name="MIDP SysInfo" />
+						<resources dir="resources">
+							<localization dynamic="false" defaultLocale="en" locales="en" />
+						</resources>
+						<jad>
+							<filter>
+									MIDlet-Name, MIDlet-Version, 
+									MIDlet-Vendor, MIDlet-Jar-URL, MIDlet-Jar-Size, 
+									MIDlet-Description?, MIDlet-Icon?, MIDlet-Info-URL?,
+									MIDlet-Data-Size?, MIDlet-*, *
+								</filter>
+						</jad>
+						<manifestFilter>
+								Manifest-Version, MIDlet-Name, 
+								MIDlet-1, MIDlet-2?, MIDlet-3?, MIDlet-4?, MIDlet-5?, 
+								MIDlet-Version, MIDlet-Vendor,
+								MicroEdition-Profile, MicroEdition-Configuration,
+								MIDlet-Data-Size?
+							</manifestFilter>
+						<!--
+							unused manifest attributes:
+								MIDlet-Description?, MIDlet-Icon?, MIDlet-Info-URL?,
+							-->
+						<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+						<obfuscator name="ProGuard" useDefaultPackage="false" unless="test or polish.vendor == BlackBerry">
+							<keep class="com.grimo.me.product.midpsysinfo.NokiaFullCanvasTest" />
+							<keep class="com.grimo.me.product.midpsysinfo.Midp2FullCanvasTest" />
+						</obfuscator>
+						<!-- debug settings: only include debug setting when the test-property is true -->
+						<debug level="error" showLogOnError="true" verbose="true" unless="test">
+							<filter level="debug" package="com.grimo.me.product.midpsysinfo" />
+						</debug>
+						<debug level="debug" showLogOnError="true" verbose="true" if="test">
+						
+						</debug>
+					</build>
+		<!-- execution of emulator(s) -->
+		<emulator
+			wait="true"
+			trace="class"
+			if="test"
+			/>		
+	</j2mepolish>
+</target>
+
+
+<target name="clean"
+	description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+	>
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+<target name="cleanbuild"
+		description="Creates a clean build."
+		depends="clean, j2mepolish"
+/>
+	
+<target name="emulator"
+	description="Builds and starts the emulator" 
+	depends="test, j2mepolish"
+/>
+
+
+</project>

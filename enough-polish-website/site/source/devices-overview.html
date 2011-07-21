@@ -1,0 +1,42 @@
+<%define inDevicesSection %>
+<%set title = J2ME Polish: Device Database %>
+<%include start.txt %>
+	
+	<h1 id="top">Device Database</h1>
+	<h2 id="interactive">Interactive Device Database</h2>
+	<p>
+	Find our new interactive device datbase at <a href="http://devices.j2mepolish.org">http://devices.j2mepolish.org</a>.
+	Please report any issues by sending an email to <i>devices</i>(at)<i>enough</i>(dot)<i>de</i>.
+	</p>
+	<h2 id="sections">Sections</h2>
+	<ul>
+		<li><a href="devices/devices-vendor.html">Devices by Vendor</a></li>
+		<li><a href="devices/apis.html">Devices by API</a></li>
+		<li><a href="devices/platform.html">Devices by the Java platform</a></li>
+		<li><a href="devices/issues.html">Known Issues Database</a></li>
+	</ul>
+	<h2 id="using">Using the Device Database</h2>
+	<p>
+		J2ME Polish includes a device database, which contains
+		all known J2ME devices and which can be extended easily.
+		<br/>
+		This database can be used for 
+		<a href="docs/build-deviceRequirements.html">selecting</a> the 
+		target devices and for 
+		<a href="docs/optimization.html">optimizing</a> 
+		the application without
+		losing the portability of the application: Any capability
+		or feature of a device can be accessed during the 
+		<a href="docs/preprocessing.html">preprocessing</a> phase,
+		an often needed example is checking the API support of
+		a device:
+<pre>
+//#if polish.api.mmapi || polish.midp2
+	// this device either supports the 
+	// Mobile Media API or the MIDP/2.0 standard
+//#endif
+</pre>
+	</p>
+	<p>
+	</p>
+<%include end.txt %>

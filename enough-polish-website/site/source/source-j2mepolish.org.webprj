@@ -1,0 +1,281 @@
+<!DOCTYPE webproject>
+<webproject>
+  <project usePreviewPrefix="0" previewPrefix="file:file%3A" type="Local" name="source-j2mepolish.org" encoding="iso 8859-1" >
+    <upload remote_host="ftp.enough.de" remote_port="" remote_path="/" remote_protocol="ftp" user="enough" />
+    <author/>
+    <email/>
+    <defaultDTD>-//W3C//DTD XHTML 1.0 Transitional//EN</defaultDTD>
+    <item url="CVS/" uploadstatus="1" />
+    <item modified_time="1096363040" url="CVS/Entries" uploadstatus="1" />
+    <item modified_time="1086812110" url="CVS/Repository" uploadstatus="1" />
+    <item modified_time="1086812110" url="CVS/Root" uploadstatus="1" />
+    <item url="docs/" uploadstatus="1" />
+    <item url="docs/CVS/" uploadstatus="1" />
+    <item modified_time="1096363040" url="docs/CVS/Entries" uploadstatus="1" />
+    <item modified_time="1086812110" url="docs/CVS/Repository" uploadstatus="1" />
+    <item modified_time="1086812110" url="docs/CVS/Root" uploadstatus="1" />
+    <item modified_time="1096894139" url="docs/build-build.html" uploadstatus="1" />
+    <item modified_time="1095255986" url="docs/build-deviceRequirements.html" uploadstatus="1" />
+    <item modified_time="1087836906" url="docs/build-example.html" uploadstatus="1" />
+    <item modified_time="1089063799" url="docs/build.html" uploadstatus="1" />
+    <item modified_time="1095270743" url="docs/build-info.html" uploadstatus="1" />
+    <item modified_time="1087840754" url="docs/build-taskdef.html" uploadstatus="1" />
+    <item modified_time="1096840411" url="docs/css-common.html" uploadstatus="1" />
+    <item modified_time="1086300034" url="docs/css-extending.html" uploadstatus="1" />
+    <item modified_time="1089055296" url="docs/css-groups.html" uploadstatus="1" />
+    <item modified_time="1086300073" url="docs/css.html" uploadstatus="1" />
+    <item modified_time="1096840609" url="docs/css-specific.html" uploadstatus="1" />
+    <item modified_time="1095960743" url="docs/css-styles.html" uploadstatus="1" />
+    <item modified_time="1086300054" url="docs/css-syntax.html" uploadstatus="1" />
+    <item modified_time="1086084238" url="docs/.DS_Store" uploadstatus="1" />
+    <item modified_time="1096449437" url="docs/install.html" uploadstatus="1" />
+    <item modified_time="1089060679" url="docs/optimization.html" uploadstatus="1" />
+    <item modified_time="1089041415" url="docs/preprocessing.html" uploadstatus="1" />
+    <item modified_time="1091926687" url="docs/utilities.html" uploadstatus="1" />
+    <item url="downloads/" uploadstatus="1" />
+    <item url="downloads/CVS/" uploadstatus="1" />
+    <item modified_time="1096363040" url="downloads/CVS/Entries" uploadstatus="1" />
+    <item modified_time="1086812110" url="downloads/CVS/Repository" uploadstatus="1" />
+    <item modified_time="1086812110" url="downloads/CVS/Root" uploadstatus="1" />
+    <item modified_time="1087939063" url="downloads/Artikel.pdf" uploadstatus="1" />
+    <item modified_time="1097019272" url="downloads/Complete_Guide_to_J2ME_Polish_letter.pdf" uploadstatus="1" />
+    <item modified_time="1097019009" url="downloads/Complete_Guide_to_J2ME_Polish.pdf" uploadstatus="1" />
+    <item modified_time="1086084238" url="downloads/.DS_Store" uploadstatus="1" />
+    <item modified_time="1086217832" url="downloads/j2mepolish-0.7.0.html" uploadstatus="1" />
+    <item modified_time="1084203121" url="downloads/j2mepolish-0.7.0.zip" uploadstatus="1" />
+    <item modified_time="1086217800" url="downloads/j2mepolish-0.7.1.html" uploadstatus="1" />
+    <item modified_time="1084381163" url="downloads/j2mepolish-0.7.1.zip" uploadstatus="1" />
+    <item modified_time="1086217775" url="downloads/j2mepolish-0.7.2.html" uploadstatus="1" />
+    <item modified_time="1084450012" url="downloads/j2mepolish-0.7.2.zip" uploadstatus="1" />
+    <item modified_time="1086217745" url="downloads/j2mepolish-0.8.0.html" uploadstatus="1" />
+    <item modified_time="1084811634" url="downloads/j2mepolish-0.8.0.zip" uploadstatus="1" />
+    <item modified_time="1086217721" url="downloads/j2mepolish-0.8.1.html" uploadstatus="1" />
+    <item modified_time="1084960888" url="downloads/j2mepolish-0.8.1.zip" uploadstatus="1" />
+    <item modified_time="1086217692" url="downloads/j2mepolish-0.9.0.html" uploadstatus="1" />
+    <item modified_time="1085468128" url="downloads/j2mepolish-0.9.0.zip" uploadstatus="1" />
+    <item modified_time="1086807713" url="downloads/j2mepolish-0.9.1.html" uploadstatus="1" />
+    <item modified_time="1086809323" url="downloads/j2mepolish-0.9.1.zip" uploadstatus="1" />
+    <item modified_time="1086807706" url="downloads/j2mepolish-0.9.2.html" uploadstatus="1" />
+    <item modified_time="1086808928" url="downloads/j2mepolish-0.9.2.jar" uploadstatus="1" />
+    <item modified_time="1086808928" url="downloads/j2mepolish-0.9.2.zip" uploadstatus="1" />
+    <item modified_time="1087602130" url="downloads/j2mepolish-1.0-RC1.html" uploadstatus="1" />
+    <item modified_time="1087245689" url="downloads/j2mepolish-1.0-RC1.jar" uploadstatus="1" />
+    <item modified_time="1087245689" url="downloads/j2mepolish-1.0-RC1.zip" uploadstatus="1" />
+    <item modified_time="1084272146" url="downloads/resources-pink.zip" uploadstatus="1" />
+    <item modified_time="1084272212" url="downloads/resources-turtle.zip" uploadstatus="1" />
+    <item url="images/" uploadstatus="1" />
+    <item url="images/CVS/" uploadstatus="1" />
+    <item modified_time="1090093923" url="images/CVS/Entries" uploadstatus="1" />
+    <item modified_time="1086812110" url="images/CVS/Repository" uploadstatus="1" />
+    <item modified_time="1086812110" url="images/CVS/Root" uploadstatus="1" />
+    <item modified_time="1084452356" url="images/checked.png" uploadstatus="1" />
+    <item modified_time="1084144514" url="images/cssboxmodel.gif" uploadstatus="1" />
+    <item modified_time="1086008680" url="images/.DS_Store" uploadstatus="1" />
+    <item modified_time="1085315911" url="images/header.png" uploadstatus="1" />
+    <item modified_time="1083957972" url="images/j2mepolish-logo-big.png" uploadstatus="1" />
+    <item modified_time="1083958006" url="images/j2mepolish-logo-old.png" uploadstatus="1" />
+    <item modified_time="1084983489" url="images/j2mepolish-logo.png" uploadstatus="1" />
+    <item modified_time="1084983479" url="images/j2mepolish-logo.xcf" uploadstatus="1" />
+    <item modified_time="1085315194" url="images/logos.jpg" uploadstatus="1" />
+    <item modified_time="1083949288" url="images/logo-small.png" uploadstatus="1" />
+    <item modified_time="1085315566" url="images/logos.png" uploadstatus="1" />
+    <item modified_time="1084051119" url="images/screenshot-example-enough-menu.png" uploadstatus="1" />
+    <item modified_time="1084051057" url="images/screenshot-example-enough.png" uploadstatus="1" />
+    <item modified_time="1084050929" url="images/screenshot-example-pink-menu.png" uploadstatus="1" />
+    <item modified_time="1084050868" url="images/screenshot-example-pink.png" uploadstatus="1" />
+    <item modified_time="1084203740" url="images/screenshot-gauge-plain.png" uploadstatus="1" />
+    <item modified_time="1085054226" url="images/screenshot-input-line.png" uploadstatus="1" />
+    <item modified_time="1084993063" url="images/screenshot-input.png" uploadstatus="1" />
+    <item modified_time="1095272043" url="atoz.html" uploadstatus="1" />
+    <item modified_time="1086717622" url="contact.html" uploadstatus="1" />
+    <item modified_time="1095271991" url="documentation.html" uploadstatus="1" />
+    <item modified_time="1096061562" url="download.html" uploadstatus="1" />
+    <item modified_time="1086496014" url=".DS_Store" uploadstatus="1" />
+    <item modified_time="1093354600" url="enough.css" uploadstatus="1" />
+    <item modified_time="1092061355" url="faq.html" uploadstatus="1" />
+    <item modified_time="1096030888" url="index.html" uploadstatus="1" />
+    <item modified_time="1090884978" url="licenses.html" uploadstatus="1" />
+    <item modified_time="1086358868" url="news.html" uploadstatus="1" />
+    <item modified_time="1097007318" url="roadmap.html" uploadstatus="1" />
+    <item modified_time="1086217460" url="screenshot-application.html" uploadstatus="1" />
+    <item modified_time="1090081883" url="screenshots.html" uploadstatus="1" />
+    <item modified_time="1088523080" url="screenshots-pink.html" uploadstatus="1" />
+    <item modified_time="1088523057" url="screenshots-turtle.html" uploadstatus="1" />
+    <item modified_time="1097024707" url="source-j2mepolish.org.webprj" uploadstatus="1" />
+    <templates>templates/</templates>
+    <toolbars>toolbars/</toolbars>
+    <item url="licensing/" uploadstatus="1" />
+    <item upload_time="" modified_time="1087511084" url="licensing/commercial-license.de.html" uploadstatus="1" />
+    <item modified_time="1090884633" url="licensing/Order-Form-de.pdf" uploadstatus="1" />
+    <item modified_time="1096559229" url="licensing/Order-Form.pdf" uploadstatus="1" />
+    <item modified_time="1087511091" url="licensing/commercial-license.html" uploadstatus="1" />
+    <item modified_time="1087932899" url="downloads/j2mepolish-1.0-RC2.html" uploadstatus="1" />
+    <item modified_time="1087932891" url="downloads/j2mepolish-1.0-RC3.html" uploadstatus="1" />
+    <item modified_time="1087852173" url="downloads/j2mepolish-1.0-RC2.jar" uploadstatus="1" />
+    <item modified_time="1087852173" url="downloads/j2mepolish-1.0-RC2.zip" uploadstatus="1" />
+    <item modified_time="1087932229" url="images/osi-certified-120x100.png" uploadstatus="1" />
+    <item modified_time="1088752345" url="downloads/j2mepolish-1.0-RC4.html" uploadstatus="1" />
+    <item modified_time="1088614052" url="devices-overview.html" uploadstatus="1" />
+    <item modified_time="1088782187" url="discussion.html" uploadstatus="1" />
+    <item modified_time="1089066860" url="downloads/j2mepolish-1.0-RC5.html" uploadstatus="1" />
+    <item modified_time="1088782491" url="forums.html" uploadstatus="1" />
+    <item modified_time="1096102369" url="docs/directives.html" uploadstatus="1" />
+    <item modified_time="1095973221" url="docs/variables.html" uploadstatus="1" />
+    <item modified_time="1095461884" url="docs/resource-assembling.html" uploadstatus="1" />
+    <item upload_time="" modified_time="1093441742" url="docs/game-engine.html" uploadstatus="1" />
+    <item modified_time="1090086924" url="downloads/j2mepolish-1.0-RC6.html" uploadstatus="1" />
+    <item modified_time="1092060704" url="contributors.html" uploadstatus="1" />
+    <item upload_time="" modified_time="1096030785" url="docs/tutorial.html" uploadstatus="1" />
+    <item modified_time="1090060359" url="docs/javadoc.html" uploadstatus="1" />
+    <item modified_time="1091993565" url="docs/extending.html" uploadstatus="1" />
+    <item modified_time="1090850982" url="docs/custom-obfuscator.html" uploadstatus="1" />
+    <item modified_time="1090851022" url="docs/custom-preprocessor.html" uploadstatus="1" />
+    <item modified_time="1093348313" url="docs/custom-item.html" uploadstatus="1" />
+    <item modified_time="1090858230" url="docs/custom-background.html" uploadstatus="1" />
+    <item modified_time="1090858247" url="docs/custom-border.html" uploadstatus="1" />
+    <item modified_time="1089549615" url="images/favicon.gif" uploadstatus="1" />
+    <item modified_time="1088156357" url="images/javanet_button.gif" uploadstatus="1" />
+    <item modified_time="1090070153" url="images/screenshot-custom-background-circle1.png" uploadstatus="1" />
+    <item modified_time="1090070206" url="images/screenshot-custom-background-circle2.png" uploadstatus="1" />
+    <item modified_time="1090076731" url="images/screenshot-custom-border-circle.png" uploadstatus="1" />
+    <item modified_time="1090327604" url="downloads/j2mepolish-1.0-RC7.html" uploadstatus="1" />
+    <item modified_time="1091015887" url="downloads/j2mepolish-1.0.html" uploadstatus="1" />
+    <item modified_time="1090884830" url="licensing/order1.html" uploadstatus="1" />
+    <item modified_time="1091033678" url="downloads/j2mepolish-1.0.1.html" uploadstatus="1" />
+    <item modified_time="1092063667" url="downloads/j2mepolish-1.1.html" uploadstatus="1" />
+    <item modified_time="1097013263" url="docs/how-tos.html" uploadstatus="1" />
+    <item modified_time="1093371115" url="downloads/j2mepolish-1.1.1.html" uploadstatus="1" />
+    <item modified_time="1096110992" url="downloads/j2mepolish-1.2.html" uploadstatus="1" />
+    <item modified_time="1095471466" url="downloads/j2mepolish-1.2-pre2.html" uploadstatus="1" />
+    <item modified_time="1095468960" url="downloads/j2mepolish-1.2-pre3.html" uploadstatus="1" />
+    <item modified_time="1097013212" url="docs/localization.html" uploadstatus="1" />
+    <item modified_time="1096892004" url="docs/build-emulator.html" uploadstatus="1" />
+    <item modified_time="1095285267" url="docs/resources-overview.html" uploadstatus="1" />
+    <item modified_time="1096292319" url="downloads/j2mepolish-1.2.1.html" uploadstatus="1" />
+    <item modified_time="1097020512" url="downloads/j2mepolish-1.2.2.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.3.html" uploadstatus="1" />
+    <item url="order/" uploadstatus="1" />
+    <item url="docs/features.html" uploadstatus="1" />
+    <item url="docs/tour.html" uploadstatus="1" />
+    <item url="order/Order-Form.pdf" uploadstatus="1" />
+    <item url="s5/" uploadstatus="1" />
+    <item url="s5/framing.css" uploadstatus="1" />
+    <item url="s5/opera.css" uploadstatus="1" />
+    <item url="s5/pretty.css" uploadstatus="1" />
+    <item url="s5/print.css" uploadstatus="1" />
+    <item url="s5/s5-core.css" uploadstatus="1" />
+    <item url="s5/slides.css" uploadstatus="1" />
+    <item url="s5/slides.js" uploadstatus="1" />
+    <item url="docs/introduction.html" uploadstatus="1" />
+    <item url="docs/tools.html" uploadstatus="1" />
+    <item url="images/binaryeditor-osx.png" uploadstatus="1" />
+    <item url="images/binaryeditor.png" uploadstatus="1" />
+    <item url="images/binaryeditor_small.png" uploadstatus="1" />
+    <item url="images/buildphases.png" uploadstatus="1" />
+    <item url="images/dragndrop-binaryeditor-osx.png" uploadstatus="1" />
+    <item url="images/fonteditor-osx.png" uploadstatus="1" />
+    <item url="images/fonteditor.png" uploadstatus="1" />
+    <item url="images/header.xcf" uploadstatus="1" />
+    <item url="images/J2ME-Polish-bin-folder.png" uploadstatus="1" />
+    <item url="images/RobertVirkus.png" uploadstatus="1" />
+    <item url="images/screenshot-example-roadrunner.png" uploadstatus="1" />
+    <item url="images/screenshot-motorola-example-enough.png" uploadstatus="1" />
+    <item url="images/screenshot-motorola-example-pink.png" uploadstatus="1" />
+    <item url="images/screenshot-motorola-example-roadrunner.png" uploadstatus="1" />
+    <item url="images/screenshot-sonyericsson-example-enough.png" uploadstatus="1" />
+    <item url="images/screenshot-sonyericsson-example-pink.png" uploadstatus="1" />
+    <item url="images/screenshot-sonyericsson-example-roadrunner.png" uploadstatus="1" />
+    <item url="s5/CVS/" uploadstatus="1" />
+    <item url="s5/CVS/Entries" uploadstatus="1" />
+    <item url="s5/CVS/Repository" uploadstatus="1" />
+    <item url="s5/CVS/Root" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.3a.html" uploadstatus="1" />
+    <item url="docs/articles.html" uploadstatus="1" />
+    <item url="downloads/Seminar.J2MEPolish.Ausarbeitung.pdf" uploadstatus="1" />
+    <item url="downloads/Seminar.J2MEPolish.Praesentation.pdf" uploadstatus="1" />
+    <item url="images/lang-de.png" uploadstatus="1" />
+    <item url="images/lang-en.png" uploadstatus="1" />
+    <item url="images/screenshot-example-enough-small.png" uploadstatus="1" />
+    <item url="images/screenshot-example-pink-small.png" uploadstatus="1" />
+    <item url="images/screenshot-example-roadrunner-small.png" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.3b.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.3c.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.0-RC3.jar" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.0-RC3.zip" uploadstatus="1" />
+    <item url="robert_virkus.asc" uploadstatus="1" />
+    <item url="s5/bodybg.gif" uploadstatus="1" />
+    <item upload_time="" url="docs/tour-cn.html" uploadstatus="1" />
+    <item url="images/j2mepolish-logo.gif" uploadstatus="1" />
+    <item url="images/lang-cn.png" uploadstatus="1" />
+    <item url="docs/tour-es.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.4.html" uploadstatus="1" />
+    <item url="docs/tour-de.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.2.5.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.3-beta1.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.3-beta2.html" uploadstatus="1" />
+    <item url="" uploadstatus="1" />
+    <item url="docs/platform-blackberry.html" uploadstatus="1" />
+    <item url="docs/platform-palm.html" uploadstatus="1" />
+    <item url="docs/platform.html" uploadstatus="1" />
+    <item url="images/lang-es.png" uploadstatus="1" />
+    <item url="images/proj2mepolish.gif" uploadstatus="1" />
+    <item url="images/title-background.png" uploadstatus="1" />
+    <item url="book/book.html" uploadstatus="1" />
+    <item url="book/" uploadstatus="1" />
+    <item url="downloads/j2mepolish-1.3-beta3.html" uploadstatus="1" />
+    <item url="polish.swf" uploadstatus="1" />
+    <item url="images/rec_pro_sdj_new.gif" uploadstatus="1" />
+    <item url="docs/platform-doja.html" uploadstatus="1" />
+    <treestatus>
+      <openfolder url="docs" />
+    </treestatus>
+    <annotations/>
+    <item url="images/enough-software-team-small.png" uploadstatus="1" />
+    <item url="downloads/j2mepolish-2.0-beta1.html" uploadstatus="1" />
+    <item url="images/j2mepolish20.gif" uploadstatus="1" />
+    <item url="images/java5syntax200px.gif" uploadstatus="1" />
+    <item url="images/java5syntax400px.gif" uploadstatus="1" />
+    <item url="docs/java5.html" uploadstatus="1" />
+    <item url="docs/mepose-install.html" uploadstatus="1" />
+    <item url="docs/mepose-running.html" uploadstatus="1" />
+    <item url="docs/mepose-wizard.html" uploadstatus="1" />
+    <item url="images/mepose-install_02_menuOpen.png" uploadstatus="1" />
+    <item url="images/mepose-install_03_searchFeature.png" uploadstatus="1" />
+    <item url="images/mepose-install_04_enterRemoteSite.png" uploadstatus="1" />
+    <item url="images/mepose-install_05_remoteSiteEntered.png" uploadstatus="1" />
+    <item url="images/mepose-install_06_searchResults.png" uploadstatus="1" />
+    <item url="images/mepose-install_07_licenseAgreement.png" uploadstatus="1" />
+    <item url="images/mepose-install_08_startInstallation.png" uploadstatus="1" />
+    <item url="images/mepose-install_09_verification.png" uploadstatus="1" />
+    <item url="images/mepose-install_10_preferencePage.png" uploadstatus="1" />
+    <item url="images/mepose-install_11_debugPreferences.png" uploadstatus="1" />
+    <item url="images/mepose-run_01_openEditor.png" uploadstatus="1" />
+    <item url="images/mepose-run_03_chooseDevice.png" uploadstatus="1" />
+    <item url="images/mepose-run_04_breakpointSet.png" uploadstatus="1" />
+    <item url="images/mepose-run_05_chooseDebug.png" uploadstatus="1" />
+    <item url="images/mepose-run_05_chooseRun.png" uploadstatus="1" />
+    <item url="images/mepose-wizard_01_choose.png" uploadstatus="1" />
+    <item url="images/mepose-wizard_02_projectName.png" uploadstatus="1" />
+    <item url="images/mepose-wizard_03_paths.png" uploadstatus="1" />
+    <item url="images/mepose-wizard_04_deviceSelection.png" uploadstatus="1" />
+    <item url="images/mepose-wizard_05_javaSettings.png" uploadstatus="1" />
+    <item url="docs/mepose.html" uploadstatus="1" />
+    <item url="docs/mepose-features.html" uploadstatus="1" />
+    <item url="docs/floater.html" uploadstatus="1" />
+    <item url="docs/mepose-convert.html" uploadstatus="1" />
+    <item url="images/floater.png" uploadstatus="1" />
+    <item url="images/mepose-convert_01_useSameName.png" uploadstatus="1" />
+    <item url="images/mepose.png" uploadstatus="1" />
+    <item url="images/mepose-install_11_pathPreferences.png" uploadstatus="1" />
+    <item url="images/mepose-run_06_emulatorStarted.png" uploadstatus="1" />
+    <item url="images/mepose-run_07_breakpointHit.png" uploadstatus="1" />
+    <item url="images/mepose-features-autocompletion.png" uploadstatus="1" />
+    <item url="images/mepose-features-mark-occurences.png" uploadstatus="1" />
+    <item url="images/mepose-features-syntax-highlighting.png" uploadstatus="1" />
+    <item url="downloads/j2mepolish-2.0-beta2.html" uploadstatus="1" />
+    <item url="downloads/j2mepolish-2.0-beta3.html" uploadstatus="1" />
+    <item url="docs/serialization.html" uploadstatus="1" />
+    <item url="docs/serialization-howto.html" uploadstatus="1" />
+    <item url="docs/serialization-persistence.html" uploadstatus="1" />
+  </project>
+</webproject>

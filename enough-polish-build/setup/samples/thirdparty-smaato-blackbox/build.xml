@@ -1,0 +1,193 @@
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created.                                              -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+
+<project 
+	name="smaato-blackbox" 
+	default="j2mepolish">
+	
+	
+	<property file="${user.name}.properties" />
+	
+	<!-- The polish.home property should point to the directory   -->
+	<!-- containing the J2ME Polish installation.                 -->
+
+	<property name="polish.home" location="%{INSTALL_PATH}" />
+	<property file="${polish.home}/global.properties" />
+	<property name="smaato.home" location="${polish.home}/thirdparty/smaato" />
+	<property file="${smaato.home}/integration/j2mepolish/soma.properties" />
+
+	<property name="device" value="Generic/AnyPhone" />
+	<property name="devices" value="Generic/AnyPhone,Motorola/Razr2V8,Motorola/V3xx,Nokia/E61,Nokia/E70,Nokia/N95,Nokia/6680,Sony-Ericsson/W850i,BlackBerry/4.2TrackBall,BlackBerry/4.3" />
+	
+	
+	<!-- Definition of the J2ME Polish task:                      -->
+	
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar"/>
+	
+		
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default target -->
+			
+	<target name="test" 
+		description="Call this target first to skip the obfuscation step, e.g. ant test j2mepolish"
+		>
+		<property name="test" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false" />
+		<property name="dir.work" value="build/real" />
+	</target>
+	 
+	<!-- In this target the J2ME Polish task is used.             -->
+	<!-- It has 3 sections:                                       -->
+	<!--    1. The info-section defines some general information  -->
+	<!--    2. The deviceRequirements-section chooses the devices -->
+	<!--       for which the application is optimized.            -->
+	<!--    3. The build-section controls the actual build        -->
+	<!--       process.                                           -->	
+	<target name="j2mepolish" 
+			depends="init"
+			description="This is the controller for the J2ME build process." 
+			>
+		<j2mepolish>
+		    <!-- general settings, these settings basically form the JAD-attributes. -->
+		    <!-- Have a look at the <jad>-section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files -->
+			<info
+				name="Black Box"
+				version="1.3.4"
+				description="Displays RSS feeds and ads advertisements"
+				vendorName="Smaato, Inc."
+				infoUrl="http://www.smaato.com"
+				icon="rss.png"
+				jarName="${polish.vendor}-${polish.name}-${polish.locale}-blackbox.jar" 
+				copyright="Copyright 2010 Smaato, Inc. All rights reserved."
+			/>
+			
+			<!-- selection of supported devices -->
+			<!-- In the test mode the application is build only for the  -->
+			<!-- Generic/midp1 phone, but when the test-property is set to false, -->
+			<!-- the second deviceRequirements will be used instead. -->
+			<deviceRequirements if="test">
+				<requirement name="Identifier" value="${device}" />
+			</deviceRequirements>
+			<deviceRequirements unless="test">
+				<requirement name="Identifier" value="${devices}" />
+			</deviceRequirements>
+			
+		    <!-- build settings -->
+			<!-- 
+			 -->
+			<build
+				fullscreen="menu"
+				usePolishGui="true"
+				workDir="${dir.work}"
+			>
+				<!-- midlets definition -->
+				<midlet class="com.smaato.blackbox.BlackBox" name="BlackBox" />
+				
+				<!-- project-wide variables - used for preprocessing.  -->
+				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+				<variables includeAntProperties="true" >
+					<!-- advertisement settings: -->
+					<variable name="soma.publisherId"   value="0" />
+					<variable name="soma.applicationId" value="0" />
+					<variable name="soma.adspaceId"     value="0" />
+					<variable name="soma.enableAdvertisements" 	value="true" />
+					<variable name="soma.networkMode" 			value="online" />
+					<variable name="soma.banner.backgroundcolor" value="0" />
+					<!-- J2ME Polish settings: -->
+					<variable name="polish.Browser.MaxRedirects" value="5" />
+					<variable name="polish.Browser.Gzip" value="false" />
+					<variable name="polish.Browser.PaintDownloadIndicator" value="true" />
+					<variable name="polish.Browser.MemorySaver" value="true" />
+					<variable name="polish.TextField.useDirectInput" value="true" />
+					<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					<variable name="polish.useScrollBar" value="true" />
+					<variable name="soma.banner.backgroundcolor" value="0" />
+				</variables>
+				<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
+				<resources
+					dir="resources/base"
+					defaultexcludes="yes"
+					excludes="readme.txt"
+				>
+					<root dir="resources/base/images" />
+					<root dir="resources/base/sounds" />
+					<root dir="resources/base/feeds" />
+					<!-- add the localization element for created localized
+					     versions of your application: -->
+					<localization locales="en_US" unless="test" />
+				</resources>
+				
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator name="ProGuard" unless="test || polish.blackberry" >
+					<!--
+					You can set additional parameters here, e.g.:
+					<parameter name="optimize" value="false" />
+					-->
+				</obfuscator>
+				
+				<!-- debug settings: only include debug setting when the test-property is true 
+				if="test" 
+				-->
+				<debug verbose="true" level="error" if="test" >
+					<filter package="com.smaato.blackbox" level="debug" />
+				</debug>
+				
+			</build>
+			
+			<!-- execution of emulator(s) -->
+			<emulator
+				wait="true"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="test and not debug"
+				>
+			</emulator>
+		
+			<emulator
+				wait="true"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="debug">
+				<debugger port="8000" />
+			</emulator>
+			
+		</j2mepolish>
+	</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+	
+	<target name="clean" 
+	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+		<delete dir="build" />
+		<delete dir="dist" />
+	</target>
+
+</project>

@@ -1,0 +1,612 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	screenColorTop1: #fff;
+	screenColorBottom1: #fff;
+	screenColorTop2: #ff0;
+	screenColorBottom2: #ff0;
+	bgColor:  #eee;
+	fontColor: #222;
+	fontShadowColor: #fff;
+	focusedFontColor: #111;
+	focusedBackgroundColor: #eee;
+	focusedBorderColor: #444;
+}
+
+backgrounds {
+	inputComplete {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+
+.mailForm {
+	padding: 5px;
+	background-color: black;
+	layout: horizontal-expand | horizontal-center | top;
+	//#if !polish.useScrollBar
+		scrollindicator-up-image: url( arrowUp.png );
+		scrollindicator-down-image: url( arrowDown.png );
+	//#endif
+	/*
+	//#if polish.api.mmapi
+		title-style: .mailFormTitle;
+	//#endif
+	*/
+}
+
+//#if polish.api.mmapi
+/**
+  * Specific title for MMAPI enabled devices.
+  * 
+.mailFormTitle extends title {
+	min-height: imageheight( love.gif );
+	font-color: black;
+	background {
+		type: animated-gif;
+		color: white;
+		image: url( love.gif );
+		anchor: right | vertical-center;
+		x-offset: 3;
+	}
+}
+  */
+//#endif
+
+.mailTree {
+	padding-vertical: 3;
+	treeitem-closed-indicator: url( arrowRight.png );
+	treeitem-opened-indicator: url( arrowLeft.png );
+}
+
+.mailBox {
+	margin: 3;
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	/*
+	background {
+		type: round-rect;
+		color: mailBoxBgColor;
+		border-color: mailBoxBorderColor;
+	}
+	*/
+	background-color: #656565;
+	font {
+		style: bold;
+		size: small;
+		color: #eee;
+	}
+	layout: expand | left;
+}
+
+.mailBox:hover {
+	margin: 0;
+	background-color: white;
+	font-color: black;
+	/*
+	background-border-color: focusedBorderColor;
+	background-border-width: 0;
+	background {
+		type: round-rect;
+		color: #8800;
+	}
+	*/
+	border {
+		type: drop-shadow;
+		inner-color: #CC8D8D67;
+		outer-color: #AA2D2D25;
+		width: 3;
+		orientation: all-sides;
+	}
+}
+
+.mailSummary {
+	padding: 3;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: #999;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: #000;
+	}
+}
+
+.mailSummary:hover {
+	padding-right: 7;
+	background-color: #fff;
+	font-color: #222;
+}
+
+
+.mailDetail {
+	padding: 2;
+	background {
+		color: #aaa;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: #222;
+	}
+	label-style: .mailDetailLabel;
+}
+
+.mailDetailLabel extends label {
+	font-color: white;
+}
+
+.mailTicker {
+	ticker-step: 1;
+	ticker-position: top;
+	padding-horizontal: 5;
+	layout: vertical-center;
+	icon-image: url( sending.png );
+	font-color: white;
+	font-size: small;
+	text-effect: shadow;
+	text-shadow-color: gray;
+}
+
+
+.createMessageForm extends .mailForm {
+	title-style: none;
+}
+
+/**
+ * Default style for labels.
+ * Set an explicit style with "label-style: name;" in the appropriate style.
+ */
+label {
+	font-size: small;
+	margin: 2;
+	margin-left: 5;
+	layout: left | newline-after;
+}
+
+/**
+  * You could style the screen info element here, which is used to display information
+  * over several screens. Since we use only two images, however, this style is not
+  * really needed.
+  */
+screeninfo {
+	margin-top: 2;
+	margin-left: 5;
+	margin-right: 5;
+}
+
+/**
+  * The element that displays the current input mode, e.g. "abc" or "Abc" or "123"
+  */
+info {
+	layout: right;
+	/* margin-right: 10; */
+	background-color: argb( 170, 255, 255, 255 );
+}
+
+
+.input {
+	margin: 3;
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	include-label: true;
+	layout: left | expand;
+	textfield-caret-color: red;
+	predictive-choice-orientation: top;
+	complete-background: inputComplete;
+	complete-background-padding: 3;
+	/*
+	font-bitmap: /arial_12b.bmf;
+	text-wrap: false;
+	*/
+}
+
+.input:hover {
+	include-label: false;
+	background {
+		type: round-rect;
+		color: white;
+	}
+}
+
+.messageInput extends .input {
+	min-height: 20%;
+}
+
+.addressInput {
+	textfield-caret-flash: false;
+	text-wrap: false;
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	include-label: true;
+	choicetextfield-choicestyle: .addressChoice;
+	choicetextfield-containerstyle: .addressChoicesContainer;
+	layout: left | expand;
+	/** style of the filter-textfield of a FilteredList/FilteredChoiceGroup */
+	filter-style: filterTextFieldStyle;
+	/** style of the popup screen for a FileredChoiceGroup */
+	popup-style: filterPopupStyle;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+.addressInput:hover {
+	padding: 3;
+	padding-left: 3;
+	background {
+		type: round-rect;
+		color: white;
+		/*
+		border-color: black;
+		border-width: 2;
+		*/
+	}
+	layout: left | expand;	
+}
+
+.filterTextFieldStyle {
+	margin-left: 2;
+	margin-right: 2;
+	before: url( search.png );
+	background {
+		color: white;
+		border-color: black;
+	}
+	layout: expand | left;
+}
+
+.filterPopupStyle {
+	repaint-previous-screen: true;
+	margin: 10;
+	margin-bottom: 0;
+	padding: 5;
+	background-color: bgColor;
+}
+
+/*
+.textFieldSymbolList {
+	padding: 10;
+	columns: 5;
+	layout: vertical-shrink | horizontal-shrink | center | vertical-center;
+}
+*/
+
+.addressChoice {
+	padding: 2;
+	font-size: small;
+	font-style: plain;
+	font-color: gray;
+	layout: left | expand;
+}
+
+.addressChoice:hover {
+	font-color: red;
+}
+
+.addressChoicesContainer {
+	background-color: argb( 210, 255, 255, 255 );
+	layout: left | expand;
+}
+
+.senderOption {
+	margin: 2;
+	radiobox-plain: none;
+	radiobox-selected: url( checked.png );
+	checkbox-plain: none;
+	checkbox-selected: url( checked.png );
+	font-size: small;
+	font-style: bold;
+}
+
+.senderOption:hover {
+	background {
+		type: round-rect;
+		color: #666;
+	}
+	font-color: white;
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+	padding: 1;
+	padding-left: 8;
+	padding-right: 8;
+	background {
+		type: round-rect;
+		arc: 4;
+		color: focusedBackgroundColor;
+		border-color: focusedBorderColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: focusedFontColor;
+		size: small;
+	}
+	layout: expand | left;	
+}
+
+/*************    Alert             ***************************************************************************************************/
+
+.mailAlert extends .mailForm {
+	margin-right: 5%;
+	margin-left: 5%;
+	padding-left: 1px;
+	padding-right: 1px;
+	layout: horizontal-center | vcenter | horizontal-shrink | vertical-shrink;
+	repaint-previous-screen: true;
+	//#if polish.midp2 || polish.api.nokia-ui
+		border {
+			type: drop-shadow;
+			width: 6;
+			inner-color: #accc;
+			outer-color: #2000;
+			orientation: top-right;
+		}
+	//#endif
+	/*
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#endif
+	*/
+	screen-change-animation: right;
+	background {
+		type: vertical-gradient;
+		top-color: #222;
+		top-color: red;
+		bottom-color: #888;
+	}
+}
+
+
+alertcontent {
+	font-color: white;
+}
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #fff;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 180;
+	/*
+	*/
+}
+
+/*************    Screen Title       ***************************************************************************************************/
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold | italic;
+	font-color: focusedFontColor;
+	background {
+		type: vertical-gradient;
+		top-color: #fff;
+		bottom-color: #ccc;
+		start: 2%;
+		end: 90%;
+	}
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	/*
+	text-effect: vertical-gradient;
+	text-vertical-gradient-start-color: #eee;
+	text-vertical-gradient-end-color: #000;		
+	*/
+	text-effect: shadow;
+	text-shadow-color: fontShadowColor;
+}
+
+.titleClock {
+	clock-format: hh:mm;
+	font-size: small;
+	font-color: #222;
+	layout: right | vertical-center;
+}
+
+/*************    Menubar         ***************************************************************************************************/
+
+menubar
+{
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	//#if polish.MenuBar.Position == right
+		background-color: silver;
+	//#else
+		background {
+			type: vertical-gradient;
+			top-color: #ccc;
+			bottom-color: #fff;
+			start: 10%;
+			end: 90%;
+		}
+	//#endif
+}
+
+/**
+ * Commands within the menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+    padding: 2;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: fontColor;
+	font-style: bold;
+	/*
+	text-effect: vertical-gradient;
+	text-vertical-gradient-end-color: #eee;
+	text-vertical-gradient-start-color: #000;
+	*/
+	text-effect: shadow;
+	text-shadow-color: #ff0;
+	/*
+	background {
+		type: round-rect;
+		color: white;
+	}
+	*/
+}
+
+/**
+ * Commands within the menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+
+menu {
+	min-width: 100;
+	padding: 1;
+	font-color: focusedFontColor;
+	font-size: small;
+	//#if polish.MenuBar.Position != right && polish.MenuBar.Position != invisible
+		view-type: slide;
+		//#if polish.MenuBar.OptionsPosition == right
+			slideview-direction: upleft;
+		//#else
+			slideview-direction: upright;
+		//#endif
+	//#endif
+	border {
+		type: drop-shadow;
+		width: 4;
+		inner-color: #aeee;
+		outer-color: #2222;
+		orientation: top-right;
+	}
+	background {
+		color: silver;
+		/*type: horizontal-stripes;
+		first-top-color: screenColorTop1;
+		first-bottom-color: screenColorBottom1;
+		second-top-color: screenColorTop2;
+		second-bottom-color: screenColorBottom2;
+		*/
+	}
+	expand-items: true;
+	/* When the extended menubar is not used, the font-section will
+	   apply to the menubar as well:
+	font-color: fontColor;
+	font-style: bold;
+	menubar-color: yellow;
+	 */
+}
+
+
+/** Style for the first layer of subcommands: **/
+menu1 extends menu {
+	view-type: none; /* deactivate sliding for the subcommands */
+}
+
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	include-label: true;
+	padding: 2;
+	font {
+		color: fontColor;
+		size: small;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+	border {
+		type: bottom;
+		color: white;
+	}
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+.menuItem:hover {
+	background {
+		color: focusedBackgroundColor;
+	}
+	font {
+		color: focusedFontColor;
+	}
+	layout: left | horizontal-expand;
+}
+
+.menuItem:pressed {
+	background {
+		color: #222;
+	}
+	font {
+		color: white;
+	}
+	layout: left | horizontal-expand;
+}
+
+.deactiveCommand {
+	background-color: silver;
+	font-color: gray;
+	layout: right;
+}
+

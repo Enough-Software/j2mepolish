@@ -1,0 +1,52 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: xx view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Gauge: xx view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-gauge.html">Gauge</a></li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-gauge">Gauge View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>xx</code> view-type  for a <a href="gui-item-gauge.html">Gauge</a>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-viewtype-xx.png"  width="98" height="31" alt="xx view-type" />	
+	<!-- 
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-xx.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="231">
+        <embed src="<%= basedir%>images/gui-viewtype-xx.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="231"
+        >
+        </embed>
+	</object>
+	 -->
+	</p>
+<pre>
+.screenMain {
+	view-type: xx;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.itemviews.XXItemView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/itemviews/XXItemView.html">XXItemView</a></li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,40 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: circle Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">circle Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Surround an item or a screen with a cyle or eclipse using the <code>circle</code> border:
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-border-circle.png"  width="105" height="31" alt="circle border" />	
+	</p>
+<pre>
+.itemMain {
+	padding-left: 5;
+	padding-right: 5;
+	border {
+		type: circle;
+		color: green;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings border circle%>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/CircleBorder.html">CircleBorder</a>.
+	</p>
+
+<%include end.txt %>

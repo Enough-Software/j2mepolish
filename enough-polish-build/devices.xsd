@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+
+This schema file validates devices.xml with the following command line:
+
+xmlstarlet val -e -s devices.xsd devices.xml
+
+xmlstarlet can be found at http://xmlstar.sourceforge.net/
+
+These namespaces will be used soon:
+
+targetNamespace="http://www.enough.de/polish/2.1/"
+xmlns="http://www.enough.de/polish/2.1/"
+
+-->
+
+<xsd:schema	
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:polish="http://www.enough.de/polish/2.1/">
+
+	<xsd:element name="devices">
+	    <xsd:complexType>
+	      <xsd:sequence>
+			<xsd:element name="device" type="Device" minOccurs="0" maxOccurs="unbounded"/>
+	      </xsd:sequence>
+	    </xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="Device">
+		<xsd:sequence>
+			<xsd:element name="identifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<!-- The unbound property is necessary to allow unordered child elements. Beware that
+			this also alters the set of recognized languages as f.e. several parent elements are now permitted.
+			All in all xml schema is not able to describe the device database correctly as it is not possible
+			to define a set of allowed elements where some occur 0-1 times and one element may contain 0-n times. -->
+			<xsd:sequence maxOccurs="unbounded">
+				<xsd:element name="parent" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="groups" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="features" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="user-agent" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="capability" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="value" type="xsd:string" use="required"/>
+						<xsd:attribute name="comment" type="xsd:string" use="optional" />
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:sequence>
+		<xsd:attribute name="supportsPolishGui" type="xsd:string"/>
+	</xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-example">
+	
+<!-- task definitions -->
+<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<property file="${user.name}.properties" />
+	<!-- The smaato.home property should point to the directory   -->
+	<!-- containing the smaato SOMA installation.                 -->
+	<property name="smaato.home" location="%{INSTALL_PATH}" />
+	<!-- The polish.home property should point to the directory   -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" value="%{POLISH_HOME}"/>
+	<property file="${polish.home}/global.properties" />
+
+	<taskdef 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar" 
+		name="j2mepolish"/>
+
+			
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="test">
+		<property name="test" value="true"/>
+		<property name="dir.work" value="build/test" />
+	</target>
+		
+	<target name="deploy">
+		<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false"/>
+		<property name="deploy-url" value=""/>
+		<property name="dir.work" value="build/real" />
+	</target>
+    
+<target depends="init" name="j2mepolish" description="builds the sample application">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info 
+			copyright="Copyright 2007 smaato, Inc. All rights reserved." 
+			description="Demonstrates the usage of the smaato SOMA Library." 
+			icon="icon.png" 
+			infoUrl="www.smaato.com" 
+			jarName="soma-sample.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			name="SOMA-Sample" 
+			vendorName="smaato" 
+			version="1.1.0"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements>
+			<requirement name="Identifier" value="Generic/multi"/>
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build 
+            usePolishGui="false"
+			workDir="${dir.work}"
+			sourceDir="source"
+			>
+			<!-- midlets definition -->
+			<midlet class="com.smaato.soma.sample.SomaSampleMidlet" name="SOMA-Sample"/>
+			<libraries>
+				<library file="${smaato.home}/import/smaato-soma.jar" />
+			</libraries>
+			<resources>
+				<localization locale="en" />
+			</resources>
+			<jad>
+				<filter>
+					MIDlet-Name, MIDlet-Version, 
+					MIDlet-Vendor, MIDlet-Jar-URL, MIDlet-Jar-Size, 
+					MIDlet-Description?, MIDlet-Icon?, MIDlet-Info-URL?,
+					MIDlet-Data-Size?, MIDlet-*, *
+				</filter>
+ 			</jad>
+			<manifestFilter>
+				Manifest-Version, MIDlet-Name, 
+				MIDlet-1, MIDlet-2?, MIDlet-3?, MIDlet-4?, MIDlet-5?, 
+				MIDlet-Version, MIDlet-Vendor,
+				MicroEdition-Profile, MicroEdition-Configuration,
+				MIDlet-Data-Size?
+			</manifestFilter>
+			
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test" >
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug level="error" showLogOnError="true" verbose="true" if="test">
+				<filter level="debug" package="com.smaato.soma"/>
+			</debug>
+			
+		</build>
+		
+		<!-- execution of emulator(s) -->
+		<emulator
+			wait="true"
+			if="test"
+			/>		
+	</j2mepolish>
+</target>
+
+
+<target name="clean"
+	description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+	>
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+	<target 
+		name="emulator"
+		description="Builds and starts the emulator" 
+		depends="test, j2mepolish"
+	/>
+
+
+</project>

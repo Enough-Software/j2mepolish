@@ -1,0 +1,633 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download J2ME Polish 2.0-beta1 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 2.0-beta1</h1>
+	<%index %>
+	<h2 id="improvements20-beta1">Improvements of J2ME Polish 2.0-beta1</h2>
+	<p>
+	J2ME Polish 2.0-beta1 brings exciting new possibilities to any mobile developer!
+	Please note that the Eclipse Plugin as well as the Java 5 syntax support will be included
+	in the forthcoming Beta 2 release, which is scheduled for mid-August 2006.
+	Please <a href="../contact.html">report</a> any problems that you might encounter.
+
+	</p>
+<ul>
+	<li><b>UI items: </b>New elements: <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/ListItem.html">ListItem</a> for showing lists or tables of items, <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/PictureBrowserItem.html">PictureBrowserItem</a> for showing items, <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/TreeItem.html">TreeItem</a> for visualizing tree structures like a file system.</li>
+	<li><b>UI effects: </b>Apply screen-change-animations and text-effects to your design.</li>
+	<li><b>Advanced Tables: </b>You can stretch elements over more than one table cell by specifying the &quot;colspan&quot; CSS attribute:
+<pre>
+.singleCell {
+	font-color: fontColor;
+	background-color: tableCellBackColor;
+}
+.twoColumnCell extends singleCell {
+	colspan: 2;
+}
+
+</pre>
+	<li><b>IO: </b>Use <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/Serializable.html">de.enough.polish.io.Serializable</a> or <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/Externalizable.html">de.enough.polish.io.Externalizable</a> for making your classes serializable - use <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/Serializer.html">de.enough.polish.io.Serializer</a> for writing and reading serializable classes to and from streams.</li>
+	<li><b>Storage:</b> Use 
+		<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/RmsStorage.html">de.enough.polish.io.RmsStorage</a> for saving and loading data to and from the Recordstore Management System. Have a look at the &quot;serialization&quot; sample application for more information.</li>
+	<li><b>CSS: </b>Use preprocessing within polish.css files just like in your source code. You can even access resources by using property functions. In the following example we specify that an item with the &quot;.mainItem&quot; has at least the same height as the image &quot;button.png&quot;. J2ME Polish will then find the correct button.png resource and query its height:
+
+<pre>
+.mainItem {
+	//#if polish.group.Series60
+		background-image: url( button.png );
+		min-height: ${ imageheight( button.png ) };
+	//#else
+		background {
+			type: gradient;
+			top-color: white;
+			bottom-color: red;
+		}
+	//#endif
+}
+</pre>
+	New property functions useful for working in polish.css filea are <code>imagewidth</code>, <code>imageheight</code> and <code>exists</code>.
+	</li>
+	<li><b>Customization: </b>You can now easily customize your application by using several resource roots:
+<pre>
+
+&lt;resources&gt;
+	&lt;root dir=&quot;resources/base&quot;/&gt;
+	&lt;root dir=&quot;resources/${customer}&quot;/&gt;
+&lt;/resources&gt;
+</pre>
+or 
+<pre>
+
+&lt;resources&gt;
+	&lt;root dir=&quot;resources/base&quot;/&gt;
+	&lt;root dir=&quot;resources/images&quot;/&gt;
+	&lt;root dir=&quot;resources/sounds&quot;/&gt;
+
+&lt;/resources&gt;
+</pre>
+</li>
+	<li><b>Internationlization: </b>You can now use messages.txt files with any encoding by using nested &lt;locale&gt; elements:
+<pre>
+&lt;resources&gt;
+	&lt;localization&gt;
+		&lt;locale name=&quot;fr_FR&quot; encoding=&quot;UTF-8&quot;/&gt;
+
+		&lt;locale names=&quot;cn, de, en&quot; encoding=&quot;UTF-8&quot; unless=&quot;test&quot; /&gt;
+	&lt;/localization&gt;
+&lt;/resources&gt;
+
+</pre>
+	</li>
+	<li><b>New backgrounds: </b>There are some new backgrounds available:
+<pre>
+backgrounds {
+	linearGradient {
+		type: gradient;
+		top-color: white;
+		bottom-color: red;
+	}
+	complexGradient {
+		type: gradient;
+		top-color: white;
+		bottom-color: red;
+		start: 5%;
+		end: 80%;
+	}
+
+}
+</pre>
+By default screen backgrounds range from the very top to the bottom of the menubar. You can change the top and the bottom position for every screen background by specifying the &quot;background-top&quot; and &quot;background-bottom&quot; CSS attributes:
+<pre>
+
+.mainScreen {
+	background {
+		type: gradient;
+		top-color: white;
+		bottom-color: red;
+		top: title;
+		bottom: menubar;
+	}
+}
+</pre>
+	</li>
+	<li><b>Subcommands &amp; UiAccess: </b>With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/UiAccess.html">de.enough.polish.ui.UiAccess</a> you can access the power of J2ME Polish while staying compatible to the standard javax.microedition.lcdui components. You can, for example, add subcommands to screens by calling <code>UiAccess.addSubCommand( parentCommand, childCommand, screen)</code>. Further options include setting the caret position of TextFields, setting the input mode of TextFields and adding ScreenStateListener to any screen.</li>
+	<li><b>Native placements of menubar elements: </b>When you use the extended menubar, you will get native behavior of the commands, e.g. on Sony Ericsson the default name for the menu will not be &quot;Options&quot; but &quot;Menu&quot; and it will also be placed on the right side of the screen. Activate the extended menubar by setting the &quot;polish.MenuBar.useExtendedMenuBar&quot; property in your build.xml script:
+
+<pre>
+&lt;variable name=&quot;polish.MenuBar.useExtendedMenuBar&quot; value=&quot;true&quot; &gt;
+</pre>
+	</li>
+
+	<li><b>Scrollbar: </b>You can use a scrollbar instead of the standard scroll indicators when you activate the <code>polish.useScrollBar</code> preprocessing variable in your build.xml script:
+<pre>
+&lt;variable name=&quot;polish.useScrollBar&quot; value=&quot;true&quot; &gt;
+</pre>
+	You can then design the scrollbar using the <code>scrollbar</code> CSS style:
+<pre>
+scrollbar {
+	background-color: white;
+	scrollbar-slider-width: 5;      /* is ignored when a slider image is defined */
+	scrollbar-slider-color: black;  /* is ignored when a slider image is defined */
+	scrollbar-slider-image: url( slider.png );
+	scrollbar-slider-mode: page; 
+		/* The mode of the slider, either &quot;area&quot;,
+		&quot;item&quot; or &quot;page&quot;. In the &quot;area&quot; mode the slider represents the
+		position of the current selection relativ to the complete width and height.
+		In the &quot;item&quot; mode the index of currently selected item
+		is taken into account relative to the number of items.
+		In the &quot;page&quot;
+		The default mode is &quot;area&quot;, unless there is no focusable item
+		on the screen, in which case the &quot;page&quot; mode is used.
+		*/
+	
+}
+</pre>
+</li>
+	<li><b>Texteffects: </b>You can apply effects to any StringItems, titles, menu items, etc - without having a bitmap font or any additional resources in your JAR!</li>
+		<ul>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/ShadowTextEffect.html">shadow</a>: adds a simple shadow to your text.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/OutlineTextEffect.html">outline</a>: shows the outline of the text only.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/SegmentTextEffect.html">segment</a>: cuts the text into horizontal slides, similar to the IBM logo.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/TypeWriterTextEffect.html">typewriter</a>: animates your text by showing one character more in each animation phase.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/LighthouseTextEffect.html">lighthouse</a>: animates the text by showing one character with its direct neighbours in a different color.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/VerticalGradientTextEffect.html">gradient</a>: adds a vertical gradient to your text.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/VerticalMirrorTextEffect.html">mirror-shadow</a>: a MIDP 2.0 only effect that adds the vertically mirrored text as a shadow to the original text.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/FadeTextEffect.html">fade</a>: 
+			You can smoothly fade in or fade our your text on MIDP 2.0 devices.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/DropShadowTextEffect.html">drop-shadow</a>: 
+			Adds a soft drop shadow for MIDP 2.0, CLDC 1.1 devices.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/AlienGlowTextEffect.html">alien-glow</a>: 
+			Use the spooky alien-glow effect for your texts on MIDP 2.0, CLDC 1.1 devices.
+			</li>
+			<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/texteffects/FadingAlienGlowTextEffect.html">fading-alien-glow</a>: You can enhance the alien glow even further by fading it in and out.
+			</li>
+		</ul>
+<pre>
+title {	
+	//#if polish.midp2 and cldc1.1
+		text-effect: alien-glow;
+	//#else
+		text-effect: gradient;
+		text-vertical-gradient-start-color: white;
+		text-vertical-gradient-end-color green;
+	//#endif
+	font-size: large;
+	font-style: bold;
+	font-color: green;
+}
+focused {
+	text-effect: shadow;
+	text-shadow-color: red;
+}
+</pre>
+<!--
+	<li><b>: </b></li>
+-->
+	</ul>
+
+	<h2 id="download">Download</h2>
+	<p>
+		<a href="http://prdownload.berlios.de/polish/j2mepolish-2.0-beta1.jar">I accept the above rules 
+		(download the full installer: 15,074,569 bytes).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a><br />
+		Start the installation by calling <code>java -jar j2mepolish-2.0-beta1.jar</code>
+		from the commandline or by double-clicking the file. When any files are just extracted,
+		you need to start the installation by right-clicking the JAR file and select &quot;Open With... &gt; Javaw&quot;.
+	</p>
+
+	<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 15,074,569 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package. You can start the installation either by double-clicking
+	the file or by calling &quot;java -jar j2mepolish-[version].jar&quot; from the commandline.
+	<b>Do not simply extract the downloaded JAR file! Microsoft Internet Explorer users might
+	need to rename the extension from ".zip" to ".jar".</b>
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_09 or 1.5.x)</a>. 
+	</p>	
+	<p>
+	If you have trouble building your application, consider to set the &quot;JAVA_HOME&quot;
+	environment variable. Make sure to check out the <a href="../docs/install.html">installation guide</a>.
+	</p>	
+
+	<h2 id="improvements13-beta3">Improvements of J2ME Polish 1.3-beta3</h2>
+	<p>
+	J2ME Polish 1.3-beta3 features bug fixes as well as some big improvements for the 1.3-beta2 release. Check out this release now!
+	</p>
+	<h3 id="fixes13-beta3">Bugfixes since 1.3-beta2</h3>
+	<ul>
+		<li><b>TabbedForm: </b> pointer events are now processed normally.</li>
+		<li><b>ScrollIndicator: </b> in some cases the scrollindicator was painted above the menu bar.</li>
+		<li><b>POPUP ChoiceGroups :</b> such ChoiceGroups are now handled correctly when a pointer event occurs while the group is opened. Also horizontal alignments are done correctly now.</li>
+		<li><b>Locale.java: </b> The Locale.java class is now always included.</li>
+		<li><b>CSS: </b> styles that have a complex hierarchy are now correctly inherited thanks to Eugene Markov.</li>
+		<li><b>LogViewer: </b> The logviewer sample application now contains the correct resources.</li>
+
+	</ul>
+
+	<h3 id="improvements13-beta3">Improvements since 1.3-beta2</h3>
+	<ul>
+		</li>
+		<li><b>Smooth Scrolling: </b>Screens are now scrolled &quot;smooth&quot; by default. You can revert to the
+		previous behavior by specifying <code>scroll-mode: normal;</code> in the Screen's style definition in the <i>polish.css</i> file.</li>
+		<li><b>DoJa: </b>J2ME Polish now supports the Japanese <a href="../docs/platform-doja.html">DoJa</a> standard out of the box.</li>
+		<li><b>Resource Assembling: </b> 
+		<ol>
+			<li><i>Excluding files: </i>You can now exclude specific resources either by placing files with a length of 0 into the resources tree or by using the <a href="../docs/build-build.html#filter">&lt;filter&gt;</a> element within the &lt;resources&gt; element.</li>
+			<li><i>Enhanced filesets: </i>
+			It's possible to use any J2ME Polish preprocessing variables within 
+			<a href="../docs/build-build.html#fileset">&lt;fileset&gt;</a>
+			 elements now:
+<pre>
+&lt;fileset 
+	dir=&quot;resources/multimedia/images/${polish.language}&quot; 
+	includes=&quot;*.png&quot; 
+/&gt;
+</pre></li>
+		</ol>
+		</li>
+		<li><b>Alert: </b> You can now design alerts just like other screens. Use the predefined styles 
+		<code>alert</code> and <code>alertcontent</code> for designing them or use your own CSS styles using the
+		<code>//#style</code> preprocessing directive.
+		</li>
+		<li><b>Optional Styles: </b> You can now mark a style as optional by ending the name with a question mark within the #style directive. When the style is defined, it will be included normally, otherwise it
+		will not be used:
+<pre>
+//#style mySpecificStyle?
+Form form = new Form( title );
+</pre>
+		</li>
+		<li><b>NetBeans: </b>J2ME Polish now supports <a href="../docs/install.html#netbeans5">NetBeans 5.x</a> out of the box. Just open any of the provided sample projects, rename the build-netbeans.xml script to build.xml and you're done. Also compile errors are now mapped to the original source files rather than the preprocessed ones.</li>
+	</ul>
+	<h3 id="changelog">Changes since 1.2.4</h3>
+	<ul>
+	  <li><b>Screen Change Effects</b>: 
+		You can now enable effects that are played whenever the current screen is changed.
+		This is demonstrated by the &quot;roadrunner&quot; sample application, just register an
+		effect by setting the screen-change-animation CSS attribute of the corresponding screen:
+<pre>
+screen-change-animation: verticalflash;
+</pre>
+		These effects are described in detail in the <a href="../book/book.html">Pro J2ME Polish book</a>.
+	</li>
+	<li><b>BlackBerry and Palm Support</b>:
+	<a href="../docs/platform-blackberry.html">BlackBerry</a> and <a href="../docs/platform-palm.html">Palm</a> 
+	platforms are now supported out of the box. You can easily adjust J2ME Polish to other platforms, too.
+	</li>
+	  <li><b>Direct Input in DateFields</b>: 
+	  You can now activate the direct input mode of DateFields by setting the &quot;polish.DateField.useDirectInput&quot;
+	  variable in your build.xml file:
+<pre>
+&lt;variable name=&quot;polish.DateField.useDirectInput&quot; value=&quot;true&quot; /&gt;
+</pre>
+	  </li>
+	  <li><b>SpriteItem</b>: use the new 
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/SpriteItem.html">SpriteItem</a> 
+	  for creating sleazy animated menus.
+	  </li>
+	  <li><b>MessageItem</b>: use the new 
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/MessageItem.html">MessageItem</a> 
+	  for showing a combination of a IconItem (for the headline along with an icon) and a StringItem (for the text).
+	  </li>
+	  <li><b>ScreenInfo</b>: you can now show an information item on every screen with the new
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/ScreenInfo.html">ScreenInfo</a> element.
+	  Additionally you need to activate this info element by setting the &quot;polish.ScreenInfo.enable&quot;
+	  preprocessing variable to &quot;true&quot; in your build.xml file:
+<pre>
+&lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
+</pre>
+	  </li>
+	  <li><b>Titles</b>: you can now easily apply a new style to the title of a screen
+	  by calling the Screen.setTitle() method along with the //#style directive:
+<pre>
+if ( this.isRegistered ) {
+	//#style registeredTitle
+	this.form.setTitle( &quot;Hello World&quot; );
+} else {
+	//#style normalTitle
+	this.form.setTitle( &quot;Hello World&quot; );
+}
+</pre>
+	  </li>
+	  
+	  <li><b>FramedForm</b>: You can split your screen into several areas with the new 
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/FramedForm.html">FramedForm</a>.
+	  	It behaves just like Form, but the frames will always stay in their original positions.
+		Ideal for all pen-based devices and for applications that show information and allow
+		the user to influence that information, e.g. dictionaries with an integrated search field
+		on the result screen.
+	  </li>
+	  <li><b>ImageBackground</b>: Using the <code>anchor</code> CSS attribute resulted in a compile error.
+	   You can now tile images much more finegrained using the <code>overlap</code>, 
+	   <code>padding-horizontal</code> and <code>padding-vertical</code> CSS attributes for the 
+	   <a href="../docs/css-specific.html#imagebackground">image background</a>.
+	  </li>
+	  <li><b>exclusive view-type</b>: you can now use the &quot;exclusive&quot; view-type 
+	   for exclusive ChoiceGroups. This view only shows the currently selected item and allows
+	   to choose other items by using the left and right arrows.
+	  </li>
+	  <li><b>TextField</b>: You can now deactivate the flashing of the cursor by specifying
+		<code>textfield-caret-flash: false;</code>.
+	  </li>
+	  <li><b>abortOnError/onError</b>: 
+	  J2ME Polish now continues to build even when an error occurs for one device. You can 
+	  specify that the complete build should be aborted by setting the &quot;abortOnError&quot; attribute
+	  of the &lt;build&gt; element. &lt;br /&gt;
+	  You can also call an Ant target automatically when an error occurred by specifying the
+	  target's name in the &amp;quot;onError&amp;quot; attribute of the &amp;lt;build&amp;gt; element.
+	  When an error occurs, J2ME Polish sets the Ant property &quot;j2mepolish.error&quot; to &quot;true&quot; 
+	  and the &quot;j2mepolish.error.message&quot; property contains the error message.
+<pre>
+	&lt;build abortOnError=&quot;false&quot; onError=&quot;handleErrorTarget&quot;&gt;
+		...
+	&lt;/build&gt;
+	
+	...
+&lt;target name=&quot;handleErrorTarget&quot;&gt;
+	&lt;echo message=&quot;${j2mepolish.error.message}&quot; /&gt;
+&lt;/target&gt;
+</pre>
+	  </li>
+	  <li><b>Preprocessor</b>: &lt;preprocessor&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions.
+	  </li>
+	  <li><b>Obfuscator</b>: &lt;obfuscator&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions.
+	  </li>
+	  <li><b>Source</b>: &lt;source&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions. This allows you for example to use different base classes
+	  without using preprocessing in your source code.
+	  </li>
+	  <li><b>Third Party Libraries</b>: Thanks to the new &lt;libraries&gt;  and &lt;library&gt; elements, 
+	  you can now use different third party libraries depending
+	  on conditions:
+<pre>
+&lt;libraries&gt;
+	&lt;library file=&quot;thirdparty/tinylines60.zip&quot; 
+	         if=&quot;polish.group.Series60 and not polish.midp2&quot; /&gt;
+	&lt;library file=&quot;thirdparty/tinylinemidp2.zip&quot; if=&quot;polish.midp2&quot; /&gt;
+&lt;/libraries&gt;
+</pre>
+	  </li>
+	  <li><b>Copier</b>: The &lt;resources&gt; element now support the setting of &lt;copier&gt; elements
+	  that are responsible for copying the resources after they have been assembled. The following examples
+	  removes all characters that are surrounded by curly braces in resource names. The resource 
+	  <i>bg{background-Series60}.png</i> will be renamed to <i>bg.png</i>, for example:
+<pre>
+&lt;resources
+	dir=&quot;resources2&quot; 
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;*.db&quot;
+ &gt;
+	&lt;copier name=&quot;renamer&quot;&gt;
+		&lt;parameter name=&quot;searchPattern&quot; value=&quot;\{.*\}&quot; /&gt;
+		&lt;parameter name=&quot;replacement&quot; value=&quot;&quot; /&gt;
+	&lt;/copier&gt;
+	&lt;copier name=&quot;svgconverter /&quot;&gt;
+&lt;/resources&gt;
+</pre>
+	  </li>
+	  <li><b>Extend all build phases</b>: You can now enhance and adjust your build process by
+		using the improved and new extensions like &lt;preprocessor&gt;, &lt;precompiler&gt;,
+		&lt;compiler&gt;, &lt;postcompiler&gt;, &lt;obfuscator&gt;, &lt;copier&gt;, &lt;packager&gt; and &lt;finalizer&gt;.
+		Learn the details in the <a href="../book/book.html">Pro J2ME Polish book</a>.
+	  </li>
+	  <li><b>TextUtil</b>: Strings with hardcoded linebreaks were not processed correctly
+	  on Series 40 devices, since the <code>Font.stringWidth()</code>-method behaves
+	  oddly on those devices.
+	  </li>
+	  <li><b>columns-width</b>: 
+	   Using a star in the <code>columns-width</code> CSS attribute
+	   is now resolved during runtime which results in more sensible settings.
+	  </li>
+	  </li>
+	  <li><b>Known Issues Database</b>:
+	  The <a href="../devices/issues.html">known issues database</a> is now better accessible.
+	  </li>
+	  <li><b>Dynamic Styles</b>: Using dynamic styles along with a ChoiceGroup in a Form resulted
+	   in a NullPointerException. Please note: it is recommended to use only static styles.
+	  </li>
+	  <li><b>TabbedForm</b>: Using a tab without any focusable items resulted in an IndexOutOfBoundsException;
+	  now you can query the currently selected tab by calling tabbedForm.getSelectedTab(). You can be notified
+	  about any changes of the tab by registering a de.enough.polish.ui.ScreenStateListener.
+	  </li>
+	  <li><b>focused-style</b>:
+	  You can now use a different focused-style for every item. So you can now have a general focused-style,
+	  a screen-specific focused-style and an item-specific focused-style. This is useful when you have a
+	  button in a Form or when you have TextFields along with other items in one Form, for example. 
+<pre>
+//#style .input
+TextField field = new TextField( "name:", null, 20, TextField.ANY );
+//#style .button 
+StringItem button = new StringItem( null, "Go!", Item.BUTTON );
+button.setDefaultCommand( new Command("Go", Command.ITEM, 1 ) );
+button.setItemCommandListener( this );
+</pre>
+<pre>
+.input {
+	font-color: white;
+	background-color: black;
+	<b>
+	focused-style: .inputFocused;
+	</b>
+}
+.inputFocused extends .input {
+	background {
+		color: white;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+}
+.button {
+	background {
+		type: round-rect;
+		color: red;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+	<b>
+	focused-style: .buttonFocused;
+	</b>
+}
+.buttonFocused extends .button {
+	background-color: yellow;
+	background-border-color: blue;
+}
+</pre>
+	  </li>
+	  <li><b>min-width, max-width</b>:
+	  any items can now be limited in their size by using the CSS attributes
+	  <code>min-width</code> and <code>max-width</code>. This is especially useful when you want
+	  to align labels. The following example uses the <code>max-width</code> along with the &quot;expand&quot;
+	  layout to bring all labels to the same width. The &quot;label&quot; style is predefined by the way and is used 
+	  by default for all labels.
+<pre>
+//#style .input
+TextField field = new TextField( "name:", null, 20, TextField.ANY );
+</pre>
+<pre>
+label {
+	font-color: black;
+	font-size: small;
+	<b>
+	max-width: 60;
+	layout: expand;
+	</b>
+}
+
+.input {
+	font-color: white;
+	background-color: black;
+	focused-style: .inputFocused;
+	<b>
+	max-width: 80;
+	layout: expand;
+	</b>
+}
+.inputFocused {
+	background {
+		color: white;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+}
+</pre>
+	  </li>
+	  <li><b>BitMapFont</b>: the method getFontHeigth() is now renamed to getFontHeight()
+	  </li>
+	  <li><b>polish.Container.allowCycling</b>: You can now use the <code>polish.Container.allowCycling</code>
+	  preprocessing variable for allowing Forms, Lists, menus etc to be cycled through by the user.
+	  When the variable is &quot;false&quot;, the user won't be able to scroll from the first item
+	  to the last item and vice versa anymore. By default this is allowed.
+<pre>
+&lt;variable name=&quot;polish.Container.allowCycling&quot; value=&quot;true&quot;/&gt;
+</pre>
+	  </li>
+	  <li><b>Additional APIs</b>:
+	  J2ME Polish now also provides the optional libraries FileConnection, PIM-API and Scalable 2D Vector Graphics.
+	  </li>
+	  <li><b>LogHander</b>: You can now use the RMS loghandler for storing all log entries into
+	  the recordstore:
+<pre>
+&lt;debug level=&quot;error&quot; if=&quot;test&quot;&gt;
+	&lt;loghandler name=&quot;rms&quot; /&gt;
+	&lt;filter package=&quot;com.company.package&quot; level=&quot;debug&quot; /&gt;
+&lt;/debug&gt;
+</pre>
+	  </li>
+	  <li><b>#abort preprocessing directive</b>:
+	  You can use the new <code>//#abort</code> directive for stopping the preprocessing
+	  in case you have encountered a misconfiguration, e.g.
+<pre>
+//#if !config.ServerUrl:defined
+	//#abort You need to set the config.ServerUrl preprocessing variable!
+//#endif
+</pre>
+	  </li>
+
+  	  <li><b>new property functions</b>:
+	  The new <code>number</code> property function counts the number of different values that are separated by 
+	  commas within one preprocessing variable:
+<pre>
+//#= String[] formats = new String[ <b>${ number( polish.SoundFormat ) }</b> ];
+int i = 0;
+//#foreach format in polish.SoundFormat
+	//#= formats[i] = "${format}";
+	i++;
+//#next format
+</pre><br />
+	The <code>classname</code> eases the usage of the &quot;useDefaultPackage&quot; option of the &lt;obfuscator&gt;.
+	When the option is activated <code>classname</code> returns only the name of the class without the package,
+	when the &quot;useDefaultPackage&quot; option  is not activated, the fully qualified name of the class is returned:
+<pre>
+//#if SoundListenerImplementation:defined
+	//#= ${ classname( SoundListenerImplementation ) } listener;
+//#else
+	SoundListener listener;
+//#endif
+</pre><br />
+	The <code>replace</code> function can replace parts of the processed String, e.g.
+<pre>
+//#= String url = "${ replace( config.ServerUrl, www, www1 ) }";
+</pre>
+	  </li>
+  	  <li><b>Automatic inclusion of preprocessing variables and Ant properties</b>:
+	You can now use Ant properties and any preprocessing variables without using the <code>//#=</code>
+	directive, after you have activated the &quot;replacePropertiesWithoutDirective&quot; option in
+	your build.xml:
+<pre>
+&lt;variables 
+	includeAntProperties=&quot;true&quot;
+	replacePropertiesWithoutDirective=&quot;true&quot;
+&gt;
+	&lt;variable file=&quot;cfg/${ lowercase(polish.vendor) }.properties&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+	You can then use any properties and property functions directly:
+<pre>
+	System.out.println("Using device ${ polish.identfier }..." );
+</pre>
+	  </li>
+	  <li><b>Jar, KZip and 7-Zip</b>: Jar, KZip and 7-Zip are now supported &quot;out of the box&quot;,
+	  when these packagers are either on the PATH or in ${polish.home}/bin:
+<pre>
+&lt;packager name=&quot;jar&quot; /&gt;
+&lt;packager name=&quot;7zip&quot; /&gt;
+&lt;packager name=&quot;kzip&quot; /&gt;
+</pre>
+	  </li>
+	  <li><b>Signing MIDlets</b>:
+	  You can now use the <code>&lt;sign&gt;</code> element for signing MIDlets automatically. 
+	  The signing is done for MIDP/2.0 devices only:
+<pre>
+&lt;sign
+	key=&quot;SignMIDlet&quot;
+	keystore=&quot;midlets.ks&quot;
+	password=&quot;${password}&quot;
+	unless=&quot;test&quot;
+/&gt;
+</pre>
+	  </li>
+	  <li><b>InitializerSplashScreen</b>: You can use
+	  the de.enough.polish.ui.splash.InitializerSplashScreen for displaying a splash screen
+	  while letting your application initialize in the background.
+	  </li>
+	  <li><b></b>:
+	  </li>
+	  <li><b>THANKS!</b>:
+	  Thanks goes to all the people that contributed to this release, i.e.
+	  Pierre Richard, Alec Bickerton, Paul Atkins, Thorsten Pr&ouml;lss, Bret Schumacher,  Joe Bowbeer, 
+	  Timo Nentwig, David Clocklabs, Chester Kollschen, Nick Richards,
+	  Killy Gncint, Kevin Hankinson, Gabriel Hauber, Martin Leissler, 
+	  Florin Marcus, Gionata Maran, Cole Lokhe, Adrian Williams,
+	  and many more.
+	  </li>
+	</ul>
+	
+
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	proprietary commercial licenses.</p>
+	<p>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+
+<%include end.txt %>

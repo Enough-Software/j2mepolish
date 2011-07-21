@@ -1,0 +1,58 @@
+<userInput>
+<panel order="0">
+	<field type="title" txt="J2ME Polish ${ Version } " />
+	<field type="staticText" txt="${ VersionMessage } " />
+	<divider alignment="top"/>
+	<field type="staticText" txt="J2ME Polish is suite of tools for creating &quot;polished&quot; J2ME applications. Each tool meets a definite need of J2ME developers: " />
+	<field type="staticText" txt="Build-tools with an integrated device-database, a powerful GUI, a remote method invocation (RMI) framework, a serialization framework, support for Java 5 syntax, a localization framework, a game-engine, a logging framework and a collection of utilities. " />
+	<field type="staticText" txt="" />
+	<field type="staticText" txt="Find more information about J2ME Polish at www.j2mepolish.org. " />
+	<field type="staticText" txt="" />
+	<divider alignment="top"/>
+	<field type="staticText" txt="Copyright 2003 - 2011 Enough Software GmbH &amp; Co. KG" />
+</panel>
+
+
+
+<!-- where to find the wireless toolkit -->
+<!--
+<panel order="1">
+	<field type="title" txt="Wireless Toolkit" />
+	<field type="search" variable="WTK_HOME">
+  		<description align="left" 
+               txt="Please specify the location of the Wireless Toolkit: "
+               />
+		<spec txt="Path to Wireless Toolkit:"		        
+		      type="directory" 
+              result="directory">
+		  <choice value="C:\WTK25" os="windows" />
+		  <choice value="C:\WTK22" os="windows" />
+		  <choice value="C:\WTK21" os="windows" />
+		  <choice value="C:\WTK20" os="windows" />
+		  <choice value="C:\WTK104" os="windows" />
+		  <choice value="/opt/WTK25" os="unix" />
+		  <choice value="/opt/WTK22" os="unix" />
+		  <choice value="/opt/WTK21" os="unix" />
+		  <choice value="/opt/WTK20" os="unix" />
+		  <choice value="/opt/WTK104" os="unix" />
+  		</spec>
+	</field>
+	<space/>
+	<field type="staticText" txt="Please note: when you enter an invalid location, you need to specify either the wtk.home-property or the preverify-attribute in the build.xml-file. On Mac OS X systems you can alternatively define the mpp.home property that points to the install path of the MPowerPlayer." />
+</panel>
+-->
+
+<!-- installation success panel -->
+<panel order="1">
+	<field type="title" txt="Installation Finished" />
+	<field type="staticText" txt="You have successfully installed J2ME Polish ${ Version }." />
+	<divider alignment="top"/>
+	<field type="staticText" txt="You can find the documentation in the &quot;doc&quot;-folder." />
+	<field type="staticText" txt="If you have installed the sample applications, you can create your first MIDlet by calling Ant either from the command-line or from within your favorite Java IDE. " />
+	<field type="staticText" txt="For migrating J2ME Polish into existing projects, just copy the file &quot;build.xml&quot; and the folder &quot;resources&quot; from one of the sample applications to your project. " />
+	<divider alignment="top"/>
+	<field type="staticText" txt="Remove the installation directory for de-installing J2ME Polish. " />
+</panel>
+
+
+</userInput>

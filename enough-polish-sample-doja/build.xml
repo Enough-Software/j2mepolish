@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-sample-doja">
+	
+	<property file="${user.name}.properties" />
+	<property  name="polish.home" location="../enough-polish-build"/>
+	<property  name="wtk.home" location="/home/enough/dev/WTK2.2"/>
+	<property  name="doja.home" location="/home/enough/dev/doja/jDKDoJa2.5"/>
+	<property  name="device" value="DoJa/os15" />
+
+	<!-- task definitions -->
+	<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<taskdef classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+		name="j2mepolish"/>
+	
+			
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="test">
+		<property name="test" value="true"/>
+		<property name="dir.work" value="build/test"/>
+	</target>
+		
+	<target name="deploy">
+		<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false"/>
+		<property name="deploy-url" value=""/>
+		<property name="dir.work" value="build/real"/>
+	</target>
+	    
+	<target depends="init" name="j2mepolish">
+		<j2mepolish>
+		    <!-- general settings -->
+			<info 
+				license="GPL" 
+				name="Tetris" 
+				vendorName="Enough Software" 
+				version="1.0.20"
+				copyright="Copyright 2004, 2005 Enough Software. All rights reserved." 
+				description="A tetris clone." 
+				icon="icon.png" 
+				infoUrl="http://www.enough.de" 
+				jarName="${ nospace( polish.vendor ) }-${ nospace( polish.name ) }-tetris.jar" 
+				jarUrl="${deploy-url}${polish.jarName}" 
+		    />
+			<!-- selection of supported devices -->
+			<deviceRequirements if="test">
+				<requirement name="Identifier" value="${device}"/>
+			</deviceRequirements>
+			<deviceRequirements unless="test">
+				<!--
+				<or>
+					<requirement name="MaxJarSize" value="148+ kb" type="Memory"/>
+					<and>
+						<requirement name="StorageSize" value="148+ kb" type="Memory"/>
+						<requirement name="MaxJarSize" value="undefined" type="Memory"/>
+					</and>
+				</or>
+				-->
+				<requirement name="Identifier" value="${device}"/>
+				<!--
+				<requirement name="Identifier" value="Sony-Ericsson/K700, Nokia/6630"/>
+				BlackBerry/7290,
+				<requirement name="SoundFormat" value="midi" />
+				<requirement name="Identifier" value="BlackBerry/7290,Sony-Ericsson/K700"/>
+				<requirement name="Identifier" value="Nokia/Series40, Sony-Ericsson/K700, Nokia/Series60, Nokia/Series60Midp2, Motorola/V525"/>
+				-->
+			</deviceRequirements>
+		    <!-- build settings -->
+			<build fullscreen="menu" 
+	                polishDir="../enough-polish-j2me/source/src" 
+	                symbols="" 
+	                usePolishGui="true"
+					workDir="${dir.work}"
+					abortOnError="true"
+					onError="errorhandling"
+				>
+				<!-- 			polishDir="../enough-polish-j2me/source/src"
+				-->
+				<!-- iApplication definition 
+				-->
+				<iappli class="tetris.Tetris" />
+				<!-- project-wide variables - used for preprocessing  -->
+				<variables>
+					<!-- reserve a size of 5120 bytes =5Kbytes for the scratch pad: -->
+					<variable name="doja.SPsize" value="5120" />
+				</variables>
+				<!--
+				<manifestFilter if="polish.vendor == Samsung">
+				        Manifest-Version, MIDlet-Name, MIDlet-Version, 
+				        MIDlet-Vendor,  
+				        MIDlet-1*,MIDlet-Icon?, MIDlet-Data-Size?, MIDlet-Description?,
+						MIDlet-Info-URL?,
+				        MicroEdition-Profile?, MicroEdition-Configuration?
+				</manifestFilter>
+				<jad>
+					 <attribute 
+						name="MIDlet-Push-1" 
+						value="socket://:79, com.sun.example.SampleChat, *" 
+						if="polish.midp2" 
+						/>
+					<attribute name="MyAttribute1" value="Value1" />
+					<attribute name="MyAttribute2" value="Value2" />
+					<attribute name="MyAttribute3" value="Value3" />
+				</jad>
+				-->
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator useDefaultPackage="false" name="ProGuard" unless="test">
+					<!--
+					<parameter name="enableFlowObfuscation" value="true" />
+					<parameter name="enableOptimization" value="false" />
+					<parameter name="enableFlowObfuscation" value="false" />
+					<keep class="de.enough.polish.example.Dummy" />
+					-->
+				</obfuscator>
+				<!-- debug settings: only include debug setting when the test-property is true  -->
+				<debug level="error" showLogOnError="true" verbose="false"  if="test" >
+					<filter level="debug" package="de.enough.polish.ui.containerviews"/>
+					<filter level="debug" pattern="de.enough.roadrunner.*"/>
+					<filter level="info" pattern="de.enough.polish.ui.*"/>
+					<filter level="info" class="de.enough.polish.ui.Screen"/>
+					<filter level="debug" class="de.enough.polish.ui.StyleSheet"/>
+					<filter level="debug" pattern="de.enough.polish.ui.game.*"/>
+				</debug>
+				<!-- play around with an additional preprocessor: 
+				<preprocessor 
+					class="de.enough.polish.extensions.TestProcessor" 
+					classPath="../enough-polish-extensions/bin/classes" 
+					>
+					<parameter name="message" value="hallo welt" />
+					<parameter name="relativeFile" value="../enough-polish-extensions/source" />
+					<parameter name="absoluteFile" value="/home/enough/Documents/Text.swt" />
+				</preprocessor>
+				-->
+				<resources
+					dir="resources"
+					defaultexcludes="yes"
+					excludes="readme.txt, *.definition"
+				>
+					<localization defaultLocale="en_US" dynamic="true" locales="en_US, de_DE" if="test" />
+					<localization dynamic="true" locales="en_US, de_DE" unless="test" />
+				</resources>
+				<!--
+				<packager
+					executable="jar"
+					arguments="cvfM;;${polish.jarPath};;-C;;${polish.packageDir};;."
+				/>
+				-->
+			</build>
+			<!-- launch emulator		-->
+			<emulator if="test" enableMemoryMonitor="false" />
+	
+		</j2mepolish>
+	</target>
+	
+	
+	
+	<target 
+		name="rename"
+		description="renames the JAR and JAD files"
+	>
+		<echo message="renaming ${polish.finalize.jar} to dist/S60E2_RoadRunner.jar" />
+		<move file="${polish.finalize.jad}" tofile="dist/S60E2FP3_RoadRunner.jad" />
+		<move file="${polish.finalize.jar}" tofile="dist/S60E2FP3_RoadRunner.jar" />
+	</target>
+
+
+	<target 
+		name="emulator"
+		depends="test,j2mepolish"
+		description="invokes the emulator"
+	>
+	</target>
+
+	<target 
+		name="clean"
+		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" 
+	>
+		<delete dir="build"/>
+		<delete dir="dist"/>
+	</target>
+	
+	<target 
+		name="cleanbuild"
+		depends="clean, j2mepolish"
+	>
+	</target>
+
+	<target 
+		name="errorhandling"
+	>
+		<echo level="error" message="Error enabled: ${j2mepolish.error}"> </echo>
+		<echo level="error" message="${j2mepolish.error.message}"> </echo>
+	</target>
+
+	
+</project>

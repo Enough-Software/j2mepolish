@@ -1,0 +1,130 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Labels %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Label</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	
+	<p>
+	Most Items support labels which are drawn in front or on top of the actual content of an item.
+	In J2ME Polish a label is internally a <a href="gui-item-stringitem.html">StringItem</a>, so you can apply
+	all text attributes like <code>font-color</code>, <code>text-effect</code> etc.
+	</p>
+	<p>
+	By default labels are designed using the predefined <code>label</code> style:
+	</p>
+<pre>
+label {
+	font-color: silver;
+	font-size: small;
+	layout: newline-after;
+}
+</pre>
+	<p>
+	<img src="<%= basedir%>images/gui-item-label.png" width="347" height="73" alt="A label" />
+	</p>
+	<p>You can, however, apply your own specific label styles using the <code>label-style</code> CSS attribute in your
+	item's style:
+	</p>
+<pre>
+.myItem {
+	background-type: round-rect;
+	background-color: white;
+	<b>label-style: .myItemLabel;</b>
+}
+.myItemLabel {
+	font-color: white;
+	font-style: italic | bold;
+}
+</pre>
+	<p>
+		<img src="<%= basedir%>images/gui-item-label2.png" width="347" height="52" alt="A label" />
+	</p>
+	<p>
+	Last but not least you should know that a background and a border usually does not include the label of an Item.
+	In case you want to extend the reach of the background and/or border to the label as well, you need to set the 
+	<code>include-label</code> CSS attribute to true:
+	</p>
+<pre>
+.myItem {
+	background-type: round-rect;
+	background-color: white;
+	<b>include-label: true;</b>
+	label-style: .myItemLabel;
+}
+.myItemLabel {
+	font-color: gray;
+	font-style: bold | italic;
+}
+</pre>
+	<p>
+		<img src="<%= basedir%>images/gui-item-label3.png" width="347" height="52" alt="A label with include-label" />
+	</p>
+	<p>
+	You can also have two backgrounds/borders for an item - one for the actual content and one that covers both the content 
+	and the label area of the item. To realize this you have to specify the <code>complete-background</code> CSS attribute
+	that has to refer to a background defined in the <code>backgrounds</code> section of your <i>polish.css</i> file.
+	If you have defined a normal background for the item as well, both backgrounds will end at the same border. To make
+	a <code>complete-background</code> visible under a normal item background, you can specify the 
+	<code>complete-background-padding</code>.
+	<br />
+	You can also specify <code>complete-border</code> with a reference to a border defined in the <code>borders</code> section
+	for adding a second border around the item and the label in the same way.
+	<br />
+	The size and padding of the <code>complete-background</code> do not influence the size calculation of an item.
+	<br />
+	In this example we specify a <code>complete-background</code> for a focused <a href="gui-item-choicegroup.html">ChoiceGroup</a>:
+	</p>
+<pre>
+backgrounds {
+	completeBg {
+		type: round-rect;
+		color: #ccc;
+	}
+}
+
+.horizontalChoice {
+	label-style: choiceGroupLabel;
+	background-type: round-rect;
+	background-color: focusedBgColor;
+	layout: expand;
+	view-type: horizontal-choice;
+	horizontalview-left-arrow: url( arrow-left.png );
+	horizontalview-right-arrow: url( arrow-right.png );
+}
+
+.horizontalChoice:hover {
+	background-color: white;
+	<b>complete-background: completeBg;
+	complete-background-padding: 3;</b>
+}
+
+.choiceGroupLabel {
+	font-style: italic;
+	font-size: small;
+	layout: newline-after;
+}
+
+.choiceItem {
+	font-color: gray;
+	font-style: bold;
+	text-wrap: false;
+}
+
+.choiceItem:hover {
+	font-color: black;
+}
+</pre>
+	<p>
+	<img src="<%= basedir%>images/gui-item-label-completebackground.png" width="325" height="94" alt="A choice group with complete-background" />
+	</p>
+
+
+<%include end.txt %>

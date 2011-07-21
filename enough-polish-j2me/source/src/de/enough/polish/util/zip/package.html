@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  Copyright (c) 2007 Enough Software
+-->
+</head>
+<body>
+<p>Provides classes for compressing and uncompressing data.</p>
+<p>The compression method used is the deflate algorithm as described in RFC 1951. It
+runs a LZ77 algorithm (search for repeating sequences) followed by a huffmann 
+encoding over the data Stream. It is also possible to a Gzip header in front
+of the Stream. These headers do not increase the alorithms performance or the 
+compression ratio, but add some more bytes to make the output compatible to the
+GZIP standard  (as described in RFC 1952).
+</p>
+<p>
+It might be usefull to know that the GZipInputStream, that is able to read from Deflate/Gzip
+Streams, needs 32kB of memory due to the compression specifications. So it is highly 
+recommended to use just one GZipStream at the time. The GZipOutputStream needs even more memory
+so be especially careful in this case. However, when using the GZipOutputStream you can influance its
+behaviour by several parameters that specify the window sizes for LZ77 and the huffman encoding.
+</p>
+<b>Compression parameters:</b>
+<p>compressionType: Specify if you prefer extra GZip headers as descibed above.</p>
+<p>plainWindowSize: This stands for the size of the lookupWindow used for the LZ77 algorithm. 
+The maximum is 32767 and the minimum is 100 if you want to take advantage of this algorithm. The LZ77
+will be switched off if you specify a lower value. This will of course lead to a faster compression
+and a lower compression. Do not hesitate to use small values when dealing with small chunks of data, 
+since large empty lookup windows are not usefull at all.
+</p>
+
+<p>huffmanWindowSize: Huffman encoding is based on the fact that short bitsequences are assigned to
+frequent characters and the other way around. In order to do that the algorithm has to set gather 
+frequency information <i>before</i> it is able to write the data to the OutputStream. All the data 
+therefore has to be temporarily stored in a window specified by the parameter huffmanWindowSize. 
+The maximum is 32767 and the minimum is 1024 (which is even pretty small). However it might be better
+to switch this mode off if you deal with equally distributed characters/data (Set huffmanWindowSize
+to 0). This will result in the use of a predefinded huffman encoding tree that does not need to be
+saved in the hader (saves some bytes also).
+</p>
+
+<b>Last Hints:</b>
+<p>
+During compression of small data amounts (with several algorithms and their implementations) it might
+happen that the encoded data is larger than the decoded original, since the data was of high entropy 
+and could not be compressed well and there was a header added on top of this. So add your own checks
+if you encouter this problem.
+</p>
+<p>That is it.<br> Well, you will not switch both modes off, will you? In this case you will just
+obtain a poor CRC32 implementation. If you need just the veryfication use the CRC checksum methods directly.
+</p>
+
+</body>
+</html>

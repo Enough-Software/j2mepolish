@@ -1,0 +1,497 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide to background %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Visual Guide to Backgrounds</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-background.html">Create your own Background</a></li>
+		<li><a href="gui-screenelement-screenbackground.html">Screen Background</a></li>
+		<li><a href="gui-item-label.html">Label Background</a></li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="gui-visualguide-borders.html">Visual Guide to Borders</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Visual Guide to Text Effects</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">Visual Guide to Item Views</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Visual Guide to Screen Transitions</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+	</ul>
+	<%index %>
+	<p>
+	This guide shows you backgrounds that you can use for all <a href="gui-visualguide.html">Items and Screens</a>.
+	You can apply every background using the CSS <code>background</code> attribute:
+	</p>
+<pre>
+.myScreen {
+	background {
+		type: horizontal-stripes;
+		first-top-color: brightBgColor;
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;	
+	}
+}
+</pre>
+	<p>
+	When you want to use the same background for several items or screens, you should define the background within the 
+	<code>backgrounds</code> section of your <i>resources/polish.css</i> file, so that only one instance of the background
+	is being used. This is also true if you inherit screen styles like in the following example:
+	</p>
+<pre>
+backgrounds {
+	defaultScreenBackground {
+		type: horizontal-stripes;
+		first-top-color: brightBgColor;
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;			
+	}
+}
+.myScreen {
+	background: defaultScreenBackground;
+}
+
+.myOtherScreen extends myScreen {
+	margin-left: 10;
+	margin-right: 10;
+	repaint-previous-screen: true;
+}
+</pre>
+	<p>
+	For adjusting a background to a screen, please refer to the <a href="gui-screenelement-screenbackground.html">Screen Background</a>
+	documentation.
+	</p>
+	<p>
+	For including an Item's label into the background, please refer to the <a href="gui-item-label.html">Label</a> documentation.
+	</p>
+	<p>Last but not least you can also <a href="extending-background.html">realize your own background</a> with J2ME Polish!
+	</p>
+	
+<h2 id="background-circle" >circle Background</h2>
+	<table><tr>
+		<td><a href="gui-background-circle.html"><img src="<%= basedir%>images/gui-background-circle.png" width="197" height="49" alt="circle background"/></a></td>
+		<td>The <a href="gui-background-circle.html">circle background</a> displays a circle or an ellipse background.</td>
+	</tr></table>
+<h2 id="background-combined">combined Background</h2>
+	<table><tr>
+		<td><a href="gui-background-combined.html"><img src="<%= basedir%>images/background-combined.png" width="352" height="40" /></a>
+		<br />
+		<div id="id_combined">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-combined.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_combined", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		
+		<!-- 
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/background-combined.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="240">
+	        <param name='height' value="240">
+	        <embed src="<%= basedir%>images/background-combined.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="240" height="260"
+	        >
+	        </embed>
+		</object>		
+		 -->
+		</td>
+		<td>Mix different backgrounds together using the <a href="gui-background-combined.html">combined background</a>.</td>
+	</tr></table>
+<h2 id="background-diagonal-gradient" >diagonal-gradient Background</h2>
+	<table><tr>
+		<td><a href="gui-background-diagonal-gradient.html"><img src="<%= basedir%>images/gui-background-diagonal-gradient.png" width="196" height="52" alt="diagonal-gradient background"/></a></td>
+		<td>The <a href="gui-background-diagonal-gradient.html">diagonal-gradient background</a> displays a background with a smooth gradient running from the top-left to the bottom-right corner.</td>
+	</tr></table>
+<h2 id="background-fade-in">fade-in Background</h2>
+	<table><tr>
+		<td>
+		<div id="id_fade_in">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-fade-in.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fade_in", "212", "32", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		<!-- 
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-fade-in.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="161">
+        <param name='height' value="49">
+        <embed src="<%= basedir%>images/gui-background-fade-in.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="161" height="49"
+        >
+        </embed>
+	</object>
+		 -->
+		</td>
+		<td valign="middle">Fade in a background on MIDP 2.0 handsets with the <a href="gui-background-fade-in.html">fade-in background</a>.</td>
+	</tr></table>	
+<h2 id="background-gif89a" >gif89a Background</h2>
+	<table><tr>
+		<td>
+		<!-- 
+		<a href="gui-background-gif89a.html"><img src="<%= basedir%>images/gui-background-gif89a.png" width="" height="" alt="gif89a background"/></a>
+		 -->
+		 (video follows)
+		 </td>
+		<td>The <a href="gui-background-gif89a.html">gif89a background</a> displays an animated GIF image on devices with MMAPI support.</td>
+	</tr></table>
+<h2 id="background-horizontal-gradient">horizontal-gradient Background</h2>
+	<table><tr>
+		<td><a href="gui-background-horizontal-gradient.html"><img src="<%= basedir%>images/gui-background-horizontal-gradient.png" width="287" height="204" /></a></td>
+		<td>The <a href="gui-background-horizontal-gradient.html">horizontal-gradient background</a> displays an horizontal gradient in the background.</td>
+	</tr></table>
+<h2 id="background-horizontal-round-rect-split">horizontal-round-rect-split Background</h2>
+	<table><tr>
+		<td><a href="gui-background-horizontal-round-rect-split.html"><img src="<%= basedir%>images/gui-background-horizontal-round-rect-split.png"  width="344" height="82" alt="horizontal-round-rect-split background" /></a></td>
+		<td>The <a href="gui-background-horizontal-round-rect-split.html">horizontal-round-rect-split background</a> displays horizontally split background with rounded corners.</td>
+	</tr></table>
+<h2 id="background-horizontal-split">horizontal-split Background</h2>
+	<table><tr>
+		<td><a href="gui-background-horizontal-split.html"><img src="<%= basedir%>images/gui-background-horizontal-split.png"  width="343" height="81" alt="horizontal-split background" /></a></td>
+		<td>The <a href="gui-background-horizontal-split.html">horizontal-split background</a> displays horizontally split background.</td>
+	</tr></table>
+	
+		
+<h2 id="background-horizontal-stripes">horizontal-stripes Background</h2>
+	<table><tr>
+		<td><a href="gui-background-horizontal-stripes.html"><img src="<%= basedir%>images/background-horizontal-stripes.png" width="253" height="248" /></a></td>
+		<td>The <a href="gui-background-horizontal-stripes.html">horizontal-stripes background</a> displays horizontal stripes in the background.</td>
+	</tr></table>
+<h2 id="background-image">image Background</h2>
+	<table><tr>
+		<td><a href="gui-background-image.html"><img src="<%= basedir%>images/background-image.png" width="248" height="248" /></a>
+		</td>
+		<td>The <a href="gui-background-image.html">image background</a> displays an image in the background.</td>
+	</tr></table>
+	
+<h2 id="background-layer">layer Background</h2>
+	<table><tr>
+		<td><a href="gui-background-layer.html"><img src="<%= basedir%>images/gui-background-layer-margin.png" width="352" height="415" /></a>
+		</td>
+		<td>The <a href="gui-background-layer.html">layer background</a> combines several other backgrounds.</td>
+	</tr></table>
+	
+	
+<h2 id="background-mask">mask Background</h2>
+	<table><tr>
+		<td><a href="gui-background-mask.html"><img src="<%= basedir%>images/background-mask.png" width="350" height="32" /></a></td>
+		<td>Mask an existing background and add transparency using a  <a href="gui-background-mask.html">mask background</a>.</td>
+	</tr></table>
+<h2 id="background-opening">opening Background</h2>
+	<table><tr>
+		<td>
+		<div id="id_opening">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-opening.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_opening", "164", "23", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		<!-- 
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-background-opening.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="164">
+	        <param name='height' value="48">
+	        <embed src="<%= basedir%>images/gui-background-opening.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="164" height="48"
+	        >
+	        </embed>
+		</object>
+		 -->
+		</td>
+		<td valign="middle">Increase the size of the background each time a new item is selected with the <a href="gui-background-opening.html">opening background</a>.</td>
+	</tr></table>
+<h2 id="background-opening-round-rect">opening-round-rect Background</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-background-opening-round-rect.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="164">
+	        <param name='height' value="48">
+	        <embed src="<%= basedir%>images/gui-background-opening-round-rect.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="164" height="48"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="middle">Increase the height of a round-rect background when the corresponding item is shown with the <a href="gui-background-opening-round-rect.html">opening-round-rect background</a>.</td>
+	</tr></table>
+<h2 id="background-partial">partial Background</h2>
+	<table><tr>
+		<td><a href="gui-background-partial.html"><img src="<%= basedir%>images/background-partial.png" width="350" height="38" /></a></td>
+		<td>The <a href="gui-background-partial.html">partial background</a> fills a part of the background.</td>
+	</tr></table>
+<h2 id="background-partial-gradient">partial-gradient Background</h2>
+	<table><tr>
+		<td><a href="gui-background-partial-gradient.html"><img src="<%= basedir%>images/background-partial-gradient.png" width="239" height="239" /></a></td>
+		<td>The <a href="gui-background-partial-gradient.html">partial-gradient background</a> displays a gradient in a part of the background.</td>
+	</tr></table>
+<h2 id="background-patch">patch Background</h2>
+	<table><tr>
+		<td><a href="gui-background-patch.html"><img src="<%= basedir%>images/background-patch-small.png" width="199" height="273" alt="patch background" /></a></td>
+		<td>The <a href="gui-background-patch.html">patch background</a> adjusts an image based background the its required size without scaling.</td>
+	</tr></table>
+<h2 id="background-polygon" >polygon Background</h2>
+	<table><tr>
+		<td><a href="gui-background-polygon.html"><img src="<%= basedir%>images/gui-background-polygon.png" width="230" height="52" alt="polygon background"/></a></td>
+		<td>The <a href="gui-background-polygon.html">polygon background</a> renders a filled polygon.</td>
+	</tr></table>
+	
+<h2 id="background-processing" >ProcessingBackground</h2>
+<table><tr>
+	<td><a href="gui-processing.html#background"><img src="<%= basedir%>images/processing.jpg" width="240" height="240" alt="Processing"/></a></td>
+	<td>The <a href="gui-processing.html#background">ProcessingBackground</a> renders a <a href="gui-processing.html">Processing</a> visualization.</td>
+</tr></table>
+
+	
+<h2 id="background-pulsating">pulsating Background</h2>
+	<table><tr>
+		<td>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="83">
+        <embed src="<%= basedir%>images/gui-background-pulsating.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="83"
+        >
+        </embed>
+	</object>
+		</td>
+		<td valign="middle">Use a background that changes its color with the <a href="gui-background-pulsating.html">pulsating background</a>.</td>
+	</tr></table>	
+	
+<h2 id="background-pulsating-circle">pulsating-circle Background</h2>
+	<table><tr>
+		<td>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating-circle.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="83">
+        <embed src="<%= basedir%>images/gui-background-pulsating-circle.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="83"
+        >
+        </embed>
+	</object>
+		</td>
+		<td valign="middle">Use a breathing circular background with the <a href="gui-background-pulsating-circle.html">pulsating-circle background</a>.</td>
+	</tr></table>
+	
+<h2 id="background-pulsating-circles">pulsating-circles Background</h2>
+	<table><tr>
+		<td>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating-circles.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="83">
+        <embed src="<%= basedir%>images/gui-background-pulsating-circles.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="83"
+        >
+        </embed>
+	</object>
+		</td>
+		<td valign="middle">Paint several ever growing circles with the <a href="gui-background-pulsating-circles.html">pulsating-circles background</a>.</td>
+	</tr></table>		
+
+<h2 id="background-pulsating-round-rect">pulsating-round-rect Background</h2>
+	<table><tr>
+		<td>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating-round-rect.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="43">
+        <embed src="<%= basedir%>images/gui-background-pulsating-round-rect.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="43"
+        >
+        </embed>
+	</object>
+		</td>
+		<td valign="middle">Use a rounded corner background that changes its color with the <a href="gui-background-pulsating-round-rect.html">pulsating-round-rect background</a>.</td>
+	</tr></table>
+	
+<h2 id="background-radial-gradient">radial-gradient Background</h2>
+	<table><tr>
+		<td><a href="gui-background-radial-gradient.html"><img src="<%= basedir%>images/gui-background-radial-gradient.png" width="264" height="262" /></a></td>
+		<td>The <a href="gui-background-radial-gradient.html">radial-gradient background</a> displays an circular gradient in the background.</td>
+	</tr></table>
+<h2 id="background-round-rect">round-rect Background</h2>
+	<table><tr>
+		<td><a href="gui-background-round-rect.html"><img src="<%= basedir%>images/background-round-rect.png" width="255" height="255" /></a></td>
+		<td>The <a href="gui-background-round-rect.html">round-rect background</a> displays a monocolored background with rounded corners.</td>
+	</tr></table>
+
+<h2 id="gui-background-round-rect-split">round-rect-split Background</h2>
+	<table><tr>
+		<td><a href="gui-background-round-rect-split.html"><img src="<%= basedir%>images/gui-texteffect-split.png"  width="344" height="82" alt="The split text-effect with a round-rect-split background." /></a></td>
+		<td valign="middle">The <a href="gui-background-round-rect-split.html">round-rect-split background</a> paints a rounded cornered background with two vertical aligned colors.
+		</td>
+	</tr></table>
+
+<h2 id="background-round-tab" >round-tab Background</h2>
+	<table><tr>
+		<td><a href="gui-background-round-tab.html"><img src="<%= basedir%>images/gui-background-round-tab.png" width="196" height="52" alt="round-tab background"/></a></td>
+		<td>The <a href="gui-background-round-tab.html">round-tab background</a> displays a background with rounded corners at the top.</td>
+	</tr></table>
+
+<h2 id="background-round-tab-bordered" >round-tab-bordered Background</h2>
+	<table><tr>
+		<td><a href="gui-background-round-tab-bordered.html"><img src="<%= basedir%>images/gui-background-round-tab-bordered.png" width="196" height="52" alt="round-tab-bordered background"/></a></td>
+		<td>The <a href="gui-background-round-tab-bordered.html">round-tab-bordered background</a> displays a background with rounded corners at the top and a border.</td>
+	</tr></table>
+
+<h2 id="background-scaling-image">scaling-image Background</h2>
+	<table><tr>
+		<td><a href="gui-background-scaling-image.html"><img src="<%= basedir%>images/gui-background-scaling-image.png" width="351" height="416" /></a></td>
+		<td>The <a href="gui-background-scaling-image.html">scaling-image background</a> scales images automatically to the required size.</td>
+	</tr></table>
+	
+<h2 id="background-simple">simple Background</h2>
+	<table><tr>
+		<td><a href="gui-background-simple.html"><img src="<%= basedir%>images/background-simple.png" width="240" height="241" /></a></td>
+		<td>The <a href="gui-background-simple.html">simple background</a> displays a monocolored and possibly translucent background.</td>
+	</tr></table>
+	
+<h2 id="background-snowflakes">snowflakes Background</h2>
+	<table><tr>
+		<td>
+		<div id="id_snowflakes">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-snowflakes.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_snowflakes", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		<!-- 
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/background-snowflakes.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="240">
+	        <param name='height' value="240">
+	        <embed src="<%= basedir%>images/background-snowflakes.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="240" height="260"
+	        >
+	        </embed>
+		</object>
+		 -->
+		</td>
+		<td valign="middle">Express winter feelings with the <a href="gui-background-snowflakes.html">snowflakes background</a>.</td>
+	</tr></table>	
+<h2 id="gui-background-split">split Background</h2>
+	<table><tr>
+		<td><a href="gui-background-split.html"><img src="<%= basedir%>images/gui-background-split.png"  width="344" height="82" alt="The split text-effect with a split background." /></a></td>
+		<td valign="middle">The <a href="gui-background-split.html">split background</a> paints a background in two vertical aligned colors.
+		</td>
+	</tr></table>
+	
+<h2 id="gui-background-text">text Background</h2>
+	<table><tr>
+		<td><a href="gui-background-text.html"><img src="<%= basedir%>images/gui-background-text.png"  width="344" height="82" alt="The text background combined with round-rect-split one." /></a></td>
+		<td valign="middle">The <a href="gui-background-text.html">text background</a> paints text in the background.
+		</td>
+	</tr></table>
+	
+<h2 id="background-vertical-gradient">vertical-gradient Background</h2>
+	<table><tr>
+		<td><a href="gui-background-vertical-gradient.html"><img src="<%= basedir%>images/background-vertical-gradient.png" width="252" height="250" /></a></td>
+		<td>The <a href="gui-background-vertical-gradient.html">vertical-gradient background</a> displays an gradient in the background.</td>
+	</tr></table>
+	
+<h2 id="background-video" >video Background</h2>
+	<table><tr>
+		<td>
+		(video follows)
+		</td>
+		<td>The <a href="gui-background-video.html">video background</a> displays a video on the background.</td>
+	</tr></table>
+	
+<h2 id="background-web20" >web20 Background</h2>
+	<table><tr>
+		<td><a href="gui-background-web20.html"><img src="<%= basedir%>images/gui-background-web20.png" width="326" height="52" alt="web20 background"/></a></td>
+		<td>The <a href="gui-background-web20.html">web20 background</a> displays a rounded corner background with an inner circular background.</td>
+	</tr></table>
+	
+<h2 id="gui-background-extend">Your Own Background</h2>
+	<table><tr>
+		<td><a href="extending-background.html"><img src="<%= basedir%>images/extend.png"  width="76" height="68" alt="Create Your Own Background" /></a></td>
+		<td valign="middle">Create Your <a href="extending-background.html">Own Background</a></td>
+	</tr></table>
+
+<!--
+ id="background-xx"
+<h2 >xx Background</h2>
+	<table><tr>
+		<td><a href="gui-background-xx.html"><img src="<%= basedir%>images/gui-background-xx.png" width="" height="" alt="xx background"/></a></td>
+		<td>The <a href="gui-background-xx.html">xx background</a> displays a  background.</td>
+	</tr></table>
+ -->
+
+
+
+<%include end.txt %>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates><codetemplate name="gettercomment" description="Comment for getter methods" context="gettercomment_context" enabled="true">/**
+ * @return Returns the ${bare_field_name}.
+ */</codetemplate><codetemplate name="settercomment" description="Comment for setter methods" context="settercomment_context" enabled="true">/**
+ * @param ${param} The ${bare_field_name} to set.
+ */</codetemplate><codetemplate name="constructorcomment" description="Comment for created constructors" context="constructorcomment_context" enabled="true">/**
+ * ${tags}
+ */</codetemplate><codetemplate name="typecomment" description="Comment for created types" context="typecomment_context" enabled="true">/**
+ * &lt;p&gt;&lt;/p&gt;
+ *
+ * &lt;p&gt;copyright enough software 2004&lt;/p&gt;
+ * &lt;pre&gt;
+ * history
+ *        ${date} - rob creation
+ * &lt;/pre&gt;
+ * @author Robert Virkus, robert@enough.de
+ */</codetemplate><codetemplate name="fieldcomment" description="Comment for fields" context="fieldcomment_context" enabled="true">/**
+ * Comment for &lt;code&gt;${field}&lt;/code&gt;
+ */</codetemplate><codetemplate name="methodcomment" description="Comment for non-overriding methods" context="methodcomment_context" enabled="true">/**
+ * ${tags}
+ */</codetemplate><codetemplate name="overridecomment" description="Comment for overriding methods" context="overridecomment_context" enabled="true">/* (non-Javadoc)
+ * ${see_to_overridden}
+ */</codetemplate><codetemplate name="newtype" description="Newly created files" context="newtype_context" enabled="true">/*
+ * Created on ${date} at ${time}.
+ * This source code is published under the GNU General Public license and
+ * the enough-software-license for commercial use.
+ * Please refer to accompanying LICENSE.txt or visit www.enough.de for details.
+ */
+${package_declaration}
+
+${typecomment}
+${type_declaration}</codetemplate><codetemplate name="catchblock" description="Code in new catch blocks" context="catchblock_context" enabled="true">// ${todo} ${user} handle ${exception_type}
+${exception_var}.printStackTrace();</codetemplate><codetemplate name="methodbody" description="Code in created method stubs" context="methodbody_context" enabled="true">// ${todo} ${user} implement ${enclosing_method}
+${body_statement}</codetemplate><codetemplate name="constructorbody" description="Code in created constructor stubs" context="constructorbody_context" enabled="true">${body_statement}
+// ${todo} ${user} implement ${enclosing_type}</codetemplate><codetemplate name="getterbody" description="Code in created getters" context="getterbody_context" enabled="true">return ${field};</codetemplate><codetemplate name="setterbody" description="Code in created setters" context="setterbody_context" enabled="true">this.${field} = ${param};</codetemplate></templates>

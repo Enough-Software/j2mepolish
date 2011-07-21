@@ -1,0 +1,526 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.customization %>
+<%set title = J2ME Polish: Customization %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Customization</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="resource-assembling.html">Resource Assembling</a></li>
+	<li><a href="localization.html">Localization</a></li>
+	<li><a href="preprocessing.html">Preprocessing</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Adjusting the design, text and functionality of your products for different customers or use cases is easy with J2ME Polish. In this section
+	you will learn how you can adjust your application with resource assembling, localization and preprocessing.
+	</p>
+	<p class="pullquote">Customer A wants a slick design, B prefers a simplistic one? And customer C requests some additional functionality?
+	No problem with J2ME Polish!
+	</p>
+	
+	<h2 id="setup">Setting Up J2ME Polish for Customization</h2>
+	<p>
+	Edit the <i>build.xml</i> script to enable customization within J2ME Polish.
+	</p>
+	<h3 id="rootdir">Setting Up Different Resource Roots</h3>
+	<p>
+	To enable customized versions of your application you can set up one base and several customization root directories with J2ME Polish:
+	</p>
+	<ul>
+		<li>In the base root you place all common resources, design settings and texts.</li>
+		<li>In each customization root you can include specific resources, design settings and texts that take precedence over the common ones.
+	</ul>
+	<p>
+	Modify your <i>build.xml</i> script and add &lt;root&gt; elements to the &lt;resources&gt; element of the &lt;build&gt; section. In the 
+	following example we use the Ant property <code>${customization}</code> to refer to the actual customization name. This allows
+	us to enable a unlimited number of customizations later onwards:
+<pre>
+&lt;resources
+	dir=&quot;resources/base&quot;
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;readme.txt&quot;
+&gt;
+	&lt;root dir=&quot;resources/base/images&quot; /&gt;
+	&lt;root dir=&quot;resources/base/sounds&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}&quot; if=&quot;build.${customization}&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}/images&quot; if=&quot;build.${customization}&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;
+&lt;/resources&gt;
+</pre>
+</p><p class="caption">Using several conditional root directories in your project</p>
+	
+	<h3 id="configuration">Using Customized Configuration Variables</h3>
+	<p>
+	For using preprocessing and adjusting build settings it is useful to define your own project specific configuration variables.
+	You can easily customize your configuration settings by adding appropriate &lt;variable&gt; definitions to your <i>build.xml</i> file:
+<pre>
+&lt;variables&gt;
+	&lt;variable file=&quot;configuration/base/configuration.properties&quot; /&gt;
+	&lt;variable file=&quot;configuration/${customization}/configuration.properties&quot; if=&quot;build.${customization}&quot;/&gt;
+&lt;/variables&gt;
+</pre>
+	</p><p class="caption">Setting up customized configurations and preprocessing variables</p>
+	<p>Within each <i>configuration.properties</i> you can now specify your own variables which you can subsequenly use in 
+	&quot;if&quot; / &quot;unless&quot; attributes and in your preprocessing code:
+<pre>
+cfg.enableSmsSupport=true
+cfg.enableServerBackup=true
+</pre>
+</p><p class="caption">Defining your own preprocessing variables</p>
+
+	<h2 id="resourceassembling">Customizing Resources</h2>
+	<p>
+	In the above project structure you can place common resources and settings into <i>resources/base</i>, <i>resources/base/images</i> and <i>resources/base/sounds</i>.
+	Just place specialized settings and resources into the specialized roots, for example <i>resources/customer2</i>, <i>resources/customer2/images</i> and <i>resources/customer2/sounds</i>.
+	Just put the specific versions of images, messages.txt or polish.css files into the appropriate root directory. You do not need to copy the common
+	files into the specific root directories.
+	</p>
+	<p>
+	<img align="left" src="<%= basedir%>images/doc-customization-rootdirs.png" alt="sample directory structure" />
+	</p><!--  <p class="caption">A sample project structure for customization</p>  -->
+
+	<p>Each root folder will be searched like described in the <a href="resource-assembling.html">Resource Assembling</a> section.
+	So you use subdirectories like <i>${root.dir}/Nokia</i>,  <i>${root.dir}/FullCanvasSize.176+x208+</i> and so on to include resources or settings
+	only for specific target devices. Note that any subsequent resources will take precedence over former ones. 
+	So the image <i>resources/${customization}/logo.png</i> will be used instead of <i>resources/base/Samsung/SGH-D900/logo.png</i> when you target
+	the D900 phone and use the &quot;${customization}&quot; root in the above example.
+	</p>
+	<p>When you want  to add all resources and subdirectories of a root, add the &quot;includeSubDirs&quot; attribute:
+<pre>
+&lt;root dir=&quot;resources/base/withsubdirs&quot; includeSubDirs=&quot;true&quot; /&gt;
+</pre>
+	</p><p class="caption">Including subdirectories of a root</p> 
+
+	
+	<h2 id="localization">Changing Text Depending on the Customization</h2>
+	<p>
+	Use the <a href="localization.html">Localization Framework</a> to customize any texts by defining them in 
+	<i>${root.dir}/messages.txt</i> or the appropriate subfolder of a root directory. 
+	Like in the Resource Assembling step you do not (and should not) repeat any texts that are already defined in your
+	base root, for example in <i>resources/base/messages.txt</i>, and that do not differ in your customized version. In this way
+	you can correct spelling mistakes, grammar and so on for most cases just by editing a single <i>messages.txt</i> file.
+	</p>
+	<p>Define the &lt;localization&gt; element in your <i>build.xml</i> script for enabling the Localization Framework:
+<pre>
+&lt;resources
+	dir=&quot;resources/base&quot;
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;readme.txt&quot;
+&gt;
+	&lt;root dir=&quot;resources/base/images&quot; /&gt;
+	&lt;root dir=&quot;resources/base/sounds&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}&quot; if=&quot;build.${customization}&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}/images&quot; if=&quot;build.${customization}&quot; /&gt;
+	&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;
+	&lt;!-- add the localization element for created localized versions 
+	     of your application: 	--&gt;
+	<b>&lt;localization&gt;
+		&lt;locale name=&quot;en_US&quot; /&gt;
+		&lt;locale name=&quot;de_DE&quot; encoding=&quot;utf-8&quot; unless=&quot;test&quot; /&gt;
+	&lt;/localization&gt;</b>
+&lt;/resources&gt;
+</pre>
+</p><p class="caption">Enabling the Localization Framework</p>
+	<p>Now you can customize any texts in the above example by adding the definitions to
+	   <i>resources/${customization}/messages.txt</i>:
+<pre>
+MIDlet-Name=My Customized Name
+title.main=My Customized Title
+</pre><p class="caption">Defining customized texts in <i>messages.txt</i>
+</p>
+	<p>In your application code you now use 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/Locale.html" target="top">Locale</a>
+	for retrieving the correct text:
+<pre>
+this.mainScreen.setTitle( Locale.get("title.main") );
+</pre></p><p class="caption">Using de.enough.polish.util.Locale for getting customized texts</p>
+
+	<p>You can also &quot;abuse&quot; the <a href="localization.html">Localization Framework</a> for setting customized preprocesing/configuration variables 
+	in your <i>messages.txt</i> files:
+	</p>
+<pre>
+var:cfg.enableSmsSupport=true
+var:cfg.enableServerBackup=true
+</pre>
+	<p class="caption">Using the Localization Framework for defining customized variables</p>
+
+
+	<h2 id="design">Customizing the Look and Feel of Your Application</h2>
+	<p>
+	You can customize the design of your application by defining the appropriate styles in the <i>polish.css</i> file of 
+	the applicable resource root or by using preprocessing within a <i>polish.css</i> file or use a combination of both techniques.
+	</p>
+	<p>
+	In your customized <i>polish.css</i> files you do not need to repeat settings that are already used in the base <i>polish.css</i> file.
+	Instead just define settings that differ from the base design:
+<pre>
+/* just using customized colors here and a specialised title: */
+colors {
+	textColor: #a00;
+	textColorFocused: #f00;
+	backgroundColor: #eee;
+	backgroundColorFocused: #fff;
+}
+
+title {
+	padding-left: ${ imagewidth( logo.png ) };
+	font-style: bold;
+	font-color: white;
+	text-effect: shadow;
+	text-shadow-color: #333;
+	background {
+		color: #a00;
+		image: url ( logo.png );
+		anchor: left | vertical-center;
+	}
+}
+</pre>
+	</p><p class="caption">Customizing your design, for example in <i>resources/${customization}/polish.css</i></p>
+	<p>Note: when you are overwriting an existing style, you inherit all settings from the parent style. Sometimes
+	this is annoying. To disable inheritance for a specific style, just set the &quot;inherit&quot; attribute to &quot;false&quot;:
+<pre>
+title {
+	<b>inherit: false;</b>
+	padding-left: ${ imagewidth( logo.png ) };
+	font-style: bold;
+	font-color: white;
+	text-effect: shadow;
+	text-shadow-color: #333;
+	background {
+		color: #a00;
+		image: url ( logo.png );
+		anchor: left | vertical-center;
+	}
+}
+</pre>
+	</p><p class="caption">Disabling inheritance of CSS attributes for the title style</p>
+	
+	<p>
+	You can also use <a href="preprocessing.html">preprocessing</a> statements to customize your design:
+<pre>
+colors {
+	//#if cfg.${customization}
+		textColor: #a00;
+		textColorFocused: #f00;
+	//#else
+		textColor: #000;
+		textColorFocused: #000;
+	//#endif
+	backgroundColor: #eee;
+	backgroundColorFocused: #fff;
+}
+title {
+	//#if ${ exists( logo.png ) }
+		padding-left: ${ imagewidth( logo.png ) };
+	//#endif
+	font-style: bold;
+	font-color: white;
+	//#if cfg.${customization}
+		text-effect: shadow;
+		text-shadow-color: #333;
+	//#endif
+	background {
+		color: #a00;
+		//#if ${ exists( logo.png ) }
+			image: url ( logo.png );
+			anchor: left | vertical-center;
+		//#endif
+	}
+}
+</pre>
+	</p><p class="caption">Customizing your design by using preprocessing in your <i>polish.css</i> file</p>
+
+	<h2 id="functionality">Customizing the Functionality of Your Application</h2>
+	<p>
+	For some customizations it might be necessary to adjust the functionality of your application as well. You can do this
+	with J2ME Polish by using preprocessing or conditional source folders. You can achieve this by using 
+	preprocessing and optionally configuring your <i>build.xml</i> script.
+	</p>
+	<h3 id="preprocessing">Use Preprocessing to Customize Your Application</h3>
+	<p>
+	Using <a href="preprocessing.html">preprocessing</a> in your application's source code gives you unlimited possibilities
+	for customizing your application. Best practice is to <a href="#configuration">define customization specific variables</a> first
+	as desribed above:
+<pre>
+cfg.enableSmsSupport=true
+var:cfg.enableServerBackup=true
+</pre>
+</p><p class="caption">Defining your own preprocessing variables</p>
+	<p>	
+	 Now you can query those configuration settings in your application code:
+<pre>
+public void storeSettings() {
+	<b>//#if cfg.enableServerBackup</b>
+		storeSetingsOnServer();
+	<b>//#else</b>
+		storeSettingsInRms();
+	<b>//#endif</b>
+}
+</pre></p><p class="caption">Using preprocessing to adjust the functionality of your application</p>
+	<h3 id="sources">Use Source Folders to Customize Your Application</h3>
+	<p>Another option is to include customization specific source code folders in your application. You can specify source code folders
+	by defining them in your <i>build.xml</i> scripts &lt;build&gt; section:
+<pre>
+&lt;sources&gt;
+	&lt;!-- always include the base folder: --&gt;
+	&lt;source dir=&quot;source/src&quot;&gt;
+	&lt;!--  include customization specific source folders: --&gt;
+	&lt;source dir=&quot;source/${customization}&quot; if=&quot;build.${customization}&quot;&gt;
+&lt;/sources&gt;
+</pre>
+</p><p class="caption">Setting up conditional source code folders</p>
+
+	<h2 id="building">Building the Customized Versions</h2>
+	<p>
+	For building the customized versions of your application, you need to adjust your <i>build.xml</i> script again.
+	For each customization we add two targets: the &quot;enable&quot; target sets up build properties required for the customization, and the 
+	&quot;customize&quot; calls the &quot;enable&quot; target first and then the &quot;j2mepolish&quot; target.
+	<br />
+	For building all customized versions of your application at once, we need to use some &lt;subant&gt; Ant voodoo, because we cannot
+	overwrite defined Ant properties once they are set. Have a look at this example taken from the &quot;blank&quot; sample application:
+<pre>
+&lt;project 
+	name=&quot;blank&quot; 
+	default=&quot;j2mepolish&quot;&gt;
+	
+	&lt;!-- import user specific properties                          --&gt;
+	&lt;property file=&quot;${user.name}.properties&quot; /&gt;
+	
+	&lt;!-- The polish.home property needs to point to the directory --&gt;
+	&lt;!-- containing the J2ME Polish installation.                 --&gt;
+	&lt;property name=&quot;polish.home&quot; location=&quot;C:\Program Files\J2ME-Polish&quot; /&gt;
+	
+	&lt;!-- import global properties                                 --&gt;
+	&lt;property file=&quot;${polish.home}/global.properties&quot; /&gt;
+
+		
+	&lt;!-- the device for the test mode - you can define it on the command-line
+	     using the -D switch, e.g. ant -Ddevice=Generic/Midp2Cldc11 emulator --&gt;
+	&lt;property name=&quot;device&quot; value=&quot;Nokia/Series60E3&quot; /&gt;
+	
+	
+
+	&lt;!-- Definition of the J2ME Polish task:                      --&gt;
+	&lt;taskdef name=&quot;j2mepolish&quot; 
+		classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+		classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar&quot;
+	/&gt;
+	
+		
+	&lt;!-- build targets, each target can be called via &quot;ant [name]&quot;, 
+		 e.g. &quot;ant clean&quot;, &quot;ant test j2mepolish&quot; or just &quot;ant&quot; for calling the default-target --&gt;
+				
+	&lt;target name=&quot;init&quot;&gt;
+	  	&lt;property name=&quot;test&quot; value=&quot;false&quot; /&gt;
+	  	<b>&lt;property name=&quot;customization&quot; value=&quot;&quot; /&gt;</b>
+		<b>&lt;property name=&quot;dir.work&quot; value=&quot;build/real/${customization}&quot; /&gt;</b>
+		<b>&lt;property name=&quot;dir.dist&quot; value=&quot;dist/${customization}&quot; /&gt;</b>
+		&lt;property name=&quot;deploy-url&quot; value=&quot;&quot; /&gt;
+	&lt;/target&gt;
+	 
+	&lt;!-- In this target the J2ME Polish task is used.             --&gt;
+	&lt;!-- It has 4 sections:                                       --&gt;
+	&lt;!--    1. The info-section defines some general information  --&gt;
+	&lt;!--    2. The deviceRequirements-section chooses the devices --&gt;
+	&lt;!--       for which the application is build.                --&gt;
+	&lt;!--    3. The build-section controls the actual build        --&gt;
+	&lt;!--       process.                                           --&gt;	
+	&lt;!--    4. The emulator-section calls the emulator            --&gt;
+	&lt;target name=&quot;j2mepolish&quot; 
+			depends=&quot;init&quot;
+			description=&quot;This is the controller for the J2ME build process.&quot; 
+			&gt;
+		&lt;j2mepolish&gt;
+		    &lt;!-- general settings, these settings basically form the JAD-attributes. --&gt;
+		    &lt;!-- Have a look at the &lt;jad&gt; section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files --&gt;
+			&lt;info
+				name=&quot;Blank&quot;
+				version=&quot;1.0.0&quot;
+				description=&quot;Please describe me&quot;
+				vendorName=&quot;Enough Software&quot;
+				infoUrl=&quot;http://www.j2mepolish.org&quot;
+				jarName=&quot;${polish.vendor}-${polish.name}-${polish.locale}-blank.jar&quot; 
+				jarUrl=&quot;${deploy-url}${polish.jarName}&quot;
+				copyright=&quot;Copyright 2007 Your Company. All rights reserved.&quot;
+			/&gt;
+			&lt;!-- selection of supported devices --&gt;
+			&lt;deviceRequirements if=&quot;test&quot;&gt;
+				&lt;requirement name=&quot;Identifier&quot; value=&quot;${device}&quot; /&gt;
+			&lt;/deviceRequirements&gt;
+			&lt;deviceRequirements unless=&quot;test&quot;&gt;
+				&lt;requirement name=&quot;Identifier&quot; 
+				value=&quot;Generic/jtwi,Nokia/Series40E3,Nokia/Series60E3,Sony-Ericsson/JavaPlatform6&quot; /&gt;
+			&lt;/deviceRequirements&gt;
+		    &lt;!-- build settings --&gt;
+			&lt;build
+				fullscreen=&quot;menu&quot;
+				usePolishGui=&quot;true&quot;
+				<b>workDir=&quot;${dir.work}&quot;
+				destDir=&quot;${dir.dist}&quot;</b>
+			&gt;
+				&lt;!-- midlets definition --&gt;
+				&lt;midlet class=&quot;de.enough.polish.sample.email.EmailMidlet&quot; name=&quot;Email&quot; /&gt;
+				&lt;!-- project-wide variables - used for preprocessing.  --&gt;
+				&lt;!-- You can set localized variables in the resources/messages.txt files as well.  --&gt;
+				&lt;variables includeAntProperties=&quot;true&quot; &gt;
+					&lt;variable file=&quot;configuration/configuration.properties&quot; /&gt;
+					&lt;!-- allow customized configuration settings: --&gt;
+					&lt;variable file=&quot;configuration/${customization}/configuration.properties&quot; /&gt;
+					&lt;!-- Sample configuration options for J2ME Polish
+					&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.TextField.supportSymbolsEntry&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.MenuBar.useExtendedMenuBar&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.useScrollBar&quot; value=&quot;true&quot; /&gt;
+					--&gt;
+				&lt;/variables&gt;
+				&lt;!-- Configure the customization settings here: --&gt;
+				&lt;resources
+					defaultexcludes=&quot;yes&quot;
+					excludes=&quot;readme.txt&quot;
+				&gt;
+					<b>&lt;root dir=&quot;resources/base&quot; /&gt;
+					&lt;root dir=&quot;resources/base/images&quot; /&gt;
+					&lt;root dir=&quot;resources/base/sounds&quot; /&gt;
+					&lt;root dir=&quot;resources/${customization}&quot; if=&quot;build.${customization}&quot; /&gt;
+					&lt;root dir=&quot;resources/${customization}/images&quot; if=&quot;build.${customization}&quot; /&gt;
+					&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;</b>
+					&lt;!-- add the localization element for created localized
+					     versions of your application: 
+					--&gt;
+					&lt;localization&gt;
+						&lt;locale name=&quot;en_US&quot; /&gt;
+						&lt;locale name=&quot;de_DE&quot; encoding=&quot;utf-8&quot; unless=&quot;test&quot; /&gt;
+					&lt;/localization&gt;
+				&lt;/resources&gt;
+				&lt;!-- obfuscator settings: do not obfuscate when the test-property is true --&gt;
+				&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test&quot; &gt;
+					&lt;!--
+					You can set additional parameters here, e.g.:
+					&lt;parameter name=&quot;optimize&quot; value=&quot;false&quot; /&gt;
+					--&gt;
+				&lt;/obfuscator&gt;
+				&lt;!-- log settings: only use debug setting when the test-property is true --&gt;
+				&lt;debug if=&quot;test&quot; showLogOnError=&quot;true&quot; verbose=&quot;true&quot; level=&quot;error&quot;&gt;
+					&lt;filter pattern=&quot;de.enough.polish.example.*&quot; level=&quot;debug&quot; /&gt;
+					&lt;filter pattern=&quot;de.enough.polish.ui.*&quot; level=&quot;warn&quot; /&gt;
+					&lt;!-- example for writing log entries to the Recordstore Management System: 
+					&lt;handler name=&quot;rms&quot; /&gt;
+					--&gt;
+				&lt;/debug&gt;
+				&lt;!-- user defined JAD attributes can also be used: --&gt;
+				&lt;jad&gt;
+					&lt;attribute name=&quot;Nokia-MIDlet-Category&quot; value=&quot;Game&quot; if=&quot;polish.group.Series40&quot; /&gt;
+				&lt;/jad&gt;	
+			&lt;/build&gt;
+			
+			&lt;!-- execution of emulator(s) --&gt;
+			&lt;emulator
+				wait=&quot;true&quot;
+				securityDomain=&quot;trusted&quot;
+				enableProfiler=&quot;true&quot;
+				enableMemoryMonitor=&quot;true&quot;
+				enableNetworkMonitor=&quot;true&quot;
+				if=&quot;debug&quot;
+				&gt;
+				&lt;!-- this is an example for connecting to a debugger - use the ${polish.debug.port} Ant property
+				     for getting to know the port of the debugger. In this example the 
+				     &quot;connect-debugger&quot; target is also required.
+				--&gt;
+				&lt;!--
+				&lt;debugger name=&quot;antcall&quot; target=&quot;connect-debugger&quot; port=&quot;6001&quot; /&gt;
+				--&gt;
+			&lt;/emulator&gt;
+                        
+			&lt;emulator
+				wait=&quot;true&quot;
+				trace=&quot;none&quot;
+				securityDomain=&quot;trusted&quot;
+				enableProfiler=&quot;false&quot;
+				enableMemoryMonitor=&quot;false&quot;
+				enableNetworkMonitor=&quot;false&quot;
+				if=&quot;test and not debug&quot;
+				&gt;
+			&lt;/emulator&gt;
+
+		
+		&lt;/j2mepolish&gt;
+	&lt;/target&gt;
+	
+	&lt;target name=&quot;setdeploy&quot; 
+		description=&quot;Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish&quot;
+		&gt;
+		&lt;property name=&quot;deploy-url&quot; value=&quot;http://www.company.com/download/&quot; /&gt;
+	&lt;/target&gt;
+	
+	&lt;target name=&quot;enableDebug&quot; 
+		&gt;
+		&lt;property name=&quot;debug&quot; value=&quot;true&quot; /&gt;
+	&lt;/target&gt;
+	
+		
+	&lt;target name=&quot;enableEmulator&quot; 
+		&gt;
+		&lt;property name=&quot;test&quot; value=&quot;true&quot; /&gt;
+		&lt;property name=&quot;dir.work&quot; value=&quot;build/test&quot; /&gt;
+	&lt;/target&gt;
+
+	&lt;target 
+		name=&quot;emulator&quot;
+		depends=&quot;enableEmulator,j2mepolish&quot;
+		description=&quot;invokes the emulator&quot;
+	&gt;
+	&lt;/target&gt;
+
+	&lt;target name=&quot;enableClean&quot; 
+		&lt;delete dir=&quot;build&quot; /&gt;
+		&lt;delete dir=&quot;dist&quot; includes=&quot;**/*&quot; /&gt;
+	&lt;/target&gt;
+
+	&lt;target  
+		name=&quot;cleanbuild&quot;
+		description=&quot;allows a clean build.&quot;
+		depends=&quot;enableClean, j2mepolish&quot;
+	/&gt;
+	
+    &lt;target name=&quot;debug&quot; description=&quot;debugs the project&quot; depends=&quot;enableDebug, enableEmulator, j2mepolish&quot; /&gt;
+	
+	<b>&lt;target name=&quot;enableCustomization1&quot;&gt;
+		&lt;property name=&quot;customization&quot; value=&quot;customization1&quot; /&gt;
+		&lt;property name=&quot;build.customization1&quot; value=&quot;true&quot; /&gt;
+	&lt;/target&gt;
+		
+	&lt;target name=&quot;buildCustomization1&quot;
+			description=&quot;customizes this project with the settings found in resources/customization1&quot;
+			depends=&quot;enableCustomization1, j2mepolish&quot;
+	/&gt;
+	
+	&lt;target name=&quot;enableCustomization2&quot;&gt;
+		&lt;property name=&quot;customization&quot; value=&quot;customization2&quot; /&gt;
+		&lt;property name=&quot;build.customization2&quot; value=&quot;true&quot; /&gt;
+	&lt;/target&gt;
+		
+	&lt;target name=&quot;buildCustomization2&quot;
+			description=&quot;customizes this project with the settings found in resources/customization2&quot;
+			depends=&quot;enableCustomization2, j2mepolish&quot;
+	/&gt;
+	
+	&lt;target 
+		name=&quot;buildAllCustomizations&quot;
+		description=&quot;Builds your application in all customizations.&quot; 
+		&gt;
+		&lt;subant target=&quot;buildCustomization1&quot; buildpath=&quot;.&quot; genericantfile=&quot;build.xml&quot; inheritall=&quot;false&quot; &gt;&lt;/subant&gt;
+		&lt;subant target=&quot;buildCustomization2&quot; buildpath=&quot;.&quot; genericantfile=&quot;build.xml&quot; inheritall=&quot;false&quot; &gt;&lt;/subant&gt;
+	&lt;/target&gt;
+</b>
+	
+
+&lt;/project&gt;
+
+</pre>
+	</p><p class="caption">Sample build.xml script for customizing your application easily with J2ME Polish</p>	
+
+	
+<%include end.txt %>

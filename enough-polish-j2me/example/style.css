@@ -1,0 +1,22 @@
+title {
+	background {
+		type="image"
+		image="bg.png"
+		crop="true"
+	}
+	font {
+		type="default"
+		style="bold"
+		size="medium"
+		orientation="center"
+		color="device:titleColor/black"
+	}
+}
+focus {
+	background {
+	}
+	border {
+	}
+	font {
+	}
+}

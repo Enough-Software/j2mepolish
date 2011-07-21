@@ -1,0 +1,189 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation: Touch Support %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Touch Support</h1>
+	
+	<%index %>
+	
+	<p>The J2ME Polish UI components support touch devices out of the box. This document describes additional features and explains
+	how you can use gestures in your application.
+	<br />This example demonstrates some features:		
+	<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/xhszGh-A9Nc&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/xhszGh-A9Nc&hl=en&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+	</p>
+	
+	<h2 id="gestures">Touch Gestures</h2>
+	<p>
+		J2ME Polish supports various touch gestures that are demonstrated in the above movie:
+	</p>
+	<h3 id="gesture-back">Back Gesture</h3>
+	<p>
+		On screens that overlay a previous screen you can directly go back to the previous screen by clicking outside of the current screen's area.
+	</p>
+	<h3 id="gesture-click">Click Gesture</h3>
+	<p>
+		When tapping an item quickly, the default action for that item is triggered.
+	</p>
+	<h3 id="gesture-hold">Hold Gesture</h3>
+	<p>
+		The hold gesture is triggered when you tap an item and hold your finger on it.
+		<br />
+		You can specify that J2ME Polish handles the hold gesture by displaying all command actions that are associated with an item with 
+		following preprocessing variable:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.Item.ShowCommandsOnHold&quot; value=&quot;true&quot; /&gt;
+</pre>
+	<h3 id="gesture-swipe">Swipe Right/Left Gesture</h3>
+	<p>
+		J2ME Polish also recognizes swipe left and swipe right touch gestures that you can use within your application easily. 
+		In the movie swipe right is used to to mark an article as read, and swipe left to mark it unread. 
+	</p>
+	
+	<h2 id="programming">Reacting to Gestures</h2>
+	<p>
+		You can react to gestures in your application in differnent ways:<br />
+	</p>
+	<ul>
+		<li>You can override <code>Item.handleGesture( int gestureId, int x, int y )</code>.</li>
+		<li>Alternatively implement and register an <code>UiEventListener</code> for
+		specific items or screens. </li>
+		<li>Last but not least you can also create a global solution by implementing and registering an <code>EventListener</code>.</li>
+	</ul>
+	
+	<h3 id="programming-override">Override Item Methods</h3>
+	<p>
+		When you extend J2ME Polish <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Items</a> 
+		you can alternatively override on of the following methods:
+	</p>
+	<ul>
+		<li><code>protected boolean handleGesture(int gesture, int x, int y)</code>: is called for every recognized gesture.</li>
+		<li><code>protected boolean handleGestureHold(int x, int y)</code>: is subsequently called for the hold gesture</li>
+		<li><code>protected boolean handleGestureSwipeLeft(int x, int y)</code>: is subsequently called for the swipe left gesture</li>
+		<li><code>protected boolean handleGestureSwipeRight(int x, int y)</code>: is subsequently called for the swipe right gesture</li>
+	</ul>
+	<p>
+		When you handle gestures in this way you should return <code>true</code> to mark that the event has been consumed as shown in 
+		the following code example:
+	</p>
+<pre>
+import de.enough.polish.ui.StringItem;
+...
+public class MyStringItem extends StringItem {
+	protected boolean handleGestureHold(int x, int y) {
+		// do something fun here...
+		BusinessLogic.handleGestureHold( this, x, y );
+		// consume this event
+		return true;
+	}
+}
+</pre>
+		
+	<h3 id="programming-uieventlistener">UiEventListener</h3>
+	<p>
+		The least invasive way to deal with gestures for a specific screen or item is to implement and register an
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEventListener.html">UiEventListener</a>.
+		You will receive an <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEvent.html">UiEvent</a> in 
+		the listener's callback method. Check if this is an <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/GestureEvent.html">GestureEvent</a>
+		and then proceed as wished. If you have handled the event please call <code>GestureEvent.setHandled()</code> to mark that the event
+		has been consumed.
+	</p>
+	<p>
+		The following sample code demonstrates this option:
+	</p>
+<pre>
+import de.enough.polish.ui.UiAccess;
+import de.enough.polish.event.UiEvent;
+import de.enough.polish.event.UiEventListener;
+import de.enough.polish.event.GestureEvent;
+import javax.microedition.lcdui.StringItem;
+...
+//#style testButton
+StringItem stringItem = new StringItem( null, Locale.get("gestures.test.button"));
+UiAccess.setUiEventListener(stringItem,
+	new UiEventListener() {
+		public void handleUiEvent(UiEvent event, Object source) {
+			if (event instanceof GestureEvent) {
+				GestureEvent gesture = (GestureEvent)event;
+				StringItem item = (StringItem)source;
+				item.setText( gesture.getGestureName());
+				// specify that we have consumed this event:
+				gesture.setHandled();
+			}
+		}
+	}
+);
+</pre>
+
+	
+	<h3 id="programming-eventlistener">EventListener</h3>
+	<p>
+		If you want to handle gesture event globally, you should register a corresponding <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/EventListener.html">EventListener</a>.
+		Unless an event has been consumed by one of the above methods you will get notified in the <code>handleEvent()</code> method 
+		as shown in this example:
+	</p>
+<pre>
+import de.enough.polish.ui.Item;
+import de.enough.polish.event.EventManager;
+import de.enough.polish.event.EventListener;
+import de.enough.polish.event.GestureEvent;
+...
+
+public class GlobalEventHandler implements EventListener {
+	private static GlobalEventHandler instance;
+	private GlobalEventHandler() {
+	}
+	public static GlobalEventHandler getInstance() {
+		if (instance == null) {
+			instance = new GlobalEventHandler();
+			EventManager.getInstance().addEventListener(GestureEvent.EVENT_GESTURE_SWIPE_LEFT, instance);
+			EventManager.getInstance().addEventListener(GestureEvent.EVENT_GESTURE_SWIPE_RIGHT, instance);
+		}
+		return instance;
+	}
+	public void handleEvent(String name, Object source, Object evntData) {		
+		// in this case we know that we only receive gesture events, so the source will be always an Item
+		// and the data will always be a GestureEvent:
+		Item item = (Item) source;
+		GestureEvent event = (GestureEvent) evntData;
+		if (event.getGestureId() == GestureEvent.GESTURE_SWIPE_LEFT) {
+			// alternatively check: if (GestureEvent.EVENT_GESTURE_SWIPE_LEFT.equals(name)) 
+			// handle gesture swipe left
+		} else {
+			// handle gesture swipe right
+		}
+		// specify that we have consumed this event:
+		event.setHandled();
+	}
+}
+</pre>
+	
+	<h2 id="virtualkeyboard">Virtual keyboard</h2>
+	<p>
+	When using TextFields in your Screens you can also use an <a href="gui-item-textfield.html#textfield-virtualkeyboard">virtual keyboard</a> to enter text. 
+	This allows you to edit text inline instead of opening up a native editor which might require more clicks or which might confuse the user. Please
+	have a look at the <a href="gui-item-textfield.html#textfield-virtualkeyboard">virtual keyboard documentation</a>.
+	</p>
+	
+	<h2 id="sample">Sample Application</h2>
+	<p>
+	Please have a look at the <i>rssbrowser/News Cup</i> sample application for a real world example. You can also download
+	this demo app on <a href="http://m.j2mepolish.org" target="_blank">m.j2mepolish.org</a> under the name 'News Cup'.
+	</p>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEventListener.html">UiEventListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/EventListener.html">EventListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/EventManager.html">EventManager</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEvent.html">UiEvent</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/GestureEvent.html">GestureEvent</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a></li>
+	</ul>
+
+
+<%include end.txt %>

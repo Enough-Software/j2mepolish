@@ -1,0 +1,85 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="../lush/index.html">Lush (UI)</a></li>
+	<li><a href="gui-visualguide.html">Visual Guide</a></li>
+	</ul>
+
+	<h1 id="top">Designing Your Mobile Applications</h1>
+	<p>
+	J2ME Polish combines the power of the mobile Java world with the flexibility of webdesigns by separating the 
+	design settings from the application's source code. By using the 
+web-standard Cascading Style Sheets (CSS), customizing and designing of applications becomes very easy and flexible. 
+With J2ME Polish any web-designer can now design mobile 
+applications, while the programmers can concentrate on the business logic!
+</p>
+<h2 id="concepts">Concepts</h2>
+<p>
+	The J2ME Polish GUI uses some basic concepts:
+</p>
+<ul>
+	<li>Develop your GUI with the normal <code>javax.microedition.lcdui</code> classes like Form, List or TextField.</li>
+	<li>Use additionally J2ME Polish <a href="gui-visualguide.html">custom components</a> like TabbedForm, TreeItem, ChoiceTextField and so on.</li>
+	<li>If you need further control over standard <code>javax.microedition.lcdui</code> components like setting the input mode of an TextField, use
+	<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/UiAccess.html">de.enough.polish.ui.UiAccess</a>.</li>
+	<li>Add <a href="preprocessing-directives.html#style">#style</a> directives to your applications source code for connecting your code with the design</li>
+	<li>Design and customize your application by using simple CSS texfiles.</li>
+	<li>Configure additional GUI options in your build.xml script.</li>
+	<!--  
+	<li></li>
+	-->
+</ul>
+<h2 id="glance">A Quick Glance at CSS</h2>
+<p>
+All design settings and files are stored in the &quot;resources&quot; directory of the project, 
+unless another directory has been specified. 
+The most important file is polish.css in that directory. All design definitions can be found here. The design definitions are grouped in &quot;styles&quot;. A style can be assigned to any GUI item like a title, a paragraph or an input field. Within a style several attributes and its values are defined:
+<pre>
+.myStyle {
+	font-color: white;
+	font-style: bold;
+	font-size: large;
+	font-face: proportional;
+	background-color: black;
+}
+</pre>
+</p><p>
+In this example the style called &quot;myStyle&quot; defines some font values and the color of the background. Every style contains a selector as well as a number of attributes and its values:
+</p>
+<p>
+Each attribute-value pair must be trailed by a semicolon. All attribute-value pairs 
+needs to be enclosed by curly brackets. The selector or name of style is 
+case-insensitive, so &quot;.MySTYle&quot; is the same as &quot;.myStyle&quot;.
+Apart from the polish.css file, you can put images and other contents into the resources folder. 
+Subfolders are used for styles and content for specific devices and groups. 
+You can put all resources for Nokia devices into the &quot;Nokia&quot; folder and resources 
+for Samsung's E700 into the &quot;Samsung/E700&quot; folder. 
+This is described in more detail in the 
+<a href="css-groups.html">&quot;Designing Specific Devices and Device-Groups&quot;</a> section.
+</p><p>
+You can specify styles directly for GUI items with the #style preprocessing directive in the 
+source code. Alternatively you can use the dynamic names of the GUI items, e.g. 
+&quot;p&quot; for text-items, &quot;a&quot; for hyperlinks or &quot;form p&quot; for all 
+text-items which are embedded in a form. The possible combinations as well as the 
+predefined style-names are discussed in the section 
+<a href="css-styles.html">&quot;Dynamic, Static and Predefined Styles&quot;</a>.
+</p><p>
+Styles can extend other styles with the &quot;extends&quot; keyword, e.g. &quot;.myStyle extends 
+baseStyle {}&quot;. This process is described in the section 
+<a href="css-extending.html">&quot;Extending Styles&quot;</a>.</p>
+<p>
+J2ME Polish supports the CSS box model with margins, paddings and content. Other common 
+design settings include the background, the border and font-settings. These common
+ settings are described in the section 
+<a href="css-common.html">&quot;Common Design Attributes&quot;</a>.
+</p><p>
+Attributes for specific GUI items as well as the details of the different background and 
+border types are discussed in the section 
+<a href="css-specific.html">&quot;Specific Design Attributes&quot;</a>.
+</p>
+<%include end.txt %>

@@ -1,0 +1,202 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">The &lt;deviceRequirements&gt; Section</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="http://devices.j2mepolish.org">J2ME Polish Device Database</a></li>
+	</ul>
+	<p class="pullquote">Select your target devices in the &lt;deviceRequirements&gt; section!</p>
+	
+	
+	<p>
+	Select the devices that you want to target in the &lt;deviceRequirements&gt; section. You can use any device capabilities 
+	for choosing your target devices:
+	</p>
+<pre>
+&lt;deviceRequirements if=&quot;test&quot;&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;Nokia/N95, Sony-Ericsson/K850i&quot; /&gt;
+&lt;/deviceRequirements&gt;
+&lt;deviceRequirements unless=&quot;test&quot;&gt;
+	&lt;requirement name=&quot;Term&quot; value=&quot;polish.api.mmapi and (polish.midp2 or polish.midp3)&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+<p>
+In this example two alternative device-selections are defined - when the test-property is 
+set to true (by defining it with <code>&lt;property name=&quot;test&quot; value="true" /&gt;</code>), 
+only the upper <code>&lt;deviceRequirements&gt;</code> element is used and the second 
+<code>&lt;deviceRequirements&gt;</code> element is ignored. The actual requirements are defined 
+with the sub elements <code>&lt;requirement&gt;</code>. Without any clarification, all listed 
+requirements need to be fulfilled by the device to be selected. 
+There are <code>&lt;or&gt;</code>, <code>&lt;and&gt;</code>, <code>&lt;not&gt;</code> 
+and <code>&lt;xor&gt;</code> elements, which can be used to 
+define the requirements very flexible.
+	</p>
+	<h2 id="attributes">Supported Attributes</h2>
+	<p>Following attributes are supported by the device-requirements section:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>deviceRequirements-Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>if</td>
+ 	 <td>No</td>
+	 <td>The name of the Ant-property which needs to be &quot;true&quot; or &quot;yes&quot; to use this &lt;deviceRequirements&gt;.</td>
+	</tr>
+	<tr><td>unless</td>
+ 	 <td>No</td>
+	 <td>The name of the Ant-property which needs to be &quot;false&quot; or &quot;no&quot; to use this &lt;deviceRequirements&gt;.</td>
+	</tr>
+	</table>
+	<p>
+	Following nested elements can be used in a &lt;deviceRequirements&gt; element:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>deviceRequirements element&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>requirement</td>
+ 	 <td>Yes</td>
+	 <td>The requirement which needs to be fulfilled by the device.</td>
+	</tr>
+	<tr><td>and</td>
+ 	 <td>No</td>
+	 <td>Series of requirements, of which all need to be fulfilled.</td>
+	</tr>
+	<tr><td>or</td>
+ 	 <td>No</td>
+	 <td>Series of requirements, of which at least one needs to be fulfilled.</td>
+	</tr>
+	<tr><td>xor</td>
+ 	 <td>No</td>
+	 <td>Series of requirements, of which one needs to be fulfilled.</td>
+	</tr>
+	<tr><td>not</td>
+ 	 <td>No</td>
+	 <td>Series of requirements, of which none must be fulfilled.</td>
+	</tr>
+	</table>
+	<p>
+	The actual work is done by the &lt;requirement&gt; element:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>requirement-Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>name</td>
+ 	 <td>Yes</td>
+	 <td>The name of the needed capability, e.g. <code>&quot;BitsPerPixel&quot;</code>.</td>
+	</tr>
+	<tr><td>value</td>
+ 	 <td>Yes</td>
+	 <td>The needed value of the capability, e.g. <code>&quot;4+&quot;</code> for a color depth or at least 4 bits per pixel.</td>
+	</tr>
+	<tr><td>type</td>
+ 	 <td>No</td>
+	 <td>The class which controls this requirement. Either a class which extends the  
+	 <code>de.enough.polish.ant.requirements.Requirement</code> class, or one of the base types 
+	 <code>&quot;Size&quot;</code>, <code>&quot;Int&quot;</code>, <code>&quot;String&quot;</code>, <code>&quot;Version&quot;</code> or <code>&quot;Memory&quot;</code>. 
+	 Example:
+	<code>&lt;requirement name=&quot;MaxMidletSize&quot; value=&quot;100+ kb&quot; type=&quot;Memory&quot; /&gt;</td>
+	</tr>
+	</table>
+	<p>
+	The &lt;or&gt;, &lt;and&gt;, &lt;not&gt; and &lt;xor&gt; elements can be nested in any manner:
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;requirement name=&quot;BitsPerPixel&quot; value=&quot;4+&quot; /&gt;
+	&lt;or&gt;
+		&lt;requirement name=&quot;JavaPackage&quot; value=&quot;nokia-ui, mmapi&quot; /&gt;
+		&lt;and&gt;
+			&lt;requirement name=&quot;JavaPackage&quot; value=&quot;mmapi&quot; /&gt;
+			&lt;requirement name=&quot;JavaPlatform&quot; value=&quot;MIDP/2.0+&quot; /&gt;
+		&lt;/and&gt;
+	&lt;/or&gt;
+&lt;/deviceRequirements&gt;
+</pre></p>
+<p>
+In this example each supported device must have a color depth of at least 4 bits per pixel. Additionally the device needs to support either the Nokia-UI-API and the Mobile Media-API (mmapi), or the Mobile Media-API and the MIDP/2.0 platform. 
+</p>
+<p>
+Instead of using such nested requirements, you can also use the &quot;Term&quot; requirement that allows you to select devices with the same power like the #if preprocessing directive. The following example includes the very same requirements like the above one - but only one &quot;Term&quot; requirement is used:
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;requirement name=&quot;Term&quot; 
+	value=&quot;(polish.BitsPerPixel &gt;= 4) and 
+		((polish.api.nokia-ui and polish.api.mmapi) 
+		or (polish.api.mmapi and polish.midp2))&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+</p>
+<p>
+J2ME Polish provides several requirements that can be used &quot;out of the box&quot;:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>requirement-name&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>BitsPerPixel</td>
+	 <td>Needed color depth of the device: 1 is monochrome,<br/>
+	 4 are 16 colors, <br/>
+	 8 = 256 colors, <br/>
+	 16 = 65.536 colors, <br/>
+	 24 = 16.777.216 colors. <br/>Example: <br/>
+	 <code>&quot;4+&quot;</code> for at least 4 bits per pixel or <code>&quot;16&quot;</code> for precisely 16 bits per pixel.
+	 <br/><code>&lt;requirement name=&quot;BitsPerPixel&quot; value=&quot;4+&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>ScreenSize</td>
+	 <td>Required width and height of the display, e.g. &quot;120+ x 100+&quot; for a resolution of at least 120 pixels horizontally and 100 pixels vertically.
+	 <br/><code>&lt;requirement name=&quot;ScreenSize&quot; value=&quot;120+ x 100+&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>ScreenWidth</td>
+	 <td>The needed horizontal resolution of the display , e.g. &quot;120+&quot; for at least 120 pixels.
+	 <br/><code>&lt;requirement name=&quot;ScreenWidth&quot; value=&quot;120+&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>ScreenHeight</td>
+	 <td>The needed vertical resolution of the display, e.g. &quot;100+&quot; for at least 100 pixels.
+	 <br/><code>&lt;requirement name=&quot;ScreenHeight&quot; value=&quot;100+&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>CanvasSize</td>
+	 <td>Required width and height of the MIDP-Canvas. Some devices do not allow the usage of the complete screen.
+	 <br/><code>&lt;requirement name=&quot;CanvasSize&quot; value=&quot;120+ x 100+&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>JavaPlatform</td>
+	 <td>The needed platform, e.g. &quot;MIDP/1.0&quot; or &quot;MIDP/2.0+&quot;.
+	 <br/><code>&lt;requirement name=&quot;JavaPlatform&quot; value=&quot;MIDP/2.0+&quot; /&gt;</code>
+	 </td>
+	</tr>
+	<tr><td>JavaConfiguration</td>
+	 <td>The needed platfconfiguration, e.g. &quot;CLDC/1.1+&quot;.
+	 <br/><code>&lt;requirement name=&quot;JavaConfiguration&quot; value=&quot;CLDC/1.1+&quot; /&gt;</code>
+	 </td>
+	</tr>
+	<tr><td>JavaPackage</td>
+	 <td>Needed APIs, e.g. &quot;nokia-ui, mmapi&quot;:
+	 <br/><code>&lt;requirement name=&quot;JavaPackage&quot; value=&quot;nokia-ui, mmapi&quot; /&gt;</code>
+	</td>
+	</tr>
+	<tr><td>JavaProtocol</td>
+	 <td>Needed data exchange protocols, e.g. &quot;serial, socket&quot;:
+	 <br/><code>&lt;requirement name=&quot;JavaProtocol&quot; value=&quot;serial,socket&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>HeapSize</td>
+	 <td>The needed heap size of the device, e.g. &quot;200+ kb&quot; or &quot;1.1+ MB&quot;
+	 <br/><code>&lt;requirement name=&quot;HeapSize&quot; value=&quot;200+kb&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>Vendor</td>
+	 <td>The vendor of the device, e.g. &quot;Nokia&quot; or &quot;Siemens&quot;.
+	 <br/><code>&lt;requirement name=&quot;Vendor&quot; value=&quot;Nokia, SonyEricsson&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>Identifier</td>
+	 <td>The identifier of the device, e.g. &quot;Nokia/N95 &quot;.
+	 <br/><code>&lt;requirement name=&quot;Identifier&quot; value=&quot;Nokia/N95 , SonyEricsson/P900&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>Feature</td>
+	 <td>A feature which needs to be supported by the device.
+	 <br/><code>&lt;requirement name=&quot;Feature&quot; value=&quot;supportsPointer&quot; /&gt;</code></td>
+	</tr>
+	<tr><td>Term</td>
+	 <td>A preprocessing term that needs to be fulfilled by the device. You can use this flexible requirement just like the //#if-preprocessing directive in your source code. 
+	 <br/><code>&lt;requirement name=&quot;Term&quot; 
+value=&quot;polish.mmapi and !polish.isVirtual and (polish.Vendor != Nokia)&quot; /&gt;</code></td>
+	</tr>
+	</table>
+	<p><br/><br/><br/><br/><br/>&nbsp;</p>
+	</div> <!-- end of content -->
+</body>
+</html>

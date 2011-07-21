@@ -1,0 +1,1016 @@
+<!-- 
+	extensions.xml defines all default extensions. 
+	Use custom-extensions.xml for defining your own extensions.
+
+    Copyright (c) 2005 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    J2ME Polish is distributed in the hope that it will be useful,
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with J2ME Polish; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+
+<extensions>
+
+	<!-- type definitions -->
+	<typedefinition>
+		<name>loghandler</name>
+		<defaultclass>de.enough.polish.log.DefaultLogHandler</defaultclass>
+	</typedefinition>
+	
+	<typedefinition>
+		<name>packager</name>
+		<defaultclass>de.enough.polish.jar.ExternalPackager</defaultclass>
+	</typedefinition>
+	
+	<!-- Preprocessor -->
+	
+	<extension>
+		<type>preprocessor</type>
+		<name>polish</name>
+		<class>de.enough.polish.preprocess.custom.PolishPreprocessor</class>
+		<autostart>true</autostart>
+	</extension>
+
+	<extension>
+		<type>preprocessor</type>
+		<name>importconverter</name>
+		<class>de.enough.polish.preprocess.custom.ImportPreprocessor</class>
+		<autostart>true</autostart>
+		
+		<!-- mapping of GUI imports -->
+		<mappings if="polish.usePolishGui">
+			<mapping from="javax.microedition.lcdui.Alert" to="de.enough.polish.ui.Alert; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.AlertType" to="de.enough.polish.ui.AlertType; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Canvas" to="de.enough.polish.ui.Canvas; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Choice" to="de.enough.polish.ui.Choice; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.ChoiceGroup" to="de.enough.polish.ui.ChoiceGroup; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Command" to="de.enough.polish.ui.Command; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.CommandListener" to="de.enough.polish.ui.CommandListener; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.CustomItem" to="de.enough.polish.ui.CustomItem; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.DateField" to="de.enough.polish.ui.DateField; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Display" to="de.enough.polish.ui.Display; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Displayable" to="de.enough.polish.ui.Displayable; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Form" to="de.enough.polish.ui.Form; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Gauge" to="de.enough.polish.ui.Gauge; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.ImageItem" to="de.enough.polish.ui.ImageItem; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Item" to="de.enough.polish.ui.Item; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.ItemCommandListener" to="de.enough.polish.ui.ItemCommandListener; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.ItemStateListener" to="de.enough.polish.ui.ItemStateListener; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.List" to="de.enough.polish.ui.List; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Screen" to="de.enough.polish.ui.Screen; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Spacer" to="de.enough.polish.ui.Spacer; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.StringItem" to="de.enough.polish.ui.StringItem; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Style" to="de.enough.polish.ui.Style; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.TextBox" to="de.enough.polish.ui.TextBox; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.TextField" to="de.enough.polish.ui.TextField; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.Ticker" to="de.enough.polish.ui.Ticker; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.*">
+				<to>
+					javax.microedition.lcdui.Font;
+					import javax.microedition.lcdui.Graphics;
+					import javax.microedition.lcdui.Image; 
+					import de.enough.polish.ui.*
+				</to>
+			</mapping>
+			<!-- 
+			<mapping from="org.netbeans.microedition.lcdui.SplashScreen" to="de.enough.polish.ui.SplashScreen; import de.enough.polish.ui.StyleSheet" />
+			 -->
+		</mappings>
+		
+		<mappings if="polish.usePolishGui and polish.blackberry">
+			<mapping from="javax.microedition.midlet.*" to="de.enough.polish.blackberry.midlet.*" />
+			<mapping from="javax.microedition.midlet.MIDlet" to="de.enough.polish.blackberry.midlet.MIDlet" />
+			<mapping from="javax.microedition.midlet.MIDletStateChangeException" to="de.enough.polish.blackberry.midlet.MIDletStateChangeException" />
+			<mapping from="javax.microedition.lcdui.Font" to="de.enough.polish.blackberry.ui.Font" />
+			<mapping from="javax.microedition.lcdui.Graphics" to="de.enough.polish.blackberry.ui.Graphics" />
+			<mapping from="javax.microedition.lcdui.Image" to="de.enough.polish.blackberry.ui.Image" />
+			<mapping from="javax.microedition.lcdui.*">
+				<to>
+					de.enough.polish.blackberry.ui.Font;
+					import de.enough.polish.blackberry.ui.Graphics;
+					import de.enough.polish.blackberry.ui.Image; 
+					import de.enough.polish.ui.*
+				</to>
+			</mapping>
+		</mappings>
+		<!-- mapping of doja imports -->
+		<mappings if="polish.usePolishGui and polish.doja">
+			<mapping from="javax.microedition.midlet.*" to="de.enough.polish.doja.midlet.*" />
+			<mapping from="javax.microedition.midlet.MIDlet" to="de.enough.polish.doja.midlet.MIDlet" />
+			<mapping from="javax.microedition.midlet.MIDletStateChangeException" to="de.enough.polish.doja.midlet.MIDletStateChangeException" />
+			<mapping from="javax.microedition.lcdui.Font" to="de.enough.polish.doja.ui.Font" />
+			<mapping from="javax.microedition.lcdui.Graphics" to="de.enough.polish.doja.ui.Graphics" />
+			<mapping from="javax.microedition.lcdui.Image" to="de.enough.polish.doja.ui.Image" />
+			<mapping from="javax.microedition.lcdui.*">
+				<to>
+					import de.enough.polish.doja.ui.Font;
+					import de.enough.polish.doja.ui.Graphics;
+					import de.enough.polish.doja.ui.Image; 
+					import de.enough.polish.ui.*
+				</to>
+			</mapping>
+			<mapping from="javax.microedition.io.HttpConnection" to="com.nttdocomo.io.HttpConnection" />
+			<mapping from="javax.microedition.io.*" to="com.nttdocomo.io.HttpConnection; import javax.microedition.io.*" />
+			<mapping from="javax.microedition.rms.*" to="de.enough.polish.doja.rms.*" />
+			<mapping from="javax.microedition.rms.RecordComparator" to="de.enough.polish.doja.rms.RecordComparator" />
+			<mapping from="javax.microedition.rms.RecordEnumeration" to="de.enough.polish.doja.rms.RecordEnumeration" />
+			<mapping from="javax.microedition.rms.RecordListener" to="de.enough.polish.doja.rms.RecordListener" />
+			<mapping from="javax.microedition.rms.RecordStore" to="de.enough.polish.doja.rms.RecordStore" />
+			<mapping from="javax.microedition.rms.InvalidRecordIDException" to="de.enough.polish.doja.rms.InvalidRecordIDException" />
+			<mapping from="javax.microedition.rms.RecordStoreException" to="de.enough.polish.doja.rms.RecordStoreException" />
+			<mapping from="javax.microedition.rms.RecordStoreFullException" to="de.enough.polish.doja.rms.RecordStoreFullException" />
+			<mapping from="javax.microedition.rms.RecordStoreNotFoundException" to="de.enough.polish.doja.rms.RecordStoreNotFoundException" />
+			<mapping from="javax.microedition.rms.RecordStoreNotOpenException" to="de.enough.polish.doja.rms.RecordStoreNotOpenException" />
+			<mapping from="java.lang.IllegalStateException" to="de.enough.polish.doja.lang.IllegalStateException" />
+			<mapping from="java.util.Timer" to="de.enough.polish.doja.util.Timer" />
+			<mapping from="java.util.TimerTask" to="de.enough.polish.doja.util.TimerTask" />
+		</mappings>
+
+		<!-- mapping of android imports -->
+		<mappings if="polish.usePolishGui and polish.android">
+			<mapping from="javax.microedition.midlet.*" to="de.enough.polish.android.midlet.*" />
+			<mapping from="javax.microedition.midlet.MIDlet" to="de.enough.polish.android.midlet.MIDlet" />
+			<mapping from="javax.microedition.midlet.MIDletStateChangeException" to="de.enough.polish.android.midlet.MIDletStateChangeException" />
+			<mapping from="javax.microedition.lcdui.Font" to="de.enough.polish.android.lcdui.Font" />
+			<mapping from="javax.microedition.lcdui.Graphics" to="de.enough.polish.android.lcdui.Graphics" />
+			<mapping from="javax.microedition.lcdui.Image" to="de.enough.polish.android.lcdui.Image" />
+			<mapping from="javax.microedition.lcdui.*">
+				<to>
+					de.enough.polish.android.lcdui.Font;
+					import de.enough.polish.android.lcdui.Graphics;
+					import de.enough.polish.android.lcdui.Image; 
+					import de.enough.polish.ui.*
+				</to>
+			</mapping>
+			<mapping from="javax.microedition.rms.*" to="de.enough.polish.android.rms.*" />
+			<mapping from="javax.microedition.rms.RecordComparator" to="de.enough.polish.android.rms.RecordComparator" />
+			<mapping from="javax.microedition.rms.RecordEnumeration" to="de.enough.polish.android.rms.RecordEnumeration" />
+			<mapping from="javax.microedition.rms.RecordListener" to="de.enough.polish.android.rms.RecordListener" />
+			<mapping from="javax.microedition.rms.RecordFilter" to="de.enough.polish.android.rms.RecordFilter" />
+			<mapping from="javax.microedition.rms.RecordStore" to="de.enough.polish.android.rms.RecordStore" />
+			<mapping from="javax.microedition.rms.InvalidRecordIDException" to="de.enough.polish.android.rms.InvalidRecordIDException" />
+			<mapping from="javax.microedition.rms.RecordStoreException" to="de.enough.polish.android.rms.RecordStoreException" />
+			<mapping from="javax.microedition.rms.RecordStoreFullException" to="de.enough.polish.android.rms.RecordStoreFullException" />
+			<mapping from="javax.microedition.rms.RecordStoreNotFoundException" to="de.enough.polish.android.rms.RecordStoreNotFoundException" />
+			<mapping from="javax.microedition.rms.RecordStoreNotOpenException" to="de.enough.polish.android.rms.RecordStoreNotOpenException" />
+			<mapping from="javax.microedition.io.*" to="de.enough.polish.android.io.*" />
+			<mapping from="javax.microedition.io.PushRegistry" to="de.enough.polish.android.io.PushRegistry" />
+			<mapping from="javax.microedition.io.Connector" to="de.enough.polish.android.io.Connector" />
+			<mapping from="javax.microedition.io.Connection" to="de.enough.polish.android.io.Connection" />
+			<mapping from="javax.microedition.io.InputConnection" to="de.enough.polish.android.io.InputConnection" />
+			<mapping from="javax.microedition.io.StreamConnection" to="de.enough.polish.android.io.StreamConnection" />
+			<mapping from="javax.microedition.io.OutputConnection" to="de.enough.polish.android.io.OutputConnection" />
+			<mapping from="javax.microedition.io.SocketConnection" to="de.enough.polish.android.io.SocketConnection" />
+			<mapping from="javax.microedition.io.HttpConnection" to="de.enough.polish.android.io.HttpConnection" />
+			<mapping from="javax.microedition.io.HttpsConnection" to="de.enough.polish.android.io.HttpsConnection" />
+			<mapping from="javax.microedition.io.ConnectionNotFoundException" to="de.enough.polish.android.io.ConnectionNotFoundException" />
+			<mapping from="javax.microedition.io.SecurityInfo" to="de.enough.polish.android.io.SecurityInfo" />
+			<mapping from="javax.microedition.pki.*" to="de.enough.polish.android.pki.*" />
+			<mapping from="javax.microedition.pki.Certificate" to="de.enough.polish.android.pki.Certificate" />
+			<mapping from="javax.microedition.pki.CertificateException" to="de.enough.polish.android.pki.CertificateException" />
+			<!--  Fileconnection API -->
+			<mapping from="javax.microedition.io.file.*" to="de.enough.polish.android.io.file.*" />
+			<mapping from="javax.microedition.io.file.ConnectionClosedException" to="de.enough.polish.android.io.file.ConnectionClosedException" />
+			<mapping from="javax.microedition.io.file.FileConnection" to="de.enough.polish.android.io.file.FileConnection" />
+			<mapping from="javax.microedition.io.file.FileSystemListener" to="de.enough.polish.android.io.file.FileSystemListener" />
+			<mapping from="javax.microedition.io.file.FileSystemRegistry" to="de.enough.polish.android.io.file.FileSystemRegistry" />
+			<mapping from="javax.microedition.io.file.IllegalModeException" to="de.enough.polish.android.io.file.IllegalModeException" />
+			<!--  Multimedia API -->
+			<mapping from="javax.microedition.media.*" to="de.enough.polish.android.media.*" />
+			<mapping from="javax.microedition.media.Control" to="de.enough.polish.android.media.Control" />
+			<mapping from="javax.microedition.media.Controllable" to="de.enough.polish.android.media.Controllable" />
+			<mapping from="javax.microedition.media.Manager" to="de.enough.polish.android.media.Manager" />
+			<mapping from="javax.microedition.media.MediaException" to="de.enough.polish.android.media.MediaException" />
+			<mapping from="javax.microedition.media.Player" to="de.enough.polish.android.media.Player" />
+			<mapping from="javax.microedition.media.PlayerListener" to="de.enough.polish.android.media.PlayerListener" />
+			<mapping from="javax.microedition.media.TimeBase" to="de.enough.polish.android.media.TimeBase" />
+			<mapping from="javax.microedition.media.control.*" to="de.enough.polish.android.media.control.*" />
+			<mapping from="javax.microedition.media.control.GUIControl" to="de.enough.polish.android.media.control.GUIControl" />
+			<mapping from="javax.microedition.media.control.FramePositioningControl" to="de.enough.polish.android.media.control.FramePositioningControl" />
+			<mapping from="javax.microedition.media.control.MetaDataControl" to="de.enough.polish.android.media.control.MetaDataControl" />
+			<mapping from="javax.microedition.media.control.MIDIControl" to="de.enough.polish.android.media.control.MIDIControl" />
+			<mapping from="javax.microedition.media.control.PitchControl" to="de.enough.polish.android.media.control.PitchControl" />
+			<mapping from="javax.microedition.media.control.RateControl" to="de.enough.polish.android.media.control.RateControl" />
+			<mapping from="javax.microedition.media.control.RecordControl" to="de.enough.polish.android.media.control.RecordControl" />
+			<mapping from="javax.microedition.media.control.StopTimeControl" to="de.enough.polish.android.media.control.StopTimeControl" />
+			<mapping from="javax.microedition.media.control.TempoControl" to="de.enough.polish.android.media.control.TempoControl" />
+			<mapping from="javax.microedition.media.control.ToneControl" to="de.enough.polish.android.media.control.ToneControl" />
+			<mapping from="javax.microedition.media.control.VideoControl" to="de.enough.polish.android.media.control.VideoControl" />
+			<mapping from="javax.microedition.media.control.VolumeControl" to="de.enough.polish.android.media.control.VolumeControl" />
+			<mapping from="javax.microedition.media.protocol.*" to="de.enough.polish.android.media.protocol.*" />
+			<mapping from="javax.microedition.media.protocol.ContentDescriptor" to="de.enough.polish.android.media.protocol.ContentDescriptor" />
+			<mapping from="javax.microedition.media.protocol.DataSource" to="de.enough.polish.android.media.protocol.DataSource" />
+			<mapping from="javax.microedition.media.protocol.SourceStream" to="de.enough.polish.android.media.protocol.SourceStream" />
+			<!--  Location API -->
+			<mapping from="javax.microedition.location.*" to="de.enough.polish.android.location.*" />
+			<mapping from="javax.microedition.location.AddressInfo" to="de.enough.polish.android.location.AddressInfo" />
+			<mapping from="javax.microedition.location.Coordinates" to="de.enough.polish.android.location.Coordinates" />
+			<mapping from="javax.microedition.location.Criteria" to="de.enough.polish.android.location.Criteria" />
+			<mapping from="javax.microedition.location.Landmark" to="de.enough.polish.android.location.Landmark" />
+			<mapping from="javax.microedition.location.LandmarkException" to="de.enough.polish.android.location.LandmarkException" />
+			<mapping from="javax.microedition.location.LandmarkStore" to="de.enough.polish.android.location.LandmarkStore" />
+			<mapping from="javax.microedition.location.Location" to="de.enough.polish.android.location.Location" />
+			<mapping from="javax.microedition.location.LocationException" to="de.enough.polish.android.location.LocationException" />
+			<mapping from="javax.microedition.location.LocationListener" to="de.enough.polish.android.location.LocationListener" />
+			<mapping from="javax.microedition.location.LocationProvider" to="de.enough.polish.android.location.LocationProvider" />
+			<mapping from="javax.microedition.location.Orientation" to="de.enough.polish.android.location.Orientation" />
+			<mapping from="javax.microedition.location.ProximityListener" to="de.enough.polish.android.location.ProximityListener" />
+			<mapping from="javax.microedition.location.QualifiedCoordinates" to="de.enough.polish.android.location.QualifiedCoordinates" />
+			<!--  Bluetooth API -->
+			<mapping from="javax.bluetooth.*" to="de.enough.polish.android.bluetooth.*" />
+			<mapping from="javax.bluetooth.BluetoothStateException" to="de.enough.polish.android.bluetooth.BluetoothStateException" />
+			<mapping from="javax.bluetooth.DeviceClass" to="de.enough.polish.android.bluetooth.DeviceClass" />
+			<mapping from="javax.bluetooth.DiscoveryAgent" to="de.enough.polish.android.bluetooth.DiscoveryAgent" />
+			<mapping from="javax.bluetooth.DiscoveryListener" to="de.enough.polish.android.bluetooth.DiscoveryListener" />
+			<mapping from="javax.bluetooth.LocalDevice" to="de.enough.polish.android.bluetooth.LocalDevice" />
+			<mapping from="javax.bluetooth.RemoteDevice" to="de.enough.polish.android.bluetooth.RemoteDevice" />
+			<mapping from="javax.bluetooth.ServiceRecord" to="de.enough.polish.android.bluetooth.ServiceRecord" />
+			<mapping from="javax.bluetooth.UUID" to="de.enough.polish.android.bluetooth.UUID" />
+			<!--  PIM API -->
+			<mapping from="javax.microedition.pim.*" to="de.enough.polish.android.pim.*" />
+			<mapping from="javax.microedition.pim.Contact" to="de.enough.polish.android.pim.Contact" />
+			<mapping from="javax.microedition.pim.ContactList" to="de.enough.polish.android.pim.ContactList" />
+			<mapping from="javax.microedition.pim.Event" to="de.enough.polish.android.pim.Event" />
+			<mapping from="javax.microedition.pim.EventList" to="de.enough.polish.android.pim.EventList" />
+			<mapping from="javax.microedition.pim.FieldEmptyException" to="de.enough.polish.android.pim.FieldEmptyException" />
+			<mapping from="javax.microedition.pim.FieldFullException" to="de.enough.polish.android.pim.FieldFullException" />
+			<mapping from="javax.microedition.pim.PIMException" to="de.enough.polish.android.pim.PIMException" />
+			<mapping from="javax.microedition.pim.PIM" to="de.enough.polish.android.pim.PIM" />
+			<mapping from="javax.microedition.pim.PIMItem" to="de.enough.polish.android.pim.PIMItem" />
+			<mapping from="javax.microedition.pim.PIMList" to="de.enough.polish.android.pim.PIMList" />
+			<mapping from="javax.microedition.pim.RepeatRule" to="de.enough.polish.android.pim.RepeatRule" />
+			<mapping from="javax.microedition.pim.ToDo" to="de.enough.polish.android.pim.ToDo" />
+			<mapping from="javax.microedition.pim.ToDoList" to="de.enough.polish.android.pim.ToDoList" />
+			<mapping from="javax.microedition.pim.UnsupportedFieldException" to="de.enough.polish.android.pim.UnsupportedFieldException" />
+			<!--  Wireless Messaging API 1.0 -->
+			<mapping from="javax.wireless.messaging.*" to="de.enough.polish.android.messaging.*" />
+			<mapping from="javax.wireless.messaging.BinaryMessage" to="de.enough.polish.android.messaging.BinaryMessage" />
+			<mapping from="javax.wireless.messaging.MessageConnection" to="de.enough.polish.android.messaging.MessageConnection" />
+			<mapping from="javax.wireless.messaging.MessageListener" to="de.enough.polish.android.messaging.MessageListener" />
+			<mapping from="javax.wireless.messaging.TextMessage" to="de.enough.polish.android.messaging.TextMessage" />
+			<mapping from="javax.wireless.messaging.Message" to="de.enough.polish.android.messaging.Message" />
+		</mappings>
+
+		
+		<!-- mapping of game imports -->
+		<mappings if="polish.midp2 and polish.usePolishGui">
+			<mapping from="javax.microedition.lcdui.game.GameCanvas" to="de.enough.polish.midp.ui.GameCanvas" />
+		</mappings>
+		<mappings if="(polish.midp1 or polish.usePolishGameApi or polish.blackberry or polish.doja or polish.android)  and polish.usePolishGui">
+			<mapping from="javax.microedition.lcdui.game.GameCanvas" to="de.enough.polish.ui.game.GameCanvas; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.Layer" to="de.enough.polish.ui.game.Layer; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.LayerManager" to="de.enough.polish.ui.game.LayerManager; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.Sprite" to="de.enough.polish.ui.game.Sprite; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.TiledLayer" to="de.enough.polish.ui.game.TiledLayer; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.*" to="de.enough.polish.ui.game.*; import de.enough.polish.ui.StyleSheet" />
+		</mappings>
+		<mappings if="(polish.midp1 or polish.usePolishGameApi or polish.blackberry) and not polish.usePolishGui">
+			<mapping from="javax.microedition.lcdui.game.GameCanvas" to="de.enough.polish.ui.game.GameCanvas" />
+			<mapping from="javax.microedition.lcdui.game.Layer" to="de.enough.polish.ui.game.Layer" />
+			<mapping from="javax.microedition.lcdui.game.LayerManager" to="de.enough.polish.ui.game.LayerManager" />
+			<mapping from="javax.microedition.lcdui.game.Sprite" to="de.enough.polish.ui.game.Sprite" />
+			<mapping from="javax.microedition.lcdui.game.TiledLayer" to="de.enough.polish.ui.game.TiledLayer" />
+			<mapping from="javax.microedition.lcdui.game.*" to="de.enough.polish.ui.game.*" />
+		</mappings>
+		<mappings if="polish.midp1 and polish.api.siemens-color-game-api">
+			<mapping from="javax.microedition.lcdui.game.GameCanvas" to="com.siemens.mp.color_game.GameCanvas; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.Layer" to="com.siemens.mp.color_game.Layer; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.LayerManager" to="com.siemens.mp.color_game.LayerManager; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.TiledLayer" to="com.siemens.mp.color_game.TiledLayer; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.Sprite" to="de.enough.polish.ui.game.Sprite; import de.enough.polish.ui.StyleSheet" />
+			<mapping from="javax.microedition.lcdui.game.*" to="de.enough.polish.ui.game.Sprite; import de.enough.polish.ui.StyleSheet; import com.siemens.mp.color_game.GameCanvas; import com.siemens.mp.color_game.Layer; import com.siemens.mp.color_game.LayerManager; import com.siemens.mp.color_game.TiledLayer" />
+		</mappings>
+		
+		<!-- mapping of WMAPI imports -->
+		<mappings if="polish.useWMAPIWrapper and not polish.api.wmapi and polish.supportsWMAPIWrapper">
+			<mapping from="javax.wireless.messaging.*" to="de.enough.polish.messaging.*" />
+			<mapping from="javax.wireless.messaging.Message" to="de.enough.polish.messaging.Message" />
+			<mapping from="javax.wireless.messaging.BinaryMessage" to="de.enough.polish.messaging.BinaryMessage" />
+			<mapping from="javax.wireless.messaging.TextMessage" to="de.enough.polish.messaging.TextMessage" />
+			<mapping from="javax.wireless.messaging.MessageConnection" to="de.enough.polish.messaging.MessageConnection" />
+			<mapping from="javax.wireless.messaging.MessageListener" to="de.enough.polish.messaging.MessageListener" />
+			<mapping from="javax.wireless.messaging.MessageListener" to="de.enough.polish.messaging.MessageListener" />
+			<mapping from="javax.microedition.io.Connector" to="de.enough.polish.io.Connector" />
+		</mappings>
+
+	</extension>
+	
+	
+	
+	<extension>
+		<type>preprocessor</type>
+		<name>antcall</name>
+		<class>de.enough.polish.preprocess.custom.AntCallPreprocessor</class>
+	</extension>
+	
+	<extension>
+		<type>preprocessor</type>
+		<name>antcallinit</name>
+		<class>de.enough.polish.preprocess.custom.AntCallInitializerPreprocessor</class>
+	</extension>
+	
+	<!-- Property Functions -->
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>nospace</name>
+		<class>de.enough.polish.propertyfunctions.NoSpaceFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>uppercase</name>
+		<class>de.enough.polish.propertyfunctions.UpperCaseFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>lowercase</name>
+		<class>de.enough.polish.propertyfunctions.LowerCaseFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>firstuppercase</name>
+		<class>de.enough.polish.propertyfunctions.FirstUpperCaseFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>bytes</name>
+		<class>de.enough.polish.propertyfunctions.BytesFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>kilobytes</name>
+		<class>de.enough.polish.propertyfunctions.KiloBytesFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>megabytes</name>
+		<class>de.enough.polish.propertyfunctions.MegaBytesFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>gigabytes</name>
+		<class>de.enough.polish.propertyfunctions.GigaBytesFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>replace</name>
+		<class>de.enough.polish.propertyfunctions.ReplaceFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>classname</name>
+		<class>de.enough.polish.propertyfunctions.ClassNameFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>package</name>
+		<class>de.enough.polish.propertyfunctions.PackageNameFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>number</name>
+		<class>de.enough.polish.propertyfunctions.NumberFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>encodeurl</name>
+		<class>de.enough.polish.propertyfunctions.EncodeUrlFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>urlencode</name>
+		<class>de.enough.polish.propertyfunctions.EncodeUrlFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>escape</name>
+		<class>de.enough.polish.propertyfunctions.EscapeFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>stringarray</name>
+		<class>de.enough.polish.propertyfunctions.StringArrayFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>localefilename</name>
+		<class>de.enough.polish.propertyfunctions.LocaleFileNameFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>displaylanguage</name>
+		<class>de.enough.polish.propertyfunctions.DisplayLanguageFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>displaycountry</name>
+		<class>de.enough.polish.propertyfunctions.DisplayCountryFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>contenttype</name>
+		<class>de.enough.polish.propertyfunctions.ContentTypeFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>imagewidth</name>
+		<class>de.enough.polish.propertyfunctions.ImageWidthFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>imageheight</name>
+		<class>de.enough.polish.propertyfunctions.ImageHeightFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>exists</name>
+		<class>de.enough.polish.propertyfunctions.ExistsFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>filesize</name>
+		<class>de.enough.polish.propertyfunctions.FileSizeFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>calculate</name>
+		<class>de.enough.polish.propertyfunctions.CalculateFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>contains</name>
+		<class>de.enough.polish.propertyfunctions.ContainsFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>containsIgnoreCase</name>
+		<class>de.enough.polish.propertyfunctions.ContainsIgnoreCaseFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>isOS</name>
+		<class>de.enough.polish.propertyfunctions.OsFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>time</name>
+		<class>de.enough.polish.propertyfunctions.TimeFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>color</name>
+		<class>de.enough.polish.propertyfunctions.ColorFunction</class>
+	</extension>
+
+	<extension>
+		<type>propertyfunction</type>
+		<name>percent</name>
+		<class>de.enough.polish.propertyfunctions.RelativePercentFunction</class>
+	</extension>
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>version</name>
+		<class>de.enough.polish.propertyfunctions.VersionFunction</class>
+	</extension>
+	
+	<!-- Preverifier -->
+	
+	<extension>
+		<type>preverifier</type>
+		<name>none</name>
+		<class>de.enough.polish.preverify.NoPreverifier</class>
+	</extension>
+
+	<extension>
+		<type>preverifier</type>
+		<name>antcall</name>
+		<class>de.enough.polish.preverify.AntCallPreverifier</class>
+	</extension>
+
+	<!-- Obfuscator -->
+	
+	<extension>
+		<type>obfuscator</type>
+		<name>RetroGuard</name>
+		<class>de.enough.polish.obfuscate.RetroGuardObfuscator</class>
+		<classpath>${polish.home}/lib/retroguard.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>obfuscator</type>
+		<name>ProGuard</name>
+		<class>de.enough.polish.obfuscate.ProGuardObfuscator</class>
+		<classpath>${polish.home}/lib/proguard.jar</classpath>
+	</extension>
+	
+	<extension>
+		<type>obfuscator</type>
+		<name>blackberry</name>
+		<class>de.enough.polish.blackberry.BlackBerryObfuscator</class>
+	</extension>
+	
+
+	<extension>
+		<type>obfuscator</type>
+		<name>YGuard</name>
+		<class>de.enough.polish.obfuscate.YGuardObfuscator</class>
+		<classpath>${polish.home}/lib/yguard-lib.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>obfuscator</type>
+		<name>yGuard</name>
+		<class>de.enough.polish.obfuscate.YGuardObfuscator</class>
+		<classpath>${polish.home}/lib/yguard-lib.jar</classpath>
+	</extension>
+	
+	<extension>
+		<type>obfuscator</type>
+		<name>KlassMaster</name>
+		<class>de.enough.polish.obfuscate.KlassMasterObfuscator</class>
+		<classpath>${polish.home}/lib/ZKM.jar:${wtk.home}/wtklib/kenv.zip</classpath>
+	</extension>
+
+	<extension>
+		<type>obfuscator</type>
+		<name>Dasho</name>
+		<class>de.enough.polish.obfuscate.DashoObfuscator</class>
+		<classpath>${polish.home}/lib/dasho.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>obfuscator</type>
+		<name>antcall</name>
+		<class>de.enough.polish.obfuscate.AntCallObfuscator</class>
+	</extension>
+	
+	<!-- Post Obfuscator -->
+	
+	<extension>
+		<type>postobfuscator</type>
+		<name>antcall</name>
+		<class>de.enough.polish.postobfuscate.AntCallPostObfuscator</class>
+	</extension>
+
+	<!-- Library Processors -->
+
+
+	<extension>
+		<type>libraryprocessor</type>
+		<name>basic</name>
+		<class>de.enough.polish.libraryprocessor.DefaultLibraryProcessor</class>
+		<autostart>
+			polish.usePolishGui 
+		</autostart>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+	</extension>
+
+
+	<!-- Pre Compiler -->
+	
+	<extension>
+		<type>precompiler</type>
+		<name>antcall</name>
+		<class>de.enough.polish.precompile.AntCallPreCompiler</class>
+	</extension>
+	
+	<extension>
+		<type>precompiler</type>
+		<name>AndroidPreCompiler</name>
+		<class>de.enough.polish.android.AndroidPreCompiler</class>
+		<autostart>
+			polish.android
+		</autostart>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+	</extension>
+
+	
+	<!-- Post Compiler -->
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>floater</name>
+		<class>de.enough.floater.FloaterPostCompiler</class>
+		<classpath>${polish.home}/lib/enough-floater.jar:${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>systemarraycopy</name>
+		<class>de.enough.polish.postcompile.systemarraycopy.SystemArrayCopyPostCompiler</class>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+		<autostart>
+			polish.Bugs.noSystemArrayCopy
+		</autostart>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>serialization</name>
+		<class>de.enough.polish.postcompile.io.SerializationPostCompiler</class>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+		<autostart>true</autostart>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>classrenaming</name>
+		<class>de.enough.polish.postcompile.renaming.ClassRenamingPostCompiler</class>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+		<autostart>true</autostart>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>antcall</name>
+		<class>de.enough.polish.postcompile.AntCallPostCompiler</class>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>orchestra</name>
+		<class>de.enough.orchestra.OrchestraPostCompiler</class>
+		<classpath>${polish.home}/lib/enough-orchestra.jar</classpath>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>retrotranslator</name>
+		<class>de.enough.polish.postcompile.retrotranslator.RetrotranslatorPostCompiler</class>
+		<classpath>${polish.home}/lib/retrotranslator-transformer.jar:${polish.home}/lib/retrotranslator-runtime.jar:${polish.home}/lib/backport-util-concurrent.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>postcompiler</type>
+		<name>retroweaver</name>
+		<class>de.enough.polish.postcompile.retroweaver.RetroWeaverPostCompiler</class>
+		<classpath>${polish.home}/lib/retroweaver-all.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>postcompiler</type>
+		<name>java5</name>
+		<class>de.enough.polish.postcompile.java5.Java5PostCompiler</class>
+		<classpath>${polish.home}/lib/retroweaver-all.jar:${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>postcompiler</type>
+		<name>j2se</name>
+		<class>de.enough.polish.j2se.JavaSEPostCompiler</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+	</extension>
+	
+	<extension>
+		<type>postcompiler</type>
+		<name>android</name>
+		<class>de.enough.polish.android.AndroidPostCompiler</class>
+		<autostart>
+			polish.usePolishGui 
+			and polish.android
+		</autostart>
+		<classpath>${polish.home}/lib/asm-all.jar:${polish.home}/lib/enough-bytecode.jar</classpath>
+	</extension>
+		
+	<!-- Log Handler -->
+	
+	<extension>
+		<type>loghandler</type>
+		<name>rms</name>
+		<clientClass>de.enough.polish.log.rms.RmsLogHandler</clientClass>
+	</extension>
+
+	<extension>
+		<type>loghandler</type>
+		<name>asynchronousrms</name>
+		<clientClass>de.enough.polish.log.rms.AsynchronousRmsLogHandler</clientClass>
+	</extension>
+	
+	<extension>
+		<type>loghandler</type>
+		<name>file</name>
+		<clientClass>de.enough.polish.log.file.FileLogHandler</clientClass>
+	</extension>
+	
+	<extension>
+		<type>loghandler</type>
+		<name>bluetooth</name>
+		<clientClass>de.enough.polish.log.bluetooth.BluetoothLogHandler</clientClass>
+	</extension>
+
+	<extension>
+		<type>loghandler</type>
+		<name>http</name>
+		<clientClass>de.enough.polish.log.http.HttpLogHandler</clientClass>
+	</extension>
+
+	<extension>
+		<type>loghandler</type>
+		<name>display</name>
+		<clientClass>de.enough.polish.log.display.DisplayLogHandler</clientClass>
+	</extension>
+	
+	<!-- Preverifier -->
+	
+	<extension>
+		<type>preverifier</type>
+		<name>none</name>
+		<class>de.enough.polish.preverify.NoPreverifier</class>
+	</extension>
+
+	<extension>
+		<type>preverifier</type>
+		<name>antcall</name>
+		<class>de.enough.polish.preverify.AntCallPreverifier</class>
+	</extension>
+
+	<!-- Manifest Creator -->
+
+	<extension>
+		<type>manifestcreator</type>
+		<name>default</name>
+		<class>de.enough.polish.manifest.DefaultManifestCreator</class>
+	</extension>
+	
+	<extension>
+		<type>manifestcreator</type>
+		<name>none</name>
+		<class>de.enough.polish.manifest.NoManifestCreator</class>
+	</extension>
+
+	<extension>
+		<type>manifestcreator</type>
+		<name>antcall</name>
+		<class>de.enough.polish.manifest.AntCallManifestCreator</class>
+	</extension>
+
+	<extension>
+		<type>manifestcreator</type>
+		<name>j2se</name>
+		<class>de.enough.polish.j2se.JavaSEManifestCreator</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+	</extension>
+	
+	<!-- Descriptor Creator -->
+
+	<extension>
+		<type>descriptorcreator</type>
+		<name>default</name>
+		<class>de.enough.polish.descriptor.DefaultDescriptorCreator</class>
+	</extension>
+
+	<extension>
+		<type>descriptorcreator</type>
+		<name>singleline</name>
+		<class>de.enough.polish.descriptor.SingleLineDescriptorCreator</class>
+	</extension>
+
+	<extension>
+		<type>descriptorcreator</type>
+		<name>multiline</name>
+		<class>de.enough.polish.descriptor.MultiLineDescriptorCreator</class>
+	</extension>
+	
+	<extension>
+		<type>descriptorcreator</type>
+		<name>doja</name>
+		<class>de.enough.polish.descriptor.DoJaDescriptorCreator</class>
+	</extension>
+
+	<extension>
+		<type>descriptorcreator</type>
+		<name>antcall</name>
+		<class>de.enough.polish.descriptor.AntCallDescriptorCreator</class>
+	</extension>
+
+	<extension>
+		<type>descriptorcreator</type>
+		<name>none</name>
+		<class>de.enough.polish.descriptor.NoneDescriptorCreator</class>
+	</extension>
+	
+	<!-- Debugger Interfaces -->
+	
+	<extension>
+		<type>debugger</type>
+		<name>antcall</name>
+		<class>de.enough.polish.emulator.AntCallDebugger</class>
+	</extension>
+
+	<extension>
+		<type>debugger</type>
+		<name>default</name>
+		<class>de.enough.polish.emulator.DefaultDebugger</class>
+	</extension>
+
+	<!-- Resource Copier -->
+	
+	<extension>
+		<type>resourcecopier</type>
+		<name>renamer</name>
+		<class>de.enough.polish.resources.RenamingResourceCopier</class>
+	</extension>
+
+	<extension>
+		<type>resourcecopier</type>
+		<name>antcall</name>
+		<class>de.enough.polish.resources.AntCallResourceCopier</class>
+	</extension>
+	
+	<extension>
+		<type>resourcecopier</type>
+		<name>svgconverter</name>
+		<class>de.enough.polish.resources.SvgConverterResourceCopier</class>
+		<classpath>${polish.home}/lib/svgSalamander.jar</classpath>
+	</extension>
+	
+
+	<!-- Packager -->
+	
+	<extension>
+		<type>packager</type>
+		<name>7zip</name>
+		<class>de.enough.polish.jar.SevenZipPackager</class>
+	</extension>
+
+	<extension>
+		<type>packager</type>
+		<name>kzip</name>
+		<class>de.enough.polish.jar.KZipPackager</class>
+	</extension>
+		
+	<extension>
+		<type>packager</type>
+		<name>external</name>
+		<class>de.enough.polish.jar.ExternalPackager</class>
+	</extension>
+	
+	<extension>
+		<type>packager</type>
+		<name>jar</name>
+		<class>de.enough.polish.jar.JarPackager</class>
+	</extension>
+	
+	<extension>
+		<type>packager</type>
+		<name>antcalljar</name>
+		<class>de.enough.polish.jar.JarPackager</class>
+	</extension>
+	
+	<extension>
+		<type>packager</type>
+		<name>android</name>
+		<class>de.enough.polish.android.AndroidPackager</class>
+		<autostart>
+			polish.usePolishGui 
+			and polish.android
+		</autostart>
+	</extension>
+	
+	<!-- Finalizer -->
+	
+	<extension>
+		<type>finalizer</type>
+		<name>sign</name>
+		<class>de.enough.polish.finalize.SignFinalizer</class>
+	</extension>
+
+	<extension>
+		<type>finalizer</type>
+		<name>antcall</name>
+		<class>de.enough.polish.finalize.AntCallFinalizer</class>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>jdp</name>
+		<class>de.enough.polish.blackberry.JDPFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+		<autostart>
+				polish.blackberry
+		</autostart>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>jar2cod</name>
+		<class>de.enough.polish.blackberry.JarToCodFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+		<autostart>
+				polish.blackberry
+		</autostart>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>jar2prc</name>
+		<class>de.enough.polish.finalize.palm.JarToPrcFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>jar2dotnet</name>
+		<class>de.enough.polish.finalize.dotnetcf.DotNetCFFinalizer</class>
+		<classpath>${polish.home}/bin/extensions:${polish.home}/lib/enough-polish-dotnetcf-1.1.jar</classpath>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>rmi</name>
+		<class>de.enough.polish.finalize.rmi.RmiFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+		<autostart>polish.build.hasRemoteClasses</autostart>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>applet</name>
+		<class>de.enough.polish.finalize.applet.AppletFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>buildlist</name>
+		<class>de.enough.polish.finalize.buildlist.BuildListFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+		<autostart>true</autostart>
+	</extension>
+	
+	<extension>
+		<type>finalizer</type>
+		<name>mea</name>
+		<class>de.enough.polish.finalize.mea.MeaFinalizer</class>
+		<classpath>${polish.home}/bin/extensions</classpath>
+	</extension>
+
+	<extension>
+		<type>finalizer</type>
+		<name>windowsmobile-source</name>
+		<class>de.enough.polish.finalize.windowsmobile.WindowsMobileSourceFinalizer</class>
+		<classpath>${polish.home}/bin/extensions:${polish.home}/lib/dotter.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>finalizer</type>
+		<name>windowsmobile</name>
+		<class>de.enough.polish.finalize.windowsmobile.WindowsMobileFinalizer</class>
+		<classpath>${polish.home}/bin/extensions:${polish.home}/lib/dotter-solution.jar</classpath>
+	</extension>
+
+	<extension>
+		<type>finalizer</type>
+		<name>iphone-source</name>
+		<class>de.enough.polish.finalize.iphone.IPhoneSourceFinalizer</class>
+		<classpath>${polish.home}/bin/extensions:${polish.home}/lib/appler.jar</classpath>
+	</extension>
+
+</extensions>

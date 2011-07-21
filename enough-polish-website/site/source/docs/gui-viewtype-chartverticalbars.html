@@ -1,0 +1,43 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: chart-vertical-bars view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChartItem: chart-vertical-bars view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-chartitem.html">ChartItem</a></li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-chartitem">ChartItem View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>chart-vertical-bars</code> view-type visualizes the data with vertical bars for a <a href="gui-item-chartitem.html">ChartItem</a>.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<img src="<%= basedir%>images/gui-item-chartitem-verticalbars.png"  width="322" height="165" alt="A ChartItem with vertical bars" />
+	</p>
+<pre>
+.verticalBarChart {
+	background: chartItemBackground;
+	padding: 3;
+	<b>view-type: chart-vertical-bars;
+	chart-vertical-bars-shadow-color: gray;</b>
+}
+</pre>
+	<p>
+	Please refer to the &quot;chart&quot; sample application for a complete example.
+	</p>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.chartviews.VerticalBarChartView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/chartviews/VerticalBarChartView.html">VerticalBarChartView</a></li>
+	</ul>
+
+<%include end.txt %>

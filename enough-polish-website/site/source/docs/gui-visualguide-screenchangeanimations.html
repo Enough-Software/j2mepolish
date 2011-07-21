@@ -1,0 +1,628 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide to screen-change-animation %>
+<%set basedir = ../ %>
+
+<%include start_flash.txt %>
+
+	<h1 id="top">Visual Guide to Screen Transitions</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Visual Guide to Backgrounds</a></li>
+		<li><a href="gui-visualguide-borders.html">Visual Guide to Borders</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Visual Guide to Text Effects</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">Visual Guide to Item Views</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+		<li><a href="../lush/index.html">Lush (UI)</a></li>
+	</ul>
+	<%index %>
+	<p>
+	This guide shows you the available effects for screen transitions.
+	<br />You can apply any effect by setting the <code>screen-change-animation</code> attribute
+	within the screen's CSS style, e.g.:
+	</p>
+<pre>
+.screenAlert {
+	padding: 2;
+	background-color: #a999;
+	layout: horizontal-shrink | vertical-shrink | center | bottom;
+	<b>screen-change-animation: left;</b>
+}
+</pre>
+	<p>
+	Screen transitions may have a direction - when you show a screen with a defined
+	<code>screen-change-animation</code>, the animation will be played in the <i>forward</i> mode. When
+	you are showing a screen without a defined <code>screen-change-animation</code> and the previous
+	screen has a defined animation, the animation will be played in the <i>backward</i> direction.
+	<br />
+	When both the previous as well as the next screen do have a <code>screen-change-animation</code>, the
+	animation of the next screen will take precedence and it will be played in the <i>foward</i> direction.
+	The only exception to this rule is when the previous screen is an Alert - in that case the
+	Alert's <code>screen-change-animation</code> will be played in the <i>backward</i> direction, even 
+	if the next screen has also a defined animation.
+	<br />
+	Note that not all animations do honor the direction of the transition.
+	</p>
+	<p>The following movies show the main menu as the last screen and the
+	popup alert as the next screen, before returning to the main menu again.
+	</p>
+
+<h2 id="screenchangeanimation-bottom">bottom Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_bottom">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-bottom.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_bottom", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td>Move in the next screen from the bottom with the 
+		<a href="gui-screenchangeanimation-bottom.html">bottom screen-change-animation</a>.
+		</td>
+	</tr></table>
+
+<h2 id="screenchangeanimation-bottomshutter">bottomshutter Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_bottomshutter">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-bottomshutter.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_bottomshutter", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the bottom using a shutter
+		with the  <a href="gui-screenchangeanimation-bottomshutter.html">bottomshutter screen-change-animation</a>.</td>
+	</tr></table>
+	
+	
+	<h2 id="screenchangeanimation-bwToColor">bwToColor Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_bwToColor">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-bwToColor.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_bwToColor", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Fade the next screen from black/white to the original color
+		with the  <a href="gui-screenchangeanimation-bwToColor.html">bwToColor screen-change-animation</a>.</td>
+	</tr></table>
+
+<h2 id="screenchangeanimation-cage">cage Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_cage">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-cage.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_cage", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td>Make every second pixel row visible in a linear movement 
+		with the  <a href="gui-screenchangeanimation-cage.html">cage screen-change-animation</a>.</td>
+	</tr></table>
+
+
+<h2 id="screenchangeanimation-diagonal">diagonal Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_diagonal">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-diagonal.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_diagonal", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen diagonally using
+		the  <a href="gui-screenchangeanimation-diagonal.html">diagonal screen-change-animation</a>.</td>
+	</tr></table>
+
+
+<h2 id="screenchangeanimation-domino">domino Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_domino">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-domino.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_domino", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Zoom out the last screen in a somewhat weird animation
+		with the  <a href="gui-screenchangeanimation-domino.html">domino screen-change-animation</a>.</td>
+	</tr></table>
+
+
+
+<h2 id="screenchangeanimation-fade">fade Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_fade">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-fade.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fade", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		
+		</td>
+		<td>Fade in the next screen smoothely
+		with the  <a href="gui-screenchangeanimation-fade.html">fade screen-change-animation</a>.</td>
+	</tr></table>
+	
+	
+<h2 id="screenchangeanimation-fadeOutFadeIn">fadeOutFadeIn Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_fadeOutFadeIn">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-fadeOutFadeIn.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fadeOutFadeIn", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Fade out the last screen, then fade in the next screen using
+		the  <a href="gui-screenchangeanimation-fadeOutFadeIn.html">fadeOutFadeIn screen-change-animation</a>.</td>
+	</tr></table>
+	
+
+<h2 id="screenchangeanimation-flash">flash Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_flash">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-flash.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_flash", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Tear the last screen horizontally open from within its center
+		with the  <a href="gui-screenchangeanimation-flash.html">flash screen-change-animation</a>.</td>
+	</tr></table>	
+	
+		
+<h2 id="screenchangeanimation-left">left Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_left">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-left.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_left", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the left
+		with the  <a href="gui-screenchangeanimation-left.html">left screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-leftshutter">leftshutter Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_leftshutter">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-leftshutter.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_leftshutter", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the left with a shutter
+		using the  <a href="gui-screenchangeanimation-leftshutter.html">leftshutter screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-newWave">newWave Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_newWave">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-newWave.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_newWave", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Splash in the next screen using something like a zipper
+		with the  <a href="gui-screenchangeanimation-newWave.html">newWave screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-particle">particle Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_particle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-particle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_particle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Zoom into single pixels of the last screen to show the next screen 
+		with the  <a href="gui-screenchangeanimation-particle.html">particle screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-rain">rain Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_rain">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-rain.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_rain", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Splash in the next screen in a rain-like fashion
+		with the  <a href="gui-screenchangeanimation-rain.html">rain screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-right">right Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_right">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-right.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_right", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the right
+		with the  <a href="gui-screenchangeanimation-right.html">right screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-rightshutter">rightshutter Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_rightshutter">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-rightshutter.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_rightshutter", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the right with a shutter using
+		the  <a href="gui-screenchangeanimation-rightshutter.html">rightshutter screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-scale">scale Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_scale">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-scale.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_scale", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Scale in the next screen
+		with the  <a href="gui-screenchangeanimation-scale.html">scale screen-change-animation</a>.</td>
+	</tr></table>
+	
+		
+<h2 id="screenchangeanimation-squeeze">squeeze Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_squeeze">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-squeeze.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_squeeze", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Squeeze out the last screen
+		with the  <a href="gui-screenchangeanimation-squeeze.html">squeeze screen-change-animation</a>.</td>
+	</tr></table>
+	
+	
+<h2 id="screenchangeanimation-top">top Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_top">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-top.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_top", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the top
+		with the  <a href="gui-screenchangeanimation-top.html">top screen-change-animation</a>.</td>
+	</tr></table>
+
+
+	
+<h2 id="screenchangeanimation-topshutter">topshutter Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_topshutter">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-topshutter.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_topshutter", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Move in the next screen from the top with a shutter using 
+		the  <a href="gui-screenchangeanimation-topshutter.html">topshutter screen-change-animation</a>.</td>
+	</tr></table>
+	
+
+<h2 id="screenchangeanimation-verticalflash">verticalflash Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_verticalflash">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-verticalflash.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_verticalflash", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Tear the last screen vertically open from within its center
+		with the  <a href="gui-screenchangeanimation-verticalflash.html">verticalflash screen-change-animation</a>.</td>
+	</tr></table>	
+
+
+
+<h2 id="screenchangeanimation-zoomboth">zoomboth Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_zoomboth">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-zoomboth.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_zoomboth", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Zoom both the previous as well as the next screen 
+		with the  <a href="gui-screenchangeanimation-zoomboth.html">zoomboth screen-change-animation</a>.</td>
+	</tr></table>
+
+	
+<h2 id="screenchangeanimation-zoomin">zoomin Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_zoomin">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-zoomin.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_zoomin", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Zoom in the next screen
+		with the  <a href="gui-screenchangeanimation-zoomin.html">zoomin screen-change-animation</a>.</td>
+	</tr></table>
+
+
+<h2 id="screenchangeanimation-zoomout">zoomout Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_zoomout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-zoomout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_zoomout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Zoom out the next screen
+		with the  <a href="gui-screenchangeanimation-zoomout.html">zoomout screen-change-animation</a>.</td>
+	</tr></table>
+
+<%include end.txt %>

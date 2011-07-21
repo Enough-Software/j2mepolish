@@ -1,0 +1,16 @@
+<ivysettings>
+  <settings defaultResolver="default-chain" />
+  <resolvers>
+    <chain name="default-chain">
+      <url name="ibiblio" checkmodified="false">
+        <ivy pattern="http://mirrors.ibiblio.org/pub/mirrors/maven2/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
+        <artifact pattern="http://mirrors.ibiblio.org/pub/mirrors/maven2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+      </url>
+      <url name="nutiteq" checkmodified="false">
+        <ivy pattern="http://www.nutiteq.com/ivy/[organisation]/[module]/ivy-[revision].xml"/>
+        <artifact pattern="http://www.nutiteq.com/ivy/[organisation]/[module]/[artifact]-[revision].[ext]"/>
+      </url>
+    </chain>
+  </resolvers>
+</ivysettings>
+

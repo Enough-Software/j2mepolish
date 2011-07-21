@@ -1,0 +1,63 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Lighthouse Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Lighthouse Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The lighthouse effect colors neighboured characters and moves the color around the text.
+	</p>
+	<h2 id="Lighthouse Text-Effect-Design">Usage</h2>
+	<p>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-lighthouse.mov">
+	        <param name='autoplay' value="true">
+	        <param name='controller' value="false">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-lighthouse.mov" autoplay="true" 
+	        controller="false" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+            width="148" height="24"
+	        >
+	        </embed>
+		</object>
+	</p>
+<pre>
+title {
+     text-effect: lighthouse;
+     text-lighthouse-color: #ffff0000;
+     text-lighthouse-neighbor-color: #ff990000;
+     text-lighthouse-mode: left-to-right;
+     layout: horizontal-center | horizontal-expand;
+     font {
+         face: proportional;
+         size: large;
+         style: bold;
+         color: #fff;
+     }
+     background-color: #fff;
+}
+</pre>	
+	<p>
+	Specific design attributes of the Lighthouse Text-Effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.LighthouseTextEffect %>
+	
+	
+	<h2 id="Lighthouse Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/LighthouseTextEffect.html">LighthouseTextEffect</a>.
+	</p>
+
+<%include end.txt %>

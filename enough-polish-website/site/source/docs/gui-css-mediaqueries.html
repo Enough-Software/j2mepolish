@@ -1,0 +1,268 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation: CSS Media Queries %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+	
+	<h1 id="top">CSS Media Queries</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	<li><a href="gui-css-animations.html">CSS Animations</a></li>
+	<li><a href="http://www.w3.org/TR/css3-mediaqueries" target="_blank">W3C definition</a></li>
+	</ul>
+	
+	<%index %>
+	
+	<p>CSS Media Queries allow you to adapt the design of your application during runtime. This feature is especially useful when targeting
+	generic devices such as <code>Generic/AnyPhone</code> or <code>Generic/AnyMsaPhone</code>.
+	<br />Without further ado let's have a look at a common example that increases the size of the commands for touchscreen devices:
+	</p>
+<pre>
+/** default styles: **/
+menuItem {
+	font-color: #333;
+}
+menuItem:hover {
+	font-color: #ddd;
+	background-color: #333;
+}
+menuItem:pressed {
+	font-color: #3d3;
+	background-color: #333;
+}
+/** adapt styles for touchscreen devices dynamically: */
+<b>@media touchscreen {</b>
+	menuItem {
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
+}	
+</pre>
+	<p>In the above example we add a padding of 4 pixel to the top and bottom of the <code>menuItem</code> style which is responsible for rendering the Option commands.</p>
+	<p>Please note that the <a href="gui-css-basics.html">pseudo styles</a> (like <code>:hover</code> or <code>:pressed</code>) inherit adjustments of their base style automatically.</p>
+	
+	<h2 id="syntax">Syntax of CSS Media Queries</h2>
+	<p>Each media query starts with <code>@media</code> followed by a comma separated list of queries.
+	The queries itself can consist of the <code>not</code> keyword followed by a media type such as <code>touchscreen</code> or <code>screen</code>,
+	which is then optionally followed by expressions. Each expression can use a feature and a value, for example <code>(min-width: 320px)</code>.
+	The presence of the keyword <code>not</code> at the beginning of the query negates the result. 
+	If the complete media query had been true without the <code>not</code> keyword it will become false, and vice versa.
+	</p>
+	<p>Following example illustrate this definition:</p>
+<ul>
+	<li><code>@media touchscreen {...}</code></li>
+	<li><code>@media not touchscreen {...}</code></li>
+	<li><code>@media touchscreen and (max-width: 240px) and (max-height: 320px) {...}</code></li>
+	<li><code>@media (min-width: 240px) and (min-height: 320px){ ...}</code></li>
+</ul>
+	<p>Technically this is the complete syntax definition of the media query list:</p>
+<pre>
+media_query_list
+ : S* media_query [ ',' S* media_query]*
+ ;
+media_query
+ : [ONLY | NOT]? S* media_type S* [ AND S* expression ]*
+ | expression [ AND S* expression ]*
+ ;
+media_type
+ : TOUCHSCREEN | SCREEN | ALL
+ ;
+expression
+ : '(' S* media_feature S* [':' S* expr]? ')' S*
+ ;
+media_feature
+ : IDENT
+ ;
+</pre>
+	<p>
+		Within a media query you can adapt any existing style. You only need to write the changes for that specific style, there is no
+		need to copy any other CSS attributes.
+	</p>
+
+	<h2 id="mediatypes">Supported Media Types</h2>
+	<p>
+		J2ME Polish currently supports these media types:
+	</p>
+	<ul>
+		<li><code>touchscreen</code>: is true for devices that have pointer events</li>
+		<li><code>screen</code>: is always true</li>
+		<li><code>all</code>: is always true</li>
+	</ul>
+	<p>In the future we will also support other media types such as <code>3D</code> or <code>svg</code>.</p>
+
+	<h2 id="mediafeatures">Supported Media Features</h2>
+	<p>
+		Media features can be used to finetune the design further. You can, for example, use different sets of images for different
+		resolutions. Most media features accept optional <code>min-</code> or <code>max-</code> prefixes to express
+		<code>greater or equal to</code> and <code>smaller or equal to</code> constraints. 
+		This syntax is used to avoid <code>&lt;</code> and <code>&gt;</code> characters which may conflict with HTML and XML. 
+		Those media features that accept prefixes will most often be used with prefixes, but can also be used alone.
+		J2ME Polish currently supports these media feature:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Feature&nbsp;&nbsp;</th><th>min/max&nbsp;&nbsp;</th><th>Explanation</th><th>Example</th></tr>
+	<tr>
+	 <td><code>width</code> and <code>device-width</code></td>
+	 <td>yes</td>
+	 <td>The width of the screen in pixels.</td>
+	 <td><code>(min-width: 240px)</code></td>
+	</tr>
+	<tr>
+	 <td><code>height</code> and <code>device-height</code></td>
+	 <td>yes</td>
+	 <td>The height of the screen in pixels.</td>
+	 <td><code>(max-height: 320px)</code></td>
+	</tr>
+	<tr>
+	 <td><code>orientation</code></td>
+	 <td>no</td>
+	 <td>The orientation of the screen, eiter <code>portrait</code> or <code>landscape</code>. Since media queries are only resolved
+	 once, you might prefer the <code>:landscape</code> and <code>:portrait</code> <a href="gui-css-basics.html#style-pseudo">pseudo styles</a>.
+	 </td>
+	 <td><code>(orientation: landscape)</code></td>
+	</tr>
+	<tr>
+	 <td><code>aspect-ratio</code> and <code>device-aspect-ratio</code></td>
+	 <td>yes</td>
+	 <td>The ratio of the value of the <code>width</code> to the value of the <code>height</code> media feature.</td>
+	 <td>The following examples all render true for devices with a resolution of 240x320:<br />
+	 <code>(aspect-ratio: 240/320)</code><br />
+	 <code>(aspect-ratio: 24/32)</code><br />
+	 <code>(aspect-ratio: 3/4)</code>
+	 </td>
+	</tr>	
+	<tr>
+	 <td><code>color</code></td>
+	 <td>yes</td>
+	 <td>The number of bits per color component. When no value is given it will check whether the device supports color at all. If the device is not a color device, the value is zero.</td>
+	 <td><code>(color)</code><br/>
+	 <code>(min-color: 6)</code>
+	 </td>
+	</tr>
+	<tr>
+	 <td><code>vendor</code></td>
+	 <td>no</td>
+	 <td>The name of the vendor of the device, e.g. Nokia, Sony-Ericsson, Samsung or LG. When the name cannot be resolved it will be <code>unknown</code>.</td>
+	 <td><code>(vendor: Nokia)</code><br/>
+	 <code>(vendor: unknown)</code>
+	 </td>
+	</tr>
+	</table>
+
+	<h2 id="Samples">Media Query Examples</h2>
+	<p>
+		Following examples can give you some ideas how to use media queries in your apps:
+	</p>
+	
+	<h3 id="Samples-resolution">Use Resolution Dependent Images</h3>
+<pre>
+/** default style: **/
+.mainScreen {
+	background {
+		image: url( bg-default.png );
+		anchor: bottom | right;
+	}
+}
+
+/** adapt styles for specific resolutions: */
+<b>@media (min-device-width: 240px) and (min-device-height: 320px) {</b>	
+	.mainScreen {
+		background {
+			image: url( bg-large.png );
+			anchor: bottom | right;
+		}
+	}
+}
+<b>@media (max-device-width: 176px) and (max-device-height: 208px) {</b>	
+	.mainScreen {
+		background {
+			image: url( bg-small.png );
+			anchor: bottom | right;
+		}
+	}
+}
+</pre>
+	<h3 id="Samples-increase">Increase Button Size for Touchscreen Devices</h3>
+<pre>
+/** default styles: **/
+menuItem {
+	font-color: #333;
+}
+menuItem:hover {
+	font-color: #ddd;
+	background-color: #333;
+}
+menuItem:pressed {
+	font-color: #3d3;
+	background-color: #333;
+}
+/** adapt styles for touchscreen devices dynamically: */
+<b>@media touchscreen {</b>
+	menuItem {
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
+	menuItem:hover {
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
+	menuItem:pressed {
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
+}	
+</pre>	
+	
+	<h2 id="optimizing">Optimize Media Queries</h2>
+	<p>
+		When you build application both for specific devices as well as for unknown / generic devices you add unecessary overhead
+		for your specific builds when you use media queries. With some simple preprocessing in your <code>polish.css</code> file
+		you can apply media queries only for your generic builds:
+	</p>
+<pre>
+<b>//#if polish.vendor == Generic</b>
+	@media touchscreen {
+		menuItem {
+			padding-top: 4px;
+			padding-bottom: 4px;
+		}
+		menuItem:hover {
+			padding-top: 4px;
+			padding-bottom: 4px;
+		}
+		menuItem:pressed {
+			padding-top: 4px;
+			padding-bottom: 4px;
+		}
+	}
+<b>//#endif</b>
+</pre>
+	
+	
+	<h2 id="programmatically">Add Media Queries Programmatically</h2>
+	<p>
+		You can also add media queries programmatically. Please note that you need to do this before the styles are applied, which is typically 
+		done within the <code>showNotify()</code> method of the corresponding UI components. A good place to do that is within the
+		<code>startApp()</code> method of your <code>MIDlet</code>, for example.
+	</p><p>
+		You can only add media queries, when you actually use them in your <i>polish.css</i> or when you manually specify the
+		<code>polish.css.mediaquery</code> preprocessing variable.
+	</p><p>
+		To add conditional styles programmatically just call <code>StyleSheet.addMediaQuery( String condition, Style[] styles ):</code>
+	</p>
+<pre>
+import de.enough.polish.ui.*;
+...
+//#if polish.css.mediaquery
+	Style mainscreenStyle = new Style();
+	mainscreenStyle.name="mainscreen"; // same as in your polish.css file
+	mainscreenStyle.addAttribute("padding", new Dimension("10px") );
+	Style[] styles = new Style[]{ mainscreenStyle };
+	StyleSheet.addMediaQuery("touchscreen", styles);
+//#endif
+</pre>
+	
+
+<%include end.txt %>

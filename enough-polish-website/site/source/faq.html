@@ -1,0 +1,182 @@
+<%define inFaqSection %>
+<%set title = J2ME Polish: FAQ %>
+<%include start.txt %>
+
+	<h1 id="top">FAQ</h1>
+	<%index %>
+	<h2 id="installation">Installation</h2>
+	<h3 id="installproblem">Q: If I extract the downloaded jar-file I don't find the described tools. What happened?</h3>
+	<p>A: You are not supposed to extract the jar file - please start
+	the installer by calling <code>java -jar j2mepolish-[version].jar</code> from the
+	command-line (substitute [version] with the actual version-number). 
+	On Windows and Mac OS X it is usually sufficient to double-click
+	the downloaded jar-file to start the installer.
+	</p>
+	<h2 id="technical">Technical</h2>
+	<h3 id="memory">Q: How much memory does J2ME Polish need?</h3>
+	<p>A: J2ME Polish itself is a build-tool with an optional GUI, some
+	helper classes and a MIDP/2.0 compatible game-engine. 
+	<br/>
+	If you just use the build-tool, no additional memory
+	is used. 
+	<br/>
+	If you want to use the GUI the additional needed memory
+	depends on what GUI features you actually use. 
+	The minimum library footprint starts around 15 kb (after obfuscation). 
+	For a full fledged application calculate up to 40 kb for the GUI.
+	Modern devices have a maximum jar size of several MBs, so the memory
+	used by the GUI is more or less negligable.
+	<br/>
+	The game-engine uses 5 to 6 kb.
+	</p>
+	<h3 id="classes">Q: J2ME Polish seems to copy classes into my application - how can I prevent this?</h3>
+	<p>A: J2ME Polish adds its utility classes and all its GUI classes (if the GUI is used)
+	automatically to each application. The obfuscation step is removing all unnecessary
+	and unused classes, so don't worry about this.
+	</p>
+	<h3 id="thirdparty">Q: What third party software is used by J2ME Polish?</h3>
+	<p>A: J2ME Polish uses following software:
+	</p>
+	<ul>
+		<li><a href="http://ant.apache.org" target="_blank">Ant</a> is the basis
+		for the build tools and is not included in the distribution.
+		</li>
+		<li><a href="http://www.jdom.org" target="_blank">JDom</a> is used for XML processing.
+		</li>
+		<li><a href="http://proguard.sourceforge.net/" target="_blank">ProGuard</a> is the default obfuscator.
+		</li>
+		<li><a href="http://www.retrologic.com/retroguard-main.html" target="_blank">RetroGuard</a> is another obfuscator
+		which is included in J2ME Polish.
+		</li>
+		<li><a href="http://www.izforge.com/izpack/" target="_blank">IzPack</a> is great tool for creating installers.
+		</li>
+	</ul>
+	<h2 id="licensing">Licensing</h2>
+	<h3 id="license-stop">Q: What happens when J2ME Polish will not be developed anymore?</h3>
+	<p>A: When the development on J2ME Polish will be halted, Enough Software will license
+	   the full product under the GNU Lesser General Public License, allowing
+	   full commercial usage without limitations. Thus Enough Software
+	   offers a very high investment security!</p>
+	<h3 id="license-combining">Q: Can I combine several Single Licenses?</h3>
+	<p>A: Yes, Single Licenses can be combined, so if you use J2ME Polish for more
+	than one application, you do not need to upgrade to the Enterprise License or
+	use the Runtime License instead.</p>
+	<h2 id="bugs">Bugs</h2>
+	<h3 id="foundone">Q: I think I have found a bug, what should I do?</h3>
+	<p>A: Please tell me about it at <a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a>.
+	You might also want to file a 
+	<a href="http://developer.berlios.de/bugs/?group_id=1246">bug-report</a>.
+	J2ME Polish is currently in the &quot;early bird&quot;
+	phase, so there are still some limitations.
+	</p>
+	<h2 id="contribute">Contribute</h2>
+	<h3 id="howtocontribute">Q: I like this project, how can I contribute?</h3>
+	<p>A: There are many ways how you can contribute:</p>
+	<ul>
+	 <li>Finding bugs</li>
+	 <li>Translating the documentation</li>
+	 <li>Enhancing or extending J2ME Polish</li>
+	 <li>Creating a design with J2ME Polish</li>
+	</ul>
+	<p>When you'd like to do anything of it, please get in touch with me at
+	<a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a>.
+	</p>
+	<p class="questionText">Q: I fixed some stuff - what now?</p>
+	<p>A: Gee, cheers! Please send it to me at
+	<a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a>.
+	Be aware that I use J2ME Polish commercially as well, though.
+	</p>
+	
+	<h2 id="features">Features</h2>
+	<h3 id="featurerequest">Q: I need a feature, when will you implement it?</h3>
+	<p>A: Please have a look at the <a href="roadmap.html">roadmap</a>.
+	When you cannot find the needed feature, please tell me about it at
+	<a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a> or 
+	at the BerliOS <a href="http://developer.berlios.de/feature/?group_id=1246" target="_blank">feature tracker</a>.
+	</p>
+	
+	<h2 id="help">Help</h2>
+	<h3 id="title">Q: My screen title is not designed properly, why?</h3>
+	<p>A: You can design the title in following circumstances:
+	</p>
+	<ul>
+	<li>you target a MIDP 1.0 phone, or</li>
+	<li>you are activating a fullscreen mode in your &lt;build&gt; element of you build.xml script by specifying <code>fullscreen=&quot;yes&quot;</code> or <code>fullscreen=&quot;menu&quot;</code>, or
+	</li>
+	<li>you are targeting a MIDP 2.0 phone and set the &quot;polish.usePolishTitle&quot; preprocessing variable to
+	&quot;true&quot; in your build.xml script:
+<pre>
+&lt;variable name=&quot;polish.usePolishTitle&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</li>
+	</ul>
+	<p>
+	MIDP 2.0 phones support a &quot;native&quot; title. On Nokia phones this title is set above of the
+	actual Canvas area, for example. That's why J2ME Polish is using such native title
+	by default.
+	<br />You can end up with a native title even when you use the &quot;menu&quot; fullscreen mode and
+	target a device with unknown softkey events. Please refer to the next question for details.
+	</p>
+	<h3 id="menubar">Q: My menubar is not designed properly, even though I use the &quot;menu&quot; fullscreen mode. What's wrong?</h3>
+	<p>A: This is usually due to one of the following reasons:
+	</p>
+	<ul>
+	<li>you are targeting a generic phone (like &quot;Generic/midp2&quot;)</li>
+	<li>you are targeting a phone for which the softkey values are unknown</li>
+	</ul>
+	<p>
+	Softkey events are not standardized and also not all phones do trigger key events when a softkey is pressed.
+	Therefore, J2ME Polish uses the &quot;native&quot; menu for best compatibility. The menubar can only be designed 
+	when you target a devic that has know softkeys, e.g. all Nokia or Motorola phones. Please refer to the 
+	<a href="devices-overview.html">device	database</a> for getting to know if your target device has known
+	softkeys. You can also specify the softkeys yourself by setting the &quot;key.LeftSoftKey&quot; and
+	&quot;key.RightSoftKey&quot; capabilites in either devices.xml or custom-devices.xml.
+	</p>
+	<h3 id="mailinglists">Q: Where are the mailing lists?</h3>
+	<p>A: Here:</p>
+	<ul>
+		<li><b>users:</b> please join the <a href="http://lists.berlios.de/mailman/listinfo/polish-users">polish-users@lists.berlios.de</a>-list.
+			<br/>
+			In this list users can discuss their problems. The developers of J2ME Polish
+			will monitor the discussions and help out!
+		</li>
+		<li><b>announcements:</b> please join the <a href="http://lists.berlios.de/mailman/listinfo/polish-announce">polish-announce@lists.berlios.de</a>-list for retrieving news regarding the polish framework.
+			<br/>
+			This list anounces new versions and has very low traffic.
+		</li>
+		<li><b>developers:</b> please join the <a href="http://lists.berlios.de/mailman/listinfo/polish-devel">polish-devel@lists.berlios.de</a>-list.
+			<br/>
+			This is for the developers of J2ME Polish.
+		</li>
+	</ul>
+	<p>Have a look at the <a href="discussion.html">discussion-page</a> for other communication possibilities.</p>
+	<h3 id="howto-newbee">Q: I'm a bit lost - how should I start using J2ME Polish?</h3>
+	<p>A: You should start by reading the <a href="docs/tutorial.html">introduction</a>
+	first. 
+	<br/>I suggest to check out the provided sample-application in the next step.
+	Play a bit around with the design (which is defined in the &quot;resources/polish.css&quot; file)
+	and in the source-code. 
+	<br/>Maybe you can find some more ideas in the collection of
+	<a href="docs/how-tos.html">how-tos</a>. 
+	<br/>You should then be ready to check out the 
+	<a href="documentation.html">full documention</a>.
+	<br/>If you look for specific information, have a look at the 
+	<a href="atoz.html">A to Z-index</a>.
+	</p>
+	
+	<h2 id="name">J2ME Polish</h2>
+	<h3 id="name">Q: What should the name &quot;J2ME Polish&quot; mean?</h3>
+	<p>A: J2ME Polish should mean &quot;turtle wax&quot;, at least that's what slashdot reader
+	<a href="http://developers.slashdot.org/comments.pl?sid=116170&cid=9831734" target="_blank">tod suggests</a>.
+	The name can be confusing really. It has nothing to do with Poland or the language
+	spoken there, rather it should imply that you can polish up your applications
+	with J2ME Polish.
+	</p>
+	
+	<h2 id="patents">Software Patents</h2>
+	<h3 id="whatrpatents4">Q: What about software patents?</h3>
+	<p>A: Software patents are only good for lawyers and major companies.
+	Please help stopping this madness:<br/>
+	<a href="http://www.ffii.org">http://www.ffii.org</a>.
+	</p>
+<%include end.txt %>

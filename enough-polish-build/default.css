@@ -1,0 +1,434 @@
+/*********************************************************************************
+ *                                                                               *
+ *  Contains default styles for several J2ME Polish components                   *
+ *  IMPORTANT: YOU CANNOT EXTEND STYLES - NEITHER EXPLICITELY WITH THE           *
+ *  "EXTENDS" KEYWORD NOR IMPLICITELY, E.G. :HOVER OR :PRESSED.                  *
+ *                                                                               *
+ *********************************************************************************/
+ 
+ colors {
+ 	browserFontColor: rgb( 30, 85, 86 );
+	browserFontColorFocused: rgb(20,40,80);
+ }
+ 
+.textFieldSymbolList {
+	inherit: false;
+	padding: 10;
+	columns: 5;
+	columns-width: equal;
+	layout: center | vertical-center;
+	background-color: white;
+}
+
+.textFieldSymbolItem {
+	inherit: false;
+	margin: 1;
+	padding: 2;
+	font {
+		color: gray;
+		size: medium;
+		style: bold;
+	}
+	layout: center;
+	focused-style: .textFieldSymbolListFocused;
+}
+
+.textFieldSymbolListFocused {
+	inherit: false;
+	margin: 0;
+	padding: 2;
+	font {
+		color: black;
+		size: medium;
+		style: bold;
+	}
+	border {
+		type: bottom;
+		color: #A00;
+	}
+	layout: center;
+}
+/*
+rightcommand {
+	inherit: false;
+	layout: right;
+}
+centercommand {
+	inherit: false;
+	layout: center;
+}
+*/
+
+.browser {
+	inherit: false;
+	/*
+	view-type: midp2;
+	*/
+}
+
+.browserText {
+	inherit: false;
+}
+
+.browserTextBold {
+	inherit: false;
+	font-color: black;
+	font-style: bold;
+}
+
+.browserTextItalic {
+	inherit: false;
+	font-style: italic;
+}
+
+
+.browserTextBoldItalic {
+	inherit: false;
+	font-style: bold | italic;
+}
+
+.browserTextCode {
+	inherit: false;
+	font-face: monospace;
+}
+
+
+.browserLink {
+	inherit: false;
+	padding-bottom: 1;
+	padding-right: 1;
+	font-color: blue;
+	font-style: bold;
+	focused-style: .browserLinkFoc;
+}
+
+.browserLinkFoc {
+	inherit: false;
+	padding-bottom: 1;
+	padding-right: 1;
+	font-color: red;
+	font-style: bold;
+}
+
+.browserInput extends .browserText {
+	inherit: false;
+	padding: 2;
+	layout: expand | left;
+	focused-style: browserInputFoc;
+	border {
+		type: round-rect;
+		width: 1;
+		color: browserFontColor;
+	}
+}
+
+.browserInputFoc extends .browserInput {
+	padding: 1;
+	inherit: false;
+	layout: expand | left;
+	border {
+		type: round-rect;
+		width: 2;
+		color: browserFontColorFocused;
+	}
+}
+
+.browserDownloadIndicator {
+	inherit: false;
+	layout: vertical-shrink | horizontal-shrink | top | right;
+	/*
+	hehe, hey Michael: white stripes on white background, eh?
+    gauge-color: white; 
+    gauge-gap-color: white;
+    gauge-animation-mode: backandforth;
+    gauge-animation-speed: 2;
+    background{
+    	color: red;
+		border-width: 2;
+		border-color: black;
+    }
+    */
+}
+
+.browserChoiceGroup {
+	inherit: false;
+}
+
+
+.browserChoiceItem {
+	inherit: false;
+}
+
+.browserChoiceGroupMultiple {
+	inherit: false;
+}
+
+.browserChoiceGroupExclusive {
+	inherit: false;
+}
+
+.browserChoiceGroupPopup {
+	background-color: white;
+	inherit: false;
+	focused-style: .browserChoiceGroupPopupFocused;
+}
+
+.browserChoiceGroupPopupFocused {
+	background-color: silver;
+	inherit: false;
+}
+
+
+.browserCheckBox {
+	inherit: false;
+}
+
+.browserRadio {
+	inherit: false;
+}
+
+.browserOption {
+	inherit: false;
+	/*
+	view-type: exclusive;
+	*/
+	layout: left | expand;
+}
+
+.browserOptionItem {
+	inherit: false;
+}
+
+.rssDescriptionAlert {
+	inherit: false;
+}
+
+.verticalmenubar {
+	inherit: false;
+	background: none;
+	layout: right | horizontal-shrink;
+}
+
+.predictiveInstallDialog {
+	inherit: false;
+	layout: vertical-shrink | bottom;
+}
+
+.predictiveInstallMessage {
+	inherit: false;
+	font-color: black;
+}
+
+.predictiveWordNotFound {
+	inherit: false;
+	layout: vertical-shrink | bottom;
+}
+
+.predictiveWordNotFoundText {
+	inherit: false;
+	font-color: black;
+}
+
+.predictiveChoice {
+	inherit: false;
+	background-color: white;
+}
+
+scrollbar {
+	inherit: false;
+	scrollbar-slider-color: silver;
+	scrollbar-slider-width: 3;
+	background-color: white;
+}
+
+/* KEYBOARD STYLES *******************************************************************/
+
+//#if polish.TextField.useVirtualKeyboard 
+	keyDimension {
+		min-height: 12%;
+		min-width: 12%;
+	}
+	
+	keySpaceDimension extends keyDimension {
+		inherit: false;
+		min-width: 45%;
+	}
+	
+	key extends keyDimension{
+		inherit: false;
+		margin: 1%;
+		
+		border-color: black;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		layout: center | vcenter;
+		focused-style: keyFocused;
+	}
+	
+	keyFocused{
+		inherit: false;
+		margin: 1%;
+		
+		border-color: black;
+		border-width: 1;
+		
+		font-color: black;
+		font-size: large;
+		
+		layout: center | vcenter;
+	}
+	
+	keySpace extends keySpaceDimension {
+		inherit: false;
+		margin: 1%;
+		
+		border-color: black;
+		border-width: 1;
+		
+		font-size: large;
+		
+		layout: center | vcenter;
+		focused-style: keySpaceFocused;
+	}
+	
+	.keySpaceFocused {
+		inherit: false;
+		margin: 1%;
+		
+		border-color: black;
+		border-width: 1;
+		
+		font-size: large;
+		
+		layout: center | vcenter;
+	}
+	
+	keyShift extends key {
+		inherit: false;
+	}
+	
+	keyDelete extends key {
+		inherit: false;
+	}
+	
+	keyClear extends key {
+		inherit: false;
+	}
+	
+	keyAbc extends key {
+		inherit: false;
+	}
+	
+	key123 extends key {
+		inherit: false;
+	}
+	
+	keyBlank extends keyDimension{
+		inherit: false;
+	}
+	
+	keyrow {
+		view-type: horizontal;
+		padding: 0;
+		layout: center;
+		focused-style: keyrowFocused; 
+	}
+	
+	keyrowFocused{
+		view-type: horizontal;
+		padding: 0;
+		layout: center;
+	}
+	
+	keyboard {
+		margin-top: 3%;
+		margin-bottom: 3%;
+		padding: 0;
+	}
+	
+	
+	keyboardView {
+		padding: 0;
+		
+		background-color: white;
+			
+		layout: vcenter | hcenter;
+	}
+	
+	keyboardViewHeader {
+		columns: 2;
+		padding: 0;
+		align-heights: true;
+	}
+	
+	keyboardViewSubmit {
+		margin: 1%;
+		min-height: 15%;
+		min-width: 15%;
+		border-color: black;
+		border-width: 1;
+		layout: vcenter;
+		focused-style: keyboardViewSubmitFocused;
+	}
+	
+	keyboardViewSubmitFocused {
+		margin: 1%;
+		min-height: 15%;
+		min-width: 15%;
+		border-color: black;
+		border-width: 1;
+		layout: vcenter;
+	}
+	
+	keyboardViewDisplay {
+		margin: 1%;
+		layout: expand | vcenter;
+		border-color: black;
+		border-width: 1;
+		max-lines: 1;
+		max-lines-appendix-position: before;
+		focused-style: keyboardViewDisplayFocused;
+	}
+	
+	keyboardViewDisplayFocused{
+		margin: 1%;
+		layout: expand | vcenter;
+		border-color: black;
+		border-width: 1;
+		max-lines: 1;
+		max-lines-appendix-position: before;
+	}
+	
+	keyMode {
+		margin: 1%;
+		border-color: #00aeef;
+		border-width: 1;
+		font-color: black;
+		font-size: large;
+		background-color: #00aeef; 
+		layout: center | vcenter;
+		pressed-style: keyModePressed;
+		focused-style: keyModeFocused;
+	}
+	
+	keyModePressed {
+		border-color: #f26522;
+		font-color: #fff;
+		background-color: #f26522;
+	}
+	
+	keyModeFocused {
+		margin: 1%;
+		border-color: #00aeef;
+		border-width: 1;
+		font-color: black;
+		font-size: large;
+		background-color: #00aeef; 
+		layout: center | vcenter;
+	}
+	
+
+//#endif

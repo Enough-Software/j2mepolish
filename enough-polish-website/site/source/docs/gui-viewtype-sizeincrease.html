@@ -1,0 +1,48 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: size-increase view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">size-increase view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>size-increase</code> view-type increases the height of an item.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-sizeincrease.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="111">
+	        <param name='height' value="90">
+	        <embed src="<%= basedir%>images/gui-viewtype-sizeincrease.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="111" height="90"
+	        >
+	        </embed>
+		</object>
+
+	</p>
+<pre>
+.itemIncrease {
+	view-type: size-increase;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.itemviews.SizeIncreaseItemView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/itemviews/SizeIncreaseItemView.html">SizeIncreaseItemView</a></li>
+	</ul>
+
+<%include end.txt %>

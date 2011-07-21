@@ -1,0 +1,170 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design: Mask Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Mask Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-background-layer.html">layer Background</a></li>
+		<li><a href="gui-background-combined.html">combined Background</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+	</ul>
+	<p>
+	Bring any background into your desired shape and add transparency to it using the <code>mask</code> background.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The <code>mask</code> background below has been realized with the following design settings:
+	<br />
+	<img src="<%= basedir%>images/background-mask.png" width="350" height="32" alt="MaskBackground" />
+	</p>
+<pre>
+colors {
+	maskColor: red;
+}
+
+backgrounds {
+	maskBackground {
+		type: polygon;
+		points: 5,90 55,0 105,90 155,0 205,90;
+		reference-width: 210;
+		reference-height: 100;
+		scale-mode: scale;
+		color: maskColor;
+	}
+	maskGradient {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: blue;
+	}	
+}
+
+
+menubar {
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background {
+		<b>type: mask;
+		mask: maskBackground;
+		mask-color: maskColor;
+		background: titleGradient;
+		opacity: 150;</b>
+	}
+}
+
+.mainScreen {
+	padding: 2;
+	padding-left: 10;
+	padding-right: 10;
+	background {
+		type: horizontal-stripes;
+		first-top-color: rgb(165,190,247);
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#endif
+}
+</pre>
+	<p>
+	The principle of the masked background is simple:
+	You can take any background, including a <a href="gui-background-combined.html">combined</a> background or even
+	a masked background as the source, and another background as mask.
+	<br />
+	The <code>MaskBackground</code> will show only parts of the source background that are covered with the mask color in the
+	mask background. The following images illustrate this:
+	</p>
+	<table class="table" cellspacing="0" cellpadding="3" border="0">
+	<tr>
+	<td valign="center">
+	<img src="<%= basedir%>images/background-mask-background.png" width="241" height="239" alt="Source" />
+	</td>
+	<td valign="center"><b>+</b></td>
+	<td valign="center">
+	<img src="<%= basedir%>images/background-mask-mask.png" width="239" height="217" alt="Mask" />
+	</td>
+	<td valign="center"><b>=</b></td>
+	<td>
+	<img src="<%= basedir%>images/background-mask-result.png" width="237" height="217" alt="Result" />
+	</td>
+	</tr>
+	<tr>
+	<td valign="center">
+<pre>
+maskGradient {
+	type: vertical-gradient;
+	top-color: white;
+	bottom-color: blue;
+}	
+</pre>
+	</td>
+	<td valign="center">&nbsp;</td>
+	<td valign="center">
+<pre>
+maskBackground {
+	type: polygon;
+	points: 5,90 55,0 105,90 155,0 205,90;
+	reference-width: 210;
+	reference-height: 100;
+	scale-mode: scale;
+	color: red;
+}
+</pre>
+	</td>
+	<td valign="center">&nbsp;</td>
+	<td valign="center">
+<pre>
+background {
+	type: mask;
+	mask: maskBackground;
+	mask-color: red;
+	background: titleGradient;
+	opacity: 150;
+}
+</pre>
+	</td>
+	</tr>
+	</table>
+	<p>
+	CSS attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>mask</td><td>n/a</td><td>background in the <i>backgrounds</i> section</td>
+		<td>
+		The background that is being used as a mask.
+		</td>
+	</tr>
+	<tr>
+		<td>mask-color</td><td>n/a</td><td>color definition</td>
+		<td>
+		The mask color - every pixel in this color will considered visible in the backround.
+		</td>
+	</tr>
+	<tr>
+		<td>background</td><td>n/a</td><td>background definition from the <i>backgrounds</i> section</td>
+		<td>
+		Background that is masked.
+		</td>
+	</tr>
+	<tr>
+		<td>opacity</td><td>255</td><td>definition</td>
+		<td>
+		Opacity between 0 (transparent) and 255 (opaque).
+		</td>
+	</tr>
+	</table>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/MaskBackground.html">MaskBackground</a>.
+	</p>
+
+<%include end.txt %>

@@ -1,0 +1,194 @@
+<%define inScreenshotsSection %>
+<%set title = J2ME Polish: Screenshots %>
+<%include start.txt %>
+	
+	<h1>Screenshots</h1>
+	<p>J2ME Polish makes it easy to adjust the design to specific devices or
+	device groups. You can try completely different designs just
+	by using a different resources-folder. For the application
+	screen-shots a simple <a href="screenshot-application.html">application</a> is used, which just shows
+	a main menu with the standard <code>javax.microedition.lcdui.List</code> 
+	class.</p>
+	<h2>A Design Featuring a Turtle</h2>
+	<table><tr>
+		<td><img src="images/screenshot-example-enough.png" alt="enough design" width="205" height="277"/></td>
+		<td><img src="images/screenshot-example-enough-menu.png" alt="enough design with menu open"  width="203" height="270"/></td>
+	</tr><tr>
+		<td colspan="2">The enough design uses two columns and a transparent menu-bar.
+		<br /><a href="downloads/resources-turtle.zip">Download resources</a>.
+		</td>
+	</tr></table>
+	<h2>polish.css</h2>
+	<p>
+<pre>
+/* The polish.css files contains all
+   design information about a project.
+   It can be adjusted for specific devices
+   or device groups by putting it in the 
+   appropriate sub-folder.
+   If you want to adjust a design for all
+   Nokia devices, define it in resources/Nokia/polish.css
+   and so on. Only new and different settings
+   need to be specified in such polish.css files. 
+   To keep this example easy, no subfolders are
+   actually used here.
+*/
+
+/* the colors which are defined in
+   the colors section can later be referenced.
+   This makes changes easy, since the color
+   just needs to be changed in one position.
+   Even default colors (like blue, green, lime, etc)
+   can be changed here. 
+*/
+colors {
+	bgColor:  rgb(132,143,96);
+	brightBgColor:  rgb(238,241,229);
+	brightFontColor: rgb(238,241,229);
+	fontColor: rgb( 30, 85, 86 );
+}
+
+/* the menu style is a predefined style for
+   designing the fullscreen-menu.
+   The font-settings (font-color,
+   font-face, font-style and font-size)
+   are used to design the menu-texts
+   (like Options, Select, or Cancel).
+   With the focused-style attribute
+   another style than the default &quot;focused&quot;
+   style is used for the menu. 
+   The menubar-color can be set to any
+   color. When &quot;transparent&quot; is used,
+   the background shines through.
+*/
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	focused-style: .menuFocused;
+	font-color: brightFontColor;
+	font-style: bold;
+	menubar-color: transparent;
+}
+
+/* The menuItem style is a predefined style
+   for the actual commands in a fullscreen-menu.
+   When the menuItem style is not defined,
+   the menu style will be used instead. 
+*/
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: black;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+}
+
+/* This is a custom style for selected
+   menu items. It is used, because it has
+   been defined in the menu style. 
+*/
+.menuFocused extends .menuItem {
+	background-color: bgColor;
+	font-color: brightFontColor;
+	layout: left | horizontal-expand;
+	after: url(dot.png);
+}
+
+/* The title style is a predefined style which is used
+   for all screen-titles.
+*/
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	background: none;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+/* The focused style is a predefined style which
+   is used by lists, forms, choice-groups and so on.
+   This style will be used for highlighting the currently
+   focused item.
+*/
+focused {
+	padding: 5;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: brightBgColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | center;
+}
+/* The .mainScreen style is a static style, which
+   is set in the MIDlet source-code with the //#style directive.
+   If the source-code would not have defined this
+   style, we could use the dynamic style &quot;list&quot; to design all
+   list-screens. 
+   An interesting attribute is the &quot;columns&quot; attribute which
+   is used to use a table with two columns instead of the default
+   layout.
+*/
+.mainScreen {
+	padding: 5;
+	padding-left: 15;
+	padding-right: 15;
+	background {
+		color: transparent;
+		image: url( bg.png );
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	columns: 2;
+	columns-width: equal;
+}
+
+/* The .mainCommand style is also a static style, which
+   is set in the MIDlet source-code with the //#style directive.
+   If the source-code would not have defined this
+   style, we could use the dynamic style &quot;listitem&quot; to design all
+   items on the list-screens. 
+   An interesting attribute is the &quot;icon-image&quot; URL, which uses
+   the %INDEX% keyword. The first list-item will use the image
+   &quot;icon0.png&quot;, the second &quot;icon1.png&quot; and so on. 
+*/
+.mainCommand {
+	margin: 2; /* for the missing border of the focussed style */
+	padding: 5;
+	background: none;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: small;
+	layout: center;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+}
+</pre>
+	</p>
+
+	<h2>Other Designs</h2>
+	<p>Please send me your designs to <a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a>,
+	so I can add them to this list.</p>
+<%include end.txt %>

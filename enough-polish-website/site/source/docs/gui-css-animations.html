@@ -1,0 +1,506 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation: CSS Animations %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+	
+	<h1 id="top">CSS Animations</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	<li><a href="gui-css-mediaqueries.html">CSS Media Queries</a></li>
+	</ul>
+	
+	<%index %>
+	
+	<p>With J2ME Polish you can animate the user interface by animating CSS attributes.
+	<br />Without further ado let's have a look at an example that shows a form with 4 StringItems and 1 ImageItem:
+		<div id="id_animations_intro">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-animations-intro.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_animations_intro", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+	</p>
+	<h2 id="syntax">Syntax of CSS Animations</h2>
+	<p>You can animate almost all CSS attributes by adding <code>-animation</code> at the end of the CSS attribute:
+	</p>
+<pre>
+menuitem {
+	background-color: white;
+}
+
+menuitem:hover {
+	font-color: white;
+	background-color: black;
+	<b>background-color-animation {
+		on: focus;
+		range: white..black;
+		duration: 300ms;
+	}</b>
+}
+</pre>
+	<p>You can animate any color, integer and percentage CSS attributes. Each animations supports following attributes:
+	</p>
+	<ul>
+		<li><b>on</b>: name of the event that triggers the animation like <code>focus</code> (gains focus), <code>defocus</code> (loses focus), <code>show</code> (element is shown), <code>show-first</code> (shown for the very first time), <code>hide</code> (element is hidden) or your own application specific event names.</li>
+		<li><b>range</b>: the start and end point of the animation separated by two dots, e.g. <code>blue..red</code> or <code>0%..50%</code>.
+		The allowed values depend on the CSS attribute in question.
+		You can separate several animation phases by using commas, e.g.
+<pre>
+font-color-animation {
+   range: red..blue, blue..green;
+}
+</pre>
+		When you have the same end- and start-value you can abbreviate it by just using two dots to the next value:
+		<code>range: red..blue..#0f0;</code>
+		</li>
+		<li><b>duration</b>: 
+		The duration of the animation. When there are several animation ranges, you can either specify the complete length or you can specify comma separated durations for each range:
+		<code>duration: 300ms, 1s;</code>. The default <code>duration</code> is <code>1000ms</code> / <code>1s</code>.
+		</li>
+		<li><b>delay</b>: The delay between the event and the start of the animation. 
+		You can specify delays for each animation phase by comma separating delay values:
+		<code>delay: 2s, 200ms;</code>. By default there is no <code>delay</code> (<code>0ms</code>).
+		</li>
+		<li><b>repeat</b>:
+		The number of times this animation should be repeated. Use <code>once</code> if it only should run at the first occurrence of the event. 
+		Use <code>always</code> to run this animation until the affected UI element receives a new style. 
+		Use a numeric value <code>n</code> to repeat the animation n times.The default value for <code>repeat</code> is 0, meaning
+		that the animation is processed once and not repeated afterwards.
+		<code>repeat: always;</code> 
+		</li>
+		<li><b>fire-event</b>: The event that is fired when this animation ends. You can use this mechanism to chain several 
+		independent animations: <code>fire-event: myCustomEvent;</code>
+		</li>
+		<li><b>function</b>: The function by which values are modified during the animation. 
+		Supported values are <code>ease</code>, <code>ease-in</code>, <code>ease-out</code> and <code>linear</code>.
+		<code>ease</code> results in a slow beginning (<code>ease-in</code>) or ending (<code>ease-out</code>) or both a smooth ending and beginning (<code>ease</code>).
+		The <code>linear</code> function will change the value purely linear to the passed time. The <code>ease</code> function 
+		is the default function:
+		<code>function: ease;</code></li>
+	</ul>
+	
+	<h2 id="events">Reacting to Events</h2>
+	<p>With the <code>on</code> attribute you specify on which event an animation should be started.
+	You can react to any kind of events either system generated or your own custom events (like "message-received", for example).
+	</p>
+	<p>Available J2ME Polish events are listed here:
+	</p>
+	<ul>
+		<li><b>show</b>: triggered when a screen or item is shown. Note that the item does not need to be visible necessarily.</li>
+		<li><b>hide</b>: triggered when a screen or item is hidden.</li>
+		<li><b>focus</b>: triggered when an item receives the focus. Use this trigger in the <code>[style-name]:hover</code> style:
+<pre>
+.menuItem {
+	font-color: #222;
+}
+.menuItem:hover {
+	font-color: #eee;
+	background-color: black;
+	<b>font-color-animation {
+		on: focus;
+		range: #222..#eee;
+		duration: 500ms;
+	}</b>
+}
+</pre>
+		</li>
+		<li><b>defocus</b>: triggered when an items loses the focus. </li>
+		<li><b>press</b>: triggered when an item is pressed, e.g. by clicking and holding the FIRE button of the phone. 
+		Use such animations in the <code>[style-name]:press</code> style:
+<pre>
+.menuItem {
+	font-color: #222;
+}
+.menuItem:hover {
+	font-color: #eee;
+	background-color: black;
+	font-color-animation {
+		on: focus;
+		range: #222..#eee;
+		duration: 500ms;
+	}
+}
+.menuItem:press {
+	font-color: #eee;
+	background-color: black;
+	<b>font-color-animation {
+		on: press;
+		range: #eee..#f00..#eee;
+		duration: 200ms, 100ms;
+	}</b>
+}
+</pre>
+		</li>
+		<li><b>unpress</b>: triggered when the item is not pressed anymore, e.g. by releasing the FIRE key on the phone.</li>
+		<!-- 
+		<li><b></b>: </li>
+		 -->
+	</ul>
+	<p>
+	You can easily use and react to your own custom events - you only need to tell J2ME Polish about such events
+	by calling <code>EventManager.fireEvent( String name, Object source, Object data )</code>.
+	Let's clarify this by an example:
+	</p>
+	<p>In the <i>polish.css</i> file use the custom event name in the <code>on</code> attribute:
+<pre>
+.messageIndicator {
+	background-color-animation {
+		on: message-received;
+		range: #fff..#0f0..#fff;
+		repeat: 1;
+		duration: 500ms;
+	}
+}
+</pre>
+	<p>
+	In your application simply notify J2ME Polish about the event when it occurs. Provide the UI element that
+	should consume the event as the source in <code>EventManager.fireEvent()</code>:
+	</p>
+<pre>
+import de.enough.polish.event.EventManager;
+
+public class MessageConsumer {
+	public void init() {
+		//#style messageIndicator
+		this.messageIndicator = new StringItem();
+		...
+	}
+	public void onMessageReceived( Message msg ) {
+		this.messageIndicator.setText( "You have " + (++this.unreadMessage) + " messages" );
+		<b>EventManager.fireEvent( "message-received", this.messageIndicator, null );</b>
+	}
+}
+</pre>
+	<p>
+	You can also use <code>de.enough.polish.ui.UiAccess</code> for triggering animation events for J2ME Polish
+	components like the title or the menubar:
+	</p>
+	<ul>
+		<li><b>UiAccess.fireEvent( String name, Screen screen, Object data )</b>: fires the event for the screen and all its embedded UI elements. Please note that this method traverses all UI components and may take a while.</li>
+		<li><b>UiAccess.fireEvent( String name, Item item, Object data )</b>: fires the event for the given item and all it's subitems.</li>
+		<li><b>UiAccess.fireEventForTitleAndMenubar( String name, Screen screen, Object data)</b>: fires the specified event for the screen's title and menubar.</li>
+	</ul>
+	<p>
+	Let's move out the menubar and the title by firing a custom event. First we define the animations
+	in the screen's title and menubar styles:
+	</p>
+<pre>
+backgrounds {
+	imageTitle {
+		type: mask;
+		mask: imageTitleMask;
+	 	mask-color: blue;
+	 	background: imageTitleTmp; 
+	 	opacity: 200;
+	}
+	imageTitleMask {
+		type: simple;
+		color: blue;
+	}
+	imageTitleTmp {
+		type: vertical-gradient;
+		top-color: #7A7A7A;
+		bottom-color: #323232;
+	}
+}
+.screenImage
+{
+	padding: 2%;
+	padding-vertical: 1%;
+	background-color: #000;
+	title-style: imageTitle;
+	menubar-style: imageMenubar;
+}
+
+.imageTitle extends title{
+	background: imageTitle;
+	<b>y-adjust-animation {
+		on: goFullscreen;
+		range: 0%..-100%;
+	}
+	y-adjust-animation {
+		on: leaveFullscreen;
+		range: -100%..0%;
+	}</b>
+}
+imageMenubar extends menubar {
+	background {
+		type: vertical-gradient;
+		top-color:  rgb(98, 120, 139);
+		bottom-color: rgb(53, 75, 92);
+	}
+	<b>y-adjust-animation {
+		on: goFullscreen;
+		range: 0%..100%;
+	}
+	y-adjust-animation {
+		on: leaveFullscreen;
+		range: 100%..0%;
+	}</b>
+}
+</pre>	
+	<p>Now we can hide the menubar and title by using UiAccess:</p>
+<pre>
+UiAccess.fireEventForTitleAndMenubar( "goFullscreen", myImageScreen, null );
+</pre>
+	<p>Showing the title and menubar again is done by firing the <code>leaveFullscreen</code> event:
+	</p>
+<pre>
+UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
+</pre>
+		<div id="id_animations_title">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-animations-menubarandtitle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_animations_title", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+	
+	<h2 id="chaining">Chaining CSS Animations</h2>
+	<p>
+	You can chain several animations for different CSS attribute with the <code>fire-event</code> attribute. In this example we 
+	start animating the background colors of the screen first - at the end we fire the <code>intro-finish</code> event. This event
+	is then picked up by one of the string items which plays an animation before starting yet another one.
+	</p>
+<pre>
+.introScreen {
+	layout: vertical-center;
+	padding: 2%;
+	padding-top: 8%;
+	background {
+		type: combined;
+		foreground: snowflakes;
+		background: gradient;
+	}
+	background-snowflakes-flake-color-animation {
+		on: show;
+		range: white..#600;
+		duration: 12s;
+		delay: 3s;
+		repeat: once;
+	}
+	background-snowflakes-number-of-flakes-animation {
+		on: show;
+		range: 5..10;
+		duration: 10s;
+		repeat: once;
+	}
+	background-snowflakes-max-flake-size-animation {
+		on: show;
+		range: 10..16;
+		duration: 10s;
+		repeat: once;
+	}
+	background-vertical-gradient-top-color-animation {
+		on: show;
+		range: #eef..#a00..#200..#000;
+		duration: 6s, 4s, 2s;
+		<b>fire-event: intro-finish;</b>
+		repeat: once;
+	}
+	background-vertical-gradient-bottom-color-animation {
+		on: show;
+		range: #009..black;
+		duration: 10s;
+		repeat: once;
+	}
+}
+
+.introText {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-color: #d00;
+	font-style: bold;
+}
+
+.introText1 extends introText {
+	x-adjust: -110%;
+	x-adjust-animation {
+		<b>on: intro-finish;</b>
+		range: -100%..0%;
+		duration: 3s;
+		<b>fire-event: intro-text1-finish;</b>
+	}
+}
+
+.introText2  extends introText {
+	layout: right;
+	x-adjust: 110%;
+	x-adjust-animation {
+		<b>on: intro-text1-finish;</b>
+		range: 100%..0%;
+		duration: 3s;
+		<b>fire-event: intro-text2-finish;</b>
+	}
+}
+
+.introImage {
+	padding-left: 20%;
+	opacity: 0;
+	opacity-animation {
+		<b>on: intro-text1-finish;</b>
+		range: 0..200..0..180..0..255;
+		duration: 100ms,100ms,100ms,100ms, 300ms;
+		delay: 1500ms,0ms, 500ms, 300ms,100ms;
+	}
+}
+</pre>
+	<p>Since we fire events by one UI element that should be consumed by other UI elements, we need to remap such events.
+	You can do this by calling <code>EventManager.remapEvent(String eventName, Object remappedSource):</code>:
+	</p>
+<pre>
+private void showIntro() {
+       //#style introScreen
+       Form form = new Form(null);
+       //#style introText1
+       StringItem introText1 = new StringItem( null, "When the night falls...");
+       form.append(introText1);
+       //#style introText2
+       StringItem introText2 = new StringItem( null, "...vampires come out!");
+       form.append(introText2);
+       ImageItem imageItem = null;
+       try {
+       	Image image = Image.createImage("/vampire.png");
+       	//#style introImage
+       	imageItem = new ImageItem( null, image, ImageItem.PLAIN, null);
+       	form.append(imageItem);
+       } catch (Exception e) {
+       	//#debug error
+       	System.out.println("Unable to load image " + e );
+       }
+       //#style introText3
+       StringItem introText3 = new StringItem( null, "Only you can stop them!");
+       form.append(introText3);
+       //#style pressKeyText
+       StringItem pressKeyText = new StringItem( null, "Press Fire");
+       pressKeyText.setDefaultCommand(this.cmdSkipIntro);
+       form.append(pressKeyText);
+       form.setCommandListener(this);
+       
+       EventManager manager = EventManager.getInstance(); 
+       <b>manager.remapEvent("intro-finish", introText1);
+       manager.remapEvent("intro-text1-finish", introText2);
+       if (imageItem != null) {
+       	manager.remapEvent("intro-text1-finish", imageItem);
+       }
+       manager.remapEvent("intro-text2-finish", introText3);
+       manager.remapEvent("show-press-key", pressKeyText);</b>
+       
+       DeviceControl.lightOn();
+       this.display.setCurrent(form);
+   }
+</pre>
+	<p>This chaining results in the following animation:
+		<div id="id_animations_intro">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-animations-intro.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_animations_intro", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+	</p>
+	
+	<h2 id="simple">Simple CSS Animations</h2>
+	<p>
+Let's have a look at a simple example:
+</p>
+<pre>
+.mainCommand {
+	margin-top: 2px;
+	padding: 5px;
+	padding-left: 20%;
+	font-color: #333;
+	font-style: bold;
+	font-size: medium;
+	layout: expand;
+}
+
+.mainCommand:hover {
+	font-color: #ccc;
+	background-color: #ddd;
+	<b>background-color-animation {
+		on: focus;
+		range: #ddd..#333;
+		duration: 1s;
+	} </b>
+}</pre>
+	
+<p>
+The above example animates the background color of elements from a light to very dark gray (<code>range: #ddd..#eee;</code>) when they receive the 
+focus (<code>on: focus;</code>) in 1 second (<code>duration: 1s;</code>):
+<br />
+<object width="425" height="344"><param name="movie" value="http://www.youtube-nocookie.com/v/QazhFHOV-g4&hl=en&fs=1&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube-nocookie.com/v/QazhFHOV-g4&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+</p>
+<p>
+You can also also animate normal numerical values, in the following example we animate the horizontal position of all elements. This animation is triggered when
+the elements are shown for the first time (<code>on: show-first</code>). We delay the 'show' event that is triggered for each element by 200ms by using <code>show-delay: 200ms;</code> in the corresponding screen's style. 
+This delays the start of the animations, so that not all elements are moved at the same time. 
+</p>
+<pre>
+.mainScreen {
+	background-color: #ddd;
+	layout: vertical-center;
+	<b>show-delay: 200ms;</b>
+}
+
+.mainCommand {
+	margin-top: 2px;
+	padding: 5px;
+	padding-left: 20%;
+	font-color: #333;
+	font-style: bold;
+	font-size: medium;
+	layout: expand;
+	<b>x-adjust: -100%;
+	x-adjust-animation {
+		on: show-first;
+		range: -100%..0%;
+	}</b>
+}
+
+.mainCommand:hover {
+	font-color: #ccc;
+	background-color: #ddd;
+	background-color-animation {
+		on: focus;
+		range: #ddd..#333;
+		duration: 1s;
+	}
+}
+</pre>
+<p>
+<object width="425" height="344"><param name="movie" value="http://www.youtube-nocookie.com/v/ZLkW5Ldhow0&hl=en&fs=1&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube-nocookie.com/v/ZLkW5Ldhow0&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+</p>
+	
+	<h2 id="sample">Sample Application</h2>
+	<p>
+	Please have a look at the <i>animation</i> sample application for a real world example.
+	</p>
+
+<%include end.txt %>

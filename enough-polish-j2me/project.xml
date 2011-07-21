@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <name>polish</name>
+  <id>polish</id>
+  <currentVersion>0.0.1-dev</currentVersion>
+  <organization>
+    <name>enough software</name>
+    <url>http://www.enough.de/</url>
+  </organization>
+  <inceptionYear>2004</inceptionYear>
+  <package>de.enough.polish</package>
+
+  <shortDescription>J2ME GUI-, Utility- and build-Framework.</shortDescription>
+
+  <!-- Gump integration -->
+  <gumpRepositoryId>polish</gumpRepositoryId>
+
+  <description>
+    polish is a GUI-, utility- and build-framework for J2ME applications.
+  </description>
+
+  <url>http://polish.berlios.de/</url>
+  <issueTrackingUrl>
+    http://developer.berlios.de/bugs/?group_id=1246
+  </issueTrackingUrl>
+  <siteAddress>polish.berlios.de</siteAddress>
+  <siteDirectory>
+    /www/maven.apache.org/
+  </siteDirectory>
+  <distributionDirectory>
+    /www/jakarta.apache.org/builds/jakarta-turbine-maven/
+  </distributionDirectory>
+
+  <repository>
+    <connection>
+      scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:maven
+    </connection>
+    <url>
+      http://cvs.apache.org/viewcvs/maven/
+    </url>
+  </repository>
+
+  <versions>
+    <version>
+      <id>current</id>
+      <name>latest version</name>
+      <tag>HEAD</tag>
+    </version>
+    <version>
+      <id>b4</id>
+      <name>1.0-b4</name>
+      <tag>HEAD</tag>
+    </version>
+  </versions>
+
+  <mailingLists>
+    <mailingList>
+      <name>polish User List</name>
+      <subscribe>
+        polish-users-request@berlios.de
+      </subscribe>
+      <unsubscribe>
+        polish-users-request@berlios.de
+      </unsubscribe>
+      <archive>
+        http://lists.berlios.de/pipermail/polish-users/
+      </archive>
+    </mailingList>
+    <mailingList>
+      <name>polish Developer List</name>
+      <subscribe>
+        polish-devel-request@berlios.de
+      </subscribe>
+      <unsubscribe>
+        polish-devel-request@berlios.de
+      </unsubscribe>
+      <archive>
+        http://lists.berlios.de/pipermail/polish-devel/
+      </archive>
+    </mailingList>
+    <mailingList>
+      <name>polish Announce List</name>
+      <subscribe>
+        polish-announce-request@berlios.de
+      </subscribe>
+      <unsubscribe>
+        polish-announce-request@berlios.de
+      </unsubscribe>
+      <archive>
+        http://lists.berlios.de/pipermail/polish-announce/
+      </archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+
+    <developer>
+      <name>Robert Virkus</name>
+      <id>enough</id>
+      <email>robert@enough.de</email>
+      <organization>enough software</organization>
+    </developer>
+
+    <developer>
+      <name>Lew Palm</name>
+      <id>capitan</id>
+      <email>lew@enough.de</email>
+      <organization>enough software</organization>
+    </developer>
+
+  </developers>
+
+  <licenses>
+  	<license>
+  		<name>GNU General Public License</name>
+  		<url>http://www.gnu.org/copyleft/gpl.html</url>
+  		<distribution>manual</distribution>
+  	</license>
+  	<license>
+  		<name>enough software license</name>
+  		<url>http://www.enough.de/polish/commercial.html</url>
+  		<distribution>manual</distribution>
+  	</license>
+  </licenses>
+
+  <dependencies>
+    <dependency>
+      <groupId>midp</groupId>
+      <artifactId>midp</artifactId>
+      <jar>midpapi.zip</jar>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <nagEmailAddress>
+      polish-devel@lists.berlios.de
+    </nagEmailAddress>
+
+    <sourceDirectory>src</sourceDirectory>
+
+    <unitTestSourceDirectory>test-src</unitTestSourceDirectory>
+
+    <aspectSourceDirectory/>
+
+    <!-- Unit test cases -->
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/RepositoryTest.java</exclude>
+      </excludes>
+    </unitTest>
+              
+    <!-- J A R  R E S O U R C E S -->
+    <!-- Resources that are packaged up inside the JAR file -->
+    <resources>
+      <resource>
+        <directory>${basedir}/src/resources/misc</directory>
+        <includes>
+          <include>*.xsd</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/resources/logging</directory>
+        <includes>
+          <include>log4j.properties</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <!-- Integration unit test cases -->
+    <integrationUnitTest/>
+
+    <jars>
+    </jars>
+  </build>
+</project>

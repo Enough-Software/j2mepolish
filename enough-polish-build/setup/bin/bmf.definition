@@ -1,0 +1,9 @@
+<!-- created by J2ME Polish on Sat Nov 13 16:30:09 CET 2004 -->
+<data-definition>
+	<description>Defines the structure of a J2ME Polish bitmap-font (*.bmf).</description>
+	<extension>.bmf</extension>
+	<entry name="supportsMixedCaseChracters" type="boolean" count="1" />
+	<entry name="characterMap" type="UTF-String" count="1" />
+	<entry name="characterWidths" type="byte" count="characterMap" />
+	<entry name="characterImage" type="PNG-Image" count="1" />
+</data-definition>

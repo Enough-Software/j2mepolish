@@ -1,0 +1,559 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.howto %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="howto-top">Cooking Tips and How-tos</h1>
+<%index %>
+
+<h2 id="howto-build">Building How-Tos</h2>
+<h3 id="howto-sourcefolders">How to Use Several Source Folders</h3>
+<p>
+You can use several source folders by defining the &quot;source&quot;-attribute 
+of the &lt;build&gt; element in the &quot;build.xml&quot; file. Just separate 
+the folders with colons or semicolons:
+<pre>
+&lt;build
+	fullscreen=&quot;menu&quot;
+	usePolishGui=&quot;true&quot;
+	sourceDir=&quot;source/src:../extensions/source/src&quot;
+&gt;
+</pre>
+</p>
+<p>
+In the above example the &quot;source/src&quot; folder of the current project and the &quot;source/src&quot; folder of the &quot;extensions&quot; project are included. The notation is OS-independent by the way. So you can separate different source-paths with either a colon ':' or a semicolon ';' and you can separate folders with a slash '/' or a backslash '\'.
+</p>
+<p>
+You can also use the nested &lt;sources&gt; element for including source-directories based on conditions. In this example the directory &quot;source/test&quot; is only included when the Ant-property &quot;test&quot; is true:
+<pre>
+&lt;build
+	fullscreen=&quot;menu&quot;
+	usePolishGui=&quot;true&quot;
+&gt;
+	&lt;sources&gt;
+		&lt;source dir=&quot;source/src&quot; /&gt;
+		&lt;source dir=&quot;source/test&quot; if=&quot;test&quot; /&gt;
+	&lt;/sources&gt;
+...
+</pre>
+</p>
+
+<h3 id="howto-api">How to Integrate Third Party APIs</h3>
+<p>
+Sometimes a third party API is needed in a project. You have to distinguish between APIs which are available as source code, and APIs which are available in binary-only form. Another case are APIs which are already pre-installed on specific devices. Depending on the type of the API different actions are required for integrating the API. Please do not forget to add the library to the classpath of your project within your IDE. This is, however, out of the scope of this how-to.
+</p>
+<h4 id="howto-api-source">How to Integrate a Source Code Third Party API</h4>
+<p>
+When a third party API is available in source code, you can integrate it by modifying the &quot;sourceDir&quot; 
+attribute of the &lt;build&gt; element in the &quot;build.xml&quot; file. 
+Consider the case where your normal application code is placed in the &quot;source/src&quot; 
+directory and the source code of the third party  API in the &quot;source/thirdparty&quot; 
+folder. You can now add the third party API by setting the &quot;sourcDir&quot; 
+attribute to &quot;source/src:source/thirdparty&quot;:
+<pre>
+&lt;build
+	imageLoadStrategy=&quot;background&quot;
+	fullscreen=&quot;menu&quot;
+	usePolishGui=&quot;true&quot;
+	resDir=&quot;resources2&quot;
+	sourceDir=&quot;source/src:source/thirdparty&quot;
+&gt;
+</pre>
+</p>
+<p>
+The notation is OS-independent by the way. So you can separate different source-paths with either a colon ':' or a semicolon ';' and you can separate folders with a slash '/' or a backslash '\'.
+</p>
+<h4 id="howto-api-binary">How to Integrate a Binary Third Party API</h4>
+<p>
+When a third party API is only available in binary form, they can be integrated with the &quot;binaryLibraries&quot; attribute 
+of the &lt;build&gt; element in the &quot;build.xml&quot; file. This attribute can point to jar- or zip-files or to a directory containing third party libraries (either jar-files, zip-files or class-files). Several libraries can be separated by colons ':' or semicolons ';'. When the libraries are situated in the &quot;import&quot; folder, only the name of the libraries need to be given (instead of specifying the full path). 
+</p>
+<p>
+In the following example the binary library &quot;tinyline&quot; is integrated. The corresponding library file &quot;tinylinegzip.zip&quot; is situated in the &quot;import&quot; folder:
+<pre>
+&lt;build
+	imageLoadStrategy=&quot;background&quot;
+	fullscreen=&quot;menu&quot;
+	usePolishGui=&quot;true&quot;
+	resDir=&quot;resources2&quot;
+	binaryLibraries=&quot;tinylinegzip.zip&quot;
+&gt;
+</pre>
+</p>
+<p>
+In this example all libraries which are situated in the &quot;thirdparty&quot; folder are integrated:
+<pre>
+&lt;build
+	imageLoadStrategy=&quot;background&quot;
+	fullscreen=&quot;menu&quot;
+	usePolishGui=&quot;true&quot;
+	resDir=&quot;resources2&quot;
+	binaryLibraries=&quot;thirdparty&quot;
+&gt;
+</pre></p>
+<p>
+The notation is OS-independent by the way. So you can separate different source-paths with either a 
+colon ':' or a semicolon ';' and you can separate folders with a slash '/' or a backslash '\'.
+</p>
+<h4 id="howto-api-device">How to Integrate a Device API</h4>
+<p>
+Many devices provide additional APIs, which are pre-installed on the devices. 
+A popular example is Nokia's UI-API which provides additional graphic and sound functions. 
+When a device supports a specific API, this is noted with the &quot;JavaPackage&quot; 
+capability of that device in the &quot;devices.xml&quot; file 
+(this file is visible only when you have chosen to install the &quot;external 
+device database&quot; during the installation of J2ME Polish). 
+</p>
+<p>
+Assuming that you want to use API &quot;phonebook&quot;, the corresponding library 
+file &quot;phonebook.jar&quot; or &quot;phonebook.zip&quot; just needs to be copied 
+into the &quot;import&quot; folder (in the J2ME Polish installation directory
+or in your project root directory). It will then be used automatically for the devices which support the &quot;phonebook&quot; API. 
+</p><p>
+You can modify the &quot;apis.xml&quot; file (this is again only visible when you have chosen to install the &quot;external device database&quot;) 
+for specifying different library-names, paths or aliases. 
+</p>
+
+<h3 id="howto-obfuscator">How to Use Several Obfuscators Combined</h3>
+<p>
+You can combine several obfuscators just by adding several 
+<a href="build-build.html#obfuscator">&lt;obfuscator&gt; elements</a> to 
+your &quot;build.xml&quot; file. Please note that combining RetroGuard and ProGuard 
+actually results in bigger classes than when ProGuard is used alone. 
+</p><p>
+Here you can find more information about integrating <a href="custom-obfuscator.html">other obfuscators</a>.
+</p>
+<h3 id="howto-memory">How to Minimize the Memory Footprint</h3>
+<p>
+There are several possibilities for minimizing the memory-footprint of J2ME Polish:
+</p>
+<h4 id="howto-memory-vars">polish.skipArgumentCheck and polish.debugVerbose</h4>
+<p>
+Define the preprocessing-symbol &quot;polish.skipArgumentCheck&quot;, by setting the 
+&quot;symbols&quot; attribute of the <a href="build-build.html">&lt;build&gt;</a>-element in the 
+&quot;build.xml&quot; file. When this symbol is defined, no method-arguments will be 
+checked by the J2ME Polish GUI. This is usually fine when the application is stable. 
+You should also skip the checking of arguments in the application by testing 
+the &quot;polish.skipArgumentCheck&quot;-symbol in the application code:
+<pre>
+public void doSomething( int index ) {
+  //#ifndef polish.skipArgumentCheck
+	// check the argument only when the &quot;polish.skipArgumentCheck&quot; is not defined:
+	if (index &lt; 0 || index &gt; this.maxIndex ) {
+	  //#ifdef polish.debugVerbose
+		throw new IllegalArgumentException(&quot;Invalid index [&quot; + index &quot;].&quot;);
+	  //#else
+		//# throw new IllegalArgumentException();
+	  //#endif
+	}
+  //#endif
+}
+</pre>
+</p>
+<p>
+The above example also uses the &quot;polish.debugVerbose&quot; symbol for determining if a meaningful 
+exception should be thrown. By giving verbose information only in cases when it is requested, 
+some memory can be saved, too. You can set and unset the &quot;polish.debugVerbose&quot; symbol by modifying 
+the &quot;verbose&quot; attribute of the 
+<a href="build-build.html#debug">&lt;debug&gt;</a>-element.
+</p>
+<h4 id="howto-memory-image">Image Load Strategy</h4>
+<p>
+When you use the J2ME Polish GUI, select the &quot;foreground&quot; image loading strategy 
+for removing 
+the overhead of loading images in a background thread. 
+The &quot;imageLoadStrategy&quot; attribute of the <a href="build-build.html">&lt;build&gt; element</a>
+can either 
+be &quot;foreground&quot; or &quot;background&quot;.
+</p>
+<h4 id="howto-memory-css">Optimizing the &quot;polish.css&quot; File</h4>
+<p>
+When you use the J2ME Polish GUI, you should not use <a href="css-specific.html">default-values</a>
+in your 
+&quot;resources/polish.css&quot; file. Forms and Lists do not use a table layout 
+by default, for example. In that case you should not set the &quot;columns&quot;-attribute 
+to &quot;1&quot;, since this is the default behavior anyhow. It is better not to use 
+the &quot;columns&quot; attribute at all in this case. 
+</p>
+<p>
+Another optimization is to define often used backgrounds, fonts and borders in the 
+<a href="css-syntax.html">appropriate section</a>
+ of the &quot;resources/polish.css&quot; file. In that case you can just refer to 
+ the instances:
+<pre>
+backgrounds {
+	myBackground {
+		type: round-rect;
+		color: gray;
+		arc: 15;
+		border-color: black;
+		border-width: 2;
+	}
+}
+title {
+	background: myBackground;
+	/** skipping other attributes **/
+}
+focused {
+	background: myBackground;
+	/** skipping other attributes **/
+}
+</pre></p>
+<p>
+A third optimization is not to use <a href="css-styles.html">dynamic styles</a>. 
+This requires the usage of the 
+<a href="preprocessing-directives.html#preprocessing-styles">#style-directive</a> in the application code. 
+</p>
+<h4 id="howto-memory-resources">Using Optimal Resources</h4>
+<p>
+Use the <a href="resource-assembling.html">resource assembling</a> of J2ME Polish for using 
+only those resources which are actually required by the application. For example it does not 
+make sense to add MIDI-soundfiles for devices which do not support such files. 
+Better put them into the &quot;resources/midi&quot; folder. 
+</p><p>
+It is also not good to use high-color images for handsets which do not support such images. Better create optimized versions of such images. This saves memory and has the additional bonus that you do not need to depend on the dithering of the device, which often results into awkward graphics. So put 4096-colors images into the &quot;resources/BitsPerImage.12&quot;  folder and 65k-colors images into the &quot;resources/BitsPerImage.16+&quot; folder.
+</p><p>
+When you use the J2ME Polish GUI you can also use <a href="css-groups.html">device-optimized designs</a>.
+</p>
+<h4 id="howto-memory-preprocess">Use Preprocessing</h4>
+<p>
+With <a href="preprocessing.html">preprocessing</a> you can make amazing adjustments to specific devices without wasting memory and without losing the portability of an application.
+</p><p>
+Consider for example this &quot;SplashScreen&quot; solution, which shows a startup logo. This screen should be derived from Nokia's FullScreenCanvas when this class is available. In a classic solution you would need to test if Nokia's API is available and to load a Nokia-specific version of the SplashScreen class:
+<pre>
+public class MyMidlet extends MIDlet {
+	[...]
+	public void showSplashScreen() {
+		Displayable splashScreen;
+		try {
+			// check if this is a Nokia-device:
+			splashScreen = Class.forName(&quot;MyNokiaSplashScreen&quot;).newInstance();
+		} catch (Exception e) {
+			// no Nokia API is available, load the classic splash screen:
+			splashScreen = new MySplashScreen();
+		}
+		this.display.set( screen );
+	}
+}
+
+public class MySplashScreen extends Canvas {
+	public void paint( Graphics g) {
+		[...]
+	}
+}
+
+public class MyNokiaSplashScreen extends com.nokia.mid.ui.FullCanvas {
+	public void paint( Graphics g) {
+		[...]
+	}
+}
+</pre></p><p>
+With the <a href="preprocessing.html">preprocessing</a> capabilities and the integrated 
+<a href="../devices-overview.html">device database</a> of J2ME Polish there is an easier and much more memory efficient solution available:
+<pre>
+public class MySplashScreen 
+//#if polish.api.nokia-ui
+	extends com.nokia.mid.ui.FullCanvas
+//#else
+	//# extends Canvas
+//#endif
+{
+	public void paint( Graphics g) {
+		[...]
+	}
+}
+</pre></p><p>
+Another example is the playback of sound. In a classical environment you would need to check the supported formats at runtime and then decide which one should be used. Using preprocessing and the device database this is much easier and no checks during the runtime are necessary:
+<pre>
+public void playMusic() {
+	Player player;
+	//#if polish.audio.mpeg
+		player = Manager.createPlayer( Class.getResourceAsStream(&quot;title.mp3&quot;), &quot;audio/mpeg&quot; );
+		player.start();
+	//#elif polish.audio.amr
+		player = Manager.createPlayer( Class.getResourceAsStream(&quot;title.amr&quot;), &quot;audio/amr&quot; );
+		player.start();
+	//#elif polish.audio.wav
+		player = Manager.createPlayer( Class.getResourceAsStream(&quot;title.wav&quot;), &quot;audio/wav&quot; );
+		player.start();
+	//#elif polish.audio.midi
+		player = Manager.createPlayer( Class.getResourceAsStream(&quot;title.midi&quot;), &quot;audio/midi&quot; );
+		player.start();
+	//#else
+		//# return;
+	//#endif
+}
+</pre></p><p>
+With the help of <a href="preprocessing.html">preprocessing</a> you can shift the runtime checks to the compile phase.
+</p>
+
+<h4 id="howto-memory-debug">Remove Debug Code</h4>
+<p>
+When the application should be shipped any debug code should be removed from the project. 
+The easiest way is to use the <a href="preprocessing-directives.html#debug">#debug and #mdebug</a>
+ preprocessing directives. The debugging can then be controlled with 
+ the <a href="build-build.html#debug">&lt;debug&gt;</a>-element in the 
+ &quot;build.xml&quot; file.
+</p>
+<h4 id="howto-memory-general">General Optimization Tips</h4>
+<p>
+Some other useful tips for minimizing the memory footprint of an application are also available:
+</p><p>
+Do not use pure Object Orientated Programming. OOP is great, but it has some drawbacks, notably the runtime and memory implications. Try to minimize the usage of classes and interfaces. Try to use preprocessing whenever it makes sense. Check if you really need methods for accessing variables. Sometimes it is better is better to declare them protected or even public and to access them directly.
+</p><p>
+If you have text which is displayed only seldom, consider to move them into a properties file.
+</p>
+
+<h3 id="howto-signing">How to Sign MIDlets with J2ME Polish</h3>
+<p>
+Signing MIDlets can be automated using the 
+<a href="build-build.html#java">&lt;java&gt;</a>-subelement of the 
+<a href="build-build.html">&lt;build&gt;</a>-element. 
+</p>
+<p>
+<b>
+IMPORTANT: please note that you cannot use normal code signing certificates on most devices, since the 
+required root certificates are missing. Your best bet to sign an application is with the (commercial) help
+of the <a href="http://javaverified.com" target="_blank">Java Verified</a> initiative.
+<br />
+On some devices you can import your own certificates.
+<br />
+Another option is to let your application certify by a vendor or a carrier.
+</b>
+</p>
+<p>
+Keys can be generated using the Java-keytool, e.g.:
+<pre>
+&gt; keytool -genkey -alias SignMIDlet -keystore midlets.ks -keyalg RSA
+</pre></p>
+<p>
+For testing purposes no certificate needs to be purchased and imported. Such MIDlets cannot be installed on real devices, however.
+</p>
+<p>
+When an appropriate certificate was purchased and imported into the keystore named &quot;midlets.ks&quot; with the key &quot;SignMIDlet&quot;, the following two <java>-elements need to be added to the <build>-element:
+<pre>
+&lt;java jar=&quot;${wtk.home}/bin/JadTool.jar&quot; 
+      	fork=&quot;true&quot; 
+      	failonerror=&quot;true&quot; 
+    	if=&quot;polish.midp2&quot; 
+	unless=&quot;test&quot;
+	message=&quot;Adding signature for device ${polish.identifier}&quot;
+	&gt;
+	&lt;arg line=&quot;-addjarsig&quot;/&gt;
+	&lt;arg line=&quot;-keypass ${password}&quot;/&gt;
+	&lt;arg line=&quot;-alias SignMIDlet&quot;/&gt;
+	&lt;arg line=&quot;-keystore midlets.ks&quot;/&gt;
+	&lt;arg line=&quot;-inputjad dist/${polish.jadName}&quot;/&gt;
+	&lt;arg line=&quot;-outputjad dist/${polish.jadName}&quot;/&gt;
+	&lt;arg line=&quot;-jarfile dist/${polish.jarName}&quot;/&gt;
+&lt;/java&gt;	
+&lt;java jar=&quot;${wtk.home}/bin/JadTool.jar&quot; 
+	fork=&quot;true&quot; 
+	failonerror=&quot;true&quot; 
+	if=&quot;polish.midp2&quot; 
+	unless=&quot;test&quot;
+	message=&quot;Adding certificate for device ${polish.identifier}&quot;
+	&gt;
+	&lt;arg line=&quot;-addcert&quot;/&gt;
+	&lt;arg line=&quot;-alias SignMIDlet&quot;/&gt;
+	&lt;arg line=&quot;-keystore midlets.ks&quot;/&gt;
+	&lt;arg line=&quot;-inputjad dist/${polish.jadName}&quot;/&gt;
+	&lt;arg line=&quot;-outputjad dist/${polish.jadName}&quot;/&gt;
+&lt;/java&gt;	
+</pre></p>
+<p>
+In the above example the signing is skipped when the test-mode is active or when the current device does not support the MIDP/2.0 standard. It is assumed that the &quot;midlets.ks&quot; keystore is situated in the same directory as the &quot;build.xml&quot; file. 
+</p><p>
+Please note that the password needs to be specified as a property. This can be done within the &quot;build.xml&quot; file or alternatively (for the more security conscious folks) on the command-line with the -Dpassword=[value] option:
+<pre>
+&gt; ant -Dpassword=secret
+</pre></p><p>
+In Mac OS X  Wireless Toolkit the &quot;JadTool.jar&quot; is not available. It can be installed together with J2ME Polish. In that case the path to the JadTool needs to be changed to &quot;${polish.home}/bin/JadTool.jar&quot; in the above example.
+</p>
+
+<h2 id="howto-gui">GUI How-Tos</h2>
+<h3 id="howto-gui-table">How to Use Tables</h3>
+<p>
+A <a href="css-specific.html#screens">table</a> can be used for any any Form, List or ChoiceGroup. The table is activated 
+by setting the &quot;columns&quot; attribute and optionally the 
+&quot;columns-width&quot; attribute in the &quot;resources/polish.css&quot; file:
+<pre>
+form {
+	padding: 5;
+	background-color: yellow;
+	columns: 2;
+	columns-width: 40, 100;
+}
+</pre></p>
+<p>
+In the above example the <a href="css-styles.html">dynamic style</a> &quot;form&quot; is used for designing all Form screens. 
+Form elements will be added from left to right and from top to bottom of the table. 
+The left column will be 40 pixels wide, whereas the right column will use 100 pixels.
+</p>
+
+<h3 id="howto-gui-apply">How to Apply the J2ME Polish GUI for Existing Applications</h3>
+<p>
+If an existing application should be &quot;polished up&quot; you should insert 
+<a href="preprocessing-directives.html#preprocessing-styles">#style preprocessing directives</a> within the 
+application to allow a fine grained design:
+<pre>
+//#style mainScreen
+List mainScreen = new List( "Main Menu", List.IMPLICIT );
+
+//#style mainScreenItem
+mainScreen.append( "Start Game", null );
+</pre>
+</p>
+<p>
+You need to use <a href="css-styles.html">static styles</a> then in the &quot;polish.css&quot; file. 
+Static styles can have almost any alphanumerical name and need to start with a dot:
+<pre>
+.mainScreen {
+	padding: 5;
+	background-color: yellow;
+	columns: 2;
+	columns-width: 40, 100;
+}
+.mainScreenItem {
+	background-color: black;
+	font-color: white;
+	icon-image: url( main%INDEX%.png );
+}
+</pre></p>
+<p>
+In the last step you should 
+<a href="css-groups.html">adjust your designs</a> for different handsets. 
+If you want to make adjustments for the Sony-Ericsson P900 for example, you need to 
+create the file &quot;resources/Sony-Ericsson/P900/polish.css&quot;. 
+In this file you can change any settings which you have done in the basic 
+&quot;resources/polish.css&quot; file. Remember that you only need to specify 
+attributes which are different, this makes subsequent changes easier.
+</p>
+
+<h3 id="howto-gui-differentdesigns">How to Apply Different Designs to One Application</h3>
+<p>
+You can alter the appearance of an application easily by using different resources like images, sound files and design-definitions. You can use one application source code for creating several different applications with this technique. The &quot;dir&quot;-attribute of the &lt;resources&gt; element in the &quot;build.xml&quot; file defaults to the &quot;resources&quot; folder, but you can change this to any other folder. Alternatively you can also set the &quot;resDir&quot;-attribute of the &lt;build&gt; element, when no &lt;resources&gt; element is used.
+</p><p>
+Best practice is to create one Ant-&lt;target&gt; for each end-application in the &quot;build.xml&quot; file. In each target the &lt;j2mepolish&gt; task is copied and changes are made to the &quot;dir&quot;-attribute of the &lt;resources&gt; element and to the &quot;workDir&quot;-attributes of the &lt;build&gt; element:
+<pre>
+&lt;target name=&quot;girlgame&quot; &gt;
+	&lt;j2mepolish&gt;
+		&lt;info
+		 jarName=&quot;${polish.vendor}-${polish.name}-girl.jar&quot; 
+		[...] /&gt;
+		&lt;deviceRequirements &gt; [...]
+		&lt;build
+		 workDir=&quot;build/girl&quot;
+		 [...]
+			&lt;resources
+		 		dir=&quot;resources/girl&quot;
+			/&gt;
+		 &gt;
+		[...] 
+		&lt;/build&gt;
+	&lt;/j2mepolish&gt;
+&lt;/target&gt;
+&lt;target name=&quot;boygame&quot; &gt;
+	&lt;j2mepolish&gt;
+		&lt;info
+		 jarName=&quot;${polish.vendor}-${polish.name}-boy.jar&quot; 
+		[...] /&gt;
+		&lt;deviceRequirements &gt; [...]
+		&lt;build
+		 resDir=&quot;resources/boy&quot;
+		 workDir=&quot;build/boy&quot;
+		 [...]
+		 &gt;
+		&lt;resources
+			dir=&quot;resources/boy&quot;
+		/&gt;
+		[...] 
+		&lt;variable name=&quot;player-width&quot; value=&quot;12&quot; &gt;
+		&lt;variable name=&quot;player-height&quot; value=&quot;12&quot; &gt;
+		&lt;/build&gt;
+	&lt;/j2mepolish&gt;
+&lt;/target&gt;
+</pre></p>
+<p>
+You can even define or alter 
+<a href="build-build.html#variables">&lt;variables&gt;</a> to make further adjustments with 
+the help of preprocessing. You could define sprite-dimensions for example each 
+or some of the &lt;j2mepolish&gt; tasks:
+<pre>
+&lt;variable name=&quot;player-width&quot; value=&quot;12&quot; &gt;
+&lt;variable name=&quot;player-height&quot; value=&quot;12&quot; &gt;
+</pre></p>
+<p>
+These variables then can be used within the application with the use of 
+<a href="preprocessing-directives.html#preprocessing-variables">preprocessing</a>:
+<pre>
+//#ifdef player-width:defined
+	//#= int width = ${player-width};
+//#else
+	int width = 10;
+//#endif
+//#ifdef player-height:defined
+	//#= int height = ${player-height};
+//#else
+	int height = 10;
+//#endif
+Sprite player = new Sprite( playerImage, width, height );
+</pre></p>
+
+<h3 id="howto-gui-commandlabels">How to Change the Labels of Standard-Commands and Menu-Labels</h3>
+<p>The labels of the standard menu-commands  can be changed by setting variables 
+either in the <a href="build-build.html#variables">build.xml</a> file or within the 
+localization-<a href="localization.html#localization-gui">messages.tx</a>t file.
+</p>
+<p>
+This example changes the &quot;Cancel&quot; command to &quot;Abbruch&quot; (German for cancel):
+<pre>
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.command.cancel&quot; value=&quot;Abbruch&quot;/&gt;
+&lt;/variables&gt;
+</pre></p>
+<p>
+Please refer to the <a href="localization.html#localization-gui">localization documentation</a> for more information.
+</p>
+
+<h3 id="activatinggui">How to Enable or Disable the Usage of the GUI for a Specific Device</h3>
+<p>
+2ME Polish's GUI is deactivated by default for some older devices like the first version of Nokia Series 40 models. 
+</p>
+<p>
+You can override this behavior by setting the &quot;supportsPolishGui&quot;-attribute of the device in question in the &quot;devices.xml&quot; file, which is located in installation folder of J2ME Polish. When the file is missing, re-run the installation and choose to install the &quot;external device database&quot; as well.</p>
+<p>
+Open devices.xml and search the device in question. Now set the &quot;supportsPolishGui&quot;-attribute: It needs to be true, when the device should support J2ME Polish's GUI.
+<pre>
+&lt;device
+	supportsPolishGui=&quot;false&quot; &gt;
+	&lt;identifier&gt;Nokia/Series40&lt;/identifier&gt;
+	&lt;!-- and so on --&gt;
+&lt;/device&gt;
+</pre>
+</p>
+<p>
+You can also override the settings in the device-database by setting the &quot;usePolishGui&quot;-attribute of the <a href="build-build.html">&lt;build&gt; element</a> to &quot;always&quot;. In that case the GUI will be used for all devices, regardless of the settings in the device database.
+</p>
+
+<h2 id="trouble">Trouble Shooting</h2>
+<h3 id="trouble-subfolders">Using Subfolders for Resources</h3>
+<p>
+Subfolders for resources are not supported for two simple reasons: 
+</p>
+<ol>
+<li>They are unnecessary and waste space in the application JAR.</li>
+<li>The automatic <a href="resource-assembling.html">resource assembling</a> of J2ME Polish is based on using subfolders. </li>
+</ol>
+
+<h3 id="trouble-compile">Compile Error</h3>
+<p>
+If you have a compile error within the J2ME Polish package or a compile error which seems to be erroneous, please try a clean build: remove the &quot;build&quot; folder or call the &quot;ant clean&quot; before building again.
+</p>
+<h3 id="trouble-preverify">Preverify Error</h3>
+<p>
+If you have a preverify error, please try a clean build: remove the &quot;build&quot; folder or call the &quot;ant clean&quot; before building again. 	
+</p>
+
+<%include end.txt %>

@@ -1,0 +1,64 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.netbeans %>
+<%set title = J2ME Polish: NetBeans %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Creating J2ME Polish Projects</h1>
+	<%index %>
+	
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="netbeans.html">Overview</a></li>
+		<li><a href="netbeans-install.html">Installation of the NetBeans Module</a></li>
+		<li><a href="netbeans-running.html">Running and Debugging</a></li>
+	</ul>
+	
+	<p>
+	To create a new J2ME Polish project within NetBeans just select File &gt; Project &gt; Mobile (or J2ME) &gt; J2ME Polish.
+	The following details help you to set up a new project.
+	</p>
+	<h2 id="step1">1. Choose Project</h2>
+	<p>
+	Select File &gt; Project &gt; Mobile (or J2ME) &gt; J2ME Polish.
+	<br/>
+	<img src="../images/netbeans-newproject1.png" alt="Choose J2ME Polish" />
+	</p>
+	<h2 id="step2">2. Specify Basic Project Settings</h2>
+	<p>
+	Specify the project's name and the installation directory of J2ME Polish.
+	<br/>
+	<img src="../images/netbeans-newproject2.png" alt="Basic Settings" />
+	</p>
+	<h2 id="step3">3. Select Target Devices</h2>
+	<p>
+	Select the devices that you want to target in your project. You can use the platform, configuration and library selectors
+	to limit the number of devices:
+	<br/>
+	<img src="../images/netbeans-newproject3.png" alt="Select Target Devices" />
+	</p>
+	<h2 id="step4">4. Choose Template and Emulator Platform</h2>
+	<p>
+	Choose the template for your project (use &quot;blank&quot; for an empty project):
+	<br/>
+	<img src="../images/netbeans-newproject4.png" alt="Choose Template" />
+	<br/>
+	You also need to specify the Emulator Platform, for NetBeans 5.5 this is usally <code>J2ME_Wireless_Toolkit_2_2</code>.
+	<br/>
+	<img src="../images/netbeans-newproject5.png" alt="Setting Emulator Platform" />
+	<br/>
+	You can set up Emulator Platform by choosing Tools > Java Platform Manager > J2ME. Note that the Emulator Platform is needed by the 
+	Mobility Pack, not by J2ME Polish. J2ME Polish will use emulators that are either installed in their default location or which have
+	been specified in <i>${polish.home}/global.properties</i>.
+	<br/>
+	<img src="../images/netbeans-platformmanager-opening.png" alt="Opening the Platform Manager" /><img src="../images/netbeans-platformmanager.png" alt="Using the Platform Manager" />
+	</p>
+	<p>
+	Now J2ME Polish creates a new project based on your settings. Run the project by pressing F6, debug by pressing F5 and build for all devices by pressing F11.
+	Learn more about <a href="netbeans-running.html">running, debugging and building</a> in NetBeans here.
+	</p>
+	
+
+
+<%include end.txt %>

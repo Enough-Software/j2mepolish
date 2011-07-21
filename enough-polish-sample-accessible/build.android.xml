@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-example">
+
+	<property file="${user.name}.properties" />
+	
+	<!-- android properties-->
+	<property name="android.build" value="${basedir}/android"/>
+	<property name="android.src" value="${android.build}/src/de/enough/polish"/>
+	<property name="android.package" value="de.enough.polish.sample.accessible"/>
+	<property name="android.main" value="MenuMidlet"/>
+	<property name="android.activity" value="${android.package}.${android.main}"/>
+
+	<!-- task definitions -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+	/>
+
+		
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+
+<target name="test">
+	<property name="test" value="true"/>
+</target>
+		
+<target name="init">
+  	<property name="test" value="false"/>
+	<property name="deploy-url" value=""/>
+</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info copyright="Copyright 2006 Enough Software. All rights reserved." 
+			description="A TreeItem example." 
+			infoUrl="http://www.enough.de" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-email.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			license="GPL" 
+			name="MobileMail" 
+			vendorName="Enough Software" 
+			version="1.0.4"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements>
+			<requirement name="Identifier" value="${device}"/>
+			<!--
+			<requirement name="Name" value="MppPhone"/>
+			-->
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build fullscreen="menu" 
+                polishDir="../enough-polish-j2me/source/src" 
+                symbols="polish.skipArgumentCheck" 
+                usePolishGui="true"
+				preverify="false"
+				compile="false"
+			>
+			<!-- midlets definition -->
+			<midlet class="${android.activity}" name="Demo"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<variable name="polish.TextField.useDirectInput" value="true" />
+				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+				<variable name="polish.TextField.includeInputInfo" value="true" />
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.Screen.dontBufferPreviousScreen" value="true" />
+				<variable name="update-url" value="http://www.enough.de/update"/>
+				
+
+				<!--
+				Drone Stuff
+				-->
+				<variable name="polish.android.R" value="${android.package}.R" />
+				
+				<variable name="polish.useFullScreen" value="true" />
+				<variable name="polish.useMenuFullScreen" value="true" />
+				<variable name="polish.Screen.base" value="de.enough.polish.drone.lcdui.Canvas" />
+
+			</variables>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test" level="error" showLogOnError="true" verbose="true">
+				<filter level="debug" package="de.enough.polish.sample.mail"/>
+				<filter level="info" pattern="de.enough.polish.ui.*"/>
+				<filter level="debug" class="de.enough.polish.ui.Container" />
+				<!--
+				<filter level="debug" class="de.enough.polish.ui.ChoiceTextField" />
+				<filter level="debug" class="de.enough.polish.ui.TreeItem" />
+				-->
+			</debug>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<localization>
+					<locale name="de" encoding="UTF8"/>
+				</localization>
+			</resources>
+		</build>
+		<emulator if="test" />
+	</j2mepolish>
+</target>
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+<target name="android">
+	
+	<!-- android clean -->	
+	<delete dir="android"/>
+	
+	<!-- call the activity creator to build the stubs -->	
+	<exec executable="${android.home}/activityCreator.bat">
+		<arg value="--out"/>
+		<arg value="${basedir}/android"/>
+		<arg value="${android.activity}"/>
+	</exec>
+	
+	<!-- copy the polish compiled source to the new activity 	-->	
+	<copy todir="${basedir}/android/src" overwrite="true">
+	    <fileset dir="${basedir}/build/Generic/android/de/source"/>
+	</copy>
+	
+	<!-- copy dummy resource (DON'T YOU DARE CHANGE THIS) -->
+	<copy file="${polish.home}/android/_.png" todir="${android.build}/res/drawable"/>
+		
+	<!-- copy project files -->
+	<copy file="${polish.home}/android/.project" todir="${android.build}"/>
+	<copy file="${polish.home}/android/.classpath" todir="${android.build}"/>
+	
+	<!-- set the project name in .project-->
+	<replace file="${android.build}/.project" value="${android.main}">
+	  	<replacefilter token="@@NAME@@"/>
+	</replace>
+	
+	<!-- copy the resource images -->	
+	<copy todir="${android.build}/res/drawable" overwrite="true">
+	    <fileset dir="${basedir}/build/Generic/android/de/resources">
+	    	<include name="**/*.png"/>
+		</fileset>
+	</copy>
+	
+	<!-- remove unneccessary sources for testing -->
+	<delete dir="${android.src}/browser"/>
+	<delete dir="${android.src}/codec"/>
+	<delete dir="${android.src}/io"/>
+	<delete dir="${android.src}/log/http"/>
+	<delete dir="${android.src}/log/rms"/>
+	<delete dir="${android.src}/math"/>
+	<delete dir="${android.src}/multimedia"/>
+	<delete dir="${android.src}/predictive"/>
+	<delete dir="${android.src}/rmi"/>
+	
+	<ant antfile="${android.build}/build.xml" dir="${android.build}"/>
+</target>
+	
+<target name="emulator" depends="test,j2mepolish" />
+
+<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

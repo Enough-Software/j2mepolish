@@ -1,0 +1,48 @@
+
+.mainScreen {
+	screen-change-animation: zoomOut;
+}
+
+
+.settingsScreen {
+	screen-change-animation: zoomIn;
+}
+
+.aboutScreen {
+}
+
+title {
+	padding-top: 5;
+	layout: center;
+	font-size: large;
+	font-color: #FF000000;
+	
+	//#if polish.midp2 and polish.hasFloatingPoint
+		text-effect: alien-glow;
+		text-alien-glow-outer-color: blue;
+		text-alien-glow-inner-color: #FF0000FF;
+	//#else
+		text-effect: gradient;
+		text-vertical-gradient-start-color: white;
+		text-vertical-gradient-end-color: highlightedFontColor;
+	//#endif	
+	
+}
+
+
+focused {
+	margin: 2;
+    font-bitmap: none;
+	text-effect: alien-glow;
+	font-color: #FF000000;
+	background: none;
+    /*
+	*/
+	/*text-alien-glow-outer-color: blue;
+	text-alien-glow-inner-color: #FF0000FF;*/
+	text-effect: fade;
+}
+
+.mainMenuItem {
+	text-effect: fade;
+}

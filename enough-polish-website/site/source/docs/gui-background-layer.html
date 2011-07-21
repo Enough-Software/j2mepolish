@@ -1,0 +1,190 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design: Combined Background %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Layer Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-background-combined.html">combined Background</a></li>
+		<li><a href="gui-background-mask.html">mask Background</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+	</ul>
+	<p>
+	Combine any backgrounds with the <code>layer</code> background:
+	</p>
+	<h2 id="Design">Design Samples</h2>
+	
+	<p>
+	<img src="<%= basedir%>images/gui-background-layer-margin.png" width="352" height="415" />
+	<br />
+	The background of the above alert has been realized with the following design settings. As you can see you can use <code>margins</code> between each background
+	for adding some border-like effect:
+	</p>
+<pre>
+backgrounds {
+
+	alertTop {
+		type: round-rect;
+		color: #fff;
+	}
+	
+	alertBg {
+		type: round-rect;
+		color: #a333;
+	}
+	
+	alertOverlay {
+		color: #9fff;
+	}
+}
+
+
+.messageAlert {
+	padding: 20px;
+	padding-top: 1px;
+	view-type: none;
+	layout: horizontal-shrink | vertical-shrink | horizontal-center | vertical-center;
+	<b>background {
+		type: layer;
+		layers: alertTop, alertBg;
+		margins: 10px, 0px;
+	}</b>
+	repaint-previous-screen: true;
+	overlay-background: alertOverlay;
+	title-style: messageAlertTitle;
+	menubar-style: messageAlertMenuBar;
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#else
+		screen-change-animation: right;
+	//#endif
+}
+
+.messageAlertTitle {
+	padding-top: 20px;
+	font-color: #333;
+	font-style: bold;
+	font-size: normal;
+}
+
+.messageAlertMenuBar {
+	background-color: #333;
+}
+
+alertcontent {
+	font-color: white;
+	font-size: small;
+	font-style: bold;
+	text-effect: shadow;
+}
+
+</pre>
+
+	<p>
+	<img src="<%= basedir%>images/background-combined.png" width="352" height="40" />
+	<br />
+	The above background has been realized with the following design settings:
+	</p>
+<pre>
+backgrounds {
+	titlePolygonRight {
+		type: polygon;
+		points: 10,50 50,10 90,50 50,90;
+		color: #00f;
+		scale-mode: proportional;
+		anchor: right | vcenter;
+	}
+	titlePolygonLeft {
+		type: polygon;
+		points: 10,50 50,10 90,50 50,90;
+		color: #00f;
+		scale-mode: proportional;
+		anchor: left | vcenter;
+	}
+	titleGradient {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: blue;
+	}
+}
+
+title {
+	padding: 2px;
+	margin-bottom: 5px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	background {
+		<b>type: layer;
+		layers: titlePolygonRight, titlePolygonLeft, titleGradient;
+		</b>
+	}
+}
+
+</pre>
+	<p>You can also combine animated backgrounds as shown in this example:
+	</p>
+	<p>
+		<div id="id_combined">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-combined.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_combined", "240", "240", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		<br />
+		The above animation has been realized with the following settings:
+	</p>
+<pre>
+backgrounds {
+	skyline {
+		image: url( skyline.png );
+		anchor: bottom;
+	}
+	snowflakes {
+		type: snowflakes;
+		color: transparent;
+		flake-color: white;
+		max-flake-size: 12;
+		number-of-flakes: 15;		
+	}
+	gradient {
+		type: vertical-gradient;
+		top-color: black;
+		bottom-color: red;
+	}
+}
+
+.myItem {
+	background {
+		type: layer;
+		layers: skyline, snowflakes, gradient;
+	}
+}
+</pre>	
+	
+	
+	<h2 id="css">CSS Attributes</h2>
+	<p>
+	Use these CSS attributes for creating a <code>layer</code> background:
+	</p>
+	<%cssmappings background layer %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/LayerBackground.html">LayerBackground</a>.
+	</p>
+
+<%include end.txt %>

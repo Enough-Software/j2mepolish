@@ -1,0 +1,121 @@
+<!-- 
+	Use custom-extensions.xml for defining your own extensions.
+	This is not needed, but simplifies the usage of your own
+	extensions, e.g. resource copier, property functions, log handlers and
+	so on.
+	
+	Each extension needs to have at least a name, a type and a class.
+	You can use any name for your extension, as long as it is unique for
+	the type. Types are simple (lowercase) strings and are specific to your
+	extension type, e.g. resourcecopier, loghandler or propertyfunction.
+	
+	You can also set a classpath that can contain Ant and J2ME Polish properties.
+	
+	Depending on the extensions you may also add other specific elements.
+	
+	An example for a property function is this:
+	
+	
+	<extension>
+		<type>propertyfunction</type>
+		<name>sha512</name>
+		<class>com.company.crypto.SHA512</class>
+		<classpath>${polish.home}/import/crypto.jar</classpath>
+	</extension>
+	
+	You could now use this property function like this:
+	
+	//#= String msisdnHash = "${ sha512( user.msisdn ) }";
+	
+	(This example assumes that you are building the application on demand
+	for each user)
+	
+
+    Copyright (c) 2005 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+
+<extensions>
+
+	
+	<!-- Example for Property Functions -->
+	<!--
+	<extension>
+		<type>propertyfunction</type>
+		<name>sha512</name>
+		<class>com.company.crypto.SHA512</class>
+		<classpath>${polish.home}/import/crypto.jar</classpath>
+	</extension>
+	-->
+
+
+	<!-- Example for Obfuscator -->
+	<!--
+	<extension>
+		<type>obfuscator</type>
+		<name>ZGuard</name>
+		<class>com.company.obfuscate.ZGuardObfuscator</class>
+		<classpath>${polish.home}/import/zguard.jar</classpath>
+	</extension>
+	-->
+
+	
+	<!-- Example for Post Compiler -->
+	<!--
+	<extension>
+		<type>postcompiler</type>
+		<name>floater</name>
+		<class>de.enough.floater.FloaterPostCompiler</class>
+		<classpath>${polish.home}/import/enough-floater.jar:${polish.home}/import/enough-floater-evaluation.jar</classpath>
+	</extension>
+	-->
+	
+	<!-- Example for Log Handler -->
+	<!--
+	<extension>
+		<type>loghandler</type>
+		<name>comm</name>
+		<clientClass>com.company.log.comm.CommLogHandler</clientClass>
+	</extension>
+	-->
+	
+	
+	<!-- Example for Packager -->
+	<!--
+	<extension>
+		<type>packager</type>
+		<name>7zip</name>
+		<class>de.enough.polish.jar.SevenZipPackager</class>
+	</extension>
+	-->
+
+	<!-- Example for Finalizer -->
+	<!--
+	<extension>
+		<type>finalizer</type>
+		<name>sign</name>
+		<class>de.enough.polish.finalize.SignFinalizer</class>
+	</extension>
+	-->
+	
+</extensions>

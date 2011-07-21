@@ -1,0 +1,323 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download J2ME Polish 1.3-beta1 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.3-beta1</h1>
+	<%index %>
+	<h2 id="improvements13-beta1">Improvements of J2ME Polish 1.3-beta1</h2>
+	<p>
+	J2ME Polish 1.3-beta1 features many major improvements. Please note that this software
+	has BETA status and should be used with care.
+	</p>
+	<ul>
+	  <li><b>SpriteItem</b>: you can use the new 
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/SpriteItem.html">SpriteItem</a> 
+	  for creating sleazy animated menus.
+	  </li>
+	  
+	  <li><b>FramedForm</b>: You can split your screen into several areas with the new 
+	  <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/FramedForm.html">FramedForm</a>.
+	  	It behaves just like Form, but the frames will always stay in their original positions.
+		Ideal for all pen-based devices and for applications that show information and allow
+		the user to influence that information, e.g. dictionaries with an integrated search field
+		on the result screen.
+	  </li>
+	  <li><b>ImageBackground</b>: Using the <code>anchor</code> CSS attribute resulted in a compile error.
+	   You can now tile images much more finegrained using the <code>overlap</code>, 
+	   <code>padding-horizontal</code> and <code>padding-vertical</code> CSS attributes for the 
+	   <a href="../docs/css-specific.html#imagebackground">image background</a>.
+	  </li>
+	  <li><b>exclusive view-type</b>: you can now use the &quot;exclusive&quot; view-type 
+	   for exclusive ChoiceGroups. This view only shows the currently selected item and allows
+	   to choose other items by using the left and right arrows.
+	  </li>
+	  <li><b>Preprocessor</b>: &lt;preprocessor&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions.
+	  </li>
+	  <li><b>Obfuscator</b>: &lt;obfuscator&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions.
+	  </li>
+	  <li><b>Source</b>: &lt;source&gt; elements can now use preprocessing
+	  terms as if- or unless-conditions. This allows you for example to use different base classes
+	  without using preprocessing in your source code.
+	  </li>
+	  <li><b>Third Party Libraries</b>: Thanks to the new &lt;libraries&gt;  and &lt;library&gt; elements, 
+	  you can now use different third party libraries depending
+	  on conditions:
+<pre>
+&lt;libraries&gt;
+	&lt;library file=&quot;thirdparty/tinylines60.zip&quot; 
+	         if=&quot;polish.group.Series60 and not polish.midp2&quot; /&gt;
+	&lt;library file=&quot;thirdparty/tinylinemidp2.zip&quot; if=&quot;polish.midp2&quot; /&gt;
+&lt;/libraries&gt;
+</pre>
+	  </li>
+	  <li><b>Copier</b>: The &lt;resources&gt; element now support the setting of &lt;copier&gt; elements
+	  that are responsible for copying the resources after they have been assembled. The following examples
+	  removes all characters that are surrounded by curly braces in resource names. The resource 
+	  <i>bg{background-Series60}.png</i> will be renamed to <i>bg.png</i>, for example:
+<pre>
+&lt;resources
+	dir=&quot;resources2&quot; 
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;*.db&quot;
+ &gt;
+	&lt;copier class=&quot;de.enough.polish.resources.RenamingResourceCopier&quot;&gt;
+		&lt;parameter name=&quot;searchPattern&quot; value=&quot;\{.*\}&quot; /&gt;
+		&lt;parameter name=&quot;replacement&quot; value=&quot;&quot; /&gt;
+	&lt;/copier&gt;
+&lt;/resources&gt;
+</pre>
+	  </li>
+	  <li><b>TextUtil</b>: Strings with hardcoded linebreaks were not processed correctly
+	  on Series 40 devices, since the <code>Font.stringWidth()</code>-method behaves
+	  oddly on those devices.
+	  </li>
+	  <li><b>columns-width</b>: 
+	   Using a star in the <code>columns-width</code> CSS attribute
+	   is now resolved during runtime which results in more sensible settings.
+	  </li>
+	  </li>
+	  <li><b>Known Issues Database</b>:
+	  The <a href="../devices/issues.html">known issues database</a> is now better accessible.
+	  </li>
+	  <li><b>Dynamic Styles</b>: Using dynamic styles along with a ChoiceGroup in a Form resulted
+	   in a NullPointerException. Please note: it is recommended to use only static styles.
+	  </li>
+	  <li><b>TabbedForm</b>: Using a tab without any focusable items resulted in an IndexOutOfBoundsException;
+	  now you can query the currently selected tab by calling tabbedForm.getSelectedTab(). You can be notified
+	  about any changes of the tab by registering a de.enough.polish.ui.ScreenStateListener.
+	  </li>
+	  <li><b>focused-style</b>:
+	  You can now use a different focused-style for every item. So you can now have a general focused-style,
+	  a screen-specific focused-style and an item-specific focused-style. This is useful when you have a
+	  button in a Form or when you have TextFields along with other items in one Form, for example. 
+<pre>
+//#style .input
+TextField field = new TextField( "name:", null, 20, TextField.ANY );
+//#style .button 
+StringItem button = new StringItem( null, "Go!", Item.BUTTON );
+button.setDefaultCommand( new Command("Go", Command.ITEM, 1 ) );
+button.setItemCommandListener( this );
+</pre>
+<pre>
+.input {
+	font-color: white;
+	background-color: black;
+	<b>
+	focused-style: .inputFocused;
+	</b>
+}
+.inputFocused extends .input {
+	background {
+		color: white;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+}
+.button {
+	background {
+		type: round-rect;
+		color: red;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+	<b>
+	focused-style: .buttonFocused;
+	</b>
+}
+.buttonFocused extends .button {
+	background-color: yellow;
+	background-border-color: blue;
+}
+</pre>
+	  </li>
+	  <li><b>min-width, max-width</b>:
+	  any items can now be limited in their size by using the CSS attributes
+	  <code>min-width</code> and <code>max-width</code>. This is especially useful when you want
+	  to align labels. The following example uses the <code>max-width</code> along with the &quot;expand&quot;
+	  layout to bring all labels to the same width. The &quot;label&quot; style is predefined by the way and is used 
+	  by default for all labels.
+<pre>
+//#style .input
+TextField field = new TextField( "name:", null, 20, TextField.ANY );
+</pre>
+<pre>
+label {
+	font-color: black;
+	font-size: small;
+	<b>
+	max-width: 60;
+	layout: expand;
+	</b>
+}
+
+.input {
+	font-color: white;
+	background-color: black;
+	focused-style: .inputFocused;
+	<b>
+	max-width: 80;
+	layout: expand;
+	</b>
+}
+.inputFocused {
+	background {
+		color: white;
+		border-color: black;
+		border-width: 2;
+	}
+	font-color: black;
+}
+</pre>
+	  </li>
+	  <li><b>BitMapFont</b>: the method getFontHeigth() is now renamed to getFontHeight()
+	  </li>
+	  <li><b>polish.Container.allowCycling</b>: You can now use the <code>polish.Container.allowCycling</code>
+	  preprocessing variable for allowing Forms, Lists, menus etc to be cycled through by the user.
+	  When the variable is &quot;false&quot;, the user won't be able to scroll from the first item
+	  to the last item and vice versa anymore. By default this is allowed.
+<pre>
+&lt;variable name=&quot;polish.Container.allowCycling&quot; value=&quot;true&quot;/&gt;
+</pre>
+	  </li>
+	  <li><b>Additional APIs</b>:
+	  J2ME Polish now also provides the optional libraries FileConnection, PIM-API and Scalable 2D Vector Graphics.
+	  </li>
+	  <li><b>LogHander</b>: You can now use the RMS loghandler for storing all log entries into
+	  the recordstore:
+<pre>
+&lt;debug level=&quot;error&quot; if=&quot;test&quot;&gt;
+	&lt;loghandler name=&quot;rms&quot; /&gt;
+	&lt;filter package=&quot;com.company.package&quot; level=&quot;debug&quot; /&gt;
+&lt;/debug&gt;
+</pre>
+	  </li>
+	  <li><b>#abort preprocessing directive</b>:
+	  You can use the new <code>//#abort</code> directive for stopping the preprocessing
+	  in case you have encountered a misconfiguration, e.g.
+<pre>
+//#if !config.ServerUrl:defined
+	//#abort You need to set the config.ServerUrl preprocessing variable!
+//#endif
+</pre>
+	  </li>
+
+  	  <li><b>new property functions</b>:
+	  The new <code>number</code> property function counts the number of different values that are separated by 
+	  commas within one preprocessing variable:
+<pre>
+//#= String[] formats = new String[ <b>${ number( polish.SoundFormat ) }</b> ];
+int i = 0;
+//#foreach format in polish.SoundFormat
+	//#= formats[i] = "${format}";
+	i++;
+//#next format
+</pre><br />
+	The <code>classname</code> eases the usage of the &quot;useDefaultPackage&quot; option of the &lt;obfuscator&gt;.
+	When the option is activated <code>classname</code> returns only the name of the class without the package,
+	when the &quot;useDefaultPackage&quot; option  is not activated, the fully qualified name of the class is returned:
+<pre>
+//#if SoundListenerImplementation:defined
+	//#= ${ classname( SoundListenerImplementation ) } listener;
+//#else
+	SoundListener listener;
+//#endif
+</pre><br />
+	The <code>replace</code> function can replace parts of the processed String, e.g.
+<pre>
+//#= String url = "${ replace( config.ServerUrl, www, www1 ) }";
+</pre>
+	  </li>
+  	  <li><b>Automatic inclusion of preprocessing variables and Ant properties</b>:
+	You can now use Ant properties and any preprocessing variables without using the <code>//#=</code>
+	directive, after you have activated the &quot;replacePropertiesWithoutDirective&quot; option in
+	your build.xml:
+<pre>
+&lt;variables 
+	includeAntProperties=&quot;true&quot;
+	replacePropertiesWithoutDirective=&quot;true&quot;
+&gt;
+	&lt;variable file=&quot;cfg/${ lowercase(polish.vendor) }.properties&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+	You can then use any properties and property functions directly:
+<pre>
+	System.out.println("Using device ${ polish.identfier }..." );
+</pre>
+	  </li>
+	  <li><b>KZip and 7-Zip</b>: KZip and 7-Zip are now supported &quot;out of the box&quot;,
+	  when these packagers are either on the PATH or in ${polish.home}/bin:
+<pre>
+&lt;packager name=&quot;7zip&quot; /&gt;
+&lt;packager name=&quot;kzip&quot; /&gt;
+</pre>
+	  </li>
+	  <li><b>Signing MIDlets</b>:
+	  You can now use the <code>&lt;sign&gt;</code> element for signing MIDlets automatically. 
+	  The signing is done for MIDP/2.0 devices only:
+<pre>
+&lt;sign
+	key=&quot;SignMIDlet&quot;
+	keystore=&quot;midlets.ks&quot;
+	password=&quot;${password}&quot;
+	unless=&quot;test&quot;
+/&gt;
+</pre>
+	  </li>
+	  <li><b>InitializerSplashScreen</b>: You can use
+	  the de.enough.polish.ui.splash.InitializerSplashScreen for displaying a splash screen
+	  while letting your application initialize in the background.
+	  </li>
+	  <li><b></b>:
+	  </li>
+	  <li><b>THANKS!</b>:
+	  Thanks goes to all the people that contributed to this release, i.e.
+	  Paul Atkins, Thorsten Pr&ouml;lss, Bret Schumacher,  Joe Bowbear, 
+	  Timo Nentwig, David Clocklabs, Chester Kollschen, Nick Richards,
+	  Killy Gncint, Kevin Hankinson, Gabriel Hauber, Martin Leissler, 
+	  Florin Marcus, Gionata Maran, Cole Lokhe, Adrian Williams,
+	  and many more.
+	  </li>
+	</ul>
+	
+
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	proprietary commercial licenses.</p>
+	<p>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.3-beta1.jar">I accept the above rules 
+		(download the full installer: 8,713,090 bytes).</a><br/>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.3-beta1.zip">I accept the above rules 
+		(download only the update: 1,026,488 bytes).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a><br />
+		Start the installation by calling <code>java -jar j2mepolish-1.3-beta1.jar</code>
+		from the commandline or by double-clicking the file.
+	</p>
+
+	<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 8,713,090 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package. You can start the installation either by double-clicking
+	the file or by calling &quot;java -jar j2mepolish-[version].jar&quot; from the commandline.
+	<b>Do not simply extract the downloaded JAR file!</b>
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_07 or 1.5.x)</a>. 
+	</p>	
+	<p>
+	If you have trouble building your application, consider to set the &quot;JAVA_HOME&quot;
+	environment variable. Make sure to check out the <a href="../docs/install.html">installation guide</a>.
+	</p>	
+<%include end.txt %>

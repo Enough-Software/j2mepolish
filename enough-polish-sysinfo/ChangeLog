@@ -1,0 +1,4 @@
+0.9.0 (11/02/2005) Changed architecture and added some new features like detection of soft keys.
+0.8.2 (09/11/2004) Replaced user threaded timers by more efficient and standard java.util.Timer.
+0.8.1 (27/08/2004) Int addition, multiplication and division benchmarking added.
+0.6.6 (16/08/2004) Initial public release.

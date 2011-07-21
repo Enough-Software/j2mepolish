@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-sample-localization">
+	
+
+	<property file="${user.name}.properties" />
+	<property name="polish.home" location="C://Program Files/J2ME-Polish2.1.0-Preview" />
+	<property file="${polish.home}/global.properties" />
+
+	<property  name="device" value="Generic/AnyPhone" />
+	<property  name="devices" value="${device}" />
+
+	
+	<!-- task definitions -->
+	<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/enough-j2mepolish-client.jar:${polish.home}/lib/jdom.jar" 
+	/>
+
+		
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+
+<target name="test">
+	<property name="test" value="true"/>
+</target>
+	
+<target name="deploy">
+	<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+</target>
+		
+<target name="init">
+  	<property name="test" value="false"/>
+	<property name="deploy-url" value=""/>
+</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info copyright="Copyright 2009 Enough Software. All rights reserved." 
+			description="A simple datefield example." 
+			icon="logo.png" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-datefield.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			name="DateField" 
+			vendorName="Enough Software" 
+			version="1.3.0"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${devices}"/>
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build fullscreen="menu" 
+                imageLoadStrategy="foreground" 
+                symbols="polish.skipArgumentCheck" 
+                usePolishGui="true"
+			>
+			<sources>
+				<source dir="source/src" />
+			</sources>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.DateFieldMidlet" name="DateField"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<variable name="polish.DateField.useDirectInput" value="true" />
+				<variable name="polish.DateField.useDirectInputForPointer" value="true" />
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.useScrollBar" value="true" />
+			</variables>
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator name="ProGuard" unless="test">
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test" level="error" showLogOnError="true" verbose="true">
+				<!--
+				<handler name="display" />
+				-->
+				<filter level="info" pattern="de.enough.polish.ui.*"/>
+				<!--
+				<filter level="debug" class="de.enough.polish.ui.Container"/>
+				<filter level="debug" class="de.enough.polish.ui.MasterCanvas"/>
+				<filter level="debug" class="de.enough.polish.ui.Alert"/>
+				<filter level="debug" class="de.enough.polish.ui.StyleSheet"/>
+				<filter level="debug" class="de.enough.polish.ui.Screen"/>
+				<filter level="debug" package="de.enough.polish.example"/>
+				<filter level="debug" class="de.enough.polish.ui.ContainerView"/>
+				-->
+			</debug>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<root dir="resources/images" />
+				<localization locales="en" />
+			</resources>
+			<jad>
+				<attribute name="LGE-MIDlet-Height"   value="400" />
+				<attribute name="LGE-MIDlet-TargetLCD-Height" value="380" />
+			</jad>
+		</build>
+		<emulator if="test" />
+	</j2mepolish>
+</target>
+
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<mkdir dir="dist" />
+	<delete dir="dist/*"/>
+</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

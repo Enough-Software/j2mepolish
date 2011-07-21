@@ -1,0 +1,55 @@
+<%set title = J2ME Polish: Changelog %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Changelog</h1>
+	<p>
+	Following changes have been done since J2ME Polish 2.0 RC3:
+	</p>
+	<ul>
+		<li><b>+ CSS Calculations</b>: You can use simple arithmetic calculations within numerical CSS attributes now:
+<pre>
+.myMenuElement {
+	padding: 2;
+	padding-left: 2 + imagewidth( before.png );
+	min-height:2 + imageheight( before.png ) + 2; /* padding-top + content + padding-bottom */
+}
+.myMenuElement:hover {
+	padding-left: 2;
+	before: url( before.png );
+}
+</pre>
+		</li>
+		<li><b>+ TabbedForm Control</b>: You can control the TabbedForm better by registering a <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a>.</li>
+		<li><b>+ Improved NetBeans</b>: In the NetBeans module you can now select target devices by API support</li>
+		<li><b>+ ScreenInfo Animation</b>: ScreenInfo is now also being animated </li>
+		<li><b>+ Motorola</b>: Improved Motorola emulator support</li>
+		<li><b>+ Commands</b>: Added methods for deactivating commands via <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a><code>.setAccessible()</code>.</li>
+		<li><b>+ BlackBerry trackball</b>: TrackBall navigation is now supported on BlackBerry (thanks to the nice folks of <a href="http://earthcomber.com/" target="_blank">Earthcomber</a>)</li>
+		<li><b>+ BlackBerry password</b>: Password TextFields are now supported on BlackBerry</li>
+		<li><b>+ ScreenHistory</b>: <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/ScreenHistory.html">ScreenHistory</a> provides a navigation history for typical mobile applications.</li>
+		<li><b>+ Emulator transient mode</b>: UEI emulators can now be started in the transient mode (install, run and deinstall) by specifying <code>transient=&quot;true&quot;</code> in the &lt;emulator&gt; section.</li>
+		<li><b>- Device Database</b>: Fixed wrong Samsung definitions</li>
+		<li><b>- Pointer Events</b>: Fixed handling of pointer events for FramedForm </li>
+		<li><b>- Installer</b>: Installer on Mac OS X with Java 1.4 now allows correct selection of folders</li>
+		<li><b>- Decimal TextField</b>: Decimal TextFields now work correctly and allow the input of dot separated numbers.</li>
+		<li><b>- Commands on S60</b>: Commands are now supported on S60 phones without activating the &quot;menu&quot; fullscreen mode.</li>
+		<li><b>- RMI Security Exception</b>: a SecurityException now results in a RemoteException</li>
+		<li><b>- CustomItem.invalidate</b>: massive size changes are now detected and handled in CustomItem.invalidate().</li>
+		<li><b>- Scrolling</b>: Jumping from the last to the first item now works as expected.</li>
+		<li><b>- PullParser</b>: Renamed PullParser to <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/xml/SimplePullParser.html">SimplePullParser</a> for limiting name clashes with KXML when the <code>useDefaultPackage</code> option is used for the &lt;obfuscator&gt; element.</li>
+		<li><b>+ Documentation</b>: Improved documentation.</li>
+		<!--  
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		-->
+	</ul>
+<%include end.txt %>

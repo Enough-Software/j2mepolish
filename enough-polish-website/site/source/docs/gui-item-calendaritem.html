@@ -1,0 +1,173 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: CalendarItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">CalendarItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-datefield.html">DateField</a></li>
+		<li><a href="gui-item-textfield.html">TextField</a></li>
+		<li><a href="gui-item-clockitem.html">ClockItem</a></li>
+		<li><a href="localization.html">Localization</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-item-calendaritem.png"  width="240" height="318" alt="A CalendarItem in action" />
+	The CalendarItem visualizes dates and allows users to edit dates.
+	<h2 id="Design">Design</h2>
+	<p>
+	The above CalendarItem has been designed with following styles:
+	</p>
+<pre>
+
+.calendarForm {
+	background {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: #aaa;
+		start: 70%;
+		end: 100%;
+	}
+	layout: hcenter | top;
+	padding-top: 3px;
+}
+
+.calendar {
+	layout: expand;
+	label-style: calendarMonth;
+}
+
+.calendar:hover {
+}
+
+.calendarMonth {
+	font-color: #222;
+	font-style: bold;
+	font-size: small;
+	before: url( arrow-left.png );
+	after: url( arrow-right.png );
+	layout: expand | center;
+}
+
+.calendarWeekday {
+	layout: center;
+	font-style: italic | bold;
+	min-width: 12%;
+}
+
+.calendarDay {
+	padding: 2px;
+	font-style: italic;
+	font-color: #222;
+	layout: right;
+}
+
+.calendarDay:hover {
+	background-color: #222;
+	font-color: #efefef;
+}
+
+.calendarCurrentday extends .calendarDay {
+	background-color: #8f8;
+}
+
+.calendarCurrentday:hover {
+	background-color: #1a1;
+	font-color: #fff;
+}
+
+.calendarDayInactive extends .calendarDay {
+	font-color: #666;
+}
+
+.calendarDayInactive:hover {
+	background-color: #666;
+	font-color: #fff;
+}
+</pre>	
+	<p>
+	The CalendarItem uses following static styles for the design of its components:
+	</p>
+	<ul>
+	<li><b>.calendarWeekday</b>: the design of the weekdays headlines</li>
+	<li><b>.calendarDay</b>: a day of the calendar</li>
+	<li><b>.calendarCurrentday</b>: the day that is is currently selected</li>
+	<li><b>.calendarDayInactive</b>: a day from a non current month</li>
+	<!-- 
+	<li><b></b>: </li>
+	<li><b></b>: </li>
+	<li><b></b>: </li>
+	 -->
+	</ul>
+	<p>Also remember to define corresponding <code>:hover</code> styles like <code>.calendarCurrentday:hover</code>.
+	</p>
+	<p>
+	The label of a CalendarItem is used for the name of the currently selected month and year. Use the <code>label-style</code> CSS attribute
+	in the CalendarItem's style for specifying a custom design. In the above example we use the <code>.calendarMonth</code> style for
+	designing the label (and for adding arrows before and after the month's name). 
+	</p>
+	<p>
+	You can use following attributes for designing a <code>CalendarItem</code>:
+	</p>
+	<%cssattributes de.enough.polish.calendar.CalendarItem %>
+
+
+	
+	<h2 id="calendaritem-Programming">Programming</h2>
+	<p>
+	Using the <code>CalendarItem</code> is simple - just initialize it with a <code>java.util.Calendar</code> or use the current date:
+	</p>
+<pre>
+Calendar birthdate = getBirthdate();
+if (birthdate == null) {
+	//#style calendar
+	this.birthdateCalendar = new CalendarItem();
+} else {
+	//#style calendar
+	this.birthdateCalendar = new CalendarItem( birthdate );
+}
+</pre>	
+	<p>
+	Please refer to the &quot;datefield&quot; sample application for a working example.
+	</p>
+
+	<h2 id="calendaritem-Configuration">Configuration</h2>
+	<p>
+	There are is one preprocessing variable that you can either specify in the <a href="build-build.html#variables">&lt;variables&gt;</a>
+	section of your <i>build.xml</i> or in your <i>messages.txt</i> files when using the <a href="localization.html">Localization</a>
+	framework.
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+
+<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.CalendarItem.FirstDayOfWeek</td>
+		<td>Monday</td>
+		<td>The first day of the week. In most countries this is Monday, in the US the week starts traditionally on a Sunday. Allowed values are 
+		<code>Monday</code> or <code>Sunday</code>.
+		</td>
+	</tr>
+	<!-- 
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	 -->
+</table>
+
+	</tr>
+
+	
+	<h2 id="calendaritemJavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/calendar/CalendarItem.html">CalendarItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

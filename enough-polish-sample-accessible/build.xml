@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-sample-accessible">
+	
+
+<property file="${user.name}.properties" />
+<property name="wtk.home" location="/home/enough/dev/WTK2.1" />
+<property name="nokia.home" location="/home/enough/dev/Nokia" />
+<property name="polish.home" location="../enough-polish-build" />
+<property  name="mpp.home" location="/home/enough/dev/mpp-sdk"/>
+	<property  name="device" value="Nokia/Series60E2" />
+
+	
+	<!-- task definitions -->
+	<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+	/>
+
+		
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+
+<target name="test">
+	<property name="test" value="true"/>
+</target>
+	
+<target name="deploy">
+	<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+</target>
+		
+<target name="init">
+  	<property name="test" value="false"/>
+	<property name="deploy-url" value=""/>
+</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info copyright="Copyright 2007 Enough Software. All rights reserved." 
+			deleteConfirm="Do you really want to kill me?" 
+			description="A simple menu screen." 
+			icon="dot.png" 
+			infoUrl="http://www.enough.de/dictionary" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-accessible.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			license="GPL" 
+			name="J2ME Polish Example" 
+			vendorName="Enough Software" 
+			version="1.3.4"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build fullscreen="menu" 
+                imageLoadStrategy="foreground" 
+                polishDir="../enough-polish-j2me/source/src" 
+                symbols="polish.skipArgumentCheck" 
+                usePolishGui="true"
+            	sourceDir="source/src"
+			>
+			<!-- 			polishDir="../enough-polish-j2me/source/src"
+			-->
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.accessible.MenuMidlet" name="Accesssible"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<variable name="update-url" value="http://www.enough.de/update"/>
+			</variables>
+			<!--
+			<jad>
+				 <attribute 
+					name="MIDlet-Push-1" 
+					value="socket://:79, com.sun.example.SampleChat, *" 
+					if="polish.midp2" 
+					/>
+				<attribute name="MyAttribute1" value="Value1" />
+				<attribute name="MyAttribute2" value="Value2" />
+				<attribute name="MyAttribute3" value="Value3" />
+			</jad>
+			-->
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator useDefaultPackage="true" name="ProGuard" unless="test">
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test" level="error" showLogOnError="true" verbose="true">
+				<!--
+				<filter level="debug" class="de.enough.polish.ui.MasterCanvas"/>
+				<filter level="debug" class="de.enough.polish.ui.Alert"/>
+				<filter level="debug" class="de.enough.polish.ui.StyleSheet"/>
+				<filter level="info" class="de.enough.polish.ui.Container"/>
+				<filter level="debug" class="de.enough.polish.ui.Screen"/>
+				<filter level="debug" pattern="de.enough.polish.example.*"/>
+				-->
+				<filter level="debug" class="de.enough.polish.ui.ContainerView"/>
+				<filter level="info" pattern="de.enough.polish.ui.*"/>
+			</debug>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<localization dynamic="false" defaultLocale="en_US" locales="de_DE, en_US"  unless="test"/>
+				<localization locales="en_US" if="test" />
+			</resources>
+		</build>
+		<emulator if="test" />
+	</j2mepolish>
+</target>
+
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

@@ -1,0 +1,53 @@
+<project name="enough-webprocessor" default="bin-dist">
+
+	<target name="init">
+    		<tstamp/>
+		<property name="builddir" value="build" />
+		<property name="distdir" value="dist" />
+	</target>
+
+	<target name="compile" depends="init">
+		<mkdir dir="${builddir}" />
+		<javac srcdir="source/src" destdir="${builddir}" source="1.4" target="1.4" debug="true" />
+	</target>
+
+	<!-- Creates the Source Code documentation -->
+	<target name="javadoc">
+	    <javadoc 
+	    	destdir="doc" 
+	    	access="public" 
+	    	use="true" 
+	    	notree="false" 
+	    	nonavbar="false" 
+	    	noindex="false" 
+	    	splitindex="true" 
+	    	author="true" 
+	    	version="true" 
+	    	nodeprecatedlist="false" 
+	    	nodeprecated="false" 
+	    	packagenames="*" 
+	    	sourcepath="source/src" 
+	    	classpath="bin/classes:import/ant.jar:import/junit.jar" 
+	    />
+	 </target>
+
+	<target name="bin-dist" depends="compile">
+		<mkdir dir="${distdir}" />
+		<jar destfile="${distdir}/enough-webprocessor.jar"
+			basedir="${builddir}"
+			includes="**/*.class"
+			index="true"
+		>
+		</jar>
+	</target>
+	
+	<target name="deploy" depends="bin-dist">
+		<copy file="${distdir}/enough-webprocessor.jar" todir="../enough-polish-build/lib"  />
+	</target>
+			
+	<target name="clean" depends="init">
+		<delete dir="${builddir}" />
+		<delete dir="${distdir}" />
+	</target>
+
+</project>

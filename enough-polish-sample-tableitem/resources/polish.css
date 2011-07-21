@@ -1,0 +1,260 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * You can use preprocessing to adjust it to different 
+  * settings.
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(132,143,96);
+	focusedBgColor:  rgb(238,241,229);
+	translucentBgColor:  argb(130, 238,241,229);
+	fontColor: rgb( 30, 85, 86 );
+	focusedFontColor: rgb(238,241,229);
+}
+
+/************************ Common backgrounds **************************************************************/
+backgrounds {
+	screenBackground {
+		type: vertical-gradient;
+		top-color: #f6ec5d;
+		bottom-color: #c3b81e;
+	}
+	tableSelection {
+		color: #ffc;
+	}
+}
+
+/************************ Demo Screen ********************************************************************/
+
+.mainScreen {
+	padding: 5;
+	layout: horizontal-expand | horizontal-center | top;
+	background: screenBackground;
+}
+
+.defaultTable {
+	padding: 3;
+	padding-horizontal: 6;
+	font-color: gray;
+	font-size: small;
+	table-selected-background: tableSelection;
+	background {
+		type: round-rect;
+		color: #dfdfaa;
+	}
+	layout: center;
+}
+
+.defaultTable:hover {
+	padding: 1;
+	padding-vertical: 3;
+	padding-horizontal: 6;
+	border {
+		type: round-rect;
+		width: 2;
+		color: #333;
+	}
+}
+
+.heading {
+	font-color: #333;
+	font-style: bold;
+	font-size: small;
+}
+
+.heading:hover {
+	font-color: #000;
+}
+
+.centeredCell {
+	padding: 0;
+	font-color: gray;
+	font-size: small;
+	layout: center;
+}
+
+.centeredCell:hover {
+	font-color: #222;
+}
+
+.textinput {
+	padding: 2px;
+	include-label: true;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+
+.textinput:hover {
+	padding: 1px;
+	background-color: white;
+	border {
+		type: round-rect;
+		color: black;
+	}
+}
+
+info {
+	layout: right;
+	background-color: #ee8;
+}
+
+.popupChoice {
+	padding: 2px;
+}
+
+.popupChoice:hover {
+	padding: 1px;
+	border-color: black;
+	background-color: white;
+}
+
+.popupChoiceItem {
+}
+
+.popupChoiceItem:hover {
+	font-color: white;
+	background-color: #333;
+}
+
+/************************  Error / Warning  ****************************************************************/
+
+.screenWarning {
+	background-color: red;
+	font-size: large;
+}
+
+/************************  General Purpose Styles  ****************************************************************/
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	font-face: proportional;
+	font-style: bold;
+	font-color: white;
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+	layout: horizontal-center | horizontal-expand;
+	background {
+		type: split;
+		top-color: #301e3a;
+		bottom-color: #150020;
+	}
+}
+
+
+label {
+	padding: 2px;
+	font-color: #150020;
+	font-size: small;
+	font-style: plain;
+	layout: newline-after;
+}
+
+/*********************** ScrollBar        ****************************************************************/
+scrollbar {
+	scrollbar-slider-color: #301e3a;
+}
+
+
+
+/************************  Commands Menu  ****************************************************************/
+
+menu {
+	padding: 0px;
+	padding-bottom: 3px;
+	width: 60%;
+	font-size: medium;
+	view-type: slide-up;
+	background {
+		type: round-tab;
+		color: #301e3a;
+	}
+	expand-items: true;
+	focused-style-first: menuItemFocusedFirst;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	padding: 3;
+	font {
+		color: white;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	border {
+		type: bottom;
+		color: #999;
+	}
+}
+
+/**
+  * This is a custom style for focused menu items.  
+  */
+.menuItem:hover {
+	background-color: #6dd0f7;
+	font-color: black;
+	layout: left | horizontal-expand;
+}
+
+/**
+  * The focused style for the first menu item uses a round-tab background:  
+  */
+.menuItemFocusedFirst extends menuItem {
+	font-color: black;
+	layout: left | horizontal-expand;
+	background {
+		type: round-tab;
+		color: #6dd0f7;
+	}
+}
+
+
+
+menubar {
+	background {
+		type: split;
+		top-color: #301e3a;
+		bottom-color: #150020;
+	}
+}
+
+leftcommand {
+	padding: 2;
+	font-color: white;
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+}
+
+leftcommand:pressed {
+	font-color: yellow;
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+
+rightcommand:pressed {
+	font-color: yellow;
+}
+

@@ -1,0 +1,112 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">The &lt;info&gt; Section</h1>
+	<p>
+	Specify general information about your application in the  &lt;info&gt; section:
+	</p>
+	<pre>
+ &lt;j2mepolish&gt;
+     &lt;!-- general settings --&gt;
+     &lt;info
+        name=&quot;SimpleMenu&quot;
+        version=&quot;1.3.4&quot;
+        description=&quot;A test project&quot;
+        vendorName=&quot;enough software&quot;
+        infoUrl=&quot;http://www.enough.de/j2mepolish&quot;
+        icon=&quot;dot.png&quot;
+        jarName=&quot;${polish.vendor}-${polish.name}-example.jar&quot; 
+        jarUrl=&quot;${polish.jarName}&quot;
+        copyright=&quot;Copyright 2008 Enough Software.&quot;
+        deleteConfirm=&quot;Do you really want to kill me?&quot; 
+     /&gt;
+     [...]
+	</pre>
+	<h2 id="attributes">Supported Attributes</h2>
+	<p>Following attributes are supported by the &lt;info&gt; element:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>info-Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>name</td>
+ 	 <td>Yes</td>
+	 <td>The name of the project, the variable &quot;MIDlet-Name&quot; overrides this setting. This variable can be used to localize the application.</td>
+	</tr>
+	<tr><td>version</td>
+ 	 <td>Yes</td>
+	 <td>The version of the project in the format [major].[minor].[build]. Example: <code>version="2.1.10".</code> The variable &quot;MIDlet-Version&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>description</td>
+ 	 <td>Yes</td>
+	 <td>The description of the project. A brief explanation about what this application does should be given here. The variable &quot;MIDlet-Description&quot; overrides the value given here, this van be used to localize the application.</td>
+	</tr>
+	<tr><td>vendorName</td>
+ 	 <td>Yes</td>
+	 <td>The name of the vendor of this application. </td>
+	</tr>
+	<tr><td>jarName</td>
+ 	 <td>Yes</td>
+	 <td>The name of the jar-files which will be created. You can use all J2ME Polish variables as in every other attribute,
+	 but the following are especially useful:
+	 <br/><code>${polish.vendor}</code>: The vendor of the device, e.g. Samsung or Motorola
+	 <br/><code>${polish.name}</code>: The name of the device
+	 <br/><code>${polish.identifier}</code>: Vendor and device name, e.g.  &quot;Nokia/N95&quot;
+	 <br/><code>${polish.version}</code>: The version of the project as defined above.
+	 <br/><code>${polish.language}</code>: The two letter ISO language-code, e.g. &quot;en&quot; or &quot;de&quot;.
+	 <br/><code>${polish.country}</code>: The two letter ISO country-code, e.g. &quot;US&quot; or &quot;DE&quot;. This can be empty when no country is defined in the current locale.
+	 <br/><code>${polish.locale}</code>: The current locale, e.g. &quot;en&quot; or &quot;de_DE&quot;.	 
+	 <br/>Example: 
+	 <code>jarName=&quot;Game-${polish.vendor}-
+	 ${polish.name}-${polish.locale}.jar&quot;</code> 
+	 results into &quot;Game-Nokia-6600-en.jar&quot; for an application which has been optimized for the Nokia/N95 
+	 and uses the English locale.
+	</td>
+	</tr>
+	<tr><td>jarUrl</td>
+ 	 <td>Yes</td>
+	 <td>The URL from which the jar file can be downloaded. This is either the HTTP address, or just the name of the jar-file, when it is loaded locally. Apart from the variables available for the jarName-attribute, you can use the name of the jar-file as defined above:
+ 	  <br/>
+	  <code>jarUrl=&quot;http://www.enough.de/midlets/Game/
+	  ${polish.vendor}/${polish.name}/${polish.jarName}&quot;</code>
+	 </td>
+	</tr>
+	<tr><td>copyright</td>
+ 	 <td>No</td>
+	 <td>Copyright notice.</td>
+	</tr>
+	<tr><td>deleteConfirm</td>
+ 	 <td>No</td>
+	 <td>The text which is presented to the user when he tries to delete the application. The variable &quot;MIDlet-Delete-Confirm&quot; overrides this setting, this van be used to localize the application.</td>
+	</tr>
+	<tr><td>installNotify</td>
+ 	 <td>No</td>
+	 <td>A HTTP-URL, which should be called after the successful installation of the application.. This can be useful for tracking how many applications are installed, for example. The user can prevent the install-notify, though. One can use the same variables as for the jarUrl-attribute. The variable &quot;MIDlet-Install-Notify&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>deleteNotify</td>
+ 	 <td>No</td>
+	 <td>A HTTP-URL, which should be called after the application has been deleted from the device. See the explanation of installNotify. The variable &quot;MIDlet-Delete-Notify&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>dataSize</td>
+ 	 <td>No</td>
+	 <td>The minimum space which is needed on the device, e.g. <br/><code>dataSize=&quot;120kb&quot;</code>. The variable &quot;MIDlet-Data-Size&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>permissions</td>
+ 	 <td>No</td>
+	 <td>The permissions which are needed by this application, e.g. <br/><code>permissions=&quot;javax.microedition.io.Connector.http&quot;</code>. The variable &quot;MIDlet-Permissions&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>optionalPermissions</td>
+ 	 <td>No</td>
+	 <td>The permissions which are useful for this application, e.g. <br/><code>optionalPermissions=&quot;javax.microedition.io.Connector.http&quot;</code>. The variable &quot;MIDlet-Permissions-Opt&quot; overrides this setting.</td>
+	</tr>
+	<tr><td>profile</td>
+ 	 <td>No</td>
+	 <td>Normally J2ME Polish is using the JavaPlatform capability of the current target device for determining the correct &quot;MicroEdition-Profile&quot; setting. You can override this by hardcoding the profile for all target devices. This is useful only in cases, when you determine device capabilities during the runtime of the application and want to deliver one application bundle for all target devices.</td>
+	</tr>
+	<tr><td>configuration</td>
+ 	 <td>No</td>
+	 <td>Normally J2ME Polish is using the JavaConfiguration capability of the current target device for determining the correct &quot;MicroEdition-Configuration&quot; setting. You can override this by hardcoding the configuration for all target devices. This is useful only in cases, when you determine device capabilities during the runtime of the application and want to deliver one application bundle for all target devices.</td>
+	</tr>
+	</table>
+<%include end.txt %>

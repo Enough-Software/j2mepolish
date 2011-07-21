@@ -1,0 +1,20 @@
+
+			</div> <!-- end #content -->
+		</div> <!-- end #content-in -->
+	</div> <!-- end of #content-wrap -->
+	
+	<div id="footer-wrap">
+		<div id="footer-in">
+			<ul id="nav-footer">
+				<li class="left">copyright &copy; Enough Software</li>
+				<li><a href="http://www.enough.de/" title="Enough Software">Enough Software</a></li>
+				<li><a href="http://www.j2mepolish.org/" title="J2ME Polish">J2ME Polish</a></li>
+			</ul>
+		</div> <!-- end #footer-in -->
+	</div> <!-- end #footer-wrap -->
+	<a href="#top" title="back to top" name="top" class="x">back to top</a>
+	
+	</div> <!-- end of #container-->
+	
+</body>
+</html>

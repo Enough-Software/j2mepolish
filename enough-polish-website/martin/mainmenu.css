@@ -1,0 +1,179 @@
+
+/* ================================================================ 
+This copyright notice must be untouched at all times.
+
+The original version of this stylesheet and the associated (x)html
+is available at http://www.cssplay.co.uk/menus/final_drop2.html
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+This stylesheet and the assocaited (x)html may be modified in any 
+way to fit your requirements.
+=================================================================== */
+
+/* style the outer div to give it width */
+.menu2 {
+	float:left; width:100%; 
+	font-family: helvetica, verdana, arial, sans-serif; 
+	font-size: 90%;
+	border-top:1px solid #c00;
+	background:#ddd url(images/menu2.gif) repeat-x; 
+	margin: 8px 0;
+	margin-top: -13px;
+	padding: 0 0 0 0;
+	padding-top: 2px;
+	/*
+	padding-left: 2px;
+	*/
+
+}
+/* remove all the bullets, borders and padding from the default list styling */
+.menu2 ul {
+	padding:0;
+	margin:0;
+	list-style-type:none;
+}
+.menu2 ul ul {
+	width:150px;
+}
+/* float the list to make it horizontal and a relative positon so that you can control the dropdown menu positon */
+.menu2 li {
+	float:left;
+	width:100px;
+	position:relative;
+}
+/* style the links for the top level */
+.menu2 a, .menu2 a:visited {
+	display:block;
+	text-decoration:none; 
+	height:30px;
+	color:#333; 
+	border:1px solid #eee; 
+	/*
+	font-size:11px;
+	width:139px; 
+	border-width:1px 1px 0 0; 
+	background:#758279; 
+	padding: 1px;
+	padding-left:10px; 
+	*/
+	line-height:29px;
+	padding-left:10px; 
+	}
+/* a hack so that IE5.5 faulty box model is corrected */
+* html .menu2 a, * html .menu2 a:visited {
+	width:100px;
+	w\idth:89px;
+}
+/* add background for hovered top level menu link: 
+.menu2 {
+*/
+	
+
+/* style the second level background */
+.menu2 ul ul a.drop, .menu2 ul ul a.drop:visited {
+	background: #ddd;
+}
+/* style the second level hover */
+.menu2 ul ul a.drop:hover{
+	background: #666  url(images/sub2a.gif);
+}
+.menu2 ul ul :hover > a.drop {
+	background: #666 url(images/sub2a.gif);
+}
+/* style the third level background */
+.menu2 ul ul ul a, .menu2 ul ul ul a:visited {
+	background:	#ddd;
+}
+/* style the third level hover */
+.menu2 ul ul ul a:hover {
+	background: #666 url(images/sub2a.gif);
+}
+.menu2 ul ul ul :hover > a {
+	background:#666 url(images/sub2a.gif);
+}
+
+/* hide the sub levels and give them a positon absolute so that they take up no room */
+.menu2 ul ul {
+	visibility:hidden;
+	position:absolute;
+	height:0;
+	top:31px;
+	left:0; 
+	width:150px;
+}
+/* another hack for IE5.5 */
+* html .menu2 ul ul {
+	top:30px;
+	t\op:31px;
+}
+
+/* position the third level flyout menu */
+.menu2 ul ul ul{
+	left:150px; 
+	top:0;
+	width:150px;
+}
+/* position the third level flyout menu for a left flyout */
+.menu2 ul ul ul.left {
+	left:-150px;
+}
+
+/* style the table so that it takes no part in the layout - required for IE to work */
+.menu2 table {position:absolute; top:0; left:0;}
+
+/* style the second level links */
+.menu2 ul ul a, .menu2 ul ul a:visited {
+	background:#ddd; 
+	color:#333; 
+	height:auto; 
+	line-height:1em; 
+	padding:5px 10px; 
+	width:129px
+}
+/* yet another hack for IE5.5 */
+* html .menu2 ul ul a{
+	width:150px;
+	w\idth:129px;
+}
+
+
+/* style the top level hover */
+.menu2 a:hover, .menu2 ul ul a:hover{
+	color:#a00; 
+	background:#666 url(images/sub2a.gif);
+	text-decoration: none;
+	/*
+	padding: 0px;
+	padding-left:10px; 
+	*/
+}
+.menu2 :hover > a, .menu2 ul ul :hover > a {
+	color:#a00;
+	background:#666 url(images/sub2a.gif);
+	text-decoration: none;
+	/*
+	padding: 0px;
+	padding-left:10px; 	
+	*/
+}
+
+/* make the second level visible when hover on first level list OR link */
+.menu2 ul li:hover ul,
+.menu2 ul a:hover ul{
+	visibility:visible; 
+}
+/* keep the third level hidden when you hover on first level list OR link */
+.menu2 ul :hover ul ul{
+	visibility:hidden;
+}
+/* keep the fourth level hidden when you hover on second level list OR link */
+.menu2 ul :hover ul :hover ul ul{
+	visibility:hidden;
+}
+/* make the third level visible when you hover over second level list OR link */
+.menu2 ul :hover ul :hover ul{ 
+	visibility:visible;
+}
+/* make the fourth level visible when you hover over third level list OR link */
+.menu2 ul :hover ul :hover ul :hover ul { 
+	visibility:visible;
+}

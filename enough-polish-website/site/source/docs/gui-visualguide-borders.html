@@ -1,0 +1,233 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide to Borders %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Visual Guide to Borders</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-border.html">Create your own Border</a></li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Visual Guide to Backgrounds</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Visual Guide to Text Effects</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">Visual Guide to Item Views</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Visual Guide to Screen Transitions</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+	</ul>
+	<%index %>
+	<p>
+	This guide shows you borders that you can use for all <a href="gui-visualguide.html">Items and Screens</a>.
+	You can apply every border using the CSS <code>border</code> attribute:
+	</p>
+<pre>
+.itemMain {
+	layout: expand | left;
+	font {
+		face: system;
+		size: medium;
+		style: bold;
+		color: #000000;
+	}
+}
+.itemMain:hover {
+	background {
+		type: round-rect-translucent;
+		color: #adffffff;
+		arc-width: 8;
+		arc-height: 8;
+	}
+	<b>border {
+		type: square-sonar;
+		inner-color: #d2d2;
+		outer-color: #4161;
+	}</b>
+}
+</pre>
+	<p>
+	When you want to use the same border for several items or screens, you should define the border within the 
+	<code>borders</code> section of your <i>resources/polish.css</i> file, so that only one instance of the border
+	is being used.
+	</p>
+	<p>
+	For including an Item's label into the border, please refer to the <a href="gui-item-label.html">Label</a> documentation.
+	</p>
+	<p>You can also <a href="extending-border.html">realize your own border</a> with J2ME Polish!
+	</p>
+
+<h2 id="border-bottom">bottom Border</h2>
+	<table><tr>
+		<td><a href="gui-border-bottom.html"><img src="<%= basedir%>images/gui-border-bottom.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-bottom.html">bottom border</a> paints a line underneath a UI component.</td>
+	</tr></table>
+
+<h2 id="border-bottom-right-shadow">bottom-right-shadow Border</h2>
+	<table><tr>
+		<td><a href="gui-border-bottom-right-shadow.html"><img src="<%= basedir%>images/gui-border-bottom-right-shadow.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-bottom-right-shadow.html">bottom-right-shadow border</a> paints a straight border at the bottom and right of the UI component.</td>
+	</tr></table>
+
+<h2 id="border-circle">circle Border</h2>
+	<table><tr>
+		<td><a href="gui-border-circle.html"><img src="<%= basedir%>images/gui-border-circle.png" width="105" height="31" /></a></td>
+		<td>The <a href="gui-border-circle.html">circle border</a> paints a circle around the UI component.</td>
+	</tr></table>
+	
+<h2 id="border-drop-shadow">drop-shadow Border</h2>
+	<table><tr>
+		<td><a href="gui-border-drop-shadow.html">
+		<img src="<%= basedir%>images/gui-border-drop-shadow.png" width="98" height="31" />
+		<br />
+		<img src="<%= basedir%>images/gui-border-drop-shadow2.png" width="320" height="49" alt="drop-shadow border" />	
+		</a></td>
+		<td>The <a href="gui-border-drop-shadow.html">drop-shadow border</a> paints a soft and translucent shadow around the UI component.</td>
+	</tr></table>
+	
+
+<h2 id="border-left">left Border</h2>
+	<table><tr>
+		<td><a href="gui-border-left.html"><img src="<%= basedir%>images/gui-border-left.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-left.html">left border</a> paints a line on the left side of an UI component.</td>
+	</tr></table>
+
+<h2 id="border-pulsating">pulsating Border</h2>
+	<table><tr>
+		<td>
+		<!-- 
+		<div id="id_pulsating">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-border-pulsating.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_pulsating", "184", "32", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		 -->
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-pulsating.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-pulsating.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td>The <a href="gui-border-pulsating.html">pulsating border</a> paints an animated rectangluar border around the UI component.</td>
+	</tr></table>
+	
+<h2 id="border-pulsating-round-rect">pulsating-round-rect Border</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-pulsating-round-rect.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-pulsating-round-rect.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td>The <a href="gui-border-pulsating-round-rect.html">pulsating-round-rect border</a> paints an animated border with rounded corners around the UI component.</td>
+	</tr></table>
+
+<h2 id="border-right">right Border</h2>
+	<table><tr>
+		<td><a href="gui-border-right.html"><img src="<%= basedir%>images/gui-border-right.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-right.html">right border</a> paints a line right of the UI component.</td>
+	</tr></table>
+
+<h2 id="border-round-rect">round-rect Border</h2>
+	<table><tr>
+		<td><a href="gui-border-round-rect.html"><img src="<%= basedir%>images/gui-border-round-rect.png" width="98" height="31" /></a></td>
+		<td>Surround an item or a screen with a rectangle with rounded corners using the <a href="gui-border-round-rect.html">round-rect border</a>.</td>
+	</tr></table>
+
+
+<h2 id="border-simple">simple Border</h2>
+	<table><tr>
+		<td><a href="gui-border-simple.html"><img src="<%= basedir%>images/gui-border-simple.png" width="98" height="28" /></a></td>
+		<td>The <a href="gui-border-simple.html">simple border</a> paints a rectangular border around the UI component.</td>
+	</tr></table>
+
+
+<h2 id="border-square-sonar">square-sonar Border</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-square-sonar.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-square-sonar.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">Surround a UI element with moving rectangular lines using  the <a href="gui-border-square-sonar.html">square-sonar border</a>.</td>
+	</tr></table>	
+
+<h2 id="border-top">top Border</h2>
+	<table><tr>
+		<td><a href="gui-border-top.html"><img src="<%= basedir%>images/gui-border-top.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-top.html">top border</a> paints a line over the UI component.</td>
+	</tr></table>
+
+
+<h2 id="gui-border-extend">Your Own Border</h2>
+	<table><tr>
+		<td><a href="extending-border.html"><img src="<%= basedir%>images/extend.png"  width="76" height="68" alt="Create Your Own Border" /></a></td>
+		<td valign="center">Create Your <a href="extending-border.html">Own Border</a></td>
+	</tr></table>
+
+<!-- 
+id="border-xx"
+<h2 >xx Border</h2>
+	<table><tr>
+		<td><a href="gui-border-xx.html"><img src="<%= basedir%>images/gui-border-xx.png" width="98" height="31" /></a></td>
+		<td>The <a href="gui-border-xx.html">xx border</a> paints a border around the UI component.</td>
+	</tr></table>
+id="border-xx"
+<h2 >xx Border</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-xx.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-xx.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">Surround a UI element with a using  the <a href="gui-border-xx.html">xx border</a>.</td>
+	</tr></table>	
+ -->
+
+<%include end.txt %>

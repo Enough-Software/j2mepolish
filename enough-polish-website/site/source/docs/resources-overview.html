@@ -1,0 +1,41 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.resources %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Assembling of Resources and Localization</h1>
+	<p>
+	J2ME Polish assembles resources and creates localized versions of your
+	application automatically. 
+	</p>
+	<p>
+	The actual resource assembling is quite easy - just put all general resources
+	into the &quot;resources&quot; folder of your project and put specialized 
+	resources into the appropriate subfolder, e.g. all Nokia-resources into
+	&quot;resources/Nokia&quot;, any Siemens-SX1-resources into &quot;resources/Siemens/SX1&quot;,
+	any MP3 files into &quot;resources/mp3&quot; and any high-color images into
+	&quot;resources/BitsPerColor.16+&quot;.
+	<br />This process can be fine tuned using the 
+	<a href="build-build.html#resources">&lt;resources&gt; element</a> so that
+	for example MIDI files are only added when the device does not support MP3 
+	and so forth.
+	</p>
+	<p>
+	J2ME Polish has the best ever localization framework which has absolutely 
+	no overhead in optimal cases, since localized messages are actually embedded
+	directly in the source-code.
+	</p>
+	<p>Going further:</p>
+	<ul>
+		<li><a href="resource-assembling.html">Resource Assembling</a> describes the 
+		resource assembling process in more detail.
+		</li>
+		<li>
+		<a href="localization.html">Localization</a> describes how applications
+		can be localized easily and effectively using J2ME Polish.
+		</li>
+	</ul>
+	<p>&nbsp;</p>
+
+<%include end.txt %>

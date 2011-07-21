@@ -1,0 +1,257 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: CustomItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">CustomItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-background.html">Create your own Background</a></li>
+		<li><a href="extending-itemview.html">Create your own view-type</a></li>
+		<li><a href="extending-texteffect.html">Create your own text-effect</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+You can integrate custom items to J2ME&nbsp;Polish by extending the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/CustomItem.html" target="_blank">javax.microedition.lcdui.CustomItem</a> 
+class. 
+	</p>
+	<h2 id="CustomItem-Design">Design</h2>
+	<p>
+	Use the following attributes to design your CustomItem:
+	</p>
+	<%cssattributes de.enough.polish.ui.CustomItem %>
+
+	
+	<h2 id="CustomItem-Programming">Programming</h2>
+<p>
+</p>
+<h3 id="initialisation">Initialization</h3>
+<p>
+J2ME Polish calls the <code>getPrefContentWidth()</code>-method first with an 
+undefined height (-1). 
+Then the <code>getPrefContentHeight()</code>-method is called with the actual granted width. 
+When the width had to be adjusted, the custom item will be notified again 
+with the <code>setSize(width. height)</code>-method. 
+</p>
+<p>
+Please note that the <code>Display.getColor( int )</code> and <code>Font.getFont( int )</code> 
+are only available on MIDP/2.0 devices. Such calls should be surrounded by #ifdef-directives:
+</p>
+<pre>
+//#ifdef polish.midp2
+	Font font = Font.getFont( Font.FONT_STATIC_TEXT );
+//#else
+	//# Font font = Font.getDefaultFont();
+//#endif
+</pre>
+
+
+<h3 id="interaction">Interaction Modes</h3>
+<p>
+The J2ME&nbsp;Polish implementation supports the interaction modes KEY_PRESS, KEY_RELEASE, KEY_REPEAT, POINTER_PRESS, POINTER_RELEASE, TRAVERSE_HORIZONTAL and TRAVERSE_VERTICAL.
+<br />
+By default every CustomItem is deemed interactive, unless you specify set <code>customitem-inactive</code> to 
+<code>true</code> in <i>polish.css</i>:
+</p>
+<pre>
+.myitem {
+	customitem-inactive: true;
+	background-color: blue;
+}
+</pre>
+
+
+<h4 id="traversal">Traversal</h4>
+<p>
+When the custom item gains the focus for the first time, the 
+traverse-method will be called with the CustomItem.NONE direction. 
+Subsequent calls will include the direction (either Canvas.UP, DOWN, LEFT or RIGHT).
+</p>
+
+
+<h4 id="interaction-events">Handling User Input</h4>
+<p>
+If you want to process user input you need to override <code>protected void keyPressed(int keyCode)</code>, 
+<code>protected void keyReleased(int keyCode)</code>, etc.
+<br />
+In J2ME Polish user events are processd hierarchially - first they are forwarded to the currently focused item.
+If they are not processed they will be moved downwards until there is a item or screen that feels responsible for 
+these events. For realizing this, J2ME Polish internally uses 
+<code>protected boolean handleKeyPressed( int keyCode, int gameAction )</code>, 
+<code>protected boolean handleKeyReleased( int keyCode, int gameAction )</code>, etc.
+<br />
+For indicating that a user input event has been handled by a <code>CustomItem</code> following
+options exist:
+</p>
+<ul>
+	<li><code>invalidate()</code>: Call <code>invalidate()</code> to indicate that the change of the item has been changed - 
+		this should not be used merely to indicate that an event has been handled, since all parent components will also be 
+		invalidated.
+	</li>
+	<li><code>repaint()</code>: Call <code>repaint()</code> or <code>repaint(x,y,w,h)</code> for indicating that the event has been 
+		processed. Since processed user input events result in a repaint of the complete screen anyhow, this might result in a small
+		overhead.
+	</li>
+	<li><code>UiAccess.setEventHandled(CustomItem item)</code>: Call
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess.setEventHandled(CustomItem item)</a>
+		to indicate that the event has been processed. This method results in no overhead and is, therefore, recommended.	
+	</li>
+	<li><code>handleKeyPressed(int keycode, int gameAction)</code>: You can also override the J2ME Polish
+		specific methods <code>protected boolean handleKeyPressed( int keyCode, int gameAction )</code>, 
+		<code>protected boolean handleKeyReleased( int keyCode, int gameAction )</code>, etc:
+<pre>
+//#if polish.usePolishGui
+protected boolean handleKeyPressed( int keyCode, int gameAction ) {
+	boolean handled = false;
+	if ( keyCode == Canvas.KEY_NUM6) {
+		doSomeStuff();
+		handled = true;
+	}
+	if (!handled) {
+		//# handled = super.handleKeyPressed( keyCode, gameAction );
+	}
+	return handled;
+}
+//#endif
+</pre>
+	</li>
+		
+</ul>
+
+<h3 id="css">Using CSS for Designing the CustomItem</h3>
+<p>
+When the CSS-styles should be used for designing the CustomItem, please make sure that the project-classpath contains the &quot;enough-j2mepolish-client.jar&quot;, which can be found in the &quot;import&quot; folder of the J2ME&nbsp;Polish installation directory.
+</p>
+<p>
+When the J2ME&nbsp;Polish GUI is used, the preprocessing-symbol &quot;polish.usePolishGui&quot; is defined. This can be used when the CustomItem should be used in the J2ME&nbsp;Polish GUI as well in a plain MIDP 2.0 based UI:
+</p>
+<pre>
+//#if polish.usePolishGui
+	import de.enough.polish.ui.*;
+//#endif
+</pre>
+<p>
+There are several ways to integrate a CSS-style into the CustomItem:
+</p>
+<ol>
+<li>Defining a static style before the super-constructor is called:
+<pre>
+public MyItem( String label ) {
+  //#style myitem
+  super( label );
+}
+</pre>
+</li>
+<li>
+Allowing the setting of the style in a second constructor:
+<pre>
+//#if polish.usePolishGui
+  public MyItem( String label, Style style ) {
+    super( label, style );
+  }
+//#endif
+</pre>
+</li>
+<li>
+Specifying the name of the dynamic style:
+<pre>
+//#if polish.useDynamicStyles
+	protected String createCssSelector() {
+	  return "myitem";
+	}
+//#endif
+</pre>
+</li>
+<li>
+Apply a style when adding the item to a Form:
+<pre>
+MyItem coolItem = new MyItem( label );
+//#style coolStyle
+this.form.append( coolItem );
+</pre>
+</li>
+</ol>
+<p>
+The last variant is the most flexible one and you do not need to change the source code, so this is the best way to apply a style. 
+</p>
+<p>
+For reading the specific style settings, the method <code>setStyle( Style )</code> needs to be overridden:
+</p>
+<pre>
+//#if polish.usePolishGui
+  <b>public void setStyle( Style style )</b> {
+  	// hide the super call from the IDE:
+  	//#if true
+		//# super.setStyle( style );
+	//#endif
+	this.font = style.font;
+	this.fontColor = style.fontColor;
+	// now read specific attributes:
+	//#ifdef polish.css.myitem-color
+		Color colorObj = style.getColorProperty( "myitem-color" );
+		if (colorObj != null) {
+			this.color = colorObj.getColor(); // returns an ARGB int
+		}
+	//#endif
+  }
+//#endif
+</pre>
+<p>
+The <code>setStyle()</code> method will be called before the preferred content width and height is requested, when the CustomItem has a style associated with it.
+</p>
+<p>
+Please note that the variable needs to be called &quot;style&quot; or needs to end with &quot;style&quot;, so that J2ME Polish can process 
+all styles correctly. This is required, since instead of string-based attribute names, numerical values of type short will be used in the 
+actual code. This approach significantly reduces the runtime performance and minimizes the heap usage.
+</p>
+<p>
+There are 5 different ways to retrieve a property from a style:
+</p>
+<ul>
+	<li><code>style.getProperty( String name )</code> returns either a String representing that value or null when the property is not defined.</li>
+	<li><code>style.getBooleanProperty( String name )</code> returns either a Boolean representing that value or null when the property is not defined. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be &quot;boolean&quot;.</li>
+	<li><code>style.getColorProperty( String name )</code> returns either a Color representing that value or null when the property is not defined. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be &quot;color&quot;.</li>
+	<li><code>style.getIntProperty( String name )</code> returns either an Integer representing that value or null when the property is not defined. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be either &quot;integer&quot; or &quot;color&quot;.</li>
+	<li><code>style.getObjectProperty( String name )</code> returns an Object that you can cast. You can use this method only when you have registered the corresponding attribute in the file &quot;custom-css-attributes.xml&quot;. The attribute-type needs to be &quot;object&quot; or &quot;style&quot;.</li></li>
+</ul>
+<p>
+In the above code example we are accessing a color object, so the definition looks like this in 
+<i>custom-css-attributes.xml</i>:
+</p>
+<pre>
+&lt;attribute
+	name=&quot;myitem-color&quot;
+	type=&quot;color&quot;
+	appliesTo=&quot;com.company.ui.MyCustomItem&quot;
+	description=&quot;The color of a custom item part.&quot;
+	default=&quot;blue&quot;
+/&gt;
+</pre>
+<h2 id="backgroundandborders">Background and Borders</h2>
+<p>
+Background and border settings will be enforced by J2ME&nbsp;Polish, the CustomItem merely needs to 
+paint its contents.
+It is advisable, therefore, that a background is only painted, when the J2ME Polish-GUI is not used:
+<pre>
+//#if !polish.usePolishGui
+	// draw default background:
+	g.setColor( this.backgroundColor );
+	g.fillRect( 0, 0, this.width, this.height );
+//#endif
+</pre>
+</p>
+
+
+	
+	<h2 id="CustomItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/CustomItem.html">CustomItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Style.html">Style</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

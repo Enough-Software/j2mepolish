@@ -1,0 +1,118 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: fadeout view-type %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">fade-out view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-viewtype-fadein.html">fade-in View Type</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>fade-out</code> view-type increases the translucency of an item to the specified amount on MIDP 2.0+ devices.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<div id="id_fadeout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-fadeout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fadeout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-fadeout.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="231">
+        <embed src="<%= basedir%>images/gui-viewtype-fadeout.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="231"
+        >
+        </embed>
+	</object>
+	<br />
+	In the above example the &quot;Save Game&quot; menu entry is deactivated programmatically when the user selects it.
+	This is done by calling <code>UiAccess.setAccessible( List list, int listIndex, boolean accessible)</code> with a 
+	<code>#style</code> preprocessing directive:
+	</p>
+<pre>
+UiAccess.setFocusedIndex(this.menuScreen, 0);
+//#style fadeOut
+UiAccess.setAccessible(this.menuScreen, 1, false);
+</pre>
+	<p>
+	The style <code>fadeOut</code> then uses the <code>fade-out</code> view-type.
+	You can see a full working example of this in the <i>accessible</i> sample application.
+	</p>
+<pre>
+.mainItem {
+	margin: 2; /* for the border of the :hover style */
+	padding: 5;
+	background: none;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: small;
+	layout: center; 
+	max-width: 100;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+}
+
+.mainItem:hover {
+	margin: 0;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: brightBgColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	layout: expand | center;	
+}
+
+.mainItem:pressed {
+	margin: 0;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: fontColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font-color: brightFontColor;
+	layout: expand | center;	
+}
+
+.fadeOut extends .mainItem {
+	//#if polish.midp2
+		<b>view-type: fade-out;	
+		fade-out-transparency-end: 40;</b>
+	//#else
+		background-color: gray;
+	//#endif
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.itemviews.FadeOutItemView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/itemviews/FadeOutItemView.html">FadeOutItemView</a></li>
+	</ul>
+
+<%include end.txt %>

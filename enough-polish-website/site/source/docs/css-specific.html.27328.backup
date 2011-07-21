@@ -1,0 +1,1805 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1 id="top">Specific Design Attributes</h1>
+	<%index %>
+	<p>Many GUI items support specific CSS attributes. </p>
+<h2 id="backgrounds">Backgrounds</h2>
+<p>
+There are many different background-types which make use of specific CSS attributes. When another background than the default simple background or the image background should be used, the background-type attribute needs to be declared. 
+When no background at all should be used, the <code>background: none;</code> declaration can be used.
+
+<h3 id="simplebackground">Simple Background</h3>
+<p>
+The simple background just fills the background with one color. When no background type is specified, the simple background is used by default, unless the &quot;background-image&quot; attribute is set. In the later case the image background will be used.
+The simple background supports the color attribute:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>color</td>
+	 <td>Yes</td>
+	 <td>The color of the background, either the name of the color or a direct definition.</td>
+	</tr>
+	</table>
+<p>
+The following styles use a yellow background:
+<pre>
+.myStyle {
+	background-color: yellow;
+}
+.myOtherStyle {
+	background-color: rgb( 255, 255, 0 );
+}
+</pre></p>
+
+<h3 id="roundrectbackground">Round-Rect Background</h3>
+<p>
+The round-rect background paints a rectangular background with round edges. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;round-rect&quot; or &quot;roundrect&quot;</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>No</td>
+	 <td>The color of the background, either the name of the color or a direct definition. The default color is white.</td>
+	</tr>
+	<tr><td>arc</td>
+	 <td>No</td>
+	 <td>The diameter of the arc at the four corners. Defaults to 10&nbsp;pixels, when none is specified.</td>
+	</tr>
+	<tr><td>arc-width</td>
+	 <td>No</td>
+	 <td>The horizontal diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	<tr><td>arc-height</td>
+	 <td>No</td>
+	 <td>The vertical diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	</table>
+<p>
+This example creates a purple background with an arc diameter of 6 pixels:
+<pre>
+.myStyle {
+	background {
+		type: round-rect;
+		color: purple;
+		arc: 6;
+	}
+}
+</pre></p><p>
+The following example uses a different horizontal arc diameter:
+<pre>
+.myStyle {
+	background-type: round-rect;
+	background-color: purple;
+	background-arc: 6;
+	background-arc-width: 10;
+}
+</pre></p>
+
+<h3 id="imagebackground">Image Background</h3>
+<p>
+The image background uses an image for painting the background. This background type is used by default when no type is set and the &quot;background-image&quot; attribute is set. The background supports  following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>No</td>
+	 <td>When used needs to be &quot;image&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>No</td>
+	 <td>The color of the background, either the name of the color, a direct definition or &quot;transparent&quot;. The default color is white. This color can only be seen when the image is not big enough.</td>
+	</tr>
+	<tr><td>image</td>
+	 <td>Yes</td>
+	 <td>The URL of the image, e.g. &quot;url( background.png )&quot;</td>
+	</tr>
+	<tr><td>anchor</td>
+	 <td>No</td>
+	 <td>The anchor of the image - when not specified the image will be centered (&quot;horizontal-center | vertical-center&quot;). You can use a combination of &quot;top&quot;, &quot;vertical-center&quot; (=&quot;vcenter&quot;), &quot;bottom&quot; and &quot;left&quot;, &quot;horizontal-center&quot; (= &quot;hcenter&quot; = &quot;center&quot;), &quot;right&quot;. E.g. &quot;top | left&quot;.</td>
+	</tr>
+	<tr><td>repeat</td>
+	 <td>No</td>
+	 <td>Either &quot;repeat&quot;, &quot;no-repeat&quot;, &quot;repeat-x&quot; or &quot;repeat-y&quot;. Determines whether the background should be repeated, repeated horizontally or repeated vertically. Default is no repeat.</td>
+	</tr>
+	</table>
+<p>
+The following style uses the image &quot;gradient.png&quot; as a background:
+<pre>
+.myStyle {
+	background-image: url( gradient.png );
+	background-anchor: top | center;
+	background-color: rgb( 69, 81, 77 );
+}
+</pre></p><p>
+This style uses the image &quot;heart.png&quot; as a repeated background:
+<pre>
+.myStyle {
+	background-image: url( heart.png );
+	background-repeat: repeat;
+}
+</pre></p>
+
+<h3 id="circlebackground">Circle Background</h3>
+<p>
+The circle background paints a circular or elliptical background. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;circle&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>No</td>
+	 <td>The color of the background, either the name of the color or a direct definition. Defaults to white.</td>
+	</tr>
+	<tr><td>diameter</td>
+	 <td>No</td>
+	 <td>With the &quot;diameter&quot; attribute it can be ensured that always a circle and never an ellipse is painted. The diameter then defines the diameter of the circle.</td>
+	</tr>
+	</table>
+<p>
+The following example uses a green circle background with a diameter of 20 pixels:
+<pre>
+.myStyle {
+	background-type: circle;
+	background-color: green;
+	background-diameter: 20;
+}
+</pre></p>
+
+
+<h3 id="pulsatingbackground">Pulsating Background</h3>
+<p>
+The pulsating background animates the color of the background. 
+The color is changing from a start-color to an end-color. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;pulsating&quot;.</td>
+	</tr>
+	<tr><td>start-color</td>
+	 <td>Yes</td>
+	 <td>The color of the background at the beginning of the animation sequence.</td>
+	</tr>
+	<tr><td>end-color</td>
+	 <td>Yes</td>
+	 <td>The color of the background at the end of the animation sequence.</td>
+	</tr>
+	<tr><td>steps</td>
+	 <td>Yes</td>
+	 <td>Defines how many color-shades between the start- and the end-color should be used.</td>
+	</tr>
+	<tr><td>repeat</td>
+	 <td>No</td>
+	 <td>Either &quot;yes&quot;/&quot;true&quot; or &quot;no&quot;/&quot;false&quot;. Determines whether the animation should be repeated. Defaults to &quot;yes&quot;.</td>
+	</tr>
+	<tr><td>back-and-forth</td>
+	 <td>No</td>
+	 <td>Either &quot;yes&quot;/&quot;true&quot; or &quot;no&quot;/&quot;false. Determines whether the animation sequence should be running backwards to the start-color again, after it reaches the end-color. When &quot;no&quot; is selected, the animation will jump from the end-color directly to the start-color (when repeat is enabled). Defaults to &quot;yes&quot;.</td>
+	</tr>
+	</table>
+<p>
+The following style starts with a white background and stops with a yellow background:
+<pre>
+.myStyle {
+	background {
+		type: pulsating;
+		start-color: white;
+		end-color: yellow;
+		steps: 15;
+		repeat: false;
+		back-and-forth: false;
+	}
+}
+</pre></p>
+
+<h3 id="pulsatingcirclebackground">Pulsating Circle Background</h3>
+<p>
+The pulsating circle background paints a circular or background which size constantly increases and decreases. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;pulsating-circle&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>No</td>
+	 <td>The color of the background, either the name of the color or a direct definition. Defaults to white.</td>
+	</tr>
+	<tr><td>min-diameter</td>
+	 <td>Yes</td>
+	 <td>The minimum diameter of the circle.</td>
+	</tr>
+	<tr><td>max-diameter</td>
+	 <td>Yes</td>
+	 <td>The maximum diameter of the circle.</td>
+	</tr>
+	</table>
+<p>
+The following example uses a green pulsating circle background with a minimum diameter of 20 pixels and a maximum diameter of 40 pixels:
+<pre>
+.myStyle {
+	background-type: pulsating-circle;
+	background-color: green;
+	background-min-diameter: 20;
+	background-max-diameter: 40;
+}
+</pre></p>
+
+<h3 id="pulsatingcirclesbackground">Pulsating Circles Background</h3>
+<p>
+The pulsating circles background paints an animated background of ever-growing circles. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;pulsating-circles&quot;.</td>
+	</tr>
+	<tr><td>first-color</td>
+	 <td>Yes</td>
+	 <td>The first circle-color, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>second-color</td>
+	 <td>Yes</td>
+	 <td>The second circle-color, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>min-diameter</td>
+	 <td>Yes</td>
+	 <td>The minimum diameter of the circle.</td>
+	</tr>
+	<tr><td>max-diameter</td>
+	 <td>Yes</td>
+	 <td>The maximum diameter of the circle.</td>
+	</tr>
+	<tr><td>circles-number</td>
+	 <td>Yes</td>
+	 <td>The number of circles which should be painted.</td>
+	</tr>
+	<tr><td>step</td>
+	 <td>No</td>
+	 <td>The number of pixels each circle should grow in each animation phase. Float-values like &quot;1.5&quot; are also allowed. This defaults to &quot;1&quot; pixel.</td>
+	</tr>
+	</table>
+<p>
+The following example uses a green pulsating circle background with a minimum diameter of 20 pixels and a maximum diameter of 40 pixels:
+<pre>
+.myStyle {
+	background-type: pulsating-circle;
+	background-color: green;
+	background-min-diameter: 20;
+	background-max-diameter: 40;
+}
+</pre></p>
+
+<h3 id="openingbackground">Opening Background</h3>
+<p>
+The opening background paints an animated background which height starts small and then increases whenever it changes the position. Its primary use is for the &quot;focused&quot;-style. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;opening&quot;.</td>
+	</tr>
+	<tr>
+	 <td>color</td>
+	 <td>Yes</td>
+	 <td>The background color, either the name of the color or a direct definition. </td>
+	</tr>
+	<tr>
+	 <td>start-height</td>
+	 <td>No</td>
+	 <td>The height of the background immediately after it has changed its position. This defaults to 1 pixel.</td>
+	</tr>
+	<tr>
+	 <td>steps</td>
+	 <td>No</td>
+	 <td>The number of pixels by which the height should be increased in each animation step. This defaults to 4 pixels. When the height is as big as the normal background-height, the animation is stopped.</td>
+	</tr>
+	</table>
+<p>
+The following example uses the opening background:
+<pre>
+.myStyle {
+	background {
+		type: opening;
+		color: bgColor;
+		start-height: 2;
+		steps: 4;
+	}
+}
+</pre></p>
+<h3 id="openingroundrectbackground">Opening-Round-Rect Background</h3>
+<p>
+The opening round rectangle background paints an animated background which height starts small and then increases whenever it changes the position. Its primary use is for the &quot;focused&quot;-style. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;opening-round-rect&quot;.</td>
+	</tr>
+	<tr>
+	 <td>color</td>
+	 <td>Yes</td>
+	 <td>The background color, either the name of the color or a direct definition. </td>
+	</tr>
+	<tr>
+	 <td>start-height</td>
+	 <td>No</td>
+	 <td>The height of the background immediately after it has changed its position. This defaults to 1 pixel.</td>
+	</tr>
+	<tr>
+	 <td>steps</td>
+	 <td>No</td>
+	 <td>The number of pixels by which the height should be increased in each animation step. This defaults to 4 pixels. When the height is as big as the normal background-height, the animation is stopped.</td>
+	</tr>
+	<tr>
+	 <td>border-width</td>
+	 <td>No</td>
+	 <td>The width of the border, defaults to 0 (no border).</td>
+	</tr>
+	<tr>
+	 <td>border-color</td>
+	 <td>No</td>
+	 <td>The color of the border, defaults to black.</td>
+	</tr>
+	<tr>
+	 <td>arc</td>
+	 <td>No</td>
+	 <td>The diameter of the arc at the four corners. Defaults to 10 pixels, when none is specified.</td>
+	</tr>
+	<tr>
+	 <td>arc-width</td>
+	 <td>No</td>
+	 <td>The horizontal diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	<tr>
+	 <td>arc-height</td>
+	 <td>No</td>
+	 <td>The vertical diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	</table>
+<p>
+The following example uses the opening-round-rect background:
+<pre>
+.myStyle {
+	background {
+		type: opening-round-rect;
+		color: bgColor;
+		start-height: 2;
+		steps: 4;
+		border-width: 2;
+		border-color: darkBgColor;
+	}
+}
+</pre>
+</p>
+<h3 id="roundtabbackground">Round-Tab Background</h3>
+<p>
+The round-tab background paints a rectangular background where the top edges are rounded. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;round-tab&quot;</td>
+	</tr>
+	<tr>
+	 <td>color</td>
+	 <td>No</td>
+	 <td>The color of the background, either the name of the color or a direct definition. The default color is white.</td>
+	</tr>
+	<tr>
+	 <td>arc</td>
+	 <td>No</td>
+	 <td></td>
+	</tr>
+	<tr>
+	 <td></td>
+	 <td>No</td>
+	 <td></td>
+	</tr>
+	<tr>
+	 <td></td>
+	 <td>No</td>
+	 <td></td>
+	</tr>
+	<tr>
+	 <td></td>
+	 <td>No</td>
+	 <td></td>
+	</tr>
+	</table>
+
+
+
+
+No
+
+
+No
+
+arc-width
+No
+The horizontal diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.
+arc-height
+No
+The vertical diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.
+
+This example creates a purple background with an arc diameter of 6 pixels:
+.myStyle {
+	background {
+		type: round-tab;
+		color: purple;
+		arc: 6;
+	}
+}
+
+The following example uses a different horizontal arc diameter:
+.myStyle {
+	background-type: round-tab;
+	background-color: purple;
+	background-arc: 6;
+	background-arc-width: 10;
+}
+
+<h2 id="borders">Borders</h2>
+<p>
+There are many different border-types which make use of specific CSS attributes. When another border than the default simple border should be used, the border-type attribute needs to be declared. 
+When no border at all should be used, the <code>border: none;</code> declaration can be used.
+</p>
+<h3 id="simpleborder">Simple Border</h3>
+<p>
+The simple border paints a rectangle border in one color. The type attribute does not need to be set for the simple border, since this is the default border. The only supported attributes are the color and the width of the border:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>color</td>
+	 <td>Yes</td>
+	 <td>The color of the border, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>width</td>
+	 <td>No</td>
+	 <td>The width of the border in pixels. Defaults to 1.</td>
+	</tr>
+	</table>
+<p>
+The following style uses a black border which is 2 pixels wide:
+<pre>
+.myStyle {
+	border-color: black;
+	border-width: 2;
+}
+</pre></p>
+
+<h3 id="roundrectborder">Round-Rect Border</h3>
+<p>
+The round-rect border paints a rectangular border with round edges. It supports following attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;round-rect&quot; or &quot;roundrect&quot;</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>Yes</td>
+	 <td>The color of the border, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>width</td>
+	 <td>No</td>
+	 <td>The width of the border in pixels. Defaults to 1.</td>
+	</tr>
+	<tr><td>arc</td>
+	 <td>No</td>
+	 <td>The diameter of the arc at the four corners. Defaults to 10&nbsp;pixels, when none is specified.</td>
+	</tr>
+	<tr><td>arc-width</td>
+	 <td>No</td>
+	 <td>The horizontal diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	<tr><td>arc-height</td>
+	 <td>No</td>
+	 <td>The vertical diameter of the arc at the four corners. Defaults to the arc-value, when none is specified.</td>
+	</tr>
+	</table>
+<p>
+This example creates a 2 pixels wide purple border with an arc diameter of 6 pixels:
+<pre>
+.myStyle {
+	border {
+		type: round-rect;
+		color: purple;
+		width: 2;
+		arc: 6;
+	}
+}
+</pre></p><p>
+The following example uses a different horizontal arc diameter:
+<pre>
+.myStyle {
+	border-type: round-rect;
+	border-color: purple;
+	border-width: 2;
+	border-arc: 6;
+	border-arc-width: 10;
+}
+</pre></p>
+
+<h3 id="shadowborder">Shadow Border</h3>
+<p>
+The shadow border paints a shadowy border. Following attributes are supported:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;shadow&quot;, &quot;bottom-right-shadow&quot; or &quot;right-bottom-shadow&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>Yes</td>
+	 <td>The color of the border, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>width</td>
+	 <td>No</td>
+	 <td>The width of the border in pixels. Defaults to 1.</td>
+	</tr>
+	<tr><td>offset</td>
+	 <td>No</td>
+	 <td>The offset between the corner and the start of the shadow. Defaults to 1&nbsp;pixel, when none is specified.</td>
+	</tr>
+</table>
+<p>
+Currently only a &quot;bottom-right-shadow&quot; is supported, so the border is painted below the item and right of the item.
+The following example uses a green shadow border:
+<pre>
+.myStyle {
+	border-type: shadow;
+	border-color: green;
+	border-width: 2;
+	border-offset: 2;
+}
+</pre></p>
+
+<h3 id="topbottomleftrightborder">Top, Bottom, Left and Right Border</h3>
+<p>
+These border paints a simple border on one side the corresponding item. Following attributes are supported:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The type needs to be &quot;top&quot;, &quot;bottom&quot;, &quot;left&quot; or &quot;right&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>Yes</td>
+	 <td>The color of the border, either the name of the color or a direct definition.</td>
+	</tr>
+	<tr><td>width</td>
+	 <td>No</td>
+	 <td>The width of the border in pixels. Defaults to 1.</td>
+	</tr>
+</table>
+<p>
+The following example uses a green border on the bottom of the title:
+<pre>
+title {
+	border-type: bottom;
+	border-color: green;
+	border-width: 2;
+}
+</pre></p>
+
+<h3 id="circleborder">Circle Border</h3>
+<p>
+The circle border paints a round or elliptical border and supports following attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>type</td>
+	 <td>Yes</td>
+	 <td>The border-type needs to be &quot;circle&quot;.</td>
+	</tr>
+	<tr><td>color</td>
+	 <td>No</td>
+	 <td>The color of the border, either the name of the color or a direct definition. Defaults to black.</td>
+	</tr>
+	<tr><td>width</td>
+	 <td>No</td>
+	 <td>The width of the border in pixels. Defaults to 1.</td>
+	</tr>
+	<tr><td>stroke-style</td>
+	 <td>No</td>
+	 <td>Either &quot;solid&quot; or &quot;dotted&quot;. Defines the painting style of the border. Defaults to &quot;solid&quot;.</td>
+	</tr>
+</table>
+<p>
+The following example uses a green circle border with a two pixel wide dotted line:
+<pre>
+.myStyle {
+	border-type: circle;
+	border-color: green;
+	border-width: 2;
+	border-stroke-style: dotted;
+}
+</pre></p>
+
+
+<h2 id="screens">Screens: List, Form and TextBox</h2>
+<h3>Predefined Styles for Lists, Forms and TextBoxes</h3>
+<p>
+All screens have a title and one or several embedded GUI items. In a Form or List one item is usually focused. Screens can also have a designable menu, when the application uses a full-screen-mode. Some of the used styles can also use additional attributes.
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Style-Name&nbsp;&nbsp;</th><th>Add. Attributes&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>title</td>
+	 <td>-</td>
+	 <td>The title of a screen.</td>
+	</tr>
+	<tr><td>focused</td>
+	 <td>-</td>
+	 <td>The style of the currently focused item in the screen.</td>
+	</tr>
+	<tr><td>menu</td>
+	 <td>&nbsp;</td>
+	 <td>The style of the full-screen menu.</td>
+	</tr>
+	<tr><td></td>
+	 <td>focused-style</td>
+	 <td>The name of the style for the currently focused menu item.</td>
+	</tr>
+	<tr><td></td>
+	 <td>menubar-color</td>
+	 <td>The background color of the menu-bar. Either the name or the definition of a color or &quot;transparent&quot;. Defaults to &quot;white&quot;.</td>
+	</tr>
+	<tr><td></td>
+	 <td>label-color, label-face, label-size, label-style</td>
+	 <td>The font of the menu-commands (like &quot;Select&quot; or &quot;Cancel&quot;). Default color is &quot;black&quot;, default font is the system font in  a bold style and medium size.</td>
+	</tr>
+	<tr><td>menuItem</td>
+	 <td>-</td>
+	 <td>The style for the commands in the menu. When not defined, the menu-style will be used.</td>
+	</tr>
+</table>
+<p>
+Please refer to the <a href="#menubar">Menubar section</a> for more info about designing the menu bar.
+</p>
+<h3 id="screenattributes">Additional Attributes for Screens</h3>
+<p>
+Each screen itself can have some additional attributes:</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>focused-style</td>
+	 <td>No</td>
+	 <td>The name of the style for the currently focused menu item. Defaults to the predefined &quot;focused&quot; style.</td>
+	</tr>
+	<tr><td>title-style</td>
+	 <td>No</td>
+	 <td>The name of the custom style for the title of the screen. This defaults to the predefined &quot;title&quot; style.</td>
+	</tr>
+	<tr><td>view-type</td>
+	 <td>No</td>
+	 <td>The view-type can be used for defining very different and even animated views of the items in a screen. An example is the &quot;dropping&quot; view-type in which the contained items seem to fall from the top to their positions. Please note that not all view-types support the &quot;columns&quot; and &quot;columns-width&quot;-attributes.</td>
+	</tr>
+	<tr><td>columns</td>
+	 <td>No</td>
+	 <td>The number of columns. This can be used to layout the items in a table. Defaults to 1 column. </td>
+	</tr>
+	<tr><td>columns-width</td>
+	 <td>No</td>
+	 <td>Either &quot;normal&quot;, &quot;equal&quot; or the width for each column in a comma separated list (e.g. &quot;columns-width: 60,60,100;&quot;).
+Defaults to &quot;normal&quot;, meaning that each column uses as much space as the widest item of that column needs.
+The &quot;equal&quot; width leads to columns which have all the same width.
+The explicit list of column-widths results in the usage of those widths.</td>
+	</tr>
+	<tr>
+	 <td>menubar-color</td>
+	 <td>No</td>
+	 <td>The color of the menu-bar. This overrides the settings in the predefined style &quot;menu&quot;. This attribute is only used, when the &quot;menu&quot; fullscreen setting is activated in the &quot;build.xml&quot; file.</td>
+	</tr>
+	<tr>
+	 <td>scrollindicator-color</td>
+	 <td>No</td>
+	 <td>The color of the element which is shown when the screen can be scrolled. The default color is &quot;black&quot;.</td>
+	</tr>
+	<tr>
+	 <td>show-text-in-title</td>
+	 <td>No</td>
+	 <td>An attribute for Lists only, which can be either "true" or "false". When "true" 
+	 is given, only the image-elements of the List will be shown and the text-elements
+	 will be used as titles. The title will be updated with each new selection.
+	 </td>
+	</tr>
+	<tr>
+	 <td>foreground-image</td>
+	 <td>No</td>
+	 <td>The URL of a image that should be painted at the very front of the screen, e.g. &quot;url( mascot.png )&quot;.
+	 </td>
+	</tr>
+	<tr>
+	 <td>foreground-x</td>
+	 <td>No</td>
+	 <td>The x-position of the foreground image in pixels from the the left border.
+	 </td>
+	</tr>
+	<tr>
+	 <td>foreground-y</td>
+	 <td>No</td>
+	 <td>The y-position of the foreground image in pixels from the the top border.
+	 </td>
+	</tr>
+	
+</table>
+<p>
+The following example uses some of these additional attributes:
+<pre>
+list {
+	background-image: url( bg.png );
+	columns: 2;
+	columns-width: equal;
+	focused-style: .listFocusStyle; /* this style needs to be defined, too */
+}
+</pre>
+</p>
+<p>TextBoxes also support a direct input mode and all CSS-attributes of the <a href="#textfield">text-field</a>.
+</p>
+<h3 id="screenstyles">Dynamic Styles for Screens</h3>
+<p>
+Dynamic styles can be used when no styles are explicitly set in the application code (compare <a href="css-styles.html">CSS styles</a>).
+A list uses the dynamic selector &quot;list&quot; and always contains choice-items. The selector of these items depends on the type of the list. An implicit list contains a &quot;listitem&quot;, a multiple list contains a &quot;checkbox&quot; and an exclusive list contains a &quot;radiobox&quot;.
+<pre>
+list {
+	background-color: pink;
+}
+</pre></p><p>
+defines the background color for screens of the type &quot;List&quot;.
+<pre>
+listitem { /* you could also use &quot;list listitem&quot; */
+	font-style: bold;
+}
+</pre></p><p>
+defines the font style for the items in an implicit list.
+<br/><br/><br/>
+A form uses the dynamic selector &quot;form&quot; and can contain different GUI items.
+<pre>
+form {
+	background-color: pink;
+}
+</pre></p><p>
+defines the background color for screens of the type &quot;Form&quot;.
+<pre>
+form p {
+	font-style: bold;
+}
+</pre></p><p>
+defines the font style for normal text items in a &quot;Form&quot;.
+<br/><br/><br/>
+A TextBox uses the dynamic selector &quot;textbox&quot; and contains a single &quot;textfield&quot; item.
+</p>
+<h3 id="screenexample">Example</h3>
+<p>
+The following example designs the main menu of an application, which is implemented using a List.
+<pre>
+colors {
+	pink:  rgb(248,39,186);
+	darkpink:  rgb(185,26,138);
+}
+
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: white;
+		border-width: 2;
+		border-color: yellow;
+	}
+	focused-style: .menuFocused;
+	menubar-color: transparent;
+	menufont-color: white;
+}
+
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: black;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+}
+
+.menuFocused extends .menuItem {
+	background-color: black;
+	font-color: white;
+	layout: left | horizontal-expand;
+	after: url(heart.png);
+}
+
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: white;
+	background {
+		color: darkpink;
+	}
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+focused {
+	padding: 2;
+	padding-vertical: 3;
+	padding-left: 3;
+	padding-right: 3;
+	padding-top: 10;
+	padding-bottom: 10;
+	background-type: round-rect;
+	background-arc: 8;
+	background-color: pink;
+	border {
+		type: round-rect;
+		arc: 8;
+		color: yellow;
+		width: 2;
+	}
+	font {
+		style: bold;
+		color: black;
+		size: small;
+	}
+	layout: expand | center;
+}
+
+list {
+	padding-left: 5;
+	padding-right: 5;
+	padding-vertical: 10;
+	padding-horizontal: 10;
+	background {
+		color: pink;
+		image: url( heart.png );
+	}
+	columns: 2;
+	columns-width: equal;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+}
+
+listitem {
+	margin: 2; /* for the border of the focused style */
+	padding: 2;
+	padding-vertical: 3;
+	padding-left: 3;
+	padding-right: 3;
+	padding-top: 10;
+	padding-bottom: 10;
+	background: none;
+	font-color: white;
+	font-style: bold;
+	font-size: small;
+	layout: center;
+	icon-image: url( %INDEX%icon.png );
+	icon-image-align: top;
+}
+</pre></p>
+
+<h2 id="viewtypes">View Types</h2>
+<p>
+View-types can be used for animating Forms, Lists, ChoiceGroups or even menus. 
+There are several view-types available, which are usually defined in a screen-style, e.g.:
+<pre>
+.mainScreen {
+	padding-left: 5;
+	padding-right: 5;
+	view-type: dropping;
+}
+</pre></p>
+<p>
+You can use either a (predefined) name of the view-type or the fully qualified 
+class-name of that type, which needs to extend the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/ContainerView.html" target="_blank">de.enough.polish.ui.ContainerView</a> class. 
+</p>
+<h3 id="viewtype-dropping">Dropping View</h3>
+<p>
+The dropping view shows an animation of dropping and bouncing items. 
+It is activated by specifying the &quot;dropping&quot; view-type and supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>droppingview-speed</td>
+	 <td>No</td>
+	 <td>The speed in pixels per animation-step. The default speed is 10.</td>
+	</tr>
+	<tr>
+	 <td>droppingview-repeat-animation</td>
+	 <td>No</td>
+	 <td>Defines whether the animation should be repeated each time the screen is shown. Possible values are &quot;true&quot; and &quot;false&quot;. This defaults to &quot;false&quot;.</td>
+	</tr>
+	<tr>
+	 <td>droppingview-maximum</td>
+	 <td>No</td>
+	 <td>The maximum bouncing-height in pixels. This defaults to 30.</td>
+	</tr>
+	<tr>
+	 <td>droppingview-damping</td>
+	 <td>No</td>
+	 <td>The value by which the maximum is decreased for each following item. By having a damping, the top items seem to bounce higher than lower ones. The default damping is 10.</td>
+	</tr>
+	<tr>
+	 <td>droppingview-maxperiode</td>
+	 <td>No</td>
+	 <td>The maximum allowed number of bounces. This defaults to 5.</td>
+	</tr>
+	<tr>
+	 <td></td>
+	 <td>No</td>
+	 <td></td>
+	</tr>
+</table>
+<p>
+<pre>
+.mainScreen {
+	padding-left: 5;
+	padding-right: 5;
+	<b>view-type: dropping;
+	droppingview-speed: 15;
+	droppingview-damping: 5;
+	droppingview-maxperiode: 2;</b>
+}
+</pre></p>
+<h3 id="viewtype-shuffle">Shuffle View</h3>
+<p>
+The shuffle view animates the items by moving them from the left and right side into their final target-position. It is activated by specifying the &quot;shuffle&quot; view-type and supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>shuffleview-speed</td>
+	 <td>No</td>
+	 <td>The speed in pixels per animation-step. The default speed is 10.</td>
+	</tr>
+	<tr>
+	 <td>shuffleview-repeat-animation</td>
+	 <td>No</td>
+	 <td>Defines whether the animation should be repeated each time the screen is shown. Possible values are &quot;true&quot; and &quot;false&quot;. This defaults to &quot;false&quot;.</td>
+	</tr>
+</table>
+<p><pre>
+.mainScreen {
+	padding-left: 5;
+	padding-right: 5;
+	<b>view-type: shuffle;
+	shuffleview-speed: 15;</b>
+}
+</pre></p>
+<h3 id="viewtype-midp2">MIDP/2.0 View</h3>
+<p>
+The MIDP/2.0 view arranges the items just like the MIDP/2.0 
+standard encourages it: the items are all lined up into one row until there is 
+not enough space anymore or until an item with a 
+&quot;newline-after&quot; or &quot;newline-before&quot; layout is inserted.  
+It is activated by specifying the &quot;midp2&quot; view-type and supports no additional attributes.
+<pre>
+.mainScreen {
+	padding-left: 5;
+	padding-right: 5;
+	<b>view-type: midp2;</b>
+}
+</pre></p>
+
+<h2 id="stringitem">The StringItem: Text, Hyperlink or Button</h2>
+<p>
+Texts have no specific attributes, but the padding-vertical attribute has a special meaning:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>padding-vertical</td>
+	 <td>No</td>
+	 <td>The space between the lines when there the text contains line-breaks.</td>
+	</tr>
+</table>
+<p>
+Depending on the appearance mode of the text, either the &quot;p&quot;, the &quot;a&quot; or the &quot;button&quot; selector is used for dynamic styles: 
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Dynamic Selector&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>p</td>
+	 <td>The &quot;p&quot; selector is used for normal texts.</td>
+	</tr>
+	<tr><td>a</td>
+	 <td>The &quot;a&quot; selector is used for hyperlinks.</td>
+	</tr>
+	<tr><td>button</td>
+	 <td>The &quot;button&quot; selector is used for buttons.</td>
+	</tr>
+</table>
+<h2 id="iconitem">The IconItem</h2>
+<p>
+Icons can only be used directly. Icons support following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>icon-image</td>
+	 <td>No</td>
+	 <td>The URL of the image, e.g. &quot;icon-image: url(icon.png);&quot;. The keyword %INDEX% can be used for adding the position of the icon to the name, e.g. 
+&quot;icon-image: url(icon%INDEX%.png);&quot;. The image used for the first icon will be &quot;icon0.png&quot;, the second icon will use the image &quot;icon1.png&quot; and so on.</td>
+	</tr>
+	<tr><td>icon-image-align</td>
+	 <td>No</td>
+	 <td>The position of the image relative to the text. Either &quot;top&quot;, &quot;bottom&quot;, &quot;left&quot; or &quot;right&quot;. Defaults to &quot;left&quot;, meaning that the image will be drawn left of the text.</td>
+	</tr>
+</table>
+<p>
+This example uses the attributes for designing all icons:
+<pre>
+icon {
+	background: none;
+	font-color: white;
+	font-style: bold;
+	icon-image: url( %INDEX%icon.png );
+	icon-image-align: top;
+}
+</pre></p><p>
+When the icon-item has a &quot;right&quot; image align and the layout is set 
+to &quot;horizontal-expand&quot;, the image will be drawn directly 
+at the right border of the item (with a gap specified by the padding-right
+attribute). Otherwise the image will be drawn right of the text with the 
+specified horizontal padding.
+</p>
+<h2 id="choiceitem">The ChoiceItem</h2>
+<p>
+The ChoiceItem is used in lists and in choice groups. It supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>icon-image</td>
+	 <td>No</td>
+	 <td>The URL of the image, e.g. &quot;icon-image: url(icon.png);&quot;. The keyword %INDEX% can be used for adding the position of the icon to the name, e.g. 
+&quot;icon-image: url(icon%INDEX%.png);&quot;. The image used for the first icon will be &quot;icon0.png&quot;, the second icon will use the image &quot;icon1.png&quot; and so on.</td>
+	</tr>
+	<tr><td>icon-image-align</td>
+	 <td>No</td>
+	 <td>The position of the image relative to the text. Either &quot;top&quot;, &quot;bottom&quot;, &quot;left&quot; or &quot;right&quot;. Defaults to &quot;left&quot;, meaning that the image will be drawn left of the text.</td>
+	</tr>
+	<tr><td>choice-color</td>
+	 <td>No</td>
+	 <td>The color in which the check- or radio-box will be painted. Defaults to black.</td>
+	</tr>
+	<tr><td>checkbox-selected
+		<br/>radiobox-selected</td>
+	 <td>No</td>
+	 <td>The URL of the image for a selected item. This will be used only when the type of the list or of the choice group is either exclusive or multiple. Default is a simple image drawn in the defined choice-color.</td>
+	</tr>
+	<tr><td>checkbox-plain
+		<br/>radiobox-plain</td>
+	 <td>No</td>
+	 <td>The URL of the image for a not-selected item. This will be used only when the type of the list or of the choice group is either exclusive or multiple. Default is a simple image drawn in the defined choice-color. When &quot;none&quot; is given, no image will be drawn for not-selected items. Only the image for selected items will be drawn in that case.</td>
+	</tr>
+</table>
+<p>
+Depending on the type of the corresponding list or choice group, different dynamic selectors are used by a choice item:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type of List or ChoiceGroup&nbsp;&nbsp;</th><th>Selector</th></tr>
+	<tr><td>implicit</td>
+	 <td>listitem</td>
+	</tr>
+	<tr><td>exclusive</td>
+	 <td>radiobox</td>
+	</tr>
+	<tr><td>multiple</td>
+	 <td>checkbox</td>
+	</tr>
+	<tr><td>popup</td>
+	 <td>popup</td>
+	</tr>
+</table>
+<h2 id="choicegroup">The ChoiceGroup</h2>
+<p>
+A choice group contains several choice items. It supports the &quot;focused-style&quot; attribute:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>focused-style</td>
+	 <td>No</td>
+	 <td>The name of the style for the currently focused item.</td>
+	</tr>
+	<tr><td>columns</td>
+	 <td>No</td>
+	 <td>The number of columns. This can be used to layout the items in a table. Defaults to 1 column. </td>
+	</tr>
+	<tr><td>columns-width</td>
+	 <td>No</td>
+	 <td>Either &quot;normal&quot;, &quot;equal&quot; or the width for each column in a comma separated list (e.g. &quot;columns-width: 60,60,100;&quot;).
+Defaults to &quot;normal&quot;, meaning that each column uses as much space as the widest item of that column needs.
+The &quot;equal&quot; width leads to columns which have all the same width.
+The explicit list of column-widths results in the usage of those widths.</td>
+	</tr>
+	<tr><td>view-type</td>
+	 <td>No</td>
+	 <td>The <a href="#viewtypes">view-type</a> of this choice group.</td>
+	</tr>
+	<tr>
+	 <td>popup-image</td>
+	 <td>No</td>
+	 <td>The URL to the image which should be shown in the closed popup-group. Per default a simple dropdown image will be used.</td>
+	</tr>
+	<tr>
+	 <td>popup-color</td>
+	 <td>No</td>
+	 <td>The color for the arrow in the dropdown-image of a closed popup-group. Defaults to black.</td>
+	</tr>
+	<tr>
+	 <td>popup-background-color</td>
+	 <td>No</td>
+	 <td>The color for the background in the dropdown-image of a closed popup-group. Defaults to white.</td>
+	</tr>
+</table>
+
+<h2 id="gaugeitem">The Gauge</h2>
+<p>
+A Gauge shows a progress indicator. It supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>gauge-image</td>
+	 <td>No</td>
+	 <td>The URL of the image, e.g. &quot;gauge-image: url(progress.png);&quot;. When no gauge-width is defined, the width of this image will be used instead.</td>
+	</tr>
+	<tr><td>gauge-color</td>
+	 <td>No</td>
+	 <td>The color of the progress bar. Defaults to blue.</td>
+	</tr>
+	<tr><td>gauge-width</td>
+	 <td>No</td>
+	 <td>The width of the gauge element in pixels. When no width is defined, either the available width or the width of the provided image will be used.</td>
+	</tr>
+	<tr><td>gauge-height</td>
+	 <td>No</td>
+	 <td>The height of the gauge element in pixels. Defaults to 10. When an image is provided, the height of the image will be used.</td>
+	</tr>
+	<tr><td>gauge-mode</td>
+	 <td>No</td>
+	 <td>Either &quot;chunked&quot; or &quot;continuous&quot;. In the continuous mode only the gauge-color will be used, whereas the chunked mode intersects the indicator in chunks. The setting is ignored when an image is provided. Default value is &quot;chunked&quot;.</td>
+	</tr>
+	<tr><td>gauge-gap-color</td>
+	 <td>No</td>
+	 <td>The color of gaps between single chunks. Only used in the &quot;chunked&quot; gauge-mode or when a gauge with an indefinite range is used. In the latter case the provided color will be used to indicate the idle state. Default gap-color is white.</td>
+	</tr>
+	<tr><td>gauge-gap-width</td>
+	 <td>No</td>
+	 <td>The width of gaps in pixels between single chunks. Only used in the &quot;chunked&quot; gauge-mode. Defaults to 3.</td>
+	</tr>
+	<tr><td>gauge-chunk-width</td>
+	 <td>No</td>
+	 <td>The width of the single chunks in the &quot;chunked&quot; gauge-mode. </td>
+	</tr>
+	<tr><td>gauge-show-value</td>
+	 <td>No</td>
+	 <td>Either &quot;true&quot; or &quot;false&quot;. Determines whether the current value should be shown. This defaults to true for all definite gauge items.</td>
+	</tr>
+	<tr><td>gauge-value-align</td>
+	 <td>No</td>
+	 <td>Either &quot;left&quot; or &quot;right&quot;. Defines where the current value of the gauge should be displayed. Defaults to &quot;left&quot;, that is left of the actual gauge item.</td>
+	</tr>
+</table>
+<p>
+The following example shows the use of the gauge attributes:
+<pre>
+.gaugeStyle {
+	padding: 2;
+	border-color: white;
+	gauge-image: url( indicator.png ); 
+	gauge-color: rgb( 86, 165, 255 );
+	gauge-width: 60;
+	gauge-gap-color: rgb( 38, 95, 158 );
+	/* these setting are ignored, since an image is provided:
+	gauge-height: 8; 
+	gauge-mode: chunked;
+	gauge-gap-width: 5;
+	gauge-chunk-width: 10;
+	*/
+}
+</pre><p>
+When the Gauge item is used with an indefinite range, the gauge-gap-color will be used to indicate the idle state. When the &quot;continuous running&quot; state is entered and an image has been specified, the image will &quot;fly&quot; from the left to the right of the indicator.
+</p>
+
+<h2 id="textfield">The TextField</h2>
+<p>
+A TextField is used to get user input. You can choose whether the native input methods or a direct input mode should be used. When the native mode  is activated, a new input screen will pop up for the user and special input modes like T9 or handwriting recognition can be used. When the direct input mode is used instead, no extra screen will be shown and J2ME Polish accepts the entered character directly. Please compare the following subsection <a href="#textfield-direct-input">Direct Input Mode</a> for more information.
+</p><p>
+The TextField supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>textfield-width</td>
+	 <td>No</td>
+	 <td>The minimum width of the textfield-element in pixels.</td>
+	</tr>
+	<tr><td>textfield-height</td>
+	 <td>No</td>
+	 <td>The minimum height of the  textfield-element in pixels. Defaults to the height of the used font.</td>
+	</tr>
+	<tr>
+	 <td>textfield-direct-input</td>
+	 <td>No</td>
+	 <td>Defines whether the direct input mode should be activated. Possible values are either &quot;false&quot; or &quot;true&quot;. By default the direct input mode is deactivated (&quot;false&quot;). </td>
+	</tr>
+	<tr>
+	 <td>textfield-caret-color</td>
+	 <td>No</td>
+	 <td>The color of the caret which indicates the editing position. This defaults to the color of the used font.</td>
+	</tr>
+	<tr>
+	 <td>textfield-caret-char</td>
+	 <td>No</td>
+	 <td>The character which indicates the editing position. This defaults to &quot;|&quot;.</td>
+	</tr>
+	<tr>
+	 <td>textfield-show-length</td>
+	 <td>No</td>
+	 <td>Determines whether the length of the entered text should be shown during the editing of this field. This has an effect only when the direct input mode is used.</td>
+	</tr>
+</table>
+<p>
+The following example shows the use of the TextField attributes:
+<pre>
+.inputStyle {
+	padding: 2;
+	background-color: white;
+	border-color: black;
+	textfield-height: 15; 
+	textfield-width: 40;
+	textfield-direct-input: true;
+	textfield-caret-color: red;
+	textfield-caret-char: >;
+	textfield-show-length: true;
+}
+</pre>
+</p>
+<h3 id="textfield-commands">TextField-Commands</h3>
+<p>
+A TextField adds the &quot;Clear&quot;- and &quot;Delete&quot;-commands to the menu by default. The names of these commands can be <a href="localization.html#localization-gui">changed easily</a>. If you want to suppress the commands completely, the &quot;polish.TextField.suppressCommands&quot;-variable has to be set:
+<pre>
+&lt;variable name=&quot;polish.TextField.suppressCommands&quot; value=&quot;true&quot;/&gt;
+</pre>
+</p>
+<h3 id="textfield-direct-input">Direct Input Mode</h3>
+<p>
+The direct input mode can be activated for TextFields as well as for TextBoxes using the CSS-attribute &quot;textfield-direct-input&quot; or by defining the preprocessing-variable &quot;polish.TextField.useDirectInput&quot; in the build.xml file:
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+</pre>
+</p><p>
+When the direct input mode is used, no extra screen will be used for editing the text and all  designing possibilities of J2ME Polish can be used. When the TextField is used within a Form, the associated ItemStateListener will be notified after each change of the text.
+</p><p>
+On stylus-based devices, this mode should not be used since these devices often rely on native input methods like handwriting recognition. This can be ensured by setting the preprocessing variable only for devices which have no pointer-events:
+<pre>
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; if=&quot;!polish.hasPointerEvents&quot;/&gt;
+</pre>
+</p><p>
+The direct input should not be used for editing longs texts (i.e. TextBoxes), since T9 and similar input helpers cannot be used in this mode.
+</p><p>
+The user can change the input mode from lowercase (&quot;abc&quot;) to initial-letter uppercase (&quot;Abc&quot;)  to uppercase (&quot;ABC&quot;) and to numeric (&quot;123&quot;). The current input mode is shown below the title in an extra StringItem. This item can be designed using the predefined CSS-style &quot;info&quot;:
+<pre>
+info {
+	padding-right: 10;
+	background: none;
+	border-color: black;
+	font-style: plain; 
+	font-face: proportional; 
+	font-size: small; 
+	font-color: fontColor; /* a color defined in the &quot;colors&quot; section */
+	layout: right;
+}
+</pre>
+</p><p>
+The info-item can be deactivated globally by setting the &quot;polish.TextField.showInputInfo&quot;-variable to &quot;false&quot;:
+<pre>
+&lt;variable name=&quot;polish.TextField.showInputInfo&quot; value=&quot;false&quot; /&gt;
+</pre>
+</p><p>
+Next to using the CSS-attributes &quot;textfield-caret-color&quot;, &quot;textfield-caret-char&quot; and &quot;textfield-show-length&quot; the behavior of the direct input mode can be adjusted using several preprocessing variables. Especially the available character can be changed, which can be necessary for localizing the direct input.
+</p><p>
+Following variables can be set:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>polish.TextField.InputTimeout</td>
+	 <td>&quot;1000&quot;</td>
+	 <td>The timeout in milliseconds after which a chosen character is inserted into the text automatically.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.showInputInfo</td>
+	 <td>&quot;true&quot;</td>
+	 <td>Defines whether the box showing the current input mode (e.g. &quot;123&quot;, &quot;Abc&quot;, &quot;abc&quot;, &quot;ABC&quot;) should be shown at all. You can deactivate the box globally by setting the &quot;polish.TextField.showInputInfo&quot; variable to &quot;false&quot;.</td>
+	</tr>
+	<tr>
+	 <td>polish.key.ChangeInputModeKey</td>
+	 <td>Varying</td>
+	 <td>The key which is used for changing the input mode between lowercase (&quot;abc&quot;), uppercase (&quot;ABC&quot;), initial-letter uppercase (&quot;Abc&quot;) and numeric (&quot;123&quot;). On Sony-Ericsson devices Canvas.KEY_STAR (42), on Motorola devices Canvas.KEY_NUM0 (48) and on all other devices Canvas.KEY_POUND (35) is used.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey1</td>
+	 <td>&quot;.,!?:/@_-+1&quot;</td>
+	 <td>The characters which are available when the key &quot;1&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey2</td>
+	 <td>&quot;abc2&quot;</td>
+	 <td>The characters which are available when the key &quot;2&quot; is pressed. It might be useful to add local specific umlauts here.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey3</td>
+	 <td>&quot;def3&quot;</td>
+	 <td>The characters which are available when the key &quot;3&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey4</td>
+	 <td>&quot;ghi4&quot;</td>
+	 <td>The characters which are available when the key &quot;4&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey5</td>
+	 <td>&quot;jkl5&quot;</td>
+	 <td>The characters which are available when the key &quot;5&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey6</td>
+	 <td>&quot;mno6&quot;</td>
+	 <td>The characters which are available when the key &quot;6&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey7</td>
+	 <td>&quot;pqrs7&quot;</td>
+	 <td>The characters which are available when the key &quot;7&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey8</td>
+	 <td>&quot;tuv8&quot;</td>
+	 <td>The characters which are available when the key &quot;8&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey9</td>
+	 <td>&quot;wxyz9&quot;</td>
+	 <td>The characters which are available when the key &quot;9&quot; is pressed.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKey0</td>
+	 <td>&quot; 0&quot;</td>
+	 <td>The characters which are available when the key &quot;0&quot; is pressed. On Motorola devices this key is used for switching the input mode.</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKeyStar</td>
+	 <td>&quot;.,!?:/@_-+&quot;</td>
+	 <td>The characters which are available when the key &quot;*&quot; is pressed. On Motorola devices this key is used for entering spaces (&quot; &quot;).</td>
+	</tr>
+	<tr>
+	 <td>polish.TextField.charactersKeyPound</td>
+	 <td>(none)</td>
+	 <td>The characters which are available when the key &quot;#&quot; is pressed. On Sony-Ericsson devices this key is used for entering spaces (&quot; &quot;).</td>
+	</tr>
+</table>
+
+<h2 id="datefield">The DateField</h2>
+<p>
+A DateField is used to enter date or time information. Currently the input is done with the use of the native functions, so that special input modes can be used (like T9). The DateField supports following additional attributes:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>datefield-width</td>
+	 <td>No</td>
+	 <td>The minimum width of the datefield-element in pixels.</td>
+	</tr>
+	<tr><td>datefield-height</td>
+	 <td>No</td>
+	 <td>The minimum height of the  datefield-element in pixels. Defaults to the height of the used font.</td>
+	</tr>
+</table>
+<p>
+The following example shows the use of the DateField attributes:
+<pre>
+.inputStyle {
+	padding: 2;
+	background-color: white;
+	border-color: black;
+	datefield-height: 15; 
+	datefield-width: 40;
+}
+</pre>
+</p>
+<p>
+The appearance of the datefield can also be adjusted using the preprocessing variable 
+&quot;polish.DateFormat&quot;, which can be defined in the &lt;variables&gt; section 
+of the J2ME&nbsp;Polish task:
+</p>
+<ul>
+ <li><code>&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;us&quot; /&gt;</code>: The US standard of MM-DD-YYYY is used, e.g. &quot;12-24-2004&quot;.</li>
+ <li><code>&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;de&quot; /&gt;</code>: The German standard of DD.MM.YYYY is used, e.g. &quot;24.12.2004&quot;.</li>
+ <li><code>&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;fr&quot; /&gt;</code>: The French standard of DD/MM/YYYY is used, e.g. &quot;24/12/2004&quot;.</li>
+ <li>All other settings: The ISO 8601 standard of YYYY-MM-DD is used, e.g. &quot;2004-12-24&quot;.</li>
+</ul>
+
+<h2 id="ticker">The Ticker</h2>
+<p>
+A Ticker scrolls a text over the current screen. In J2ME Polish the ticker is situated right above the menu-bar on the bottom of a screen. Following attribute is supported:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>ticker-step</td>
+	 <td>No</td>
+	 <td>The number of pixels by which the ticker is shifted at each update. Defaults to 2 pixels.</td>
+	</tr>
+</table>
+
+<h2 id="menubar">The Menu Bar</h2>
+<p>
+In the menu bar the commands reside that have been added to a screen. 
+This bar can be designed using the predefined &quot;menu&quot; style. The font-settings in this style are used to render the actual commands, and the CSS attrbute &quot;menubar-color&quot; defines the color of the menu-bar. The color can have any setting including &quot;transparent&quot;, which is useful when the background of the corresponding screen should be shown. The &quot;menubar-color&quot; defaults to white by the way. When this attribute is also defined in a screen-style, it will override the setting in the &quot;menu&quot; style for the corresponding screen. Let me demonstrate:
+<pre>
+menu {
+	padding: 5;
+	background: none;
+	/* The design of the commands in the menu-bar: */
+	font-style: bold; 
+	font-face: proportional; 
+	font-size: small; 
+	font-color: red;
+	/* The color of the menubar background:  */
+	menubar-color: black;
+}
+
+.myScreenStyle {
+	background-image: url( bg.png );
+	/* use a transparent menubar for screens with this style,
+         so that the bg.png image is shown in the menubar as well: */
+	menubar-color: transparent;
+}
+</pre>
+</p>
+<p>
+When there is more than one item available in the menu, an &quot;Options&quot; menu will be shown automatically, which opens the real menu when pressed (like shown in the following figures).
+</p>
+<p>
+<img src="../images/screenshot-example-enough.png" alt="The closed menu." />
+<img src="../images/screenshot-example-enough-menu.png" alt="The opened menu." />
+</p>
+<p>
+The items in the opened menu are designed using the predefined &quot;menuitem&quot; style. The background and the border of the opened menu is designed using the &quot;menu&quot; style. You can change the names of the &quot;Options&quot;, &quot;Select&quot; and &quot;Cancel&quot; commands by the way, this is explained in the <a href="localization.html#localization-gui">localization chapter</a>.
+</p>
+<!--
+<p>
+If you want to change the dimensions and margins of the menu-bar, you need to specify preprocessing variables within the build.xml.
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>polish.Menu.MarginBottom</td>
+	 <td>0</td>
+	 <td>The number of pixels from the bottom of the screen to the command in the menu bar.</td>
+	</tr>
+	<tr>
+	 <td>polish.Menu.MarginTop</td>
+	 <td>2</td>
+	 <td>The margin in pixels from the top to the command in the menu bar.</td>
+	</tr>
+	<tr>
+	 <td>polish.Menu.MarginLeft</td>
+	 <td>2</td>
+	 <td>The margin in pixels from the left to the command in the menu bar.</td>
+	</tr>
+	<tr>
+	 <td>polish.Menu.MarginRight</td>
+	 <td>2</td>
+	 <td>The margin in pixels from the right to the command in the menu bar.</td>
+	</tr>
+</table>
+<p>
+The following example increases the bottom margin to 3 pixels:
+<pre>
+&lt;variable name=&quot;polish.Menu.MarginBottom&quot; value=&quot;3&quot; /&gt;
+</pre>
+</p>
+-->
+
+<h2 id="extendedmenubar">The Extended Menu Bar</h2>
+<p>
+You can use the extended menu bar in cases when the design possibilities of the normal menu bar are not sufficient for you. In contrast to the normal menu bar, the extended menu bar is a full blown item and can, therefore, be designed just like any other item. The price for using the extended menu bar is to have an additional 2 kb class file in your JAR.
+</p><p>
+For using the extended menu-bar instead of the normal one, you need to set the &quot;polish.MenuBar.useExtendedMenuBar&quot; preprocessing variable to &quot;true&quot; in the &lt;variables&gt;-section of the build.xml file:
+<pre>
+&lt;variables&gt;
+	&lt;variable 
+		name=&quot;polish.MenuBar.useExtendedMenuBar&quot; 
+		value=&quot;true&quot; 
+	/&gt;
+&lt;/variables&gt;
+</pre></p><p>
+The menu bar can be designed using the predefined styles &quot;menubar&quot;, &quot;leftcommand&quot; and &quot;rightcommand&quot;:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Style&nbsp;&nbsp;</th><th>Description</th></tr>
+	<tr>
+	 <td>menubar</td>
+	 <td>This design of the menu-bar itself.</td>
+	</tr>
+	<tr>
+	 <td>leftcommand</td>
+	 <td>Designs the left command (&quot;Options&quot;, &quot;Select&quot; and user-defined commands). Accepts all attributes of the IconItem.</td>
+	</tr>
+	<tr>
+	 <td>rightcommand</td>
+	 <td>Designs the right command (&quot;Cancel&quot; and user-defined BACK or CANCEL commands). Accepts all attributes of the IconItem.</td>
+	</tr>
+</table>
+<p>The menubar-style offers following additional attributes:</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>menubar-options-image</td>
+	 <td>No</td>
+	 <td>Defines the image-URL for the options-image of the extended menubar.</td>
+	</tr>
+	<tr>
+	 <td>menubar-select-image</td>
+	 <td>No</td>
+	 <td>Defines the image-URL for the select-image of the extended menubar.</td>
+	</tr>
+	<tr>
+	 <td>menubar-cancel-image</td>
+	 <td>No</td>
+	 <td>Defines the image-URL for the cancel-image of the extended menubar.</td>
+	</tr>
+	<tr>
+	 <td>menubar-show-image-and-text</td>
+	 <td>No</td>
+	 <td>Determines whether the text should be shown as well in the menubar, when an image has been defined for the corresponding action. Defaults to &quot;false&quot;.</td>
+	</tr>
+</table>
+<p>
+The following example demonstrates the design of the extended menu-bar:
+<pre>
+menubar {
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 2;
+	margin-right: 2;
+	padding: 0;
+	background: none;
+	menubar-options-image: url( options.png );
+	/*
+	menubar-select-image: url( checked.png );
+	menubar-cancel-image: url( cancel.png );
+	menubar-show-image-and-text: true;
+	*/
+}
+
+leftcommand {
+	padding-horizontal: 4;
+	padding-bottom: 0;
+	font-color: fontColor;
+	font-style: bold;
+	background: none;
+}
+
+rightcommand {
+	padding-horizontal: 4;
+	padding-bottom: 0;
+	font-color: fontColor;
+	font-style: bold;
+	background: none;
+}
+</pre></p>
+<h2 id="tabbedform">Tabbed Form</h2>
+<p>
+The tabbed form can be designed like any Form and accepts the very same CSS-attributes. Additionally the predefined styles &quot;tabbar&quot;, &quot;activetab&quot; and &quot;inactivetab&quot; can be used to design the additional elements of a tabbed form.
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Style&nbsp;&nbsp;</th><th>Description</th></tr>
+	<tr>
+	 <td>tabbar</td>
+	 <td>This style designs the tab-bar of a TabbedForm.</td>
+	</tr>
+	<tr>
+	 <td>activetab</td>
+	 <td>Designs the currently active tab of a TabbedForm.</td>
+	</tr>
+	<tr>
+	 <td>inactivetab</td>
+	 <td>Designs all tabs but the currently selected one of a TabbedForm.</td>
+	</tr>
+</table>
+<p>
+You can set the color of the scrolling indicator within the tabbar-style with the tabbar-scrolling-indicator-color attribute:
+<pre>
+tabbar {
+	background-color: white;
+	layout: expand;
+	padding-bottom: 0;
+	tabbar-scrolling-indicator-color: black;
+}
+
+activetab {
+	background-type: round-tab;
+	background-color: silver;
+	background-arc: 8;
+	font-color: white;
+	padding-left: 10;
+	padding-right: 8;
+}
+
+inactivetab {
+	padding-left: 6;
+	padding-right: 4;
+	margin-left: 2;
+	margin-right: 2;
+	background-type: round-tab;
+	background-color: gray;
+	background-arc: 8;
+	font-color: silver;
+}
+</pre></p>
+<p>
+The <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/TabbedForm.html" target="_blank">de.enough.polish.ui.TabbedForm</a>
+ supports all Form methods and some additional methods for handling the
+tabs:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Method&nbsp;&nbsp;</th><th>Example&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>TabbedForm( String title, String[] tabNames, Image[] tabImages )</td>
+	 <td>
+<code>
+//#style myTabbedForm<br />
+TabbedForm form = new TabbedForm( "Hello", new String[] {"First Tab", "another tab"}, null );
+</code>
+	 </td>
+	 <td>Creates a new TabbedForm.</td>
+	</tr>
+	<tr>
+	 <td>append( int tabIndex, Item item )</td>
+	 <td>
+<code>
+form.append( 2, myStringItem );
+</code>
+	 </td>
+	 <td>Adds the item to the specified tab. The first tab has got the index 0.</td>
+	</tr>
+	<tr>
+	 <td>set( int tabIndex, int itemIndex, Item item )</td>
+	 <td>
+<code>
+form.set( 2, 1, myStringItem );
+</code>
+	 </td>
+	 <td>Sets the item to the specified index on the given tab. </td>
+	</tr>
+	<tr>
+	 <td>delete( int tabIndex, Item item )</td>
+	 <td>
+<code>
+form.delete( 2, myStringItem );
+</code>
+	 </td>
+	 <td>Deletes the given item from the specified tab.</td>
+	</tr>
+
+</table>
+
+<p>
+The following listing demonstrates the usage of the TabbedForm:
+<pre>
+package de.enough.polish.demo;
+
+import javax.microedition.lcdui.Choice;
+import javax.microedition.lcdui.ChoiceGroup;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.DateField;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.Item;
+import javax.microedition.lcdui.ItemStateListener;
+
+import de.enough.polish.ui.TabbedForm;
+
+public class TabbedFormDemo implements ItemStateListener {
+	
+
+	private TextField nameField;
+
+	public TabbedFormDemo(  DemoMidlet midlet, Display display, Command returnCmd ) {
+		String[] tabNames = new String[]{ &quot;Input&quot;, &quot;Choice&quot;, 
+			&quot;Connection&quot;, &quot;Test&quot;, &quot;Settings&quot;, 
+			&quot;Internet&quot; };
+		//#style tabbedScreen
+		TabbedForm form = new TabbedForm(&quot;TabbedDemo&quot;, tabNames, null );
+		//#style label
+		StringItem label = new StringItem( null, &quot;name:&quot; );
+		form.append( 0, label );
+		//#style input
+		this.nameField = new TextField( null, &quot;Robert&quot;, 
+			30, TextField.ANY | TextField.INITIAL_CAPS_WORD );
+		form.append(0, this.nameField);
+		//#style label
+		label = new StringItem( null, &quot;birthday:&quot; );
+		form.append( 0, label );
+		//#style input
+		DateField birthdate = new DateField( null, DateField.DATE );
+		form.append( 0, birthdate );
+		
+		//#style label
+		label = new StringItem(null, &quot;What kind of animals do you like:&quot;);
+		form.append( 1, label );
+		//#style multipleChoice
+		ChoiceGroup choice = new ChoiceGroup( null, Choice.MULTIPLE );
+		//#style choiceItem
+		choice.append(&quot;dogs&quot;, null);
+		//#style choiceItem
+		choice.append(&quot;cats&quot;, null);
+		//#style choiceItem
+		choice.append(&quot;birds&quot;, null);
+		form.append(1, choice);
+		
+		//#style label
+		label = new StringItem(null, &quot;Connection:&quot;);
+		form.append( 2, label );
+		//#style multipleChoice
+		choice = new ChoiceGroup( null, Choice.MULTIPLE );
+		//#style choiceItem
+		choice.append(&quot;ISDN&quot;, null);
+		//#style choiceItem
+		choice.append(&quot;DSL&quot;, null);
+		//#style choiceItem
+		choice.append(&quot;Cable&quot;, null);
+		form.append(2, choice);
+		
+
+		
+		form.addCommand(returnCmd);
+		form.setCommandListener(midlet);
+		form.setItemStateListener( this );
+		display.setCurrentItem( choice );
+	}
+
+	public void itemStateChanged(Item item) {
+		if (item instanceof TextField) {
+			TextField field = (TextField) item;
+			System.out.println(&quot;Item State Changed: &quot; + field.getString() );
+		} else {
+			System.out.println(&quot;Item State Changed: &quot; + item );
+		}
+	}
+}
+</pre>
+</p>
+
+<%include end.txt %>

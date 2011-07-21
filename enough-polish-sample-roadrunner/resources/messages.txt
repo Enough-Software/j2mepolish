@@ -1,0 +1,62 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application.               #
+#   Keys and values are separated     #
+#   by the equals-sign "=".           #
+#   You can include parameters with   #
+#   the standard {0}, {1} etc         #
+#   mechanism.                        #
+#                                     #
+#######################################
+
+title.GameScreen=Roadrunner
+title.GameOver=Game Over
+title.Help=Help
+title.Settings=Settings
+title.About=About Roadrunner
+
+cmd.StartGame=Start Game
+cmd.Quit=Exit
+cmd.ShowLog=Show Log
+cmd.Return=Return
+cmd.Replay=Play again
+cmd.Help=Help
+cmd.Settings=Settings
+cmd.About=About
+cmd.Ok=OK
+
+menu.StartGame=Start Game
+menu.LoadGame=Load Game
+menu.Highscore=Highscore
+menu.Help=Help
+menu.Settings=Settings
+menu.About=About
+menu.Quit=Exit
+
+setting.EnableSound=Enable Sound: 
+setting.sound=Enable Sound: 
+setting.sound.off=no
+setting.sound.on=yes
+setting.sound.fxonly=Only Effects
+setting.name=Your Name: 
+setting.language=Language: 
+
+about.text=Roadrunner is a demonstration game of J2ME Polish: www.j2mepolish.org
+
+
+message.GameStarted=Go...!
+message.TargetReached.1=Well done!
+message.TargetReached.2=Dude!!!
+message.TargetReached.3=Whoa!!!
+message.TargetReached.4=Cool!!!
+message.LevelFinished=Level {0} cleared!!!
+message.GameOver=Game over...
+message.TimeOut=Time's up...!
+message.Killed.1=Ouch...!
+message.Killed.2=Damn!
+message.Killed.3=Look out!!
+message.Killed.4=Nooooo!
+
+message.LanguageChanged=Language changed to {0}!!
+

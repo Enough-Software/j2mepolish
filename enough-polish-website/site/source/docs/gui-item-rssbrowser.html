@@ -1,0 +1,101 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: RssBrowser %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">RssBrowser</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-htmlbrowser.html">HtmlBrowser</a></li>
+		<li><a href="rmi.html">RMI &amp; XML-RPC</a></li>
+		<li><a href="../touch/index.html">Touch (Client Server)</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-item-rssbrowser.png"  width="353" height="417" alt="The RssBrowser dislaying a digg feed." />
+	<br />
+	Use the <code>RssBrowser</code> to display RSS 2.0 feeds.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The above design has been realized using following CSS settings:
+	</p>
+<pre>
+.rssBrowser {
+	view-type: midp2;
+}
+
+.browserLink {
+	font-color: blue;
+	font-style: bold;
+}
+
+.browserLink:hover {
+	font-color: red;
+}
+</pre>
+	<p>The <code>RssBrowser</code>, like the <a href="gui-item-htmlbrowser.html">HtmlBrowser</a>, uses the default CSS styles
+	<code>.browserLink</code>, <code>.browserText</code> or <code>.browserInput</code>.
+	</p>
+
+	<h3 id="attribute-rssbrowser">CSS Attributes for the RssBrowser</h3>
+	<p>
+	You can use the following attributes for designing a <code>RssBrowser</code>:
+	</p>
+	<%cssattributes de.enough.polish.browser.rss.RssBrowser %>
+
+	<h2 id="rssbrowser-commands">RSS Commands</h2>
+	<p>
+	The RssBrowser uses two commands for letting the user interact with RSS feeds. You can use
+	the following preprocessing variables or translations within <i>resources/messages.txt</i> for
+	adjusting these commands:
+	</p>
+	<ul>
+		<li><code>polish.rss.command.select</code>: Lets the user view the description of a RSS item.</li>
+		<li><code>polish.rss.command.followlink</code>: Allows the user to open the linked RSS article page.</li>
+	</ul>
+	<p>These are the default translations:</p>
+<pre>
+polish.rss.command.select=Show
+polish.rss.command.followlink=Go
+</pre>
+	
+	<h2 id="rssbrowser-Programming">Programming</h2>
+	<p>
+	Using the <code>RssBrowser</code> is not difficult.
+	The following code snippet shows how to create an <code>RssBrowser</code>:
+	</p>
+<pre>
+//#style rssBrowserForm
+Form form = new Form("Browser");
+//#style rssBrowser
+this.rssBrowser = new RssBrowser( this ); 
+// "this" implements an ItemCommandListener
+form.append( this.rssBrowser );
+</pre>	
+	<p>
+	If you want to view a feed, call <code>RssBrowser.go(String url):</code>.
+	</p>
+<pre>
+this.rssBrowser.go( "http://www.digg.com/rss/index.xml" );
+</pre>
+	<p>
+	If you want to include descriptions directly on the overview page instead 
+	of in the linked page, call <code>RssBrowser.setIncludeDescriptions(boolean includeDescriptions)</code>:
+	</p>
+<pre>
+this.rssBrowser.setIncludeDescriptions( true );
+</pre>
+	<p>
+	Please refer to the &quot;rss&quot; sample application for a working example.
+	</p>
+	
+	<h2 id="rssbrowser-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/rss/RssBrowser.html">RssBrowser</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

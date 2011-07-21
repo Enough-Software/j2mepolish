@@ -1,0 +1,56 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: gauge-horizontal-icons view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">gauge-horizontal-icons view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-gauge.html">Gauge</a></li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-gauge">Gauge View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>gauge-horizontal-icons</code> view-type displays several images in sequence while viewing one image at a time.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-gaugehorizontalicons.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="52">
+        <embed src="<%= basedir%>images/gui-viewtype-gaugehorizontalicons.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="52"
+        >
+        </embed>
+	</object>
+	</p>
+<pre>
+.gaugeHorizontalIcons 
+{
+	<b>view-type: gauge-horizontal-icons;</b>
+	gauge-horizontal-icons-count: 8;
+	gauge-horizontal-icons-image: url( arrow.png );
+	gauge-horizontal-icons-highlight-image: url( arrow_highlight.png );
+	gauge-horizontal-icons-highlight-count: 1;
+	gauge-horizontal-icons-interval: 500;
+	layout: horizontal-center | horizontal-expand;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.gaugeviews.HorizontalIconsGaugeView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/gaugeviews/HorizontalIconsGaugeView.html">HorizontalIconsGaugeView</a></li>
+	</ul>
+
+<%include end.txt %>

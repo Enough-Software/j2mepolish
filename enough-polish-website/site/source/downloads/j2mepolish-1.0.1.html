@@ -1,0 +1,84 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download 1.0.1 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.0.1</h1>
+	<%index %>
+	<h2 id="improvements101">Improvements of J2ME Polish 1.0.1</h2>
+<p>
+	The 1.0 release throws a NullPointerException in some circumstances, 
+	when the J2ME Polish GUI is not	used. Also the device-definition
+	of the Nokia/6100 contained a wrong screen-size. The 
+	1.0.1 release
+	fixes these errors.
+</p>
+	<h2 id="improvements100">Improvements of J2ME Polish 1.0</h2>
+	<p>
+	After nine months of intense programming, the 1.0 release of J2ME Polish
+	has now been released.
+	J2ME Polish 1.0 contains several bugfixes and improvements compared to the last release:
+	</p>
+<ul>
+	<li><b>GUI</b>: some memory optimizations result in smaller
+	JAR files as well as less heap usage.
+	<hr/>
+	DateField did not return correctly after editing. This behaviour has been fixed.
+	<hr/>
+	Some new borders and backgrounds:
+	<ul>
+		<li>circle-border: a border which draws a simple circle.</li>
+		<li>circle-background: a background which draws a simple circle.</li>
+		<li>pulsating-circle-background: an animated background which draws a circle, which
+		is constantly growing and shrinking.</li>
+		<li>pulsating-circles-background: an animated background which draws 
+		ever-growing circles.</li>
+	</ul>
+	<hr/>
+	</li>
+	<li><b>JAD- and Manifest-Attributes</b>: 
+	Custom attributes will now be copied only into the JAD file,
+	unless a manifest attributes-filter is used.
+	<hr/>
+	</li>
+	<li><b>Device Database</b>: 
+	Updated and added device definitions. Also added the new &quot;Generic/jsr185&quot;
+	device, which represents a standard MIDP/2.0 device with WMAPI and MMAPI support.
+	<hr/>
+	<li><b>Preprocessing</b>: The new #message directive can
+	be used to analyse the behaviour of the preprocessing phase:
+	<pre>
+	//#message Using update-url &quot;${update-url}&quot;.
+	</pre>
+	<hr/>
+	</li>
+</ul>
+
+<h2 id="install">Installation</h2>
+	<p>Depending on your system setup, please doubleclick the downloaded installer 
+	or call &quot;java -jar j2mepolish-1.0.1.jar&quot; on the command line to
+	start the installation.</p>
+	<p>A complete instruction is available in the 
+	<a href="../docs/install.html">installation documentation</a>.</p>
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license need to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>The size of the full installer is 3.82 MB / 3.921 kb / 4.014.117 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package.
+	</p>
+	<p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.0.1.jar">I accept the above rules (download the full installer).</a><br/>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.0.1.zip">I accept the above rules (download only the update).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a>
+	</p>
+<%include end.txt %>

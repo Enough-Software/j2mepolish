@@ -1,0 +1,89 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: FilteredList %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">FilteredList</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-list.html">List</a></li>
+		<li><a href="gui-visualguide.html#gui-overview">Screen Elements</a></li>
+		<li><a href="gui-item-filteredchoicegroup.html">FilteredChoiceGroup</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-screen-filteredlist.png" width="352" height="417" alt="A FilteredList."/>
+		<br />
+		The FilteredList allows you to limit the number of shown entries 
+		by entering some text. This speeds up the time for finding a specific entry in a long result list, for example.
+	</p>
+	
+<h2 id="design">Design</h2>
+
+<p>The FilteredList in the screenshot is a <a href="gui-screen-popup.html">popup screen</a>
+and has been realized using following CSS settings:</p>
+<pre>
+.filterPopupStyle {
+	repaint-previous-screen: true;
+	margin: 10;
+	margin-bottom: 0;
+	padding: 5;
+	background-color: black;
+	/* not needed, since .filterTextFieldStyle is used by default:
+	filter-style: filterTextFieldStyle;
+	*/
+}
+
+.filterTextFieldStyle {
+	margin-left: 2;
+	margin-right: 2;
+	before: url( search.png );
+	background {
+		color: white;
+		border-color: black;
+	}
+	layout: expand | left;
+}
+</pre>
+<p>
+By default the <a href="gui-item-textfield.html">TextField</a> of a FilteredList is designed using the 
+<code>.filterTextFieldStyle</code>, you can specify you own style using the <code>filter-style</code> attribute.
+</p>
+<h3 id="design-List">CSS Attributes for a FilteredList</h3>
+<p>You can use following CSS attributes for a FilteredList:</p>
+<%cssattributes de.enough.polish.ui.FilteredList %>
+
+<h3 id="design-ListItems">CSS Attributes for items within a FilteredList</h3>
+<p>You can design items added to a FilteredList with the following CSS attributes:</p>
+<%cssattributes de.enough.polish.ui.ChoiceItem %>
+
+<h2 id="programming">Programming</h2>
+<p>
+You can use the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/FilteredList.html">FilteredList</a> like
+a normal <code>javax.microedition.lcdui.List</code> for most parts. Please note that you should not set an <code>ItemStateListener</code> on a 
+<code>FilteredList</code>, unless you want to filter entries by yourself. 
+<br />
+Please refer to the <a href="gui-screen-list.html">List</a> documentation for further details.
+</p>
+
+<h2 id="configuration">Configuration</h2>
+<p>
+You can configure if List should not show commands like &quot;Select&quot; for implicit and exclusive Lists or &quot;Mark&quot;
+for multiple lists. By default such commands are shown. Specify these configuration settings in the <code>variables</code>
+section of your <i>build.xml</i> script. Please refer to the <a href="gui-screen-list.html">List</a> documentation
+for further details.
+</p>
+
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/FilteredList.html">FilteredList</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

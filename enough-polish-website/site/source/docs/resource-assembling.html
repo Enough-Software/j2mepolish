@@ -1,0 +1,373 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Resource Assembling %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Assembling of Resources</h1>
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="customization.html">Customization</a></li>
+	<li><a href="localization.html">Localization</a></li>
+	<li><a href="build.html">build.xml</a></li>
+	</ul>
+	<%index %>
+	<p class="pullquote">Select and organize your resources automatically - it's easy to set up, but extremely powerful!
+	</p>
+	<p>
+	<img src="<%= basedir%>images/build-resource-assembling-structure.png"  width="321" height="453" alt="Example Resource Structure" />
+	</p>
+	<h2 id="concepts">Concepts</h2>
+	<p>
+	During the build process resources like images, sound files etc. 
+	are assembled autmatically for each device.
+	</p><p>
+Place all your resources into the <i>${project.home}/resources</i> folder (when no other directory has been specified 
+in the <a href="build-build.html#resources">&lt;resources&gt; element</a> or with the 
+<code>resDir</code> attribute of the <a href="build-build.html">&lt;build&gt; element</a> in your <i>build.xml</i> script).
+	</p>
+	<p>
+	In case you have specific resource that only should be added for some devices, you can put these into
+	correspondingly names subfolders of the <i>resources</i> directory.
+	<br />
+	You can have the resource <i>bg.png</i> in both the <i>resources</i> as well as the <i>resources/ScreenSize.240+x320+</i>
+	folders, for example. When you now build your application for a device with a screen size of at least
+	240 pixels wide and 320 pixels high, the resources from <i>resources/ScreenSize.240+x320+</i> will
+	be included in your application - they will overwrite generic resources with the same name that are
+	placed in the <i>resources</i> directory.
+	</p>
+	<p>
+Resources for devices of specific vendors  can be placed into the &quot;resources/[vendor-name]&quot; folder, e.g. the &quot;resources/Nokia&quot; folder for Nokia devices. Resources for a specific device can be placed into the &quot;resources/[vendor-name]/[device-name]&quot; folder, e.g. the folder &quot;resources/Nokia/N95&quot; for Nokia/N95 devices. 
+	</p><p>
+	You can refer to any device capability that has been defined in the device database for 
+	</p><p>
+All resources will be copied to the root of the application and more specific resources will overwrite the common resources: If you have a picture named &quot;hello.png&quot; in the &quot;resources&quot; folder as well as in the &quot;resources/Nokia&quot; and in the &quot;resources/Nokia/N95 &quot; folder, the version in the &quot;resources&quot; folder will be used for all non-Nokia devices, the version contained in the &quot;resources/Nokia&quot; folder will be used for all Nokia devices, but the image &quot;resources/Nokia/N95 /hello.png&quot; will be used for the application which is build for the Nokia/N95  phone. 
+<br/>
+In the application code you can load this image as any other resource from the root: 
+</p>
+<pre>
+Image.createImage( &quot;/hello.png&quot; );
+</pre>
+	<p>In case you want to include subfoldersin your application's JAR file, you need to use a <a href="#root">root directory</a>
+	with enabled <code>includeSubDirs</code> attribute. Please see below for more details.
+	</p>
+	<p>
+	The adjustments of designs for different devices is described in the 
+	<a href="css-groups.html">CSS-documentation</a>.
+	</p>
+	<h2 id="groups">Often Used Directories</h2>
+	<p>
+	Here are some examples for commonly used directory names:
+	</p>
+	
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Group</th><th>Type</th><th>Default Folder</th><th>Explanation</th></tr>
+	<tr>
+	 <td>IconSize.16x16</td>
+	 <td>Capability</td>
+	 <td>resources/IconSize.16x16</td>
+	 <td>Folder for different icon sizes of the target devices, e.g. <i>IconSize.16x16</i> or <i>IconSize.56x56</i> and so on. You can use
+	 the <i>IconSize.0x0</i> for storing icon resources for devices with an unknown <code>IconSize</code> capability.
+	 </td>
+	</tr>
+	<tr>
+	 <td>ScreenSize.176x208</td>
+	 <td>Screen</td>
+	 <td>resources/ScreenSize.176x208</td>
+	 <td>Folder for different screen sizes of the target devices, e.g. ScreenSize.176x208 or ScreenSize.128x128 and so on. </td>
+	</tr>
+	<tr>
+	 <td>ScreenSize.240+x320+</td>
+	 <td>Screen</td>
+	 <td>resources/ScreenSize.240+x320+</td>
+	 <td>Folder for devices with screens that are as large or larger than the specified screen size. In the example the screen needs to be at least 240 pixels wide and 320 pixel high so that resources from that folder are included.</td>
+	</tr>
+	<tr>
+	 <td>CanvasSize.176x208</td>
+	 <td>Canvas</td>
+	 <td>resources/CanvasSize.176x208</td>
+	 <td>Folder for different canvas sizes of the target devices, e.g. CanvasSize.176x208 or CanvasSize.128x128 and so on. </td>
+	</tr>
+	<tr>
+	 <td>CanvasSize.170+x200+</td>
+	 <td>Canvas</td>
+	 <td>resources/CanvasSize.170+x200+</td>
+	 <td>Folder for devices with canvassses that are as large or larger than the specified canvas size. In the example the canvas needs to be at least 170 pixels wide and 200 pixel high so that resources from that folder are included.</td>
+	</tr>
+	<tr>
+	 <td>FullCanvasSize.176x208</td>
+	 <td>FullCanvas</td>
+	 <td>resources/CFullanvasSize.176x208</td>
+	 <td>Folder for different canvas sizes in fullscreen-mode of the target devices, e.g. FullCanvasSize.176x208 or FullCanvasSize.128x128 and so on. </td>
+	</tr>
+	<tr>
+	 <td>FullCanvasSize.170+x200+</td>
+	 <td>Canvas</td>
+	 <td>resources/FullCanvasSize.170+x200+</td>
+	 <td>Folder for devices with canvassses that are as large or larger than the specified canvas size in fullscreen-mode. In the example the canvas needs to be at least 170 pixels wide and 200 pixel high in the fullscreen-mode so that resources from that folder are included.</td>
+	</tr>
+	<tr>
+	 <td>mp3</td>
+	 <td>audio</td>
+	 <td>resources/mp3</td>
+	 <td>For devices which support the MP3 sound format.</td>
+	</tr>
+	<tr>
+	 <td>amr</td>
+	 <td>audio</td>
+	 <td>resources/amr</td>
+	 <td>For devices which support the AMR sound format.</td>
+	</tr>
+	<tr>
+	 <td>midi</td>
+	 <td>audio</td>
+	 <td>resources/midi</td>
+	 <td>For devices which support the MIDI sound format.</td>
+	</tr>
+	<tr>
+	 <td>polish.audio.mp3 and not polish.audio.amr</td>
+	 <td>Preprocessing Term</td>
+	 <td>resources/polish.audio.mp3 and not polish.audio.amr</td>
+	 <td>You can use any preprocessing term as a directory name as well.</td>
+	</tr>
+	<tr>
+	 <td>mpeg-4</td>
+	 <td>video</td>
+	 <td>resources/mpeg-4</td>
+	 <td>For devices which support the MPEG-4 video format.</td>
+	</tr>
+	<tr>
+	 <td>3gpp</td>
+	 <td>video</td>
+	 <td>resources/3gpp</td>
+	 <td>For devices which support the 3GPP video format.</td>
+	</tr>
+	</table>
+
+	<h2 id="root">Structure Your Resources with Root Directories</h2>
+	<p>
+	While the default resource assembling mechanism is quite powerful, you might want to structure
+	your resources a bit better or include subdirectories in your application as well. 
+	Your can easily achieve this by defining <code>&lt;root&gt;</code> elements in your 
+	<i>build.xml</i> script:
+	</p>
+<pre>
+&lt;resources
+	dir=&quot;resources/base&quot;
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;readme.txt&quot;
+&gt;
+	&lt;root dir=&quot;resources/base/design&quot; /&gt;
+	&lt;root dir=&quot;resources/base/sounds&quot; /&gt;
+	&lt;root dir=&quot;resources/base/images&quot; /&gt;
+	&lt;root dir=&quot;resources/base/images/largescreens&quot; 
+		if=&quot;polish.ScreenWidth &amp;gt;= 240 and polish.ScreenHeight &amp;gt;= 300&quot; 
+	/&gt;
+	&lt;root dir=&quot;resources/base/images/i18n&quot; 
+		includeSubDirs=&quot;true&quot; includeBaseDir=&quot;true&quot; excludes=&quot;CVS, readme*&quot; 
+	/&gt;
+&lt;/resources&gt;
+</pre>
+	<p>
+	Now you can put all sounds, images and the polish.css design into their own subfolder hierarchy. 
+	Each <a href="build-build.html#resources_root">&lt;root /&gt;</a> provides another starting point for the normal resource assembling
+	mechanism described above.
+	</p>
+	<p>Sometimes you will want to keep subfolders for your resources as well. You might want to add all
+	<a href="localization.html">localization</a> dependent
+	resources, for example, and allow your user to switch the localization dynamically. Image following
+	resource structure with the language dependent <i>flag.png</i> resource:
+	</p>
+<pre>
+resources/base/images/i18n/en/flag.png
+resources/base/images/i18n/de/flag.png
+resources/base/images/i18n/dk/flag.png
+resources/base/images/i18n/fr/flag.png
+resources/base/images/i18n/es/flag.png
+resources/base/images/i18n/cn/flag.png
+</pre>
+	<p>You can include the complete <i>i18n</i> directory with all its subfolders with this
+	<code>&lt;root /&gt;</code> definition with activated <code>includeSubDirs=&quot;true&quot;</code> setting:
+	<p>
+<pre>
+&lt;root dir=&quot;resources/base/images/i18n&quot; 
+	includeSubDirs=&quot;true&quot; includeBaseDir=&quot;true&quot; excludes=&quot;CVS, readme*&quot; 
+/&gt;
+</pre>
+	<p>
+	You can now load the language dependent resource with this code:
+	</p>
+<pre>
+Image flag = Image.createImage( "i18n/" + Locale.LANGUAGE + "/flag.png" );
+</pre>
+
+	<h2 id="finetune">Fine Tuning the Resource Assembling</h2>
+	<p>
+	Sometimes it is necessary to adjust the resource assembling. 
+	<br />
+	The easiest way is to use conditional <code>&lt;root&gt; settings:
+	</p>
+<pre>
+&lt;root dir=&quot;resources/base/images/largescreens&quot; 
+	if=&quot;polish.ScreenWidth &amp;gt;= 240 and polish.ScreenHeight &amp;gt;= 300&quot; 
+/&gt;
+</pre>
+	<p>
+	In the above example you include resources from <i>resources/base/images/largescreens</i> only
+	for target devices with a screen resolution of at least 240x300. And again you can use subdirectories
+	within the <i>largescreens</i> folder for making differentations, e.g. by having an image in
+	<i>resources/base/images/largescreens/Sony-Ericsson/</i>.
+	<br />
+	If you are building your application for a device with an unknown or a resolution less than 240x300, resources
+	will be loaded from the other <code>roots</code>, typically from the <i>resources</i> folder.
+	</p>
+	<p>
+	Note that you have to escape any XML characters in your <code>if</code> condition, since you 
+	are defining them within the <i>build.xml</i> script.
+	<br />
+	Instead of writing <code>if=&quot;polish.ScreenWidth &amp;gt;= 240&quot;</code> you need to
+	escape the <code>&gt;</code> character into <code>&amp;gt;</code>, for example. 
+	And instead of using <code>&amp;&amp;</code> you should use <code>and</code> to combine conditions - alternatively
+	you can also escape it into <code>&amp;amp;&amp;amp;</code>.
+	</p>
+	<p>
+	By the way - you can use <code>&lt;root&gt;</code> directories for <a href="customization.html">customizing</a> your
+	application as well.
+	</p>
+	
+	<h2 id="excluding">Excluding Resources</h2>
+	<p>
+	Sometimes it's much easier to exclude a resource for one or some devices than to include them for the rest of devices.
+	The easiest way for doing this is to add a resource with the same name but with a size of 0 bytes into the appropriate subfolder:
+	</p>
+<pre>
+${project.home}/resources/playback.wav
+${project.home}/resources/Nokia/N95/playback.wav
+</pre>
+	<p>If the <i>playback.wav</i> file in the <i>${project.home}/resources/Nokia/N95/</i> folder is 0 bytes in size, the
+	build for Nokia/N95 device will not include this file.
+	<br />
+	On Unix based operating systems you can use the <code>touch</code> command line command for creating such a file:
+	</p>
+<pre>
+$ mkdir resources/Nokia/N95/
+$ touch resources/Nokia/N95/playback.wav
+</pre>
+	<p>
+	Alternatively you can use a nested <code>&lt;filter&gt;</code> element:
+	</p>
+<pre>
+&lt;filter excludes=&quot;*.mid&quot; if=&quot;polish.audio.midi and polish.audio.amr&quot; /&gt;
+</pre>
+	<p>
+	The above example will include all MIDI files if the target device supports both MIDI as well as AMR sound formats.
+	</p>
+
+	<h2 id="tips">Tips &amp; Tricks</h2>
+	<p>
+	Resources often use up a considerable if not the biggest amount of JAR size of your application.
+	Here are some tips how you can limit the used space of your resources and how you can adapt them easily to
+	your target devices.
+	</p>
+	<h3 id="optimizing">Optimize the Size of Resources</h3>
+	<p>
+	You can often save a considerable amount by optimizing your resources.
+	<br >
+	Image sizes can be limited by reducing the number of colors and by removing unecessary headers. 
+	Sound files can be made leaner by reducing the sample rate and using an mobile optimized format like AMR.
+	</p>
+	<p>There are also tools like <a href="http://www.advsys.net/ken/utils.htm" target="_blank">pngout</a>,
+	<a href="http://pmt.sourceforge.net/pngcrush/" target="_blank">Pngcrush</a> 
+	or <a href="http://optipng.sourceforge.net/" target="_blank">OptiPNG</a>
+	that help you to optimize PNG
+	images - use them!
+	</p>
+	<h3 id="downloadlater">Download Resources Later</h3>
+	<p>
+	An effective way to trim down your JAR size is to exclude resources completely. You can then later onwards download
+	these resources from within your application and store them into the Recordstore (RMS) of the device.
+	</p>
+	<p>
+	A drawback of this method is that you need to have a working network connection, which is not always a trivial task.
+	</p>
+	<p>
+	You also need to make some adjustments so that J2ME Polish UI components can still access images which are referenced by
+	CSS styles. You have to provide a class or object that defines the 
+	<code>public Image loadImage( String url ) throws IOException</code> method and register
+	this class by defining the <a href="build-build.html#variables">preprocessing variable</a>
+	<code>polish.classes.ImageLoader</code>:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.classes.ImageLoader&quot; value=&quot;com.company.ResourceManager&quot; /&gt;
+</pre>
+	<p>
+	Now you have to provide the method as well:
+	</p>
+<pre>
+package com.company;
+import javax.microedition.lcdui.Image;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class ResourceManager {
+	public static Image loadImage( String url )
+	throws IOException
+	{
+		InputStream in = getResourceAsStream( url );
+		Image image = Image.createImage( in );
+		in.close();
+	}
+	
+	public static InputStream getResourceAsStream( url ) 
+	throws IOException
+	{
+		//TODO retrieve resource from RMS
+		return null;
+	}
+}
+</pre>
+	<h3 id="externaltranslations">Download Translations Later</h3>
+	<p>
+	You can also <a href="localization.html#externaltranslations">externalize translations</a> and download
+	them at a later point in your application.
+	</p>
+	
+	<h3 id="adjusting">Adjust Resources during Build Time</h3>
+	<p>
+	It often quite difficult to provide device optimized resources for all your target devices.
+	J2ME Polish can help you to scale resources using the <code>svgconverter</code> 
+	<a href="build-build.html#copier">Resource Copier</a>:
+	</p>
+<pre>
+&lt;resources 
+ dir=&quot;resources&quot; excludes=&quot;readme*, *.definition&quot; &gt; 
+  <b>&lt;copier name=&quot;svgconverter&quot; /&gt;</b>
+&lt;/resources&gt;
+</pre>
+	<p>The <code>svgconverter</code> resizes all <i>icon*.svg</i> and <i>bg*.svg</i> automatically
+	to the icon and the screen size of the current target device and saves them as PNG files with the same name.
+	</p>
+	
+	<h3 id="adjusting">Adjust Resources during Run Time</h3>
+	<p>
+	Especially during the first iterations of a new project you don't want to provide images for all screen resolutions et cetera.
+	You can use the 
+	<br /><a href="gui-background-scaling-image.html">
+	<img src="<%= basedir%>images/gui-background-scaling-image.png"  width="351" height="416" alt="scaling-image background" />	
+	scaling-image</a> background for adapting images automatically during runtime.
+	</p>
+	<h3 id="notusing">A Life without Resources</h3>
+	<p>
+	Adapting images for different devices is not only hard work, you sometimes even don't know the screen resolutions 
+	at build time, for example when you are targeting a generic device like <i>Sony-Ericsson/JavaPlatform8</i>.
+	</p>
+	<p>
+	J2ME Polish provides many design options that do not need images at all. Instead of using an image for realizing a gradient
+	background, you can just use the <a href="gui-background-vertical-gradient.html">vertical-gradient background</a>, for example.
+	Thanks for complex backgrounds like the <a href="gui-background-combined.html">combined background</a> 
+	and the <a href="gui-background-mask.html">mask background</a> you can also realize unusual formed backgrounds like having
+	a gradient within a round-rect background.
+	</p>
+	
+	
+<%include end.txt %>

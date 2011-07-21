@@ -1,0 +1,16 @@
+
+.mainScreen {
+	screen-change-animation: left;
+	left-screen-change-animation-speed: 5;
+}
+
+
+.settingsScreen {
+	screen-change-animation: right;
+	right-screen-change-animation-speed: 5;
+}
+
+.aboutScreen {
+	screen-change-animation: top;
+	top-screen-change-animation-speed: 8;
+}

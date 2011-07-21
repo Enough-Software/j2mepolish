@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+
+  Copyright 2006, 2007 Enough Software
+
+  Licensed under the GPL (the "License");
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  
+  Contains the servlet definition for the game server.
+
+-->
+
+
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+
+  <display-name>GameServer</display-name>
+  <description>
+     A simple game server application that can be accessed by mobile J2ME applications.
+  </description>
+
+
+
+<!-- servlet mappings start -->
+
+    <servlet>
+        <servlet-name>RemoteHttpServlet</servlet-name>
+        <servlet-class>de.enough.polish.sample.rmi.GameServerImpl</servlet-class>
+        <!--  use init-params for configuring your service  -->
+	    <init-param>
+	      <param-name>cfg.gameserver.MyInitParam</param-name>
+	      <param-value>my game server init value</param-value>
+	    </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RemoteHttpServlet</servlet-name>
+        <url-pattern>/myservice</url-pattern>
+    </servlet-mapping>
+
+<!-- servlet mappings end -->
+
+
+</web-app>
+

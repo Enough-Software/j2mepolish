@@ -1,0 +1,66 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">CSS for J2ME</h1>
+	<p>
+J2ME Polish includes an optional Graphical User Interface, which can be designed using the 
+web-standard Cascading Style Sheets (CSS). So every web-designer can now design mobile 
+applications thanks to J2ME Polish! This chapter will explain all details of the design 
+possibilities, no prior knowledge about CSS is required. The GUI is compatible with the 
+javax.microedition.ui-classes, therefore no changes need to be made in the source code of 
+the application. The GUI will be incorporated by the preprocessing mechanism automatically, 
+unless the &quot;usePolishGui&quot;-attribute of the 
+&lt;build&gt; element is set to false in the build.xml file.
+</p>
+<h2 id="glance">A Quick Glance</h2>
+<p>
+All design settings and files are stored in the &quot;resources&quot; directory of the project, 
+unless another directory has been specified. 
+The most important file is polish.css in that directory. All design definitions can be found here. The design definitions are grouped in &quot;styles&quot;. A style can be assigned to any GUI item like a title, a paragraph or an input field. Within a style several attributes and its values are defined:
+<pre>
+.myStyle {
+	font-color: white;
+	font-style: bold;
+	font-size: large;
+	font-face: proportional;
+	background-color: black;
+}
+</pre>
+</p><p>
+In this example the style called &quot;myStyle&quot; defines some font values and the color of the background. Any style contains a selector as well as a number of attributes and its values:
+</p>
+<p>
+Each attribute-value pair needs to be finished with a semicolon. The style declaration 
+needs to be finished by a closing curved parenthesis. The selector or name of style is 
+case-insensitive, so &quot;.MySTYle&quot; is the same as &quot;.myStyle&quot;.
+Apart from the polish.css file, you can put images and other contents into the resources-folder. 
+Sub-folders are used for styles and content for specific devices and groups. 
+You can put all resources for Nokia devices into the &quot;Nokia&quot; folder and resources 
+for Samsung's E700 into the &quot;Samsung/E700&quot; folder. 
+This is described in more detail in the 
+<a href="css-groups.html">&quot;Designing Specific Devices and Device-Groups&quot;</a> section.
+</p><p>
+You can specify styles directly for GUI items with the #style preprocessing directive in the 
+source code. Alternatively you can use the dynamic names of the GUI items, e.g. 
+&quot;p&quot; for text-items, &quot;a&quot; for hyperlinks or &quot;form p&quot; for all 
+text-items which are embedded in a form. The possible combinations as well as the 
+predefined style-names are discussed in the section 
+<a href="css-styles.html">&quot;Dynamic, Static and Predefined Styles&quot;</a>.
+</p><p>
+Styles can extend other styles with the extends-keyword, e.g. &quot;.myStyle extends 
+baseStyle {}&quot;. This process is described in the section 
+<a href="css-extending.html">&quot;Extending Styles&quot;</a>.</p>
+<p>
+J2ME Polish supports the CSS box model with margins, paddings and content. Other common 
+design settings include the background, the border and font-settings. These common
+ settings are described in the section 
+<a href="css-common.html">&quot;Common Design Attributes&quot;</a>.
+</p><p>
+Attributes for specific GUI items as well as the details of the different background and 
+border types are discussed in the section 
+<a href="css-specific.html">&quot;Specific Design Attributes&quot;</a>.
+</p>
+<%include end.txt %>

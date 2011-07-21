@@ -1,0 +1,11 @@
+Please copy all jar-files into the "import"-folder of your J2ME installation directory (${polish.home}/import).
+Copy all XML files to ${polish.home}, but skip the custom-xxx.xml files when you have adjusted them yourself.
+
+The provided "build.xml" needs to be adjusted:
+- the "wtk.home" property needs to point to the installation directory of
+  the Wireless Toolkit.
+- the "polish.home" property needs to point to the installation directory of
+  J2ME Polish.
+- the "license" attribute of the <build>-elements needs to be either "GPL" or
+  the commercial license key.
+

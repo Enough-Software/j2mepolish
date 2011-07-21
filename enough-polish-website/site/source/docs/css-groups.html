@@ -1,0 +1,144 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Designing for Specific Devices or Device-Groups</h1>
+	<%index %>
+	<p>
+Sometimes the design needs to be adapted to a specific device or a group of devices. You can easily use specific pictures, styles etcetera by using the appropriate sub folders of the &quot;resources&quot; folder.
+<br/>See also the general <a href="resource-assembling.html">resources assembling</a>.
+</p>
+<h2 id="hierarchy">The Hierarchy of the &quot;resources&quot; Folder</h2>
+<p>
+In the resources folder itself you put all resources and design definitions which should be valid for all devices.
+In the folder named like the vendor of a device (e.g. &quot;Nokia&quot;, &quot;Samsung&quot; or &quot;Motorola&quot;) you put all resources and design definitions for devices of that vendor.
+In the folder named like the explicit and implicit groups of a device you add the resources and design definitions for these device-groups. An explicit group is for example the &quot;Series60&quot; group, implicit groups are defined by the supported APIs of a device and the BitsPerPixel capability of devices. You can add a small movie for all devices which support the Mobile Media API (mmapi) by putting that movie into the &quot;resources/mmapi&quot; folder. Or you can add colored images for all devices which have at least a color depth of 8 bits per pixel by putting these images into the &quot;resources/BitsPerPixel8+&quot; folder.
+Last but not least you can use device specific resources and design definitions by putting them into the &quot;resources/[vendor]/[device]&quot; folder, e.g. &quot;resources/Nokia/N95 &quot; or &quot;resources/Samsung/E700&quot;.
+Any existing resources will be overwritten by more specific resources:
+</p>
+<ol>
+ <li>At first the basic resources and definitions found in the &quot;resources&quot; folder will be used.</li>
+ <li>Secondly the vendor-specific resources will be used, e.g. &quot;resources/Nokia&quot;.</li>
+ <li>Thirdly the group-specific resources will be used, e.g. &quot;resources/mmapi&quot;, &quot;resources/Series60&quot;, &quot;resources/BitsPerPixel.8+&quot; or &quot;resources/BitsPerPixe.16&quot;.</li>
+ <li>The resources and settings in the device specific folder will overwrite all other resources and settings. The device specific folder is for example the folder &quot;resources/Nokia/N95 &quot; for the Nokia/N95  phone or the folder &quot;resources/Samsung/E700&quot; for Samsung's E700.</li>
+</ol>
+<p>All resources will be copied into the root of the application, so if you want to access 
+an image called &quot;my-imgage.png&quot; you need to load it with the path &quot;/my-image.png&quot; in the
+source code.</p>
+<p>
+When you add the polish.css file for a specific vendor, group or device, you do not 
+need to repeat all styles and attributes from the more basic settings. You need to 
+specify the more specific setting only.  When you want to change the color of a font, 
+you just need to specify the &quot;font-color&quot; attribute of that style. No other 
+attributes or styles need to be defined. This is the cascading character of the Cascading 
+Style Sheets of J2ME Polish.
+</p><p>
+This example illustrates the cascading character of polish.css:</p>
+<p>In &quot;resources/polish.css&quot; you define the style &quot;myStyle&quot;:
+<pre>
+.myStyle {
+	font-color: white;
+	font-style: bold;
+	font-size: large;
+	font-face: proportional;
+	background-color: black;
+}
+</pre><p>
+You can change the font-color of that style for all Nokia devices with the following 
+declaration in &quot;resources/Nokia/polish.css&quot;:
+<pre>
+.myStyle {
+	font-color: gray;
+}
+</pre>
+</p>
+<p>
+You can specify another font-size and font-color for the Nokia 6600 phone with these 
+settings in &quot;resources/Nokia/N95 /polish.css&quot;:
+<pre>
+.myStyle {
+	font-color: red;
+	font-size: medium;
+}
+</pre></p>
+<h2 id="groups">Groups</h2>
+<p>
+Every device can have explicit and implicit groups. Explicit groups are stated by the 
+&lt;groups&gt; element of the device in the file devices.xml. Implicit groups are defined 
+by the capabilities of the device: Each supported API results in an implicit group and the 
+BitsPerPixel capability results in several groups.
+</p>
+<h3 id="platformgroups">Java-Platform-Groups</h3>
+<p>When a device supports the MIDP/1.0 standard, it belongs to the &quot;midp1&quot; group.</p>
+<p>When a device supports the MIDP/2.0 standard, it belongs to the &quot;midp2&quot; group.</p>
+<h3 id="configurationgroups">Java-Configuration-Groups</h3>
+<p>When a device supports the CLDC/1.0 standard, it belongs to the &quot;cldc1.0&quot; group.</p>
+<p>When a device supports the CLDC/1.1 standard, it belongs to the &quot;cldc1.1&quot; group.</p>
+<h3 id="apigroups">API-Groups</h3>
+<p>
+For each supported API the device belongs to a group with the name of that API (in lowercase).
+When the device supports the Mobile Media API (mmapi), it belongs to the &quot;mmapi&quot;-group. 
+When the device supports the Nokia-UI API, it belongs to the &quot;nokia-ui&quot; group. 
+The name of the group is defined by the &lt;symbol&gt; element of the API in the file apis.xml.
+</p>
+<h3 id="bitsperpixelgroups">BitsPerPixel-Groups</h3>
+<p>
+Every device display has a specific color depth which is specified by the BitsPerPixel-capability of that device in the devices.xml file. Depending on how many bits per pixel are supported, the device belongs to different groups:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>BitsPerPixel&nbsp;&nbsp;</th><th>Colors&nbsp;&nbsp;</th><th>Groups</th></tr>
+	<tr><td>1</td>
+ 	 <td>2<sup>1</sup>=2 (b/w)</td>
+	 <td>BitsPerPixel.1</td>
+	</tr>
+	<tr><td>4</td>
+ 	 <td>2<sup>4</sup>=16</td>
+	 <td>BitsPerPixel.4
+	 <br/>BitsPerPixel.4+</td>
+	</tr>
+	<tr><td>8</td>
+ 	 <td>2<sup>8</sup>=256</td>
+	 <td>BitsPerPixel.8
+<br/>BitsPerPixel.8+
+<br/>BitsPerPixel.4+</td>
+	</tr>
+	<tr><td>12</td>
+ 	 <td>2<sup>12</sup>=4.096</td>
+	 <td>BitsPerPixel.12
+<br/>BitsPerPixel.12+
+<br/>BitsPerPixel.8+
+<br/>BitsPerPixel.4+</td>
+	</tr>
+<tr><td>16</td>
+ 	 <td>2<sup>16</sup>=65.536</td>
+	 <td>BitsPerPixel.16
+<br/>BitsPerPixel.16+
+<br/>BitsPerPixel.12+
+<br/>BitsPerPixel.8+
+<br/>BitsPerPixel.4+</td>
+	</tr>
+<tr><td>18</td>
+ 	 <td>2<sup>18</sup>=262.144</td>
+	 <td>BitsPerPixel.18
+<br/>BitsPerPixel.18+
+<br/>BitsPerPixel.16+
+<br/>BitsPerPixel.12+
+<br/>BitsPerPixel.8+
+<br/>BitsPerPixel.4+</td>
+	</tr>
+	<tr><td>24</td>
+ 	 <td>2<sup>24</sup>=16.777.216</td>
+	 <td>BitsPerPixel.24
+<br/>BitsPerPixel.24+
+<br/>BitsPerPixel.16+
+<br/>BitsPerPixel.12+
+<br/>BitsPerPixel.8+
+<br/>BitsPerPixel.4+</td>
+	</tr>
+	</table>
+<p>
+So you can put images for phones with at least 16 colors into the &quot;resources/BitsPerPixel.4+&quot; folder. And you can specify settings for true color devices in the file &quot;resources/BitsPerPixel.24/polish.css&quot;.
+</p>
+<%include end.txt %>

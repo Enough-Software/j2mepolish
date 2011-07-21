@@ -1,0 +1,355 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Beta 1.2 pre3 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.2 pre 3</h1>
+	<%index %>
+	<h2 id="improvements12">Improvements of J2ME Polish 1.2 preview 3</h2>
+	<p>
+	J2ME Polish 1.2 preview 3 contains several bugfixes and improvements compared to the last release:
+	</p>
+<ul>
+	<li><b>Resource Assembling</b>:
+	The <a href="../docs/build-build.html#resources">&lt;resources&gt; element</a> (a subelement of &lt;build&gt;) can now be 
+	used to finetune the automatic resource assembling:
+<pre>
+&lt;resources
+	dir=&quot;resources&quot; 
+	defaultexcludes=&quot;yes&quot;
+	excludes=&quot;*.db&quot;
+ &gt;
+	 &lt;fileset 
+		dir=&quot;resources/multimedia&quot; 
+		includes=&quot;*.mp3&quot; 
+		if=&quot;polish.audio.mp3&quot; 
+	 /&gt;
+	 &lt;fileset 
+		dir=&quot;resources/multimedia&quot; 
+		includes=&quot;*.mid&quot; 
+		if=&quot;polish.audio.midi and !polish.audio.mp3&quot; 
+	 /&gt;
+&lt;/resources&gt;	
+</pre>
+	Each embedded &lt;fileset&gt; can be selected using the standard
+	&quot;if&quot; and &quot;unless&quot;-attributes. In the above examble 
+	MIDI soundfiles are only included when the device supports MIDI but no
+	MP3s. Instead of using the first fileset all MP3 files could be put into the
+	&quot;resources/mp3&quot;-folder as well, by the way.
+	<hr />
+	</li>
+	<li><b>Localization</b>:
+	J2ME Polish now offers a full internationalization framework, with the
+	fastest performance and widest localization support possible. Most
+	localizations are actually embedded in the source-code, so there is absolutely
+	no performance setback. You can also use localized resources, attributes
+	and - obviously - messages.
+	This is explained at the <a href="../docs/localization.html">localization tutorial</a>.
+	The included sample application is now localized for English and German.
+	<hr />
+	</li>
+	<li><b>Emulator</b>: 
+	J2ME Polish can now run emulators as well. These are configured 
+	with the <a href="../docs/build-emulator.html">&lt;emulator&gt; element</a>, which is a direct subelement of the &lt;j2mepolish&gt; task.
+	So far only emulators based on the Wirless Toolkit are supported.
+<pre>
+&lt;emulator
+	wait=&quot;true&quot;
+	trace=&quot;class&quot;
+	preferences=&quot;myemulator.properties&quot;
+	securityDomain=&quot;trusted&quot;
+	enableProfiler=&quot;true&quot;
+	enableMemoryMonitor=&quot;true&quot;
+	enableNetworkMonitor=&quot;true&quot;
+	&gt;
+	&lt;parameter name=&quot;-Xjam&quot; value=&quot;transient=http://localhost:8080/${polish.jadName}&quot; /&gt;
+&lt;/emulator&gt;
+</pre>
+	<hr />
+	</li>
+	<li><b>Obfuscator</b>: 
+	J2ME Polish now includes the latest ProGuard-version (3.0.7).
+	ProGuard 2.0 can still be used, J2ME Polish contains both the stable
+	2.1 release as well as the current 3.0.7 release. When the 2.1 release should
+	be used, just adjust the classpath of the J2ME Polish task in the 
+	&quot;build.xml&quot;, so that it contains the proguard2.jar:
+<pre>
+&lt;taskdef name=&quot;j2mepolish&quot; 
+	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+	classpath=&quot;${polish.home}/import/enough-j2mepolish-build.jar:
+	   ${polish.home}/import/jdom.jar:
+	   ${polish.home}/import/<b>proguard2.jar</b>&quot;/&gt;
+</pre>	
+	<hr />
+	</li>
+	<li><b>Compilation</b>: 
+	<ul>
+		<li><i>javacTarget</i>:
+		The &lt;build&gt; element now supports the &quot;javacTarget&quot;-attribute for setting the
+		compiler-target. By default the &quot;1.2&quot; target is used, unless a WTK 1.x or Mac OS X is used, in which case the target &quot;1.1&quot; is used.
+		Prior versions of J2ME Polish always used the &quot;1.1&quot; target.
+<pre>
+&lt;build
+	...
+	javacTarget=&quot;1.1&quot;
+	&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>compilerMode</i>: 
+		When the compiler-mode is activated, J2ME Polish will not
+		package the application and only process one device. 
+		This mode is useful for IDEs which
+		support indirect compilation like NetBeans for example.
+		You can select &quot;Run&quot; in NetBeans and NetBeans
+		uses J2ME Polish as compiler, packages the application
+		and starts the emulator - this saves valuable time
+		during the development phase.
+		<br />
+		The &quot;compilerDestDir&quot;-attribute defines where the compiled
+		(and obfuscated) classes should be stored. The default target directory
+		is &quot;bin/classes&quot;.
+<pre>
+&lt;build
+	...
+	compilerMode=&quot;true&quot;
+	compilerDestDir=&quot;classes&quot;
+	&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>Compile Errors</i>:
+		Compile errors do now point to the original sources
+		instead of pointing to the preprocessed files.
+		Within an IDE just click on the error-message to edit
+		the faulty source code.
+		<hr />
+		</li>
+		<li><i>Debug Information</i>:
+		Full Debug Information is now added to the classes,
+		when the &lt;debug&gt; element is activated.
+		</li>
+	</ul>
+	<hr />
+	</li>
+	<li><b>Preprocessing</b>: 
+	When preprocessing variables are used, functions can be used to transform
+	the values, e.g.
+<pre>
+//#= long heapSize = ${ bytes( polish.HeapSize ) };
+</pre>
+	Following functions can be used:
+	<ul>
+		<li><i>bytes</i>: retrieves the (long) number of bytes of the given memory value.</li>
+		<li><i>kilobytes</i>: retrieves the (double) number of kilobytes of the given memory value.</li>
+		<li><i>megabytes</i>: retrieves the (double) number of megabytes of the given memory value.</li>
+		<li><i>gigabytes</i>: retrieves the (double) number of gigabytes of the given memory value.</li>
+		<li><i>uppercase</i>: retrieves the uppercase value.</li>
+		<li><i>lowercase</i>: retrieves the lowercase value.</li>
+	</ul>
+	Functions are also handy for comparing values, e.g.:
+<pre>
+//#if ${ bytes( polish.HeapSize ) } >= ${ bytes( 100kb ) }
+	// heapsize is greater than 100 kb!
+//#endif
+</pre>
+
+	<hr />
+	</li>
+	<li><b>CLDC/1.1 Support</b>: 
+	J2ME Polish now contains an API for CLDC/1.1 devices.
+	<hr />
+	</li>
+	<li><b>Device Database</b>: 
+	Updated and added device definitions. 
+	<hr />
+	</li>
+	<li><b>JAD &amp; MANIFEST Attributes</b>: 
+	<ul>
+		<li><i>target-Attribute</i>: 
+	All user-defined attributes are now added to both the
+	manifest as well as the JAD file by default. This behaviour
+	can be changed by setting the &quot;target&quot;-attribute
+	of the &lt;attribute&gt; element:
+<pre>
+&lt;attribute name=&quot;UDP-Server-Port&quot; value=&quot;5000&quot; target=&quot;jad&quot; /&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>Loading Attribute from a File</i>: 
+		Attributes can now be loaded from a file as well:
+<pre>
+&lt;attribute file=&quot;nokia.jad&quot; if=&quot;polish.vendor == Nokia&quot; /&gt;
+</pre>
+		In the file attribute-names and -values need to be separated
+		with a colon (&quot;:&quot;). Empty lines and lines starting
+		with &quot;#&quot; are ignored.
+		</li>
+		<li><i>Using Variables Within Attributes</i>: 
+		Attributes-values can now make use of any defined variables as well, e.g.:
+<pre>
+&lt;attribute 
+	name=&quot;MyApp-HomeUrl&quot; 
+	value=&quot;www.company.com/myapp/${polish.language}&quot; /&gt;
+&lt;attribute 
+	name=&quot;MIDlet-DataSize&quot; 
+	value=&quot;${ bytes(polish.DataSize) }&quot; 
+	if=&quot;polish.DataSize:defined&quot; /&gt;
+</pre>		
+		This also applies to attributes defined in the &lt;info&gt; section.
+		</li>
+	</ul>
+	<hr />
+	</li>
+	<li><b>Variables and Parameters</b>: 
+		Any variables and parameters can now be loaded from a file as well:
+<pre>
+&lt;variable file=&quot;nokia.properties&quot; if=&quot;polish.vendor == Nokia&quot; /&gt;
+</pre>
+		In the file variable-names and -values need to be separated
+		with an equals-sign (&quot;=&quot;). Empty lines and lines starting
+		with &quot;#&quot; are ignored.
+		<hr />
+	</li>
+	
+	<li><b>GUI</b>:
+		The DateField now supports the French format of DD/MM/YYYY as well along
+		with the ISO, German and US standard.
+		The preprocessing-variable &quot;polish.DateFormat&quot; is used to control
+		the format, e.g. 
+<pre>
+&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;fr&quot;/&gt;
+</pre>
+		<hr />
+		<br />
+		The DateFormat also supports the new generic values &quot;dmy&quot; (day-month-year), 
+		&quot;mdy&quot; (month-day-year) or &quot;ymd&quot; (year-month-day).
+		Along with the polish.DateFormatSeparator-variable and the
+		polish.DateFormatEmptyText-variable one can use any custom dateformat:
+<pre>
+&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;ymd&quot;/&gt;
+&lt;variable name=&quot;polish.DateFormatSeparator&quot; value=&quot;/&quot;/&gt;
+&lt;variable name=&quot;polish.DateFormatEmptyText&quot; value=&quot;Select Date&quot;/&gt;
+</pre>
+	<hr />
+	</li>
+	<li><b>Device Selection</b>: 
+	The new &quot;JavaConfiguration&quot;-requirement eases the selection of devices
+	by their configuration:
+<pre>
+&lt;requirement name=&quot;JavaConfiguration&quot; value=&quot;CLDC/1.1+&quot; /&gt;
+</pre>
+	<hr/>
+	</li>
+	<li><b>Preprocessing</b>: 
+	<ul>
+		<li><i>Preprocessing-Functions</i>: 
+	Properties can now be converted using the functions &quot;bytes&quot;, 
+	&quot;kilobytes&quot;, &quot;megabytes&quot; and &quot;gigabytes&quot;:
+<pre>
+//#= long heapSize = ${ bytes( polish.HeapSize ) };
+</pre>
+		<hr /></li>
+		<li><i>If-Directives</i>: 
+		In //#if-directives the boolean operators &quot;and&quot;, &quot;or&quot; as well
+		as &quot;not&quot; can be used instead of the symbols 
+		&quot;&amp;&amp;&quot;, &quot;||&quot; and &quot;!&quot;.
+		</li>
+	</ul>
+	<hr/>
+	</li>	
+	<li><b>Bugs</b>: 
+	<ul>	
+	<li><i>Obfuscator</i>: 
+	The &lt;keep&gt; elements were ignored in the 1.1.1 release, this is fixed
+	in the current release.
+	<hr /></li>
+	<li><i>J2SE 1.5 Support</i>: 
+	The J2ME Polish-task could not be used in conjunction with the
+	J2SE 1.5 compiler, because the source-compatibility was not set
+	correctly and the javac-target was always &quot;1.1&quot;.
+	Now the source-compatibility is always set and the javac-target can be changed.
+	<hr /></li>
+	<li><i>Device-Selection</i>: 
+	When a device was selected by its identifier, other devices
+	with the similar name were selected as well (e.g. Nokia/7250 and Nokia/7250i).
+	<hr />
+	The &quot;HeapSize&quot;-requirement was not working correctly, it was
+	unable to select any devices.
+	<hr />
+	</li>
+	<li><i>Using Identifier in #if-directive</i>: 
+	Identifiers could not be compared in #if-preprocesing directives directly.
+	This is now fixed:
+<pre>
+//#if polish.Identifier == Nokia/N95 
+</pre>
+	<hr />
+	</li>
+	<li><i>Setting of Select-Text</i>: 
+	The "polish.command.select" variable was ignored, now it
+	sets the label of select-commands as expected.
+	<hr />
+	</li>
+	<li><i>Detection of Ticker</i>: 
+	The J2ME Polish GUI did not always detect all setTicker(Ticker) and getTicker()
+	method calls, which resulted in a compile error. This is now fixed.
+	</li>
+	
+	</ul>
+	<hr/>
+	<li><b>Thanks</b>: 
+	Thanks for this release goes to Thomas Broyer for the improvements 
+	of the DateField class and new preprocessing directives, 
+	Jan Peknik for suggesting the
+	compiler-mode, attributes-loading and &quot;bending&quot; of compiler-messages
+	(as well as explaining how this can be done),
+	Achim Arrasz for suggesting the inclusion of debug-information during
+	compilation, Kostas Kakoulis for bug reports,
+	 Jozart for starting the &quot;javac-target&quot;-discussion as well as 
+	 providing excellent background information,
+	Sebastian Szczygiel for improvements of the device database,
+	And thanks to all you users of J2ME Polish!
+	<hr/>
+	</li>
+</ul>
+
+<h2 id="update">Update</h2>
+	<p>When you are updating J2ME Polish from 1.1 or earlier, please have a look at the 
+	included build.xml. A new Ant-property &quot;polish.home&quot; now eases
+	the integration of J2ME Polish into your projects.
+	</p>
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license need to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		THIS IS BETA SOFTWARE! PLEASE REPORT ANY
+		PROBLEMS YOU ENCOUNTER TO J2MEPOLISH@ENOUGH.DE!
+	</p><p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.2-pre3.jar">I accept the above rules (download the full installer).</a><br/>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.2-pre3.zip">I accept the above rules (download only the update).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a>
+	</p>
+
+	<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 5.263.427 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package.
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_05)</a>. 
+	This update is officially recommended for security
+	reasons as well.
+	</p>	
+
+<%include end.txt %>

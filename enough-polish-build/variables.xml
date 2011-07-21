@@ -1,0 +1,2476 @@
+<variables>
+	<variable 
+		name="polish.Animation.MaxIdleTime"
+		type="time"
+		description="Interval in milliseconds until animations are stopped when there is no activity. This defaults to 3 minutes."
+		default="5400000"
+		appliesTo="AnimationThread"
+	/>
+	<variable 
+		name="polish.BlackBerry.enableBackLight"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.DeviceControl"
+	/>
+	<variable 
+		name="polish.BlackBerry.enablePlatformRequest"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.midlet.MIDlet"
+	/>
+	<variable 
+		name="polish.BlackBerry.mapSpaceToFire"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.BlackBerry.platformRequest"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.midlet.MIDlet"
+	/>
+	<variable 
+		name="polish.BlackBerry.useStandardMenuBar"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.Browser.Gzip"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.browser.Browser"
+	/>
+	<variable 
+		name="polish.Browser.MaxRedirects"
+		type="integer"
+		description="Maximum number of supported redirections before giving up."
+		default="5"
+		appliesTo="de.enough.polish.io.RedirectHttpConnection"
+	/>
+	<variable 
+		name="polish.Browser.MemorySaver"
+		type="boolean"
+		description="Enables that a certain memory remains free at any time during loading of webpages."
+		default="false"
+		appliesTo="de.enough.polish.browser.Browser"
+	/>
+	<variable 
+		name="polish.Browser.MemorySaver.Amount"
+		type="integer"
+		description="The amount of memory which should be kept free at any stage during loading of webpages. This defaults to 50kb."
+		default="51200"
+		condition="polish.Browser.MemorySaver=true"
+		appliesTo="de.enough.polish.browser.Browser"
+	/>
+	<variable 
+		name="polish.Browser.PaintDownloadIndicator"
+		type="boolean"
+		description="Draws an indicator while the browser is downloading a page."
+		default="false"
+		appliesTo="de.enough.polish.browser.Browser"
+	/>
+	<variable 
+		name="polish.Browser.UserAgent"
+		type="string"
+		description="The user agent that should be used."
+		default="J2ME-Polish/ + System.getProperty(microedition.platform)"
+		appliesTo="de.enough.polish.browser.protocols.HttpBluetoothProtocolHandler, de.enough.polish.browser.protocols.HttpProtocolHandler"
+	/>
+	<variable 
+		name="polish.BuildLibrary"
+		type="boolean"
+		description=""
+		default="false"
+		appliesTo="Screen"
+		invisible="true"
+	/>
+	<variable 
+		name="polish.CalendarItem.FirstDayOfWeek"
+		type="enum"
+		description="The first day of the week."
+		values="Sunday, Monday"
+		default="Monday"
+		appliesTo="de.enough.polish.calendar.CalendarItem"
+	/>
+	<variable 
+		name="polish.ChoiceGroup.handleDefaultCommandFirst"
+		type="boolean"
+		description="Triggers the default command of a ChoiceGroup instead of changing the selected state of that choice."
+		default="false"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem"
+	/>
+	<variable 
+		name="polish.ChoiceGroup.suppressMarkCommands"
+		type="boolean"
+		description="Deactivates the Mark and Unmark commands that are added by default for a multiple ChoiceGroup."
+		default="false"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem, FilteredList"
+	/>
+	<variable 
+		name="polish.ChoiceGroup.suppressSelectCommand"
+		type="boolean"
+		description="Deactivates the Select command for a implicit or exclusive ChoiceGroup."
+		default="false"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem, FilteredList"
+	/>
+	<variable 
+		name="polish.CommandItem.showCommand"
+		type="boolean"
+		description=""
+		default=""
+		condition=""
+		appliesTo="CommandItem"
+	/>
+	<variable 
+		name="polish.Container.ScrollDelta"
+		type="integer"
+		description="The difference that the Container contents should be scrolled when there is no selectable element below/above the currently focused one. This defaults to half of the available scrolling height."
+		appliesTo="FakeContainerCustomItem, Container"
+	/>
+	<variable 
+		name="polish.Container.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="FakeContainerCustomItem, Container"
+	/>
+	<variable 
+		name="polish.Container.allowCycling"
+		type="boolean"
+		description="Allows the user to traverse to the first item when being at the last one and going downwards (or to the last item when being at the first item and going upwards)."
+		default="true"
+		appliesTo="MIDP2LayoutView, CommandItem, FakeContainerCustomItem, MenuBar, FramedForm, ChoiceTextField, UiAccess, ContainerView, TabbedForm, RelativeLayoutView, Container"
+	/>
+	<variable 
+		name="polish.Container.clearResetsFocus"
+		type="boolean"
+		description="When a Container is emptied, its auto-focus index will be reset to 0 by default. Use this variable to keep the auto-focus index at the currently selected one."
+		default="true"
+		appliesTo="FakeContainerCustomItem, Container"
+	/>
+	<variable 
+		name="polish.Container.dontUseNumberKeys"
+		type="boolean"
+		description="By default the user can select entries within a ChoiceGroup by pressing the corresponding number (e.g. '3' for selecting the third entry)."
+		default="false"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem"
+	/>
+	<variable 
+		name="polish.Container.notifyFocusChange"
+		type="boolean"
+		description="You can activate ItemStateChangeListener updates when the user traverses to a different item within a Container."
+		default="false"
+		appliesTo="Container"
+	/>
+	<variable 
+		name="polish.DateField.useDirectInput"
+		type="boolean"
+		description="You can activate the direct input mode for DateFields. By default a native Form with an embedded native DateField will be used."
+		default="false"
+		appliesTo="DateField"
+	/>
+	<variable 
+		name="polish.DateField.useDirectInputForPointer"
+		type="boolean"
+		description=""
+		default="false"
+		condition=""
+		appliesTo="DateField"
+	/>
+	<variable 
+		name="polish.DateFormat"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Locale, DateField"
+	/>
+	<variable 
+		name="polish.DateFormatEmptyText"
+		type="translation"
+		default="YYYY-MM-DD"
+		appliesTo="DateField"
+	/>
+	<variable 
+		name="polish.DateFormatSeparator"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Locale, DateField"
+	/>
+	<variable 
+		name="polish.Debug.showLastMessageFirst"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Debug"
+	/>
+	<variable 
+		name="polish.Display.baseclass"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.Display.idleEvent"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.Display.idleEvent.interval"
+		type="time"
+		description="Interval in milliseconds for."
+		default=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.Display.supportLayers"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas, Display"
+	/>
+	<variable 
+		name="polish.FishEye.scaleHq"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="FishEyeContainerView"
+	/>
+	<variable 
+		name="polish.FramedForm.allowCycling"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="FramedForm, UiAccess"
+	/>
+	<variable 
+		name="polish.FullCanvasHeight"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="InitializerMovieScreen, GameCanvas, InitializerSplashScreen, Display"
+	/>
+	<variable 
+		name="polish.FullCanvasSize"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="InitializerMovieScreen, GameCanvas, InitializerSplashScreen, Display"
+	/>
+	<variable 
+		name="polish.FullCanvasWidth"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="InitializerMovieScreen, GameCanvas, InitializerSplashScreen, Display"
+	/>
+	<variable 
+		name="polish.GameCanvas.useFullScreen"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="GameCanvas"
+	/>
+	<variable 
+		name="polish.GradientText.ClearColor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="VerticalGradientTextEffect"
+	/>
+	<variable 
+		name="polish.IconItem.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="FakeIconCustomItem, IconItem"
+	/>
+	<variable 
+		name="polish.ImageItem.allowUserInteraction"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ImageItem"
+	/>
+	<variable 
+		name="polish.Item.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="Item"
+	/>
+	<variable 
+		name="polish.JavaPlatform"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.PolishDateField, de.enough.polish.blackberry.ui.PolishEditField, de.enough.polish.blackberry.ui.BackgroundWrapper, de.enough.polish.blackberry.ui.PolishPasswordEditField, de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.JavaSE"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.calendar.CalendarTimeZone, de.enough.polish.io.Serializer, de.enough.polish.io.RecordingDataInputStream"
+	/>
+	<variable 
+		name="polish.Key.ReturnKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="ChoiceTextField"
+	/>
+	<variable 
+		name="polish.LibraryBuild"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TreeItem, de.enough.polish.blackberry.ui.NativeDisplayImpl, Style, Screen, de.enough.polish.doja.ui.Display, Item, TextEffect, de.enough.polish.browser.Browser, IconCustomItem, TableItem, PictureBrowserItem, ScreenInfo, de.enough.polish.util.sensor.AccelationInfoItem, de.enough.polish.browser.html.HtmlTagHandler, FakeStringCustomItem, FakeTextFieldCustomItem, Form, de.enough.polish.util.Debug, de.enough.polish.browser.rss.RssBrowser, UiAccess, FakeIconCustomItem, TabbedForm, TabbedPane, StyleCache, Canvas, FilteredChoiceGroup, TextField, de.enough.polish.event.AsynchronousMultipleCommandListener, StyleSheet, FakeContainerCustomItem, SnapshotScreen, PieChartView, FramedForm, ClockItem, Container, MessageItem, ChartItem, de.enough.polish.util.Locale, InitializerSplashScreen, VerticalBarChartView, ChoiceTextField, FakeCustomItem, Display, ListItem, AnimationThread"
+	/>
+	<variable 
+		name="polish.List.suppressCommands"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="List"
+	/>
+	<variable 
+		name="polish.List.suppressMarkCommands"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="List"
+	/>
+	<variable 
+		name="polish.List.suppressSelectCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="List"
+	/>
+	<variable 
+		name="polish.Locale.imports"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="de.enough.polish.util.Locale"
+	/>
+	<variable 
+		name="polish.Locale.initializeMethod"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Locale"
+		invisible="true"
+	/>
+	<variable 
+		name="polish.Map.dropInterface"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.OAIdentityHashMap, de.enough.polish.util.IdentityHashMap, de.enough.polish.util.HashMap, de.enough.polish.util.OAHashMap"
+	/>
+	<variable 
+		name="polish.MenuBar.MarginBottom"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.MarginLeft"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.MarginRight"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.MarginTop"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.NumberOfSoftKeys"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.OkPosition"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.OptionsPosition"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.PaddingBottom"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.PaddingLeft"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.PaddingRight"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.PaddingTop"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.MenuBar.Position"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.rebuild"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.useCenterCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.MenuBar.useExtendedMenuBar"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, FakeTextFieldCustomItem, TabbedPane"
+	/>
+	<variable 
+		name="polish.MenuBar.useMiddleCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.MirrorShadowText.ClearColor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="VerticalMirrorTextEffect"
+	/>
+	<variable 
+		name="polish.RemoteBluetoothScreen"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.Screen.FireTriggersOkCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.ManualOrientationChange"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.Screen.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.base"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, TabbedPane"
+	/>
+	<variable 
+		name="polish.Screen.callSuperEvents"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.imports"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.initCode"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.releaseInterval"
+		type="time"
+		description="Interval in milliseconds for."
+		default=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.showNotifyCode"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Screen.showScreenChangeAnimationOnlyForScreen"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.ScreenChangeAnimation.back"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.ScreenChangeAnimation.backward"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.ScreenChangeAnimation.blankColor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ScreenChangeAnimation"
+	/>
+	<variable 
+		name="polish.ScreenChangeAnimation.forward"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, Display"
+	/>
+	<variable 
+		name="polish.ScreenHeight"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.Graphics"
+	/>
+	<variable 
+		name="polish.ScreenInfo.enable"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.ScreenOrientationCanChange"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.ScreenSize"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.Graphics"
+	/>
+	<variable 
+		name="polish.ScreenWidth"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="MessageItem, de.enough.polish.blackberry.ui.Graphics, Screen"
+	/>
+	<variable 
+		name="polish.Style.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="Style"
+	/>
+	<variable 
+		name="polish.StyleCache.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="StyleCache"
+	/>
+	<variable 
+		name="polish.StyleSheet.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="StyleSheet"
+	/>
+	<variable 
+		name="polish.StyleSheet.releaseResources"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="StyleSheet"
+	/>
+	<variable 
+		name="polish.TabbedForm.allowTabSelection"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TabbedForm"
+	/>
+	<variable 
+		name="polish.TabbedForm.releaseResourcesOnTabChange"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TabbedForm"
+	/>
+	<variable 
+		name="polish.TextField.InputTimeout"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.Symbols"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.activateUneditableWithFire"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.additionalMethods"
+		type="source"
+		description="Path to sources."
+		invisible="true"
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.allowNativeModeSwitch"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey0"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey1"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey2"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey3"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey4"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey5"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey6"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey7"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey8"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKey9"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKeyPound"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.charactersKeyStar"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.help"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.includeInputInfo"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.jumpToStartOnFocus"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.0"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.1"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.2"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.3"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.4"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.5"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.6"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.7"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.8"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.numerickeys.9"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.TextField.predictive.showCommands"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.TextField.showHelpText"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, UiAccess"
+	/>
+	<variable 
+		name="polish.TextField.showInputInfo"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.supportSymbolsEntry"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.suppressAddSymbolCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.suppressAutoInputModeChange"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.suppressClearCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.suppressCommands"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.suppressDeleteCommand"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.TextField.useDirectInput"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.predictive.array.ArrayReader, de.enough.polish.predictive.trie.TrieTextBuilder, de.enough.polish.predictive.trie.TrieNode, TextField, PredictiveAccess, de.enough.polish.predictive.array.ArrayTextBuilder, de.enough.polish.predictive.TextBuilder, de.enough.polish.predictive.trie.TrieSetup, de.enough.polish.predictive.trie.TrieOrder, de.enough.polish.predictive.trie.TrieReader, de.enough.polish.predictive.trie.TrieRecord, de.enough.polish.predictive.trie.TrieTextElement, de.enough.polish.predictive.trie.TrieCustom, de.enough.polish.predictive.trie.TrieUtils, de.enough.polish.predictive.PredictiveReader, FakeTextFieldCustomItem, UiAccess, de.enough.polish.predictive.array.ArrayTextElement, de.enough.polish.predictive.trie.TrieProvider, de.enough.polish.predictive.TextElement"
+	/>
+	<variable 
+		name="polish.TextField.useDynamicCharset"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField"
+	/>
+	<variable 
+		name="polish.TextField.useExternalInfo"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem, UiAccess"
+	/>
+	<variable 
+		name="polish.TextField.usePredictiveInput"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.Ticker.Position"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.TiledLayer.GridType"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TiledLayer"
+	/>
+	<variable 
+		name="polish.TiledLayer.TransparentTileColor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TiledLayer"
+	/>
+	<variable 
+		name="polish.TiledLayer.splitImage"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TiledLayer"
+	/>
+	<variable 
+		name="polish.TiledLayer.useBackBuffer"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TiledLayer"
+	/>
+	<variable 
+		name="polish.Vendor.Motorola"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.Vendor.Siemens"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.allowImageCaching"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="StyleSheet"
+	/>
+	<variable 
+		name="polish.android.font.LargeFactor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.android.lcdui.Font"
+	/>
+	<variable 
+		name="polish.android.font.MediumFactor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.android.lcdui.Font"
+	/>
+	<variable 
+		name="polish.android.font.SmallFactor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.android.lcdui.Font"
+	/>
+	<variable 
+		name="polish.animationInterval"
+		type="time"
+		description="Interval in milliseconds for."
+		default=""
+		appliesTo="AnimationThread"
+	/>
+	<variable 
+		name="polish.animationMinimumInterval"
+		type="time"
+		description="Interval in milliseconds for."
+		default=""
+		appliesTo="AnimationThread"
+	/>
+	<variable 
+		name="polish.blackberry"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.AccessibleField, de.enough.polish.blackberry.ui.NativeDisplayImpl, Screen, Item, DateField, de.enough.polish.util.DeviceControl, de.enough.polish.video.VideoContainer, CommandItem, FadeScreenChangeAnimation, de.enough.polish.blackberry.ui.BackgroundWrapper, FakeTextFieldCustomItem, TranslucentSimpleBackground, TabbedForm, FilteredList, Gauge, DropShadowRoundRectBorder, TextField, GameCanvas, FakeContainerCustomItem, MenuBar, ContainerView, Container, TranslucentRoundRectBackground, de.enough.polish.util.DrawUtil, ChoiceTextField, FakeCustomItem, Display"
+	/>
+	<variable 
+		name="polish.blackberry.keyUpCalledOnKeyRelease"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.bugs.inversedGameActions"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.build.classes.NativeDisplay"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.build.classes.fullscreen"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Screen, Display, TabbedPane"
+	/>
+	<variable 
+		name="polish.build.classes.screen"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.classes.ApplicationInitializer"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="InitializerMovieScreen, InitializerSplashScreen"
+	/>
+	<variable 
+		name="polish.classes.BitMapFont.resourceLoader"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.BitMapFont"
+	/>
+	<variable 
+		name="polish.classes.ImageLoader"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="ImageTask, StyleSheet"
+	/>
+	<variable 
+		name="polish.classes.MenuBar"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Screen, TabbedPane"
+	/>
+	<variable 
+		name="polish.classes.ScrollBar"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Screen, FakeContainerCustomItem, Container"
+	/>
+	<variable 
+		name="polish.classes.SplashView"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="InitializerSplashScreen"
+	/>
+	<variable 
+		name="polish.classes.TabBar"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="TabbedForm"
+	/>
+	<variable 
+		name="polish.classes.fullscreen"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="InitializerMovieScreen, Screen, GameCanvas, InitializerSplashScreen, Display, TabbedPane"
+	/>
+	<variable 
+		name="polish.classes.midlet-1"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.midlet.MIDlet, de.enough.polish.doja.midlet.MIDlet"
+	/>
+	<variable 
+		name="polish.classes.title"
+		type="class"
+		description="Fully qualified name of class."
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.color.overlay"
+		type="color"
+		description="Color defined in the colors section of polish.css."
+		default=""
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.command.back"
+		type="translation"
+		default="Back"
+		appliesTo="de.enough.polish.browser.html.HtmlTagHandler"
+	/>
+	<variable 
+		name="polish.command.cancel"
+		type="translation"
+		default="Cancel"
+		appliesTo="Screen, StyleSheet, MenuBar"
+	/>
+	<variable 
+		name="polish.command.clear"
+		type="translation"
+		default="Clear"
+		appliesTo="TextField, FakeTextFieldCustomItem, DateField"
+	/>
+	<variable 
+		name="polish.command.clear.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.delete"
+		type="translation"
+		default="Delete"
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.delete.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.entersymbol"
+		type="translation"
+		default="Add Symbol"
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.entersymbol.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.followlink"
+		type="translation"
+		default="Go"
+		appliesTo="de.enough.polish.browser.html.HtmlTagHandler"
+	/>
+	<variable 
+		name="polish.command.hide"
+		type="translation"
+		default="Hide"
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.command.mark"
+		type="translation"
+		default="Mark"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem"
+	/>
+	<variable 
+		name="polish.command.ok"
+		type="translation"
+		default="OK"
+		appliesTo="StyleSheet, Alert"
+	/>
+	<variable 
+		name="polish.command.options"
+		type="translation"
+		default="Options"
+		appliesTo="Screen, MenuBar"
+	/>
+	<variable 
+		name="polish.command.select"
+		type="translation"
+		default="Select"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem, Screen, List, MenuBar"
+	/>
+	<variable 
+		name="polish.command.submit"
+		type="translation"
+		default="Submit"
+		appliesTo="de.enough.polish.browser.html.HtmlTagHandler"
+	/>
+	<variable 
+		name="polish.command.switch_keyboard"
+		type="translation"
+		default="Switch keyboard"
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.switch_keyboard.priority"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.command.unmark"
+		type="translation"
+		default="Unmark"
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem"
+	/>
+	<variable 
+		name="polish.doja"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, GameCanvas, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.dtmf.separator"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.browser.protocols.TelProtocolHandler"
+	/>
+	<variable 
+		name="polish.enableSmileySupport"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.executeCommandsAsynchrone"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.group.series40"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="SnapshotScreen"
+	/>
+	<variable 
+		name="polish.group.series60e3"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="SnapshotScreen"
+	/>
+	<variable 
+		name="polish.handleEvents"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar, Item, TabbedPane"
+	/>
+	<variable 
+		name="polish.hasCommandKeyEvents"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen, TabbedPane"
+	/>
+	<variable 
+		name="polish.hasFloatingPoint"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.ImageUtil, RotateTextEffect, de.enough.polish.util.MathUtil, XmasSnowBackground, de.enough.polish.util.Arrays, RotateRgbEffect, de.enough.polish.io.xmlrpc.XmlRpcSerializer, de.enough.polish.io.Serializer, de.enough.polish.math.FP, de.enough.polish.io.RecordingDataInputStream, de.enough.polish.java5.Autobox"
+	/>
+	<variable 
+		name="polish.hasPointerEvents"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, TreeItem, Screen, TabbedList, ScrollBar, Item, TimeEntryItem, TableItem, TitleMenuBar, TabBar, DateField, CommandItem, FakeTextFieldCustomItem, UiAccess, TabbedPane, de.enough.polish.blackberry.ui.BaseScreen, Gauge, InitializerMovieScreen, RainScreenChangeAnimation, TextField, FakeChoiceGroupCustomItem, HorizontalChoiceView, de.enough.polish.calendar.CalendarItem, ImageItem, NewWaveScreenChangeAnimation, FakeContainerCustomItem, DancingPixelScreenChangeAnimation, MenuBar, FramedForm, HorizontalContainerView, CustomItem, Container, ItemView, InitializerSplashScreen, ChoiceTextField, FakeCustomItem, Display, ExclusiveSingleLineView, ScreenChangeAnimation"
+	/>
+	<variable 
+		name="polish.hasTrackBallEvents"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.hasTrackballEvents"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.PolishDateField, de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.hasVirtualKeyboard"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.i18n.loadResources"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="StyleSheet"
+	/>
+	<variable 
+		name="polish.i18n.rightToLeft"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, Ticker, FakeTextFieldCustomItem, FakeStringCustomItem, TextEffect, StringItem"
+	/>
+	<variable 
+		name="polish.i18n.useDynamicTranslations"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, TextField, FakeChoiceGroupCustomItem, Screen, List, StyleSheet, de.enough.polish.browser.rss.RssTagHandler, MenuBar, Alert, de.enough.polish.browser.protocols.HttpProtocolHandler, DateField, de.enough.polish.browser.protocols.HttpBluetoothProtocolHandler, de.enough.polish.util.Locale, de.enough.polish.browser.html.HtmlTagHandler, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.i18n.useExternalTranslations"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Locale"
+	/>
+	<variable 
+		name="polish.identifier.motorola/v3xx"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="SnapshotScreen"
+	/>
+	<variable 
+		name="polish.images.backgroundLoad"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ImageTask, ImageBackground, StyleSheet, ChoiceItem, TiledImageBackground, ImageQueue, FakeIconCustomItem, IconItem, Gauge"
+	/>
+	<variable 
+		name="polish.inSkinEditor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="StyleSheet"
+	/>
+	<variable 
+		name="polish.jadName"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.midlet.MIDlet, de.enough.polish.doja.midlet.MIDlet"
+	/>
+	<variable 
+		name="polish.java5"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.KeyValueList, de.enough.polish.util.ArrayList, de.enough.polish.util.Map, de.enough.polish.util.Iterator, de.enough.polish.java5.Enum, MenuBar, de.enough.polish.io.Storage, de.enough.polish.io.RmsStorage, de.enough.polish.util.HashMap, de.enough.polish.java5.Autobox"
+	/>
+	<variable 
+		name="polish.key.AddSymbolKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.AddSymbolKey2"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.CenterSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar, Display"
+	/>
+	<variable 
+		name="polish.key.ChangeInputModeKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.ChangeNumericalAlphaInputModeKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.ClearKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, Item, FakeTextFieldCustomItem, FakeCustomItem, de.enough.polish.android.lcdui.DisplayUtil, DateField"
+	/>
+	<variable 
+		name="polish.key.EnterKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.key.LeftSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem, Screen, Display, TabbedPane, de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.key.LeftSoftKeys"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.key.Menu"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, MenuBar, de.enough.polish.android.lcdui.DisplayUtil, de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.key.MiddleSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen, MenuBar, Display"
+	/>
+	<variable 
+		name="polish.key.ReturnKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, MenuBar, FakeTextFieldCustomItem, de.enough.polish.android.lcdui.DisplayUtil"
+	/>
+	<variable 
+		name="polish.key.RightSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen, Display, TabbedPane"
+	/>
+	<variable 
+		name="polish.key.RightSoftKeys"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.key.TopLeftSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.key.TopLeftSotkey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.key.TopRightSoftKey"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.key.backspace"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.enter"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.maybeSupportsAsciiKeyMap"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.shift"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, PredictiveAccess, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.supportsAsciiKeyMap"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.key.supportsAsciiKeyMap.condition"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="TextField, Screen, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.language"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.browser.protocols.HttpBluetoothProtocolHandler, de.enough.polish.browser.protocols.HttpProtocolHandler"
+	/>
+	<variable 
+		name="polish.license"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Display"
+	/>
+	<variable 
+		name="polish.locale"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Locale"
+	/>
+	<variable 
+		name="polish.log.display"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas, Display"
+	/>
+	<variable 
+		name="polish.log.display.background-color"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas"
+	/>
+	<variable 
+		name="polish.log.display.font-color"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas"
+	/>
+	<variable 
+		name="polish.log.display.max-entries"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas"
+	/>
+	<variable 
+		name="polish.log.display.shadow-color"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas"
+	/>
+	<variable 
+		name="polish.log.display.timeout"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.display.LogCanvas"
+	/>
+	<variable 
+		name="polish.log.file.fileName"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.file.FileLogHandler"
+	/>
+	<variable 
+		name="polish.log.file.flushEachEntry"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.file.FileLogHandler"
+	/>
+	<variable 
+		name="polish.log.file.preferredRoot"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.file.FileLogHandler"
+	/>
+	<variable 
+		name="polish.log.file.useUnqiueName"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.file.FileLogHandler"
+	/>
+	<variable 
+		name="polish.log.handlers"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Debug"
+	/>
+	<variable 
+		name="polish.log.http.server"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.log.http.HttpLogHandler"
+	/>
+	<variable 
+		name="polish.needsManualMenu"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, TabbedForm, TabbedPane"
+	/>
+	<variable 
+		name="polish.obfuscate"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.rmi.RemoteClient"
+	/>
+	<variable 
+		name="polish.predictive.command.addword.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.disable"
+		type="translation"
+		default="Disable Predictive Input"
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.disable.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.enable"
+		type="translation"
+		default="Enable Predictive Input"
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.enable.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.install"
+		type="translation"
+		default="Install Predictive Input"
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.command.install.priority"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.download.message"
+		type="translation"
+		default="The predictive dictionary  could not be found or has the wrong version. Press OK to exit the application and download the dictionary."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.download.title"
+		type="translation"
+		default="Predictive Text"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.globalSwitch"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.local.message"
+		type="translation"
+		default="The predictive dictionary has the wrong version or could not be found. Press OK to install the dictionary."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.noInfo"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.registerNewWord.command"
+		type="translation"
+		default="New Word"
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.registerNewWord.label"
+		type="translation"
+		default="New Word: "
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.predictive.setup.cancel"
+		type="translation"
+		default="Do you really want to cancel the installation ? This may result in unwanted effects."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.cmd.cancel"
+		type="translation"
+		default="Cancel"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.cmd.exit"
+		type="translation"
+		default="Exit"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.cmd.no"
+		type="translation"
+		default="No"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.cmd.yes"
+		type="translation"
+		default="Yes"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.error"
+		type="translation"
+		default="An error has occured:"
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.info"
+		type="translation"
+		default="Installing the dictionary used for predictive input. Please wait a moment ..."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.showCommands"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.status.delete"
+		type="translation"
+		default="Deleting previous installation ..."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.status.finished"
+		type="translation"
+		default="Finished, please press exit ..."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.setup.status.install"
+		type="translation"
+		default="Installing ..."
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.useLocalRMS"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.predictive.trie.TrieSetup"
+	/>
+	<variable 
+		name="polish.predictive.wordNotFound"
+		type="translation"
+		default="Word not found"
+		appliesTo="PredictiveAccess"
+	/>
+	<variable 
+		name="polish.rmi.redirects"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.rmi.RemoteClient, de.enough.polish.rmi.xmlrpc.XmlRpcRemoteClient"
+	/>
+	<variable 
+		name="polish.rmi.xmlrpc.methodname.dot"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.rmi.xmlrpc.XmlRpcRemoteClient"
+	/>
+	<variable 
+		name="polish.rss.command.followlink"
+		type="translation"
+		default="Go"
+		appliesTo="de.enough.polish.browser.rss.RssTagHandler"
+	/>
+	<variable 
+		name="polish.rss.command.select"
+		type="translation"
+		default="Show"
+		appliesTo="de.enough.polish.browser.rss.RssTagHandler"
+	/>
+	<variable 
+		name="polish.showLogOnError"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.Debug"
+	/>
+	<variable 
+		name="polish.skipArgumentCheck"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, LayerManager, FakeChoiceGroupCustomItem, List, Gauge, TiledLayer"
+	/>
+	<variable 
+		name="polish.skipTicker"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.sleepInterval"
+		type="time"
+		description="Interval in milliseconds for."
+		default=""
+		appliesTo="AnimationThread"
+	/>
+	<variable 
+		name="polish.softkey-vibrate"
+		type="key"
+		description="Key definition as integer value."
+		default=""
+		condition=""
+		appliesTo="MenuBar"
+	/>
+	<variable 
+		name="polish.supportInvisibleItems"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="FakeContainerCustomItem, Item, FakeCustomItem, UiAccess, Container"
+	/>
+	<variable 
+		name="polish.title.input"
+		type="translation"
+		default="Input"
+		appliesTo="TextField, FakeTextFieldCustomItem"
+	/>
+	<variable 
+		name="polish.useDefaultPackage"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.util.DrawUtil"
+	/>
+	<variable 
+		name="polish.useDynamicStyles"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, TreeItem, RgbImageItem, Screen, Ticker, List, TabbedList, ChoiceItem, Item, ScrollBar, Alert, TableItem, TabBar, Spacer, DateField, FakeTextFieldCustomItem, FakeStringCustomItem, Form, StringItem, TabbedForm, TabbedPane, FilteredList, Gauge, TextField, FakeChoiceGroupCustomItem, ImageItem, StyleSheet, GameCanvas, FakeContainerCustomItem, MenuBar, SnapshotScreen, CustomItem, ClockItem, Container, ChartItem, FakeCustomItem"
+	/>
+	<variable 
+		name="polish.useFullScreen"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, GameCanvas, Display, TabbedPane, de.enough.polish.blackberry.ui.BaseScreen"
+	/>
+	<variable 
+		name="polish.useMenuFullScreen"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, GameCanvas, TabbedForm, TabbedPane"
+	/>
+	<variable 
+		name="polish.usePopupItem"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem"
+	/>
+	<variable 
+		name="polish.useScrollBar"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen, FakeContainerCustomItem, MenuBar, Container"
+	/>
+	<variable 
+		name="polish.vendor"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="TextField, de.enough.polish.util.DrawUtil, TranslucentSimpleBackground"
+	/>
+	<variable 
+		name="polish.vendor.Generic"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="SnapshotScreen"
+	/>
+	<variable 
+		name="polish.vendor.Siemens"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.vendor.Sony-Ericsson"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="SnapshotScreen"
+	/>
+	<variable 
+		name="polish.vendor.siemens"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="Screen"
+	/>
+	<variable 
+		name="polish.verboseDebug"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="ChoiceGroup, FakeChoiceGroupCustomItem, Gauge"
+	/>
+	<variable 
+		name="polish.video.rotate"
+		type=""
+		description=""
+		values=""
+		default=""
+		condition=""
+		appliesTo="de.enough.polish.video.VideoContainer"
+	/>
+</variables>

@@ -1,0 +1,59 @@
+<!-- this is an example polish project definition -->
+<project>
+
+	<!-- general information about this project -->
+	<info>
+		<name>MyProject</name>
+		<description>A test project</description>
+		<info-url></info-url>
+		<!-- the icon for the specific device will be used -->
+		<icon>icon.png</icon>
+		<!-- since several jar files will usually be generated,
+		       the variable ${device-identifier} is included in the name -->
+		<jar-url>http://www.enough.de/midp/${device-identifier}-example.jar</jar-url>
+		<vendor-info>
+			<vendor-name>enough software</vendor-name>
+			<vendor-url>http://www.enough.de</vendor-url>
+			<vendor-description>Mobile Development Tools</vendor-description>
+	    </vendor-info>
+	    <authors>
+			<author name="Robert Virkus" email="robert@enough.de" />
+		</authors>
+	    <copyright>
+	        Copyright © 2004 enough software. All rights reserved.
+	    </copyright>
+	    <delete-confirm>Do you really want to kill me?</delete-confirm>
+	    <delete-notify>http://www.enough.de/killed?MyProject</delete-notify>
+	    <install-notify>http://www.enough.de/installed?MyProject</install-notify>
+    </info>
+    
+	<!-- definition of supported devices -->
+	<device-requirements>
+		<requirement name="ScreenSize" value="100+ x 100+" />
+		<requirement name="BitsPerPixel" value="4+" />
+		<requirement name="JavaPlatform" value="MIDP/1.0+" />
+		<requirement name="JavaPackage" value="nokia-ui, mmapi" />
+		<requirement name="JavaProtocol" value="https, socket" />
+		<requirement name="HeapSize" value="500+kb" />
+		<requirement name="Vendor" value="Nokia | SonyEricsson" />
+	</device-requirements>
+	
+	<!-- build settings -->
+	<build>
+		<midlets>
+			<midlet>de.enough.polish.example.ExampleMidlet</midlet>
+			<midlet number="2">de.enough.polish.example.GuiDemoMidlet</midlet>
+		</midlets>
+		<version>0.6</version>
+		<!-- images for widgets, backgrounds etc will be loaded in the background: -->
+		<image-load-strategy background="yes" />
+		<fullscreen enable="yes" menu="yes" />
+		<symbols>ExampleSymbol, AnotherExample</symbols>
+		<variables>
+			<variable name="update-url" value="http://www.enough.de/update" />
+		</variables>
+		<source>source/src</source>
+		<polish-source>/home/user/j2me/polish/source/src</polish-source>
+	</build>
+	
+</project>

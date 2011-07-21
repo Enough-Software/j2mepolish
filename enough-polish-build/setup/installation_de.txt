@@ -1,0 +1,66 @@
+J2ME Polish 1.0 RC6
+===================
+
+Installieren Sie J2ME Polish durch doppel-klicken der Datei oder 
+durch Eingabe des Befehls "java -jar j2mepolish-1.0-RC6.jar"
+von der Kommandozeile.
+
+Der Installer enthaelt u.a. die komplette Dokumentation und eine
+Beispiels-Applikation.
+
+Mehr Informationen sind online unter http://www.j2mepolish.org 
+verfuegbar.
+
+
+Was ist J2ME Polish?
+====================
+
+1. Build-Tool: 
+J2ME Polish uebernimmt das Preprocessen, Kompilieren, Jaren und 
+Erstellen der JAD-Dateien für J2ME Applikationen. Dabei hilft eine umfangreiche 
+Geraete-Datenbank.
+ 
+2. GUI: 
+J2ME Polish enthaelt eine GUI für J2ME Telefone, die mittels einfachen 
+CSS-Textdateien designed werden kann (wie Webseiten). Mit J2ME Polish koennen 
+Designer endlich unabhaengig vom Entwickler arbeiten! Die GUI wird dabei
+transparent von J2ME Polish eingebunden und ist kompatibel zum
+MIDP-Standard. Es sind keine Aenderungen am Quellcode notwendig, um die
+die GUI zu nutzen.
+ 
+3. Logging-Framework: 
+J2ME Polish enthaelt ein Logging-Framework, das aehnlich wie log4j gesteuert 
+werden kann. U.a. koennen Logging-Meldungen auch im realen Geraet eingesehen 
+werden und alle Logging-Meldungen koennen spurlos aus der endgueltigen 
+Anwendung entfernt werden, ohne dass man im Sourcecode Aenderungen notwendig
+sind.
+ 
+4. Game-Engine: 
+Mit J2ME Polish kann die MIDP/2.0 Game-API auch auf MIDP/1.0 Handys genutzt werden. 
+Die notwendige Umwandlung und Integration wird dabei vollautomatisch vorgenommen.
+ 
+5. Tools: 
+Einige Tools wie beispielsweise eine ArrayList (die es sonst unter J2ME nicht gibt) 
+oder ein Text-Wrapping Tool können genutzt werden.
+ 
+
+
+Lizensierung
+============
+J2ME Polish ist als Open Source unter der GNU General Public License veroeffentlicht.
+Soll das Produkt fuer kommerzielle (Closed Source) Software genutzt werden, so
+muss eine entsprechende Lizenz kaeuflich erworben werden.
+Naehere Informationen dazu unter http://www.j2mepolish.org/licenses.html
+
+
+Kontakt
+=======
+J2ME Polish ist ein Produkt von Enough Software.
+
+Enough Software
+Robert Virkus
+Vor dem Steintor 218
+D-28203 Bremen
+
+www.enough.de
+info@enough.de

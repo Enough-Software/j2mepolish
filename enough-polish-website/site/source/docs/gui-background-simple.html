@@ -1,0 +1,42 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Simple Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+	</ul>
+	<p>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The simple background shows a solid or translucent color:<br />
+	<img src="<%= basedir%>images/background-simple.png"  width="240" height="241" alt="simple background" />	
+<pre>
+.myItem {
+	background-color: argb( 150, 255, 0, 255 );
+}
+</pre>
+	</p>
+	<p>
+	CSS attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>color</td><td>white</td><td>color definition</td>
+		<td>
+		The color of the background, can be a rbg, argb or hexadecimal value of the color or the name of the color as defined in the colors section.
+		</td>
+	</tr>
+	</table>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/SimpleBackground.html">SimpleBackground</a>.
+	</p>
+
+<%include end.txt %>

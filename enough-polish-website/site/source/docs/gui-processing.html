@@ -1,0 +1,102 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Processing %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+<h1 id="top">Processing</h1>
+<%index %>
+<p>
+	<i>
+		<a href="http://www.processing.org" target="_blank">Processing</a> is an open source programming language and environment for people who want to create images, animations, and interactions. Initially developed to serve as a software sketchbook and to teach fundamentals of computer programming within a visual context, Processing also has evolved into a tool for generating finished professional work. Today, there are tens of thousands of students, artists, designers, researchers, and hobbyists who use Processing for learning, prototyping, and production. 
+	</i> <small>(Source: processing.org)</small>
+	<br/><img src="<%= basedir%>images/processing.jpg" width="240" height="240" alt="Processing"/>
+<p>
+<br />J2ME Polish supports Processing visualizations in following ways:<br />&nbsp;
+</p>
+<ul>
+	<li><a href="#item">ProcessingItem</a> displays a Processing visualization within a <a href="gui-screen-form.html">Form</a>, <a href="gui-screen-framedform.html">FramedForm</a>, etc.</li>
+	<li><a href="#screen">ProcessingScreen</a> allows you to use a visualization for a complete screen.</li>
+	<li><a href="#background">ProcessingBackground</a> enables you to use a Processing in the background of any item or screen.</li>	
+	<!-- 
+	<li><b></b>: </li>
+	 -->
+</ul>
+
+<p>
+	<br />
+	The supported feature set is largely equivalent with the now defunct <a href="http://mobile.processing.org/" target="_blank">mobile Processing</a> project. 
+	While this excludes some complex rendering mechanism, it allows you to easily port over existing Processing visualizations.
+</p>
+<h2 id="context">ProcessingContext</h2>
+<p>
+	For integrating Processing code you should extend <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingContext.html">de.enough.polish.processing.ProcessingContext</a> 
+	(for documentation compare<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingInterface.html">ProcessingInterface</a>).
+	<br/>
+	Override the <code>public void setup()</code> method to initialize your painting data.
+	<br/>
+	The most important method is <code>public void draw()</code> in which you paint your area (defined by the instance fields <code>this.width</code> and <code>this.height</code>).
+	Here you can the various available draw methods such as:
+	<ul>
+		<li>use <code>stroke(color)</code> and <code>fill(color)</code> to specify the color of lines and filled areas.</li>
+		<li>with <code>line(int,int,int,int)</code>, <code>curve(int..)</code> and <code>bezier(int..)</code> you can paint (curved) lines.</li>
+		<li>paint rectangles, cycles and ellipses with <code>ellipse(int, int, int, int)</code>, <code>rect(int, int, int, int)</code>, and <code>quad(int..)</code>.</li>
+	</ul>
+	<br/>
+	You can react to events by overriding one of the <code>signal</code> methods, e.g. <code>signalKeyPressed(int keycode)</code>, <code>signalHasFocus()</code>, <code>signalLostFocus()</code>, <code>signalSizeChange(int width, int height)</code>.
+</p>
+<h2 id="background">ProcessingBackground</h2>
+<p>
+With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingBackground.hml">ProcessingBackground</a> you can use a <a href="#context">ProcessingContext</a> for backgrounds of screens, items, etc.
+To implement a <code>ProcessingBackground</code> first create a <code>ProcessingContext</code> and register this with the background:
+</p>
+<pre>
+// create a sample ProcessingContext:
+ProcessingContext context = new ProcessingTreeContext();
+// and attach it to a ProcessingBackground:
+ProcessingBackground background = new ProcessingBackground( context );
+// append the background to a style:
+Style style = StyleSheet.getStyle("myform");
+style.background = background;
+// or apply the background directly to a screen:
+UiAccess.setBackground( myForm, background );
+</pre>
+
+<h2 id="screen">ProcessingScreen</h2>
+<p>
+With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingScreen.hml">ProcessingScreen</a> you can use a <a href="#context">ProcessingContext</a> as a standalone screen (or use that screen in a <a href="gui-screen-tabbedpane.html">TabbedPane</a>).
+To implement a <code>ProcessingScreen</code> first create a <code>ProcessingContext</code> and register this with the screen:
+</p>
+<pre>
+// create a sample ProcessingContext:
+ProcessingContext context = new ProcessingTreeContext();
+// and attach it to a ProcessingScreen:
+//#style screenTree
+ProcessingScreen screen = new ProcessingScreen("Hello World", context);
+// show the screen:
+display.setCurrent( screen );
+</pre>
+<h2 id="item">ProcessingItem</h2>
+<p>
+With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingItem.hml">ProcessingItem</a> you can use a <a href="#context">ProcessingContext</a> within a Form, FramedForm, Alert, etc.
+To implement a <code>ProcessingItem</code> first create a <code>ProcessingContext</code> and register this with the item:
+</p>
+<pre>
+// create a sample ProcessingContext:
+ProcessingContext context = new ProcessingTreeContext();
+// and attach it to a ProcessingItem:
+ProcessingItem item = new ProcessingItem(context);
+// append the item to a Form:
+//#style treeItem
+myForm.append( treeItem );
+</pre>
+
+<h2 id="sample">Sample App</h2>
+<p>
+	<br />
+	Please refer to the &quot;processing-tree&quot; sample application to see the processing support in action.
+</p>
+
+	
+<%include end.txt %>

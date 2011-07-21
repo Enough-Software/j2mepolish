@@ -1,0 +1,162 @@
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish-target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created and so on.                                    -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+<project 
+	name="enough-j2mepolish-sysinfo" 
+	default="j2mepolish">
+	
+	<!-- import user specific properties                          -->
+	<property file="${user.name}.properties" />
+
+	<!-- The polish.home property needs to point to the directory -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" location="%{INSTALL_PATH}" />
+	
+	<!-- import global properties                                 -->
+	<property file="${polish.home}/global.properties" />
+
+	
+	<!-- Definition of the J2ME Polish task:                      -->
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/import/proguard.jar:${polish.home}/yguard-lib.jar:${wtk.home}/wtklib/kenv.zip"/>
+	
+		
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="setdeploy" 
+		description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+		>
+		<property name="deploy-url" value="http://www.company.com/download/" />
+	</target>
+		
+	<target name="test" 
+		description="Call this target first to skip the obfuscation step, e.g. ant test j2mepolish"
+		>
+		<property name="test" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false" />
+		<property name="dir.work" value="build/real" />
+		<property name="deploy-url" value="" />
+	</target>
+	 
+	<!-- In this target the J2ME Polish task is used.             -->
+	<!-- It has 3 sections:                                       -->
+	<!--    1. The info-section defines some general information  -->
+	<!--    2. The deviceRequirements-section chooses the devices -->
+	<!--       for which the application is optimized.            -->
+	<!--    3. The build-section controls the actual build        -->
+	<!--       process.                                           -->	
+	<target name="j2mepolish" 
+			depends="init"
+			description="This is the controller for the J2ME build process." 
+			>
+		<j2mepolish>
+		    <!-- general settings, these settings basically form the JAD-attributes. -->
+		    <!-- Have a look at the <jad>-section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files 
+		         In this example we are setting the profile and configuration regardless
+		         of the capabilities of the target-devices, since we want to use one
+		         build for all devices.
+		         -->
+			<info
+				copyright="Copyright 2004, 2005 Grimo Software, Enough Software and Mark Schrijver. All rights reserved." 
+				description="Extracts information from MIDP capable devices." 
+				icon="icon.png" 
+				infoUrl="www.grimo-software.com" 
+				jarName="sysinfo.jar" 
+				jarUrl="${deploy-url}${polish.jarName}" 
+				name="MIDPSysInfo" 
+				vendorName="Grimo Software" 
+				version="0.9.0"
+				profile="MIDP-1.0"
+				configuration="CLDC-1.0"
+			/>
+			<!-- selection of the target device -->
+			<deviceRequirements>
+				<requirement name="Identifier" value="Generic/multi"/>
+			</deviceRequirements>
+		    <!-- build settings -->
+			<!-- 
+			 -->
+			<build
+	            usePolishGui="false"
+				workDir="${dir.work}"
+			>
+				<!-- midlets definition -->
+				<midlet class="de.enough.sysinfo.MIDPSysInfoMIDlet" name="MIDP SysInfo"/>
+				<resources>
+					<localization locale="en" />
+				</resources>
+				<jad>
+					<filter>
+						MIDlet-Name, MIDlet-Version, 
+						MIDlet-Vendor, MIDlet-Jar-URL, MIDlet-Jar-Size, 
+						MIDlet-Description?, MIDlet-Icon?, MIDlet-Info-URL?,
+						MIDlet-Data-Size?, MIDlet-*, *
+					</filter>
+	 			</jad>
+				<manifestFilter>
+					Manifest-Version, MIDlet-Name, 
+					MIDlet-1, MIDlet-2?, MIDlet-3?, MIDlet-4?, MIDlet-5?, 
+					MIDlet-Version, MIDlet-Vendor,
+					MicroEdition-Profile, MicroEdition-Configuration,
+					MIDlet-Data-Size?
+				</manifestFilter>
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator name="ProGuard" unless="test" >
+					<keep class="NokiaFullCanvasTest" />
+					<keep class="Midp2FullCanvasTest" />
+				</obfuscator>
+				<!-- debug settings: only include debug setting when the test-property is true -->
+				<debug level="error" verbose="true" if="test">
+					<filter level="debug" package="com.grimo.me.product.midpsysinfo"/>
+				</debug>
+			</build>
+			
+			<!-- execution of emulator(s) -->
+			<emulator if="test"	/>	
+		</j2mepolish>
+	</target>
+
+	<target 
+		name="emulator"
+		depends="test,j2mepolish"
+		description="invokes the emulator"
+	>
+	</target>
+
+	<target name="clean" 
+	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+		<delete dir="build" />
+		<mkdir dir="dist" />
+		<delete dir="dist" includes="**/*" />
+	</target>
+	
+	<target  
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant cleanbuild] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+		depends="clean, j2mepolish"
+	/>
+
+
+</project>

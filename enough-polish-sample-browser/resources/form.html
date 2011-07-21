@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD Compact HTML 1.0 Draft//EN">
+<html>
+<head>
+<title>Forms</title>
+</head>
+<body>
+<p>
+You can use HTML forms normally in J2ME Polish. For submitting a form programmatically use <code>HtmlBrowser.submitForm(..)</code>
+</p> 
+<form action="index.html" method="POST" name="test" >
+	<input class="textinput" label="Your name: " type="text" name="name" />
+	<input label="Languages: " type="checkbox" name="languages" value="j2me" />Java ME/J2ME
+	<input type="checkbox" name="languages" value="android" />Java (Android)
+	<input type="checkbox" name="languages" value="cs" />C#
+	<input type="checkbox" name="languages" value="objc" />Objective-C
+	<input type="checkbox" name="languages" value="html" checked="checked" />HTML
+	<input type="checkbox" name="languages" value="js" />JavaScript
+	<input type="checkbox" name="languages" value="basic"/>Basic
+	<input type="checkbox" name="languages" value="fortran"/>Fortran
+	<input type="checkbox" name="languages" value="assembler"/>Assembler
+	<!--
+	<input label="Your card: " choice="exclusive" groupclass="paymentschoicegroup" class="paymentitem" type="radio" name="payment" value="Mastercard" />Mastercard
+    <input class="paymentitem" type="radio" name="payment" value="Visa" />Visa
+    <input class="paymentitem" type="radio" name="payment" value="AmericanExpress" />American Express
+    -->
+	<!--
+	<input label="Your card: " choice="popup" class="paymentitem" type="radio" name="payment" value="Mastercard" />Mastercard
+    <input class="paymentitem" type="radio" name="payment" value="Visa" />Visa
+    <input class="paymentitem" type="radio" name="payment" value="AmericanExpress" />American Express
+    -->
+
+	
+	<input type="submit" value="Submit" />
+	
+	
+</form>
+</body>
+</html>

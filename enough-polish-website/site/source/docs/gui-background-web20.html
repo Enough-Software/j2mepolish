@@ -1,0 +1,43 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: web20 Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">web20 Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Show a rounded corner background with an inner circular background.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-web20.png"  width="326" height="52" alt="web20 background" />	
+</p>
+<pre>
+.itemMain {
+	background {
+		type: web20;
+		color: #0e0;
+		circle-color: #8f8;
+		circle-anchor: bottom;
+		padding-bottom: 0;
+		padding-left: 2;
+		padding-right: 2;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background web20 %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/Web20RoundRectBackgroundBackground.html">Web20RoundRectBackgroundBackground</a></li>
+	</ul>
+
+<%include end.txt %>

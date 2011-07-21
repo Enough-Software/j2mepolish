@@ -1,0 +1,199 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">The &lt;emulator&gt; Section</h1>
+	<%index %>
+	<p>
+	Launch your application in emulators by specifying the &lt;emulator&gt; element:
+	</p>
+<pre>
+&lt;emulator
+	wait=&quot;true&quot;
+	trace=&quot;class&quot;
+	preferences=&quot;myemulator.properties&quot;
+	securityDomain=&quot;trusted&quot;
+	enableProfiler=&quot;true&quot;
+	enableMemoryMonitor=&quot;true&quot;
+	enableNetworkMonitor=&quot;true&quot;
+	transient=&quot;true&quot;
+	transientPort=&quot;9099&quot;
+	if=&quot;test&quot;
+	&gt;
+	&lt;parameter name=&quot;-Xjam&quot; 
+			value=&quot;transient=http://localhost:8080/${polish.jadName}&quot; /&gt;
+
+&lt;/emulator&gt;
+</pre>
+	<p>In the above example the emulator is only started, when the &quot;test&quot; property is &quot;true&quot;.</p>
+	
+	<h2 id="emulator-attributes">Supported Attributes</h2>
+	<p>Following attributes are supported by the &lt;emulator&gt; element:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>emulator-Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>wait</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. Defines whether the J2ME Polish task should wait until the emulator is finished. This is needed when any output should be shown on the Ant-output, therefore wait defaults to &quot;yes&quot;. </td>
+	</tr>
+	<tr><td>transient</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. Starts the emulator in transient mode (install, run, deinstall) if set to <code>true</code>. 
+	 J2ME Polish will then serve the application via a small HTTP server to the emulator.
+	 </td>
+	</tr>
+	<tr><td>transientPort</td>
+ 	 <td>No</td>
+	 <td>Sets the port on which the application should be delivered in transient mode. Default port is 9090. </td>
+	</tr>
+	<tr><td>trace</td>
+ 	 <td>No</td>
+	 <td>Defines if any virtual machine activities should be shown on the output. Possible values are &quot;class&quot; for showing the loading of classes, &quot;gc&quot; for activities of the garbage collection and &quot;all&quot; for a very extensive output. Several values can be given when they are separated by comma, e.g &quot;class,gc&quot;. When it is set to  &quot;none&quot; tracing will be deactivated completely.</td>
+	</tr>
+	<tr><td>securityDomain</td>
+ 	 <td>No</td>
+	 <td>The MIDP 2.0 security-domain of the application: either "trusted", "untrusted", "minimum" or "maximum". In &quot;trusted&quot; and &quot;maximum&quot; mode all security sensitive activities are allowed; in the &quot;untrusted&quot; mode the user will be questioned before each security sensitive activity and in the &quot;minimum&quot; mode any security sensitive activity will not be allowed. </td>
+	</tr>
+	<tr><td>enableProfiler</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. When activated the  performance will be profiled during the execution of the application. The results will be shown when the emulator itself is closed.</td>
+	</tr>
+	<tr><td>enableMemoryMonitor</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. When activated the memory usage of the application will be shown.</td>
+	</tr>
+	<tr><td>enableNetworkMonitor</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. When any network activities are done, a monitor will show details of the sent and received data.</td>
+	</tr>
+	<tr><td>preferences</td>
+ 	 <td>No</td>
+	 <td>The file which contains the emulator-preferences. When such a file is used, the profiler and monitor settings are ignored. Please consult the documentation of the Wireless Toolkit for detailed information about the preferences file.</td>
+	</tr>
+	<tr><td>showDecompiledStackTrace</td>
+ 	 <td>No</td>
+	 <td>Either <code>true</code> or <code>false</code>. Determines whether a decompiled stack-trace should be shown, even when the source-code position of an exception could be be located. The automatic resolving of stack traces is discussed <a href="#emulator-stacktrace">below</a>.</td>
+	</tr>
+	<tr><td>if</td>
+ 	 <td>No</td>
+	 <td>The Ant property which needs to be <code>true</code> when the &lt;emulator&gt; element should be executed.</td>
+	</tr>
+	<tr><td>unless</td>
+ 	 <td>No</td>
+	 <td>The Ant property which needs to be <code>true</code> when the &lt;emulator&gt; element should be executed.</td>
+	</tr>
+	</table>
+	
+	<h2 id="emulator-parameter">The &lt;parameter&gt; Subelement</h2>
+	<p>
+	The &lt;emulator&gt; element supports the nested subelement &lt;parameter&gt; for defining additional command line parameters:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>parameter-Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>name</td>
+ 	 <td>Yes</td>
+	 <td>The name of the parameter.</td>
+	</tr>
+	<tr><td>value</td>
+ 	 <td>Yes</td>
+	 <td>
+	 The value of the parameter, the value can use any J2ME Polish or user-defined variable, the following variables are especially useful:
+<br /><code>${polish.jadName}</code>: The name of the JAD-file
+<br /><code>${polish.jadPath}</code>: The absolute path of the JAD-file
+<br /><code>${polish.jarName}</code>: The name of the JAR-file
+<br /><code>${polish.jarPath}</code>: The absolute path of the JAR-file
+<br /><code>${polish.midlet.class}</code>: The name of the main MIDlet class.
+<br /><code>${polish.class.midlet-1}</code>: The name of the first MIDlet class (same as <code>polish.midlet.class</code>).
+<br /><code>${polish.class.midlet-2}</code>: The name of the second MIDlet class, if any.
+<br /><code>${polish.class.midlet-n}</code>: The name of the n<sup>th</sup> MIDlet class, if any.
+<br />
+When only a command-line switch should be defined, just define an empty value, e.g.
+<pre>
+&lt;parameter name=&quot;-Xsomething&quot; value=&quot;&quot; /&gt;
+</pre>
+	 </td>
+	</tr>
+	<tr><td>if</td>
+ 	 <td>No</td>
+	 <td>The Ant property which needs to be &quot;true&quot; or the preprocessing term which needs result true when this parameter should be used.</td>
+	</tr>
+	<tr><td>unless</td>
+ 	 <td>No</td>
+	 <td>The Ant property which needs to be &quot;false&quot; or the preprocessing term which needs result false when this parameter should be used.</td>
+	</tr>
+	</table>
+	
+	<h2 id="emulator-definition">Emulator-Settings in the Device Database and in the build.xml</h2>
+<p>
+J2ME Polish uses the device-database to determine the correct emulator. 
+If an emulator cannot be started, you can tell J2ME Polish how to launch it by
+ modifying these settings.
+</p>
+<h3 id="wtk">WTK Emulators</h3>
+<p>
+For emulators which are integrated in the Wireless Toolkit the  <code>&quot;Emulator.Skin&quot;</code>-capability is used for determining the correct emulator. This is the name which can be found in the  &quot;${wtk.home}/wtklib/devices&quot; folder, e.g.  &quot;SonyEricsson_P900&quot; etc. When no  <code>&quot;Emulator.Skin&quot;</code>-capability is found, the current default emulator will be started instead. When the wrong emulator is started, please check if the  <code>&quot;Emulator.Skin&quot;</code>-capability has been set in the  &quot;${polish.home}/devices.xml&quot; file. If that capability is missing, please report it also to <a href="mailto:j2mepolish@enough.de?subject=Emulator">j2mepolish@enough.de</a> so that the device database can be improved.
+</p><p>
+You can also set several skins, when several versions of an emulator do exist, for example. J2ME Polish will then choose the the first emulator it finds. Additional skins are defined by the capabilities  &quot;Emulator.Skin.2&quot;,  &quot;Emulator.Skin.3&quot; and so forth.
+</p>
+<h3 id="nokia">Nokia Emulators</h3>
+<p>
+For launching Nokia emulators it might be necessary to define the  &quot;<code>nokia.home</code>&quot; property in the <i>${polish.home}/global.properties</i> file. This property needs to point to the installation directory of the Nokia emulators and defaults to  &quot;C:\Nokia&quot; on Windows machines and to  &quot;${user.home}/Nokia&quot; on Unix machines. For many emulators it is sufficient to set the  <code>&quot;Emulator.Class&quot;</code> and  <code>&quot;Emulator.Skin&quot;</code>-capabilities of the device in the  &quot;${polish.home}/devices.xml&quot; file. The  <code>&quot;Emulator.Class&quot;</code>-capability then needs to be  &quot;NokiaEmulator&quot; and the  <code>&quot;Emulator.Skin&quot;</code>-capability needs to correspond with the name of the emulator which can be found in the  &quot;${nokia.home}/Devices&quot;-directory.
+</p><p>
+Some non-standard-emulators make it necessary the use the  &quot;GenericEmulator&quot;-class instead. The invocation of such emulators is explained below.
+</p>
+<h3 id="siemens">Siemens Emulators</h3>
+<p>
+For launching Siemens emulators it might be necessary to define the  &quot;<code>siemens.home</code>&quot; property in the <i>${polish.home}/global.properties</i> file. This property needs to point to the installation directory of the  &quot;Siemens Mobile Toolkit&quot; (SMTK) and defaults to  &quot;C:\siemens&quot;. When a Siemens-emulator should be used, the corresponding device-definition in the  &quot;${polish.home}/devices.xml&quot; file needs to set the  <code>&quot;Emulator.Class&quot;</code>-capability to  &quot;SiemensEmulator&quot; (this is the default for all Siemens-phones). The <code>&quot;Emulator.Skin&quot;</code>-capability needs to specify the name of the emulator, which can be found in the &quot;${siemens.home}/SMTK/emulators&quot;-directory.
+</p>
+<h3 id="motorola">Motorola Emulators</h3>
+<p>
+For launching Motorola emulators it might be  necessary to define the &quot;<code>motorola.home</code>&quot; property in the <i>${polish.home}/global.properties</i> file. This property needs to point to the installation directory of the Motorola SDKs, e.g. &quot;C:\program files\Motorola&quot;. 
+</p>
+<h3 id="blackberry">Blackberry Emulators</h3>
+<p>
+For launching <a href="platform-blackberry.html">BlackBerry</a> emulators it might be  necessary to define the &quot;<code>blackberry.home</code>&quot; property in the <i>${polish.home}/global.properties</i> file. This property needs to point to the installation directory of the BlackBerry JDE, e.g. &quot;C:\program files\Research in Motion&quot;. 
+When you have installed several JDE's, J2ME Polish will use the correct one for building and launching the emulator.
+</p>
+<h3 id="any-emulator">Launching any Emulator with the GenericEmulator-Implementation</h3>
+<p>
+You can start any kind of emulator with the GenericEmulator class. You should set the  <code>&quot;Emulator.Class&quot;</code>-capability of the corresponding device-definition in the  &quot;${polish.home}/devices.xml&quot; file to  &quot;GenericEmulator&quot;. 
+</p><p>
+The <code>&quot;Emulator.Executable&quot;</code>-capability needs to define the program which should be started, e.g. &quot;java&quot; or &quot;${motorola.home}/EmulatorA.1/bin/emujava.exe&quot;. This program is responsible for starting the emulator.
+</p><p>
+You need also to define the command-line arguments for the emulator with the <code>&quot;Emulator.Arguments&quot;</code>-capability. Command-line arguments are separated by two semicolons in a row, e.g. &quot;-Xdescriptor;;${polish.jadPath};;-classpath;;${polish.jarPath}&quot;. As you can see in the example, any J2ME Polish-variables as well as Ant-properties can be used within the emulator-arguments. Often used is the &quot;polish.jadPath&quot;-variable, which contains the absolute path to the JAD-file and the &quot;polish.jarPath&quot;-variable, which does the same for the JAR-file. Also useful is the variable <code>polish.classes.midlet-1</code> that does define the first MIDlet in the suite.
+</p><p>
+You should try to minimize the dependency on a specific system setup by using properties like &quot;<code>motorola.home</code>&quot; or &quot;<code>nokia.home</code>&quot; in your settings. These properties can then be defined within the corresponding build.xml file.  
+</p><p>
+Please inform the J2ME Polish community about any emulators you have integrated, so that other users can also benefit from your settings. Just send an email to <a href="mailto:j2mepolish@enough.de?subject=Emulator">j2mepolish@enough.de</a>. Thanks!
+</p>
+
+<h2 id="emulator-stacktrace">Automatic Resolving of Stack Traces and Exceptions</h2>
+<p>
+J2ME Polish can resolve stack traces like <code>&quot;Exception at com.company.MyClass.doSomething(+200)&quot;</code> automatically, when the free &quot;jad&quot; decompiler is installed. This decompiler can be downloaded at <a href="http://www.kpdus.com/jad.html" target="_blank">http://www.kpdus.com/jad.html</a>. Please adjust the PATH environment variable, so that it includes the installation directory of jad or install the jad-excecutable (jad.exe or jad) to the &quot;${polish.home}/bin&quot; folder.
+</p><p>
+When jad is installed correctly, J2ME Polish will resolve stack traces automatically. Instead of seeing only the rather obscure stack trace <code>package.class.method(+instructionoffset)</code>,  an additional message giving the source-location as well as the faulty source code is printed out, e.g. <code>&quot;src/com/company/MyClass.java:97: int result = max / 0;&quot;</code>. If you execute J2ME Polish from within an IDE, you can click on such a message and then edit the faulty code directly.
+</p><p>
+In cases when J2ME Polish is not able to locate the position in the source code, an extract of the decompiled class-code will be shown instead. This extract will help you to identify the source of the error. The following fragment gives an example of a decompiled class code:
+<pre>
+            world.animate(System.currentTimeMillis() - lastCycleTime);
+    //   87  169:aload_0         
+    //   88  170:getfield        #13  &lt;Field World world&gt;
+    //   89  173:invokestatic    #17  &lt;Method long System.currentTimeMillis()&gt;
+    //   90  176:lload           4
+    //   91  178:lsub            
+    //   92  179:invokevirtual   #23  &lt;Method void World.animate(long)&gt;
+</pre>
+</p><p>
+In the first line the actual directive is given and in the following lines the binary equivalent compiled java code is listed. The second number from the left is the number which is given in the original error message (e.g. <code>package.class.method(+179)</code>).
+</p><p>
+When the &quot;showDecompiledStackTrace&quot;-attribute of the &lt;emulator&gt; element is set to &quot;true&quot; or &quot;yes&quot;, a decompiled code fragment will be given out for each stack-trace, even when the source-code position could be located.
+</p><p>
+Please note that the source-code position can only be located, when the debugging-mode is activated. This is done by setting the &quot;enable&quot;-attribute of the <a href="build-build.html#debug">&lt;debug&gt; element</a> to &quot;true&quot;. In the default-setup this is done when you call the  &quot;emulator&quot; target of the <i>build.xml is called first: 
+<pre>
+&quot;ant test j2mepolish&quot;.
+</pre>
+</p>
+
+<%include end.txt %>

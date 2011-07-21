@@ -1,0 +1,188 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: ScreenInfo Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ScreenInfo</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-stringitem.html">Text Design</a></li>
+		<li><a href="gui-screenelement-title.html">Title Design</a></li>
+		<li><a href="gui-screenelement-screenbackground.html">Screen Background</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	You can use the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenInfo.html">ScreenInfo</a> class to
+	show status information consistently over all the screens of your application.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-screenelement-title.png"  width="240" height="30" alt="title" />
+	<br >
+	In the above example we use several images for displaying the online status of the user. The design
+	is easy using the default <code>screeninfo</code> style:
+<pre>
+screeninfo {
+	margin-top: -24;
+	margin-left: 10;
+}
+</pre>
+	</p>
+	<p>
+	The <code>ScreenInfo</code> class uses internally an <a href="gui-item-iconcustomitem.html">IconCustomItem</a> for visualization. Please refer
+	to that item's documentation for more information about design options.
+	</p>
+	
+	<h2 id="Configuration">Configuration</h2>
+	<p>
+	You need to activate the usage of the <code>ScreenInfo</code> element by setting the &quot;polish.ScreenInfo.enable&quot; variable
+	to &quot;true&quot; in your <i>build.xml</i> script:
+<pre>
+&lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</p>
+	
+	<h2 id="Programming">Programming</h2>
+	<p>Since there is only a single <code>ScreenInfo</code> element that spans over all screens of your application, all
+	you need to modify your <code>ScreenInfo</code> element are static methods of the <code>ScreenInfo</code> class.
+	</p>
+	<p>
+	In the default mode the <code>ScreenInfo</code> element allows the setting of the text (<code>ScreenInfo.setText(String)</code>)
+	and image (<code>ScreenInfo.setImage(Image)</code>) that should be displayed. You can also 
+	toggle the visibility by calling <code>ScreenInfo.setVisible( boolean )</code>. The following example exchanges the
+	image of the <code>ScreenInfo</code> depending on the online status of the user:
+<pre>
+private void setStatus( int status ) {
+	String url;
+	switch (status) {
+	case STATUS_ONLINE: url = &quot;/info_online.png&quot;; break;
+	case STATUS_INVISIBLE: url = &quot;/info_invisible.png&quot;; break;
+	default: url = &quot;/info_offline.png&quot;;
+	}
+	//#if polish.ScreenInfo.enable
+		try {
+			Image img = Image.createImage(url);
+			<b>ScreenInfo.setImage( img );</b>
+		} catch (IOException e) {
+			//#debug error
+			System.out.println(&quot;Unable to switch to status &quot; + status + &quot;: &quot; + url + &quot; could not be loaded&quot; + e );
+		}
+	//#else
+		//#debug info
+		System.out.println(&quot;status set to &quot; + status  );
+	//#endif
+}
+</pre>	
+	</p>
+	<p>
+	For changing the design, you can also use the <code>#style</code> preprocessing directive when calling 
+	<code>ScreenInfo.setText(String)</code> or
+	<code>ScreenInfo.setImage(Image)</code>:
+<pre>
+//#style statusAccessDenied
+ScreenInfo.setText("Not Allowed!");
+</pre>
+	</p>
+	<p>
+		You can also directly change the fontcolor and the background of the <code>ScreenInfo</code> element by calling
+		<code>ScreenInfo.setFontColor(int)</code> and <code>ScreenInfo.setBackground( Background )</code>.
+		This usage is, however, not recommended.
+	</p>
+	<p>
+		You can use any GUI item including your own CustomItem as a <code>ScreenInfo</code> element by calling <code>ScreenInfo.setItem( Item )</code>.
+		Remember that you must not call any of the text- or image-related methods of the <code>ScreenInfo</code> element afterwards, since
+		these require the usage of an <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/IconItem.html">IconItem</a> internally.
+	</p>
+	
+	
+	<h2 id="screeninfo-busyindicator">How to realize a busy indicator with ScreenInfo</h2>
+	<p>
+	You can use <code>ScreenInfo</code> as an busy indicator, for example by using an animated gauge. 
+	<br/>
+	<img src="<%= basedir%>images/gui-screenelement-screeninfo-busyindicator.png" alt="busy indicator" width="236" height="317" /> 
+	<br/>
+	Necessary steps are:
+	</p>
+	<ul>
+		<li>register the <code>polish.ScreenInfo.enable</code> preprocessing variable:
+			<code>&lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;</code>
+		</li>
+		<li>Create a gauge in the code and use this in ScreenInfo:
+<pre>
+//#style busyGauge
+Gauge busyGauge = new Gauge(null, false, Gauge.INDEFINITE, Gauge.CONTINUOUS_RUNNING );
+ScreenInfo.setItem(busyGauge);
+ScreenInfo.setVisible(false);
+</pre>
+		</li>
+		<li>Enable and disable this gauge by calling start() and stop() methods at the beginning and end of long running processes:
+<pre>
+private synchronized void startBusyIndicator() {
+	if (this.busyIndicators == 0) {
+		ScreenInfo.setVisible(true);
+	}
+	this.busyIndicators++;
+	//#debug
+	System.out.println("start busy indicator: Number of busy indicators: " + this.busyIndicators);
+}
+
+private synchronized void stopBusyIndicator() {
+	if (this.busyIndicators > 0) {
+		this.busyIndicators--;
+		if (this.busyIndicators == 0) {
+			ScreenInfo.setVisible(false);
+		}
+	}
+	//#debug
+	System.out.println("stop busy indicator: Number of busy indicators: " + this.busyIndicators);
+}
+</pre>
+		</li>
+		<li>Design the busy indicator gauge in the <i>polish.css</i> file:
+<pre>
+.busyGauge {
+	padding-top: 9px;
+	padding-left: 1px;
+	view-type: gauge-images;
+	gauge-images-sources: busy01.png,busy02.png,busy03.png,busy04.png,busy05.png,busy06.png,busy07.png,busy08.png,busy09.png,busy10.png,busy11.png,busy12.png;
+	gauge-images-interval: 100;
+}
+</pre>
+		</li>
+		<li>Since by default the ScreenInfo element is shown at the top left of the screen (unless you specify otherwise in the <code>screeninfo</code> style), 
+		you might want to ensure that the title is at least as hight as the busy indicator images:
+<pre>
+title {
+	padding: 2px;
+	font-size: large;
+	font-style: bold;
+	font-color: fontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	layout: center | vertical-center | expand;
+	<b>min-height: imageheight( busy01.png );</b>
+}
+</pre>
+		</li>
+	</ul>
+	<p>
+	The <i>blank</i> sample app contains all necessary resources and code for the busy indicator.
+	</p>
+	
+	<h2 id="samples">ScreenInfo Sample Apps</h2>
+	<ul>
+		<li><b>blank</b>: demonstrates a busy indicator</li>
+		<li><b>mail</b>: uses images for indicating online/offline mode</li>
+	</ul>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenInfo.html">ScreenInfo</a>
+	</p>
+	
+	
+
+<%include end.txt %>

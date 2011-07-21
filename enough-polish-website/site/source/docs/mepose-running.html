@@ -1,0 +1,35 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.mepose %>
+<%set title = J2ME Polish: Mepose %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+<h1 id="top">Running and Debugging a J2ME Polish Project</h1>
+<%index %>
+<div class="screenshots">
+    <div class="screenshot">
+        <div class="screenshot_description">Create a J2ME Polish launch configuration by selecting &quot;Run/Run Configurations...&quot; and then &quot;J2ME Polish&quot;</div>
+        <div class="screenshot_image"><img src="../images/mepose_run_01.png" alt="A J2ME Polish launch configuration" /></div>
+    </div>
+    
+    <div class="screenshot">
+        <div class="screenshot_description">Select the devices you want to build for. You can filter the list of devices by the platform and supported APIs.</div>
+        <div class="screenshot_image"><img src="../images/mepose_run_03.png" alt="The device chooser" /></div>
+    </div>
+</div>
+
+<p><em>Then launch!</em></p>
+
+<h2 id="troubleshooting">Troubleshooting Debugging</h2>
+<p>In case you have trouble with the debugging, please check your debugging preferences in Eclipse (Window/Preferences).</p>
+
+<p>
+Go to the &quot;Debug&quot; panel and uncheck the item &quot;Suspend execution on uncaught exceptions&quot;.
+</p>
+
+<img src="../images/mepose-install_11_debugPreferences.png" />
+
+
+<%include end.txt %>

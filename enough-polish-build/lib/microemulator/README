@@ -1,0 +1,93 @@
+MicroEmulator 2.0.4
+
+J2ME Device Emulator is pure Java implementation of J2ME in J2SE.
+It allows demonstrate MIDlet (MIDP/CLDC) based applications as a
+standalone Java application or as web browser applet.
+
+Context:
+    1. Running application
+    2. Applet config
+    3. Building MicroEmulator from sources
+
+Requirements:
+ - J2SE 1.4+
+
+There are two methods of running apps in emulator:
+
+1. As an application:
+a) java org.microemu.app.Main (MIDlet application main class)
+or, java org.microemu.app.Main (MIDlet jad file)
+
+ - microemulator.jar must be in CLASSPATH
+
+b) java -jar microemulator.jar (MIDlet application main class)
+or, java -jar microemulator.jar (MIDlet jad file)
+
+ - (MIDlet application main class) parameter is optional, if used MIDlet
+   application jar file must be in CLASSPATH,
+ - (MIDlet jad file) must have .jad extension,
+ - for Nokia UI support include nokiaui.jar to the CLASSPATH,
+ - for Siemens API support include siemensapi.jar to the CLASSPATH.
+
+
+2. In applet:
+
+Preparing applet version of MIDlet should be done by selecting Save for Web menu item from File menu
+in standalone MicroEmulator application. During that process additional MIDlet bytecode modification 
+is performed in order to satisfy some compatibility issues running Java ME code inside Java SE. 
+
+Produced html code:
+<applet code="org.microemu.applet.Main"
+		width=226 height=471 archive="microemu-javase-applet.jar,(MIDlet application jar)">
+	<param name="midlet" value="(MIDlet application main class)">
+</applet>
+
+ - for Nokia UI support include nokiaui.jar to the archive attribute,
+ - for Siemens API support include siemensapi.jar to the archive attribute.
+
+There is additional parameter in applet definition tag if you want start applet
+with another device than default:
+  <param name="device" value="({device class name} | {device.xml file location})">
+    eg. minimum phone included in distribution has
+        org/microemu/device/minimum/device.xml
+
+and remember to include new device jar into applet archive tag
+    eg. minimum phone included in distribution has
+        minimum.jar
+
+Example for SimpleDemo MIDlet, Nokia UI support and Minimum device:
+<applet code="org.microemu.applet.Main"
+		width=157 height=285 archive="microemu-javase-applet.jar,nokiaui.jar,minimum.jar,simpledemo.jar">
+	<param name="midlet" value="org.microemu.midp.examples.simpledemo.SimpleDemo">
+	<param name="device" value="org/microemu/device/minimum/device.xml">
+</applet>
+
+Example for SimpleDemo MIDlet and Minimum device with Mouse and color:
+<applet code="org.microemu.applet.Main"
+		width=157 height=285 archive="microemu-javase-applet.jar,minimum.jar,simpledemo.jar">
+	<param name="midlet" value="org.microemu.midp.examples.simpledemo.SimpleDemo">
+	<param name="device" value="org/microemu/device/minimum/device-color.xml">
+</applet>
+
+Example for SimpleDemo MIDlet and Large Skin:
+<applet code="org.microemu.applet.Main"
+		width=292 height=618 archive="microemu-javase-applet.jar,large.jar,simpledemo.jar">
+	<param name="midlet" value="org.microemu.midp.examples.simpledemo.SimpleDemo">
+	<param name="device" value="org/microemu/device/large/device.xml">
+</applet>
+
+
+3. Building MicroEmulator from sources
+
+  We are using maven2 to build project
+
+  To build project you need this environment variables:
+  JAVA_HOME, SWT_HOME (to build swt module) and WTK_HOME to compile and test MIDlets
+
+  To create Eclipse projects run:
+    mvn eclipse:clean eclipse:eclipse -DdownloadSources=true
+
+  To run build without tests:
+    mvn -Dmaven.test.skip=true
+
+

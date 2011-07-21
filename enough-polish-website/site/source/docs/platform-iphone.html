@@ -1,0 +1,151 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: iPhone Porting %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Porting J2ME apps to the iPhone</h1>
+<%index %>
+
+<p>
+Traditionally mobile applications are developed with mobile Java (J2ME), which is possible without restrictions in development environment and hardware. Apple(TM) does not, however, provide a Java Virtual Machine for the iPhone. Creating applications for the iPhone platform requires an Apple development environment , Apple hardware and substantial know how in Objective-C as well as OS X development.
+</p>
+<p>
+The J2ME Polish Native iPhone Extensions translate mobile Java applications into native iPhone executables that require no installed Java Virtual Machine and allow application to access native iPhone features. This allows you to leverage existing mobile Java applications and create new iPhone applications without Objective-C and OS X expertise.
+</p>
+<p>
+The native iPhone support is an extension of the porting capabilities of the J2ME Polish development framework.
+</p>
+<h2 id="technology">Technology</h2>
+<p>The section details the technology behind the porting process.</p>
+<h3 id="technology-overview">Porting Overview</h3>
+<p>
+The porting is realized by transcoding the Java application source code into Objective-C source code. It is then compiled and linked with a MIDP compatible wrapper API. This optimized wrapper provides mobile Java functionality to iPhone applications. The complete application is then compiled and linked into an iPhone application.
+</p>
+<h3 id="technology-transformation">Source Code Transformation</h3>
+<p>
+The source code transformation works by analyzing the grammatical structure of the Java source code which is transformed into an abstract syntax tree (AST). The Java AST is then transformed in several phases into an Objective-C AST, which is then at last rendered into Objective-C source code, with at least two fragments for each Java class: the header and the implementation file.
+</p>
+<h3 id="technology-api">Wrapper API</h3>
+<p>
+The wrapper API eases the transformation of code by providing an MIDP compatible layer on top of the iPhone APIs. The wrapper implements most common MIDP and CLDC functionalities and will support following JCP extensions shortly:
+</p>
+<ul>
+	<li>JSR 179: Location API</li>
+	<li>JSR 75: PIM API</li>
+	<li>JSR 75: FileConnection API</li>
+	<li>JSR 120: Sending of text messages</li>
+	<li>JSR 135: Multimedia API</li>
+	<li>JSR 256: Sensor API</li>
+</ul>
+<p>
+For the garbage collection the auto release pool of the iPhone is being used.
+</p>
+<h3 id="technology-native">Accessing iPhone APIs From Within Java Applications</h3>
+<p>
+You can access native functions of the iPhone platform from within your Java application. A corresponding Java library is delivered as part of the J2ME Polish extension.
+</p>
+
+<h2 id="business">Business Options</h2>
+<p>
+Depending on the business case, Enough Software can provide a care free conversion of an application, the conversion of the source code or even license the conversion technology for inhouse usage.
+<br />
+Please get in touch by sending an email to <a href="mailto:services@enough.de">services@enough.de</a>.
+</p>
+<h3 id="business-carefree">Care Free Conversion</h3>
+<p>
+Enough Software offers the conversion of an existing Java based application. A fixed price offering can be given after assessing the application. For the conversion following fragments are needed:
+</p>
+<ul>
+	<li>the application's source code</li>
+	<li>any resources, if possible optimized for 320x480 pixel, 160ppi resolution</li>
+</ul>
+<p>
+The converted application is guaranteed to work on the iPhone and to be free from errors that are not present in the original application's source code.
+</p>
+<p>
+Alternatively we can also port applications against a 10% revenue share.
+</p>
+<h3 id="business-objectivec">Objective-C Transformation</h3>
+<p>
+It is also possible to convert the application's source code into Objective-C and deliver the transformed source code. This code can then be used to port the application or to provide the basis of an iPhone development branch. The necessary wrapper libraries are provided in binary form.
+</p>
+<h3 id="business-onsite">On Site Conversion</h3>
+<p>
+Last but not least it is possible to license Enough Software's conversion technology for inhouse usage. This allows you to convert your application without the need to transmit source code to Enough Software.
+</p>
+
+<h2 id="risks">Conversion Risks</h2>
+<p>
+The iPhone conversion tools are under development, therefore some risks need to be addressed.
+</p>
+<h3 id="risks-ui">UI Conversion: Risk = likely</h3>
+<p>
+Automatically converting the user interface of a Java application can be tricky, as typical Java UI libraries depend on keyboard input and have the notion of 'focus', whereas the iPhone does not provide a physical keyboard nor do native iPhone applications have a focus.
+</p>
+<p> 
+Commands attached to items illustrate the problem of the missing focus. In a traditional Java application item commands can be used to provide the user different options depending on the selected item. Since the iPhone UI does not have the notion of 'focus', item commands are difficult to port.
+</p>
+<p>
+Another problematic area can include text input or the reaction to game events.
+</p>
+<p>
+During the conversion highlevel javax.microedition.lcdui user interface components are translated into native iPhone UI components, which react and look like a native iPhone application.
+</p>
+<p>
+If a non J2ME Polish based nor a highlevel javax.microedition.lcdui user interface is used, it might be advisable to re-implement the user interface for the iPhone.
+</p>
+<h3 id="risks-memory">Memory Management: Risk = likely</h3>
+<p>
+The iPhone platform does not provide a fully featured Garbage Collector like the Java platform does. Instead it provides a number of other memory management options, such as reference counting and a semi-automatic auto release pool, which adds some GC-like features to the reference counting approach. During conversion the auto release pool is being used automatically within the generated Objective-C source code. This automatic integration is not 100% failsafe and may result in some memory leaks.
+</p>
+<p>
+Thanks to the developer tools provided by Apple, such memory leaks can be fixed relatively easily.
+</p>
+<h3 id="risks-limitations">Platform Limitations and Apple Guidelines: Risk = possible</h3>
+<p>
+The iPhone provides a very powerful platform, but it contains some limitations not found in modern Java based handsets:
+</p>
+<ul>
+	<li>SMS messages cannot be send automatically, the user needs to confirm and can alter the message before it is being send off</li>
+	<li>SMS messages cannot be send to a specific port</li>
+	<li>SMS messages cannot be received programmatically</li>
+	<li>Application cannot be started automatically (PushRegistry)</li>
+</ul>
+<p>
+Furthermore, the iPhone development guidelines limit the possible areas that are covered by an application. The most common restriction applies to adult content, which is not allowed. There have been cases, in which applications have been rejected by Apple, since they have replicated functionalities of existing Apple applications. The iPhone development guidelines can be accessed at http://developer.apple.com/iphone/.
+</p>
+<h3 id="risks-wrapper">Wrapper Limitations: Risk = possible</h3>
+<p>
+The wrapper that replicates common Java features on top of the iPhone APIs is under constant development. So far development has been concentrated on most common functionalities, so it can be possible that a specific functionality is not yet implemented.
+</p>
+<p>
+Depending on the business case Enough Software can push up the development of certain functionalities upon request.
+</p>
+<h3 id="risks-transformation">Code Generation: Risk = rare</h3>
+<p>
+During conversion it can happen that non-transformable Java syntax is encountered or that grammatically correct Objective-C source code is rendered which contains programming errors.
+</p>
+<p>
+Enough Software uses unit testing and regular conversion of the Bouncy Castle cryptographic library to minimize this risk.
+</p>
+<h2 id="support">Trouble Shooting and Support</h2>
+<p>
+If support is required or a risk is realized, Enough Software can help in several ways.
+</p>
+<h3 id="support-online">Online Support</h3>
+<p>
+We can assist your technical staff using online collaboration over telephone, instant messaging, email etc on a per need basis.
+</p>
+<h3 id="support-onsite">On Site Support</h3>
+<p>
+If required Enough Software can also assist you at your location by sending out staff to you. This can be done on a daily or weekly basis.
+</p>
+<h3 id="support-updates">Updates</h3>
+<p>
+Depending on the business case you are eligible for receiving updates of the conversion technology. Updates will be provided free of charge.
+</p>
+
+
+
+<%include end.txt %>

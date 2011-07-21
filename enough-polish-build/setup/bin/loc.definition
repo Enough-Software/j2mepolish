@@ -1,0 +1,11 @@
+<!-- created by J2ME Polish on Thu Mar 03 13:34:10 CET 2005 -->
+<data-definition>
+	<description>Defines the structure of dynamic localization files</description>
+	<extension>.loc</extension>
+	<type name="SingleParameterTranslation"><subtype type="UTF-String" /><subtype type="UTF-String" /></type>
+	<entry name="numberOfPlainTranslations" type="int" count="1" />
+	<entry name="plainTranslations" type="UTF-String" count="numberOfPlainTranslations" />
+	<entry name="numberOfSingleParameterTranslations" type="int" count="1" />
+	<entry name="singleParameterTranslations" type="SingleParameterTranslation" count="numberOfSingleParameterTranslations" />
+	<entry name="numberOfMultipleParameterTranslations" type="int" count="1" />
+</data-definition>

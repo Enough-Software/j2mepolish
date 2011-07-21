@@ -1,0 +1,667 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: CSS Basics %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">CSS Basics</h1>
+	
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="../lush/index.html">Lush (UI)</a></li>
+	<li><a href="gui-visualguide.html">Visual Guide</a></li>
+	<li><a href="gui-css-animations.html">CSS Animations</a></li>
+	<li><a href="gui-css-mediaqueries.html">CSS Media Queries</a></li>
+	</ul>
+	
+	<%index %>
+	
+	<p><br />J2ME Polish uses the same syntax for CSS declarations as web browsers.</p>
+	<h2>Structure of a CSS Declaration</h2>
+<pre>
+.myStyle   {   font-color: black;   }
+
+SELECTOR/      ATTRIBUTE   VALUE
+NAME
+</pre>
+	<p>
+Every style starts with the selector followed by an opening curved parenthesis, a number of attribute-value pairs and a closing  curved parenthesis.
+The selector can consist of several item-names and contain an &quot;extends&quot; clause.
+Each attribute-value pair needs to be finished by a semicolon.
+</p>
+<h2 id="css-naming">Naming and Style Types</h2>
+<p>
+J2ME Polish differentiates between different style types:
+</p>
+<ul>
+	<li><b>Static styles</b>:  start their name with a dot (e.g. <code>.mainMenuItem</code>) and are used with the <code>//#style</code> preprocesing directive, e.g. <code>//#style mainMenuItem</code>.</li>
+	<li><b>Predefined styles</b>: are used by some UI elements, examples include <code>title</code>, <code>menubar</code> or <code>menu</code>. In contrast to static styles, predefined ones don't start with a dot.</li>
+	<li><b>Dynamic styles</b>: are resolved during runtime when a UI element has no associated style. Examples include <code>form</code> for designing <a href="gui-screen-form.html">Forms</a> or <code>form p</code> for designing <a href="gui-item-stringitem.html">StringItems</a> within forms. Dynamic names do not start with a dot.</li>
+	<li><b>Pseudo styles</b>: can be used to extend static or predefined styles. Examples are <code>.mainMenuItem:hover</code> or <code>.mainMenuItem:pressed</code>. Pseudo styles use a colon between the style's basic name and its pseudo name.</li>
+</ul>
+<p>
+Styles can use any names, as long as they consist of alphanumeric and underline (_) characters only. Names are not case-sensitive. 
+All Java keywords like &quot;class&quot;, &quot;int&quot; or &quot;boolean&quot; etcetera are not allowed as style names.
+</p>
+<h3 id="style-predefined">Predefined Styles</h3>
+<p>
+There are several predefined styles which you can look up in the <a href="gui-visualguide.html">visual guide</a> for the respective components.
+Some commonly used predefined styles are:
+</p>
+<ul>
+	<li><a href="gui-screenelement-title.html">title</a>: designs the title of screens, can be overridden using the <code>title-style</code> attribute that points to a static style.</li>
+	<li><a href="gui-screenelement-menubar.html">menubar</a>: designs the menubar of screens when using the extended menubar implementation, can be overriden using the <code>menubar-style</code> that points to a static style.</li>
+	<li><a href="gui-screenelement-scrollbar.html">scrollbar</a>: designs the scrollbar for screens.</li>
+	<li><a href="gui-screenelement-focused.html">focused</a>: the default style for focused UI elements that do not specify a <code>[style-name]:hover</code> pseudo style.</li>
+	<!-- 
+	<li><a href="gui-screenelement-.html"></a>: </li>
+	 -->
+</ul>
+<h3 id="style-static">Static Styles</h3>
+<p>
+Static styles are applied with the <code>#style</code> directive in your Java code - note that the the style name needs to start with a dot in the 
+<i>polish.css</i> file, but not necessarily in the #style directive:
+</p>
+<pre>
+//#style mainScreen
+Form form = new Form("Hello World");
+//#style info
+form.append("Welcome to your first app.");
+</pre>
+<p>
+In the <i>polish.css</i> you need to define the corresponding styles:
+</p>
+<pre>
+.mainScreen {
+	background-color: #ddd;
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+.info {
+	font-style: italic;
+	font-color: #333;
+}
+</pre>
+<h3 id="style-dynamic">Dynamic Styles</h3>
+<p>Dynamic styles are resolved during runtime. They are good for designing applications that don't use <code>#style</code> preprocessing directives.
+However since they resolved during runtime they are not as effective as static styles. In general we don't recommend the usage of dynamic styles, therefore.
+<h3 id="style-pseudo">Pseudo Styles</h3>
+<p>
+Pseudo styles are used to design UI elements in different states, e.g. when they are focused. Pseudo styles use a colon between the basic style name
+and the pseudo style, for example <code>.myItem:hover</code> or <code>.myItem:pressed</code>. Pseudo styles inherit all settings of the basic element 
+There are a couple of pseudo styles available:
+</p>
+<ul>
+	<li><code>:hover</code> designs the focused state of the UI element. You should strive to keep the <code>:hover</code> state of a UI element the same
+	size as in the normal style, otherwise UI elements will seem to 'jump' around when moving the focus. Here's an example in which
+	we use a margin in the unfocused state to compensate for a border in the focused state: 
+<pre>
+.mainMenuItem {
+	margin: 2px;
+	font-color: #333;
+	layout: expand;
+}
+.mainMenuItem:hover {
+	margin: 0px;
+	font-color: #eee;
+	background-color: #333;
+	border-color: #600;
+	border-width: 2px;
+}
+</pre>
+	</li>
+	<li><code>:pressed</code> defines the design for an element when it is pressed, meaning the user selects it by holding down a pointer or a key.
+	 Typically the <code>:pressed</code> style is applied when the element is already focused, so you either need to make sure that
+	 you copy the <code>:hover</code> settings manually or nest styles, like <code>.mainMenuItem:hover:pressed</code>. 
+	 This is not true for all cases, e.g. <a href="gui-screenelement-menubar.html">leftcommand</a> etc are never focused, but they have a 
+	 pressed style: <code>leftcommand:pressed</code>:
+<pre>
+leftcommand {
+	font-style: bold;
+	font-color: #00aeef;
+}
+leftcommand:pressed {
+	font-color: #fff;
+}
+rightcommand extends leftcommand {
+	layout: right;
+}
+rightcommand:pressed {
+	font-color: #fff;
+}
+middlecommand extends leftcommand {
+	layout: center;
+}
+middlecommand:pressed {
+	font-color: #fff;
+}
+</pre>
+	</li>
+	<li><code>:visited</code>. Use the <code>:visited</code> style for changing the design of a UI item after its default command has been
+	triggered. Here's an example for links within the <a href="gui-item-browseritem.html">browser</a>:
+<pre>
+.browserlink {
+	padding-left: 4%;
+	padding-right: 4%;
+	layout: expand;
+	font {
+		style: bold;
+		color: #00aeef;
+	}
+}
+.browserlink:hover {
+	font-color: #fff;
+	background-color: #f26522;
+}
+.browserlink:pressed {
+	background-color: #f26522;
+	font-color: #333;
+}
+<b>.browserlink:visited</b> {
+	font-color: #999;
+}
+<b>.browserlink:hover:visited</b> {
+	font-color: #999;
+}
+</pre>
+	</li>
+	<li><code>:landscape</code> allows you to change the design for landscape screen orientations. 
+	This is useful for differentiating your design between portrait and landscape modes, e.g. displaying icon texts in landscape mode but
+	not in portrait mode:
+<pre>
+.tabIcon {
+	margin: 1px;
+	padding: 2px;
+	icon-image: url( Tab%INDEX%.png );
+	icon-image-align: top;
+	max-width: 25%;
+	font-bitmap: url( arialsmall.bmf );
+	layout: expand | center | vertical-center;
+}
+
+.tabIcon:hover {
+	padding: 1px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #f1f1f1;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+	icon-image: url( TabFoc%INDEX%.png );
+}
+
+<b>.tabIcon:landscape</b> {
+	text-visible: false;
+}
+
+<b>.tabIcon:landscape:hover</b> {
+	padding: 1px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #f1f1f1;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+	icon-image: url( TabFoc%INDEX%.png );
+}
+</pre>
+	</li>
+	<li><code>:portrait</code> works the same as <code>:landscape</code> pseudo styles, but only for portrait resolutions.</li>
+</ul>
+<p>
+You can also nest pseudo styles, e.g. for designing the <code>:visited</code> style of <code>.myItem:hover</code> just define the style
+<code>.myItem:hover:visited</code>.
+</p>
+<p>Here's the <code>:landscape</code> pseudo style in action:
+<br />
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/pLrRMh2od94&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/pLrRMh2od94&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+</p>
+<p>See the <code>:visisted</code> pseudo style here:
+<br />
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/II-ksR06jmc&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/II-ksR06jmc&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+</p>
+
+
+<h2 id ="css-grouping">Grouping of Attributes</h2>
+<p>Attributes can be grouped for easier handling:
+</p>
+<pre>
+.mainItem {
+	font-color: black;
+	font-size: medium;
+	font-style: italic;
+	font-face: system;
+}
+</pre>
+<p>
+The above code is equivalent with the following:
+<pre>
+.mainItem {
+	font {
+		color: black;
+		size: medium;
+		style: italic;
+		face: system;
+	}
+}
+</pre>
+</p><p>
+The grouping makes the declarations better readable for humans.
+</p>
+<h2 id="css-referrals">Referring to Other Styles</h2>
+<p>
+When another style is referred, the dots of static styles do not need to be written. Styles can be referred in attributes or after the <code>extends</code> keyword in the selector of a style.
+</p>
+<pre>
+.mainItem {
+	font-color: black;
+	font-size: medium;
+}
+
+.menuItem extends mainItem {
+	font-color: #333;
+}
+</pre>
+<h2 id="css-comments">Comments</h2>
+<p>
+Comments can be inserted at any place and start with &quot;/*&quot; and stop with &quot;*/&quot;. Everything between these boundaries is ignored:
+</p>
+<pre>
+/**
+  * this style designs the items in the main screen, 
+  * use //#style mainItem to bind this style to a UI element in your Java code: 
+  */
+.mainItem {
+	/* defining the color of a font: */
+	font-color: black;
+	/* sizes are small, medium and large: */
+	font-size: medium;
+	/* styles are plain, bold, italic or underlined, combine them using | or &amp; : */
+	font-style: italic;
+	/* the face can either be system, proportional or monospace: */
+	font-face: system;
+}	
+</pre>
+
+<h2 id="css-boxmodel">CSS Box Model</h2>
+<p>
+J2ME Polish supports the same box model as HTML browsers:
+<br />
+<img src="<%= basedir%>images/cssboxmodel.gif" width="433" height="317" alt="CSS box model" />
+<br />
+The <code>margin</code> describes the gap to other UI elements. The <code>padding</code> describes the gap between the border of the item and the actual content of that item. 
+The <code>margin</code> defaults to 0&nbsp;pixels, whereas any <code>padding</code> defaults to 1&nbsp;pixel. 
+Next to the left, right, top and bottom padding, J2ME Polish also knows the vertical and the horizontal paddings. 
+These define the gaps between different content sections. The gap between the label of an item and the actual content is defined by the horizontal padding. 
+Another example is an icon (IconCustomItem/IconItem), which consists of an image and a text. Depending on the align of the image, either the vertical or the horizontal padding 
+fills the space between the icon-image and the icon-text.
+In the following example, the top, right and bottom margin is 5&nbsp;pixels, whereas the left margin is 10&nbsp;pixels:
+<pre>
+.myStyle {
+	margin: 5px;
+	margin-left: 10px;
+	font-color: black;
+}
+</pre>
+</p>
+<p>
+Percentage values can also be used. Like in the standard CSS 2.1, percentage values are calculated relative to the available width of the corresponding UI element, 
+even for top and bottom values.
+</p>
+<pre>
+.myStyle {
+	padding: 2.8%;
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-vertical: 1%;
+	font-color: black;
+}
+</pre>
+<p>
+</p>
+
+<h2 id="polishcss">Structure of polish.css</h2>
+	<p>
+	You specify the design your application in the <i>polish.css</i> file, which by default is located in <i>resources/polish.css</i>. 
+	This file can contain different sections:
+	</p>
+<ul>
+ <li><code>colors</code>: The colors section contains the definition of colors.</li>
+ <li><code>fonts</code>: The fonts section contains font definitions.</li>
+ <li><code>backgrounds</code>: The backgrounds section contains background definitions that are referenced in other styles.</li>
+ <li><code>borders</code>: The borders section contains definition of borders.</li>
+ <li>rest: The rest of polish.css contains the actual style definitions.</li>
+</ul>
+<p>
+The defined colors, fonts, backgrounds and borders can be referenced in the actual style definitions. This makes changes very easy, since you need to change the value only in one position.
+</p>
+
+<h2 id="layout">The Layout Attribute</h2>
+<p>
+The <code>layout</code> attribute defines how the affected item should be aligned and laid out. 
+Possible layout values are for example left, right or center. All layout values of the MIDP 2.0 standard can be used:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Layout&nbsp;&nbsp;</th><th>Alternative-Names&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>left</td>
+	 <td>-</td>
+	 <td>The affected items should be left-aligned. </td>
+	</tr>
+	<tr><td>right</td>
+	 <td>-</td>
+	 <td>The affected items should be right-aligned. </td>
+	</tr>
+	<tr><td>center</td>
+	 <td>horizontal-center, hcenter</td>
+	 <td>The affected items should be centered horizontally.</td>
+	</tr>
+	<tr><td>expand</td>
+	 <td>horizontal-expand, hexpand</td>
+	 <td>The affected items should use the whole available width (i.e. should fill the complete row).</td>
+	</tr>
+	<tr><td>shrink</td>
+	 <td>horizontal-shrink, hshrink</td>
+	 <td>The affected items should use the minimum width possible.</td>
+	</tr>
+	<tr><td>top</td>
+	 <td>-</td>
+	 <td>The affected items should be top-aligned. </td>
+	</tr>
+	<tr><td>bottom</td>
+	 <td>-</td>
+	 <td>The affected items should be bottom-aligned. </td>
+	</tr>
+	<tr><td>vcenter</td>
+	 <td>vertical-center</td>
+	 <td>The affected items should be centered vertically.</td>
+	</tr>
+	<tr><td>vexpand</td>
+	 <td>vertical-expand</td>
+	 <td>The affected items should use the whole available height (i.e. should fill the complete column).</td>
+	</tr>
+	<tr><td>vshrink</td>
+	 <td>vertical-shrink</td>
+	 <td>The affected items should use the minimum height possible.</td>
+	</tr>
+	<tr><td>newline-after</td>
+	 <td>-</td>
+	 <td>Items following an item with a newline-after layout should be placed on the next line. This can be used for labels or for item within a <code>midp2</code> <code>view-type</code>, for example.</td>
+	</tr>
+	<tr><td>newline-before</td>
+	 <td>-</td>
+	 <td>The affected items should always start on a new line (when there are any items in front of it). This can be used for labels or for item within a <code>midp2</code> <code>view-type</code>, for example.</td>
+	</tr>
+	</table>
+<p>
+Layout values can also be combined, using either the &quot;||&quot;, &quot;|&quot;, &quot;or&quot; or &quot;and&quot; operators. All operators result in the same combination. An item can be centered and using the whole available width with following example:
+</p>
+<pre>
+.myStyle {
+	layout: center | expand;
+}
+</pre>
+
+<h2 id="colors">Colors</h2>
+<p>
+Colors can be defined in the colors section and in each attribute which ends on &quot;-color&quot;, e.g. &quot;font-color&quot;, &quot;border-color&quot; etc.
+</p>
+<h3>Predefined Colors</h3>
+<p>
+The 16 standard windows colors are predefined:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Name&nbsp;&nbsp;</th><th>Hex-Value&nbsp;&nbsp;</th><th>Color</th><th>Name&nbsp;&nbsp;</th><th>Hex-Value&nbsp;&nbsp;</th><th>Color</th></tr>
+	<tr><td>white</td><td>#FFFFFF</td><td bgcolor="white">&nbsp;</td>
+	<td>yellow</td><td>#FFFF00</td><td bgcolor="yellow">&nbsp;</td></tr>
+	<tr><td>black</td><td>#000000</td><td bgcolor="black">&nbsp;</td>
+	<td>maroon</td><td>#800000</td><td bgcolor="maroon">&nbsp;</td></tr>
+	<tr><td>red</td><td>#FF0000</td><td bgcolor="red">&nbsp;</td>
+	<td>purple</td><td>#800080</td><td bgcolor="purple">&nbsp;</td></tr>
+	<tr><td>lime</td><td>#00FF00</td><td bgcolor="lime">&nbsp;</td>
+	<td>fuchsia</td><td>#FF00FF</td><td bgcolor="fuchsia">&nbsp;</td></tr>
+	<tr><td>blue</td><td>#0000FF</td><td bgcolor="blue">&nbsp;</td>
+	<td>olive</td><td>#808000</td><td bgcolor="olive">&nbsp;</td></tr>
+	<tr><td>green</td><td>#008000</td><td bgcolor="green">&nbsp;</td>
+	<td>navy</td><td>#000080</td><td bgcolor="navy">&nbsp;</td></tr>
+	<tr><td>silver</td><td>#C0C0C0</td><td bgcolor="silver">&nbsp;</td>
+	<td>teal</td><td>#008080</td><td bgcolor="teal">&nbsp;</td></tr>
+	<tr><td>gray</td><td>#808080</td><td bgcolor="gray">&nbsp;</td>
+	<td>aqua</td><td>#00FFFF</td><td bgcolor="aqua">&nbsp;</td></tr>
+</table>
+<p>
+Another predefined color is <code>transparent</code>, which results in an transparent area. <code>transparent</code> is only supported by some UI elements like a <a href="gui-background-image.html">image background</a>. 
+</p>
+<h3>The colors Section</h3>
+<p>
+The colors section of the <i>polish.css</i> file can contain colors, which can be referenced in the styles, fonts, border and background sections. You can even overwrite the predefined colors to confuse other designers!
+<pre>
+colors {
+	bgColor: #50C7C7;
+	bgColorFocused: #50D9D9;
+	textColor: #7F7F7F;
+}
+</pre>
+</p>
+<h3>How to Define Colors</h3>
+<p>
+A color can be defined in many different ways:
+<pre>
+.myStyle {
+	font-color: white; 	/* the name of the color */
+	border-color: #80FF80; 	/* a rgb hex value */
+	start-color: #F00; 	/* a short rgb-hex-value - this is red */
+	menu-color: #7F80FF80; 	/* an alpha-rgb hex value */
+	background-color: rgb( 255, 50, 128 );  /* a rrr,ggg,bbb value */
+	fill-color: rgb( 100%, 30%, 50% ); 	    /* a rgb-value with percentage */
+	label-color: argb( 128, 255, 50, 128 ); /* a aaa, rrr, ggg, bbb value */
+}
+</pre></p><p>
+Color names refer to one of the predefined colors or a color which has been defined in the colors-section:
+<pre>
+color: black; or 
+color: darkBackgroundColor;
+</pre>
+</p><p>
+The hex-value defines a color with two hexadecimal digits for each color (RRGGBB). Additionally the alpha blending-component can be added (AARRGGBB).  
+<pre>
+color: #FF000;     /*  defines red.                    */
+color: #7FFF0000;  /*  defines a half transparent red. */
+</pre></p>
+</p><p>
+The shortened hex-value defines a color by a RGB-value in hexadecimal. Every digit will be doubled to retrieve the full hex-value: 
+<pre>
+color: #F00; is equivalent with color: #FF0000; 
+color: #0D2; is equivalent with color: #00DD22;  /* and so on. */
+</pre>
+</p><p>
+A rgb-value starts with &quot;rgb(&quot; and then lists the decimal value of each color from 0 up to 255: 
+<pre>
+color: rgb( 255, 0, 0 );  /*  defines red.            */
+color: rbg( 0, 0, 255);   /*  defines blue and so on.  */
+</pre>
+</p><p>
+Alternatively percentage values can be used for rgb-colors:
+<pre>
+color: rgb( 100%, 0%, 0% );         /* defines red as well as */
+color: rgb( 100.00%, 0.00%, 0.00% );
+</pre></p><p>
+Alpha-RGB colors can be defined with the argb()-construct:
+<pre>
+color: argb( 128, 255, 0, 0 ); 
+</pre>
+</p><p>
+defines a half transparent red. For the argb-construct percentage values can be used as well.
+</p>
+
+<h3>Alpha Blending</h3>
+<p>
+Colors with alpha blending can be defined with hexadecimal or argb-definitions (see above). An alpha value of 0 results in fully transparent pixels, 
+whereas the value FF (or 255 or 100%) results in fully opaque pixels. Some devices support values between 0 and FF, which results in 
+translucent colors. Colors with a specified alpha channel can only be used by specific GUI items. Please refer to the <a href="gui-visualguide.html">documentation</a> of the specific design attributes. 
+</p>
+
+<h2 id="fonts">Text Rendering</h2>
+<p>
+The base class for rendering texts in J2ME Polish is a <code>StringItem</code>, please refer to the <a href="gui-item-stringitem.html">String Item documentation</a> for all design options.
+</p>
+<p>
+The most important settings are:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Possible Values&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>font-color</td>
+	 <td>Reference to a color or direct declaration of the color.</td>
+	 <td>Depending on the number of colors the device supports, colors can look differently on the actual device.</td>
+	</tr>
+	<tr><td>font-face</td>
+	 <td>system (default, normal)</td>
+	 <td>The default font-face which is used when the font-face or label-face attribute is not set.</td>
+	</tr>
+	<tr><td></td>
+	 <td>proportional</td>
+	 <td>A proportional face. This is on some devices actually the same font-face as the system-font.</td>
+	</tr>
+	<tr><td></td>
+	 <td>monospace</td>
+	 <td>A font-face in which each character has the same width.</td>
+	</tr>
+	<tr><td>font-size</td>
+	 <td>small</td>
+	 <td>The smallest possible font.</td>
+	</tr>
+	<tr><td></td>
+	 <td>medium (default, normal)</td>
+	 <td>The default size for texts.</td>
+	</tr>
+	<tr><td></td>
+	 <td>large (big)</td>
+	 <td>The largest possible font size.</td>
+	</tr>
+	<tr><td></td>
+	 <td>px</td>
+	 <td>When you specify the size in pixel like
+		<code>font-size: 22px;</code> J2ME Polish will pick the most appropriate font instead on MIDP devices. 
+		<a href="platform-blackberry.html">BlackBerry</a> and <a href="platform-android.html">Android</a> platforms support
+		the pixel size values directly.</td>
+	</tr>
+	<tr><td>font-style</td>
+	 <td>plain (default, normal)</td>
+	 <td>The default style.</td>
+	</tr>
+	<tr><td></td>
+	 <td>bold</td>
+	 <td>A bold thick style</td>
+	</tr>
+	<tr><td></td>
+	 <td>italic (cursive)</td>
+	 <td>A cursive style.</td>
+	</tr>
+	<tr><td></td>
+	 <td>underlined</td>
+	 <td>Not really a style, just an underlined text.</td>
+	</tr>
+	<tr><td>font-bitmap</td>
+	 <td>The name of the bitmap font.</td>
+	 <td>With the <code>bitmap</code> attribute a bitmap font can be used instead of the system, proportional and monospace fonts. Please note that bitmap fonts cannot be changed in neither size or style. You can only change the color of a bitmap font when it has been saved with a black color.</td>
+	</tr>
+	<tr><td>text-effect</td>
+	 <td>The name of effect for the text.</td>
+	 <td>You can apply a large number of <a href="gui-visualguide-texteffects.html">text-effects</a>.</td>
+	</tr>
+
+	</table>
+	
+<h2 id="programmatically">Access Styles Programmatically</h2>
+<p>
+You can apply and read styles programmatically in several ways:
+</p>
+<ul>
+	<li><code>#style</code> directive: use the style directive to apply static styles in the constructor of UI elements or in many screen methods or
+	in <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html#setStyle(javax.microedition.lcdui.Item, de.enough.polish.ui.Style)">UiAccess.setStyle(Item, Style)</a>:
+<pre>
+//#style mainMenuItem
+UiAccess.setStyle( myMenuItem );
+</pre>
+	</li>
+	<li>To load styles dynamically use 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/StyleSheet.html#getStyle(java.lang.String)">StyleSheet.getStyle(String name)</a>
+	to access styles by their name. Please note that J2ME Polish optimizes away styles that are not used within your project directly. To force the 
+	inclusion of a style that is accessed only programmatically, you need to define it's <code>always-include</code> CSS property:
+<pre>
+.menubarFacebook {
+	always-include: true;
+	...
+}
+</pre> 
+	</li>
+	<li>To create styles dynamically just use the 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Style.html">Style constructor</a> and add settings using the 
+	<code>.addAttribute(String name, Object property)</code> method. Note that the name of your style needs to end
+	on <code>style</code>, since J2ME Polish replaces CSS attribute names with short IDs during the build process using
+	preprocessing.
+<pre>
+Style myStyle = new Style();
+myStyle.addAttribute("padding", new Dimension("20%") );
+myStyle.addAttribute("font-color", new Color(0x333333) );
+myStyle.background = new SimpleBackground( new Color(0xffdddd) );
+</pre>
+	</li> 
+</ul>
+
+<h2 id="sample">Sample polish.css</h2>
+<p>
+Let's have a look at a full example:
+</p>
+<pre>
+colors {
+	fontColor: #333;
+	fontColorFocused: #ddd; 
+	fontColorPressed: #600;
+}
+
+backgrounds {
+	screenBg {
+		type: vertical-gradient;
+		top-color: #fff;
+		bottom-color: #ccc;
+	}
+}
+
+.mainScreen {
+	background: screenBg;
+}
+
+.mainItem {
+	font-color: fontColor;
+	font-style: bold;
+	layout: expand;
+	padding-left: 10%;
+}
+.mainItem:hover {
+	font-color: fontColorFocused;
+	background-color: #333;
+}
+.mainItem:pressed {
+	font-color: fontColorPressed;
+	background-color: #333;
+}
+
+title {
+	background-color: #333;
+	font-color: fontColorFocused;
+	layout: expand | center;  
+}
+</pre>
+
+
+
+<%include end.txt %>

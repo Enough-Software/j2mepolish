@@ -1,0 +1,49 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: drop-shadow Border %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">drop-shadow Border</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Borders</a></li>
+		<li><a href="extending-border.html">Create Your Own Border</a></li>
+	</ul>
+	<p>
+	Surround an item or a screen with a possibly translucent drop shadow using the <code>drop-shadow</code> border:
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-border-drop-shadow2.png" width="320" height="49" alt="drop-shadow border" />	
+	<br />
+	<img src="<%= basedir%>images/gui-border-drop-shadow2.png" width="640" height="98" alt="drop-shadow border magnified" />	
+	<br />
+	<br />
+	<img src="<%= basedir%>images/gui-border-drop-shadow.png"  width="98" height="31" alt="drop-shadow border" />	
+	<br />
+	<img src="<%= basedir%>images/gui-border-drop-shadow.png"  width="196" height="62" alt="drop-shadow border" />	
+	</p>
+<pre>
+.itemMain {
+	background-color: #0e0;
+	border {
+		type: drop-shadow;
+		inner-color: #a0e0;
+		outer-color: #5050;
+		width: 3;
+		orientation: all;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings border drop-shadow%>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/borders/DropShadowBorder.html">DropShadowBorder</a>.
+	</p>
+
+<%include end.txt %>

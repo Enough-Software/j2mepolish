@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <!--
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>J2ME-Polish</appname>
+        <appversion>${Version}</appversion>
+        <authors>
+            <author name="Robert Virkus" email="j2mepolish@enough.de"/>
+        </authors>
+        <url>http://www.j2mepolish.org/</url>
+    </info>
+    
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 100x700. It will be able to change the size.
+    -->
+	<guiprefs width="1000" height="700" resizable="yes">
+	</guiprefs>    
+    <!-- 
+        The locale section.
+        Only use the English locale at the moment.
+    -->
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+    
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="HTMLLicencePanel.licence" src="../setup/j2mepolish-license.html"/>
+		<res id="userInputSpec.xml" src="userInputSpec.xml" />
+		<res id="useNativeLAF" src="../setup/useNativeLAF" />
+		<!-- 
+        <res id="Installer.image" src="../setup/tinyturtle.jpg" />
+		 -->
+        <res id="Installer.image" src="../setup/enough_retro.png" />
+        <res id="eng.xml" src="../setup/eng.xml" />
+    </resources>
+    
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+		<!-- welcome screen -->
+        <panel classname="UserInputPanel" />
+		<!-- showing the licensing possibilities -->
+        <panel classname="HTMLLicencePanel" />
+		<!-- choosing the license 
+        <panel classname="ChooseLicensePanel" />
+        -->
+		<!-- where to install J2ME Polish -->
+	 	<panel classname="ChooseTargetPanel" />
+		<!-- setting of global.properties -->
+	 	<panel classname="SetPropertiesPanel" />
+		<!-- where to find the WTK 
+	 	<panel classname="UserInputPanel" />
+	 	-->
+        <!-- what packages should be installed -->
+        <panel classname="PacksPanel" />
+		<!-- where to install J2ME Polish
+	 	<panel classname="TargetPanel" />
+	 	 -->
+		<!-- the actual installation -->
+        <panel classname="CustomInstallPanel" />
+		<!-- installation success screen 
+ 		<panel classname="UserInputPanel" />
+ 		-->
+        <panel classname="FinishInstallationPanel" />		
+    </panels>
+    
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The J2ME Polish core files, which will be copied into the &quot;lib&quot;- and &quot;import&quot;-folder.</description>
+            <file src="import" targetdir="$INSTALL_PATH"/>
+            <file src="lib" targetdir="$INSTALL_PATH"/>
+            <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
+            <file src="../custom-css-attributes.xml" targetdir="$INSTALL_PATH"/>
+            <file src="legal" targetdir="$INSTALL_PATH"/>
+            <file src="custom-devices.xml" targetdir="$INSTALL_PATH"/>
+            <file src="../setup/JadTool.jar" targetdir="$INSTALL_PATH/bin"/>
+            <file src="android" targetdir="$INSTALL_PATH"/>
+			<!-- copy the BlackBerry obfuscation dictionary -->
+            <file src="../bbclassdictionary.txt" targetdir="$INSTALL_PATH"/>
+            <!--
+            <file src="../setup/build.xml" targetdir="$INSTALL_PATH"/>
+            <parsable targetfile="$INSTALL_PATH/build.xml" type="shell" /> 
+            -->
+        </pack>
+        <pack name="NetBeans Integration" required="no" preselected="no">
+            <description>EXPERIMENTAL plugin for creating J2ME Polish projects in NetBeans. 
+Please note that you need to specify the netbeans.home property in the previous settings screen and that your NetBeans installation directory needs to be writable for you.
+You will also need the Mobility Plugin for NetBeans that can be downloaded at http://www.netbeans.org.
+The module will be activated the next time you exit NetBeans (so please start NetBeans and exit right away again, NetBeans will automatically relaunch and integrate the J2ME Polish module, in some cases you might need to exit twice).
+For using the module select File &gt; New Project &gt; Mobile &gt; J2ME Polish Project and follow the steps.  Further information is available on www.j2mepolish.org.      
+            </description>
+            <file src="ide/netbeans/de-enough-polish-netbeans.nbm" targetdir="$NETBEANS_INSTALL_HOME"/>
+        </pack>
+        <pack name="Eclipse Integration (Mepose)" required="no" preselected="no">
+            <description>EXPERIMENTAL plugin for creating and debugging J2ME Polish projects in Eclipse. 
+Please note that you need to specify the eclipse.home property in the previous settings screen and that your Eclipse installation directory needs to be writable for you.
+The plugin will be activated the next time you start Eclipse.
+For using the plugin select File &gt; New &gt; Project &gt; Java &gt; J2ME Polish Project and follow the steps. Further information is available on www.j2mepolish.org.
+When the plugin is not installed correctly, please start eclipse with "-clean" command line argument or install the plugin from within Eclipse under Help &gt; Software Updates.
+            </description>
+            <file src="ide/eclipse/plugins" targetdir="$ECLIPSE_INSTALL_HOME"/>
+            <file src="ide/eclipse/features" targetdir="$ECLIPSE_INSTALL_HOME"/>
+        </pack>
+        <!-- 
+        <pack id="thirdparty-smaato-soma" name="Third Party: Smaato SOMA Client (mobile advertising library)" required="no" preselected="yes">
+            <description>A library for embedding advertisements in your application. J2ME Polish can embed ads automatically for you.</description>
+            <file src="../setup/thirdparty/smaato" targetdir="$INSTALL_PATH/thirdparty"/>
+            <file src="samples/thirdparty-smaato-blackbox" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/thirdparty-smaato-blackbox/build.xml" type="shell" /> 
+        </pack>
+         -->
+        <pack id="thirdparty-nutiteq-openstreetmap" name="Third Party: Nutiteq Open Street Map" required="no" preselected="yes">
+            <description>A library for including openstreetmap maps in your application.</description>
+            <!--  
+            <file src="../setup/thirdparty/nutiteq" targetdir="$INSTALL_PATH/thirdparty"/>
+            -->
+            <file src="samples/thirdparty-nutiteq-openstreetmap" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/.classpath" type="shell" /> 
+        </pack>
+        <pack name="Blank Sample Application" required="no" preselected="yes">
+            <description>A sample skeleton project structure useful for creating new J2ME Polish projects.</description>
+            <file src="samples/blank" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/blank/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/blank/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/blank/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/blank/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="CSS Animation Sample Application" required="no" preselected="yes">
+            <description>This project shows you how to use CSS animations.</description>
+            <file src="samples/animation" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/animation/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/animation/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/animation/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/animation/nbproject/project.properties" type="shell" /> 
+        </pack>
+
+        <pack name="Serialization and Persistence Sample Application" required="no" preselected="yes">
+            <description>The serialization and persistence framework allows you to easily store objects on the handset. This sample application shows you how to do that.</description>
+            <file src="samples/serialization" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/serialization/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/serialization/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/serialization/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/serialization/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="RMI Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to use the RMI (remote method invocation) framework of J2ME Polish.</description>
+            <file src="samples/rmi" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/rmi/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi/nbproject/project.properties" type="shell" /> 
+        </pack>
+
+        <pack name="XML-RPC Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to call XML-RPC servers using the RMI (remote method invocation) framework of J2ME Polish.</description>
+            <file src="samples/rmi-xmlrpc" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/rmi-xmlrpc/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi-xmlrpc/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi-xmlrpc/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rmi-xmlrpc/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Processing Tree Sample Application" required="no" preselected="yes">
+            <description>This project shows you how to use Processing within J2ME Polish. Visit processing.org for more information about Processing.</description>
+            <file src="samples/processing-tree" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/processing-tree/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/processing-tree/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/processing-tree/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/processing-tree/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Fisheye Sample Application" required="no" preselected="yes">
+            <description>A simple application demonstrating the fisheye view-type.</description>
+            <file src="samples/fisheye" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/fisheye/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/fisheye/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/fisheye/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/fisheye/nbproject/project.properties" type="shell" /> 
+        </pack>
+
+        <pack name="RGB Filter Sample Application" required="no" preselected="yes">
+            <description>A simple application demonstrating RGB filter.</description>
+            <file src="samples/rgbfilter" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/rgbfilter/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rgbfilter/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rgbfilter/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rgbfilter/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Java 5 Syntax Sample Application" required="no" preselected="yes">
+            <description>You can use Java 5 syntax elements like generics, autoboxing and enums with J2ME Polish. This project shows you an example.</description>
+            <file src="samples/java5" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/java5/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/java5/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/java5/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/java5/nbproject/project.properties" type="shell" /> 
+        </pack>
+
+        <pack name="Browser Sample Application" required="no" preselected="yes">
+            <description>J2ME Polish provides a XML based browser widget that can be easily used and extended.
+We also provide a HTML browser based on top of the XML browser that supports forms, images, differently rendered text and so on out of the box. 
+This sample application shows how to use the browser technology of J2ME Polish.
+            </description>
+            <file src="samples/browser" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/browser/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/browser/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/browser/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/browser/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+       <pack name="RSS Sample Application" required="no" preselected="yes">
+            <description>Display RSS feeds with the RssBrowser in your J2ME Polish application.
+            </description>
+            <file src="samples/rss" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/rss/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rss/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rss/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/rss/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="ChartItem Sample Application" required="no" preselected="yes">
+            <description>Use the ChartItem for visualizing complex data and trends.
+            </description>
+            <file src="samples/chartitem" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/chartitem/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/chartitem/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/chartitem/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/chartitem/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="CalendarItem and DateField Sample Application" required="no" preselected="yes">
+            <description>Use the CalendarItem or DateField for showing and editing dates.
+            </description>
+            <file src="samples/datefield" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/datefield/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/datefield/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/datefield/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/datefield/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="TableItem Sample Application" required="no" preselected="yes">
+            <description>Demonstrates the usage of the J2ME Polish TableItem.
+            </description>
+            <file src="samples/tableitem" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/tableitem/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tableitem/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tableitem/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tableitem/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="Roadrunner Sample Application" required="no" preselected="yes">
+            <description>A sample application that features a well know game principle.</description>
+            <file src="samples/roadrunner" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/roadrunner/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/roadrunner/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/roadrunner/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/roadrunner/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Accessible Sample Application" required="no" preselected="yes">
+            <description>Learn how to deactivate and reactivate user interface elements with J2ME Polish.</description>
+            <file src="samples/accessible" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/accessible/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/accessible/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/accessible/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/accessible/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Menu Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows a very simple menu and contains three different CSS designs as well as two localizations.</description>
+            <file src="samples/menu" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/menu/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/menu/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/menu/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/menu/nbproject/project.properties" type="shell" /> 
+        </pack>
+        
+        <pack name="Logviewer Sample Application" required="no" preselected="no">
+            <description>A sample application that is used to show log entries that have been previously stored in the recordstore using the 'rms' logger.</description>
+            <file src="samples/logviewer" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/logviewer/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/logviewer/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/logviewer/nbproject/project.properties" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/logviewer/.classpath" type="shell" /> 
+        </pack>
+        <pack name="ChoiceTextField, TreeItem and Subcommands Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to use subcommands, the TreeItem and ChoiceTextField, a dropdown textfield.</description>
+            <file src="samples/email" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/email/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/email/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/email/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/email/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="FramedForm Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to use the FramedForm.</description>
+            <file src="samples/framedform" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/framedform/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/framedform/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/framedform/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/framedform/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="TabbedForm Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to use the TabbedForm.</description>
+            <file src="samples/tabbedform" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedform/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedform/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedform/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedform/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="TabbedPane Sample Application" required="no" preselected="yes">
+            <description>A sample application that shows how to use the TabbedPane.</description>
+            <file src="samples/tabbedpane" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedpane/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedpane/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedpane/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/tabbedpane/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <pack name="MIDP SysInfo" required="no" preselected="yes">
+            <description>An application that checks the capabilities of your device. This application is based on Grimo Software's MIDP SysInfo MIDlet and is a co-effort of Grimo Software, Enough Software and Mark Schriejver.</description>
+            <file src="samples/sysinfo" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/sysinfo/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/sysinfo/nbproject/project.properties" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/sysinfo/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/sysinfo/.classpath" type="shell" /> 
+        </pack>
+        <pack name="DoJa Tetris Sample Application" required="no" preselected="yes">
+            <description>A Tetris clone from Sun for DoJa devices.</description>
+            <file src="samples/doja" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/doja/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/doja/nbproject/project.properties" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/doja/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/doja/.classpath" type="shell" /> 
+        </pack>
+        <pack name="Docs" required="no" preselected="yes">
+            <description>The documentation of J2ME Polish in HTML format.</description>
+            <file src="doc" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
+        </pack>
+        <pack name="Tools" required="no" preselected="yes">
+            <description>General stand-alone tools for J2ME development, e.g. the designer, the binary data editor or an editor for creating bitmap-fonts.</description>
+            <file src="macosx/binaryeditor.app" targetdir="$INSTALL_PATH/bin">
+            	<os name="Mac OS X" />
+            </file>
+            <file src="macosx/fonteditor.app" targetdir="$INSTALL_PATH/bin" >
+            	<os name="Mac OS X" />
+            </file>
+            <file src="macosx/designer.app" targetdir="$INSTALL_PATH/bin" >
+            	<os name="Mac OS X" />
+            </file>
+            <file src="../setup/scripts/designer" targetdir="$INSTALL_PATH/bin" os="unix"/>
+            <file src="../setup/scripts/designer.bat" targetdir="$INSTALL_PATH/bin" os="windows"/>
+            <file src="../setup/scripts/binaryeditor" targetdir="$INSTALL_PATH/bin" os="unix"/>
+            <file src="../setup/scripts/binaryeditor.bat" targetdir="$INSTALL_PATH/bin" os="windows"/>
+            <file src="../setup/scripts/fonteditor" targetdir="$INSTALL_PATH/bin" os="unix"/>
+            <file src="../setup/scripts/fonteditor.bat" targetdir="$INSTALL_PATH/bin" os="windows"/>
+            <file src="../setup/bin/level.definition" targetdir="$INSTALL_PATH/bin" />
+            <file src="../setup/bin/level1.data" targetdir="$INSTALL_PATH/bin" />
+            <file src="../setup/bin/readme.txt" targetdir="$INSTALL_PATH/bin" />
+            <file src="../setup/bin/example.bmf" targetdir="$INSTALL_PATH/bin" />
+            <file src="../setup/bin/bmf.definition" targetdir="$INSTALL_PATH/bin" />
+            <!-- mark Unix shell skripts as executable: -->
+            <executable targetfile="$INSTALL_PATH/bin/designer" stage="never" os="unix" />
+            <executable targetfile="$INSTALL_PATH/bin/binaryeditor" stage="never" os="unix" />
+            <executable targetfile="$INSTALL_PATH/bin/fonteditor" stage="never" os="unix" />
+            <executable targetfile="$INSTALL_PATH/bin/fonteditor.app/Contents/MacOS/FontEditor" stage="never" >
+            	<os name="Mac OS X" />
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/binaryeditor.app/Contents/MacOS/BinaryEditor" stage="never">
+            	<os name="Mac OS X" />
+            </executable>            
+            <executable targetfile="$INSTALL_PATH/bin/designer.app/Contents/MacOS/Designer" stage="never" >
+            	<os name="Mac OS X" />
+            </executable>
+            <parsable targetfile="$INSTALL_PATH/bin/designer" type="shell"  os="unix" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/designer.bat" type="shell"  os="windows" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/binaryeditor" type="shell"  os="unix" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/binaryeditor.bat" type="shell" os="windows" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/fonteditor" type="shell"  os="unix" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/fonteditor.bat" type="shell" os="windows" /> 
+            <parsable targetfile="$INSTALL_PATH/bin/fonteditor.app/Contents/Info.plist" type="shell">
+            	<os name="Mac OS X" />
+            </parsable>
+            <parsable targetfile="$INSTALL_PATH/bin/binaryeditor.app/Contents/Info.plist" type="shell">
+            	<os name="Mac OS X" />
+            </parsable>
+            <parsable targetfile="$INSTALL_PATH/bin/designer.app/Contents/Info.plist" type="shell">
+            	<os name="Mac OS X" />
+            </parsable>
+        </pack>
+        <pack name="External Device Database" required="no" preselected="no" >
+            <description>The files &quot;devices.xml&quot;, &quot;vendors.xml&quot;, &quot;groups.xml&quot; and &quot;apis.xml&quot; etc. 
+Do NOT use these if you want to add your own device-definitions!
+Instead use custom-devices.xml, custom-vendors.xml, custom-groups.xml and custom-apis.xml for your own definitions.
+			</description>
+            <file src="devices.xml" targetdir="$INSTALL_PATH"/>
+            <file src="vendors.xml" targetdir="$INSTALL_PATH"/>
+      	    <file src="groups.xml" targetdir="$INSTALL_PATH"/>
+            <file src="apis.xml" targetdir="$INSTALL_PATH"/>
+            <file src="platforms.xml" targetdir="$INSTALL_PATH"/>
+            <file src="configurations.xml" targetdir="$INSTALL_PATH"/>
+            <file src="capabilities.xml" targetdir="$INSTALL_PATH"/>
+            <file src="custom-extensions.xml" targetdir="$INSTALL_PATH"/>
+        </pack>
+        <pack id="sources" name="Sources" required="no" preselected="yes">
+            <description>The sources of J2ME Polish. These are useful if you want to extend J2ME Polish.</description>
+            <file src="j2mepolish-src" targetdir="$INSTALL_PATH"/>
+        </pack>
+    </packs>
+    
+</installation>

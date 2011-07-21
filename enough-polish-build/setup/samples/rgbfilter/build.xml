@@ -1,0 +1,270 @@
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish-target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created and so on.                                    -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+<project 
+	name="enough-j2mepolish-rgbfilter" 
+	default="j2mepolish">
+	
+	<!-- import user specific properties                          -->
+	<property file="${user.name}.properties" />
+	
+	<!-- The polish.home property needs to point to the directory -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" location="%{INSTALL_PATH}" />
+	
+	<!-- import global properties                                 -->
+	<property file="${polish.home}/global.properties" />
+
+
+		
+	<!-- the device for the test mode - you can define it on the command-line
+	     using the -D switch, e.g. ant -Ddevice=Generic/AnyMsaPhone emulator -->
+	<property name="device" value="Generic/AnyPhone"/>
+	<property name="devices" value="${device},Nokia/Series40E3,Nokia/Series60E2,Nokia/Series60E3,Sony-Ericsson/JavaPlatform7,Sony-Ericsson/JavaPlatform8"/>
+	
+
+
+	<!-- Definition of the J2ME Polish task:                      -->
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar"
+	/>
+	
+		
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="setdeploy" 
+		description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+		>
+		<property name="deploy-url" value="http://www.company.com/download/" />
+	</target>
+	
+	<target name="enableDebug" 
+		description="Call this target first to skip the obfuscation step, call the emulator and start the debugger, e.g. ant enableDebug j2mepolish"
+		>
+		<property name="debug" value="true" />
+	</target>
+	
+		
+	<target name="test" 
+		description="Call this target first to skip the obfuscation step and call the emulator, e.g. ant test j2mepolish"
+		>
+		<property name="test" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+			
+	<target name="init">
+	  	<property name="test" value="false" />
+		<property name="dir.work" value="build/real" />
+		<property name="deploy-url" value="" />
+		<property name="resource.dir" value="resources" />
+	</target>
+	 
+	<!-- In this target the J2ME Polish task is used.             -->
+	<!-- It has 3 sections:                                       -->
+	<!--    1. The info-section defines some general information  -->
+	<!--    2. The deviceRequirements-section chooses the devices -->
+	<!--       for which the application is optimized.            -->
+	<!--    3. The build-section controls the actual build        -->
+	<!--       process.                                           -->	
+	<target name="j2mepolish" 
+			depends="init"
+			description="This is the controller for the J2ME build process." 
+			>
+		<j2mepolish>
+		    <!-- general settings, these settings basically form the JAD-attributes. -->
+		    <!-- Have a look at the <jad>-section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files -->
+			<info
+				name="RGB Filter"
+				version="2.1.4"
+				description="A simple project that uses RGB filter."
+				vendorName="Enough Software"
+				infoUrl="http://www.j2mepolish.org"
+				icon="icon0.png"
+				jarName="${polish.vendor}-${polish.name}-${polish.locale}-rgbfilter.jar" 
+				jarUrl="${deploy-url}${polish.jarName}"
+				copyright="Copyright 2011 Enough Software. All rights reserved."
+			/>
+			<!-- selection of supported devices -->
+			<!-- In the test mode the application is build only for the  -->
+			<!-- Generic/midp1 phone, but when the test-property is set to false, -->
+			<!-- the second deviceRequirements will be used instead. -->
+			<deviceRequirements if="test">
+				<requirement name="Identifier" value="${device}" />
+			</deviceRequirements>
+			<deviceRequirements unless="test">
+				<requirement name="Identifier" value="${devices}" />
+				<!-- on could use other devices for real builds, e.g. :
+				<or>
+					<and>
+						<requirement name="JavaPackage" value="nokia-ui" />
+						<requirement name="BitsPerPixel" value="16+" />
+					</and>
+				</or>
+				 -->
+			</deviceRequirements>
+		    <!-- build settings -->
+			<!-- 
+			 -->
+			<build
+				symbols="ExampleSymbol, AnotherExample"
+				usePolishGui="true"
+				workDir="${dir.work}"
+			>
+				<!-- midlets definition -->
+				<midlet class="de.enough.polish.example.MenuMidlet" name="RGB Filter" />
+				<!-- project-wide variables - used for preprocessing.  -->
+				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+				<variables includeAntProperties="true" >
+					<!-- use the advanced menubar mode that offers near-native command handling and positioning, on BB and Android use native commands: -->
+					<variable
+						name="polish.FullScreen"
+						value="menu" 
+						unless="polish.blackberry || polish.android" 
+					/>
+					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					<!-- example variables:
+					You can change the title of the sample application with the "title"-var.
+					-->
+					<variable name="title" value="J2ME Polish" />
+				</variables>
+				<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
+				<resources
+					dir="${resource.dir}"
+					defaultexcludes="yes"
+					excludes="readme.txt"
+				>
+					<!-- you can also use several root directories for your resource assembling.
+					     This is useful for customizations and for having a cleanly structured 
+					     resources directory (for example seperating images from sounds, etc):
+					<root dir="resources/images" />
+					<root dir="resources/sounds" />
+					<root dir="resources/customer1" if="customer1" />
+					<root dir="resources/customer2" if="customer2" />
+					-->
+					<!-- add the localization element for created localized
+					     versions of your application: -->
+					<localization locales="de_DE, en_US" unless="test" />
+					<localization locales="en_US" if="test" />
+				</resources>
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator name="ProGuard" unless="test or polish.blackberry" >
+					<!--
+					You can set additional parameters here, e.g.:
+					<parameter name="optimize" value="false" />
+					-->
+				</obfuscator>
+				<!-- debug settings: only include debug setting when the test-property is true -->
+				<debug if="test or log" verbose="true" level="error">
+					<filter pattern="de.enough.polish.example.*" level="debug" />
+					<filter pattern="de.enough.polish.ui.*" level="warn" />
+				</debug>
+				<!-- user defined JAD attributes can also be used: -->
+				<jad>
+					<attribute name="Nokia-MIDlet-Category" value="Game" if="polish.group.Series40" />
+				</jad>	
+				<!-- 
+				   This is an example for signing MIDlets with J2ME Polish. 
+				   You can set the password on the commandline by calling "ant -Dpassword=secret",
+				   or by setting the Ant property above.
+				   Signing is done only for MIDP/2.0 devices.
+				-->
+				<!--
+				<sign
+					key="SignMIDlet"
+					keystore="midlets.ks"
+					password="${password}"
+					unless="test"
+				/>
+				-->
+			</build>
+			
+			<!-- execution of emulator(s) -->
+			<emulator
+				wait="true"
+				securityDomain="trusted"
+				enableProfiler="true"
+				enableMemoryMonitor="true"
+				enableNetworkMonitor="true"
+				if="debug"
+				>
+				<!--
+				<parameter name="-Xjam" value="transient=http://localhost:8080/${polish.jadName}" />
+				-->
+			</emulator>
+                        
+			<emulator
+				wait="true"
+				trace="class"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="test and not debug"
+				>
+				<!-- this is an example for connecting to a debugger - use the ${polish.debug.port} Ant property
+				     for getting to know the port of the debugger. In this example the 
+				     "connect-debugger" target is also required.
+				-->
+				<!--
+				<debugger name="antcall" target="connect-debugger" port="6001" />
+				-->
+			</emulator>
+
+		
+		</j2mepolish>
+	</target>
+	
+	<target 
+		name="emulator"
+		depends="test,j2mepolish"
+		description="invokes the emulator"
+	>
+	</target>
+
+	<target name="clean" 
+	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+		<delete dir="build" />
+		<delete dir="dist" includes="**/*" />
+	</target>
+
+	<target  
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant cleanbuild] whenever you made changes to devices.xml, vendors.xml or groups.xml"
+		depends="clean, j2mepolish"
+	/>
+
+	<target name="enableBarbie" >
+		<property name="resource.dir" value="resources2" />
+		<property name="dir.work" value="build/barbie" />
+	</target>
+	
+    <target name="barbie" description="launches the application with the barbie design" depends="enableBarbie, test, j2mepolish" />
+
+	<target name="enableFrog" >
+		<property name="resource.dir" value="resources3" />
+		<property name="dir.work" value="build/frog" />
+	</target>
+	
+    <target name="frog" description="launches the application with the frog design" depends="enableFrog, test, j2mepolish" />
+	
+    <target name="debug" description="debugs the project" depends="enableDebug, test, j2mepolish" />
+
+</project>

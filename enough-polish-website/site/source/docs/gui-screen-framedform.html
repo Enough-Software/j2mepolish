@@ -1,0 +1,75 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: FramedForm %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using FramedForms</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-form.html">Form</a></li>
+		<li><a href="gui-screen-tabbedform.html">TabbedForm</a></li>
+		<li><a href="gui-visualguide.html#gui-overview">Screen Elements</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The FramedForm provides several frames that remain static on the screen, while only the center frame
+	can be scrolled.
+</p>
+<h2 id="design">Design</h2>
+<p><img src="<%= basedir%>images/gui-screen-framedform.png" width="354" height="421" alt="FramedForm"/>
+
+<br />The above design has been realized with the following settings in <i>polish.css</i>:
+<pre>
+.gradientFramedForm {
+	padding: 2;
+	background-color: screenBgColor;
+	layout: vertical-center | horizontal-center;
+}
+
+rightframe {
+	layout: vertical-expand | vertical-center;
+}
+</pre>
+</p>
+<p>The FramedForm contains any kind of items in several frames. 
+The user can jump between different frames by clicking left and right (when the non-scrollable frames contain selectable items).
+</p>
+<p>
+The FramedForm uses different styles for its design:
+</p>
+<ul>
+	<li><b>leftframe</b>: the design of the frame left of the main content area</li>
+	<li><b>rightframe</b>: the design of the frame right of the main content area</li>
+	<li><b>topframe</b>: the design of the frame over the main content area</li>
+	<li><b>bottomframe</b>: the design of the frame below the main content area</li>
+</ul>
+<p>You can use the following CSS attributes for the FramedForm:</p>
+<%cssattributes de.enough.polish.ui.FramedForm %>
+
+
+<h2 id="programming">Programming</h2>
+<p>The FramedForm is used like a normal <a href="gui-screen-form.html">Form</a> but you have some additional methods for 
+adding contents to a specific frame:
+</p>
+<ul>
+	<li><code>append( int frameOrientation, Item item )</code>: Adds the given item to the specified frame (either Graphics.TOP, Graphics.BOTTOM, Graphics.LEFT or Graphics.RIGHT), can be used with a <code>style</code> preprocessing directive.</li>
+	<li><code>set( int frameOrientation, int itemNum, Item item )</code>: Updates an existing item in the specified frame.</li>
+	<li><code>delete( int frameOrientation, int itemNum )</code>: Removes the given item from the specifid frame.</li>
+	<li><code>deleteAll( int frameOrientation )</code>: Removes all items from the specified frame.</li>
+	<li><code>boolean deleteFrame(int frameOrientation)</code>: Deletes a complete frame.</li>
+	<li><code>setActiveFrame( int frameOrientation )</code>: Focuses the specified frame.</li>
+</ul>
+<p>
+For a complete example please refer to the &quot;framedform&quot; sample application.
+</p>
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/FramedForm.html">FramedForm</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+<%include end.txt %>

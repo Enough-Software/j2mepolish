@@ -1,0 +1,482 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  */
+
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	overlay: #9fff;
+}
+
+
+borders {
+	squareFocusedBorder {
+		color: black;
+		width: 1;
+	}
+	
+	dropShadow {
+		type: round-rect-drop-shadow;
+		inner-color: #a333;
+		outer-color: #2222;
+		arc: 10;
+		width: 8;
+		orientation: bottom-left;
+	}
+	
+}
+
+backgrounds {
+	completeBg {
+		type: round-rect;
+		color: #ccc;
+	}
+	gradientTop {
+		type: partial-gradient;
+		start: 0%;
+		end: 10%;
+		top-color: rgb(132,143,96);
+		bottom-color: #ccc;
+	}
+	gradientMiddle {
+		type: partial-gradient;
+		start: 90%;
+		end: 100%;
+		top-color: #ccc;
+		bottom-color: rgb(132,143,96);
+	}
+	
+	commandBackBg {
+		type: mask;
+		mask-color: red;
+		mask: commandBackBgMask;
+		background: commandBgGradient;
+	}
+
+	commandBackBgPressed {
+		type: mask;
+		mask-color: red;
+		mask: commandBackBgMask;
+		background: commandBgPressedGradient;
+	}
+	
+	commandBackBgMask {
+		type: horizontal;
+		left-background: arrowLeftBgMask;
+		right-background: roundRectBgMask;
+		split-pos: 14%;
+		margin: -1;
+	}
+	
+	arrowLeftBgMask {
+		type: triangle;
+		orientation: left;
+		color: red;
+	}
+	
+	roundRectBgMask {
+		type: round-rect;
+		arc: 4;
+		color: red;
+	}
+	
+	
+	commandBg {
+		type: mask;
+		mask-color: red;
+		mask: commandBgMask;
+		background: commandBgGradient;
+	}
+	
+	commandBgPressed {
+		type: mask;
+		mask-color: red;
+		mask: commandBgMask;
+		background: commandBgPressedGradient;
+	}
+	
+	
+	commandBgMask {
+		type: round-rect;
+		arc: 4;
+		color: red;
+	}
+	
+	commandBgGradient {
+		type: vertical-gradient;
+		top-color: #fdfeff;
+		bottom-color: #9e8e81;
+	}
+	
+	commandBgPressedGradient {
+		type: vertical-gradient;
+		top-color: #cdcecf;
+		bottom-color: #0e0e01;
+	}
+	
+		
+	menuItemBg {
+		type: mask;
+		mask-color: red;
+		mask: commandBgMask;
+		background: commandBgGradient;
+	}
+	
+	focusedCommandBgGradient {
+		type: vertical-gradient;
+		top-color: #ec8c11;
+		bottom-color: #e24510;
+	}
+	
+	
+	menuItemFocBg {
+		type: mask;
+		mask-color: red;
+		mask: commandBgMask;
+		background: focusedCommandBgGradient;
+	}
+	
+	
+}
+
+/************* Title and Menu   ***********************************************************************************/
+
+/**
+  * The menubar is also responsible for styling the title, as the 
+  * 'title-menubar' option is used for screens within the TabbedPane.
+  */
+menubar {
+	padding: 2px;
+	padding-bottom: 4px;
+	background {
+		type: vertical-gradient;
+		top-color: #acadb1;
+		bottom-color: #f6f6f6;
+	}
+	layout: horizontal-center | horizontal-expand;
+}
+
+leftcommand {
+	min-width: 40%; /* 40% of 50% maximum width results in 20% of screen width */
+	max-width: 40%;
+	font-size: small;
+	background: commandBackBg;
+	text-layout: center;
+	layout: left | vertical-center;
+}
+
+leftcommand:pressed {
+	background: commandBackBgPressed;
+}
+
+rightcommand extends leftcommand {
+	layout: right | vertical-center;
+	background: commandBg;
+}
+
+rightcommand:pressed {
+	background: commandBgPressed;
+}
+
+
+title {
+	max-width: 56%;
+	font-face: proportional;
+	font-size: medium;
+	font-style: bold;
+	font-color: #e24510;
+	text-effect: shadow;
+	text-shadow-color: #888;
+	layout: horizontal-center | horizontal-expand | vertical-center;
+}
+
+.mapTitle {
+	view-type: horizontal-choice;
+	horizontalview-roundtrip: true;
+	horizontalview-left-arrow: url( arrow-left.png );
+	horizontalview-right-arrow: url( arrow-right.png );
+	max-width: 56%;
+	layout: expand | center;
+}
+
+.mapTitleItem {
+	margin: 1px;
+	padding: 1px;
+	icon-image: url( filter%INDEX%.png );
+	icon-image-align: top;
+	layout: center | vertical-center;
+}
+
+.mapTitleItem:hover {
+}
+
+.mapTitleItem:checked {
+	background {
+		type: round-rect;
+		color: #ec8c11;
+	}
+}
+
+/************* TabbedPane styling ***********************************************************************************/
+
+
+.tabbedPane {
+	title-menu: true;
+	tabbedpane-tabbar-position: bottom;
+}
+
+.tabbedPaneIcons {
+	view-type: horizontal-left;
+	horizontalview-distribution: equal;
+	horizontalview-roundtrip: true;
+	background {
+		type: vertical-gradient;
+		top-color: #f6f6f6;
+		bottom-color: #acadb1;
+	}
+	border {
+		top-width: 1;
+		color: #aaa;
+	}
+	layout: expand;
+}
+
+.tabIcon {
+	margin: 1px;
+	padding: 2px;
+	icon-image: url( Tab%INDEX%.png );
+	icon-image-align: top;
+	font-bitmap: url( arialsmall.bmf );
+	layout: expand | center | vertical-center;
+}
+
+.tabIcon:hover {
+	padding: 1px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #f1f1f1;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+	icon-image: url( TabFoc%INDEX%.png );
+}
+
+.tabIcon:landscape {
+	text-visible: false;
+}
+
+.tabIcon:landscape:hover {
+	padding: 1px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #f1f1f1;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+	icon-image: url( TabFoc%INDEX%.png );
+}
+
+.customTabIcon {
+	padding: 2px;
+	icon-image: url( TabCustom0.png );
+	icon-image-align: top;
+	font-bitmap: url( arialsmall.bmf );
+	layout: expand | center | vertical-center;
+}
+
+.customTabIcon:hover {
+	padding: 1px;
+	font-color: red;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #ff7;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+}
+
+.mainMenuScreen {
+	title-menu: true;
+	background-color: #fff;
+	show-delay: 150ms;
+	layout: vertical-center;
+	padding-vertical: 2px;
+}
+
+.mainMenuItem {
+	margin: 2px;
+	font-style: bold;
+	layout: expand | center | vertical-center;
+	background: menuItemBg;
+	//#if polish.android
+		min-height: 18%;
+	//#endif
+}
+
+.mainMenuItem:hover {
+	margin: 1px;
+	background: menuItemFocBg;
+	border {
+		type: round-rect;
+		color: red;
+	}
+}
+
+.mainMenuItem:pressed {
+	margin: 1px;
+	font-color: white;
+	background: menuItemFocBg;
+	border {
+		type: round-rect;
+		color: red;
+	}
+}
+
+
+.mainMenuItemAnimated extends mainMenuItem {
+	x-adjust: -100%;
+	x-adjust-animation {
+		on: show-first;
+		range: -100%..0%;
+		duration: 600ms;
+	}
+}
+
+.mainMenuItemAnimated:hover {
+	background: menuItemFocBg;
+}
+
+.mainMenuItemAnimated:pressed {
+	x-adjust: 0%;
+	font-color: white;
+	background: menuItemFocBg;
+}
+
+
+/*** info screen ****/
+.screenMessage {
+	title-menu: true;
+	layout: vertical-center | center;
+	background-color: #eee;
+}
+
+
+/*************   Other styles  *************/
+
+label {
+	font-size: small;
+	margin: 2;
+	margin-left: 5;
+	layout: left | newline-after;
+}
+
+/**
+  * The element that displays the current input mode, e.g. "abc" or "Abc" or "123"
+  */
+info {
+	layout: right;
+	margin-right: 10;
+	background-color: argb( 170, 255, 255, 255 );
+}
+
+/*************    Popup Alert        ***************************************************************************************************/
+.popupAlert {
+	repaint-previous-screen: true;
+	layout: vertical-shrink | horizontal-shrink | vertical-center | horizontal-center;
+	padding: 5%;
+	background-color: #8f88;
+}
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 80%;
+}
+
+
+/*************     Commands Menu     **************************************************************************************************/
+
+
+menu {
+	margin-left: 2px;
+	margin-right: 2px;
+	width: 75%;
+	padding: 2px;
+	background-color: #ddd;
+	border {
+		width: 1;
+		color: #666;
+	}
+	bgborder: dropShadow;
+	layout: top | right;
+}
+
+/** 
+ *  'Options' text design at the top of the opened menu.
+ */
+.menuTextBgFont {
+	always-include: true;
+	font-color: #333;
+	font-style: bold;
+	font-size: small;
+}
+
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin: 2px;
+	margin-left: 5%;
+	margin-right: 5%;
+	font-color: #333;
+	font-style: bold;
+	font-size: large;
+	background: menuItemBg;
+	layout: expand | center;
+	border {
+		type: round-rect;
+		color: #888;
+	}
+}
+
+.menuItem:hover {
+}
+
+.menuItem:pressed {
+	background {
+		type: round-rect;
+		arc: 6;
+		color: #888;
+	}
+}
+

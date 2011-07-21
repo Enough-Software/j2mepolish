@@ -1,0 +1,69 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.netbeans %>
+<%set title = J2ME Polish: NetBeans %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">NetBeans Integration</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="netbeans.html">Overview</a></li>
+		<li><a href="netbeans-newproject.html">Creating a new Project</a></li>
+		<li><a href="netbeans-running.html">Running and Debugging</a></li>
+	</ul>
+	
+	<p>
+	You can install the NetBeans module during installation of J2ME Polis.
+	</p>
+	<h2 id="prerequisites">Prerequisites</h2>
+	<p>
+	You need a working <a href="http://www.netbeans.org/" target="_blank">NetBeans</a> installation 
+	with an installed <a href="http://www.netbeans.org/features/javame/" target="_blank">mobility pack</a>.
+	<br/>
+	Additionally you will need a preverifier and at least one emulator:
+	<br />
+	For Windows we recommend the <a href="http://java.sun.com/products/sjwtoolkit/download-2_5.html" target="_blank">Sun Wireless Toolkit for CLDC</a> (currently version 2.5).
+	<br />
+	For Linux we recommend the <a href="http://java.sun.com/products/sjwtoolkit/download-2_5.html" target="_blank">J2ME Wireless Toolkit for CLDC</a> (version 2.5).
+	<br />
+	For Mac OS X we recommend the <a href="http://mpowerplayer.com" target="_blank">MPowerPlayer</a>.
+	Also note that you need to <a href="http://wiki.netbeans.org/wiki/view/MobilityFromZipToNB" target="_blank">install the mobility pack manually on OS X</a>.
+	</p>
+	<p>
+		
+	<h2 id="installation">Installation</h2>
+	<p>
+	During the installation of J2ME Polish you have to specify where you have installed NetBeans and you have to select that you wish to install the 
+	NetBeans module. The module will be installed automatically the next time you quit NetBeans.
+	</p>
+	<p>
+	NOTE: you need writing rights for your NetBeans installation directory to install the J2ME Polish integration.
+	</p>
+	<p>
+	Specify where to find NetBeans:
+	<br/>
+	<img src="../images/netbeans-install-nbhome-nbhomeonly.png" alt="Specify where to find NetBeans" />	
+	<br/>
+	<img src="../images/netbeans-install-nbhome.png" alt="Specify where to find NetBeans" />
+	</p>
+	<p>
+	Select to install the NetBeans integration:
+	<br/>
+	<img src="../images/netbeans-install-selectpackage-packageonly.png" alt="Select to install the NetBeans integration" />	
+	<br/>
+	<img src="../images/netbeans-install-selectpackage.png" alt="Select to install the NetBeans integration" />	
+	</p>
+	<p>
+	Now you have to restart NetBeans. Just quit NetBeans, it will restart automatically and install the module:
+	<br/>
+	<img src="../images/netbeans-updatecenter.png" alt="NetBeans update center" />	
+	<br/>
+	Note that in some cases a second restart is required for the successfull installation.
+	</p>
+	<p>
+	Now you can <a href="netbeans-newproject.html">create new J2ME Polish projects</a> by selecting File &gt; Project &gt; Mobile &gt; J2ME Polish.
+	</p>
+
+
+<%include end.txt %>

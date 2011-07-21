@@ -1,0 +1,326 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending J2ME Polish: ScreenChangeAnimation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Extending the J2ME Polish GUI with ScreenChangeAnimations</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-itemview.html">Item Views</a></li>
+		<li><a href="extending-border.html">Borders</a></li>
+		<li><a href="extending-background.html">Backgrounds</a></li>
+		<li><a href="extending-texteffect.html">TextEffect</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Existing ScreenChangeAnimations</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A ScreenChangeAnimation animates a transition from one screen to the next.
+	While there are
+	<a href="gui-visualguide-screenchangeanimations.html">various screen-change-animations</a> available, you might encounter a 
+	situation in which you want to create your own animation - read on for learning how.</p>
+	</p>
+	
+	<h2 id="concepts">Concepts of ScreenChangeAnimation</h2>
+	<p>
+	It's easy to realize your own animation by following these steps:
+	</p>
+	<ol>
+		<li><b>Implement</b> your animation by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenChangeAnimation.html">de.enough.polish.ui.ScreenChangeAnimation</a> 
+		or an existing ScreenChangeAnimation subclass.</li>
+		<li><b>Register</b> the animation in <i>${polish.home}/custom-css-attributes.xml</i> (optional).</li>
+		<li><b>Apply </b> your animation by specifying the <code>screen-change-animation</code> CSS attribute in your project's <i>polish.css</i> file.</li>
+	</ol>
+	
+	<h2 id="implementation">Implementing your ScreenChangeAnimation</h2>
+	<p>
+	Create your own animation by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenChangeAnimation.html">de.enough.polish.ui.ScreenChangeAnimation</a> 
+	or an existing ScreenChangeAnimation subclass.
+	For simple animations you only need to implement a constructor and the methods <code>protected boolean animate()</code>
+	and <code>protected void paintAnimation( Graphics g )</code>.
+	</p>
+	<h3 id="implementation-fields">Fields</h3>
+	<p>
+	You can use the following instance fields of ScreenChangeAnimation for realizing your animation:
+	</p>
+	<ul>
+		<li><code>protected Image lastCanvasImage</code>: The image of the previous screen.</li>
+		<li><code>protected int[] lastCanvasRgb</code>: If you want to to
+	use RGB data of the previous screen on MIDP 2.0 handsets as well, you need  to set the instance field <code>useLastCanvasRgb</code>
+	to <code>true</code> in either your constructor, the <code>show(..)</code> method
+	or the <code>setStyle(Style)</code> method.</li>
+		<li><code>protected Image nextCanvasImage</code>: The image of the next screen.</li>
+		<li><code>protected int[] nextCanvasRgb</code>: If you want to to
+	use RGB data of the next screen on MIDP 2.0 handsets as well, you need  to set the instance field <code>useNextCanvasRgb</code>
+	to <code>true</code> in either your constructor, the <code>show(..)</code> method
+	or the <code>setStyle(Style)</code> method.</li>
+		<li><code>protected int screenWidth</code>: The width of the screen.</li>
+		<li><code>protected int screenHeight</code>: The height of the screen.</li>
+		<li><code>protected boolean isForwardAnimation</code>: You can differentiate between entering a screen that
+		uses your ScreenChangeAnimation (<code>this.isForwardAnimation</code> is <code>true</code>) and leaving a 
+		screen that uses your animation while entering a screen without a ScreenChangeAnimation 
+		(<code>this.isForwardAnimation</code> is <code>false</code>).
+		</li>
+	</ul>
+	
+	<h3 id="implementation-constructor">Constructor</h3>
+	<p>
+	If you implement a constructor, you need to have a constructor that does not take any arguments.
+	<br />
+	You should refrain from acquiring any resources in your constructor, as this slows down the startup time and the available
+	memory for your application.
+	</p>
+	
+	<h3 id="implementation-animate">animate()</h3>
+	<p>
+	Your ScreenChangeAnimation stays active as long as you return <code>true</code> in your
+	<code>protected boolean animate()</code> method.
+	</p>
+	<p>When you return <code>false</code> you need to release all resources that your implementation might hold.
+	You do not need to care about the default resources described in the <a href="#implementation-fields">Fields section</a>.
+	</p>
+
+	<h3 id="implementation-paintAnimation">paintAnimation( Graphics g )</h3>
+	<p>
+	Paint your animation in the <code>protected void paintAnimation( Graphics g )</code> method.
+	You can do anything that is allowed with <code>Graphics</code>, e.g.
+<pre>
+g.drawImage( this.lastCanvasImage, 0, 0, Graphics.TOP | Graphics.LEFT );
+</pre>
+	</p>
+	
+	<h3 id="implementation-setStyle">setStyle( Style style )</h3>
+	<p>
+	If you want to support additional CSS attributes that you need to register within
+	<i>${polish.home}/custom-css-attributes.xml</i>, you need to overwrite
+	<code>protected void setStyle(Style style)</code>.
+	<br />
+	Since the <code>setStyle</code> method is called just before the animation is started, 
+	you can also use this mechanism to reset your values to the default values (or overwrite <code>showNotify()</code> instead):
+	</p>
+<pre>
+protected void setStyle(Style style) {
+	if (this.isForwardAnimation) {
+		this.currentStep = 0;
+	} else {
+		this.currentStep = MAX_STEPS;
+	}
+	//#if polish.css.myanimation-background-color
+		Color color = style.getColor( "myanimation-background-color" );
+		if (color != null) {
+			this.backgroundColor = color.getColor();
+		} else {
+			this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
+		}
+	//#endif
+}
+</pre>
+	<p>The above snippet assumes that you have the following attribute definition in <i>${polish.home}/custom-css-attributes.xml</i>:
+	</p>
+<pre>
+&lt;attribute
+	name=&quot;myanimation-background-color&quot;
+	type=&quot;color&quot;
+	appliesTo=&quot;MyScreenChangeAnimation&quot;
+	description=&quot;The background color of my animation.&quot;
+	default=&quot;black&quot;
+/&gt;
+</pre>
+	
+	
+	<h3 id="implementation-sample">Sample Implementation</h3>
+	<p>With the following example we illustrate the existing <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/screenanimations/LeftScreenChangeAnimation.html">de.enough.polish.ui.screenanimations.LeftScreenChangeAnimation</a> 
+	that inserts the next screen from the left:
+	<br />
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-screenchangeanimation-left.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="175">
+	        <param name='height' value="225">
+	        <embed src="<%= basedir%>images/gui-screenchangeanimation-left.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="176" height="225"
+	        >
+	        </embed>
+		</object>
+		</p>
+<pre>
+//#condition polish.usePolishGui
+
+package de.enough.polish.ui.screenanimations;
+
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+
+import de.enough.polish.ui.ScreenChangeAnimation;
+import de.enough.polish.ui.Style;
+
+public class LeftScreenChangeAnimation 
+<b>extends ScreenChangeAnimation</b>
+{
+	
+	private int currentX;
+	//#if polish.css.left-screen-change-animation-speed
+		private int speed = -1;
+	//#endif
+	//#if polish.css.left-screen-change-animation-move-previous
+		private boolean movePrevious;
+	//#endif
+
+	/**
+	 * Creates a new animation 
+	 */
+	public LeftScreenChangeAnimation() {
+		super();
+	}
+
+	protected void setStyle(Style style)
+	{
+		super.setStyle(style);
+		if (this.isForwardAnimation) {
+			this.currentX = 0; 
+		} else {
+			this.currentX = this.screenWidth;
+		}
+		//#if polish.css.left-screen-change-animation-speed
+			Integer speedInt = style.getIntProperty( &quot;left-screen-change-animation-speed&quot; );
+			if (speedInt != null ) {
+				this.speed = speedInt.intValue();
+			} else {
+				this.speed = -1;
+			}
+		//#endif
+		//#if polish.css.left-screen-change-animation-move-previous
+			Boolean movePreviousBool = style.getBooleanProperty(&quot;left-screen-change-animation-move-previous&quot;);
+			if (movePreviousBool != null) {
+				this.movePrevious = movePreviousBool.booleanValue();
+			} else {
+				this.movePrevious = false;
+			}
+		//#endif
+	}
+
+
+	protected boolean animate() {
+		int adjust;
+		//#if polish.css.left-screen-change-animation-speed
+			if (this.speed != -1) {
+				adjust =  this.speed;
+			} else {
+		//#endif
+				adjust = (this.screenWidth - this.currentX) / 3;
+				if (adjust &lt; 2) {
+					adjust = 2;
+				}
+		//#if polish.css.left-screen-change-animation-speed
+			}
+		//#endif
+		if (this.isForwardAnimation) {
+			if (this.currentX &lt; this.screenWidth) {
+				this.currentX += adjust;
+				return true;
+			}
+		} else if (this.currentX &gt; 0) {
+			this.currentX -= adjust;
+			return true;
+		}
+		return false;
+	}
+
+	public void paintAnimation(Graphics g) {
+		int x = 0;
+		//#if polish.css.left-screen-change-animation-move-previous
+			if (this.movePrevious) {
+				x = this.currentX;
+			}
+		//#endif
+		Image first;
+		Image second;
+		if (this.isForwardAnimation) {
+			first = this.lastCanvasImage;
+			second = this.nextCanvasImage;
+		} else {
+			first = this.nextCanvasImage;
+			second = this.lastCanvasImage;
+		}
+		g.drawImage( first, x, 0, Graphics.TOP | Graphics.LEFT );
+		g.drawImage( second, - this.screenWidth + this.currentX, 0, Graphics.TOP | Graphics.LEFT );
+	}
+
+}
+</pre>
+	
+	<h2 id="registration">Registering Your ScreenChangeAnimation</h2>
+	<p>
+	You can now register your implementation for easier usage in <i>${polish.home}/custom-css-attributes.xml</i>:
+	</p>
+<pre>
+&lt;attribute name=&quot;screen-change-animation&quot;&gt;
+	&lt;mapping from=&quot;myanimation&quot; 
+	            to=&quot;new de.enough.polish.ui.screenanimations.MyScreenChangeAnimation()&quot; 
+	/&gt;
+&lt;/attribute&gt;
+</pre>
+	<p>Since you are supporting some additional CSS attributes within the <code>setStyle</code> method, you need
+	to register these attributes within <i>${polish.home}/custom-css-attributes.xml</i> as well:
+	</p>
+<pre>
+&lt;attribute
+	name=&quot;left-screen-change-animation-speed&quot;
+	type=&quot;integer&quot;
+	appliesTo=&quot;LeftScreenChangeAnimation&quot;
+	description=&quot;The constant speed of the animation - by default the animation uses a somewhat quadratic de-acceleration.&quot;
+	default=&quot;-1&quot;
+/&gt;
+&lt;attribute
+	name=&quot;left-screen-change-animation-move-previous&quot;
+	type=&quot;boolean&quot;
+	appliesTo=&quot;LeftScreenChangeAnimation&quot;
+	description=&quot;Set to true for moving the previous screen along with the animation.&quot;
+	default=&quot;false&quot;
+/&gt;
+</pre>
+
+	<h2 id="usage">Using Your ScreenChangeAnimation</h2>
+	<p>
+	You can use your animation for all screen styles:
+<pre>
+//#style myAlert
+Alert alert = new Alert("Hello World");
+</pre>
+	</p>
+	<p>
+	Now use your animation by specifying it in the appropriate style of your <i>polish.css</i> file:
+	</p>
+<pre>
+.myAlert{
+	border-type: round-rect;
+	border-color: gray;
+	<b>screen-change-animation: myanimation;</b>
+}
+</pre>
+	<p>
+	In case you skipped the registration of your implementation in <i>${polish.home}/custom-css-attributes.xml</i> you can
+	also reference your implementation directly:
+	</p>
+<pre>
+.myAlert{
+	border-type: round-rect;
+	border-color: gray;
+	<b>screen-change-animation: new de.enough.polish.ui.screenanimations.MyScreenChangeAnimation();</b>
+}
+</pre>
+	
+	<p>
+	That's it - you've done it!
+	</p>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenChangeAnimation.html">ScreenChangeAnimation</a></li>
+	</ul>
+
+<%include end.txt %>

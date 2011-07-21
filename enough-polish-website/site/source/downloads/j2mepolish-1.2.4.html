@@ -1,0 +1,210 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download J2ME Polish 1.2.4 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.2.4</h1>
+	<%index %>
+	<h2 id="improvements123d">Improvements of J2ME Polish 1.2.4</h2>
+	<p>
+	<%ifdef isBetaAvailable %>
+	(Note: there is a <a href="downloads/<%= LatestBetaDownload %>">Beta
+	Version <%= BetaVersion %> available)</a>.
+	<%endif %>
+	</p>
+	<ul>
+	  <li><b>&quot;Term&quot; Device Requirement</b>:
+	  you can now use the &quot;Term&quot; 
+	  <a href="../docs/build-deviceRequirements.html">requirement</a> 
+	  for selecting devices just like an <code>if</code>-preprocessing directive:
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;requirement name=&quot;Term&quot; 
+	value=&quot;(polish.BitsPerPixel &gt;= 4) and 
+	((polish.api.nokia-ui and polish.api.mmapi) 
+	or (polish.api.mmapi and polish.midp2))&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+	  </li>
+  	  <li><b>custom-devices.xml</b>:
+	  You can now use your own device definitions in custom-devices.xml, custom-groups.xml, custom-vendors.xml and custom-apis.xml.
+	  This mechanism helps you to manage your own definitions without needing to merge these files
+	  with every update of J2ME Polish.
+	  </li>
+  	  <li><b>&lt;compiler&gt; element</b>:
+	  The <a href="../docs/build-build.html#compiler">&lt;compiler&gt;</a>-element now allows 
+	  you to use finetune the compiler-settings.
+	  </li>
+
+	  <li><b>Extended Menubar</b>: 
+	  J2ME Polish now allows you to design the <a href="../docs/css-specific.html#extendedmenubar">menu bar</a> 
+	  in detail, e.g. setting
+	  of paddings, margins, animated background, different backgrounds for the left
+	  and the right command. Another option is to use images instead of text for the 
+	  "Options", "Select" and "Cancel" command. Since this extended menu bar needs additional space 
+	  in the JAR file, this feature has to be activated explicitly by setting a preprocessing
+	  variable:
+<pre>
+&lt;variables&gt;
+	&lt;variable 
+		name=&quot;polish.MenuBar.useExtendedMenuBar&quot; 
+		value=&quot;true&quot; 
+	/&gt;
+&lt;/variables&gt;
+</pre>
+	  </li>
+	  <li><b>Tabbed Form</b>: 
+	  The <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/TabbedForm.html" target="_blank">de.enough.polish.ui.TabbedForm</a> 
+	  can be used just like a
+	  normal Form, but allows you to split the form into several tabs.
+	  Of course you can design the <a href="../docs/css-specific.html#tabbedform">tabbed form</a> using 
+	  css. Some additional methods ease the handling of the tabs, too.
+	  </li>
+	  <li><b>MIDP SysInfo</b>: 
+	The MIDP SysInfo application provides intimidate information about your handset,
+	e.g. the specific MMAPI settings, supported libraries, values of the Softbuttons and
+	more. This application is based on the original MIDP SysInfo MIDlet of 
+	<a href="http://www.grimo-software.com" target="_blank">Grimo Software.com</a> and is a cooperative
+	effort of Enough Software, Grimo Software (Waldemar Baraldi) and Mark Schriejver.
+	You can find this application in <code>${polish.home}</code>/samples/sysinfo.
+	  </li>
+	  <li><b>MIDP/2 View Type</b>: 
+	  Thanks to <a href="http://kinwong.superihost.com" target="_blank">Kin Wong</a> it is now possible to use a typical MIDP/2.0 view in forms.
+	  Just set the CSS attribute <a href="../docs/css-specific.html#viewtypes">&quot;view-type&quot;</a> to &quot;midp2&quot;:
+	  </li>
+	  <li><b>UTF8-Encoding</b>: 
+	  J2ME Polish now saves JAD and MANIFEST files in the UTF8 encoding by default.
+	  You can use the &quot;encoding&quot;-attribute of the 
+	  <a href="../docs/build-build.html">&lt;build&gt;</a>-element for specifying
+	  another encoding.
+	  </li>
+	  <li><b>ImageBackground-anchor</b>:
+	  The <a href="../docs/css-specific.html#imagebackground">image background</a> 
+	  now supports the CSS attribute &quot;anchor&quot; so that you can align the image, e.g.
+	  <code>background-align: top | left;</code>
+	  </li>
+	  <li><b>Screen-foreground</b>:
+	  You can now use a foreground image in any List, Form or TabbedForm by using
+	  the CSS attributes &quot;foreground-image&quot;, &quot;foreground-x&quot; and
+	  &quot;foreground-y&quot;. Such an image will be painted before all others, even 
+	  before an opened menu.
+	  </li>
+	  <!--
+	  <li>SpriteItem</li>
+	  -->
+	  <li><b>&lt;manifestFilter&gt;, &lt;jadFilter&gt;</b>:
+	  You can now use &quot;if&quot; and &quot;unless&quot; attributes for the 
+	  &lt;manifestFilter&gt; and &lt;jadFilter&gt;, so that you can filter for specific devices
+	  like all Samsung devices:
+<pre>
+&lt;jadFilter if="polish.Vendor == Samsung" &gt;
+	MIDlet-Name, MIDlet-Version, 
+	MIDlet-Vendor, MIDlet-Jar-URL, MIDlet-Jar-Size, 
+	MIDlet-Description?, MIDlet-Icon?, MIDlet-Info-URL?,
+	MIDlet-Data-Size?, MIDlet-*
+&lt;/jadFilter&gt;
+</pre>	  
+	  </li>
+	  <li><b>Dynamic Translations</b>:
+	  You can now change the translations during the runtime of your application by
+	  using <a href="../docs/localization.html#dynamictranslations">dynamic translations</a>:
+<pre>
+&lt;resources
+	dir=&quot;resources&quot;
+	excludes=&quot;*.txt&quot;
+&gt;
+	&lt;localization 
+		dynamic=&quot;true&quot;
+		default=&quot;en&quot;
+		locales=&quot;de, en, fr_CA&quot; 
+	/&gt;
+&lt;/resources&gt;
+</pre>
+You can then switch to the German translation by calling <code>Locale.loadTranslations( &quot;/de.loc&quot; )</code>, for example.  	
+	  </li>
+	  <li><b>configuration and platform Settings of the &lt;info&gt; Element</b>:
+	  The <a href="../docs/build-info.html">&lt;info&gt;</a>-element now 
+	  supports the setting of the &quot;MicroEdition-Configuration&quot; as well as 
+	  &quot;MicroEdition-Profile&quot;. Usually these values are derived from the target
+	  device. By setting the &quot;configuration&quot; and &quot;platform&quot;-attributes of the 
+	  &lt;info&gt; element you can now override this for all target devices.
+	  </li>
+	  <li><b>Dynamic ScreenSize, CanvasSize and FullCanvasSize resources</b>:
+	  You can now use &quot;resources/ScreenSize.170+x200+&quot; etc for your
+	  <a href="../docs/resource-assembling.html">resource assembling</a>.
+	  </li>
+	  <li><b>ChoiceGroup.setDefaultCommand()</b>: now switches the command for selecting items in the choice group as well as opening a POPUP group. The original &quot;Select&quot;-command is replaced in that case. This feature is not available when all ChoiceGroup-commands are deactivated with the preprocessing variables &quot;polish.ChoiceGroup.suppressMarkCommands&quot; and &quot;polish.ChoiceGroup.suppressSelectCommand&quot;.</li>
+	  <li><b>useDefaultPackge</b>: when the default package is used 
+	  (which can be set with the &lt;obfuscator&gt; element, the preprocessing symbol &quot;polish.useDefaultPackage&quot; will be defined.</li>
+	  <li><b>Many Thanks</b> to:
+	  Waldemar Baraldi, Kin Wong, Andrew Ebling, Mark Schrijver, Nikolay Klimchuk, Jon Malmquist, Johannes Simon,
+	  and Thorsten Pr&ouml;lss!
+	  </li>
+	</ul>
+	<h2 id="fixes124">Bugfixes of J2ME Polish 1.2.4</h2>
+	<p>
+	</p>
+	<ul>
+	  <li><b>Fullscreen Mode on Sony Ericsson/K700</b>: 
+	  	The SE K700 did not display system screens properly when the fullscreen-mode was activated. The J2ME Polish GUI now uses Nokia's UI API for the fullscreen mode instead on this device.</li>
+	  <li><b>POPUP ChoiceGroup</b>: 
+	  	when a long POPUP ChoiceGroup was closed, the screen did not scroll back to the original position.</li>
+	  <li><b>TextField Direct Input</b>:
+	  	fast user input could trigger ArrayIndexOutOfBounds exceptions. The input scheme of Motorola phones is now exactly like Motorola's</li>
+	  <li><b>BitMapFont</b>:
+	  	Bitmap fonts could not be used on Nokia MIDP/1.0 and some Motorola phones.</li>
+	  <li><b>BinaryEditor</b>:
+	  	The BinaryEditor did not store unsigned short values correctly.</li>
+	  <li><b>ChoiceGroup, Form, List</b>:
+	  	When an item that is focused replaced with the set-method the focus was invisible. 
+		Reusing Screens is now safer to accomplish.
+	  </li>
+	  <li><b>Use Default Package</b>: The "useDefaultPackage"-option of the obfuscator resulted in build errors when the obfuscator was used along with the logging framework. 
+	  	Also the invocation of the native TextField and DateField was not working with this option enabled.</li>
+	</ul>
+	
+
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	proprietary commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license needs to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		<a href="http://download2.berlios.de/polish/j2mepolish-1.2.4.jar">I accept the above rules 
+		(download the full installer: 8,232,596 bytes).</a><br/>
+		<a href="http://prdownload.berlios.de/polish/j2mepolish-1.2.4.jar">I accept the above rules 
+		(download the full installer from the mirror: 8,232,596 bytes).</a><br/>
+		<a href="http://download2.berlios.de/polish/j2mepolish-1.2.4.zip">I accept the above rules 
+		(download only the update: 910,457 bytes).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a><br />
+	<%ifdef isBetaAvailable %>
+	<a href="<%= LatestBetaDownload %>">Download the current beta: <%= BetaVersion %></a>.<br /><br />
+	<%endif %>
+		Start the installation by calling <code>java -jar j2mepolish-1.2.4.jar</code>
+		from the commandline or by double-clicking the file.
+
+	</p>
+
+	<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 8,232,596 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package. You can start the installation either by double-clicking
+	the file or by calling &quot;java -jar j2mepolish-[version].jar&quot; from the commandline.
+	<b>Do not simply extract the downloaded JAR file!</b>
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_07 or 1.5.x)</a>. 
+	</p>	
+	<p>
+	If you have trouble building your application, consider to set the &quot;JAVA_HOME&quot;
+	environment variable. Make sure to check out the <a href="../docs/install.html">installation guide</a>.
+	</p>	
+<%include end.txt %>

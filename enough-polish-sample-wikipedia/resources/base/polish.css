@@ -1,0 +1,333 @@
+colors {
+	borderColor: #1e5556;
+	browserFontColor: #1e5556;
+	focusedBorderColor: #000000;
+	fontColor: #1e5556;
+	focusedBgColor: #ffffff;
+	browserFontColorFocused: #142850;
+	focusedFontColor: #000000;
+	bgColor: #eeeeee;
+}
+
+backgrounds {
+	mainBackground {
+		type: vertical-gradient;
+		top-color: #f6ec5d;
+		bottom-color: #c3b81e;
+	}
+	
+}
+
+/************************** general styles  ********************************************************************************/
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	margin: 2;
+	padding: 2;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: white;
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+	layout: horizontal-center | horizontal-expand;
+	background {
+		type: round-rect-split;
+		top-color: #301e3a;
+		bottom-color: #150020;
+	}
+}
+
+
+focused {
+	layout: expand | left;
+	font-style: bold;
+	background-color: #eee; 
+}
+
+label {
+	layout: left | newline-after;
+	font {
+		size: small;
+		style: italic;
+		color: #333;
+	}
+}
+
+/************************** main screen  **********************************************************************************/
+.screenMain {
+	layout: horizontal-center | vertical-center;
+	margin: 0;
+	padding: 10px;
+	padding-vertical: 5px;
+	background: mainBackground;
+}
+
+.itemMain {
+	padding: 2px;
+	padding-left: 20px;
+	font-color: #150020;
+	layout: expand | left;
+}
+
+.itemMain:hover {
+	font-color: white;
+	font-style: bold;
+	background {
+		type: round-rect;
+		color: #150020;
+	}
+}
+
+.itemMain:pressed {
+	font-color: #c3b81e;
+	font-style: bold;
+	background {
+		type: round-rect;
+		color: #150020;
+	}
+}
+
+/************************** about screen  *********************************************************************************/
+
+.aboutAlert {
+	layout: horizontal-center | vertical-center;
+	margin: 0px;
+	padding: 1px;
+	background: mainBackground;
+	//#if polish.midp2
+	    screen-change-animation: zoomInAndHide;
+	//#else
+	    screen-change-animation: right;
+	//#endif
+}
+
+alertcontent {
+	font-color: white;
+	text-effect: shadow;
+	text-shadow-color: #222;
+}
+
+/************************** search screen  ******************************************************************************/
+.screenSearch extends screenMain {
+	screen-change-animation: right;
+}
+
+.itemInput {
+	margin: 1px;
+	padding: 3px;
+	layout: left | horizontal-expand;
+	font-color: #666;
+	background {
+		type: round-rect;
+		color: white;
+	}		
+}
+
+
+.itemInput:hover {
+	margin: 0px;
+	font-color: black;
+	border {
+		type: round-rect;
+		color: #444;
+	}
+}
+
+/** input indicator within text textfield: */
+info {
+	padding: 0px;
+	layout: right;
+	font-color: #666;
+	font-style: italic;
+}
+
+
+.projectChoice {
+	margin: 1px;
+	padding: 3px;
+	layout: expand;
+	view-type: exclusive-choice;
+	exclusiveview-left-arrow: url( arrow-left.png );
+	exclusiveview-right-arrow: url( arrow-right.png );
+	exclusiveview-left-arrow-pressed: url( arrow-left-press.png );
+	exclusiveview-right-arrow-pressed: url( arrow-right-press.png );
+	exclusiveview-roundtrip: true;
+	background {
+		type: round-rect;
+		color: white;
+	}		
+}
+
+.projectChoice:hover {
+	margin: 0px;
+	border {
+		type: round-rect;
+		color: #444;
+	}
+}
+
+.projectChoiceItem {
+	font-color: #666;
+	font-style: bold;
+}
+
+.projectChoiceItem:hover {
+	font-color: black;
+}
+
+
+/************************** HTML browser screen ****************************************************************************/
+
+
+.htmlBrowserForm {
+	padding-left: 10;
+	padding-right: 10;
+	padding-top: 10;
+	background-color: #fff;
+	title-style: htmlBrowserTitle;
+	screen-change-animation: right;	
+}
+
+.htmlBrowserTitle extends title {
+	text-wrap: false;
+	text-wrap-animate: false;
+}
+
+.htmlBrowser {
+	view-type: midp2;
+}
+
+.browserdownloadindicator {
+	layout: vertical-shrink | horizontal-shrink | top | right;
+}
+
+.browserlink {
+	font {
+		face: system;
+		size: medium;
+		style: bold;
+		color: #ff4f4fe3;
+	}
+}
+.browserlink:hover {
+	font {
+		color: #ff0000;
+	}
+}
+
+
+
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #301e3a;
+	scrollbar-slider-width: 6;
+	scrollbar-fadeout: true;
+	opacity: 180;
+	background-color: white;
+}
+
+
+/****************   menu          **********************************************************************************************/
+
+
+menubar {
+	margin: 2;
+	background {
+		type: round-rect-split;
+		top-color: #301e3a;
+		bottom-color: #150020;
+	}
+}
+
+leftcommand {
+	layout: left;
+	font {
+		style: bold;
+		color: white;
+	}
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+}
+
+leftcommand:pressed {
+	font-color: #c3b81e;
+	text-effect: none;
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+rightcommand:pressed {
+	font-color: #c3b81e;
+	text-effect: none;
+}
+
+middlecommand extends leftcommand {
+	layout: center;
+}
+rightcommand:pressed {
+	font-color: #c3b81e;
+	text-effect: none;
+}
+
+
+menu {
+	padding: 0;
+	padding-bottom: 3;
+	min-width: 100;
+	font-size: medium;
+	view-type: slide-up;
+	background {
+		type: round-tab;
+		color: white;
+	}
+	focused-style-first: menuItemFocusedFirst;
+}
+
+menuItem {
+	padding-left: 2;
+	padding-right: 2;
+	layout: left;
+}
+
+
+menuItem:hover {
+	layout: left | horizontal-expand;
+	font-color: white;
+	background-color: #301e3a;
+}
+
+menuItem:pressed {
+	layout: left | horizontal-expand;
+	font-color: #c3b81e;
+	background-color: #301e3a;
+}
+
+/**
+  * The focused style for the first menu item uses a round-tab background:  
+  */
+.menuItemFocusedFirst extends menuItem {
+	font-color: white;
+	layout: left | horizontal-expand;
+	background {
+		type: round-tab;
+		color: #301e3a;
+	}
+}
+
+.menuItemFocusedFirst:pressed {
+	font-color: #c3b81e;
+	layout: left | horizontal-expand;
+	background {
+		type: round-tab;
+		color: #301e3a;
+	}
+}
+
+
+

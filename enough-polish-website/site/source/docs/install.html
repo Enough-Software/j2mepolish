@@ -1,0 +1,66 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.installcore %>
+<%set title = J2ME Polish: Installation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Installation</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="netbeans.html">NetBeans Integration</a></li>
+		<li><a href="mepose.html">Eclipse Integration</a></li>
+	</ul>
+	<%index %>
+	<p>For installing J2ME Polish <a href="../download.html">download</a> the
+	latest release and start the installation either by double-clicking the file or
+	by calling &quot;java -jar j2mepolish-<%= PolishVersion %>.jar&quot; from the command-line.
+	<br/>
+	The installer of J2ME Polish contains a sample MIDlet application with
+	two different designs. This application is optimized for Nokia Series
+	60 devices, so it is recommended to have such an emulator installed. The
+	Nokia emulator can be retrieved from <a href="http://forum.nokia.com">http://forum.nokia.com</a>.
+	<br/>
+	To build the sample application, run the included &quot;sample/build.xml&quot; from your
+	favorite Java IDE or call &quot;ant&quot; from the command-line, after you have
+	switched to the &quot;sample&quot; directory. Call
+	&quot;ant test j2mepolish&quot; to skip the obfuscation and to enable the
+	logging of the sample application. In that case the default emulator
+	is also launched by J2ME Polish.
+	</p>
+<h2 id="requirements">Requirements for Installing J2ME Polish</h2>
+<p>
+To use J2ME Polish, following components need to be installed:
+</p>
+<ul>
+	<li>Java 2 Standard Edition SDK 1.4  or higher, 
+	<a href="http://java.sun.com/j2se/" target="_blank">http://java.sun.com/j2se/</a>
+	</li>
+	<li>Sun Java Wireless Toolkit, 
+	<a href="http://java.sun.com/products/sjwtoolkit/index.html" target="_blank">http://java.sun.com/products/sjwtoolkit/index.html</a> (for Windows and Linux),
+	<br/>
+	or the Mobile Power Player SDK <a href="http://developer.mpowerplayer.com/" target="_blank">http://developer.mpowerplayer.com</a> (for Mac OS X)	
+	</li>
+	<li>Favorite IDE, for example Eclipse 3.0, 
+	<a href="http://www.eclipse.org" target="_blank">http://www.eclipse.org</a>
+	</li>
+	<li>Ant 1.6 or higher, if not already integrated in the IDE, 
+	<a href="http://ant.apache.org" target="_blank">http://ant.apache.org</a>
+	</li>
+	<li>Optionally device emulators, e.g. the Nokia J2ME emulator, 
+	<a href="http://forum.nokia.com" target="_blank">http://forum.nokia.com</a>
+	</li>
+</ul>
+
+<h2 id="problems">Installation Problems</h2>
+<p>
+Here are common problems that might occur during the installation:
+</p>
+<ul>
+   <li><b>ZIP instead of JAR</b>: some versions of Internet Explorer rename the extension of installer from <code>.jar</code> to <code>.zip</code>. In that case please rename the extension before starting the installation.</li>
+   <li><b>All files are extracted</b>: sometimes a decompression utility feels responsible for <code>.jar</code> files. In that case either right-click the installer and choose to open it with Java or call the installer from the commandline using <code>java -jar j2mepolish-${version}.jar</code>, where ${version} denotes the current version number.</li>
+   <li><b>Where is the source?</b> During the installation you have to actively select to install the sources within the package selection. Afterwards you will find the source in <i>${polish.home}/source</i>.</li>
+   <li><b>Where is the devices.xml?</b> Like the sources you have to actively select to install the device database during the installation. We recommend visiting <a href="http://devices.j2mepolish.org">http://devices.j2mepolish.org</a> instead.</li>
+</ul>
+
+<%include end.txt %>

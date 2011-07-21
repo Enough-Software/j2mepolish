@@ -1,0 +1,33 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">The Build Process</h1>
+	<p>
+	The build process creates &quot;ready to deploy&quot;, optimized application-bundles from the 
+	source code. The process is controlled by the <a href="build-example.html">build.xml</a> 
+	file, which is situated at 
+	the root of the project. This file is a standard Ant file which is used to control 
+	the J2ME Polish-task. 
+	The J2ME Polish-task is separated into the sections &quot;<a href="build-info.html">info</a>&quot;, 
+	&quot;<a href="build-deviceRequirements.html">deviceRequirements</a>&quot; 
+	and &quot;<a href="build-build.html">build</a>&quot;.
+	</p>
+	<p>
+	During the build following steps are accomplished:
+	</p>
+	<ul>
+	<li><a href="build-deviceRequirements.html">Selection of the supported devices</a></li>
+	<li><a href="resource-assembling.html">Assembling of the resources</a></li>
+	<li><a href="preprocessing.html">Preprocessing</a> of the source code, optimizing for the device</li>
+	<li><a href="build-build.html">Compilation</a> of the application</li>
+	<li><a href="build-build.html#obfuscator">Obfuscation</a> and shrinking of the compiled code</li>
+	<li><a href="build-build.html#attributes">Preverification</a></li>
+	<li><a href="build-build.html">Creation</a> of the JAR and JAD files</li>
+	</ul>
+	<p>
+	All but the first steps are done for each selected device.
+	</p>
+<%include end.txt %>

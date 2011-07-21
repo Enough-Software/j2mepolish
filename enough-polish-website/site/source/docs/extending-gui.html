@@ -1,0 +1,50 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending the J2ME Polish UI %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Extending the J2ME Polish UI</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="extending-build.html">Extending the Build Process</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+	</ul>
+<p>
+You can extend the J2ME Polish UI in various ways:
+</p>
+<ul>
+	<li><b><a href="extending-background.html">Backgrounds</a></b>: create your own background</li>
+	<li><b><a href="extending-border.html">Borders</a></b>: use custom borders in your application.</li>
+	<li><b><a href="extending-itemview.html">view-type</a></b>: create your own visualization of an existing item</li>
+	<li><b><a href="extending-screenchangeanimation.html">screen-change-animation</a></b>: apply your own screen transition effects</li>
+	<li><b><a href="extending-texteffect.html">text-effect</a></b>: realize your own text-effect</li>
+	<li><b><a href="gui-item-customitem.html">Items</a></b>: extend and the standard CustomItem and design it using CSS.</li>
+</ul>
+<h2  id="existingcode">Adapting J2ME Polish Classes</h2>
+<p>
+You can also adapt existing J2ME Polish source files to your needs. During installation choose to install the source files as well.
+Then you have to tell J2ME Polish where to find the client side source files using the <code>polish.client.source</code> Ant property,
+which you can define in your <i>build.xml</i> or within your <i>${user.name}.properties</i> file, e.g.
+</p>
+<pre>
+&lt;property name=&quot;polish.client.source&quot; value=&quot;${polish.home}/j2mepolish-src/j2me/src/&quot; /&gt;
+</pre>
+<p>
+You can now change the sources directly in the <i>${polish.client.source}</i> folder and make a new build for including 
+the changed classes.
+</p>
+
+<h2  id="contribute">Contributing Your Extensions</h2>
+<p>
+Please consider to contribute your extensions to the J2ME&nbsp;Polish project. In an open source world, everyone can participate from the work of others.
+</p><p>
+Do note, however, that J2ME&nbsp;Polish is used commercially as well. Please get in touch with us at j2mepolish@enough.de to discuss your contribution.
+</p><p>
+When you contribute your extension, we need the sourcecode and a complete documentation of it. Preferably the extension is documented in English, but German is also accepted. It is recommended to use the JavaDoc conventions within the code for basic documentation. The J2ME&nbsp;Polish project adheres to the normal Java style conventions. For distinguishing local from instance variables, please use the &quot;this&quot; operator for accessing instance variables. This behavior can be enforced in the Eclipse IDE by setting the compiler-option &quot;unqualified access to instance variables&quot;.
+</p>
+<%include end.txt %>

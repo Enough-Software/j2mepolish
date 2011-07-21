@@ -1,0 +1,109 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.programming %>
+<%set title = J2ME Polish: Utilities %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Utilities</h1>
+<p>
+J2ME Polish contains several often needed J2ME utilty classes:
+</p>
+<%index %>
+
+<h2 id="specific">Overview</h2>
+<ul>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/xml/package-summary.html" target="_blank">XML</a>: We have a minimum overhead &amp; fast XML implementation for both SAX as well as DOM tree parsing.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/json/package-summary.html" target="_blank">JSON</a>: With our optimized JSON parsing and construction you are ready any modern REST style webservice.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/format/atom/package-summary.html" target="_blank">Atom News Feeds</a>: Use, persist and parse Atom feeds easily with our Atom support</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/bluetooth/package-summary.html" target="_blank">Bluetooth</a>: Our Bluetooth classes ease the discovery of other Bluetooth devices and allow you to stream data over L2CAP connections.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/geometry2d/package-summary.html" target="_blank">Geometry 2D</a>: Provides advanced 2D rendering mechanisms.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/file/package-summary.html" target="_blank">File Connection</a>: Allows you to easily browse file directories.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/location/package-summary.html" target="_blank">Location</a>: The location helper classes ease the retrieval and update of locations.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/math/package-summary.html" target="_blank">Math</a>: The math package contains fixed point implementations for CLDC 1.0 devices and a BigInteger implementation for all.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/calendar/package-summary.html" target="_blank">Calendar</a>: Our calendar classes contain both UI and model classes to manage calendars with recurring or one time events.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/multimedia/package-summary.html" target="_blank">Audio</a>: Our multimedia audio supplements ease the playback of audio.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/video/package-summary.html" target="_blank">Video</a>: Allows you to capture and playback video.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/pim/package-summary.html" target="_blank">PIM</a>: Easily access contacts with the J2ME Polish PIM API.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/snapshot/package-summary.html" target="_blank">Snapshot</a>: Use the SnapshotUtil for capturing photo snapshots.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/base64/package-summary.html" target="_blank">Base64 Encoding</a>: Encode and decode base64 messages.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/sensor/package-summary.html" target="_blank">Sensor Access</a>: Allows you to access accelator information easily.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/zip/package-summary.html" target="_blank">GZip</a>: Allows you to extract and compress GZip files.</li>
+	<li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/package-summary.html" target="_blank">General Utilities:</a> J2ME Polish provides a whole bunch of utility classes like ArrayList, IntList, IntStack, HashMap, OAHashMap, TimePoint, TimePeriod and many more.</li>
+	
+</ul>
+
+<h2 id="specific">Specific Utilties</h2>
+<h3 id="bitmapfont">Using the BitMapFont Class</h3>
+<p>
+You can use the class
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFont.html" target="_blank">de.enough.polish.util.BitMapFont</a>
+for using bitmap fonts directly in your application.
+This is often useful in games and other application, when you want to show messages to the user
+which should not appear in the standard font-faces.
+</p>
+<p>
+The involved concepts are quite easy:
+</p>
+<ol>
+	<li>Create a bitmap font using the <a href="tools.html#fonteditor">${polish.home}/font-editor</a> executable.</li>
+	<li>Create a <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFont.html" target="_blank">BitMapFont</a> in your application.</li>
+	<li>Use the <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFontViewer.html" target="_blank">BitMapFontViewer</a> to display a message.</li>
+</ol>
+<p>
+The following code illustrates the second and third step:
+<pre>
+import de.enough.polish.util.*;
+
+public class MyCanvas extends Canvas {
+
+	private BitMapFont bitMapFont;
+	privte BitMapFontViewer messageViewer;
+
+	public MyCanvas() {
+		this.bitMapFont = BitMapFont.getInstance("/coolfont.bmf");
+		this.messageViewer = this.bitMapFont.getViewer("Hello World!");
+		int availableWidth = getWidth() - 20;
+		int padding = 2;
+		int textOrientation = Graphics.LEFT;
+		this.messageViewer.layout( availableWidth, availableWidth, padding, orientation );
+	}
+
+	public void paint( Graphics g ) {
+		int x = 10;
+		int y = 20;
+		this.messageViewer.paint( x, y, g );
+	}
+}
+</pre>
+</p>
+<p>
+Since the BitMapFont.getViewer(String)-method is the most expensive one, you should
+try to call it only when it's necessary, e.g. when a new message is generated.
+</p>
+
+
+<h3 id="ArrayList">ArrayList</h3>
+<p>
+J2ME Polish includes an ArrayList class, which is compatible to the J2SE class.
+Find more information at the <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/ArrayList.html" target="_blank">JavaDoc documentation</a>.
+</p>
+<p>
+Some more specialized classes include the 	<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/IdentityArrayList.html" target="_blank">IdentityArrayList</a>,
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/IntList.html" target="_blank">IntList</a>, <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/LongList.html" target="_blank">LongList</a>
+and <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BooleanList.html" target="_blank">BooleanList</a>.
+</p>
+
+<h3 id="TextUtil">TextUtil</h3>
+<p>
+The TextUtil class contains several helper methods for text manipulation, e.g.
+a wrapping-algorithm and a split-tool. Have a look at the
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/TextUtil.html" target="_blank">JavaDoc documentation</a>.
+</p>
+
+<h2 id="javadoc">JavaDoc</h2>
+<p>
+Please refer to the <a href="<%= javadocdir %>../javadoc/j2me/index.html" target="_blank">JavaDoc documentation</a>
+of these classes for further information.
+</p> 
+
+<%include end.txt %>

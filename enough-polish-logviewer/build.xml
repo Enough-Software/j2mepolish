@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-example">
+
+<!-- task definitions -->
+<!-- classpath="import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar" -->
+	<property file="${user.name}.properties" />
+	<property name="wtk.home" value="/home/enough/dev/WTK2.2"/>
+	<!-- The polish.home property should point to the directory   -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" value="../enough-polish-build"/>
+	<property name="nokia.home" value="/home/enough/dev/Nokia" />
+	<property name="device" value="Generic/multi"/>
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/import/jdom.jar" 
+	/>
+
+			
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="test">
+		<property name="test" value="true"/>
+		<property name="dir.work" value="build/test" />
+	</target>
+		
+
+	<target name="init">
+	  	<property name="test" value="false"/>
+		<property name="deploy-url" value=""/>
+		<property name="dir.work" value="build/real" />
+	</target>
+    
+<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info 
+			license="GPL"
+			copyright="Copyright 2005 Enough Software. All rights reserved." 
+			description="A log viewer." 
+			jarName="${polish.vendor}-${polish.name}-logviewer.jar" 
+			name="Log Viewer" 
+			vendorName="Enough Software" 
+			version="1.1.0"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+			<!--
+			<requirement name="Identifier" value="Generic/multi"/>
+			<requirement name="Identifier" value="Nokia/Series60"/>
+			<requirement name="Identifier" value="Sony-Ericsson/P900"/>
+			<requirement name="Identifier" value="Siemens/S55"/>
+			<requirement name="Identifier" value="Sony-Ericsson/K700"/>
+			-->
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="Nokia/6630, Motorola/A1000, Sony-Ericsson/K700, Siemens/S65, Nokia/6600, Generic/midp2"/>
+			<!--  
+			<requirement name="Identifier" value="Generic/PlainMidp2, Sony-Ericsson/K700, Nokia/Series60, Nokia/Series60Midp2, Motorola/V525, Siemens/S65, Motorola/A1000"/>
+			<requirement name="Identifier" value="Siemens/S55"/>
+			<requirement name="Identifier" value="Generic/PlainMidp2, Sony-Ericsson/K700, Nokia/Series60, Nokia/Series60Midp2, Motorola/V525, Siemens/S65"/>
+			<requirement name="Identifier" value="Nokia/Series60, Nokia/Series60Midp2"/>
+			<requirement name="Identifier" value="Siemens/S55"/>
+			-->
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build 
+			fullscreen="menu" 
+            polishDir="../enough-polish-j2me/source/src" 
+            symbols="polish.skipArgumentCheck" 
+            usePolishGui="yes"
+            sourceDir="source/src"
+			workDir="${dir.work}"
+			>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.log.rms.LogViewerMidlet" name="Log Viewer"/>
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables>
+				<variable name="polish.classes.ApplicationInitializer" value="de.enough.polish.log.rms.LogViewerMidlet" />
+				<variable name="polish.TextField.useDirectInput" value="true" unless="polish.hasPointerEvents" />
+				<variable name="polish.log.UploadServer" value="http://213.133.111.51/logger/upload.jsp" />
+				<variable name="polish.log.MIDletSuite" value="MN_5" />
+				<variable name="polish.log.Vendor" value="Navigon AG" />
+				<!--
+				<variable name="polish.log.MIDletSuite" value="Demonstrator" />
+				<variable name="polish.log.Vendor" value="Enough Software" />
+				-->
+				<!--
+				<variable file="cfg/${ lowercase(polish.vendor) }.properties" />
+				<variable name="polish.TextField.suppressCommands" value="true"/>
+				<variable name="polish.ChoiceGroup.handleDefaultCommandFirst" value="true"/>
+				<variable name="polish.Container.allowCycling" value="true"/>
+				<variable name="polish.Screen.FireTriggersOkCommand" value="false"/>
+				<variable name="polish.ChoiceGroup.suppressMarkCommands" value="true"/>
+				<variable name="polish.ChoiceGroup.suppressSelectCommand" value="false"/>
+				<variable name="polish.TextField.charactersKey2" value="abc2äæåàáâãç"/>
+				<variable name="polish.TextField.suppressClearCommand" value="true"/>
+				<variable name="update-url" value="http://www.enough.de/update"/>
+				<variable name="polish.usePolishTitle" value="true" unless="polish.vendor == Nokia"/>
+				<variable name="polish.GameCanvas.useFullScreen" value="menu"/>
+				<variable name="polish.FullScreenXX" value="no" if="polish.vendor == Sony-Ericsson" />
+				<variable name="Test1" value="Test1 is SET!!!" if="polish.vendor == Sony-Ericsson" />
+				<variable name="Test2" value="Test2 is SET!!!" if="polish.Identifier.Nokia/Series60" />
+				<variable name="polish.classes.ImageLoader" value="de.enough.polish.demo.TestImageLoader" />
+				<variable name="polish.classes.ApplicationInitializer" value="de.enough.polish.demo.DemoMidlet" />
+				<variable name="polish.DateFormat" value="de" />
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.TextField.useDirectInput" value="true" if="!polish.hasPointerEvents"/>
+				<variable name="polish.TextField.showInputInfo" value="false" />
+				<variable name="polish.Menu.MarginBottom" value="3"/>
+				<variable name="polish.Menu.MarginTop" value="12"/>
+				<variable name="polish.Menu.MarginLeft" value="10"/>
+				<variable name="polish.Menu.MarginRight" value="0"/>
+				<variable name="polish.TextField.showInputInfo" value="false" />
+				-->
+			</variables>
+			<!--
+			-->
+			<!-- obfuscator settings: do not obfuscate when the test-property is true unless="test" -->
+			<obfuscator unless="test" useDefaultPackage="true" name="ProGuard" >
+			</obfuscator>
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<!--
+			if="test"
+			-->
+			<debug level="error" showLogOnError="true" verbose="false" if="test">
+				<filter level="debug" pattern="de.enough.polish.demo.*"/>
+				<filter level="debug" pattern="de.enough.polish.ui.Screen"/>
+				<filter level="debug" pattern="de.enough.polish.ui.containerviews.*"/>
+
+				<!--
+				<filter level="debug" pattern="de.enough.polish.ui.CustomItem"/>
+				<filter level="debug" pattern="de.enough.polish.ui.Container"/>
+				<filter level="debug" pattern="de.enough.polish.ui.TabbedForm"/>
+				<filter level="debug" pattern="de.enough.polish.ui.Screen"/>
+				<filter level="debug" pattern="de.enough.polish.ui.TextField"/>
+				-->
+				<filter level="info" pattern="de.enough.polish.ui.game.GameCanvas"/>
+			</debug>
+			
+			<resources
+				dir="resources" 
+				defaultexcludes="yes"
+				excludes="*.db"
+			 >
+				 <localization
+					locales="en"
+				 />
+			</resources>
+		</build>
+		
+		<!-- execution of emulator(s) -->
+		<emulator if="test"	
+			enableNetworkMonitor="true"
+		/>
+	</j2mepolish>
+</target>
+
+
+<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+	<delete dir="build"/>
+	<delete dir="dist"/>
+</target>
+	
+	<target 
+		name="emulator"
+		description="Starts the emulator" 
+		depends="test, j2mepolish"
+		>
+	</target>
+	
+	<target 
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" 
+		depends="clean, j2mepolish"
+		>
+	</target>
+
+
+</project>

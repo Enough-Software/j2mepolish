@@ -1,0 +1,32 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application.               #
+#   Key and Value are separated       #
+#   by the equals-sign "=".           #
+#                                     #
+#######################################
+
+# You can also define localized preprocessing variables here, by starting the 
+# definition with "var:". Variables defined here will override the ones defined
+# in the <variables>-section of your build.xml.
+# Variables starting with "polish." or "MIDlet-" don't need to start with "var:"
+# by the way.
+#var:MyExampleVariable=Hello World
+
+# It's also possible to set MIDlet-attributes for your JAD- and MANIFEST-files here. 
+# If you like you can start them with "var:" as well, but it is not needed.
+# Again MIDlet-attributes defined override the one defined in the <info>-
+# and <jad>-sections of your build.xml
+#MIDlet-Description=A localized sample project
+
+cmd.StartGame=Start Game
+cmd.Quit=Exit
+cmd.ShowLog=Show Log
+
+menu.StartGame=Start Game
+menu.LoadGame=Load Game
+menu.Highscore=Highscore
+menu.Quit=Exit
+
+

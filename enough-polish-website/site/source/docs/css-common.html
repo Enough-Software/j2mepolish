@@ -1,0 +1,525 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Common Design Attributes</h1>
+	<%index %>
+<h2 id="polishcss">Structure of polish.css</h2>
+	<p>
+The polish.css file can contain different sections:
+</p>
+<ul>
+ <li>colors: The colors-section contains the definition of colors.</li>
+ <li>fonts: The fonts-section contains font definitions.</li>
+ <li>backgrounds: The backgrounds-section contains background definitions.</li>
+ <li>borders: The borders-section contains definition of borders.</li>
+ <li>rest: The rest of polish.css contains the actual style definitions.</li>
+</ul>
+<p>
+The defined colors, fonts, backgrounds and borders can be referenced in the actual style definitions. This makes changes very easy, since you need to change the value only in one position.
+</p>
+<h2 id="stylestructure">Structure of a Style Definition</h2>
+<p>
+Each style can contain different &quot;sections&quot;:
+</p>
+<ul>
+ <li>margin: The gap between items</li>
+ <li>padding: The gap between the border and the content of an item</li>
+ <li>font: The used content-font and its color</li>
+ <li>label: The used label-font and its color</li>
+ <li>layout: The layout of the items.</li>
+ <li>background: The definition of the item's background</li>
+ <li>border: The definition of the item's border</li>
+ <li>before and after: Elements which should be inserted before or after the items.</li>
+ <li>specific attributes: All attributes for specific GUI items.</li>
+</ul>
+<p>
+An example of such a complete style definition is the following:
+<pre>
+/* this style designs the currently focused element in a list, form etc: */
+focused {
+	/* margins and paddings: */
+	margin: 2;
+	margin-left: 5;
+	margin-right: 10;
+	padding: 1;
+	padding-vertical: 2;
+	/* font and label: */
+	font {
+		color: blue;
+		size: medium;
+		face: system;
+	}
+	label {
+		color: black;
+		size: small;
+	}
+	/* layout is centered: */
+	layout: center;
+	/* background: */
+	background-color: gray;
+	/* no border: /*
+	border: none;
+	/* before: add an image: */
+	before: url( arrow.png );
+	/* after: add another image: */
+	after: url( leftArrow.png );
+	/* no specific attributes are used in this example*/
+}
+</pre>
+</p>
+<h2 id="boxmodel">The CSS Box Model: Margins and Paddings</h2>
+<p>
+All GUI items support the standard CSS box model:
+<img src="../images/cssboxmodel.gif" alt="The CSS box model" />
+The margin describes the gap to other GUI items. The padding describes the gap between the border of the item and the actual content of that item. So far no different border-widths (for left, right, top and bottom) can be set with J2ME Polish. Since this is a more bizarre and seldom used feature, not much harm is done. 
+</p><p>
+The margin- and padding-attributes define the default gaps for the left, right, top and bottom elements. Any margin has the default value of 0&nbsp;pixels, whereas any padding defaults to 1&nbsp;pixel. Next to the left, right, top and bottom padding, J2ME Polish also knows the vertical and the horizontal paddings. These define the gaps between different content sections. The gap between the label of an item and the actual content is defined by the horizontal padding. Another example is the icon, which consists of an image and a text. Depending on the align of the image, either the vertical or the horizontal padding fills the space between the icon-image and the icon-text.
+In the following example, the top, right and bottom margin is 5&nbsp;pixels, whereas the left margin is 10&nbsp;pixels:
+<pre>
+.myStyle {
+	margin: 5;
+	margin-left: 10;
+	font-color: black;
+}
+</pre>
+</p>
+<p>
+Percentage values can also be used. Percentage values for top, bottom and vertical attributes relate to the height of the display. Percentage values for left, right and horizontal attributes relate to the width of the display:
+<pre>
+.myStyle {
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-vertical: 1%;
+	font-color: black;
+}
+</pre>
+</p>
+<p>
+When the device has a width of 176&nbsp;pixels, a padding of 2% results into 3.52&nbsp;pixels, meaning effectively a padding of 3&nbsp;pixels. At a display height of 208&nbsp;pixels a vertical padding of 1% results into a padding of 2.08&nbsp;pixels or effectively 2&nbsp;pixels. Please note that the capability &quot;ScreenSize&quot; of the device needs to be defined when you use percentage values.
+</p>
+<h2 id="layout">The Layout Attribute</h2>
+<p>
+The layout attribute defines how the affected item should be aligned and laid out. 
+Possible layout values are for example left, right or center. All layout values of the MIDP/2.0 standard can be used:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Layout&nbsp;&nbsp;</th><th>Alternative-Names&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>left</td>
+	 <td>-</td>
+	 <td>The affected items should be left-aligned. </td>
+	</tr>
+	<tr><td>right</td>
+	 <td>-</td>
+	 <td>The affected items should be right-aligned. </td>
+	</tr>
+	<tr><td>center</td>
+	 <td>horizontal-center, hcenter</td>
+	 <td>The affected items should be centered horizontally.</td>
+	</tr>
+	<tr><td>expand</td>
+	 <td>horizontal-expand, hexpand</td>
+	 <td>The affected items should use the whole available width (i.e. should fill the complete row).</td>
+	</tr>
+	<tr><td>shrink</td>
+	 <td>horizontal-shrink, hshrink</td>
+	 <td>The affected items should use the minimum width possible.</td>
+	</tr>
+	<tr><td>top</td>
+	 <td>-</td>
+	 <td>The affected items should be top-aligned. </td>
+	</tr>
+	<tr><td>bottom</td>
+	 <td>-</td>
+	 <td>The affected items should be bottom-aligned. </td>
+	</tr>
+	<tr><td>vcenter</td>
+	 <td>vertical-center</td>
+	 <td>The affected items should be centered vertically.</td>
+	</tr>
+	<tr><td>vexpand</td>
+	 <td>vertical-expand</td>
+	 <td>The affected items should use the whole available height (i.e. should fill the complete column).</td>
+	</tr>
+	<tr><td>vshrink</td>
+	 <td>vertical-shrink</td>
+	 <td>The affected items should use the minimum height possible.</td>
+	</tr>
+	<tr><td>newline-after</td>
+	 <td>-</td>
+	 <td>Items following an item with a newline-after layout should be placed on the next line. Currently the newline settings will be ignored, since every item will be placed on a new line.</td>
+	</tr>
+	<tr><td>newline-before</td>
+	 <td>-</td>
+	 <td>The affected items should always start on a new line (when there are any items in front of it). Currently the newline settings will be ignored, since every item will be placed on a new line.</td>
+	</tr>
+	<tr><td>plain</td>
+	 <td>-</td>
+	 <td>No specific layout should be used, instead the default behavior should be used. Such a layout does not need to be defined explicitly, but it can be useful to overwrite a basic setting.</td>
+	</tr>
+	</table>
+<p>
+Layout values can also be combined, using either the &quot;||&quot;, &quot;|&quot;, &quot;or&quot; or &quot;and&quot; operators. All operators result in the same combination. An item can be centered and using the whole available width with following example:
+<pre>
+.myStyle {
+	layout: center | expand;
+}
+</pre></p><p>
+This is equivalent with:
+<pre>
+.myStyle {
+	layout: center || expand;
+}
+</pre></p><p>
+And equivalent with:
+<pre>
+.myStyle {
+	layout: center and expand;
+}
+</pre></p><p>
+And equivalent with:
+<pre>
+.myStyle {
+	layout: center or expand;
+}
+</pre></p><p>
+And equivalent with:
+<pre>
+.myStyle {
+	layout: hcenter | hexpand;
+}
+</pre></p><p>
+And equivalent with:
+<pre>
+.myStyle {
+	layout: horizontal-center | horizontal-expand;
+}
+</pre></p>
+
+<h2 id="colors">Colors</h2>
+<p>
+Colors can be defined in the colors section and in each attribute which ends on &quot;-color&quot;, e.g. &quot;font-color&quot;, &quot;border-color&quot; etc.
+</p>
+<h3>Predefined Colors</h3>
+<p>
+The 16 standard windows colors are predefined:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Name&nbsp;&nbsp;</th><th>Hex-Value&nbsp;&nbsp;</th><th>Color</th><th>Name&nbsp;&nbsp;</th><th>Hex-Value&nbsp;&nbsp;</th><th>Color</th></tr>
+	<tr><td>white</td><td>#FFFFFF</td><td bgcolor="white">&nbsp;</td>
+	<td>yellow</td><td>#FFFF00</td><td bgcolor="yellow">&nbsp;</td></tr>
+	<tr><td>black</td><td>#000000</td><td bgcolor="black">&nbsp;</td>
+	<td>maroon</td><td>#800000</td><td bgcolor="maroon">&nbsp;</td></tr>
+	<tr><td>red</td><td>#FF0000</td><td bgcolor="red">&nbsp;</td>
+	<td>purple</td><td>#800080</td><td bgcolor="purple">&nbsp;</td></tr>
+	<tr><td>lime</td><td>#00FF00</td><td bgcolor="lime">&nbsp;</td>
+	<td>fuchsia</td><td>#FF00FF</td><td bgcolor="fuchsia">&nbsp;</td></tr>
+	<tr><td>blue</td><td>#0000FF</td><td bgcolor="blue">&nbsp;</td>
+	<td>olive</td><td>#808000</td><td bgcolor="olive">&nbsp;</td></tr>
+	<tr><td>green</td><td>#008000</td><td bgcolor="green">&nbsp;</td>
+	<td>navy</td><td>#000080</td><td bgcolor="navy">&nbsp;</td></tr>
+	<tr><td>silver</td><td>#C0C0C0</td><td bgcolor="silver">&nbsp;</td>
+	<td>teal</td><td>#008080</td><td bgcolor="teal">&nbsp;</td></tr>
+	<tr><td>gray</td><td>#808080</td><td bgcolor="gray">&nbsp;</td>
+	<td>aqua</td><td>#00FFFF</td><td bgcolor="aqua">&nbsp;</td></tr>
+</table>
+<p>
+Another predefined color is &quot;transparent&quot;, which results in an transparent area. &quot;transparent&quot; is only supported by some GUI elements like the menu-bar of a full-screen menu. 
+</p>
+<h3>The colors Section</h3>
+<p>
+The colors section of the polish.css file can contain colors, which can be referenced in the styles, fonts, border and background sections. You can even overwrite the predefined colors to confuse other designers!
+<pre>
+colors {
+	bgColor: #50C7C7;
+	bgColorLight: #50D9D9;
+	gray: #7F7F7F;
+}
+</pre>
+</p>
+<h3>How to Define Colors</h3>
+<p>
+A color can be defined in many different ways:
+<pre>
+.myStyle {
+	font-color: white; 	/* the name of the color */
+	border-color: #80FF80; 	/* a rgb hex value */
+	start-color: #F00; 	/* a short rgb-hex-value - this is red */
+	menu-color: #7F80FF80; 	/* an alpha-rgb hex value */
+	background-color: rgb( 255, 50, 128 );  /* a rrr,ggg,bbb value */
+	fill-color: rgb( 100%, 30%, 50% ); 	    /* a rgb-value with percentage */
+	label-color: argb( 128, 255, 50, 128 ); /* a aaa, rrr, ggg, bbb value */
+}
+</pre></p><p>
+Color names refer to one of the predefined colors or a color which has been defined in the colors-section:
+<pre>
+color: black; or 
+color: darkBackgroundColor;
+</pre>
+</p><p>
+The hex-value defines a color with two hexadecimal digits for each color (RRGGBB). Additionally the alpha blending-component can be added (AARRGGBB).  
+<pre>
+color: #FF000;     /*  defines red.                    */
+color: #7FFF0000;  /*  defines a half transparent red. */
+</pre></p>
+</p><p>
+The shortened hex-value defines a color by a RGB-value in hexadecimal. Every digit will be doubled to retrieve the full hex-value: 
+<pre>
+color: #F00; is equivalent with color: #FF0000; 
+color: #0D2; is equivalent with color: #00DD22;  /* and so on. */
+</pre>
+</p><p>
+A rgb-value starts with &quot;rgb(&quot; and then lists the decimal value of each color from 0 up to 255: 
+<pre>
+color: rgb( 255, 0, 0 );  /*  defines red.            */
+color: rbg( 0, 0, 255);   /*  defines blue and so on.  */
+</pre>
+</p><p>
+Alternatively percentage values can be used for rgb-colors:
+<pre>
+color: rgb( 100%, 0%, 0% );         /* defines red as well as */
+color: rgb( 100.00%, 0.00%, 0.00% );
+</pre></p><p>
+Alpha-RGB colors can be defined with the argb()-construct:
+<pre>
+color: argb( 128, 255, 0, 0 ); 
+</pre>
+</p><p>
+defines a half transparent red. For the argb-construct percentage values can be used as well.
+</p>
+
+<h3>Alpha Blending</h3>
+<p>
+Colors with alpha blending can be defined with hexadecimal or argb-definitions (see above). An alpha value of 0 results in fully transparent pixels, whereas the value FF (or 255 or 100%) results in fully opaque pixels. Some devices support values between 0 and FF, which results in transparent colors. Colors with a specified alpha channel can only be used by specific GUI items. Please refer to the documentation of the specific design attributes. 
+</p>
+
+<h2 id="fonts">Fonts</h2>
+<p>
+Many GUI Items have text elements, which can be designed with the font- or label-attributes.
+<br/>Both attribute-groups support the same attributes:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Attribute&nbsp;&nbsp;</th><th>Possible Values&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>color</td>
+	 <td>Reference to a color or direct declaration of the color.</td>
+	 <td>Depending on the number of colors the device supports, colors can look differently on the actual device.</td>
+	</tr>
+	<tr><td>face</td>
+	 <td>system (default, normal)</td>
+	 <td>The default font-face which is used when the font-face or label-face attribute is not set.</td>
+	</tr>
+	<tr><td></td>
+	 <td>proportional</td>
+	 <td>A proportional face. This is on some devices actually the same font-face as the system-font.</td>
+	</tr>
+	<tr><td></td>
+	 <td>monospace</td>
+	 <td>A font-face in which each character has the same width.</td>
+	</tr>
+	<tr><td>size</td>
+	 <td>small</td>
+	 <td>The smallest possible font.</td>
+	</tr>
+	<tr><td></td>
+	 <td>medium (default, normal)</td>
+	 <td>The default size for texts.</td>
+	</tr>
+	<tr><td></td>
+	 <td>large (big)</td>
+	 <td>The largest possible font size.</td>
+	</tr>
+	<tr><td>style</td>
+	 <td>plain (default, normal)</td>
+	 <td>The default style.</td>
+	</tr>
+	<tr><td></td>
+	 <td>bold</td>
+	 <td>A bold thick style</td>
+	</tr>
+	<tr><td></td>
+	 <td>italic (cursive)</td>
+	 <td>A cursive style.</td>
+	</tr>
+	<tr><td></td>
+	 <td>underlined</td>
+	 <td>Not really a style, just an underlined text.</td>
+	</tr>
+	<tr><td>bitmap</td>
+	 <td>The name of the bitmap font. The extension &quot;.bmf&quot; is not needed.</td>
+	 <td>With the &quot;bitmap&quot;-attribute a bitmap-font can be used instead of the system, proportional and monospace fonts. Please note that bitmap-fonts cannot be changed in neither size, color or style. Compare the following section for a detailed discussion of bitmap-fonts.</td>
+	</tr>
+
+	</table>
+<p>
+An example font and label specification:
+<pre>
+.myStyle {
+	font-color: white;
+	font-face: default; /* same as system or normal */
+	font-size: default; /* same as medium or normal */ 
+	font-style: bold;
+	label-color: gray;
+	label-face: proportional; 
+	label-size: small;
+	label-style: cursive; /* same as italic */
+}
+</pre></p><p>
+The same specification can also be written as follows:
+<pre>
+.myStyle {
+	font {
+		color: white;
+		style: bold;
+	}
+	label {
+		color: gray;
+		face: proportional; 
+		size: small;
+		style: cursive; /* same as italic */
+	}
+}
+</pre>
+</p><p>
+In the font-definition the above face and size attributes can be skipped, since they only define the default behavior anyhow.
+</p>
+<h2 id="bitmapfonts">Bitmap-Fonts</h2>
+<p>
+Bitmap-Fonts can be used instead of the usual predefined fonts for any text elements like titles, StringItems, etc. 
+</p>
+<h3 id="creatingbitmapfonts">Creating Bitmap-Fonts</h3>
+<p>
+Bitmap-Fonts can be created out of any True Type Fonts (*.ttf) using the ${polish.home}/bin/fonteditor executable. In some cases it might be beneficial to optimize the created PNG image manually for decreasing the size of the image and making manual adjustments. The created bitmap-fonts-files (*.bmf) can also be fine-tuned using the binary data editor ${polish.home}/bin/binarydataeditor. Just select the File -> &quot;open in binary editor&quot;-command. 
+</p><p>
+The created bitmap-font needs to be copied into the &quot;resources&quot; folder of the project.
+</p>
+<h3 id="usingbitmapfontsingui">Using Bitmap-Fonts in the J2ME Polish GUI</h3>
+<p>
+The created bitmap-fonts can be used for any text-based items in the J2ME Polish GUI. They can be integrated using the &quot;font-bitmap&quot;-attribute. The &quot;.bmf&quot; extension does not need to be given. In the following example the &quot;china.bmf&quot; font is used for the currently focused item:
+<pre>
+focused {
+	font-bitmap: china;
+	background-color: yellow;
+	layout: center | expand;
+}
+</pre></p>
+
+<h3 id="usingbitmapfontsdirectly">Using Bitmap-Fonts Directly</h3>
+<p>
+The bitmap-fonts can also be used directly in the program-code with the help of the <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFont.html" target="_blank">de.enough.polish.util.BitMapFont</a> class. 
+Please compare the <a href="<%= javadocdir %>../javadoc/j2me/index.html" target="_blank">JavaDoc</a> documentation for more information.
+</p><p>
+This example uses a bitmap-font for displaying a text:
+</p><p><pre>
+import de.enough.polish.util.*;
+
+public class MyScreen extends Canvas {
+	<b>private BitMapFont bitMapFont = BitMapFont.getInstance( &quot;/china.bmf&quot; );</b>
+	<b>private BitMapFontViewer textViewer;</b>
+	public MyScreen() throws IOException {
+		<b>this.textViewer = this.bitMapFont.getViewer( &quot;Hello World!&quot; );</b>
+		...
+	}
+...
+	public void paint( Graphics g ) {
+		int x = 20;
+		int y = 50;
+		<b>this.viewer.paint( x, y, g );</b>
+	}
+}
+</pre></p>
+
+<h2 id="labels">Labels</h2>
+<p>
+All GUI-Items can have a label, which is designed using the 
+<a href="css-styles.html#predefined">pre-defined style</a> &quot;label&quot;. 
+One can specify another-style by using the &quot;label-style&quot;-attribute:
+<pre>
+.myStyle {
+	font {
+		color: white;
+		style: bold;
+	}
+	label-style: myLabelStyle;
+}
+
+.myLabelStyle {
+	font-style: bold;
+	font-color: green;
+	background-color: yellow;
+}
+</pre>
+<p>
+It is often advisable to use separate items for labels and contents. In that way you can get a clean design by using a table, in which all labels are placed on the left side and all input-fields etc on the right side. 
+Tables are defined by using the <a href="css-specific.html#screens">&quot;columns&quot;-attribute</a> of the corresponding screen.
+</p>
+<p>
+When you want to have a line-break after each label, just add the &quot;newline-after&quot;-value to the layout:
+<pre>
+label {
+	font-style: bold;
+	font-color: green;
+	background: none;
+	layout: left | newline-after;
+}
+</pre></p>
+
+<h2 id="backgroundsandborders">Backgrounds and Borders</h2>
+<p>
+Each style can define a specific background and border. There are many different types of backgrounds and borders available, of which some are even animated.
+A specification of a simple background and border is the following example:
+<pre>
+.myStyle {
+	background-color: white;
+	border-color: gray;
+	border-width: 2;
+}
+</pre></p><p>
+This example creates a white rectangular background with a gray border, which is 2 pixel wide.
+<pre>
+.myStyle {
+	background {
+		type: pulsating; 
+		start-color: white;
+		end-color: pink;
+		steps: 30;
+	}
+}
+</pre></p><p>
+The above example creates a background which color is constantly changing between white and pink. 30 color shades are used for the animation.
+When no background or border should be used, the &quot;none&quot; value can be set:
+<pre>
+.myStyle {
+	background: none;
+	border: none;
+}
+</pre></p>
+<p>
+If more complex types should be used, the background- or border-type needs to be specified explicitly.  The following example illustrates this for an background, which colors change all the time:
+The available background- and border-types are explained in detail in the sections 
+<a href="css-specific.html#backgrounds">&quot;Specific Design Attributes for Backgrounds&quot;</a>
+and
+<a href="css-specific.html#borders">&quot;Specific Design Attributes for Borders&quot;</a>.
+</p>
+
+<h2 id="beforeandafter">Before and After Attributes</h2>
+<p>
+The before and after attributes can be used to insert content before or after GUI items which have the specified style.
+The following example adds a heart picture after the actual GUI items. The &quot;focused&quot; style is a predefined style which is used for lists, forms, and so on.
+<pre>
+focused {
+	after: url( heart.png );
+	background: none;
+	border-type: round-rect;
+	border-arc: 6;
+	border-color: yellow;
+	border-width: 2;
+	layout: left | expand;
+	font-color: black;
+}
+</pre></p><p>
+<img src="../images/screenshot-example-pink.png" width="202" height="271" alt="example for the after attribute" />
+Currently only images can be included with before or after attributes.
+</p>
+<%include end.txt %>

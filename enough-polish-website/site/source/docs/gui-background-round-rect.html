@@ -1,0 +1,70 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Round-Rect Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+	</ul>
+	<p>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The round-rect background displays a monocolored background with rounded corners.
+	<br /><img src="<%= basedir%>images/background-round-rect.png" width="255" height="255" alt="round-rect background" />	
+<pre>
+.myItem {
+	background {
+		type: round-rect;
+		arc: 9;
+		color: red;
+	}
+}
+</pre>
+	</p>
+	<p>
+	CSS attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>type</td><td>n/a</td><td>round-rect</td>
+		<td>
+		The type setting is required for selecting a round-rect background.
+		</td>
+	</tr>
+	<tr>
+		<td>color</td><td>white</td><td>color definition</td>
+		<td>
+		The color of the background, can be a rbg or hexadecimal value of the color or the name of the color as defined in the colors section.
+		</td>
+	</tr>
+	<tr>
+		<td>arc</td><td>10</td><td>numerical value</td>
+		<td>
+		The diameter of the arc at the four corners.
+		</td>
+	</tr>
+	<tr>
+		<td>arc-width</td><td>10</td><td>numerical values</td>
+		<td>
+		 	The horizontal diameter of the arc at the four corners. Defaults to the <code>arc</code>-value, when none is specified.
+		</td>
+	</tr>
+	<tr>
+		<td>arc-height</td><td>10</td><td>numerical values</td>
+		<td>
+		 	The vertical diameter of the arc at the four corners. Defaults to the <code>arc</code>-value, when none is specified.
+		</td>
+	</tr>
+	</table>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/RoundRectBackground.html">RoundRectBackground</a>.
+	</p>
+
+<%include end.txt %>

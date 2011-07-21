@@ -1,0 +1,317 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Download J2ME Polish 1.2.3a %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.2.3 a</h1>
+	<%index %>
+	<h2 id="improvements123">Improvements of J2ME Polish 1.2.3a</h2>
+	<p>
+	J2ME Polish 1.2.3a is a small update with following bugfixes and improvements:
+	</p>
+	<h3 id="bugfixes">Bug Fixes</h3>
+	<ul>
+	<li><b>Automatic Stacktrace Resolving</b>: 
+		Under Windows the automatic resolver of stacktraces got stuck when the 
+		jad decompiler issued more than 40 lines of errors.
+		<hr />
+	</li>
+	<li><b>polish.TextField.useDirectInput</b>: 
+		Setting that preprocessing variable resulted in a 
+		compile error.
+		<hr />
+	</li>
+	<li><b>compilerModePreverify</b>: 
+		The preverifying in the compiler-only mode did not work
+		correctly.
+		<hr />
+	</li>
+	<li><b>Form.set()</b>: 
+		Form.set() and Form.add() did not trigger a repaint.
+	</li>
+	</ul>
+	<h3 id="improvements">Improvements</h3>
+	<ul>
+	<!--
+	<li><b>Menu Bar</b>: 
+		The margins of the menu bar can now be set with the following preprocessing 
+		variables: polish.Menu.MarginBottom, polish.Menu.MarginTop, polish.Menu.MarginLeft, 
+		polish.Menu.MarginRight - the default value is 2 pixels for each margin 
+		but the polish.Menu.MarginBottom (which is 0 by default).
+<pre>
+&lt;variable name=&quot;polish.Menu.MarginBottom&quot; value=&quot;3&quot; /&gt;
+</pre>
+		<hr />
+	</li>
+	-->
+		<li><b>Obfuscator.useDefaultPackage</b>: 
+		J2ME Polish can now move all classes to the default package
+		for you. This includes the MIDlet-classes as well and can result
+		in a smaller jar-size. Please note that you are responsible for
+		preventing name-clashes of classes. You do not need to adjust
+		your &lt;midlet&gt; settings, this is done automatically by J2ME Polish.
+
+<pre>
+&lt;obfuscator name=&quot;ProGuard&quot; useDefaultPackage=&quot;true&quot; unless=&quot;test&quot; /&gt;
+</pre>
+		<hr />
+	</li>
+	<li><b>New Borders</b>: 
+		you can now use the additional border-types &quot;bottom&quot;, &quot;top&quot;, 
+		&quot;left&quot; and &quot;right&quot;, which support the same attribute as the &quot;simple&quot; border, 
+		for example:
+
+<pre>
+focused {
+	font-color: red;
+	border {
+		type: bottom;
+		color: red;
+		width: 2;
+	}
+}
+</pre>
+		<hr />
+	</li>
+	<!--
+	<li><b>Image-Background</b>: 
+		The image-background can now be aligned as well, which
+		can be useful for gradient backgrounds. You can use the 
+		normal layout-terminology, e.g. &quot;left | center&quot;, &quot;h-center | v-center&quot;
+		and so on. Default layout is centered.
+<pre>
+.myStyle {
+	font-color: red;
+	background {
+		type: image;
+		image: url( bg.png );
+		repeat: repeat-y;
+		layout: left;
+	}
+}
+</pre>
+		<hr />
+	</li>
+	-->
+	<li><b>Display.setCurrentItem( Item )</b>: 
+		Display.setCurrentItem( Item ) is now automatically resolved
+		by J2ME Polish and can be used for MIDP/1.0 as well as MIDP/2.0
+		phones if you use the J2ME Polish GUI.
+		<hr />
+	</li>
+	<li><b>&lt;obfuscator&gt; and &lt;debug&gt;</b>: 
+		The &lt;obfuscator&gt;  and &lt;debug&gt; elements do not need
+		the &quot;enable&quot; attribute any more - this is now always true and
+		is deprecated. Please use the &quot;if&quot; and &quot;unless&quot; attributes in
+		case you need to control those elements from now on.
+		<hr />
+	</li>
+	<li><b>Thanks</b>: for this release go to
+		Andrew Emmons, Thomas Kraft, Milosz Weckowski, 
+		Philipp Stolze, Eran and Fernando Gomes.
+		<hr />
+	</li>
+	</ul>
+	<h2 id="improvements123">Improvements of J2ME Polish 1.2.3</h2>
+	<p>
+	J2ME Polish 1.2.3 brings a full screen UI for all MIDP/2.0 phones,
+	the ability to automatically resolve stack traces like 
+	&quot;RuntimeException at at com.company.MyClass.mymethod(+22)&quot;,
+	an editor for binary files like level-data, the ability to
+	use different packagers, and
+	provides many small but fine improvements, a couple of
+	bug fixes and an updated device database as well as documentation:
+	</p>
+	<ul>
+	<li><b>Bitmap Fonts</b>: 
+	Using the font-editor in the &quot;${polish.home}/bin&quot; folder, you 
+	easily create <a href="../docs/css-common.html#bitmapfonts">bitmap-fonts</a> out of any True Type font and use them in your
+	application. Within the GUI you can use bitmap-fonts by setting the
+	&quot;font-bitmap&quot;-attribute in the &quot;polish.css&quot;-file:
+<pre>
+.myStyle {
+	/* Use the coolfont.bmf for this style: */
+	font-bitmap: coolfont;
+	background-color: green;
+}
+</pre>
+	You can also use bitmap fonts independently of the J2ME Polish GUI
+	by using the <a href="../docs/utilities.html#bitmapfont">BitMapFont-class</a>.
+	<hr />
+	<li><b>Fullscreen-Mode</b>: 
+	The full-screen mode is now supported for MIDP/2.0 devices as well. 
+	The mode can be set with the &quot;polish.FullScreen&quot;-variable as well, which allows
+	a finer grained control than using the &quot;usePolishGui&quot;-attribute of the 
+	&lt;build&gt; element:
+<pre>
+&lt;build
+	usePolishGui=&quot;true&quot;
+	fullscreen=&quot;menu&quot;
+	&gt;
+	&lt;variables&gt;
+		&lt;variable 
+		name=&quot;polish.FullScreen&quot; 
+		value=&quot;yes&quot;
+		if=&quot;polish.vendor == Siemens&quot;
+	/&gt;
+	&lt;variables&gt;
+	[...]
+</pre>
+	<hr />
+	</li>
+	<li><b>Automatic Stack Trace Resolving</b>: 
+	When an application error occurs during an emulator-session,
+	J2ME Polish can decompile and pinpoint the corresponding source-code-location
+	directly from error messages like &quot;java.lang.RuntimeException at com.company.MyClass.mymethod(+22)&quot;.
+	For this J2ME Polish uses the &quot;jad&quot;-decompiler, which is available at
+	<a href="http://www.kpdus.com/jad.html" target="_blank">http://www.kpdus.com/jad.html</a>.
+	This is described in more detail in the <a href="../docs/build-emulator.html#emulator-stacktrace">emulator documentation</a>.
+	<hr />
+	</li>
+	<li><b>Packaging</b>: 
+	J2ME Polish can now use different packagers as well, which can be specified with
+	the <a href="../docs/build-build.html#packager">&lt;packager&gt; element</a>:
+<pre>
+&lt;packager
+ executable=&quot;jar&quot;
+ arguments=&quot;cvfM;;${polish.jarPath};;-C;;${polish.packageDir};;.&quot;
+/&gt;
+</pre>
+	<hr />
+	</li>
+	<li><b>Binary Data Editor</b>: 
+	J2ME Polish now includes an editor for binary data files, e.g. level data.
+	Have a look at the <a href="../docs/tools.html">&quot;${polish.home}/bin&quot;</a>-directory.
+	<hr />
+	</li>
+	<li><b>Direct Input Mode</b>: 
+	You can activate a <a href="../docs/css-specific.html#textfield-direct-input">direct input mode</a> for textfields by specifying
+	<code>textfield-direct-input: true;</code> in the &quot;polish.css&quot;
+	file now.
+	<hr />
+	</li>
+	<li><b>Sony Ericsson Emulators</b>: 
+	Emulators from Sony Ericsson can now be launched automatically by J2ME Polish,
+	even when they are not integrated in the &quot;normal&quot; WTK.
+	<hr />
+	</li>
+	<li><b>Lists</b>: 
+	In <a href="../docs/css-specific.html#screenattributes">Lists</a> you can now show only the images
+	and use the appended texts as titles by setting
+	the &quot;show-text-in-title&quot;-CSS-attribute to &quot;true&quot;.
+	<hr />
+	<li><b>Screens</b>: 
+	Improved the layout of &quot;normal&quot; <a href="../docs/css-specific.html#screenattributes">tables</a>, in which each column can use
+	as much space as needed (and possible).
+	<hr />
+	</li>
+	<li><b>Scrolling Indicator</b>: 
+	The scrolling indicator is now painted on the left bottom for Siemens
+	devices by default.
+	<hr />
+	</li>
+	<li><b>Directory Handling</b>: 
+	J2ME Polish can now handle absolute paths for the directories as well, e.g.
+	&lt;property name=&quot;dir.work&quot; value=&quot;C:\temp\polish&quot; /&gt;.
+	<hr />
+	<li><b>Obfuscators</b>: 
+	J2ME Polish now includes the <a href="http://www.yworkds.de" target="_blank">yGuard</a> obfuscator as well
+	and also supports the <a href="http://www.zelix.com/" target="_blank">&quot;KlassMaster&quot;</a>
+	and <a href="http://www.preemptive.com/" target="_blank">&quot;Dasho&quot;</a> obfuscators.
+	<hr />
+	<li><b>Game Engine</b>: 
+	Corrected an error when a sprite is created using another sprite while Nokia's UI API
+	is available. Also improved the performance of Sprite and LayerManager.
+	<hr />
+	</li>
+	<li><b>GUI Commands</b>: 
+	Added commands &quot;mark&quot;, &quot;unmark&quot; and &quot;select&quot; to Lists and ChoiceGroups.
+	Of course these can be <a href="../docs/localization.html#localization-gui">localized</a> as well.
+	They can be deactivated by defining the &lt;variable&gt;s:
+<pre>
+&lt;variable name=&quot;polish.ChoiceGroup.suppressMarkCommands&quot; value=&quot;true&quot;/&gt;
+&lt;variable name=&quot;polish.ChoiceGroup.suppressSelectCommand&quot; value=&quot;true&quot;/&gt;
+&lt;variable name=&quot;polish.TextField.suppressCommands&quot; value=&quot;true&quot;/&gt;
+</pre> 
+	<hr />
+	</li>
+	<li><b>Preprocessing</b>: 
+	You can now use the new &quot;!=&quot;-operator for comparing values:
+<pre>
+//#if polish.vendor != Nokia
+	// this is not a Nokia device...
+//#endif
+</pre>
+	
+	<hr />
+	</li>
+	<li><b>Libraries</b>: 
+	The Thread.MIN_PRIORITY had the wrong value 0 instead of 1 in the included midp2.jar library.
+	J2ME Polish now also includes the Mobile 3D Graphics API (m3g.jar) as well as the 
+	bluetooth API (btapi.jar).
+	<hr />
+	</li>
+	<li><b>Device-Selection</b>: 
+	All requirements now support the &quot;undefined&quot; value, which means
+	that the specified capability must not be defined:
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;or&gt;
+		&lt;requirement name=&quot;MaxJarSize&quot; value=&quot;148+ kb&quot; type=&quot;Memory&quot;/&gt;
+		&lt;and&gt;
+			&lt;requirement name=&quot;StorageSize&quot; value=&quot;148+ kb&quot; type=&quot;Memory&quot;/&gt;
+			&lt;requirement name=&quot;MaxJarSize&quot; value=&quot;undefined&quot; type=&quot;Memory&quot;/&gt;
+		&lt;/and&gt;
+	&lt;/or&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+	<hr />
+	When a generic deviceRequirement-type like &quot;Memory&quot;, &quot;String&quot;, &quot;Int&quot; or &quot;Version&quot;
+	was used, the name and the value of the requirement got mixed up.
+	<hr />
+	</li>
+	
+	<li><b>Thanks</b>: 
+	Thanks for this release goes to Andrew Barnes for making the direct input mode
+	of TextFields possible, Thomas Kraft for reviewing the forthcoming
+	J2ME Polish book, Piotr Czarny, Jon Malmquist, Milosz Weckowski and Thomas Broyer for 
+	extensive beta testing, providing excellent bug
+	reports and corrections to the device database. 
+	<hr />
+	</li>
+	
+	</ul>
+
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	proprietary commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license needs to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.2.3a.jar">I accept the above rules (download the full installer: 7.571.292 bytes).</a><br/>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.2.3a.zip">I accept the above rules (download only the update).</a><br/>
+	   	<a href="../index.html">I do NOT accept the above rules.</a><br />
+		Start the installation by calling <code>java -jar j2mepolish-1.2.3a.jar</code>
+		from the commandline or by double-clicking the file.
+	</p>
+
+	<h2 id="installationproblems">Trouble Shooting</h2>
+	<p>The size of the full installer is 7.571.292 bytes.<br/>
+	If you have installation problems, please make sure that you have downloaded
+	the complete package. You can start the installation either by double-clicking
+	the file or by calling &quot;java -jar j2mepolish-[version].jar&quot; from the commandline.
+	<b>Do not simply extract the downloaded JAR file!</b>
+	</p>
+	<p>
+	When you are having installation problems under Windows XP, please use the
+	latest <a href="http://java.sun.com/j2se/1.4.2/download.html" target="_blank">J2SE-version (1.4.2_06 or 1.5.x)</a>. 
+	</p>	
+
+<%include end.txt %>

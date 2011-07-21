@@ -1,0 +1,127 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: TabbedPane %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using TabbedPane</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-tabbedform.html">TabbedForm</a></li>
+	</ul>
+	<%index %>
+	<p>
+	
+</p>
+<h2 id="design">Design</h2>
+<p><img src="<%= basedir%>images/gui-screen-tabbedpane.png" alt="TabbedPane" width="240" heigth="320" />
+
+<br /> The above design has been realized with following settings in <i>polish.css</i>:
+<pre>
+.tabbedPane {
+	title-menu: true;
+}
+
+.tabbedPaneIcons {
+	<b>view-type: horizontal;</b>
+	background {
+		type: vertical-gradient;
+		top-color: #f6f6f6;
+		bottom-color: #acadb1;
+	}
+	border {
+		top-width: 1;
+		color: #aaa;
+	}
+	layout: expand;
+}
+
+.tabIcon {
+	margin: 1px;
+	padding: 2px;
+	icon-image: url( Tab%INDEX%.png );
+	icon-image-align: top;
+	max-width: 25%;
+	font-bitmap: url( arialsmall.bmf );
+	layout: expand | center | vertical-center;
+}
+
+.tabIcon:hover {
+	padding: 1px;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: #f1f1f1;
+	}
+	border {
+		type: round-rect;
+		arc: 8;
+		color: #aeaeae;
+	}
+	icon-image: url( TabFoc%INDEX%.png );
+}
+</pre>
+</p>
+<p>The TabbedPane allows you to put several screens into a single TabbedPane. The user can jump between different tabs by clicking left and right.
+Title and commands are drawn from the currently selected screen.
+</p>
+<p>
+The TabbedPane uses these default styles for its design:
+</p>
+<ul>
+	<li><b>.tabbedPaneIcons</b>: the design of the bar that contains the tab icons</li>
+</ul>
+<h3 id="tabbedpane-attributes">CSS Attributes for TabbedPane</h3>
+<p>You can use following TabbedPane specific CSS attributes for your design:</p>
+<%cssattributes de.enough.polish.ui.TabbedPane %>
+
+
+
+
+<h2 id="programming">Programming</h2>
+<p>
+You can easily add screens to a TabbedPane using these methods:
+</p>
+<ul>
+	<li><code>TabbedPane(String title)</code>: Creates a new TabbedPane with the specified title - can be used with a <code>style</code> preprocessing directive..</li>
+	<li><code>addTab( Displayable tab, Image icon)</code>: Adds a screen.</li>
+	<li><code>addTab( Displayable tab, Image icon, String text)</code>: Adds a screen.</li>
+	<li><code>addTab( Displayable tab, IconItem iconItem)</code>: Adds a screen.</li>
+	<li><code>setTab(int index, Displayable tab)</code>: Changes the screen of the specified tab without changing the tab icon.</li>
+	<li><code>setTab(int index, Displayable tab, Image icon)</code>: Changes the screen of the specified tab.</li>
+	<li><code>setTab(int index, Displayable tab, Image icon, String text)</code>: Changes the screen of the specified tab.</li>
+	<li><code>setTab(int index, Displayable tab, IconItem tabIconItem)</code>: Changes the screen of the specified tab.</li>
+	<li><code>setCurrentTab( Displayable tab)</code>: Changes the screen of the currently selected tab.</li>
+	<li><code>setCurrentTab( Displayable tab, Image icon, String text)</code>: Changes the screen of the currently selected tab.</li>
+	<li><code>setCurrentTab( Displayable tab, Image icon, String text)</code>: Changes the screen of the currently selected tab.</li>
+	<li><code>setCurrentTab( Displayable tab, IconItem iconItem)</code>: Changes the screen of the currently selected tab.</li>
+	<li><code>setTabListener( TabListener tabListener)</code>: Sets a TabListener.</li>
+	<li><code>setTabbedFormListener( TabbedFormListener listener )</code>: Sets the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a> that is invoked before and after the user changes a tab.</li>
+	<li><code>setFocus(int tabIndex)</code>: Focuses the specified tab.</li>
+	<li><code>removeTab(int index)</code>: Removes the specified tab.</li>
+	<li><code>size()</code>: Retrieves the number of tabs</li>
+	<!-- 
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	 -->
+</ul>
+<p>
+Please refer to the &quot;tabbedpane&quot; sample application for working example.
+</p>
+
+
+
+</table>
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedPane.html">TabbedPane</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabListener.html">TabListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

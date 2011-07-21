@@ -1,0 +1,198 @@
+<%define inDownloadSection %>
+<%set basedir = ../ %>
+<%set title = J2ME Polish: Beta 1.2 pre2 %>
+<%include start.txt %>
+
+	<div id="content">
+	<h1>J2ME Polish 1.2 pre 2</h1>
+	<%index %>
+	<h2 id="improvements12">Improvements of J2ME Polish 1.2 preview 2</h2>
+	<p>
+	J2ME Polish 1.2 preview 2 contains several bugfixes and improvements compared to the last release:
+	</p>
+<ul>
+	<li><b>Obfuscator</b>: 
+	J2ME Polish now includes the latest ProGuard-version (3.0.2).
+	ProGuard 2.0 can still be used, just use the "ProGuard2"-
+	instead of the "ProGuard"-obfuscator.
+	<hr />
+	</li>
+	<li><b>Compilation</b>: 
+	<ul>
+		<li><i>javacTarget</i>:
+		The &lt;build&gt; element now supports the &quot;javacTarget&quot;-attribute for setting the
+		compiler-target. By default the &quot;1.2&quot; target is used, unless a WTK 1.x or Mac OS X is used, in which case the target &quot;1.1&quot; is used.
+		Prior versions of J2ME Polish always used the &quot;1.1&quot; target.
+<pre>
+&lt;build
+	...
+	javacTarget=&quot;1.1&quot;
+	&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>compilerMode</i>: 
+		When the compiler-mode is activated, J2ME Polish will not
+		package the application and only process one device. 
+		This mode is useful for IDEs which
+		support indirect compilation like NetBeans for example.
+		You can select &quot;Run&quot; in NetBeans and NetBeans
+		uses J2ME Polish as compiler, packages the application
+		and starts the emulator - this saves valuable time
+		during the development phase.
+		<br />
+		The &quot;compilerDestDir&quot;-attribute defines where the compiled
+		(and obfuscated) classes should be stored. The default target directory
+		is &quot;bin/classes&quot;.
+<pre>
+&lt;build
+	...
+	compilerMode=&quot;true&quot;
+	compilerDestDir=&quot;classes&quot;
+	&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>Compile Errors</i>:
+		Compile errors do now point to the original sources
+		instead of pointing to the preprocessed files.
+		Within an IDE just click on the error-message to edit
+		the faulty source code.
+		</li>
+	</ul>
+	<hr />
+	</li>
+	<li><b>Device Database</b>: 
+	Updated and added device definitions. 
+	<hr />
+	</li>
+	<li><b>JAD & MANIFEST Attributes</b>: 
+	<ul>
+		<li><i>target-Attribute</i>: 
+	All user-defined attributes are now added to both the
+	manifest as well as the JAD file by default. This behaviour
+	can be changed by setting the &quot;target&quot;-attribute
+	of the &lt;attribute&gt; element:
+<pre>
+	&lt;attribute name=&quot;UDP-Server-Port&quot; value=&quot;5000&quot; target=&quot;jad&quot; /&gt;
+</pre>
+		<hr />
+		</li>
+		<li><i>Loading Attribute from a File</i>: 
+		Attributes can now be loaded from a file as well:
+<pre>
+	&lt;attribute file=&quot;nokia.jad&quot; if=&quot;polish.vendor == Nokia&quot; /&gt;
+</pre>
+		In the file attribute-names and -values need to be separated
+		with a colon (&quot;:&quot;). Empty lines and lines starting
+		with &quot;#&quot; are ignored.
+		</li>
+	</ul>
+	<hr />
+	</li>
+	<li><b>Variables</b>: 
+		Variables can now be loaded from a file as well:
+<pre>
+	&lt;variable file=&quot;nokia.properties&quot; if=&quot;polish.vendor == Nokia&quot; /&gt;
+</pre>
+		In the file variable-names and -values need to be separated
+		with an equals-sign (&quot;=&quot;). Empty lines and lines starting
+		with &quot;#&quot; are ignored.
+		<hr />
+	</li>
+	
+	<li><b>GUI</b>:
+		The DateField now supports the French format of DD/MM/YYYY as well along
+		with the ISO, German and US standard.
+		The preprocessing-variable &quot;polish.DateFormat&quot; is used to control
+		the format, e.g. 
+<pre>
+&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;fr&quot;/&gt;
+</pre>
+		<hr />
+		<br />
+		The DateFormat also supports the new generic values &quot;dmy&quot; (day-month-year), 
+		&quot;mdy&quot; (month-day-year) or &quot;ymd&quot; (year-month-day).
+		Along with the polish.DateFormatSeparator-variable and the
+		polish.DateFormatEmptyText-variable one can use any custom dateformat:
+<pre>
+&lt;variable name=&quot;polish.DateFormat&quot; value=&quot;ymd&quot;/&gt;
+&lt;variable name=&quot;polish.DateFormatSeparator&quot; value=&quot;/&quot;/&gt;
+&lt;variable name=&quot;polish.DateFormatEmptyText&quot; value=&quot;Select Date&quot;/&gt;
+</pre>
+	<hr />
+	</li>
+	<li><b>Device Selection</b>: 
+	The new &quot;JavaConfiguration&quot;-requirement eases the selection of devices
+	by their configuration:
+<pre>
+&lt;requirement name=&quot;JavaConfiguration&quot; value=&quot;CLDC/1.1+&quot; /&gt;
+</pre>
+	<hr/>
+	</li>
+	
+	<li><b>Bugs</b>: 
+	<ul>
+	<li><i>J2SE 1.5 Support</i>: 
+	The J2ME Polish-task could not be used in conjunction with the
+	J2SE 1.5 compiler, because the source-compatibility was not set
+	correctly and the javac-target was always &quot;1.1&quot;.
+	Now the source-compatibility is always set and the javac-target can be changed.
+	<hr /></li>
+	<li><i>Device-Selection</i>: 
+	When a device was selected by its identifier, other devices
+	with the similar name were selected as well (e.g. Nokia/7250 and Nokia/7250i).
+	<hr /></li>
+	<li><i>Using Identifier in #if-directive</i>: 
+	Identifiers could not be compared in #if-preprocesing directives directly.
+	This is now fixed:
+<pre>
+//#if polish.Identifier == Nokia/N95 
+</pre>
+	</li>
+	</ul>
+	<hr/>
+	<li><b>Thanks</b>: 
+	Thanks for this release goes to Thomas Broyer for the improvements 
+	of the DateField class, Jan Peknik for suggesting the
+	compiler-mode, attributes-loading and &quot;bending&quot; of compiler-messages
+	(as well as explaining how this can be done),
+	 Jozart for starting the &quot;javac-target&quot;-discussion,
+	Sebastian Szczygiel for improvements of the device database,
+	And thanks to all you users of J2ME Polish!
+	<hr/>
+	</li>
+</ul>
+
+<h2 id="update">Update</h2>
+	<p>When you are updating J2ME Polish from 1.1 or earlier, please have a look at the 
+	included build.xml. A new Ant-property &quot;polish.home&quot; now eases
+	the integration of J2ME Polish into your projects.
+	<br />
+	Also remember to get the latest ProGuard-version from
+	<a href="http://proguard.sourceforge.net" target="_blank">http://proguard.sourceforge.net</a>.
+	</p>
+	
+<h2 id="license">License</h2>
+	<p>J2ME Polish is licensed under the GNU General Public License (GPL) and under
+	commercial licenses.</p>
+	<p>For using J2ME Polish commercially in closed source applications,
+	the appropriate commercial license need to be obtained.
+	<br/>
+	Please compare the <a href="../licenses.html">licensing page</a> for more information.
+	</p>
+
+<h2 id="download">Download</h2>
+	<p>
+		THIS IS BETA SOFTWARE! PLEASE REPORT ANY
+		PROBLEMS YOU ENCOUNTER TO j2mepolish@enough.de!
+		<br />
+		A complete installer will be available along with the official
+		1.2 release.
+	</p><p>
+		<a href="http://download.berlios.de/polish/j2mepolish-1.2-pre2.zip">I accept the above rules (download the update).</a><br />
+	   	<a href="../index.html">I do NOT accept the above rules.</a>
+	</p>
+	
+
+<%include end.txt %>

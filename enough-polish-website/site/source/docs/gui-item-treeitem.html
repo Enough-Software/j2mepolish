@@ -1,0 +1,155 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: TreeItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">TreeItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-item-treeitem.png"  width="347" height="301" alt="A TreeItem in action" />
+	<br />
+	A <code>TreeItem</code> helps you to browse hierarchical data.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The above design has been realized using the following CSS settings:
+	</p>
+<pre>
+.mailTree {
+	padding-vertical: 3;
+	treeitem-closed-indicator: url( arrowRight.png );
+	treeitem-opened-indicator: url( arrowLeft.png );
+}
+
+.mailBox {
+	margin: 3;
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background-color: #656565;
+	font {
+		style: bold;
+		size: small;
+		color: mailBoxFontColor;
+	}
+	layout: expand | left;
+}
+
+.mailBox:hover {
+	margin: 0;
+	background-color: white;
+	font-color: black;
+	border {
+		type: drop-shadow;
+		inner-color: #CC8D8D67;
+		outer-color: #AA2D2D25;
+		width: 3;
+		orientation: all-sides;
+	}
+}
+
+.mailSummary {
+	padding: 4;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: mailSummaryBgColor;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: mailSummaryFontColor;
+	}
+}
+
+.mailSummary:hover {
+	padding: 2;
+	padding-left: 7;
+	padding-right: 7;
+	background-border-color: focusedBorderColor;
+	background-border-width: 2;
+}
+
+
+.mailDetail {
+	padding: 2;
+	background {
+		color: mailDetailBgColor;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: mailDetailFontColor;
+	}
+	label-style: .mailDetailLabel;
+}
+
+.mailDetailLabel extends label {
+	font-color: white;
+}
+</pre>
+
+	<h3 id="attribute-tree">CSS Attributes for the TreeItem</h3>
+	<p>
+	You can use the following attributes for designing a <code>TreeItem</code>:
+	</p>
+	<%cssattributes de.enough.polish.ui.TreeItem %>
+	
+	<h2 id="treeitem-Programming">Programming</h2>
+	<p>
+	The following example shows the use of a <code>TreeItem</code>:
+	</p>
+<pre>
+public void createTree( Form form ) {
+	//#style mailTree
+	TreeItem tree = new TreeItem( null );
+	//#style mailbox
+	Item node = tree.appendToRoot("Inbox", null);
+	addMessage(tree, node, "Bill Gates", "What's next?", "After conquering the world, what's left?" );
+	addMessage(tree, node, "Stephen Hawkings", "Black Holes",  "They are my favourite!" );
+	addMessage(tree, node, "David Byrne", "String Theory", "Or is it m-theory with multidimensional branes?!" );
+
+	//#style mailbox
+	node = tree.appendToRoot("Outbox", null);
+	addMessage(tree, node, "Enough Software", "J2ME Polish",  "Powerful, Flexible, Extensible.");
+
+	//#style mailbox
+	node = tree.appendToRoot("Sent", null);
+	addMessage(tree, node, "Steve Jobs", "iPhone?", "Gimme that phone, please :-)  - and don't forget the Java support!"  );
+
+	form.append( tree );
+}
+
+private void addMessage(TreeItem tree, Item node, String from, String subject, String text ) {
+	Item subjectItem;
+	Item detailItem;
+	//#style mailSummary
+	subjectItem = tree.appendToNode(node, from, null );
+	//#style mailDetail
+	detailItem = new StringItem( "Subject: ", subject);
+	tree.appendToNode( subjectItem, detailItem );
+	//#style mailDetail
+	detailItem = new StringItem( "Text: ", text);
+	tree.appendToNode( subjectItem, detailItem );
+}
+
+</pre>	
+	<p>
+	Please refer to the &quot;email&quot; sample application for a working example.
+	</p>
+	
+	<h2 id="treeitem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TreeItem.html">TreeItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

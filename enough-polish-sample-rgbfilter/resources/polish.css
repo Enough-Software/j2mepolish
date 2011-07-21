@@ -1,0 +1,251 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  */
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles unless the screen style defines the title-style CSS attribute.
+  */
+title {
+	padding: 2px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: #fff;
+	text-effect: shadow;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	background {
+		type: vertical-gradient;
+		top-color: #333;
+		bottom-color: #eee;
+	}
+}
+
+
+/** 
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  */
+.mainScreen {
+	padding: 2px;
+	padding-left: 5%;
+	padding-right: 5%;
+	background-color: #666;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+}
+
+/**
+  * The .mainItem style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  */
+.mainItem {
+	font-style: bold;
+	font-size: medium;
+	font-color: #555;
+	padding: 0px;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: left;
+	layout: left | expand;
+	padding-left: 10%;
+	padding-horizontal: 7%;
+	icon-filter: scale, grayscale;
+	icon-filter-layout: hcenter | vcenter;
+	filter-scale-grade: 60%;
+	filter-scale-grade-animation {
+		on: defocus;
+		range: 100%..60%;
+		duration: 400ms;
+	}
+	filter-grayscale-grade: 100%;
+	filter-grayscale-grade-animation {
+		on: defocus;
+		range: 0%..100%;
+		duration: 400ms;
+	}
+	font-color-animation {
+		on: defocus;
+		range: #000..#555;
+	}
+	/*
+	text-filter: rotate;
+	text-filter-layout: hcenter | vcenter;
+	filter-rotation-angle: -20;
+	filter-rotation-angle-animation {
+		on: defocus;
+		range: 0..-20;
+		duration: 400ms;
+	}
+	icon-filter: blur;
+	filter-blur-grade: 100%;
+	filter-blur-grade-animation {
+		on: defocus;
+		range: 0%..100%;
+	}
+	*/
+}
+
+.mainItem:hover {
+	font-color-animation {
+		on: focus;
+		range: #555..#000;
+	}
+	filter-scale-grade-animation {
+		on: focus;
+		range: 60%..100%;
+		duration: 400ms;
+	}
+	filter-grayscale-grade-animation {
+		on: focus;
+		range: 100%..0%;
+		duration: 400ms;
+	}	
+	/*
+	filter-rotation-angle-animation {
+		on: focus;
+		range: -20..0;
+		duration: 400ms;
+	}
+	filter-blur-grade-animation {
+		on: focus;
+		range: 100%..0%;
+	}
+	*/
+}
+
+.mainItem:pressed {
+	view-type: particle;
+}
+
+
+
+.messageAlert extends .mainScreen {
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	view-type: none;
+	layout: horizontal-shrink | vertical-shrink | horizontal-center | bottom;
+	background-type: simple;
+	background-color: argb( 150, 255, 255, 255 );
+	repaint-previous-screen: true;
+}
+
+alertcontent {
+	font-color: white;
+	font-size: small;
+	font-style: bold;
+	text-effect: shadow;
+}
+
+.input {
+	margin: 1;
+	background-color: white;
+	layout: expand;
+}
+
+.input:hover {
+	margin: 0;
+	background-color: yellow;
+	border-color: black;
+}
+
+info {
+	margin: 1;
+	font-color: gray;
+	layout: right;
+}
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #fff;
+	scrollbar-slider-width: 6px;
+	scrollbar-fadeout: true;
+	opacity: 180;
+}
+
+
+/*************    Commands Menu      ***************************************************************************************************/
+
+menubar {
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background {
+		type: vertical-gradient;
+		top-color: #333;
+		bottom-color: #ddd;
+		start: 10%;
+		end: 100%;
+	}
+}
+
+/**
+ * Commands within the menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+    //#if polish.key.MiddleSoftKey:defined or polish.MenuBar.useMiddleCommand
+    	/* the middle command is used, so lower the left and right commands relatively */
+		padding-top: 7;
+	//#endif
+	padding-bottom: 0;
+	font-color: white;
+	font-style: bold;
+	text-effect: shadow;
+	text-shadow-color: #333;
+	font-size: large;
+}
+
+/**
+ * Commands within the menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+middlecommand extends leftcommand {
+	padding-top: 1;
+	font-color: black;
+}
+
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  */
+menu {
+	margin-left: 2px;
+	padding: 0px;
+	background-color: #fff;
+}
+
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  */
+menuItem {
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: #333;
+		style: bold;
+	}
+	layout: left;
+}
+
+/**
+  * A focused menuItem
+  */
+menuItem:hover {
+	background-color: #333;
+	font-color: #fff;
+	layout: left | horizontal-expand;
+}
+

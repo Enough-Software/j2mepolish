@@ -1,0 +1,284 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(90,121,239);
+	brightBgColor:  rgb(165,190,247);
+	brightFontColor: white;
+	fontColor: rgb( 66, 85, 148 ); 
+	translucentBgColor:  argb(130, 165,190,247);
+}
+
+
+backgrounds {
+	triangleUp {
+		type: triangle;
+		orientation: top;
+		color: #770;
+	}
+	
+	triangleDown {
+		type: triangle;
+		orientation: bottom;
+		color: #770;
+	}
+	
+}
+
+/************ main screen *************************************************/
+
+
+title {
+	padding: 8.5%;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	background-color: bgColor;
+}
+
+.mainScreen {
+	padding: 2px;
+	padding-left: 5%;
+	padding-right: 5%;
+	background {
+		type: horizontal-stripes;
+		first-top-color: #fff;
+		second-top-color: #fff;
+		first-bottom-color: #333;
+		second-bottom-color: #000;
+	}
+}
+
+.dateField {
+	margin-top: 4px;
+	padding: 2px;
+	background-color: silver;
+	font-color: #333;
+	font-size: large;
+	layout: expand;
+}
+
+.dateField:hover {
+	padding: 1px;
+	background-color: white;
+	border-color: black;
+	font-color: black;
+}
+
+label {
+	font-color: #fff;
+	text-effect: shadow;
+	text-shadow-color: #333;
+}
+
+/************ calendar and time entry styles *************************************************/
+
+.calendarForm {
+	background {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: #aaa;
+		start: 70%;
+		end: 100%;
+	}
+	layout: hcenter | top;
+	padding-top: 3px;
+}
+
+.calendar {
+	layout: expand;
+	label-style: calendarMonth;
+}
+
+.calendar:hover {
+}
+
+.calendarMonth {
+	font-color: #222;
+	font-style: bold;
+	font-size: small;
+	before: url( arrow-left.png );
+	after: url( arrow-right.png );
+	layout: expand | center;
+}
+
+.calendarWeekday {
+	layout: center;
+	font-style: italic | bold;
+	min-width: 12%;
+}
+
+.calendarDay {
+	padding: 2px;
+	font-style: italic;
+	font-color: #222;
+	layout: right;
+}
+
+.calendarDay:hover {
+	background-color: #222;
+	font-color: #efefef;
+}
+
+.calendarCurrentday extends .calendarDay {
+	background-color: #8f8;
+}
+
+.calendarCurrentday:hover {
+	background-color: #1a1;
+	font-color: #fff;
+}
+
+.calendarDayInactive extends .calendarDay {
+	font-color: #666;
+}
+
+.calendarDayInactive:hover {
+	background-color: #666;
+	font-color: #fff;
+}
+
+.time {
+	font-color: #666;
+	font-size: large;
+	time-arrow-up: triangleUp;
+	time-arrow-down: triangleDown;
+	time-arrow-width: 60px;
+	layout: center;
+}
+
+.time:hover {
+	font-color: #222;
+}
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 85%;
+}
+
+
+/*************   Menu Bar     **********************************************************************************/
+
+menubar {
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background {
+		type: vertical-gradient;
+		top-color: #aaa;
+		bottom-color: #fff;
+		start: 10%;
+		end: 100%;
+	}
+}
+
+/**
+ * Commands within the menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+    //#if polish.key.MiddleSoftKey:defined or polish.MenuBar.useMiddleCommand
+    	/* the middle command is used, so lower the left and right commands relatively */
+		padding-top: 7;
+	//#endif
+	padding-bottom: 0;
+	font-color: white;
+	font-style: bold;
+	font-size: large;
+	text-effect: shadow;
+	text-shadow-color: #333;
+	font-size: small;
+}
+
+/**
+ * Commands within the menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+middlecommand extends leftcommand {
+	padding-top: 1;
+	font-color: black;
+}
+
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  * The font-settings (font-color,
+  * font-face, font-style and font-size)
+  * are used to design the menu-texts
+  * (like Options, Select, or Cancel).
+  * With the focused-style attribute
+  * another style than the default "focused"
+  * style is used for the menu. 
+  */
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	font-color: brightFontColor;
+	font-size: large;
+	font-style: bold;
+}
+
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+}
+
+/**
+  * A focused menuItem
+  */
+menuItem:hover {
+	background-color: bgColor;
+	font-color: brightFontColor;
+	layout: left | horizontal-expand;
+}

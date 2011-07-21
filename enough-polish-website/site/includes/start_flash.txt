@@ -1,0 +1,10 @@
+
+<%include start_header.txt %>
+
+<script type="text/javascript" src="<%= basedir%>scripts/swfobject.js"></script>
+
+</head>
+<body>
+
+<%include start_body.txt %>
+

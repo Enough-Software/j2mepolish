@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>J2ME Polish</title>
+<meta name="version" content="S5 1.0" />
+<link rel="stylesheet" href="../s5/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="../s5/opera.css" type="text/css" media="projection" id="operaFix" />
+<link rel="stylesheet" href="../s5/print.css" type="text/css" media="print" id="slidePrint" />
+<script src="../s5/slides.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="layout">
+
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer">
+<!--
+<h1>Bremen/Germany, 2005-06-29</h1>
+-->
+<h2><a class="homelink" href="introduction.html">J2ME Polish</a></h2>
+<div id="controls"></div>
+</div>
+
+</div>
+
+
+<div class="presentation">
+
+<div class="slide">
+<h1>J2ME Polish: Take a Tour</h1>
+<h3>Robert Virkus</h3>
+<h4>Enough Software</h4>
+<p>
+This presentation has been creating using <a href="http://www.meyerweb.com/eric/tools/s5" target="_blank">S5</a>. 
+<br />Thanks to <i>Eric Meyer</i> for creating such a great tool!
+</p>
+<p>
+Navigation:
+<br />Just click with your mouse or use the arrow-keys for changing the slides.
+<br />Click on the &quot;J2ME Polish&quot;-link below to return.
+</p>
+</div>
+
+
+<div class="slide">
+<h1>What's in it?</h1>
+<p>J2ME Polish is a collection of tools for developing J2ME applications:</p>
+<ul>
+<li>Build tools for creating application bundles out of one source project - for multiple devices and multiple locales.</li>
+<li>A device database which can be used to adjust your application to different handsets with Preprocessing.</li>
+<li>A user interface (GUI), which is designed outside of the application code with simple text-files (CSS).</li>
+<li>Utiliy classes like the BitMapFont or ArrayList.</li>
+<li>Standalone Tools like the editor for modifying binary data files.</li>
+<li>...and this is just the start!</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Building J2ME Applications</h1>
+<p>It's easy to build applications with J2ME Polish:</p>
+<ul>
+<li>Select your target-devices, either by listing them or by describing their needed capabilities (such as &quot;supports WMAPI and MIDP/2.0&quot;).</li>
+<li>J2ME Polish preprocesses, compiles, obfuscates and packages the application for you.</li>
+<li>You can also start the respective emulator automatically during the development phase.</li>
+<li>Since the build tools are based on Ant, J2ME Polish can be configured extensively and integrates nicely into all Java IDEs.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Resource Assembling</h1>
+<ul>
+<li>J2ME Polish includes the appropriate resources for your application automatically.</li>
+<li>Put common resources into the &quot;resources&quot; folder.</li>
+<li>You can use specialised resources by putting them into the appropriate subfolder, e.g. &quot;resources/Nokia&quot;, &quot;resources/Siemens/S65&quot; or &quot;resources/ScreenSize.160+x200+&quot;.</li>
+<li>It's easy to fine-tune the resource assembling, you can for example include MIDI files only when the device supports MIDI sound, but no MP3 sound and so on.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Localization</h1>
+<ul>
+<li>Localization is needed when the application should be marketed in several regions.</li>
+<li>You can adjust texts and other resources like images and sounds to different locales easily with J2ME Polish.</li>
+<li>When you localize your application with J2ME Polish, there will be no overhead compared with non-localized applications because translations are directly embedded into the application.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>The Device Database</h1>
+<p>The Device Database helps to adjust your application to different handsets:</p>
+<ul>
+<li>Over 300 J2ME devices and their respective J2ME capabilities like Canvas-size, APIs, supported formats etc are listed.</li>
+<li>You can profit not only by looking into the capabilities, but also by using them directly in your source-code during the preprocessing-phase.</li>
+<li>Since it is XML based, you can extend it easily.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Preprocessing</h1>
+<ul>
+<li>Preprocessing changes the code before it is compiled.</li>
+<li>By using preprocessing you can adjust your application to various devices without loosing the portability of your application.</li>
+<li>J2ME Polish provides you with powerful preprocessing directives and a standarized naming scheme.</li>
+<li>You can use any capabilities which are defined in the device database.</li>
+</ul>
+<p>
+<pre>
+//#if polish.midp2 || polish.api.mmapi
+	// okay the audio-playback of the MMAPI can be used:
+	Player player = ...
+//#endif
+</pre>
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>GUI (1/2)</h1>
+<ul>
+<li>J2ME Polish allows you to design the MIDP highlevel-GUI using simple CSS text-files.</li>
+<li>It's not difficult: <code>background-color: rgb(123, 54, 233);</code></li>
+<li>Depending on the item or screen you can use specialized attributes.</li>
+<li>You can use images, bitmap-fonts, different backgrounds, animations and so on.</li>
+<li>The complete design is done outside of the application code.</li>
+<li>So you can easily adjust different &quot;themes&quot; of your application without changing its source-code.</li>
+<li>With the GUI you can use MIDP/2.0 features like CustomItems on MIDP/1.0 phones!</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>GUI (2/2)</h1>
+<p>
+<img src="../images/screenshot-example-enough.png" alt="An application using a List." />
+<img src="../images/screenshot-example-pink.png" alt="The same application with another theme." />
+<img src="../images/screenshot-example-roadrunner.png" alt="Yet another theme." />
+<br />
+The above screenshots show the very same application using different themes.
+<br />Of course you can create your own items, backgrounds and so on as well.
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Game Engine</h1>
+<ul>
+<li>With the Game Engine of J2ME Polish you can use the MIDP/2.0 game API on MIDP/1.0 phones.</li>
+<li>You can use different optimization strategies like a backbuffer for TiledLayer.</li>
+<li>The game engine is hightly optimized for speed to make most out of your game.</li>
+<li>Use one source code for delivering all your target devices.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Utility Classes</h1>
+<ul>
+<li>Use some often needed utilities which are not available in the J2ME standard.</li>
+<li><code>de.enough.polish.util.BitMapFont</code> displays messages in a bitmap font.</li>
+<li><code>de.enough.polish.util.ArrayList</code> offers a fast alternative for Vector.</li>
+<li><code>de.enough.polish.util.TextUtil</code> provides general String functions and splits texts for displaying them on a canvas.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Logging Framework</h1>
+<ul>
+<li>With the logging framework you can view <code>System.out.println()</code>-messages on real devices.</li>
+<li>You can enable different logging levels like &quot;debug&quot;, &quot;warn&quot; or &quot;error&quot; for specific classes or packages.</li>
+<li>Define your own logging levels like &quot;performance&quot;.</li>
+<li>Deactivate logging completely for the final application, so that absolutely no traces will remain in the application.</li>
+</ul>
+<p>
+<pre>
+try {
+	Connection con = Connector.open( url );
+	...
+} catch (Exception e) {
+	//#debug error
+	System.out.println("Unable to connect" + e );
+}
+</pre>
+</p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Standalone Tools</h1>
+<ul>
+<li>Use the <i>binary-editor</i> for creating and modifying binary data like level data files.</li>
+<li>The <i>font-editor</i> creates bitmap fonts out of any true type fonts.</li>
+</ul>
+<p><img src="../images/binaryeditor-osx.png" alt="The binary editor in action." /></p>
+<div class="handout">
+</div>
+</div>
+
+<div class="slide">
+<h1>Thanks!</h1>
+<p>You have completed the tour.<br />Further steps:</p>
+<ul>
+	<li>The <a href="features.html">Features</a>-page describes the most important features and links to the full documentation for more details.</li>
+	<li>The <a href="tutorial.html">Tutorial</a> explains the sample application and helps you to manage the first steps.</li>
+	<li>Refer to the <a href="../documentation.html">Documentation</a> for getting full information.</li>
+	<li>Don't forget to <a href="../download.html">download</a> J2ME Polish.</li>
+</ul>
+<div class="handout">
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

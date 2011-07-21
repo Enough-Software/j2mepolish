@@ -1,0 +1,179 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.css %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Dynamic, Static and Predefined Styles</h1>
+	<%index %>
+	<p>
+J2ME Polish distinguishes between dynamic, static and predefined styles:
+</p>
+<ul>
+ <li>Predefined styles are used by the GUI for several items like screen-titles. </li>
+ <li>Static styles are defined in the source code of the application with the #style preprocessing directive. </li>
+ <li>Dynamic styles are used for items according to their position on the screen.</li>
+</ul>
+<h2 id="static">Static Styles</h2>
+<p>
+The easiest styles are the static ones. The programmer just needs to tell the designer the style names and what they are used for (that is for what kind of items or screens) and the designer defines them in the appropriate polish.css file. Static styles always start with a dot, e.g. &quot;.myStyle&quot;.
+Static styles are faster than dynamic styles. It is therefore recommended to use static styles whenever possible.
+</p>
+<h2 id="predefined">Predefined Styles</h2>
+<p>Predefined styles are static styles which are used by the J2ME Polish GUI. In contrast to the normal &quot;user-defined&quot; static styles their names do not start with a dot, e.g. &quot;title&quot; instead of &quot;.title&quot;.
+Following predefined styles are used:
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Style&nbsp;&nbsp;</th><th>Description</th></tr>
+	<tr><td>title</td>
+	 <td>
+	 The style of screen-titles. For MIDP/2.0 devices the native implementation is used by default, unless the preprocessing variable &quot;polish.usePolishTitle&quot; is defined with &quot;true&quot;:
+	 <pre>
+&lt;variable name=&quot;polish.usePolishTitle&quot; value=&quot;true&quot; unless=&quot;polish.Vendor == Nokia&quot; /&gt;
+</pre>
+</td>
+	</tr>
+	<tr><td>focused</td>
+	 <td>The style of a currently focused item. This style is used in Lists, Forms and for Containers like the ChoiceGroup.
+	 You can also use custom styles for specific Screens or ChoiceGroups by using the 
+	 <a href="css-specific.html#screenattributes">&quot;focused-style&quot;-attribute</a>.
+	 </td>
+	</tr>
+	<tr><td>menu</td>
+	 <td>This style is used for designing the menu bar in the full screen mode. The full screen mode can be triggered by the &quot;fullScreenMode&quot; attribute of the <build> element in the build.xml (with fullScreenMode=&quot;menu&quot;). In the menu style you can also define which style is used for the currently focused command with the &quot;focused-style&quot;-attribute, e.g. &quot;focused-style: menuFocused;&quot;. In this case you need to define the static style &quot;.menuFocused&quot; as well.</td>
+	</tr>
+	<tr><td>menuItem</td>
+	 <td>The style used for the menu items (the commands) of a screen. When menuItem is not defined, the &quot;menu&quot; style is used instead.</td>
+	</tr>
+	<tr><td>label</td>
+	 <td>This style is used for the menu the label of any item. One can specify another label-style by defining the 
+	 CSS-attribute &quot;label-style&quot; in the appropriate style, which refers to another style.</td>
+	</tr>
+	<tr><td>info</td>
+	 <td>The style which is used for displaying additional information in a screen. Currently this is only used for showing the current input mode when the <a href="css-specific.html#textfield-direct-input">direct input mode</a> of a TextField or a TextBox is enabled.</td>
+	</tr>
+	<tr><td>default</td>
+	 <td>The style which is used by the J2ME Polish GUI when the desired predefined style is not defined. The default style is always defined, even when it is not explicitly defined in the polish.css file.</td>
+	</tr>
+	</table>
+<p>
+The names of predefined styles must not be used for static styles, so you must not use a static style with the name &quot;.title&quot; etc.
+</p>
+
+<h2 id="dynamic">Dynamic Styles</h2>
+<p>
+Dynamic styles can be used to apply styles to items without using #style directives in the source code. With dynamic styles the designer can work completely independent of the programmer and try out new designs for GUI items which have not yet an associated static style. You can also check out the power and possibilities of the J2ME Polish API without changing the source code of an existing application at all.
+Obviously, dynamic styles need a bit more memory and processing time than static styles. It is  recommended, therefore, to use static styles instead for finished applications. 
+Dynamic styles do not start with a dot and use the selectors of the items they want to design:
+Texts use either &quot;p&quot;, &quot;a&quot;, &quot;button&quot; or &quot;icon&quot;. Screens use the name of the screen, e.g. &quot;form&quot;, &quot;list&quot; or &quot;textbox&quot;. 
+<pre>
+p {
+	font-color: black;
+	font-size: medium;
+	background: none;
+}
+form {
+	margin: 5;
+	background-color: gray;
+	border: none;
+	font-size: medium;
+}
+</pre></p><p>
+You can also design only items which are contained in other items or screens:
+The style &quot;form p&quot; designs all text-items (of the class StringItem) which are contained in a form:
+<pre>
+form p {
+	font-color: white;
+	font-size: medium;
+}
+</pre>
+</p>
+<p>
+Static styles and dynamic styles can be used together, you can design all hyperlinks1 in the screen with the style &quot;.startScreen&quot; for example with the following style declaration:
+<pre>
+.startScreen a {
+	font-color: blue;
+	font-size: medium;
+	font-style: italic;
+}
+</pre>
+</p>
+<p>
+Items and screens have specific selectors for dynamic styles:
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Item-Class&nbsp;&nbsp;</th><th>Selector&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>StringItem</td>
+	 <td>p</td>
+	 <td>StringItem shows text. The &quot;p&quot; selector is used, when the item has the appearance mode PLAIN.</td>
+	</tr>
+	<tr><td></td>
+	 <td>a</td>
+	 <td>The &quot;a&quot; selector is used, when the item  has the appearance mode HYPERLINK.</td>
+	</tr>
+	<tr><td></td>
+	 <td>button</td>
+	 <td>The &quot;button&quot; selector is used, when the item has the appearance mode BUTTON.</td>
+	</tr>
+	<tr><td>ImageItem</td>
+	 <td>img</td>
+	 <td>Shows an image.</td>
+	</tr>
+	<tr><td>Gauge</td>
+	 <td>gauge</td>
+	 <td>Shows a progress indicator.</td>
+	</tr>
+	<tr><td>Spacer</td>
+	 <td>spacer</td>
+	 <td>Is used for showing an empty space. The usage of the Spacer item is discouraged, since the spaces can be set for all items with the margin and padding attributes.</td>
+	</tr>
+	<tr><td>IconItem</td>
+	 <td>icon</td>
+	 <td>Shows an image together with text.</td>
+	</tr>
+	<tr><td>TextField</td>
+	 <td>textfield</td>
+	 <td>Allows textual input from the user.</td>
+	</tr>
+	<tr><td>DateField</td>
+	 <td>datefield</td>
+	 <td>Allows the input of dates or times from the user.</td>
+	</tr>
+	<tr><td>ChoiceGroup</td>
+	 <td>choicegroup</td>
+	 <td>Contains several choice items.</td>
+	</tr>
+	<tr><td>ChoiceItem</td>
+	 <td>listitem</td>
+	 <td>Shows a single choice. The selector &quot;listitem&quot; is used, when this item is contained in an implicit list.</td>
+	</tr>
+	<tr><td></td>
+	 <td>radiobox</td>
+	 <td>The selector &quot;radiobox&quot; is used when the list or choice group has the type &quot;exclusive&quot;.</td>
+	</tr>
+	<tr><td></td>
+	 <td>checkbox</td>
+	 <td>The selector &quot;checkbox&quot; is used when the list or choice group has the type &quot;multiple&quot;.</td>
+	</tr>
+	<tr><td></td>
+	 <td>popup</td>
+	 <td>The selector &quot;popup&quot; is used when the choice group has the type &quot;popup&quot;.</td>
+	</tr>
+</table>
+<p>&nbsp;</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Screen-Class&nbsp;&nbsp;</th><th>Selector&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr><td>List</td>
+	 <td>list</td>
+	 <td>Shows several choice items.</td>
+	</tr>
+	<tr><td>Form</td>
+	 <td>form</td>
+	 <td>Contains different GUI items.</td>
+	</tr>
+	<tr><td>TextBox</td>
+	 <td>textbox</td>
+	 <td>Contains a single textfield.</td>
+	</tr>
+	</table>
+<%include end.txt %>

@@ -1,0 +1,71 @@
+################################################################################
+#                                                                              #
+# In this file the default translations for the J2ME Polish GUI are defined.   #
+# You can override this in your project by defining them in your               #
+# resources/messages.txt file.                                                 #
+#                                                                              #
+################################################################################
+
+polish.command.ok=OK
+polish.command.cancel=Cancel
+polish.command.select=Select
+polish.command.mark=Mark
+polish.command.unmark=Unmark
+polish.command.options=Options
+# for deleting a single char:
+polish.command.delete=Delete
+# for deleting a complete TextField:
+polish.command.clear=Clear
+# for hiding menus on BlackBerry devices:
+polish.command.hide=Hide
+# for showing a default title when no label
+# is defined in a TextField. This is only
+# used when no direct input mode is activated:
+polish.title.input=Input
+# used for showing a screen for selecting symbols within TextFields:
+polish.command.entersymbol=Add Symbol
+# used by the HtmlBrowser for a links:
+polish.command.followlink=Go
+# used by the HtmlBrowser for submitting a form:
+polish.command.submit=Submit
+# used by the RssBrowser for returning to the previous page:
+polish.command.back=Back
+# RSS commands:
+polish.rss.command.select=Show
+polish.rss.command.followlink=Go
+# DateField:
+polish.DateFormatEmptyText=YYYY-MM-DD
+# TextField:
+polish.command.switch_keyboard=Switch keyboard
+
+# used for predictive setup
+polish.predictive.command.enable=Enable Predictive Input
+polish.predictive.command.disable=Disable Predictive Input
+polish.predictive.command.install=Install Predictive Input
+polish.predictive.registerNewWord.label=New Word: 
+polish.predictive.registerNewWord.command=New Word
+polish.predictive.download.title=Predictive Text
+polish.predictive.download.message=The predictive dictionary  could not be found or has the wrong version. Press OK to exit the application and download the dictionary.
+polish.predictive.local.title=Predictive Text
+polish.predictive.local.message=The predictive dictionary has the wrong version or could not be found. Press OK to install the dictionary.
+polish.predictive.title=Predictive Input
+polish.predictive.wordNotFound=Word not found
+
+polish.predictive.setup.title=Predictive Setup
+polish.predictive.setup.info=Installing the dictionary used for predictive input. Please wait a moment ...
+polish.predictive.setup.status.delete=Deleting previous installation ...
+polish.predictive.setup.status.install=Installing ...
+polish.predictive.setup.status.finished=Finished, please press exit ...
+polish.predictive.setup.cancel=Do you really want to cancel the installation ? This may result in unwanted effects.
+polish.predictive.setup.error=An error has occurred:
+polish.predictive.setup.cmd.cancel=Cancel
+polish.predictive.setup.cmd.exit=Exit
+polish.predictive.setup.cmd.yes=Yes
+polish.predictive.setup.cmd.no=No
+
+
+polish.keyboard.blank=
+polish.keyboard.clr=Clear
+polish.keyboard.del=Delete
+polish.keyboard.mode=Mode
+polish.keyboard.shift=Shift

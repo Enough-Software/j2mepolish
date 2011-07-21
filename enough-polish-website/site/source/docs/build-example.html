@@ -1,0 +1,151 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Example for the build.xml</h1>
+	<p class="legalText">
+	<pre>
+&lt;!-- This file controls the build process.                    --&gt;
+&lt;!-- The most important target is the j2mepolish-target,      --&gt;
+&lt;!-- which controls for what devices the application should   --&gt;
+&lt;!-- be created and so on.                                    --&gt;
+&lt;!--                                                          --&gt;
+&lt;!-- Important: when you have no Wireless Toolkit installed   --&gt;
+&lt;!-- you need to define the &quot;preverify&quot;-attribute             --&gt;
+&lt;!-- of the &lt;build&gt; element of the J2ME Polish task.          --&gt;
+&lt;!--                                                          --&gt;
+&lt;!-- When you call Ant from the command-line, you can         --&gt;
+&lt;!-- call &quot;ant test j2mepolish&quot; to skip the obfuscation       --&gt;
+&lt;!-- and to build the example for fewer handsets.             --&gt;
+&lt;!-- The default target builds and obfuscates the example.    --&gt;
+&lt;!--                                                          --&gt;
+&lt;!-- The full documentation can be found at                   --&gt;
+&lt;!-- http://www.j2mepolish.org                                --&gt;
+&lt;!--                                                          --&gt;
+&lt;!-- Have fun!                                                --&gt;
+&lt;project 
+	name=&quot;enough-j2mepolish-example&quot; 
+	default=&quot;j2mepolish&quot;&gt;
+	
+&lt;!-- The wtk.home property should point to the directory      --&gt;
+&lt;!-- containing the Wireless Toolkit.                         --&gt;
+&lt;property name=&quot;wtk.home&quot; value=&quot;C:\WTK2.1&quot; /&gt;
+	
+&lt;!-- Definition of the J2ME Polish task:                      --&gt;
+&lt;taskdef name=&quot;j2mepolish&quot; 
+	    classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+	    classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar
+	    :${polish.home}/lib/jdom.jar&quot; /&gt;
+
+	
+&lt;!-- build targets, each target can be called via &quot;ant [name]&quot;, 
+     e.g. &quot;ant clean&quot;, &quot;ant notest j2mepolish&quot; or just &quot;ant&quot; for 
+     calling the default-target --&gt;
+&lt;target name=&quot;test&quot; &gt;
+	&lt;property name=&quot;test&quot; value=&quot;true&quot; /&gt;
+&lt;/target&gt;
+		
+&lt;target name=&quot;init&quot;&gt;
+  	&lt;property name=&quot;test&quot; value=&quot;false&quot; /&gt;
+&lt;/target&gt;
+ 
+&lt;!-- In this target the J2ME Polish task is used.             --&gt;
+&lt;!-- It has 3 sections:                                       --&gt;
+&lt;!--    1. The info-section defines some general information  --&gt;
+&lt;!--    2. The deviceRequirements-section chooses the devices --&gt;
+&lt;!--       for which the application is optimized.            --&gt;
+&lt;!--    3. The build-section controls the actual build        --&gt;
+&lt;!--       process.                                           --&gt;	
+&lt;target name=&quot;j2mepolish&quot; 
+		depends=&quot;init&quot;
+		description=&quot;This is the controller for the J2ME build process.&quot; 
+		&gt;
+	&lt;j2mepolish&gt;
+	    &lt;!-- general settings --&gt;
+		&lt;info
+		 name=&quot;J2ME Polish&quot;
+		 version=&quot;1.3.4&quot;
+		 description=&quot;A sample project&quot;
+		 vendorName=&quot;Enough Software&quot;
+		 infoUrl=&quot;http://www.j2mepolish.org&quot;
+		 icon=&quot;dot.png&quot;
+		 jarName=&quot;${polish.vendor}-${polish.name}-example.jar&quot; 
+		 jarUrl=&quot;${polish.jarName}&quot;
+		 copyright=&quot;Copyright 2004 Enough Software. All rights reserved.&quot;
+		 deleteConfirm=&quot;Do you really want to kill me?&quot; 
+			/&gt;
+		&lt;!-- selection of supported devices --&gt;
+		&lt;!-- In the test mode the application is build only for the  --&gt;
+		&lt;!-- Nokia/3650 and the 6600 phones, otherwise  --&gt;
+		&lt;!-- the second deviceRequirements will be used instead. --&gt;
+		&lt;deviceRequirements if=&quot;test&quot;&gt;
+			&lt;requirement name=&quot;Identifier&quot; 
+			 value=&quot;Nokia/3650, Nokia/N95 &quot; /&gt;
+		&lt;/deviceRequirements&gt;
+		&lt;deviceRequirements unless=&quot;test&quot;&gt;
+			&lt;requirement name=&quot;Identifier&quot; 
+			 value=&quot;Nokia/Series60, Nokia/Series60Midp2, Generic/midp2&quot; /&gt;
+			&lt;!-- on could use other devices for real builds, e.g. :
+			&lt;or&gt;
+				&lt;and&gt;
+					&lt;requirement name=&quot;JavaPackage&quot; 
+					 value=&quot;nokia-ui&quot; /&gt;
+					&lt;requirement name=&quot;BitsPerPixel&quot; 
+					 value=&quot;16+&quot; /&gt;
+				&lt;/and&gt;
+			&lt;/or&gt;
+			 --&gt;
+		&lt;/deviceRequirements&gt;
+	    &lt;!-- build settings --&gt;
+		&lt;build
+		 symbols=&quot;ExampleSymbol, AnotherExample&quot;
+		 imageLoadStrategy=&quot;background&quot;
+		 fullscreen=&quot;menu&quot;
+		 usePolishGui=&quot;true&quot;
+		 resDir=&quot;resources&quot;
+		 &gt;
+		  &lt;!-- midlets definition --&gt;
+		  &lt;midlet class=&quot;de.enough.polish.example.MenuMidlet&quot; 
+		   name=&quot;Example&quot; /&gt;
+		  &lt;!-- project-wide variables - used for preprocessing  --&gt;
+		  &lt;variables&gt;
+ 			&lt;variable name=&quot;update-url&quot; 
+			 value=&quot;http://www.enough.de/update&quot; /&gt;
+			&lt;variable name=&quot;title&quot; 
+			 value=&quot;J2ME Polish&quot; /&gt;
+		  &lt;/variables&gt;
+		  &lt;!-- obfuscator: don't obfuscate when the test-property is true --&gt;
+ 		  &lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; /&gt;
+		  &lt;!-- debug settings: only include debug setting when the test-
+			 property is true --&gt;
+		  &lt;debug if=&quot;test&quot; 
+		   showLogOnError=&quot;true&quot; verbose=&quot;true&quot; 
+		   level=&quot;error&quot;&gt;
+			&lt;filter pattern=&quot;de.enough.polish.example.*&quot; 
+			 level=&quot;debug&quot; /&gt;
+			&lt;filter pattern=&quot;de.enough.polish.ui.*&quot; 
+			 level=&quot;warn&quot; /&gt;
+		  &lt;/debug&gt;
+		  &lt;!-- user defined JAD attributes can also be used: --&gt;
+		  &lt;jad&gt;
+			&lt;attribute name=&quot;Nokia-MIDlet-Category&quot; 
+			 value=&quot;Game&quot; if=&quot;polish.Vendor == Nokia&quot; /&gt;
+		  &lt;/jad&gt;			
+		&lt;/build&gt;
+	&lt;/j2mepolish&gt;
+&lt;/target&gt;
+
+
+&lt;target name=&quot;clean&quot; 
+  	  description=&quot;allows a clean build. You should call [ant clean] whenever you made 
+	  		changes to devices.xml, vendors.xml or groups.xml&quot;&gt;
+	&lt;delete dir=&quot;build&quot; /&gt;
+	&lt;delete dir=&quot;dist&quot; /&gt;
+&lt;/target&gt;
+&lt;/project&gt;
+
+	</pre>
+	</p>
+<%include end.txt %>

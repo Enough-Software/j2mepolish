@@ -1,0 +1,66 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application.               #
+#   Keys and values are separated     #
+#   by the equals-sign "=".           #
+#   You can include parameters with   #
+#   the standard {0}, {1} etc         #
+#   mechanism.                        #
+#                                     #
+#######################################
+
+title.GameScreen=Roadrunner
+title.GameOver=Game Over
+title.Help=Hilfe
+title.Settings=Einstellungen
+title.About=\u00dcber Roadrunner
+
+cmd.StartGame=Start
+cmd.Quit=Ende
+cmd.ShowLog=Log anzeigen
+cmd.Return=Zur\u00fcck
+cmd.Replay=Nochmal spielen
+cmd.Help=Hilfe
+cmd.About=\u00dcber Roadrunner
+cmd.Ok=OK
+
+menu.StartGame=Spiel starten
+menu.LoadGame=Spiel laden
+menu.Highscore=Highscore
+menu.Help=Hilfe
+menu.Settings=Einstellungen
+menu.About=Info
+menu.Quit=Ende
+
+setting.EnableSound=Sound aktivieren
+setting.sound=Sound nutzen: 
+setting.sound.off=nein
+setting.sound.on=ja
+setting.sound.fxonly=Nur Effekte
+setting.name=Dein Name: 
+
+about.text=Roadrunner ist ein Demo-Spiel von J2ME Polish: www.j2mepolish.org
+
+message.GameStarted=Go...!
+message.TargetReached.1=Sehr gut!
+message.TargetReached.2=Geil!!!
+message.TargetReached.3=Whoa!!!
+message.TargetReached.4=Cool!!!
+message.LevelFinished=Level {0} ges\u00e4ubert!!!
+message.GameOver=Game over...
+message.TimeOut=Zeit ist abgelaufen...!
+message.Killed.1=Au...!
+message.Killed.2=Scheisse!
+message.Killed.3=Aufpassen!!
+message.Killed.4=Neeeiiin!
+
+polish.command.ok=OK
+polish.command.cancel=Abbruch
+polish.command.select=Auswahl
+polish.command.mark=Aktivieren
+polish.command.unmark=Deaktivieren
+polish.command.options=Optionen
+polish.command.delete=L\u00f6schen
+polish.command.clear=Alles l\u00f6schen
+polish.title.input=Eingabe

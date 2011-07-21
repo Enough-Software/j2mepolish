@@ -1,0 +1,283 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(132,143,96);
+	focusedBgColor:  rgb(238,241,229);
+	translucentBgColor:  argb(130, 238,241,229);
+	fontColor: rgb( 30, 85, 86 );
+	focusedFontColor: rgb(238,241,229);
+	
+	noteBgColor: bgColor;
+	noteFontColor: focusedFontColor;
+	
+	titleColor: black;
+}
+
+.notesList {
+	padding: 5;
+	padding-left: 15;
+	padding-right: 15;
+	background {
+		color: focusedBgColor;
+	}
+	layout: horizontal-expand | horizontal-center | top;
+	scroll-mode: normal;
+	/*
+	*/
+}
+
+.createNoteForm extends notesList {
+}
+
+scrollbar {
+	scrollbar-slider-mode: page;
+	background-color: red;
+}
+
+
+.notesItem {
+	padding: 3;
+	background {
+		color: noteBgColor;
+	}
+	font {
+		style: bold;
+		size: small;
+		color: noteFontColor;
+	}
+	layout: expand | left;
+	text-wrap: false;
+}
+
+
+label {
+	font-size: small;
+	margin: 2;
+	margin-left: 5;
+	layout: left | newline-after;
+}
+
+/**
+  * The element that displays the current input mode, e.g. "abc" or "Abc" or "123"
+  */
+info {
+	layout: right;
+	margin-right: 10;
+	background-color: argb( 170, 255, 255, 255 );
+}
+
+.input {
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+	include-label: true;
+	focused-style: .inputFocused;
+	layout: left | expand;
+}
+
+.inputFocused {
+	padding: 1;
+	padding-left: 3;
+	background {
+		type: round-rect;
+		color: white;
+		border-color: black;
+		border-width: 2;
+	}
+	layout: left | expand;	
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+	padding: 1;
+	border {
+		type: round-rect;
+		arc: 4;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | left;	
+	text-wrap: true;
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: focusedFontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+/******** TextField symbol input ***********/
+.textFieldSymbolList {
+	padding: 3;
+	margin-left: 3;
+	margin-right: 3;
+	layout: horizontal-shrink | vertical-shrink | horizontal-center | bottom;
+	columns: 4;
+	columns-width: equal;
+	repaint-previous-screen: true;
+	focused-style: .textFieldSymbolFocused;
+	background {
+		type: round-rect;
+		color: rgb( 220, 220, 220 );
+		border-color: titleColor;
+		border-width: 2;
+	}
+}
+
+.textFieldSymbolItem {
+	layout: expand | center;
+	font-color: gray;
+	font-style: bold;
+}
+
+.textFieldSymbolFocused extends .textFieldSymbolItem {
+	font-color: black;
+	background-color: yellow;
+}
+
+
+/*************   MENU BAR *************/
+
+menubar
+{
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2;
+	margin-right: 2;
+	min-width: 120;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: focusedBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	focused-style: .menuFocused;
+	font-color: focusedFontColor;
+	font-style: bold;
+	menubar-color: bgColor;
+}
+
+/** Style for the first layer of subcommands: **/
+menu1 extends menu {
+	background-color: yellow;
+	background-type: simple;
+      layout: right;
+      margin-bottom: 4;
+      margin-right: 4;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: green;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+.menuFocused extends .menuItem {
+	background-color: bgColor;
+	font-color: focusedFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0;
+	padding-top: 3;
+	padding-bottom: 0;
+	font-color: black;
+	font-style: bold;
+	layout: left;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+
+
+

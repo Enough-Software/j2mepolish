@@ -1,0 +1,63 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.migration %>
+<%set title = J2ME Polish: Migration %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+	<h1 id="top">Migration</h1>
+	<%index %>
+	
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="install.html">J2ME Polish Installation</a></li>
+		<li><a href="netbeans.html">NetBeans Integration</a></li>
+		<li><a href="mepose.html">Eclipse Integration</a></li>
+	</ul>
+
+	<p>
+	Some aspects of J2ME Polish have been changed since J2ME Polish 1.x. On this page you will learn about the necessary changes
+	to your build.xml scripts and polish.css design files.
+	</p>
+<h2 id="taskdefinition">Task Definition</h2>
+<p>
+In J2ME Polish 2.0 the <i>enough-j2mepolish-build.jar</i> moved from the <i>import</i> to the <i>lib</i> folder, so any task definitions
+within build.xml scripts have to be changed:
+	<pre>
+&lt;taskdef 
+	name=&quot;j2mepolish&quot; 
+	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+	classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar
+		:${polish.home}/lib/jdom.jar&quot; /&gt;
+	</pre>
+	</p>
+	<p>
+	We've done this change so that programmers can better distinguish between libraries that are only used during build time and libraries that
+	are available on the phones (like the MMAPI for example) and that programmers would like to add to the classpath of their projects.
+	</p>
+	
+	<h2 id="screenmargins">Screen Margins</h2>
+	<p>
+	In J2ME Polish 1.x <code>margin</code> and <code>padding</code> CSS attributes both resulted in the same space between the physycal border
+	of a screen and its content. In J2ME Polish 2.0 margins produce actual margins between the physical border of a screen and the screen's background.
+	This can be used for creating popup screens for example. So if there are now gaps showing in an application's screen, just use <code>padding</code> 
+	instead of <code>margin</code> for the respective screen's style in the <i>polish.css</i> file.
+	</p>
+	
+	<h2 id="rightcommandlayout">Layout of the Right Command</h2>
+	<p>
+	When using the <a href="gui-screenelement-menubar.html">extended menubar</a> the default layout of the <code>rightcommand</code> CSS style
+	has been changed from <code>right</code> to the item's default layout (<code>left</code>). This change allows us to realize layouts like 
+	<code>center</code> which have been not possible in J2ME Polish 1.x.
+	</p>
+	
+	<h2 id="license">License Key</h2>
+	<p>
+	In J2ME Polish 1.x the <code>license</code> attribute of the <code>&lt;info&gt;</code> element described the used J2ME Polish license. This element
+	is not supported anymore and is ignored. Existing J2ME Polish 1.x customers can upgrade to 2.x, please inquire for details by sending a query 
+	to j2mepolish(at)enough(dot)de.
+	</p>
+	
+	
+<%include end.txt %>

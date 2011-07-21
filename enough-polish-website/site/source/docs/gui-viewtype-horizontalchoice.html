@@ -1,0 +1,64 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: horizontal-choice view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChoiceGroup: horizontal-choice view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-choicegroup.html">ChoiceGroup</a></li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-choicegroup">ChoiceGroup View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>horizontal-choice</code> view-type shows all options of an exclusive <a href="gui-item-choicegroup.html">ChoiceGroup</a> in a row.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<img src="<%= basedir%>images/gui-viewtype-horizontalchoice.png" width="316" height="79" alt="The horizontal-choice view-type" />		
+	</p>
+<pre>
+.horizontalChoice {
+	label-style: choiceGroupLabel;
+	background-type: round-rect;
+	background-color: focusedBgColor;
+	include-label: true;
+	layout: expand;
+	<b>view-type: horizontal-choice;
+	horizontalview-left-arrow: url( arrow-left.png );
+	horizontalview-right-arrow: url( arrow-right.png );</b>
+}
+
+.horizontalChoice:hover {
+	background-color: white;
+}
+
+.choiceItem {
+	font-color: gray;
+	font-style: bold;
+	text-wrap: false;
+}
+
+.choiceItem:hover {
+	font-color: black;
+}
+
+.choiceGroupLabel {
+	font-style: italic;
+	font-size: small;
+	layout: newline-after;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.containerviews.HorizontalChoiceView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/containerviews/HorizontalChoiceView.html">HorizontalChoiceView</a></li>
+	</ul>
+
+<%include end.txt %>

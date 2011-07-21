@@ -1,0 +1,151 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: DateField %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">DateField</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-calendaritem.html">CalendarItem</a></li>
+		<li><a href="gui-item-textfield.html">TextField</a></li>
+		<li><a href="gui-item-clockitem.html">ClockItem</a></li>
+		<li><a href="localization.html">Localization</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-item-datefield.png"  width="235" height="85" alt="A datefield in action" />
+	The DateField allows you to enter dates and time in different modes:
+	</p>
+	<ul>
+		<li><b>Native Input Mode</b>: When the native mode  is used, 
+			a new input screen will pop up for the user. 
+			This allows your user to use all native input mechanisms that the target device supports but it does interrupt
+			the flow within the application. The Native Input Mode is used by default.
+		</li>
+		<li><b>Direct Input Mode</b>: With the Direct Input Mode J2ME&nbsp;Polish accepts input directly without showing a new popup screen.
+<pre>
+&lt;variable name=&quot;polish.DateField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+</pre> 
+		</li>
+	</ul>
+	<h2 id="Design">Design</h2>
+	<p>
+	The above DateField has been designed with following styles:
+	</p>
+<pre>
+colors {
+	fontColor: rgb( 30, 85, 86 );
+}
+.dateInput {
+	margin: 1;
+	padding: 4;
+	font-style: bold;
+	font-size: small;
+	font-color: fontColor;
+	background-color: silver;
+	border-color: black;
+}
+
+.dateInput:hover {
+	padding: 3;
+	border-width: 2;
+	background-color: white;
+}
+</pre>	
+	<p>Additionally following settings have been made:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.DateField.useDirectInput&quot; value=&quot;true&quot;/&gt;
+</pre>	
+	<p>
+	You can use following attributes for designing a <code>DateField</code>:
+	</p>
+	<%cssattributes de.enough.polish.ui.DateField %>
+
+	<h2 id="datefield-commands">DateField-Commands</h2>
+	<p>
+	A DateField adds the &quot;Clear&quot; command to the menu when the direct input mode is used. 
+	The names of this and other commands can be changed easily using <a href="localization.html#localization-gui">localization</a>
+	in your <i>messages.txt</i> file:
+	</p>
+<pre>
+polish.command.clear=Reset
+</pre>
+
+	
+	<h2 id="datefield-Programming">Programming</h2>
+	<p>
+	Use the <code>DateField</code> like the MIDP <code>javax.microedition.lcdui.DateField</code>:
+	</p>
+<pre>
+//#style dateInput
+this.birthdate = new DateField( "birthday:", DateField.DATE );
+this.birthdate.setDate( new Date( System.currentTimeMillis() ) );
+</pre>	
+	<p>
+	Please refer to the &quot;datefield&quot; sample application for a working example.
+	</p>
+
+	<h2 id="datefield-Configuration">Configuration</h2>
+	<p>
+	There are several preprocessing variables that you can either specify in the <a href="build-build.html#variables">&lt;variables&gt;</a>
+	section of your <i>build.xml</i> or in your <i>messages.txt</i> files when using the <a href="localization.html">Localization</a>
+	framework.
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+
+<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.DateFormat</td>
+		<td>ymd</td>
+		<td>The sequence of date parts - use <code>y</code> for the year, <code>m</code> for the month and <code>d</code> for the day.
+		US American format is for example <code>mdy</code>.
+		<br />
+		You can also use the abbreviations <code>us</code> for US American, <code>fr</code> for French and <code>de</code> for
+		German date formats.
+		<br />
+		For <code>TIME</code> or <code>DATE_TIME</code> DateFields <code>hh:mm</code> will be appended in any case.
+		</td>
+	</tr>
+	<tr>
+		<td>polish.DateFormatEmptyText</td>
+		<td>YYYY-MM-DD</td>
+		<td>Defines the text that should be shown by an empty DateField - the shown default depends on the <code>polish.DateFormat</code> variable as well
+		- if  <code>polish.DateFormat</code> is for example <code>mdy</code>, the default will be <code>MM-DD-YYYY</code>.
+		</td>
+	</tr>
+	<tr>
+		<td>polish.DateFormatSeparator</td>
+		<td>-</td>
+		<td>The separator between years, months and days of a <code>DATE</code> or <code>DATE_TIME</code> DateField.</td>
+	</tr>
+	
+	<tr>
+		<td>polish.DateField.useDirectInputForPointer</td>
+		<td>false</td>
+		<td>Enables the usage of a <a href="gui-item-calendaritem.html">CalendarItem</a> when a DateField is clicked on a touch device. By default the native implementation is used.</td>
+	</tr>
+	
+	<!-- 
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	 -->
+</table>
+
+	</tr>
+
+	
+	<h2 id="datefield-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/DateField.html">DateField</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

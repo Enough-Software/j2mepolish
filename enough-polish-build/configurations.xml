@@ -1,0 +1,128 @@
+<!-- 
+	configurations.xml defines all known J2ME configurations. 
+	You can add or change the existing specifications and
+	use the changed settings in the code.
+
+    Copyright (c) 2005 - 2008 Robert Virkus / Enough Software
+
+    This file is part of J2ME Polish.
+
+    J2ME Polish is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    J2ME Polish is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Commercial licenses are also available, please
+    refer to the accompanying LICENSE.txt or visit
+    http://www.j2mepolish.org for details.
+
+-->
+
+<configurations>
+	
+	<configuration>
+		<identifier>CLDC/1.0</identifier>
+		<features>cldc, cldc1.0</features>
+		<description>Connected Limited Device Configuration 1.0. Does not support floating point calculations.</description>
+		<capability name="build.BootClassPath" value="cldc-1.0.jar" />
+		<capability name="SupportFloatingPoint" value="false" />
+	</configuration>
+
+	<configuration>
+		<identifier>CLDC/1.0.4</identifier>
+		<features>cldc, cldc1.0</features>
+		<description>Connected Limited Device Configuration 1.0.4. Does not support floating point calculations.</description>
+		<capability name="build.BootClassPath" value="cldc-1.0.jar" />
+		<capability name="SupportFloatingPoint" value="false" />
+	</configuration>
+
+	<configuration>
+		<identifier>CLDC/1.1</identifier>
+		<features>cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>Connected Limited Device Configuration 1.0. Does support floating point calculations and weak references.</description>
+		<capability name="build.BootClassPath" value="cldc-1.1.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>CDC/1.0</identifier>
+		<features>cdc, cdc10, cdc1.0, hasFloatingPoint, hasJNI</features>
+		<description>Connected Device Configuration 1.0 is based on J2SE 1.3.</description>
+		<capability name="build.BootClassPath" value="cdc-1.0.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+
+	<configuration>
+		<identifier>Android/1.1</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-1.1.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+
+	<configuration>
+		<identifier>Android/1.5</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-1.5.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/1.6</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-1.6.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/2.0</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-2.0.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/2.1</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-2.1.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/2.2</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-2.2.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/2.3</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-2.3.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/3.0</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-3.0.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+</configurations>

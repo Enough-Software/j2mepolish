@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="j2mepolish" name="enough-polish-sample-tabbedform">
+
+	<property file="${user.name}.properties" />
+	<!-- the device used for test builds:                         -->
+	<property name="device" value="Nokia/Series60E2" />
+	<property name="devices" value="${device}, Nokia/Series60E2FP3, Sony-Ericsson/W900" />
+
+	<!-- The polish.home property should point to the directory   -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="wtk.home" location="../../dev/WTK2.2"/>
+	<property name="polish.home" location="../enough-polish-build"/>
+	<property name="nokia.home" value="/home/enough/dev/Nokia" />
+	<property name="kzip.home" value="/home/enough/bin" />
+	<property name="blackberry.home" location="/home/enough/.wine/fake_windows/Program Files/Research In Motion/BlackBerry JDE 4.0" />
+	<property name="palm.home" location="/home/enough/dev/palm/Java_Tech_for_Garnet_WEME57" />
+	<property name="palm.simulator.home" location="/home/enough/dev/palm/palmsim61_dbg" />
+
+	<!-- task definitions -->
+	<taskdef 
+		name="j2mepolish"
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/bin/classes:${polish.home}/import/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar:../enough-polish-extensions/bin/classes" 
+	/>
+
+			
+	<!-- build targets, each target can be called via "ant [name]", 
+		 e.g. "ant clean", "ant notest j2mepolish" or just "ant" for calling the default-target -->
+	
+	<target name="test">
+		<property name="test" value="true"/>
+		<property name="dir.work" value="build/test"/>
+	</target>
+		
+	<target name="deploy">
+		<property name="deploy-url" value="http://193.22.164.185:8080/"/>
+	</target>
+
+	<target name="init">
+	  	<property name="test" value="false"/>
+		<property name="deploy-url" value=""/>
+		<property name="dir.work" value="build/real"/>
+	</target>
+    
+	<target depends="init" name="j2mepolish">
+	<j2mepolish>
+	    <!-- general settings -->
+		<info 
+			license="GPL"
+			copyright="Copyright 2006 Enough Software. All rights reserved." 
+			description="Example for using a TabbedForm." 
+			icon="/icon.png" 
+			infoUrl="http://www.j2mepolish.org" 
+			jarName="${ nospace(polish.vendor) }-${ nospace(polish.name) }-${polish.locale}-tabbedform.jar" 
+			jarUrl="${deploy-url}${polish.jarName}" 
+			name="TabbedForm" 
+			vendorName="Enough Software" 
+			version="1.0.0"
+	    />
+		<!-- selection of supported devices -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}"/>
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${devices}" />
+		</deviceRequirements>
+	    <!-- build settings -->
+		<build 
+			fullscreen="menu" 
+            polishDir="../enough-polish-j2me/source/src" 
+            symbols="polish.skipArgumentCheck" 
+            usePolishGui="always"
+            sourceDir="source/src"
+			workDir="${dir.work}"
+			>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.tabbedform.TabbedFormDemo" name="TabbedForm"/>
+
+			<!-- project-wide variables - used for preprocessing  -->
+			<variables 
+				replacePropertiesWithoutDirective="false"
+				>
+				<variable file="config.properties" />
+				<variable name="polish.TextField.useDirectInput" value="true" />
+				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
+				<variable name="polish.TextField.Symbols" value="&quot;@#()&lt;&gt;&amp;;,.:!/\~$%^*" />
+				<variable name="polish.TextField.suppressAddSymbolCommand" value="true" if="polish.key.AddSymbolKey:defined" />
+				<variable name="polish.command.entersymbol" value="Add Symbol" />
+				<variable name="polish.TextField.allowNativeModeSwitch" value="true" />
+
+				
+				<variable name="polish.TextField.useDirectInput" value="true" />
+				                   <variable name="polish.rmi.redirects" value="false" />
+				                   <variable name="polish.rmi.xmlrpc" value="true" />
+				                   <variable name="polish.usesScrollBar" value="true" />
+				                   <variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<!-- 
+				                   <variable name="polish.MenuBar.useMiddleCommand" value="true" />
+				                   <variable name="polish.TabbedForm.allowTabSelection" value="true" />			
+				-->
+				<!--
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				-->
+			</variables>
+			<!-- obfuscator settings: do not obfuscate when the test-property is true  
+			-->
+			<obfuscator  name="ProGuard" useDefaultPackage="false" unless="test or polish.blackberry">
+				<parameter name="optimize" value="true" />
+			</obfuscator>
+			<!-- debug/log settings: only include debug setting when the test-property is true -->
+			<debug level="info" showLogOnError="true" verbose="true" logTimestamp="true" if="test">
+				<filter level="debug" package="de.enough.polish.sample.tabbedform"/>
+				<filter level="debug" class="de.enough.polish.ui.TabbedForm"/>
+				<filter level="debug" class="de.enough.polish.ui.TabBar"/>
+				<!--
+				<filter level="debug" class="de.enough.polish.ui.Screen"/>
+				<filter level="debug" class="de.enough.polish.ui.ContainerView"/>
+				<filter level="debug" class="de.enough.polish.ui.Item"/>
+				<filter level="debug" class="de.enough.polish.ui.Container"/>
+				<filter level="debug" class="de.enough.polish.ui.ChoiceGroup"/>
+				<filter level="debug" class="de.enough.polish.ui.TabbedForm"/>
+				<filter level="debug" class="de.enough.polish.ui.Screen"/>
+				<filter level="debug" class="de.enough.polish.ui.MenuBar"/>
+				-->
+			</debug>
+			<resources
+				dir="resources" 
+				defaultexcludes="yes"
+				excludes="*.db"
+				filterZeroLengthFiles="true"
+			 >
+				<localization locales="en" />
+			</resources>
+			
+			<packager name="jar">
+				<parameter name="verbose" value="false" />
+			</packager>
+		</build>
+		
+		<!-- execution of emulator(s) -->
+		<emulator if="test" />		
+	</j2mepolish>
+	</target>
+
+	<target description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" name="clean">
+		<delete dir="build"/>
+		<delete dir="dist"/>
+	</target>
+
+	<target 
+		name="emulator"
+		description="Starts the emulator" 
+		depends="test, j2mepolish"
+		>
+	</target>
+	
+	<target 
+		name="cleanbuild"
+		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml" 
+		depends="clean, j2mepolish"
+		>
+	</target>
+	
+</project>

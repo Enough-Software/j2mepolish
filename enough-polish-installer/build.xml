@@ -1,0 +1,126 @@
+<project 
+	name="enough-installer" 
+	default="bin-dist">
+
+<!-- global properties -->
+	<property file="${user.name}.properties" />
+	<property name="izpack.dir" value="/home/enough/dev/IzPack" />
+
+<!-- build targets, each target can be called via "ant [name]", e.g. "ant clean" -->
+
+<target name="init">
+	<!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create distribution dirs -->
+	<mkdir dir="dist" />
+</target>
+
+<!-- Creates the Source Code documentation -->
+<target name="javadoc">
+    <javadoc 
+    	destdir="doc" 
+    	access="public" 
+    	use="true" 
+    	notree="false" 
+    	nonavbar="false" 
+    	noindex="false" 
+    	splitindex="true" 
+    	author="true" 
+    	version="true" 
+    	nodeprecatedlist="false" 
+    	nodeprecated="false" 
+    	packagenames="*" 
+    	sourcepath="source/src" 
+    	classpath="bin/classes:import/ant.jar:import/junit.jar" 
+    />
+ </target>
+
+<target name="bin-dist" depends="init">
+	<delete dir="bin/classes" />
+	<mkdir dir="bin/classes" />
+	<unjar src="import/TargetPanel.jar" dest="bin/classes"/>
+	<unjar src="import/InstallPanel.jar" dest="bin/classes"/>
+
+	<!-- compile the classes -->
+	<echo message="compiling" />
+	<javac classpath="import/installer.jar:import/TargetPanel.jar:import/UserInputPanel.jar:InstallPanel.jar"
+		srcdir="source/src"
+		destdir="bin/classes"
+		source="1.4"
+		target="1.4"
+	/>
+	<!-- create and copy the jar file for the ChooseLicensePanel -->
+	<echo message="creating jar" />
+	<jar destfile="${izpack.dir}/bin/panels/ChooseLicensePanel.jar"
+	     basedir="bin/classes"
+		 includes="**/ChooseLicensePanel.class"
+		 index="false"
+	     >
+	</jar>
+	<!-- copy the single ChooseLicensePanel class -->
+	<echo message="copying class-file" />
+	<copy file="bin/classes/com/izforge/izpack/panels/ChooseLicensePanel.class" 
+	      todir="${izpack.dir}/bin/panels/ChooseLicensePanel/com/izforge/izpack/panels"/>
+	
+	<!-- create and copy the jar file for the ChooseTargetPanel -->
+	<echo message="creating jar" />
+	<jar destfile="${izpack.dir}/bin/panels/ChooseTargetPanel.jar"
+	     basedir="bin/classes"
+		 index="false"
+	     >
+	</jar>
+	<!-- copy the single ChooseTargetPanel class -->
+	<echo message="copying class-file" />
+	<copy file="bin/classes/com/izforge/izpack/panels/ChooseTargetPanel.class" 
+	      todir="${izpack.dir}/bin/panels/ChooseTargetPanel/com/izforge/izpack/panels"/>
+	
+	<!-- create and copy the jar file for the SetPropertiesPanel -->
+	<echo message="creating jar" />
+	<jar destfile="${izpack.dir}/bin/panels/SetPropertiesPanel.jar"
+	     basedir="bin/classes"
+		 index="false"
+	     >
+		<fileset dir="source/src/" includes="**/*.properties" />
+		
+	</jar>
+	<!-- copy the single SetPropertiesPanel class -->
+	<echo message="copying class-file" />
+	<copy file="bin/classes/com/izforge/izpack/panels/SetPropertiesPanel.class" 
+	      todir="${izpack.dir}/bin/panels/SetPropertiesPanel/com/izforge/izpack/panels"/>
+	
+	<!-- create and copy the jar file for the CustomInstallPanel -->
+	<echo message="creating jar" />
+	<jar destfile="${izpack.dir}/bin/panels/CustomInstallPanel.jar"
+	     basedir="bin/classes"
+		 index="false"
+	     >
+	</jar>
+	<!-- copy the single CustomInstallPanel class -->
+	<echo message="copying class-file" />
+	<copy file="bin/classes/com/izforge/izpack/panels/CustomInstallPanel.class" 
+	      todir="${izpack.dir}/bin/panels/CustomInstallPanel/com/izforge/izpack/panels"/>
+	
+	<!-- create and copy the jar file for the ChooseLicensePanel -->
+	<echo message="creating jar" />
+	<jar destfile="${izpack.dir}/bin/panels/FinishInstallationPanel.jar"
+	     basedir="bin/classes"
+		 index="false"
+	     >
+	</jar>
+	<!-- copy the single ChooseLicensePanel class -->
+	<echo message="copying class-file" />
+	<copy file="bin/classes/com/izforge/izpack/panels/FinishInstallationPanel.class" 
+	      todir="${izpack.dir}/bin/panels/FinishInstallationPanel/com/izforge/izpack/panels"/>
+	
+	
+	<echo message="done." />
+</target>
+			
+<target name="clean" depends="init">
+	<delete dir="build" />
+	<delete dir="dist" />
+	<delete dir="tmp" />
+</target>
+
+
+</project>

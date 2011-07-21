@@ -1,0 +1,44 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: round-tab-bordered Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">round-tab-bordered Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+		<li><a href="gui-screen-tabbedform.html">TabbedForm</a></li>
+	</ul>
+	<p>
+	Displays a background with rounded corners at the top. This can be especially useful for 
+	designing the tab-bordereds of a <a href="gui-screen-tabbedform.html">TabbedForm</a>.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-round-tab-bordered.png"  width="196" height="52" alt="round-tab-bordered background" />	
+</p>
+<pre>
+.itemMain {
+	background {
+		type: round-tab-bordered-bordered;
+		color: #0e0;
+		arc-width: 6;
+		arc-height: 6;
+		border-color: #8f8;
+		border-width: 1;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background round-tab-bordered %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/RoundTabbedBorderedBackground.html">RoundTabbedBorderedBackground</a></li>
+	</ul>
+
+<%include end.txt %>

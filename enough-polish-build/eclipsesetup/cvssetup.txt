@@ -1,0 +1,19 @@
+Want to become a J2ME Polish comitter? Here's how.
+
+1) Submit improvements on the mailing list
+2) Get the trust of the J2ME Polish core developers ;-)
+
+...
+Then:
+
+1) get an account on berlios:
+http://developer.berlios.de/
+
+2) Let the J2ME Polish developer know about your intentions and your berlios account name
+
+3) Check out the "enough-polish-build" module
+4) Check out the "enough-polish-j2me" module
+5) Build J2ME Polish by calling ant from the enough-polish-build directory
+
+Note 1: at the moment we're assuming you're using Eclipse
+Note 2: if you're using Eclipse, please import the codetemplates from this directory and apply Eclipse setup changes that are shown in the pictures of this folder

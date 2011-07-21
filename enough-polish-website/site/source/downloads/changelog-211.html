@@ -1,0 +1,40 @@
+<%set title = J2ME Polish: Changelog %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Changelog</h1>
+
+	<h2 id="211">J2ME Polish 2.1.1</h2>
+	<p>
+	J2ME Polish 2.1.1 provides many essential bugfixes and powerful new features.
+	</p>
+	<ul>
+		<li><b>MIDP 1.0</b>: MIDP 1.0 compatibility has been restored</li>
+		<li><b>Generic/Java</b>: Target <code>Generic/Java</code> to create a standalone Java app out of your MIDlet</li>
+		<li><b>:visited</b>: Use the <code>:viisted</code> pseudo style to design UI items on which the default command has been triggered.</li>
+		<li><b>:landscape, :portrait</b>: Use the <code>:landscape</code> or <code>:portrait</code> pseudo styles to design screens or items in landscape or portrait mode.</li>
+		<li><b>Android: Softkeyboard</b>: Softkeyboards are now supported for Android 1.5+ devices</li>
+		<li><b>Android: Signing</b>: Signing is now done using the standard <code>&lt;sign&gt;</code> element.</li>
+		<li><b>Android: Location API</b>: Fixed usage of different location providers.</li>
+		<li><b>Android: font-size</b>: On Android devices you can now use percentage or pixel values for fonts: <code>font-size: 36px;</code>.</li>
+		<li><b>html tex-effect</b>: Use <code>text-effect: html;</code> for creating rich text components.</li>
+		<li><b>RGB handling</b>: Resolving RGB drawing bugs dynamically for generic devices like Generic/AnyPhone.</li>
+		<li><b>TreeModel</b>: Allowing to use a TreeModel for TreeItem</li>
+		<li><b>ScreenChangeAnimations</b>: fixed some race conditions for switching screens while playing screen change animations</li>
+		<li><b>layout</b>: Fixed center layout problems when using labels, and right layout in combination with <code>after</code>.</li>
+		<li><b>Canvas</b>: Fixed support for command handling in Canvas subclasses</li>
+		<li><b>BlackBerry: setTitle</b>: Fixed missing lock when setting screen titles from a thread.</li>
+		<li><b>BlackBerry: screen size</b>: Fixed screen size calculation when no screen has been shown previously.</li>
+		<li><b>BlackBerry: font-size</b>: On BlackBerry devices you can now use percentage or pixel values for fonts: <code>font-size: 36px;</code>.</li>
+		<li><b>numbered view-type</b>: Improved performance of number view-type</li>
+		<li><b>carrousel view-type</b>: Fixed carrousel view-type</li>
+		<li><b>Qwerty Keyboards</b>: Fixed triggering of game actions on some Nokia qwerty devices like the E63</li>
+		<li><b>scroll-background</b>: added option not to move a <code>scroll-background</code> by using <code>move-scroll-backgrounds: false;</code></li>
+		<li><b>Location API</b>: Added de.enough.polish.location.FallbackLocationProvider for creeating automated fallback solutions, e.g. when no GPS is available use the network location provider.</li>
+		<!-- 
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		 -->
+	</ul>
+<%include end.txt %>

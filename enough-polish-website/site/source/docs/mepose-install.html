@@ -1,0 +1,87 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.mepose %>
+<%set title = J2ME Polish: Mepose %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+
+<h1 id="top">Installing Mepose</h1>
+	<%index %>
+	
+<h2 id="prequisites">Prerequisites</h2>
+<p>You need the following components on your system:</p>
+<ul>
+	<li>Eclipse 3.2 or higher
+	<a href="http://www.eclipse.org" target="_blank">http://www.eclipse.org</a>
+	</li>
+	<li>J2ME Polish 2.0 or higher
+	<a href="../download.html">http://www.j2mepolish.org</a>
+	</li>
+	<li>A device emulator
+	<table id="emulators">
+	   <tr>
+	       <td>for Windows and Linux</td>
+	       <td>Sun Java Wireless Toolkit<br />
+                <a href="http://java.sun.com/products/sjwtoolkit/index.html" target="_blank">http://java.sun.com/products/sjwtoolkit/index.html</a></td>
+	   </tr>
+       <tr>
+	       <td>for Mac OSX</td>
+	       <td>Mobile Power Player SDK<br/>
+	           <a href="http://mpowerplayer.com/" target="_blank">http://mpowerplayer.com</a></td>
+	   </tr>
+	</table>
+	</li>
+</ul>
+
+<h2 id="j2mepolishinstaller">Using the J2ME Polish Installer</h2>
+<div class="screenshots">
+
+    <div class="screenshot">
+	<div class="screenshot_description">
+	During the installation of J2ME Polish you can specify the installation directory of Eclipse by setting the <code>eclipse.home</code> property
+	in the Paths dialog:
+	</div>
+    <div class="screenshot_image"><img src="../images/mepose-install-eclipsehome.png" alt="Specify where to find Eclipse" /></div>
+    </div>
+    
+	<div class="screenshot">
+	<div class="screenshot_description">
+	On the next page, select 'Eclipse integration' by ticking the corresponding checkbox:
+	</div>
+	<div  class="screenshot_image"><img src="../images/mepose-install-selectpackage.png" alt="Select to install the Eclipse integration" /></div>
+    </div>
+
+</div>
+
+<h2 id="installdetails">Using the Eclipse Update Manager</h2>
+<div class="screenshots">
+
+    <div class="screenshot">
+        <div class="screenshot_description">Open the update manager from the menu with "Help/Install New Software...".</div>
+        <div class="screenshot_image"><img src="../images/mepose_install_01.png" alt="The update manager"/></div>
+    </div>
+
+    <div class="screenshot">
+        <div class="screenshot_description">Enter the URL <a href="http://www.j2mepolish.org/mepose">http://www.j2mepolish.org/mepose</a> as an update site.</div>
+        <div class="screenshot_image"><img src="../images/mepose_install_02.png" alt="Enter the url in the manager"/></div>
+    </div>
+
+    <div class="screenshot">
+        <div class="screenshot_description">Choose the Mepose Feature. Click &quot;Next&quot; and follow the steps of the wizard to finish the installation.</div>
+        <div class="screenshot_image"><img src="../images/mepose_install_03.png" alt="Select the Mepose feature"/></div>
+    </div>
+</div>
+
+<h2 id="settingupeclipse">Setting up Eclipse</h2>
+    <div class="screenshots">
+        <div class="screenshot">
+            <div class="screenshot_description">Open Window Preferences and go to the &quot;Debug&quot; panel. Uncheck the item &quot;Suspend execution on uncaugt exceptions&quot;</div>
+            <div class="screenshot_image"><img src="../images/mepose-install_11_debugPreferences.png" alt="The debug preferences" /></div>
+        </div>
+    </div>
+
+<p>
+<em>The installation is done!</em>
+</p>
+<%include end.txt %>

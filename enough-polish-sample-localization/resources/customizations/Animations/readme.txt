@@ -1,0 +1,1 @@
+This folder contains a different design for the sample application.Call the "animations" target to test this design.

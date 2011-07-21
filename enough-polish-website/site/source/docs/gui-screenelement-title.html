@@ -1,0 +1,126 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Title Design %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Screen Titles</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-css-text.html">Text Design</a></li>
+		<li><a href="gui-screenelement-screeninfo.html">ScreenInfo</a></li>
+		<li><a href="gui-screenelement-screenbackground.html">Screen Background</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	All screens support the setting of titles which are usually shown at the top of the screen.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-screenelement-title.png"  width="240" height="30" alt="title" />
+	<br >
+	You can design the title of all screen with the default <code>title</code> style:
+	</p>
+<pre>
+colors {
+	fontColor: #222;
+	fontShadowColor: #eee;
+	focusedFontColor: #111;
+}
+title {
+	padding: 2;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: focusedFontColor;
+	background {
+		type: vertical-gradient;
+		top-color: #fff;
+		bottom-color: #ccc;
+		start: 2%;
+		end: 90%;
+	}
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	text-effect: shadow;
+	text-shadow-color: fontShadowColor;
+}
+</pre>
+	<p>
+	Note that the red status button in the above example is realized with a <a href="gui-screenelement-screeninfo.html">ScreenInfo</a> element.
+	Other options for embetting information within the title area include to use
+	<a href="#Programming">Item/CustomItem</a> as your title, the usage of
+	<a href="css-common.html#before">before/after</a> attributes or of an 
+	<a href="gui-background-image.html">image background</a>.
+	</p>
+	<p>
+	Title specific design attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Applies To&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+		<td>title-position</td><td>top</td><td>top, bottom</td><td>title style, screen style</td>
+		<td>Positions the title at either the top or the bottom of the screen.</td>
+	</tr>
+	<tr>
+		<td>title-style</td><td>title</td><td>-</td><td>screen style</td>
+		<td>Sets a specific title style for the referenced screen:
+<pre>
+.myAlert {
+	title-style: myAlertTitle;
+}
+.myAlertTitle {
+	background-color: red;
+}
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>show-text-in-title</td><td>false</td><td>false, true</td><td>list style</td>
+		<td>Supresses the original title and uses the text of the currently selected element as the title within a list:
+<pre>
+.mainMenuList {
+	show-text-in-title: true;
+}
+</pre>
+		</td>
+	</tr>
+	</table>
+
+	<p>
+	Further design options:
+	</p>
+	<ul>
+		<li><a href="css-common.html">Common CSS Attributes</a> for specifying margins, layout, colors, before/after images and so on.</li>
+		<li><a href="gui-css-text.html">Text Design</a> for specifying fonts and text-effects.</li>
+		<li><a href="gui-visualguide.html#backgrounds">Backgrounds</a> for designing the background.</li>
+		<li><a href="gui-visualguide.html#borders">Borders</a> for designing the border.</li>
+	</ul>
+	
+	<h2 id="Configuration">Configuration</h2>
+	<p>
+	You need to set the fullscreen-mode to either &quot;menu&quot; or &quot;true&quot; when J2ME Polish should render the title,
+	otherwise the native title implementation of your target platform is used. You can set the fullscreen-mode within the 
+	&lt;build&gt; element of the &lt;j2mepolish&gt; task of your <i>build.xml</i> script:
+	
+<pre>
+&lt;build usePolishGui=&quot;true&quot; fullscreen=&quot;menu&quot; &gt; (...)
+</pre>
+	</p>
+	
+	<h2 id="Programming">Programming</h2>
+	<p>
+	You can use any GUI item including your own CustomItem as a title by calling
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess.setTitle( Screen, Item )</a>.
+	</p>
+	<p>You can also set a subtitle located under the title by calling
+	<code>UiAccess.setSubTitle( Screen screen, String subTitle)</code> or <code>UiAccess.setSubTitle( Screen screen, Item subTitle)</code>.
+	</p>
+	<p>
+	You can hide the title as well as the menubar by calling <code>screen.setFullScreenMode( true );</code> or 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess.setFullScreenMode( Screen, booolean )</a>.
+	</p>
+	
+
+<%include end.txt %>

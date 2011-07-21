@@ -1,0 +1,313 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending J2ME Polish: TextEffect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Extending the J2ME Polish GUI with TextEffects</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-itemview.html">Item Views</a></li>
+		<li><a href="extending-border.html">Borders</a></li>
+		<li><a href="extending-background.html">Backgrounds</a></li>
+		<li><a href="extending-screenchangeanimation.html">ScreenChangeAnimation</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Existing TextEffects</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Text effects provide you with an easy way to spice up your fonts without caring
+	about sizes and availability of characters in bitmap fonts. While there are
+	 <a href="gui-visualguide-texteffects.html">various text-effects</a> available, you might encounter a 
+	 situation in which you want to create your own effect.</p>
+	</p>
+	
+	<h2 id="concepts">Concepts of TextEffect</h2>
+	<p>
+	A text effect takes over the rendering and layout of the text of a StringItem and all classes inheriting from StringItem.
+	You can, however, apply your own effect by following these steps:
+	<ol>
+		<li><b>Implement</b> your effect by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextEffect.html">de.enough.polish.ui.TextEffect</a> 
+		or an existing TextEffect subclass.</li>
+		<li><b>Register</b> the effect in <i>${polish.home}/custom-css-attributes.xml</i> (optional).</li>
+		<li><b>Apply </b> your effect by specifying the <code>text-effect</code> CSS attribute in your project's <i>polish.css</i> file.</li>
+	</ol>
+	</p>
+	
+	<h2 id="implementation">Implementing your TextEffect</h2>
+	<p>
+	Create your own effect by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextEffect.html">de.enough.polish.ui.TextEffect</a> 
+	or an existing TextEffect subclass.
+	For simple effects you only need to implement <code>public drawString( String text, int textColor, int x, int y, int orientation, Graphics g )</code>,
+	which renders a single line of text at the specified position.
+	<br />
+	You can animate your effect by overriding one of the <code>animate</code> methods (see below).
+	<br />
+	If you want to design your text-effect using CSS, you need to implement the <code>public void setStyle( Style style )</code> 
+	method, too.
+	</p>
+	<p>Additionally, you can take over full control over the layout process by overriding or using the following methods:
+	</p>
+	<ul>
+		<li><code>public boolean animate()</code>: Animates this effect - return true when you need a repaint.</li>
+		<li><code>public void animate(Item parent, long currentTime, ClippingRegion repaintRegion)</code>: 
+			Animates this effect - use this method if you need a repaint outside of the actual content area of 
+			the parent item.
+		</li>
+		<li><code>public void drawStrings( String[] textLines, int textColor, int x, int y, int leftBorder, int rightBorder, int lineHeight, int maxWidth, int layout, Graphics g )</code>: 
+			Use this method for drawing all rows of a StringItem at once - by default this method calls the above described <code>drawString()</code> method
+			for each row.
+		</li>
+		<li><code>public int getLeftX( int x, int orientation, int textWidth  )</code>: 
+			Calculates the horizontal start position - this is useful in case you need to draw RGB integer arrays, for example.
+		</li>
+		<li><code>public int getTopY( int y, int orientation, Font font ), getTopY( int y, int orientation, int height, int baseLine )</code>: 
+			Calculates the vertical top position.
+		</li>
+		<li><code>public static int[] getRgbData( String text, int textColor, Font font )</code>,
+			<code>public static int[] getRgbData(String text, int textColor, Font font, int x, int y, int width, int height )</code>,
+			<code>public static int[] getRgbData(String text, int textColor, Font font, int x, int y, int width, int height, int transparentColor)</code>: 
+			Converts a font and a text into an RGB integer array on MIDP 2.0+ devices.
+		</li>
+		<li><code>public void showNotify()</code>: Notifies the effect that it is about to being shown.</li>
+		<li><code>public void hideNotify()</code>: Notifies this effect that the corresponding item is to be hidden.</li>
+		<li><code>public void releaseResources()</code>: Notifies this effect that it should release all resources like loaded 
+			images etc to free memory.
+		</li>
+		<li><code>public int stringWidth(String str)</code>: Calculates the width that is required for the text.</li>
+		<li><code>public int getFontHeight()</code>: Gets the height of the font / a single row of the text effect.</li>
+		<li><code>protected Font getFont()</code>: Gets the used font.</li>
+		<li><code>public String[] wrap(String text, Font font, int firstLineWidth, int lineWidth)</code>: 
+			Wraps the text into several lines.
+		</li>
+		<!-- 
+		<li><code></code>: </li>
+		<li><code></code>: </li>
+		 -->
+	</ul>
+	<p>In the following example we explain the existing <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/ShadowTextEffect.html">de.enough.polish.ui.texteffects.ShadowTextEffect</a> 
+	that renders a shadow around a text:
+	<br />
+<img src="../images/gui-texteffect-shadow.png" width="314" height="48" alt="the shadow text-effect in action" />	
+	</p>
+<pre>
+//#condition polish.usePolishGui
+package de.enough.polish.ui.texteffects;
+
+import javax.microedition.lcdui.Graphics;
+
+import de.enough.polish.ui.Style;
+import de.enough.polish.ui.TextEffect;
+
+/**
+ * Paints a shadow behind a text.
+ * @author your name here
+ */
+public class MyShadowTextEffect 
+<b>extends TextEffect</b>
+{
+	
+	public static final int ORIENTATION_BOTTOM_RIGHT = 0;
+	public static final int ORIENTATION_BOTTOM_LEFT = 1;
+	public static final int ORIENTATION_TOP_RIGHT = 2;
+	public static final int ORIENTATION_TOP_LEFT = 3;
+	public static final int ORIENTATION_BOTTOM = 4;
+	public static final int ORIENTATION_TOP = 5;
+	public static final int ORIENTATION_RIGHT = 6;
+	public static final int ORIENTATION_LEFT = 7;
+	
+	public int shadowColor;
+	public int xOffset = 1;
+	public int yOffset = 1;
+
+	/**
+	 * Creates a shadow effect.
+	 */
+	<b>public MyShadowTextEffect()</b> {
+		super();
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.TextEffect#setStyle(de.enough.polish.ui.Style)
+	 */
+	<b>public void setStyle(Style style)</b> {
+		super.setStyle(style);
+		//#ifdef polish.css.text-myshadow-color
+			Integer colorInt = style.getIntProperty("text-myshadow-color");
+			if (colorInt != null) {
+				this.shadowColor = colorInt.intValue();
+			}
+		//#endif
+		//#ifdef polish.css.text-myshadow-orientation
+			Integer orientationInt = style.getIntProperty("text-myshadow-orientation");
+			if (orientationInt != null) {
+				switch ( orientationInt.intValue() ) {
+				case ORIENTATION_BOTTOM_RIGHT: 
+					this.xOffset = 1;
+					this.yOffset = 1;
+					break;
+				case ORIENTATION_BOTTOM_LEFT: 
+					this.xOffset = -1;
+					this.yOffset = 1;
+					break;
+				case ORIENTATION_TOP_RIGHT: 
+					this.xOffset = 1;
+					this.yOffset = -1;
+					break;
+				case ORIENTATION_TOP_LEFT: 
+					this.xOffset = -1;
+					this.yOffset = -1;
+					break;
+				case ORIENTATION_BOTTOM: 
+					this.xOffset = 0;
+					this.yOffset = 1;
+					break;
+				case ORIENTATION_TOP: 
+					this.xOffset = 0;
+					this.yOffset = -1;
+					break;
+				case ORIENTATION_RIGHT: 
+					this.xOffset = 1;
+					this.yOffset = 0;
+					break;
+				case ORIENTATION_LEFT: 
+					this.xOffset = -1;
+					this.yOffset = 0;
+				}
+			}
+		//#endif
+		//#ifdef polish.css.text-myshadow-x
+			Integer xInt = style.getIntProperty("text-myshadow-x");
+			if (xInt != null) {
+				this.xOffset = xInt.intValue();
+			}
+		//#endif
+		//#ifdef polish.css.text-myshadow-y
+			Integer yInt = style.getIntProperty("text-myshadow-y");
+			if (yInt != null) {
+				this.yOffset = yInt.intValue();
+			}
+		//#endif
+		//#debug
+		System.out.println("ShadowTextEffect.setStyle(): color=" 
+			+ Integer.toHexString(this.shadowColor) + ", x=" + this.xOffset + ", y=" + this.yOffset );
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.TextEffect#drawString(java.lang.String, int, int, int, int, javax.microedition.lcdui.Graphics)
+	 */
+	<b>public void drawString(String text, int textColor, int x, int y, int orientation, Graphics g) </b>
+	{
+		g.setColor( this.shadowColor );
+		g.drawString(text, x + this.xOffset, y + this.yOffset, orientation);
+		g.setColor( textColor );
+		g.drawString(text, x, y, orientation);
+	}
+
+}
+
+</pre>
+	<p>
+	</p>
+	
+	<h2 id="registration">Registering Your Text Effect</h2>
+	<p>
+	You can now register your implementation for easier usage in <i>${polish.home}/custom-css-attributes.xml</i>:
+	</p>
+<pre>
+&lt;attribute name=&quot;text-effect&quot;&gt;
+	&lt;mapping from=&quot;myshadow&quot; 
+	            to=&quot;new de.enough.polish.ui.texteffects.MyShadowTextEffect()&quot; 
+	/&gt;
+&lt;/attribute&gt;
+</pre>
+	<p>Since you are supporting some additional CSS attributes within the <code>setStyle</code> method, you need
+	to register these attributes within <i>${polish.home}/custom-css-attributes.xml</i> as well:
+	</p>
+<pre>
+	&lt;attribute
+		name=&quot;text-myshadow-color&quot;
+		type=&quot;color&quot;
+		appliesTo=&quot;MyShadowTextEffect&quot;
+		description=&quot;Sets the color of a shadow for the shadow font-effect.&quot;
+		default=&quot;black&quot;
+		id=&quot;89&quot;
+	/&gt;
+	
+	&lt;attribute
+		name=&quot;text-myshadow-orientation&quot;
+		type=&quot;integer&quot;
+		appliesTo=&quot;MyShadowTextEffect&quot;
+		description=&quot;Sets the orientation of a shadow for the shadow font-effect.&quot;
+		default=&quot;bottom-right&quot;
+		values=&quot;bottom-right, bottom-left, top-right, top-left, bottom, top, right, left&quot;
+		id=&quot;90&quot;
+	/&gt;
+
+	&lt;attribute
+		name=&quot;text-myshadow-x&quot;
+		type=&quot;integer&quot;
+		appliesTo=&quot;MyShadowTextEffect&quot;
+		description=&quot;Sets the x-orientation in pixels of a shadow for the shadow font-effect.&quot;
+		default=&quot;1&quot;
+		id=&quot;91&quot;
+	/&gt;
+	
+	&lt;attribute
+		name=&quot;text-myshadow-y&quot;
+		type=&quot;integer&quot;
+		appliesTo=&quot;MyShadowTextEffect&quot;
+		description=&quot;Sets the y-orientation in pixels of a shadow for the shadow font-effect.&quot;
+		default=&quot;1&quot;
+		id=&quot;92&quot;
+	/&gt;
+</pre>
+
+	<h2 id="usage">Using Your Text Effect</h2>
+	<p>
+	You can use your effect for all items and screen elements that are based on 
+	<a href="gui-item-stringitem.html">StringItem</a>, for example 
+	<a href="gui-item-textfield.html">TextFields</a>, <a href="gui-screenelement-title.html">screen titles</a>, 
+	<a href="gui-screenelement-ticker.html">screen tickers</a>, or <a href="gui-css-basics.html#label">item labels</a>.
+<pre>
+//#style myShadow
+StringItem stringItem = new StringItem( "label: ", "hello world" );
+form.append( stringItem );
+</pre>
+	</p>
+	<p>
+	Now use your effect by specifying it in the appropriate style of your <i>polish.css</i> file:
+<pre>
+.myShadow {
+	border-type: round-rect;
+	border-color: gray;
+	<b>text-effect: myshadow;</b>
+}
+</pre>
+	</p>
+	<p>
+	In case you skipped the registration of your implementation in <i>${polish.home}/custom-css-attributes.xml</i> you can
+	also reference your implementation directly:
+<pre>
+.myShadow {
+	border-type: round-rect;
+	border-color: gray;
+	<b>text-effect: new de.enough.polish.ui.texteffects.MyShadowTextEffect();</b>
+}
+</pre>
+	</p>
+	
+	<p>
+	That's it - you've done it!
+	</p>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextEffect.html">TextEffect</a>
+	</p>
+
+<%include end.txt %>

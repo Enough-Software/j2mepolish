@@ -1,0 +1,63 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: exclusive-choice view-type %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChoiceGroup: exclusive-choice view-type</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-choicegroup.html">ChoiceGroup</a></li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-choicegroup">ChoiceGroup View Types</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">View Types</a></li>
+		<li><a href="extending-itemview.html">Create Your Own View Type</a></li>
+	</ul>
+	<p>
+	The <code>exclusive-choice</code> view-type shows one option of an exclusive <a href="gui-item-choicegroup.html">ChoiceGroup</a> at a time.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+		<img src="<%= basedir%>images/gui-viewtype-exclusivechoice.png" width="316" height="79" alt="The exclusive-choice view-type" />		
+	</p>
+<pre>
+.exclusiveChoice {
+	label-style: choiceGroupLabel;
+	background-type: round-rect;
+	background-color: focusedBgColor;
+	include-label: true;
+	layout: expand;
+	<b>view-type: exclusive-choice;
+	exclusiveview-left-arrow: url( arrow-left.png );
+	exclusiveview-right-arrow: url( arrow-right.png );</b>
+}
+
+.exclusiveChoice:hover {
+	background-color: white;
+}
+
+.choiceItem {
+	font-color: gray;
+	font-style: bold;
+}
+
+.choiceItem:hover {
+	font-color: black;
+}
+
+.choiceGroupLabel {
+	font-style: italic;
+	font-size: small;
+	layout: newline-after;
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.containerviews.ExclusiveSingleLineView %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/containerviews/ExclusiveSingleLineView.html">ExclusiveSingleLineView</a></li>
+	</ul>
+
+<%include end.txt %>

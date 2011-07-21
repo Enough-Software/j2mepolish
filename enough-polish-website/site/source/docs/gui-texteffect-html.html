@@ -1,0 +1,80 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: html Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">html Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The html text-effect allows you to design complex text.
+	</p>
+	<h2 id="Html-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-html.png"  width="182" height="152" alt="the html text-effect" />
+	<br />
+	The above text has been realized with this Java code:
+	</p>
+<pre>
+//#style aboutText
+form.append(&quot;&lt;span class=\&quot;aboutHeader\&quot;&gt;FileExplorer&lt;/span&gt; is a sample application of &lt;b&gt;J2ME Polish.&lt;/b&gt; &quot; 
+		+ &quot;You can use and modify this application for your own purposes - the sources are provided in &quot;
+		+ &quot;J2ME Polish:\n&lt;span class=\&quot;aboutLink\&quot;&gt;www.j2mepolish.org&lt;/span&gt;&quot;);
+
+</pre>
+	<p>In the <i>polish.css</i> file following design has been specified:</p>
+<pre>
+.aboutText {
+	<b>text-effect: html;</b>
+	font-color: #333;
+	layout: bottom;
+}
+
+.aboutHeader {
+	<b>always-include: true;</b>
+	font-size: large;
+	font-style: bold;
+	font-color: #933;
+}
+
+.aboutLink {
+	<b>always-include: true;</b>
+	font-style: underlined | italic;
+	font-color: #444;
+}
+</pre>
+	<p>
+	The HTML support within this text effect is very, very basic:
+	</p>
+	<ul>
+		<li><code>&lt;b&gt;</code>: makes your text <b>bold</b>.</li>
+		<li><code>&lt;i&gt;</code>: makes your text <i>italic</i>.</li>
+		<li><code>&lt;any class=&quot;styleName&quot;&gt;</code>: uses the specified style for the text. Note that you need to define
+		the <code>always-include: true;</code> within the referenced style, otherwise the style will be optimized away.</li>
+	</ul>
+	<p>
+	If you are using <code>class</code> styles within your text you can use any design settings in those style, including
+	other text effects.  See <a href="gui-item-stringitem.html">StringItems</a> for more details.
+	</p>
+<!-- 
+<p>
+	Specific design attributes of the html text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.HtmlTextEffect %>
+ -->
+	
+		
+	<h2 id="Html-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/HtmlTextEffect.html">HtmlTextEffect</a>.
+	</p>
+
+<%include end.txt %>

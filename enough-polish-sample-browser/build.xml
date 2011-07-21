@@ -1,0 +1,234 @@
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the j2mepolish target,      -->
+<!-- which controls for what devices the application should   -->
+<!-- be created.                                              -->
+<!--                                                          -->
+<!-- Important: when you have no Wireless Toolkit installed   -->
+<!-- you need to define the "preverify"-attribute             -->
+<!-- of the <build>-element of the J2ME Polish task.          -->
+<!--                                                          -->
+<!-- When you call Ant from the command-line, you can         -->
+<!-- call "ant test j2mepolish" to skip the obfuscation       -->
+<!-- and to build the example for fewer handsets.             -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
+
+<project 
+	name="enough-j2mepolish-browser" 
+	default="j2mepolish">
+	
+	
+<property file="${user.name}.properties" />
+	
+<!-- The polish.home property should point to the directory   -->
+<!-- containing the J2ME Polish installation.                 -->
+<property name="polish.home" value="../enough-polish-build/" />
+
+<property file="${polish.home}/global.properties" />
+
+	
+	
+<!-- Definition of the J2ME Polish task:                      -->
+
+<taskdef name="j2mepolish" 
+	classname="de.enough.polish.ant.PolishTask" 
+	classpath="${polish.home}:${polish.home}/bin/classes:
+			${polish.home}/lib/enough-j2mepolish-build.jar:
+			${polish.home}/lib/jdom.jar"
+/>
+	
+	
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default target -->
+
+<target name="setdeploy" 
+	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+	>
+	<property name="deploy-url" value="http://www.company.com/download/" />
+</target>
+	
+<target name="test" 
+	description="Call this target first to skip the obfuscation step, e.g. ant test j2mepolish"
+	>
+	<property name="test" value="true" />
+	<property name="dir.work" value="build/test" />
+</target>
+		
+<target name="init">
+  	<property name="test" value="false" />
+	<property name="dir.work" value="build/real" />
+	<property name="deploy-url" value="" />
+</target>
+ 
+<!-- In this target the J2ME Polish task is used.             -->
+<!-- It has 3 sections:                                       -->
+<!--    1. The info-section defines some general information  -->
+<!--    2. The deviceRequirements-section chooses the devices -->
+<!--       for which the application is optimized.            -->
+<!--    3. The build-section controls the actual build        -->
+<!--       process.                                           -->	
+<target name="j2mepolish" 
+		depends="init"
+		description="This is the controller for the J2ME build process." 
+		>
+	<j2mepolish>
+		<lifecyclemanager name="mea">
+			<parameter name="fallbackDevice" value="Generic/AnyPhone" />
+			<parameter name="access" value="pseudoprivate" />
+		</lifecyclemanager>
+	    <!-- general settings, these settings basically form the JAD-attributes. -->
+	    <!-- Have a look at the <jad>-section for setting specialised attributes.
+	         You can also define localized attributes in the resources/messages.txt files -->
+		<info
+			name="Browser"
+			version="1.3.4"
+			description=""
+			vendorName="Enough Software"
+			infoUrl="http://www.j2mepolish.org"
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-browser.jar" 
+			jarUrl="${deploy-url}${polish.jarName}"
+			copyright="Copyright 2007 Enough Software. All rights reserved."
+		/>
+		
+		<!-- selection of supported devices -->
+		<!-- In the test mode the application is build only for the  -->
+		<!-- Generic/midp1 phone, but when the test-property is set to false, -->
+		<!-- the second deviceRequirements will be used instead. -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}" />
+		</deviceRequirements>
+		<deviceRequirements if="!test and device:defined">
+			<requirement name="Identifier" value="${device}" />
+		</deviceRequirements>
+		<deviceRequirements unless="test or device:defined">
+			<or>
+						<requirement name="Identifier" value="Generic/DefaultColorPhone" />
+						<requirement name="Identifier" value="Generic/DefaultGrayPhone" />
+						<requirement name="Identifier" value="Generic/JtwiCldc11" />
+						<requirement name="Identifier" value="Generic/MediaControlSkin" />
+						<requirement name="Identifier" value="Generic/Midp2Cldc11" />
+						<requirement name="Identifier" value="Generic/Midp2Cldc11Pointer" />
+						<requirement name="Identifier" value="Generic/MppPhone" />
+						<requirement name="Identifier" value="Generic/PlainMidp2Cldc11" />
+						<requirement name="Identifier" value="Generic/QwertyDevice" />
+						<requirement name="Identifier" value="Generic/multi" />
+						<requirement name="Identifier" value="Nokia/Series40DP2" />
+						<requirement name="Identifier" value="Nokia/Series40DP3" />
+						<requirement name="Identifier" value="Nokia/Series40Midp2" />
+						<requirement name="Identifier" value="Nokia/Series60E2FP2" />
+						<requirement name="Identifier" value="Nokia/Series60E2FP3" />
+						<requirement name="Identifier" value="Nokia/Series60E3" />
+						<requirement name="Identifier" value="Siemens/x65" />
+						<requirement name="Identifier" value="Siemens/x75" />
+						<requirement name="Identifier" value="Sony-Ericsson/JavaPlatform2" />
+						<requirement name="Identifier" value="Sony-Ericsson/JavaPlatform3" />
+						<requirement name="Identifier" value="Sony-Ericsson/JavaPlatform4" />
+						<requirement name="Identifier" value="Sony-Ericsson/JavaPlatform5" />
+						<requirement name="Identifier" value="Sony-Ericsson/JavaPlatform6" />
+						</or>
+		</deviceRequirements>
+		
+	    <!-- build settings -->
+		<!-- 
+		 -->
+		<build
+			symbols="ExampleSymbol, AnotherExample"
+			fullscreen="menu"
+			usePolishGui="true"
+			workDir="${dir.work}"
+		>
+			<!-- midlets definition -->
+			<midlet class="de.enough.polish.sample.browser.BrowserMidlet" name="Browser" />
+			
+			<!-- project-wide variables - used for preprocessing.  -->
+			<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+			<variables includeAntProperties="true" >
+				<variable name="polish.usePopupItem" value="true" />
+				<variable name="polish.Browser.UserAgent" value="J2ME-Polish 2.0" />
+				<variable name="polish.Browser.MaxRedirects" value="5" />
+				<variable name="polish.Browser.Gzip" value="true" />
+				<variable name="polish.Browser.PaintDownloadIndicator" value="true" />
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.useScrollBar" value="true" />
+				<variable name="polish.RemoteBluetoothScreen" value="true" />
+			</variables>
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<!-- add the localization element for created localized
+				     versions of your application: -->
+				<localization locales="en_US" unless="test" />
+				<localization locales="en_US" if="test" />
+			</resources>
+			
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator name="ProGuard" unless="test || polish.blackberry" > 
+				<!--
+				You can set additional parameters here, e.g.:
+				<parameter name="optimize" value="false" />
+				-->
+			</obfuscator>
+			
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test or log" showLogOnError="true" verbose="true" level="error">
+				<filter pattern="de.enough.polish.ui.*" level="warn" />
+				<!--
+				<filter class="de.enough.polish.ui.ChoiceGroup" level="debug" />
+				<filter package="de.enough.polish.sample.browser" level="debug" />
+				<filter class="de.enough.polish.browser.Browser" level="debug" />
+				<filter class="de.enough.polish.browser.html.HtmlBrowser" level="debug" />
+				<filter class="de.enough.polish.ui.containerviews.MIDP2LayoutView" level="debug" />
+				<filter class="de.enough.polish.ui.ContainerView" level="debug" />
+				<filter class="de.enough.polish.ui.Container" level="debug" />
+				-->
+			</debug>
+			
+			<!-- user defined JAD attributes can also be used: -->
+			<jad>
+				<attribute name="Nokia-MIDlet-Category" value="Game" if="polish.group.Series40" />
+			</jad>	
+			
+			
+		</build>
+		
+		<!-- execution of emulator(s) -->
+		<emulator
+			wait="true"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="test and not debug"
+			>
+		</emulator>
+	
+		<emulator
+			wait="true"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="debug">
+			<debugger port="8000" />
+		</emulator>
+		
+	</j2mepolish>
+</target>
+
+<target name="emulator" depends="test,j2mepolish" />
+
+<target name="clean" 
+  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+	<delete dir="build" />
+	<delete dir="dist" />
+</target>
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

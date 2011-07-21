@@ -1,0 +1,243 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.logging %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Debug/Logging</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="preprocessing.html">Preprocessing</a></li>
+		<li><a href="build.html">build.xml</a></li>
+	</ul>
+	<%index %>
+
+<p><img src="<%= basedir%>images/logging.jpg" width="350" height="267" alt="Sometimes logging feels good." /><br />
+J2ME Polish provides a logging framework for debugging purposes.
+The goals for the framework are:</p>
+<ul>
+	<li>Enable and disable different logging levels for specific
+	classes or packages</li>
+	<li>Leave no traces, when disabled</li>
+	<li>Extensible: define your own logging levels, add your own log
+	handlers</li>
+	<li>Allow to process and view log messages on real devices</li>
+	<li>last but not least: <b>simplicity</b>!</li>
+</ul>
+
+<h2 id="programming">Programming</h2>
+<p>To create a log entry in your, a simple
+<code>System.out.println()<code> is used combined with the <code>#debug</code> preprocessing directive:
+</p>
+<pre>
+try {
+	doSomething();
+	//#debug
+	System.out.println("doSomething() succeeded");
+} catch (Exception e) {
+	//#debug error
+	System.err.println("doSomething() failed" + e);
+}
+</pre>
+<p>
+If the last logged parameter is an exception, the logging framework will automatically print its stacktrace:
+</p>
+<pre>
+//#debug error
+System.err.println("doSomething() failed" <b>+ e</b>);
+</pre>
+<p>
+You can also tag a debug message with a log level as shown above. There are 5 predefined log levels,
+but you can also create your own log levels:
+</p> 
+<ul>
+<li>debug &lt; info &lt; warn &lt; error &lt; fatal &lt; [userdefined]</li>
+</ul>
+<h3 id="debugging">Using the Log Framework for Debugging</h3>
+<p>
+As you will see below you can activate specific log levels for a class or a package. You can also check for a specific 
+log level in your code using the <code>#if</code> directive: 
+</p>
+<pre>
+//#if polish.debug.info
+   int startTime = System.currentTimeMillis();
+//#endif
+
+doComplexCall();
+
+//#debug info
+System.out.println(&quot;complex call took &quot; 
+	+ (System.currentTimeMillis() - startTime) 
+	+ &quot; ms.&quot; );
+</pre>
+<p>In the above example we check if the <code>info</code> logging level is activated for this class. If that's the case we 
+measure and log the duration of the call. You can check for any log level by querying for the preprocessing symbol 
+<code>polish.debug.${level}</code>, and yes this includes user specified ones:
+</p>
+<ul>
+	<li>polish.debug.debug</li>
+	<li>polish.debug.info</li>
+	<li>polish.debug.warn</li>
+	<li>polish.debug.error</li>
+	<li>polish.debug.fatal</li>
+	<li>polish.debug.${userdefined}</li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+<p>To activate the logging for your application, edit the &lt;debug&gt; section in your <i>build.xml</i>.</p>
+<h3 id="logfilter">Log Filters and Levels</h3>
+<pre>
+&lt;debug 
+	verbose=&quot;false&quot;
+	level=&quot;error&quot;
+	if=&quot;test&quot; &gt;
+	&lt;filter package=&quot;com.company.mail&quot; level=&quot;info&quot; /&gt;
+	&lt;filter class=&quot;com.company.mail.IMapServer&quot; level=&quot;debug&quot; /&gt;
+&lt;/debug&gt;
+</pre>
+<p>The example above will show log messages with the level <code>info</code> or higher in all classes of the package <code>com.company.mail</code>
+and log messages with the level <code>debug</code> or higher of the class <code>com.company.mail.IMapServer</code>. You can use any number
+of <code>&lt;filter&gt;</code> elements to finetune your log levels. <br />
+For all other classes the <code>error</code> log level will be active, as this is specified in the <code>level</code> 
+attribute (<code>&lt;debug level=&quot;error&quot; ...</code>).
+</p>
+<p>In the above example the logging is only active when the Ant property <code>test</code> is set to true, since we are using the <code>if</code> 
+attribute: <code>&lt;debug if=&quot;test&quot; ...</code>. Alternatively you might also want to use the <code>unless</code> attribute.
+</p>
+<h3 id="loglevel">Custom Log Levels</h3>
+<p>
+You can define and activate your own log levels using the <code>levels</code> attribute of the <code>&lt;debug&gt;</code> element: 
+</p>
+<pre>
+&lt;debug 
+	verbose=&quot;false&quot;
+	level=&quot;error&quot;
+	<b>levels=&quot;memory,performance&quot;</b>
+	if=&quot;test&quot; &gt;
+	&lt;filter package=&quot;com.company.mail&quot; level=&quot;info&quot; /&gt;
+	&lt;filter class=&quot;com.company.mail.IMapServer&quot; level=&quot;debug&quot; /&gt;
+&lt;/debug&gt;
+</pre>
+<p>
+You can now use such log levels like the predefined ones in your application:
+</p>
+<pre>
+<b>//#debug memory</b>
+System.out.println("Free memory: " + Runtime.getRuntime().freeMemory() );
+
+<b>//#if polish.debug.performance</b>
+	long startTime = System.currentTimeMilis();
+//#endif
+...
+</pre>
+
+<h3 id="loghandler">Log Handlers</h3>
+<p>
+By default log entries are logged to the standard output stream - this is useful in an emulator, but only in few other circumstances.
+<br />
+Use log handlers for sending logged entries to other places as well.
+</p>
+<h4 id="loghandler-display">display Handler</h4>
+<p>
+The <code>display</code> log handler shows logged entries on top of the screen. This handler requires that you use the J2ME Polish user interface:
+<br />
+<img src="<%= basedir%>images/loghandler-display.png" width="463" height="545" alt="The display log handler in action." />
+</p>
+<p>After some time without new log entries, the log will be hidden. Even when the log is shown, you can work normally with the application.
+You can influence the appearance and behavior with some optional parameters:
+</p>
+<pre>
+&lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
+  &lt;handler name=&quot;display&quot;&gt;
+     &lt;!-- hide entries after 10 seconds: --&gt;
+     &lt;parameter name=&quot;timeout&quot; value=&quot;10s&quot; /&gt;
+     &lt;!-- show maximum 30 log entries: --&gt;
+     &lt;parameter name=&quot;max-entries&quot; value=&quot;30&quot; /&gt;
+     &lt;!-- specify used colors: --&gt;
+     &lt;parameter name=&quot;background-color&quot; value=&quot;#a333&quot; /&gt;
+     &lt;parameter name=&quot;font-color&quot; value=&quot;yellow&quot; /&gt;
+     &lt;parameter name=&quot;shadow-color&quot; value=&quot;rgb(0,0,0)&quot; /&gt;
+  &lt;/handler&gt;
+&lt;/debug&gt;
+</pre>
+
+<h4 id="loghandler-bluetooth">bluetooth Handler</h4>
+<p>Send log entries directly to your Bluetooth enabled Desktop PC with the <code>bluetooth</code> log handler.
+For receiving the log entries you can use <i>${polish.home}/bin/enough-j2mepolish-bluetoothlogger.jar</i> 
+(call it from the command line using <code>java -jar enough-j2mepolish-bluetoothlogger.jar</code>).
+<br />
+Note that you need to have support for L2CAP connectivity, which is not supported on Windows when using the Microsoft Bluetooth stack. 
+If that's the case for please deactivate that stack and use Widcomm or similar instead. On Linux and Mac OS X L2CAP is always supported (when Bluetooth is active). 
+</p>
+<pre>
+&lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
+  &lt;handler name=&quot;bluetooth&quot; /&gt;
+&lt;/debug&gt;
+</pre>
+<h4 id="loghandler-http">http Handler</h4>
+<p>
+You can also send log entries to a remote server using HTTP GET requests thanks to Vera Wahler's contribution:
+</p>
+<pre>
+&lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
+  &lt;handler name=&quot;http&quot;&gt;
+       &lt;-- optional parameters --&gt;
+       &lt;parameter name=&quot;server&quot; value=&quot;http://www.j2mepolish.org/loghandler&quot; /&gt;
+  &lt;/handler&gt;
+&lt;/debug&gt;
+</pre>
+<p>
+This log handler will create a GET request for each log entry. The following example is a simple Ruby script that 
+reads received log entries:
+</p>
+<pre>
+#!/usr/bin/ruby
+require 'webrick'
+include WEBrick
+
+s = HTTPServer.new( :Port => 8100)
+
+class LogServlet < HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+    hash = req.query
+    puts "Time: "+hash['time'].to_s
+    puts "Message: "+hash['message'].to_s
+    puts "Classname: "+hash['classname'].to_s
+    puts "LineNumber: "+hash['lineNumber'].to_s
+    puts "Exception: "+hash['Exception'].to_s
+    puts "Level: "+hash['level'].to_s
+  end  
+end
+
+s.mount("/loghandler", LogServlet)
+
+trap("INT") { s.shutdown }
+
+s.start
+</pre>
+
+<h2 id="stacktraces">Stack Traces</h2>
+<p>
+Emulator stacktraces usually only give the bytecode offset of an exception:
+</p>
+<pre>
+at com.company.product.ClassName.method(+20);
+</pre>
+<p>J2ME Polish can resolve such offsets automatically:</p>
+<pre>
+at com.company.product.ClassName.java:200
+</pre>
+<p>
+For making this possible, please install the <i>jad</i> decompiler from <a href="http://www.kpdus.com/jad.html" target="_blank">http://www.kpdus.com/jad.html</a> to <i>${polish.home}/bin</i>.
+</p>
+<p>
+Last but not least don't forget to add a catched exception as the last parameter to a log entry in this way:
+</p>
+<pre>
+} catch (Exception e) {
+	//#debug error
+	System.err.println("doSomething() failed" <b>+ e</b>);
+}
+</pre>
+
+<%include end.txt %>

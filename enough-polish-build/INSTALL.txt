@@ -1,0 +1,90 @@
+********************
+*** Installation ***
+********************
+
+The full documentation can be found at www.j2mepolish.org/documentation.html
+and at www.j2mepolish.org/docs/install.html
+
+
+********************
+*** Requirements ***
+********************
+
+To use J2ME Polish, following components need to be installed:
+
+Java 2 Standard Edition SDK 1.4  or higher, http://java.sun.com/j2se/1.4.2/index.jsp
+
+Java Wireless Toolkit, http://java.sun.com/products/j2mewtoolkit/index.html 
+
+Favorite IDE, for example Eclipse 3.0, http://www.eclipse.org 
+
+Ant 1.5 or higher, if not already integrated in the IDE, http://ant.apache.org
+
+
+***********************************
+*** Installation of J2ME Polish ***
+***********************************
+
+Following components need to be installed:
+
+The build tools (enough-j2mepolish-build.jar, jdom.jar, and proguard.jar or retroguard.jar).
+
+Optionally the J2ME utilities and GUI classes, when the GUI or the utilities should be 
+used directly in the project (enough-j2mepolish-client.jar).
+
+Just follow these steps:
+
+1. Extract the file j2mepolish.zip from the "setup"-folder of your installation CD 
+   or from www.j2mepolish.org/download.html into your application project 
+   (the project for which you want to use J2ME Polish).
+
+2. You now need to adjust the build.xml file, which you can find in the 
+   root of your project. To check out the example, please adjust
+   the "wtk.home"-property which is situated at the beginning fo the build.xml
+   file.
+  
+3. A designer needs to adjust the file resources/polish.css for your project. 
+   To check out the example, no settings need to be changed.
+
+4. If you want to use the J2ME utilities or the J2ME Polish GUI directly, 
+   add the file import/enough-j2mepolish-client.jar to the classpath of your project.
+
+5. Call Ant from the command line or from within your IDE.
+
+6. You will find the created JARs and JADs within the "dist" folder of
+   the project.
+
+Congratulations, you have managed the installation!
+
+
+********************************************
+*** Integrating J2ME Polish into Eclipse ***
+********************************************
+
+To integrate J2ME Polish into Eclipse it is best to create a new folder in your workspace 
+called "myproject" (or any other name) and to extract the J2ME Polish zip file into it. 
+Then go into Eclipse and create a new project called "myproject". Eclipse should then 
+integrate all source-files automatically. 
+
+
+You now need to adjust the classpath of the new project: 
+Select the project, right click, select "properties" and go to the "Java Build Path". 
+Go to the "Libraries" tab -> "Add Jars..." and include the library 
+"workspace/myproject/import/midp2.jar". 
+
+
+Now open the file "build.xml" (which is located in the root of your project) and 
+adjust the "wtk.home"-property in it. This is located at the very beginning of the 
+build.xml file. 
+The build.xml file has Unix style line endings, so if you have trouble reading this 
+file, either open it in Eclipse or open it with a real text-editor (read: not Notepad!). 
+You can also change the deviceRequirements if you want to. The example is optimized to 
+Nokia Series 60 devices. 
+
+
+You can now create the JAR and JAD files by right-clicking the build.xml file, selecting 
+"Run Ant" and running Ant in the next dialog. You will find the JAR and JAD files then 
+in the "dist" folder of the project. If you want to access them from within Eclipse, 
+you might need to refresh your project: 
+Right-click the project and select "Refresh". 
+

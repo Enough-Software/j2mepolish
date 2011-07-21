@@ -1,0 +1,39 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: diagonal-gradient Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">diagonal-gradient Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Display a smooth gradient running from the top-left to the bottom-right corner.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-diagonal-gradient.png"  width="196" height="52" alt="diagonal-gradient background" />	
+</p>
+<pre>
+.itemMain {
+	background {
+		type: diagonal-gradient;
+		color: #0e0;
+		target-color: #8f8;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background diagonal-gradient %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/SmoothColorBackground.html">SmoothColorBackground</a></li>
+	</ul>
+
+<%include end.txt %>

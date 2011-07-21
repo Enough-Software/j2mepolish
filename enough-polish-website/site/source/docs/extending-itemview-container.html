@@ -1,0 +1,252 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending J2ME Polish: ContainerView %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Create Custom Layouts By Extending ContainerView</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-itemview.html">Item Views</a></li>
+		<li><a href="extending-border.html">Borders</a></li>
+		<li><a href="extending-background.html">Backgrounds</a></li>
+		<li><a href="extending-texteffect.html">TextEffect</a></li>
+		<li><a href="extending-screenchangeanimation.html">ScreenChangeAnimation</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A <code>ContainerView</code> arranges all items of a J2ME Polish <code>Container</code> on the screen. 
+	</p>
+	
+	<h2 id="concepts">Concepts of ItemViews</h2>
+	<p>
+	ItemViews separate the visualization and optionally the user interaction of an item from the data model of that item.
+	A J2ME Polish item usually provides it's default visualization in the same class that provides the data model - this approach minimizes
+	memory usage and JAR size. You can, however, apply your own visualization by following these steps:
+	<ol>
+		<li><b>Implement</b> your view by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ItemView.html">de.enough.polish.ui.ItemView</a> or an item-specific ItemView subclass.</li>
+		<li><b>Register</b> the view in <i>${polish.home}/custom-css-attributes.xml</i>.</li>
+		<li><b>Apply </b> your visualization by using it in your project's <i>polish.css</i> file.</li>
+	</ol>
+	</p>
+	
+	<h2 id="implementation">Implementing your ItemView</h2>
+	<p>
+	Note: several items provide their own specific ItemView that ease the implementation - please refer to the corresponding documentation
+	for more details.
+	</p>
+	<p>
+	Create your own visualization by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ItemView.html">de.enough.polish.ui.ItemView</a> or an item-specific ItemView subclass.
+	You need to implement <code>initContent(Item parent, int firstLineWidth, int lineWidth)</code>
+	and <code>paintContent( Item parent, int x, int y, int leftBorder, int rightBorder, Graphics g )</code>. 
+	In the <code>initContent</code> you need to calculate required dimensions for visualization and set the fields
+	<code>contentWidth</code> and <code>contentHeight</code>.
+	<br />
+	You can override the <code>isValid( Item parent, Style style )</code> method for ensuring that your view
+	is only used for specify classes.
+	<br />
+	You can also animate your view by overriding the <code>animate()</code> method.
+	</p>
+	<p>In this example we provide a view for <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ClockItem.html">de.enough.polish.ui.ClockItem</a> that
+	uses binary instead of decimal numbers for the visualization. 
+	<br />
+<img src="../images/extending-itemview-clock.png" width="218" height="77" alt="the binary text view in action" />	
+	</p>
+	<p>
+<pre>
+//#condition polish.usePolishGui
+/*
+ * Created on May 30, 2007 at 12:09:08 AM.
+ * 
+ * Copyright (c) 2007 Robert Virkus / Enough Software
+ *
+ * This file is part of J2ME Polish.
+ *
+ * J2ME Polish is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * J2ME Polish is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with J2ME Polish; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * 
+ * Commercial licenses are also available, please
+ * refer to the accompanying LICENSE.txt or visit
+ * http://www.j2mepolish.org for details.
+ */
+package de.enough.polish.ui.clockviews;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.microedition.lcdui.Graphics;
+
+import de.enough.polish.ui.ClockItem;
+import de.enough.polish.ui.Item;
+import de.enough.polish.ui.ItemView;
+import de.enough.polish.ui.StringItem;
+import de.enough.polish.ui.Style;
+
+/**
+ * Visualizes the clock as a binary string, e.g. 101:111 instead of 4:11.
+ */
+public class BinaryTextClockView extends ItemView {
+
+	private final Date date;
+	private final Calendar calendar;
+	private final StringItem clockText;
+	private long lastTimeUpdate;
+	private ClockItem clockItem;
+	
+	/**
+	 * Creates a new item view.
+	 */
+	public BinaryTextClockView() {
+		this.date = new Date();
+		this.calendar = Calendar.getInstance();
+		this.clockText = new StringItem( null, null );
+	}
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#animate()
+	 */
+	public boolean animate() {
+		boolean animated = super.animate();
+		long time = System.currentTimeMillis();
+		if ( (this.clockItem.includeSeconds() 
+				&& time/1000 > this.lastTimeUpdate/1000)
+			|| (!this.clockItem.includeSeconds() 
+					&& time/(1000*60) > this.lastTimeUpdate/(1000*60)) ) 
+		{
+			this.clockText.setText( updateTime( time ) );
+			animated = true;
+		}
+		return animated;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#initContent(de.enough.polish.ui.Item, int, int)
+	 */
+	protected void initContent(Item parent, int firstLineWidth, int lineWidth) 
+	{
+		// cast to object is required since ClockItem officially extends javax.microedition.lcdui.CustomItem:
+		this.clockItem = (ClockItem)(Object)parent; 
+		this.clockText.setText( updateTime( System.currentTimeMillis() ) );
+		this.contentWidth = this.clockText.getItemWidth(firstLineWidth, lineWidth);
+		this.contentHeight = this.clockText.getItemHeight(firstLineWidth, lineWidth);
+	}
+	
+	/**
+	 * Updates the shown time.
+	 * @param time the currently shown time
+	 * @return the time as a binary string
+	 */
+	protected String updateTime( long time ) {
+		this.lastTimeUpdate = time;
+		this.date.setTime(time);
+		this.calendar.setTime(this.date);
+		String hour = Integer.toBinaryString( this.calendar.get( Calendar.HOUR_OF_DAY ) );
+		String minute = Integer.toBinaryString( this.calendar.get( Calendar.MINUTE ) );
+		String seconds = null;
+		if (this.clockItem.includeSeconds()) {
+			seconds = Integer.toBinaryString( this.calendar.get( Calendar.SECOND ) );
+		}
+		return this.clockItem.updateTime(hour, minute, seconds); 
+	}
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#paintContent(de.enough.polish.ui.Item, int, int, int, int, javax.microedition.lcdui.Graphics)
+	 */
+	protected void paintContent(Item parent, int x, int y, int leftBorder,
+			int rightBorder, Graphics g) 
+	{
+		this.clockText.paint(x, y, leftBorder, rightBorder, g);
+	}
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#isValid(de.enough.polish.ui.Item, de.enough.polish.ui.Style)
+	 */
+	protected boolean isValid(Item parent, Style style) {
+		// cast to object is required since ClockItem officially extends javax.microedition.lcdui.CustomItem:
+		return ((Object)parent instanceof ClockItem); 
+	}
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#setStyle(de.enough.polish.ui.Style)
+	 */
+	protected void setStyle(Style style) {
+		super.setStyle(style);
+		this.clockText.setStyle(style);
+		// remove parent background and border, so that only the clock text contains them:
+		removeParentBackground();
+		removeParentBorder();
+	}	
+
+}
+</pre>
+	</p>
+	
+	<h2 id="registration">Registering Your ItemView</h2>
+	<p>
+	You can now register your implementation for easier usage in <i>${polish.home}/custom-css-attributes.xml</i>:
+<pre>
+&lt;attribute name=&quot;view-type&quot;&gt;
+	&lt;mapping from=&quot;clock-binary-text&quot; 
+	            to=&quot;new de.enough.polish.ui.clockviews.BinaryTextClockView()&quot; 
+	            appliesTo=&quot;ClockItem&quot; /&gt;
+&lt;/attribute&gt;
+</pre>
+	</p>
+	
+	<h2 id="usage">Using Your ItemView</h2>
+	<p>
+	You use the corresponding item just like normal in your source code:
+<pre>
+//#style myClock
+ClockItem clockItem = new ClockItem( "time: " );
+form.append( clockItem );
+</pre>
+	</p>
+	<p>
+	Now use your ItemView by specifying it in the appropriate style of your <i>polish.css</i> file:
+<pre>
+.myClock {
+	border-type: round-rect;
+	border-color: gray;
+	<b>view-type: clock-binary-text;</b>
+}
+</pre>
+	</p>
+	<p>
+	In case you skipped the registration of your implementation in <i>${polish.home}/custom-css-attributes.xml</i> you can
+	also reference your implementation directly:
+<pre>
+.myClock {
+	border-type: round-rect;
+	border-color: gray;
+	<b>view-type: new de.enough.polish.ui.clockviews.BinaryTextClockView();</b>
+}
+</pre>
+	</p>
+	
+	<p>
+	That's it - you've done it!
+	<br />
+<img src="../images/extending-itemview-clock.png" width="218" height="77" alt="the binary text view in action" />	
+	</p>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ContainerView.html">ContainerView</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Container.html">Container</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ItemView.html">ItemView</a></li>
+	</ul>
+
+<%include end.txt %>

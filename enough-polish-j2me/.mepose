@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meposeproject>
+	<meposeproperty name="id.buildxml" value="" />
+	<meposeproperty name="id.supported.platforms" value="" />
+	<meposeproperty name="id.supported.configurations" value="" />
+	<meposeproperty name="id.path.sonyhome" value="" />
+	<meposeproperty name="id.supported.devices" value="" />
+	<meposeproperty name="id.path.siemenshome" value="" />
+	<meposeproperty name="id.path.motorolahome" value="" />
+	<meposeproperty name="id.path.wtkhome" value="" />
+	<meposeproperty name="id.path.projecthome" value="" />
+	<meposeproperty name="id.path.nokiahome" value="" />
+	<meposeproperty name="id.path.mpphome" value="" />
+	<meposeproperty name="id.current.target.onlybuild" value="j2mepolish" />
+</meposeproject>

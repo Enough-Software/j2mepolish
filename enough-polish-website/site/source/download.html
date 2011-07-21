@@ -1,0 +1,114 @@
+<%define inDownloadSection %>
+<%set title = J2ME Polish: Download %>
+<%include start.txt %>
+
+
+<%ifdef isBetaAvailable %>
+	
+		<h1 id="top">Download</h1>
+		<p>
+		Download <a href="downloads/<%= LatestDownload %>">J2ME Polish <%= PolishVersion %></a> now!
+		The installer includes the binary distribution, the documentation and the source-code
+		of J2ME Polish. Any required settings will be done by the installer.
+		<br />
+		You can also download the latest <a href="downloads/<%= LatestBetaDownload %>">Beta
+		Version <%= BetaVersion %></a>.
+		</p>
+		
+<%else %>
+	
+		<h1 id="top">Download</h1>
+		<!-- 
+	<p><img alt="J2ME Polish 2.0 is here!" src="images/j2mepolish20.gif" width="400" height="400"/></p>
+	<p>J2ME Polish 2.0 is now available! See an <a href="<%= basedir %>docs/features.html">overview of the features here</a>.</p>
+				
+			<h2 id="download">Download</h2>
+		 -->
+				<p>
+				J2ME Polish is dual licensed under the Open Source GPL license and a proprietary commercial license.
+				When you use J2ME Polish commercially, you might need to obtain a commercial license, as described in the
+				<a href="<%= basedir %>licenses.html">licensing details</a>.
+				
+				</p>
+				<ul>
+					<li><a href="http://prdownload.berlios.de/polish/j2mepolish-2.0.jar"><img src="images/download.gif" alt="download" width="48" height="48"/>I accept the above rules 
+						(download the full installer: 50,172,049 bytes).</a></li>
+						<!-- 
+					<li><a href="http://www.j2mepolish.org/downloads/j2mepolish-2.0.jar"><img src="images/download.gif" alt="download" width="48" height="48"/>I accept the above rules 
+						(download the full installer from mirror 2: 50,172,049 bytes).</a></li>
+						 -->
+					<li><a href="<%= basedir %>index.html">I do NOT accept the above rules.</a></li>
+				</ul>
+				<p>
+				Start the installation by double-clicking the file or by calling <code>java -jar j2mepolish-2.0-RC3.jar</code>
+				from the commandline or. When Winzip or WinRar is opening,
+				you need to start the installation by right-clicking the JAR file and select &quot;Open With... &gt; Javaw&quot;.
+			</p>
+			
+			<h2 id="installguide">Installation Guide</h2>
+			<p>
+			The <a href="<%= basedir %>docs/install.html">installation guide</a> explains how to install J2ME Polish and integrate it into
+			the commonly used IDEs.
+			</p>
+			
+			
+			<h2 id="installationproblems">Trouble Shooting</h2>
+			<p>The size of the full installer is 26,260,632 bytes.<br/>
+				If you have installation problems, please make sure that you have downloaded
+				the complete package. You can start the installation either by double-clicking
+				the file or by calling &quot;java -jar j2mepolish-[version].jar&quot; from the commandline.
+				<b>Do not simply extract the downloaded JAR file!</b>
+				 Microsoft Internet Explorer users might
+					need to rename the extension from ".zip" to ".jar".
+			</p>
+			<p>
+			Migrating from J2ME Polish 1.x? Check out the <a href="<%= basedir %>docs/migration.html">Migration Documentation</a>!
+			</p>
+			<p>
+				If you have trouble building your application, consider to set the &quot;JAVA_HOME&quot;
+				environment variable. Make sure to check out the <a href="<%= basedir %>docs/install.html">installation guide</a>.
+			</p>	
+			
+	<%endif %>
+	
+	<h2 id="documentation">Documentation</h2>
+	<table><tr>
+	<td valign="top">Extensive <a href="<%= basedir %>documentation.html">HTML documentation</a> is available online and also included in the J2ME Polish distribution.
+	Please support this project by buying the <a href="<%= basedir %>book/book.html">Pro J2ME Polish book</a>.</td>
+	<td><a class="imageLink" href="<%= basedir %>book/book.html">
+	<img src="<%= basedir %>images/proj2mepolish.gif" width="125" height="164" alt="Pro J2ME Polish book" /></a></td>
+	</tr></table>
+
+	<h2 id="source">Source Code</h2>
+	<p>
+		You can download the latest source code from the 
+		<a href="http://cvs.berlios.de/cgi-bin/viewcvs.cgi/polish/">CVS repository</a>.
+		The installer includes the source code of J2ME Polish as well.
+	</p>
+	<h2 id="thirdparty">Third Party Tools</h2>
+	<p>Following fine third party software is used by J2ME Polish:</p>
+	<ul>
+		<li><a href="http://ant.apache.org" target="_blank">Ant</a> is the basis
+		for the build tools and is not included in the distribution. It is licensed under the Apache license.
+		</li>
+		<li><a href="http://www.jdom.org" target="_blank">JDom</a> The XML processing library JDOM is licensed under a Apache style license..
+		</li>
+		<li><a href="http://asm.objectweb.org" target="_blank">ASM</a> is a very small and fast Java bytecode manipulation framework which is availabe under a BDS derived license.
+		</li>
+		<li><a href="http://retroweaver.sourceforge.net" target="_blank">RetroWeaver</a> provides the basis for converting Java classes with Java 1.5 features back to the Java 1.2 class format and is provided
+under the BSD license. J2ME Polish includes a modified RetroWeaver version.
+		</li>
+		<li><a href="http://svgsalamander.dev.java.net" target="_blank">SVG Salamander</a>  is a SVG rendering engine availabe under GNU Lesser General Public License.
+		</li>
+		<li><a href="http://proguard.sourceforge.net/" target="_blank">ProGuard</a> is the default obfuscator and licensed under the GPL.
+		</li>
+		<li><a href="http://www.yworks.de/" target="_blank">yGuard-library</a> is a LGPL obfuscation library which can be used from within J2ME Polish.
+		</li>
+		<li><a href="http://www.retrologic.com/retroguard-main.html" target="_blank">RetroGuard 1.1.6</a> is a LGPL obfuscator
+		which is included in J2ME Polish.
+		</li>
+		<li><a href="http://www.izforge.com/izpack/" target="_blank">IzPack</a> is great tool for creating installers, which is licensed under the GPL.
+		</li>
+	</ul>
+
+<%include end.txt %>

@@ -1,0 +1,140 @@
+<borders>
+	<!-- SimpleBorder -->
+	<border>
+		<class>de.enough.polish.ui.borders.SimpleBorder</class>
+		<type-names>
+			<type-name>simple</type-name>
+			<type-name>SimpleBorder</type-name>
+		</type-names>
+		<constructors>
+			<constructor>
+				<params order="color,borderWidth">
+					<param>
+						<name>color</name>
+						<description>the color of this border in RGB, e.g. 0xFFDD12</description>
+						<mandatory>no</mandatory>
+						<type>rgbColor</type>
+						<default>0</default>
+					</param>
+					<param>
+						<name>borderWidth</name>
+						<alternatives>width</alternatives>
+						<description>the width of this border</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>1</default>
+					</param>
+				</params>
+			</constructor>
+		</constructors>
+	</border>
+	
+	<!-- RoundRectBorder -->
+	<border>
+		<class>de.enough.polish.ui.borders.RoundRectBorder</class>
+		<type-names>
+			<type-name>round</type-name>
+			<!-- one could assume that the class-name is always a valid type-name... -->
+			<type-name>RoundRectBorder</type-name>
+		</type-names>
+		<constructors>
+			<constructor>
+				<params order="color,borderWidth,arc">
+					<param>
+						<name>color</name>
+						<description>the color of this border in RGB, e.g. 0xFFDD12</description>
+						<mandatory>no</mandatory>
+						<type>rgbColor</type>
+						<default>0</default>
+					</param>
+					<param>
+						<name>borderWidth</name>
+						<alternatives>width</alternatives>
+						<description>the width of this border</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>1</default>
+					</param>
+					<param>
+						<name>arc</name>
+						<description>the diameter of the arc at the four corners</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>5</default>
+					</param>
+				</params>
+			</constructor>
+			<constructor>
+				<params order="color,borderWidth,arcWidth,arcHeight">
+					<param>
+						<name>color</name>
+						<description>the color of this border in RGB, e.g. 0xFFDD12</description>
+						<mandatory>no</mandatory>
+						<type>rgbColor</type>
+						<default>0</default>
+					</param>
+					<param>
+						<name>borderWidth</name>
+						<alternatives>width</alternatives>
+						<description>the width of this border</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>1</default>
+					</param>
+					<param>
+						<name>arcWidth</name>
+						<description>the horizontal diameter of the arc at the four corners</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>5</default>
+					</param>
+					<param>
+						<name>arcHeight</name>
+						<description>the vertical diameter of the arc at the four corners</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>5</default>
+					</param>
+				</params>
+			</constructor>
+		</constructors>
+	</border>
+
+	<!-- BottomRightShadowBorder -->
+	<border>
+		<class>de.enough.polish.ui.borders.BottomRightShadowBorder</class>
+		<type-names>
+			<type-name>shadow</type-name>
+			<type-name>BottomRightShadowBorder</type-name>
+		</type-names>
+		<constructors>
+			<constructor>
+				<params order="color,borderWidth,offset">
+					<param>
+						<name>color</name>
+						<description>the color of this border in RGB, e.g. 0xFFDD12</description>
+						<mandatory>no</mandatory>
+						<type>rgbColor</type>
+						<default>0</default>
+					</param>
+					<param>
+						<name>borderWidth</name>
+						<alternatives>width</alternatives>
+						<description>the width of this border</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>1</default>
+					</param>
+					<param>
+						<name>offset</name>
+						<description>the offset of the shadow</description>
+						<mandatory>no</mandatory>
+						<type>positiveInt</type>
+						<default>1</default>
+					</param>
+				</params>
+			</constructor>
+		</constructors>
+	</border>
+
+</borders>

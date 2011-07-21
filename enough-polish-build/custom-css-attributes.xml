@@ -1,0 +1,36 @@
+<!--
+	custom-css-attributes.xml can define the CSS attributes of your own CustomItems.
+	If you have project specific UI elements, place a copy of this file into
+	the project's root directory (same space as the build.xml). 
+	
+	Each attribute can have following attributes:
+	name (required): the name of the attribute, e.g. "icon-image".
+	description (optional): the description of the attribute.
+	type (optional): the type of the attribute, either "string", "integer",
+					 "color", "boolean", "time", "percentorabsolute" or "style". Defaults to "string".
+	appliesTo (optional): A comma-separated list of classes for which the attribute can
+				      be used, e.g. "MyCustomItem".
+	default (optional): The default-value of the attribute.
+	values (optional): All allowed values in a comma-separated list.
+	id (optional): The (short) ID of this attribute, use IDs between 1000 and 9999 for custom attributes. The ID is required for
+	               CSS animations and for serializing styles.  
+
+-->
+<attributes>
+	<!-- sample-attribute:
+	<attribute
+		name="focused-style"
+		type="style"
+		appliesTo="Item"
+		description="The name of the style for the currently focused item."
+		default="focused"
+	/>
+	<attribute
+		name="myitem-color"
+		type="color"
+		appliesTo="com.company.ui.MyCustomItem"
+		description="The color of a custom item part."
+		default="blue"
+	/>
+	-->
+</attributes>

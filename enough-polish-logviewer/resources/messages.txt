@@ -1,0 +1,29 @@
+# translations for the logviewer project
+
+cmd.quit=Exit
+cmd.clearLog=Clear Log
+cmd.saveLog=Save Log
+cmd.uploadLog=Upload Log
+cmd.cancel=Cancel
+cmd.ok=OK
+
+title.error=Error
+title.selectLog=Log Selection
+title.logView=Log
+title.upload.settings=Upload Log
+title.upload.screen=Upload Log
+
+message.pleaseWait=Please wait while loading the log...
+message.noRecordStoreFound=No suitable log found - have you activated the rms-handler in the <debug>-element?
+message.invalidLogFormat=This log has an invalid format.
+message.savedLogTo=Saved log to {0}.
+message.unableToSave=Unable to save log: {0}.
+message.upload.noLogEntries=There are no log entries to upload.
+message.uploading=Uploading log entries...
+message.uploadingNr=Uploading entry {0}.
+message.upload.success={0} log entries have been uploaded successfully!
+message.upload.failure=Uploading to {1} failed with response code {0}.
+message.upload.error=Uploading failed with error {0}.
+
+input.upload.serverUrl=URL: 
+input.upload.password=Password: 

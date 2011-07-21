@@ -1,0 +1,115 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design: Partial Gradient Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Partial-Gradient Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="gui-background-combined.html">combined Background</a></li>
+		<li><a href="gui-background-mask.html">mask Background</a></li>
+		<li><a href="gui-background-partial.html">partial Background</a></li>
+	</ul>
+	<p>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The <code>partial-gradient</code> background paints a linear, vertical gradient in a part of the background.
+	It is usually used in a <a href="gui-background-combined.html">combined</a> or in a 
+	<a href="gui-background-mask.html">mask</a> background.
+	<br />
+	<img src="<%= basedir%>images/background-partial-gradient.png" width="239" height="239" />
+	<br />
+	The above background has been realized with the following settings:
+	</p>
+<pre>
+backgrounds {
+  partialTop {
+		type: partial-gradient;
+		start: 10%;
+		end: 20%;
+		top-color: white;
+		bottom-color: blue;
+  }
+  partialBottom {
+		type: partial-gradient;
+		start: 20%;
+		end: 40%;
+		top-color: blue;
+		bottom-color: white;
+  }
+  formFg {
+ 		type: combined;
+ 		foreground: partialTop;
+ 		background: partialBottom;
+  }
+  formBg {
+ 		color: white;
+  }
+}
+.myForm {
+  background {
+		type: combined;
+		foreground: formFg;
+		background: formBg;
+  }
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>type</td><td>partial-gradient</td><td>-</td>
+		<td>
+		Set the <code>type</code> to <code>partial-gradient</code>.
+		</td>
+	</tr>
+	<tr>
+		<td>top-color</td><td>white</td><td>color definition</td>
+		<td>
+		The color of the background at the top, can be a rbg/hexadecimal value of the color or the name of the color as defined in the colors section.
+		</td>
+	</tr>
+	<tr>
+		<td>bottom-color</td><td>blue</td><td>color definition</td>
+		<td>
+		The color of the background at the bottom, can be a rbg/hexadecimal value of the color or the name of the color as defined in the colors section.
+		</td>
+	</tr>
+	<tr>
+		<td>start</td><td>30%</td><td>percent value</td>
+		<td>
+		The desired start point of the gradient.
+<pre>
+	background-start: 20%;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>end</td><td>70%</td><td>percent value</td>
+		<td>
+		The desired end point of the gradient.
+<pre>
+	background-bottom: 70%;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>stroke</td><td>solid</td><td>solid, dotted</td>
+		<td>
+		The stroke style of the gradient.
+		</td>
+	</tr>
+
+	</table>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PartialGradientBackground.html">PartialGradientBackground</a>.
+	</p>
+
+<%include end.txt %>

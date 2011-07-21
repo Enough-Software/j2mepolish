@@ -1,0 +1,18 @@
+title.main=Tabbed Form
+title.introduction=Intro
+title.setting=Setting
+title.input=Input
+
+cmd.exit=Exit
+cmd.back=Back
+cmd.modetypes=Mode Type
+cmd.player=Player
+cmd.adversary=Adversary
+
+label.setting=Choose Game Mode: 
+label.setting.fast=Master
+label.setting.normal=Normal
+label.setting.slow=Beginner
+label.input=Name: 
+
+txt.introduction=This demo shows how to use a TabbedForm with J2ME Polish.

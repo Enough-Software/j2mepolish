@@ -1,0 +1,17 @@
+########################################################################################################
+#                                                                                                      #
+#  This file contains translations, use messages_de.txt, messages_en.txt etc to add further languages. #
+#  You can also use this to customize strings like the MIDlet-Name or MIDlet-Description for           #
+#  different apps.                                                                                     #
+#  Lines starting with a '#' are comments and will not be processed.                                   #
+#                                                                                                      #
+########################################################################################################
+
+# common commands:
+cmd.exit=Exit
+cmd.back=Back
+
+##############################
+# main menu list screen:
+##############################
+main.title=J2ME Polish

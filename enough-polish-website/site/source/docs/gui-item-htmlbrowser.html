@@ -1,0 +1,710 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: HtmlBrowser %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">HtmlBrowser</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-rssbrowser.html">RssBrowser</a></li>
+		<li><a href="rmi.html">RMI &amp; XML-RPC</a></li>
+		<li><a href="../touch/index.html">Touch (Client Server)</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-item-htmlbrowser.png"  width="334" height="260" alt="The HtmlBrowser with search results from Wikipedia." />
+	<br />
+	Use the <code>HtmlBrowser</code> to display simple HTML pages within any <a href="gui-screen-form.html">Form</a>,
+	<a href="gui-screen-framedform.html">FramedForm</a> or <a href="gui-screen-tabbedform.html">TabbedForm</a>.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The above design has been realized using following CSS settings - note that we use the <code>midp2</code> view for allowing
+	several items within a single row of the browser:
+	</p>
+<pre>
+.htmlBrowser {
+	view-type: midp2;
+}
+
+.browserText {
+	font-size: small;
+	font-color: black;
+}
+
+.browserLink {
+	font-color: blue;
+	font-style: bold;
+}
+
+.browserLink:hover {
+	font-color: red;
+}
+</pre>
+	<p>
+	The design of HTML elements is realized with default CSS styles unless the elements define their own <code>class</code> or
+	<code>id</code> attributes.
+	<br />
+	The following list shows the default styles names that are being used for the design of browser items:
+	</p>
+	<ul>
+		<li><code>browserText</code>: standard text within a <code>p</code> element.</li>
+		<li><code>browserTextBold</code>: bold text.</li>
+		<li><code>browserTextItalic</code>: cursive text.</li>
+		<li><code>browserTextBoldItalic</code>: bold cursive text.</li>
+		<li><code>browserLink</code>: address anchor</li>
+		<li><code>browserInput</code>: textfield</li>
+		<li><code>browserDownloadIndicator</code>: continuous running gauge</li>
+		<li><code>browserChoiceGroup</code>: multiple choice group</li>
+		<li><code>browserChoiceItem</code>: multiple choice group item</li>
+		<li><code>browserOption</code>:  exclusive choice group</li>
+		<li><code>browserOptionItem</code>: exclusive choice group item</li>
+	</ul>
+	<p>
+	The following example shows how to reference an existing CSS style - if both <code>class</code> and
+	<code>id</code> attributes are defined, the <code>id</code> attribute takes precedence.
+	</p>
+<pre>
+&lt;div class=&quot;chart&quot; <b>id=&quot;verticalBarChart&quot;</b>&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;50,15,5,0,5,15,50&lt;/span&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;0,35,45,50,45,35,0&lt;/span&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;25,25,25,25,25,25,25&lt;/span&gt;
+&lt;/div&gt;
+</pre>
+	<p>
+	J2ME&nbsp;Polish removes all references of unused styles by default - you can use
+	the <code>always-include</code> CSS attribute for ensuring that a style will be 
+	available by calling <code>StyleSheet.getStyle(styleName)</code>, even though it is not
+	referenced by a <code>#style</code> preprocessing directive:
+	</p>
+<pre>
+.<b>verticalBarChart</b> {
+	/* include this style even though it is not referenced in the source code: */
+	<b>always-include: true;</b>
+	padding: 3;
+	view-type: chart-vertical-bars;
+	chart-vertical-bars-shadow-color: gray;
+	background {
+		type: round-rect;
+		color: silver;
+	}
+}
+</pre>
+	
+
+	<h3 id="attribute-htmlbrowser">CSS Attributes for the HtmlBrowser</h3>
+	<p>
+	You can use following attributes for designing a <code>HtmlBrowser</code>:
+	</p>
+	<%cssattributes de.enough.polish.browser.html.HtmlBrowser %>
+	
+	<h2 id="htmlbrowser-Programming">Programming</h2>
+	<p>
+	Using the <code>HtmlBrowser</code> is not difficult.
+	The following code snippet shows how to create an <code>HtmlBrowser</code>:
+	</p>
+<pre>
+//#style htmlBrowserForm
+Form form = new Form("Browser");
+//#style htmlBrowser
+this.htmlBrowser = new HtmlBrowser(); 
+form.append( this.htmlBrowser );
+</pre>	
+	<p>
+	If you want to view a content, call <code>HtmlBrowser.go(String url):</code>.
+	</p>
+<pre>
+this.htmlBrowser.go( "http://www.digg.com" );
+</pre>
+	<p>
+	You can also specify your own back command, which is dynamically added and removed from the browser's screen depending on
+	the history size:
+	</p>
+<pre>
+Command cmdBack = new Command("Back", Command.BACK, 9);
+this.htmlBrowser.setBackCommand( cmdBack );
+</pre>
+	<h3 id="htmlbrowser-Programming-taghandler">Registering Your Own Tags</h2>
+	<p>
+	You can easily extend the <code>HtmlBrowser</code> by registering your own 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/html/HtmlTagHandler.html">HtmlTagHandler</a>.
+	<br />You then need to register the browser in your tag handler:
+	</p>
+<pre>
+myChartTagHandler.register( this.htmlBrowser );
+</pre>
+	<p>The following code is taken from the &quot;browser&quot; sampe application and shows how you can
+	extend the browser by adding support for  a custom <code>chart</code> micro format:
+	</p>
+<pre>
+&lt;div class=&quot;chart&quot; id=&quot;verticalBarChart&quot; &gt;
+	&lt;span class=&quot;chartdata&quot;&gt;50,15,5,0,5,15,50&lt;/span&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;0,35,45,50,45,35,0&lt;/span&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;25,25,25,25,25,25,25&lt;/span&gt;
+	&lt;span class=&quot;chartdata&quot;&gt;50,25,75,25,-25,-25,0&lt;/span&gt;
+	&lt;span class=&quot;chartcolors&quot;&gt;#ff0000,#00ff00,#0000ff,#ffff00&lt;/span&gt;
+&lt;/div&gt;
+</pre>
+	<p>The processing of other tags is handled by the default <code>HtmlTagHandler</code>.
+<pre>
+package de.enough.polish.sample.browser;
+
+import de.enough.polish.browser.Browser;
+import de.enough.polish.browser.TagHandler;
+import de.enough.polish.ui.ChartItem;
+import de.enough.polish.ui.Container;
+import de.enough.polish.ui.Style;
+import de.enough.polish.util.ArrayList;
+import de.enough.polish.util.HashMap;
+import de.enough.polish.util.StringTokenizer;
+import de.enough.polish.util.TextUtil;
+import de.enough.polish.xml.SimplePullParser;
+
+/**
+ * Handles each &lt;div&gt; element with a <code>chart</code> class.
+ */
+public class ChartTagHandler
+extends TagHandler
+{
+	private static final String CLASS_CHART = "chart";
+	private static final String CLASS_CHART_DATA = "chartdata";
+	private static final String CLASS_CHART_COLORS = "chartcolors";
+	private boolean collectData;
+	private ArrayList strDataSequences = new ArrayList();
+	private String strColors;
+	private Style chartStyle;
+	private TagHandler parent;
+  
+	/**
+	 * Creates a new handler for "chart" div tags
+	 * @param parent the default handler for div tags to which unprocessed
+	 *        tags are forwarded, can be null
+	 */
+	public ChartTagHandler( TagHandler parent ) {
+		this.parent = parent;
+	}
+
+	public void register(Browser browser)
+	{
+		// register the tags we want to process:
+		<b>browser.addTagHandler("div", this);
+		browser.addTagHandler("span", this);</b>
+	}
+  
+	<b>public boolean handleTag(Container parentItem, SimplePullParser parser, 
+					String tagName, boolean opening, 
+					HashMap attributeMap, Style style)</b>
+	{
+		String elementClass = (String) attributeMap.get("class");
+		if (TextUtil.equalsIgnoreCase("div", tagName) 
+    		&& 
+    		( (!opening && this.collectData) 
+    				|| TextUtil.equalsIgnoreCase(CLASS_CHART, elementClass)) 
+    		)
+		{
+			if (opening)
+			{
+				// collect chart data until tag is being closed...
+				this.strDataSequences.clear();
+				this.strColors = null;
+				this.collectData = true;
+				this.chartStyle = style;
+			}
+			else
+			{
+				int[][] dataSequences = parseDataSequences();
+				int[] colors = parseChartColors();
+				
+				//#style browserChart?
+				ChartItem item = new ChartItem(null, dataSequences, colors);
+				if (this.chartStyle != null) {
+					item.setStyle(this.chartStyle);
+					this.chartStyle = null;
+				} 
+				//#debug
+				System.out.println("adding chartitem" + item);
+				parentItem.add(item);
+				this.collectData = false;
+				this.strDataSequences.clear();
+				this.strColors = null;
+			}
+			return true;
+		}
+		else if (TextUtil.equalsIgnoreCase("span", tagName) && this.collectData) 
+		{
+			if (opening && TextUtil.equalsIgnoreCase(CLASS_CHART_DATA, elementClass))
+			{
+				parser.next();
+				String data = parser.getText();
+				this.strDataSequences.add(data);
+				return true;
+			}
+			else if (opening && TextUtil.equalsIgnoreCase(CLASS_CHART_COLORS, elementClass))
+			{
+				parser.next();
+				this.strColors = parser.getText();
+				return true;
+			} else if (!opening) {
+				// also handle the closing &lt;/span&gt; tags while collecting data:
+				return true;
+			}
+		}
+		if (this.parent == null) {
+			return false;
+		} else {
+			return this.parent.handleTag(parentItem, parser, tagName, opening, attributeMap, style);
+		}
+	}
+
+	/**
+	 * Parses and retrieves the colors for the chart.
+	 * 
+	 * @return the colors given in the "chartcolors" span element
+	 */
+	private int[] parseChartColors()
+	{
+		if (this.strColors == null) {
+			return new int[]{ 0xFF0000, 0x00FF00, 0x0000FF };
+		}
+		String[] colorStrings = TextUtil.splitAndTrim(this.strColors, ',');
+		int[] colors = new int[ colorStrings.length ];
+		for (int i = 0; i &lt; colors.length; i++)
+		{
+			String colorString = colorStrings[i];
+			int color = 0xff0000;
+			try {
+				if (colorString.charAt(0) == '#') {
+					color = Integer.parseInt(colorString.substring(1), 16);
+				} else if (colorString.startsWith("0x")) {
+					color = Integer.parseInt(colorString.substring(2), 16);
+				} else {
+					color = Integer.parseInt(colorString, 16);
+				}
+			} catch (Exception e) {
+				//#debug error
+				System.out.println("Unable to parse color definition " + colorString + e);
+			}
+			colors[i] = color;
+		}
+		return colors;
+	}
+
+	/**
+	 * Parses and returns the data sequences used for the chart.
+	 * 
+	 * @return an array of integer arrays with the chart data
+	 */
+	private int[][] parseDataSequences()
+	{
+		int num = this.strDataSequences.size();
+		int[][] result = new int[num][];
+		
+		for (int i = 0; i < num; i++)
+		{
+			String sequence = (String) this.strDataSequences.get(i);
+			StringTokenizer st = new StringTokenizer(sequence, ',');
+			int[] array = new int[st.countTokens()];
+      
+			for (int index = 0; st.hasMoreTokens(); index++)
+			{
+				array[index] = Integer.parseInt(st.nextToken());
+			}
+			result[i] = array;
+		}
+		return result;
+	}
+}
+</pre>	
+	<p>
+	Please refer to the &quot;browser&quot; sample application for a complete example.
+	</p>
+
+
+<h3 id="htmlbrowser-Programming-protocolhandler">Protocol Handlers</h3>	
+	<p>
+	Protocol handlers are responsible for handling the <code>href</code> attributes of <code>&lt;a&gt;</code> anchors, e.g.
+	<code>&lt;a href=&quot;http://www.j2mepolish.org&quot;&gt;j2mepolish.org&lt;/a&gt;</code>
+	and for the <code>src</code> of <code>&lt;img&gt;</code> tags, like 
+	<code>&lt;img src=&quot;resource://welcome.png&quot; &gt;</code>.
+	</p>
+	<p>
+	J2ME Polish provides following tag handlers out of the box:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Protocol&nbsp;&nbsp;</th><th>Used By Default&nbsp;&nbsp;</th><th>Class</th><th>Explanation</th></tr>
+	<tr>
+	 <td>http</td>
+	 <td>true</td>
+	 <td>HttpProtocolHandler</td>
+	 <td>
+	 Handler for <code>http</code> URLs.
+	 </td>
+	</tr>
+	<tr>
+	 <td>https</td>
+	 <td>true</td>
+	 <td>HttpProtocolHandler</td>
+	 <td>
+	 Handler for <code>https</code> URLs.
+	 </td>
+	</tr>
+	<tr>
+	 <td>resource</td>
+	 <td>true</td>
+	 <td>ResourceProtocolHandler</td>
+	 <td>
+	 Handler for <code>resource</code> URLs that loads resources from the JAR file of your application.
+	 </td>
+	</tr>
+	<tr>
+	 <td>external</td>
+	 <td>false</td>
+	 <td>ExternalProtocolHandler</td>
+	 <td>
+	 Opens the referenced resource by calling the push registry on MIDP 2.0 phones - typically this is used for
+	 opening URLs in the native browser, e.g.
+	 <code>&lt;a href=&quot;external:http://shop.company.com/start&quot;&gt;Start again in native browser&lt;/a&gt;</code>.
+	 </td>
+	</tr>
+	<tr>
+	 <td>tel</td>
+	 <td>false</td>
+	 <td>TelProtocolHandler</td>
+	 <td>
+	 Initiates phone calls on MIDP 2.0 phones. In difference to the <code>external</code> protocol handler the <code>tel</code> 
+	 handler also resolves the DTMF separator within phone numbers.
+	 </td>
+	</tr>
+</table>
+	
+	<h4 id="htmlbrowser-Programming-protocolhandler-adding">Adding Protocol Handlers</h4>
+	<p>
+	By default handlers for the protocols <code>http</code>, <code>https</code> and <code>resource</code>
+	are added to a <code>BrowserItem</code>.
+	</p>
+	<p>
+	You can programmatically add different protocol handlers using the constructor or the <code>addProtocolHandler()</code> 
+	method of the <code>HtmlBrowser</code>:
+	</p>
+<pre>
+import de.enough.polish.browser.protocols.*;
+...
+ProtocolHandler[] handlers = new ProtocolHandler[] {
+	new HttpProtocolHandler("http"), // for http://
+	new HttpProtocolHandler("https"), // for https://
+	new ResourceProtocolHandler("resource"), // for resource://
+	new ExternalProtocolHandler("external", myMidlet), // for external:// (opens in the native browser)
+	new TelProtocolHandler("tel", myMidlet) // for tel:+44123123456 - initiates a phone call
+};
+//#style browser
+this.htmlBrowser = new HtmlBrowser( handlers );
+</pre>
+	<p>
+	The following code snippet achieves the same goal using the <code>addProtocolHandler</code> method:
+	</p>
+<pre>
+//#style browser
+this.htmlBrowser = new HtmlBrowser(); // handlers for http, https and resource are added by default
+this.htmlBrowser.addProtocolHandler( new ExternalProtocolHandler("external", myMidlet) );
+this.htmlBrowser.addProtocolHandler( new TelProtocolHandler("tel", myMidlet) );
+</pre>
+	<p>
+	Now you can use the <code>external</code> and <code>tel</code> protocols in your HTML markup:
+	</p>
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;test&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;
+	&lt;b&gt;Thank you&lt;/b&gt;
+    &lt;/p&gt;    
+	&lt;p&gt;You order has been processed. Select one of the following options:&lt;/p&gt;
+	&lt;p&gt;
+	&lt;a href=&quot;tel:+44123123456#4545&quot;&gt;Call customer service&lt;/a&gt;
+	&lt;br /&gt;
+	&lt;a href=&quot;http://shop.company.com/start&quot;&gt;Start again&lt;/a&gt;
+	&lt;br /&gt;
+	&lt;a href=&quot;external:http://shop.company.com/start&quot;&gt;Start again in native browser&lt;/a&gt;
+	&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+	<h4 id="htmlbrowser-Programming-protocolhandler-extending">Creating Your Own Protocol Handler</h4>
+	<p>
+	You can also create your own protocol handler by extending <code>de.enough.polish.browser.ProtocolHandler</code>.
+	In this class you only have to implement the <code>public StreamConnection getConnection(String url) throws IOException</code>
+	method, which is used for resolving an URL.
+	<br />
+	You also need to forward the protocol name itself to the super constructor.
+	</p>
+	<p>
+	The following example shows you how to retrieve resources via <code>http</code> or <code>https</code>:
+	</p>
+<pre>
+//#condition polish.usePolishGui || polish.midp
+package de.enough.polish.browser.protocols;
+
+import de.enough.polish.browser.ProtocolHandler;
+import de.enough.polish.io.RedirectHttpConnection;
+import de.enough.polish.util.HashMap;
+
+import java.io.IOException;
+
+import javax.microedition.io.StreamConnection;
+
+<b>public class HttpProtocolHandler extends ProtocolHandler</b>
+{
+	private static final String USER_AGENT = 
+	//#if polish.Browser.UserAgent:defined
+		//#= 	"${polish.Browser.UserAgent}";
+	//#else
+				"J2ME-Polish/" + System.getProperty("microedition.platform");
+	//#endif
+
+	private HashMap requestProperties;
+
+	/**
+	 * Creates a new HttpProtocolHandler object with "http" as it's protocol.
+	 */
+	public HttpProtocolHandler()
+	{
+		this("http", new HashMap() );
+	}
+
+	/**
+	 * Creates a new HttpProtocolHandler object with "http" as it's protocol.
+	 * 
+	 * @param requestProperties the request properties to use for each request
+	 */
+	public HttpProtocolHandler(HashMap requestProperties)
+	{
+		this("http", requestProperties );
+	}
+
+	/**
+	 * Creates a new HttpProtocolHandler object.
+	 * 
+	 * @param protocolName the protocolname (usually "http" or "https")
+	 */
+	public HttpProtocolHandler(String protocolName)
+	{
+		this(protocolName,new HashMap() );
+	}
+	
+	/**
+	 * Creates a new HTTPProtocolHandler object.
+	 * 
+	 * @param protocolName the protocolname (usually "http" or "https")
+	 * @param requestProperties the request properties to use for each request
+	 */
+	public HttpProtocolHandler(String protocolName, HashMap requestProperties)
+	{
+		<b>super( protocolName );</b>
+		this.requestProperties = requestProperties;
+		if (requestProperties != null) {
+			if ( (requestProperties.get("User-Agent") == null) )
+			{
+				requestProperties.put("User-Agent", USER_AGENT );
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.browser.ProtocolHandler#getConnection(java.lang.String)
+	 */
+	<b>public StreamConnection getConnection(String url)
+	throws IOException</b>
+	{
+		return new RedirectHttpConnection(url, this.requestProperties);
+	}
+}
+</pre>
+	<p>
+	When you return <code>null</code>, no further action will be undertaken, as demonstrated by the telephone call protocol handler:
+	</p>
+<pre>
+//#condition polish.midp2
+package de.enough.polish.browser.protocols;
+
+import java.io.IOException;
+
+import javax.microedition.io.StreamConnection;
+import javax.microedition.midlet.MIDlet;
+
+import de.enough.polish.browser.ProtocolHandler;
+
+<b>public class TelProtocolHandler
+extends ProtocolHandler</b>
+{
+	private MIDlet midlet;
+
+	/**
+	 * Creates an TellProtocolHandler object using the default "tel" protocol name.
+	 * 
+	 * @param midlet the midlet object of the application
+	 */
+	public TelProtocolHandler(MIDlet midlet)
+	{
+		this( "tel", midlet );
+	}
+
+	/**
+	 * Creates an TelProtocolHandler object using the specified protocol name.
+	 * 
+	 * @param protocolName the name of the protocol to handle
+	 * @param midlet the midlet object of the application
+	 */
+	public TelProtocolHandler(String protocolName, MIDlet midlet)
+	{
+		super( protocolName );
+		this.midlet = midlet;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.browser.ProtocolHandler#getConnection(java.lang.String)
+	 */
+	public StreamConnection getConnection(String url) throws IOException
+	{
+		<b>this.midlet.platformRequest( "tel:" + extractMsisdn(url));
+		return null;</b>
+	}
+	
+	/**
+	 * Strips the MSISDN part off an url. 
+	 * In contrast to other protocol handlers, the external protocol handler only uses a single colon to
+	 * separate the external protocol from the folllowing protocol, e.g. external:http://www.j2mepolish.org
+	 * 
+	 * @param url the url to remove the protocol from
+	 * 
+	 * @return the host and part part of the given url
+	 */
+	protected String extractMsisdn(String url)
+	{
+		String msisdn = url.substring(this.protocolName.length() + 1);
+		String separator = null;
+		//#if polish.dtmf.separator:defined
+			//#= separator = "${polish.dtmf.separator}";
+			if (!separator.equals("#")) {
+				int pos = msisdn.indexOf('#');
+				if (pos != -1) {
+					msisdn = msisdn.substring(0, pos) + separator + msisdn.substring(pos + 1); 
+				}
+			}
+		//#endif
+		return msisdn;
+	}
+
+}
+</pre>
+	
+<h3 id="htmlbrowser-Programming-browserlistener">Waiting for Browser Events</h2>
+		<p>
+		You can get informed about internal browser events by implementing <code>BrowserListener</code>
+		and by calling <code>this.htmlBrowser.setListener( listener )</code>:
+		</p>
+<pre>
+public interface BrowserListener
+{
+	public void notifyPageStart(String url);
+	public void notifyPageEnd();
+
+	public void notifyDownloadStart(String url);
+	public void notifyDownloadEnd();
+	public void notifyPageError(String url, Exception e);
+}
+</pre>
+	<p>This allows you to show an acitivity indicator while the user is accessing data, for example.</p>
+	
+	
+	
+	<h2 id="htmlbrowser-configuration">Configuration</h2>
+	<p>You can configure many aspects of the <code>HtmlBrowser</code> using preprocessing variables defined 
+	in your <i>build.xml</i> script:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>polish.Browser.PaintDownloadIndicator</td>
+	 <td>false</td>
+	 <td>Paints an indicator whenever the browser downloads data, design the continously running 
+	 <a href="gui-item-gauge.html">Gauge></a> using the <code>browserDownloadIndicator</code>.
+	 Alternatively register your own <code>BrowserListener</code>.
+	 </td>
+	</tr>
+	<tr>
+	 <td>polish.Browser.MemorySaver</td>
+	 <td>false</td>
+	 <td>Ensures that there will be at least 50 kb or <code>polish.Browser.MemorySaver.Amount</code> (in bytes) left free
+	 when downloading and processing data.
+	 </td>
+	</tr>
+	<tr>
+	 <td>polish.Browser.UserAgent</td>
+	 <td><code>&quot;J2ME-Polish/&quot; + System.getProperty(&quot;microedition.platform&quot;)</code></td>
+	 <td>The user agent that the browser uses for .</td>
+	</tr>
+	<tr>
+	 <td>polish.Browser.Gzip</td>
+	 <td>false</td>
+	 <td>Adds GZIP compression support for loading webpages from a server - depending on the pages this might not only
+	 limit the transmitted data, but also speed up the loading. However, additional resources are required for unzipping the
+	 pages.</td>
+	</tr>
+	<!-- 
+	<tr>
+	 <td>polish.Browser.</td>
+	 <td>false</td>
+	 <td>.</td>
+	</tr>
+	 -->
+	</table>
+
+	
+	<h2 id="htmlbrowser-commands">Commands</h2>
+	<p>The HtmlBrowser uses some commands that you can translate using preprocessing variables
+	or J2ME&nbsp;Polish' <a href="localization.html">Localization framework</a>:
+	</p>
+	<ul>
+		<li><code>polish.command.followlink</code>: A command that is added automatically to text or image links - default value is &quot;Go&quot;,</li>
+		<li><code>polish.command.submit</code>: A command that is added automatically to submit buttons of forms - default value is &quot;Submit&quot;,</li>
+		<li><code>polish.command.back</code>: A command that is used for returning from internal views like the alert that is being used for the <a href="gui-item-rssbrowser.html">RssBrowser</a> - default value is &quot;Back&quot;,</li>
+	</ul>
+	<p>The following snippet from a <i>resources/messages.txt</i> file shows you the default values for these commands:
+	</p>
+<pre>
+# used by the HtmlBrowser for a links:
+polish.command.followlink=Go
+# used by the HtmlBrowser for submitting a form:
+polish.command.submit=Submit
+# used by the RssBrowser for returning to the overview after showing details of an RSS-Item:
+polish.command.back=Back
+</pre>
+		
+	<h2 id="htmlbrowser-limitations">Current Limitations</h2>
+	<p>
+	Currently you cannot use lists like <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code>.
+	<br />
+	<code>&lt;table&gt;</code> tags are not supported yet.
+	<br />
+	In forms you can only use <code>GET</code> as a possible action, not <code>POST</code>.
+	</p>
+
+	<h2 id="htmlbrowser-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/html/HtmlBrowser.html">HtmlBrowser</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/html/HtmlTagHandler.html">HtmlTagHandler</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/Browser.html">Browser</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/BrowserListener.html">BrowserListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/browser/TagHandler.html">TagHandler</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>
+

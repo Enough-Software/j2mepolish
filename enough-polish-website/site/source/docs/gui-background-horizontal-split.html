@@ -1,0 +1,67 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: horizontal-split Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">horizontal-split Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	The <code>horizontal-split</code> background separates the background in a left and a right part. 
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-horizontal-split.png"  width="343" height="81" alt="horizontal-split background" />	
+	<br />
+	The above title design has been realized by combining a <code>horizontal-split</code> with a <code>circle</code> background:
+</p>
+<pre>
+backgrounds {
+	titleCircle {
+		type: circle;
+		color: red;
+		diameter: 80%;
+		anchor: right | vcenter;
+		x-offset: -5;
+	}
+	<b>titleBg {
+		type: horizontal-split;
+		left-color: #f00;
+		right-color: #ccc;
+		split-pos: 75%;
+	}</b>
+}
+title {
+	margin: 2;
+	padding: 2;
+	padding-top: 12;
+	padding-bottom: 12;
+	padding-left: 12;
+	padding-right: 8;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: #ccc;
+	background {
+		type: combined;
+		foreground: titleCircle;
+		background: titleBg;
+	}
+	layout: left | expand;	
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background horizontal-split %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/HorizontalSplitBackground.html">HorizontalSplitBackground</a></li>
+	</ul>
+
+<%include end.txt %>

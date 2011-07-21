@@ -1,0 +1,200 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide to Text Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Visual Guide text-effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-texteffect.html">Create your own text-effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Visual Guide to Backgrounds</a></li>
+		<li><a href="gui-visualguide-borders.html">Visual Guide to Borders</a></li>
+		<li><a href="gui-visualguide-viewtypes.html">Visual Guide to Item Views</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Visual Guide to Screen Transitions</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+		<li><a href="../lush/index.html">Lush (UI)</a></li>
+	</ul>
+	<%index %>
+	
+	<p>Text effects can be applied to all items that display text like <a href="gui-item-stringitem.html">StringItems</a>, 
+	<a href="gui-screenelement-menubar.html">Commands</a> or
+	<a href="gui-screenelement-title.html">screen titles</a> using the <code>text-effect</code> CSS attribute:
+	</p>
+<pre>
+title {
+	background-color: black;
+	font-color: white;
+	text-effect: shadow;
+	<b>text-shadow-color: silver;</b>
+}
+</pre>	
+	
+	<h2 id="gui-texteffect-shadow">shadow</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-shadow.html"><img src="<%= basedir%>images/gui-texteffect-shadow.png"  width="144" height="24" alt="the shadow text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-shadow.html">shadow</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-dropshadow">drop-shadow</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-dropshadow.html"><img src="<%= basedir%>images/gui-texteffect-drop-shadow.png"  width="141" height="23" alt="the drop-shadow text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-dropshadow.html">drop-shadow</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-alienglow">alien-glow</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-alienglow.html"><img src="<%= basedir%>images/gui-texteffect-alienglow.png"  width="137" height="24" alt="the alien-glow text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-alienglow.html">alien-glow</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-fading-alienglow">fading-alien-glow</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-fading-alien-glow.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-fading-alien-glow.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="148" height="44"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center"><a href="gui-texteffect-fading-alienglow.html">fading-alien-glow</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-flash">flash</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-flash.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-flash.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+            width="148" height="44"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center"><a href="gui-texteffect-flash.html">flash</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-lighthouse">lighthouse</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-lighthouse.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-lighthouse.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+            width="148" height="44"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center"><a href="gui-texteffect-lighthouse.html">lighthouse</a> text-effect</td>
+	</tr></table>	
+	<h2 id="gui-texteffect-mirrorshadow">mirror-shadow</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-mirror-shadow.html"><img src="<%= basedir%>images/gui-texteffect-mirror-shadow.png"  width="131" height="47" alt="the mirror-shadow text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-mirror-shadow.html">mirror-shadow</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-outline">outline</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-outline.html"><img src="<%= basedir%>images/gui-texteffect-outline.png"  width="135" height="24" alt="the outline text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-outline.html">outline</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-rotate">rotate</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-rotate.html"><img src="<%= basedir%>images/gui-texteffect-rotate.png"  width="135" height="35" alt="the rotate text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-rotate.html">rotate</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-rotating">rotating</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-rotating.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="67">
+	        <embed src="<%= basedir%>images/gui-texteffect-rotating.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="148" height="87"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center"><a href="gui-texteffect-rotating.html">rotating</a> text-effect</td>
+	</tr></table>	
+	<h2 id="gui-texteffect-segment">segment</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-segment.html"><img src="<%= basedir%>images/gui-texteffect-segment.png"  width="125" height="24" alt="the segment text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-segment.html">segment</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-smiley">smiley</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-smiley.html"><img src="<%= basedir%>images/gui-texteffect-smiley.png"  width="123" height="26" alt="the smiley text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-smiley.html">smiley</a> text-effect</td>
+	</tr></table>
+	<h2 id="gui-texteffect-split">split</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-split.html"><img src="<%= basedir%>images/gui-texteffect-split.png"  width="344" height="82" alt="The split text-effect with a round-rect-split background." /></a></td>
+		<td valign="center"><a href="gui-texteffect-split.html">split</a> text-effect</td>
+	</tr></table>
+		
+	
+	<h2 id="gui-texteffect-typewriter">typewriter</h2>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-texteffect-typewriter.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="148">
+	        <param name='height' value="24">
+	        <embed src="<%= basedir%>images/gui-texteffect-typewriter.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="148" height="44"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center"><a href="gui-texteffect-typewriter.html">typewriter</a> text-effect</td>
+	</tr></table>	
+	<h2 id="gui-texteffect-vertical-gradient">vertical-gradient</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-vertical-gradient.html"><img src="<%= basedir%>images/gui-texteffect-vertical-gradient.png"  width="139" height="24" alt="the vertical-gradient text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-vertical-gradient.html">vertical-gradient</a> text-effect</td>
+	</tr></table>
+	
+	
+	<h2 id="gui-texteffect-html">html</h2>
+	<table><tr>
+		<td><a href="gui-texteffect-html.html"><img src="<%= basedir%>images/gui-texteffect-html.png"  width="182" height="152" alt="the html text-effect" /></a></td>
+		<td valign="center"><a href="gui-texteffect-html.html">html</a> text-effect</td>
+	</tr></table>
+	
+	<h2 id="gui-texteffect-extend">Your Own Text-Effect</h2>
+	<table><tr>
+		<td><a href="extending-texteffect.html"><img src="<%= basedir%>images/extend.png" width="76" height="68" alt="Create Your Own Text-Effect" /></a></td>
+		<td valign="center">Create Your <a href="extending-texteffect.html">Own Text-Effect</a></td>
+	</tr></table>
+	
+	
+
+<%include end.txt %>

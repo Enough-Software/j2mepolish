@@ -1,0 +1,184 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: TabbedForm %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using TabbedForms</h1>
+		<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screen-tabbedpane.html">TabbedPane</a></li>
+	</ul>
+	<%index %>
+	<p>
+	
+</p>
+<h2 id="design">Design</h2>
+<p><img src="<%= basedir%>images/gui-screen-TabbedForm.png" alt="TabbedForm" width="354" heigth="419" />
+
+<br /> The above design has been realized with following settings in <i>polish.css</i>:
+<pre>
+.tabbedForm {
+	padding: 4;
+	layout: hcenter | vcenter;
+	background {
+		type: vertical-gradient;
+		top-color: screenBgColor;
+		bottom-color: screenBgBottomColor;
+		start: 10%;
+		end: 80%;
+		top: title;
+		bottom: menubar;
+	}
+	/* not supported because we use the extended menu bar:
+	menubar-color: menubarColor;
+	*/
+	scrollindicator-up-image: url( arrowU.png );
+	scrollindicator-down-image: url( arrowD.png );
+	title-style: solidTitle;
+}
+
+tabbar {
+	background-color: white;
+	layout: expand;
+	padding-bottom: 0;
+	tabbar-left-arrow: url( left.png );
+	tabbar-right-arrow: url( right.png );
+	tabbar-arrow-y-offset: 3;
+	tabbar-roundtrip: true;
+	/* not supported, since we use arrow images:
+	tabbar-scrolling-indicator-color: COLOR_FOREGROUND;
+	*/
+}
+
+activetab {
+	padding: 3;
+	padding-left: 10;
+	padding-right: 8;
+	padding-top: 7;
+	background-type: round-tab;
+	background-color: activeTabColor;
+	background-arc: 8;
+	font-color: black;
+	font-style: bold;
+}
+
+inactivetab {
+	margin-left: 2;
+	margin-right: 2;
+	margin-bottom: 1;
+	padding: 3;
+	padding-left: 6;
+	padding-right: 4;
+	background-type: round-tab;
+	background-color: inactiveTabColor;
+	background-arc: 8;
+	font-color: gray;
+}
+</pre>
+</p>
+<p>The TabbedForm contains any kind of items in several tabs. The user can jump between different tabs by clicking left and right.
+</p>
+<p>
+The TabbedForm uses these default styles for its design:
+</p>
+<ul>
+	<li><b>tabbar</b>: the design of the complete bar that contains all tabs</li>
+	<li><b>activetab</b>: the design of the currently selected tab</li>
+	<li><b>inactivetab</b>: designs the remaining tabs</li>
+</ul>
+<h3 id="tabbedform-attributes">CSS Attributes for TabbedForm</h3>
+<p>You can use following TabbedForm specific CSS attributes for your design:</p>
+<%cssattributes de.enough.polish.ui.TabbedForm %>
+
+<h3 id="tabbar-attributes">CSS Attributes for the Tab Bar</h3>
+<p>For designing the tab bar at the top of a TabbedForm, use these CSS attributes:</p>
+<%cssattributes de.enough.polish.ui.TabBar %>
+
+
+
+<h2 id="programming">Programming</h2>
+<p>You can use the TabbedForm in most aspects like a normal <code>javax.microedition.lcdui.Form</code> with some additional
+options for managing items on specific tabs and tab interaction.
+</p>
+<ul>
+	<li><code>TabbedForm(String title, String[] tabNames, Image[] tabImages )</code>: Creates a new TabbedForm with the specified tabs - can be used with a <code>style</code> preprocessing directive..</li>
+	<li><code>append( int tabIndex, Item item )</code>: Appends an item to the specified tab - can be used together with a <code>style</code> preprocessing directive.</li>
+	<li><code>append( int tabIndex, Item item, Style itemStyle )</code>: Appends an item with a programatically chosen style.</li>
+	<li><code>set( int tabIndex, int itemIndex, Item item )</code>: Exchanges an existing item in the specified tab.</li>
+	<li><code>Item get(int tabIndex, int itemNum)</code>: Retrieves an item from the specified tab.</li>
+	<li><code>delete( int tabIndex, Item item )</code>, <code>delete( int tabIndex, int itemIndex )</code>: Deletes an item from a specific tab.</li>
+	<li><code>deleteAll( int tabIndex )</code>: Clears a complete tab.</li>
+	<li><code>int size( int tabIndex )</code>: Gets the number of items within a tab.</li>
+	<li><code>int getTabCount()</code>: Retrieves the number of tabs.</li>
+	<li><code>setActiveTab( int tabIndex )</code>: Swicthes the the specified tab.</li>
+	<li><code>int getActiveTab()</code>: Retrieves the currently selected tab.</li>
+	<li><code>setTabImage( int tabIndex, Image image )</code>: Changes the image of the existing tab.</li>
+	<li><code>setText(int tabIndex, String text )</code>: Changes the text of the existing tab.</li>
+	<li><code>setTabbedFormListener( TabbedFormListener listener )</code>: Sets the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a> that is invoked whenever the user changes a tab.</li>
+	<!-- 
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	 -->
+</ul>
+<p>
+Please refer to the &quot;tabbedform&quot; sample application for working example.
+</p>
+
+<h2 id="configuration">Configuration</h2>
+<p>
+You can configure if List should not show commands like &quot;Select&quot; for implicit and exclusive Lists or &quot;Mark&quot;
+for multiple lists. By default such commands are shown. Specify these configuration settings in the <code>variables</code>
+section of your <i>build.xml</i> script.
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.TabbedForm.allowTabSelection</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Allows the user to select the tabs - this is then necessary for changing the tab as well.
+<pre>
+&lt;variable name=&quot;polish.TabbedForm.allowTabSelection&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.TabbedForm.releaseResourcesOnTabChange</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Releases all resources hold by a specific tab after another one has been selected. This might make sense
+		when some tabs hold very complex UI data like RGB based animations.
+<pre>
+&lt;variable name=&quot;polish.TabbedForm.releaseResourcesOnTabChange&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+
+<!-- 
+	<tr>
+		<td>polish.</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+<pre>
+&lt;variable name=&quot;polish.&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+ -->
+
+</table>
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedForm.html">TabbedForm</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TabBar.html">TabBar</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

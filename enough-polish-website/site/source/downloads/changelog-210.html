@@ -1,0 +1,445 @@
+<%set title = J2ME Polish: Changelog %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Changelog</h1>
+
+	<h2 id="210">J2ME Polish 2.1.0</h2>
+	<h3 id="210-animations">CSS Animations</h3>
+	<p>
+	</p>
+	<h3 id="210-screenorientation">Screen Orientation</h3>
+	<p>
+	</p>
+	<h3 id="210-further">Further Changes</h3>
+	<ul>
+		<li><b>- split TextEffect</b>: now works with layouts different than top.</li>
+		<li><b></b>: </li>
+		<!-- 
+		<li><b></b>: </li>
+		 -->
+	</ul>	
+	
+	<h2 id="203">J2ME Polish 2.0.3</h2>
+	<h3 id="203-anyphone">Generic/AnyPhone</h3>
+	<p>
+	The biggest news is that you can now build applications that run on any MIDP based handset byt targeting the
+	<code>Generic/AnyPhone</code> in your <i>build.xml</i> script.
+	Use following code snippet to achieve this:
+	</p>
+<pre>
+&lt;deviceRequirements&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyPhone&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+	<h3 id="203-ota">Free OTA Service for Developers</h3>
+	<p>
+	Visit <a href="http://ota.j2mepolish.org">http://ota.j2mepolish.org</a> for uploading your builds
+	to our free OTA service. You can upload both private and public content. More documentation can be found
+	on ota.j2mepolish.org.
+	</p>
+	<h3 id="203-changes">Further 2.0.3 Changes</h3>
+	<p>
+	Furthermore following changes have been done since J2ME Polish 2.0.2:
+	</p>
+	<ul>
+		<li><b>- Memory Leak</b>: The item command handling contained a now fixed memory leak.</li>
+		<li><b>- Clear Key</b>: Clear key does not delete several characters in one go anymore.</li>
+		<li><b>- Form.set(int, Item)</b>: Setting an item did not adjust scrolling of the form.</li>
+		<li><b>- Password TextField Caret</b>: The caret position of a password TextField was calculated wrongly.</li>
+		<li><b>- Phonenumber TextField</b>: A phonenumber input now allows to enter a plus for international country codes by pressing '0' for a long time.</li>
+		<li><b>- RGB handling</b>: now the new <code>DrawUtil.drawRgb(...)</code> method is used for the J2ME Polish internal RGB handling, so it now works on Samsung devices as well under all circumstances.</li>
+		<li><b>+ Browser back command</b>: You can now call <code>browser.setBackCommand(Command cmd)</code> on any HtmlBrowser and RssBrowser. The back command will now be dynamically added and removed depending on the history size of the browser.</li>
+		<li><b>+ Browser FormListener</b>: Use a <code>FormListener</code> to change and check form inputs before they are shown or send.</li>
+		<li><b>+ TableItem</b>: Use the <code>TableItem</code> to display dynamic tabular data.</li>
+		<li><b>+ Lots of new UI Features</b>: Browse the visual guides and you will find a lot of new UI features like using a specific layout for the first and/or last item of a container/List/menu/etc, using new backgrounds or new TextEffects like the split text-effect, and so on.</li>
+		<!-- 
+		<li><b></b>: </li>
+		 -->
+	</ul>
+	
+	
+	<h2 id="202">J2ME Polish 2.0.2</h2>
+	<p>
+	Following changes have been done since J2ME Polish 2.0.1:
+	</p>
+	<ul>
+		<li><b>- Builds for MIDP 1.0 without J2ME Polish UI</b>: Building projects for MIDP 1.0 devices compile again when the J2ME Polish UI is deactivated.</li>
+		<li><b>- FilteredList</b>: in some circumstances an invalid filtered list entry was returned in <code>FilteredList.getSelectedIndex()</code></li>
+		<li><b>- Series 60 E2 FP3</b>: fixed screen size detection for Series 60, second edition, feature pack 3 devices.</li>
+		<li><b>- Sony Ericsson Platform 8</b>: Added bug definitions for Sony Ericsson Java Platform 8 devices, setting middle soft key commands correctly.</li>
+		<li><b>+ BigInteger</b>: Added <code>de.enough.polish.math.BigInteger</code> for applications relying on <code>java.lang.BigInteger</code> which is not available on MIDP/CLDC handsets.</li>
+		<li><b>+ TextField caret positionM</b>: Jumping to the last character when a textfield is being focused</li> 
+		<li><b>+ Left To Right Languages</b>: Added experimental support for left-to-right languages. Set the <code>polish.i18n.rightToLeft</code> preprocessing variable to enable this support.</li>
+		<li><b>+ Logging</b>: user defined logging levels that are used within <code>//#debug</code> preprocessing directives 
+		now have a lower priority than the debug level. You can activate all applicable user defined levels using the 
+		<code>levels</code> attribute of the <code>&lt;debug&gt;</code> element:
+<pre>
+&lt;debug verbose=&quot;true&quot; level=&quot;warn&quot; levels=&quot;timing, memory&quot; /&gt;
+</pre>
+		</li>
+		<li><b>+ Content Distribution</b>: added support for content deployment using the <code>mea</code> archive type - we will be launching an accompanying free OTA service for developers soon:
+<pre>
+&lt;lifeCycleManager name=&quot;mea&quot; /&gt;
+</pre>
+		</li>
+		<!-- 
+		<li><b></b>: </li>
+		 -->
+	</ul>
+	
+	<h2 id="201">J2ME Polish 2.0.1</h2>
+	<p>
+	Following changes have been done since J2ME Polish 2.0:
+	</p>
+	<ul>
+		<li><b>- Builds without J2ME Polish UI</b>: Building projects that do not use the J2ME Polish UI do compile again.</li>
+		<li><b>- Builds for MIDP 1.0</b>: Building projects for MIDP 1.0 devices compile again.</li>
+		<li><b>- SGH-E900</b>: added <code>ignoreTitleCall</code> bug for correct rendering of the title</li>
+		<li><b>- Invocation of Command with FIRE</b>: OK commands are now invoked after releasing the FIRE key, not when pressing the FIRE key. This caused problems in some situations.</li>
+		<li><b>- IDE Integration</b>: Classpaths are now resolved and named correctly on Windows systems</li>
+		<li><b>- Screen.getCommandItem()</b>: Fixed NullPointerException when there were no commands available on a screen</li>
+		<li><b>- Scrolling</b>: Fixed scrolling in nested containers, fixed size handling for some Series 60 devices.</li>
+		<li><b>+ POPUP ChoiceGroup</b>: You can cycle through all items of a POPUP ChoiceGroup after you have reached the last item when setting <code>popup-roundtrip</code> to true in the ChoiceGroup's style.</li>
+		<li><b>+ Content Types of HTML and RSS pages</b>: The content types of remote pages are now honored by the HtmlBrowser and RssBrowser.</li>
+		<li><b>+ horizontal-gradient and radial-gradient</b>: added two new gradient backgrounds.</li>
+		<li><b>+ ThreadedItemCommandListener</b>: added de.enough.polish.event.ThreadedItemCommandListener.</li>
+		<li><b>+ ChoiceGroup Items</b>: you can now deactivate the painting of ChoiceGroup check and radioboxes for the selected elements as well by specifying <code>radiobox-selected: none;</code> or <code>checkbox-selected: none;</code>.</li>
+		<li><b>+ horizontal-gradient background</b>: Added the horizontal-gradient background as a design option.</li>
+		<li><b>+ visible CSS attribute</b>: You can now toggle the visibility of items using the <code>visible</code> CSS attribute.
+		       You can change the style using <code>UiAccess.setStyle( screen/item )</code> or using the <code>change-styles</code> CSS attribute (see below).
+<pre>
+.invisible {
+	visible: false;
+}
+
+.visible {
+	visible: true;
+}
+</pre>
+		</li>
+		<li><b>+ change-styles CSS attribute</b>: You can now change styles of child items of a Container/Screen/ChoiceGroup using the <code>change-styles</code> CSS attribute without doing any programming:
+<pre>
+.result {
+	always-include: true;
+	margin: 2;
+	background-color: silver;
+	view-type: midp2;
+	view-type-sequential-traversal: true;
+	layout: expand;
+	<b>change-styles: visible &gt; invisible;</b>
+}
+
+.result:hover {
+	margin: 0;
+	border-color: #222;
+	border-width: 2;
+	<b>change-styles: invisible &gt; visible;</b>
+	background {
+		type: horizontal-gradient;
+		left-color: white;
+		right-color: #ccc;
+	}
+}
+</pre>
+		</li>
+		<!-- 
+		<li><b>+ </b>: </li>
+		 -->
+	</ul>
+
+	<h2 id="20">J2ME Polish 2.0</h2>
+	<p>
+	Following changes have been done since J2ME Polish 2.0 RC4:
+	</p>
+	<ul>
+		<li><b>- RMI</b>: Remote methods without parameters are supported now. Server side exceptions are handled better. Re-enabled obfuscation support. Fixed handling of Nokia Series 40 3rd edition phones. Handled synchronization for cases in which a remote call is triggered immediately after calling RemoteClient.open() on Sony Ericsson phones. Used connections are cleaned up correctly on Motorola devices. Added support for switching between obfuscated and normal builds.</li>
+		<li><b>- Gauge</b>: fixed setValue() when there is a <code>view-type</code> attached to a gauge.</li>
+		<li><b>- Floater</b>: fixes for Math.toRadians(), Math.toDegrees() and DataInput.readFloat() and handling of float and double arrays.</li>
+		<li><b>- Bytecode Extensions</b>: classloading fix</li>
+		<li><b>- ScrollIndicator</b>: Foxed positioning of default scroll-indicators.</li>
+		<li><b>- Browser</b>: busy indicator is removed correctly now every time, navigation works correctly after an invalid URL has been selected.</li>
+		<li><b>- Scrolling</b>: when there is static text at the beginning of a Form and the first interactive element is selected automatically, the Form will not scroll automatically.</li>
+		<li><b>- MenuBar</b>: fixed menubar layout for screens with margins</li>
+		<li><b>- Alert</b>: alerts that are placed without specifying the next screen do always return to the previous shown screen.</li>
+		<li><b>- popup</b>: background of popup screens is painted correctly on Sony devices when repaint-previous-screen has been specified.</li>
+		<li><b>- BlackBerry</b>: the focus between textfields is now handled correctly on devices with trackballs. The correct JDE is now used for building devices with or without trackballs when <code>blackberry.home</code> points to the directory containing various JDEs. Icons are now supported for JDEs before the JDE 4.2, too.</li>
+		<li><b>- SnapshotScreen</b>: snapshots are now also possible on Series 40 devices.</li>
+		<li><b>- FramedForm</b>: fixed handling of key events and positioning of top/bottom frames, added deleteAll() and delete() methods</li>
+		<li><b>- Utils</b>: fixed classpath in the batch files of the FontEditor and the BinaryEditor</li>
+		<li><b>- POPUP ChoiceGroups</b>: lists that are longer than a page are painted and scrolled correctly.</li>
+		<li><b>+ ThreadedCommandListener</b>: added de.enough.polish.event.ThreadedCommandListener and AysnchronousCommandListener</li>
+		<li><b>+ AysnchronousItemCommandListener</b>: added de.enough.polish.event.AysnchronousItemCommandListener</li>
+		<li><b>+ screen change animations</b>: added <code>fade</code>, <code>particle</code>, <code>gradient</code>, <code>zoomBoth</code> and <code>diagonal</code> animations.</li>
+		<li><b>+ ImageUtil</b>: the scale() methods can now scale down images as well.</li>
+		<li><b>+ RssBrowser</b>: the RssBrowser displays RSS 2.0 content</li>
+		<li><b>+ WYSIWYG Designer</b>: the WYSIWYG designer in <i>${polish.home}/bin</i> allows you to design existing applications without needing to know CSS and with direct visual feedback to the designer. Note that this is merely a preview to the full designer.</li>
+		<li><b>+ Ticker</b>: you can now add several tickers to a Form by calling UiAccess.append( ticker, form ).</li>
+		<li><b>+ Build List</b>: You can generate the list of devices as well as the list of generated JAD and JAR files using the <code>buildlist</code> finalizer:
+<pre>
+	&lt;finalizer name=&quot;buildlist&quot; /&gt;
+</pre>
+		</li>
+		<li><b>+ HTML and WML Export</b>: You can generate simple HTML and WML pages that contain links to the JAD files for all generated applications:
+<pre>
+	&lt;taskdef name=&quot;buildlist&quot; XXX TBD XXX /&gt;
+</pre>
+		</li>
+		<li><b>+ Programmatic Styles</b>: It's now much easier to change and generate styles programmatically, e.g. by calling style.setAttribute(short id,Object value).</li>
+		<li><b>+ menubar-style, leftcommand-style, rightcommand-style, middlecommand-style, menu-style</b>: You can now use these CSS attributes for using screen specific menu/menubarstyles when using the extended menubar:
+<pre>
+.mainScreenMenu  {
+	margin-right: 10;
+	margin-left: 10;
+	padding: 4;
+	layout: right | bottom | horizontal-shrink | vertical-shrink;
+	repaint-previous-screen: true;
+	background {
+		type: round-rect;
+		color: #8ff0;
+	}
+	<b>menubar-style: .mainScreenMenuMenuBar;</b>
+}
+
+.mainScreenMenuMenuBar extends menubar {
+	background {
+		type: round-rect;
+		color: #8ff0;
+	}
+	background-type: simple;
+	<b>leftcommand-style: .mainScreenMenuLeftCommand;</b>
+	<b>rightcommand-style: .mainScreenMenuRightCommand;</b>
+}
+
+.mainScreenMenuLeftCommand {
+	font-color: black;
+	font-style: bold;
+	text-effect: outline;
+}
+
+.mainScreenMenuRightCommand {
+	layout: right;
+	font-color: green;
+	font-style: bold;
+}
+</pre>
+		</li>
+		<li><b>+ Item Commands</b>: When using the extended menubar and targeting devices that have a defined <code>polish.key.MiddleSoftKey</code> capability, the item command with the highest  priority will be placed in the middle of the menubar. You can force item commands for other devices as well, by setting the preprocessing variable <code>polish.MenuBar.useMiddleCommand</code> to true. It can be designed using the <code>middlesoftkey</code> CSS style:
+<pre>
+leftcommand
+{
+	margin: 0;
+    margin-horizontal: 10;
+	padding-top: 5;
+	padding-bottom: 0;
+	font-color: black;
+	font-style: bold;
+	text-effect: shadow;
+	text-shadow-color: #ff0;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+<b>middlecommand</b> extends leftcommand {
+	layout: center;
+	/* lifting the center command by moving it upwards relative 
+	 * to the left and right command (which have a padding-top of 5): 
+	 */
+	padding-top: 1;
+}
+</pre>
+		</li>
+		<li><b>+ TextField/info</b>: The <code>info<code> element that displays the current input mode for TextFields can now be moved into TextFields as well by specifying the <code>polish.TextField.includeInputInfo</code> preprocessing variable in your build.xml script:
+<pre>
+&lt;variable name=&quot;polish.TextField.includeInputInfo&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</li>
+		<li><b>+ Libraries</b>: You can now use variables within paths to binary libraries, e.g.
+<pre>
+&lt;libraries&gt;
+	&lt;library file=&quot;libs/${polish.vendor}/external.jar&quot; /&gt;
+&lt;/libraries&gt;
+</pre>
+		</li>
+		<li><b>+ QWERTY Support</b>: now supporting qwerty style keyboards on Nokia E70, E61, communicator devices</li>
+		<li><b>+ Screen Orientation Change</b>: Devices that can change their screen orientation are now supported</li>
+		<li><b>+ Right Aligned Menubar</b>: On Nokia communicator the menubar is positioned on the right side of the screen</li>
+		<li><b>+ FilteredList/FilteredChoiceGroup</b>: the FilteredList and FilteredChoiceGroup allows you to narrow down searches by entering input</li>
+		<li><b>+ Animations</b>: improved animation handling, now only animated parts are refreshed in the next paint cycle</li>
+		<li><b>+ Predictive Text Input</b>: You can use predictive text input when setting both polish.TextField.useDirectInput and polish.TextField.usePredictiveInput to true in your build.xml:
+<pre>
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value==&quot;true&quot;/&gt;
+	&lt;variable name=&quot;polish.TextField.usePredictiveInput&quot; value==&quot;true&quot;/&gt;
+&lt;/variables&gt;
+</pre>		
+		</li>
+		<li><b>+ String[] Based Predictive Input</b>: When activating predictive input you can even limit input to a specified String array by using UiAccess:
+<pre>
+TextField field = new TextField(&quot;What do you target&quot;, null, 30, TextField.ANY);
+String[] allowedWords = new String[]{ &quot;J2ME&quot;, &quot;Java&quot;, &quot;Windows Mobile&quot;, &quot;Linux&quot;, &quot;OS X&quot; };
+UiAccess.setPredictiveDictionary( field, allowedWords)
+</pre>
+		 </li>
+		<li><b>+ Smiley Support</b>: you can now use the &quot;smiley&quot; text effect for showing smileys within StringItems and TextFields (more information to follow). </li>
+		<li><b>+ Various View Types</b>: added new view-types like <b>fisheye</b> for Lists or Containers, <b>gauge-cycling-spheres</b> for Gauges, <b>verticalfixed</b> for Forms and Lists and so on.</li>
+		<li><b>+ Resource Assembling</b>: you can now choose to include all subfolders but not the root directory itself. It's also possible to exclude files:
+<pre>
+&lt;resources
+	dir=&quot;resources&quot;
+	excludes=&quot;readme.txt&quot;
+&gt;
+	<b>&lt;root dir=&quot;resources/templates&quot; includeSubDirs=&quot;true&quot; includeBaseDir=&quot;false&quot; exclude=&quot;CVS&quot; /&gt;</b>
+&lt;/resources&gt;
+</pre>
+		</li>
+		<li><b>+ 'combined' Background</b>: combine any number of backgrounds using the <code>combined</code> background:
+<pre>
+
+backgrounds {
+	titleForeground {
+		type: polygon;
+		points: 10,50 50,10 90,50 50,90;
+		color: #00f;
+		scale-mode: proportional;
+		anchor: right | vcenter;
+	}
+	titleBackground {
+		type: combined;
+		foreground: titlePolygonLeft;
+		background: titleGradient;
+	}
+	
+	titlePolygonLeft {
+		type: polygon;
+		points: 10,50 50,10 90,50 50,90;
+		color: #00f;
+		scale-mode: proportional;
+		anchor: left | vcenter;
+	}
+	titleGradient {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: blue;
+	}
+}
+
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	
+	<b>background {
+		type: combined;
+		foreground: titleForeground;
+		background: titleBackground;
+	}</b>
+}
+
+</pre>
+		</li>
+		<li><b>'mask' Background</b>: You can bring any background in any shape and optionally make it 
+		translucent by using the <code>mask</code> background:
+<pre>
+
+backgrounds {
+	
+	maskBackground {
+		type: polygon;
+		points: 5,90 55,0 105,90 155,0 205,90;
+		reference-width: 210;
+		reference-height: 100;
+		scale-mode: scale;
+		color: maskColor;
+	}
+	
+	gradientBackground {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: blue;
+	}
+	
+}
+menubar {
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	<b>background {
+		type: mask;
+		mask: maskBackground;
+		mask-color: maskColor;
+		background: gradientBackground;
+		opacity: 150;
+	}</b>
+}
+</pre>
+		</li>
+		<!-- 
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		 -->
+	</ul>
+	<h2 id="20RC4">J2ME Polish 2.0 RC4</h2>
+	<p>
+	Following changes have been done since J2ME Polish 2.0 RC3:
+	</p>
+	<ul>
+		<li><b>+ CSS Calculations</b>: You can use simple arithmetic calculations within numerical CSS attributes now:
+<pre>
+.myMenuElement {
+	padding: 2;
+	padding-left: 2 + imagewidth( before.png );
+	min-height:2 + imageheight( before.png ) + 2; /* padding-top + content + padding-bottom */
+}
+.myMenuElement:hover {
+	padding-left: 2;
+	before: url( before.png );
+}
+</pre>
+		</li>
+		<li><b>+ TabbedForm Control</b>: You can control the TabbedForm better by registering a <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/TabbedFormListener.html">TabbedFormListener</a>.</li>
+		<li><b>+ Improved NetBeans</b>: In the NetBeans module you can now select target devices by API support</li>
+		<li><b>+ ScreenInfo Animation</b>: ScreenInfo is now also being animated </li>
+		<li><b>+ Motorola</b>: Improved Motorola emulator support</li>
+		<li><b>+ Commands</b>: Added methods for deactivating commands via <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a><code>.setAccessible()</code>.</li>
+		<li><b>+ BlackBerry trackball</b>: TrackBall navigation is now supported on BlackBerry (thanks to the nice folks of <a href="http://earthcomber.com/" target="_blank">Earthcomber</a>)</li>
+		<li><b>+ BlackBerry password</b>: Password TextFields are now supported on BlackBerry</li>
+		<li><b>+ ScreenHistory</b>: <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/ScreenHistory.html">ScreenHistory</a> provides a navigation history for typical mobile applications.</li>
+		<li><b>+ Emulator transient mode</b>: UEI emulators can now be started in the transient mode (install, run and deinstall) by specifying <code>transient=&quot;true&quot;</code> in the &lt;emulator&gt; section.</li>
+		<li><b>- Device Database</b>: Fixed wrong Samsung definitions</li>
+		<li><b>- Pointer Events</b>: Fixed handling of pointer events for FramedForm </li>
+		<li><b>- Installer</b>: Installer on Mac OS X with Java 1.4 now allows correct selection of folders</li>
+		<li><b>- Decimal TextField</b>: Decimal TextFields now work correctly and allow the input of dot separated numbers.</li>
+		<li><b>- Commands on S60</b>: Commands are now supported on S60 phones without activating the &quot;menu&quot; fullscreen mode.</li>
+		<li><b>- RMI Security Exception</b>: a SecurityException now results in a RemoteException</li>
+		<li><b>- CustomItem.invalidate</b>: massive size changes are now detected and handled in CustomItem.invalidate().</li>
+		<li><b>- Scrolling</b>: Jumping from the last to the first item now works as expected.</li>
+		<li><b>- PullParser</b>: Renamed PullParser to <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/xml/SimplePullParser.html">SimplePullParser</a> for limiting name clashes with KXML when the <code>useDefaultPackage</code> option is used for the &lt;obfuscator&gt; element.</li>
+		<li><b>+ Documentation</b>: Improved documentation.</li>
+		<!--  
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		<li><b></b>: </li>
+		-->
+	</ul>
+<%include end.txt %>

@@ -1,0 +1,83 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: SpriteItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">SpriteItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Use the <code>SpriteItem</code> for showing an animated <code>javax.microedition.lcdui.game.Sprite</code> in your Form.
+	</p>
+	<h2 id="SpriteItem-Design">Design</h2>
+	<p>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-item-spriteitem.mov">
+	        <param name='autoplay' value="true">
+	        <param name='controller' value="false">
+	        <param name='loop' value="true">
+	        <param name='width' value="72">
+	        <param name='height' value="75">
+	        <embed src="<%= basedir%>images/gui-item-spriteitem.mov" autoplay="true" 
+	        controller="false" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="72" height="75"
+	        >
+	        </embed>
+		</object>
+	<br />
+	You can only design basic concepts like background, padding, etc with a SpriteItem: 
+	</p>
+	<%cssattributes de.enough.polish.ui.SpriteItem %>
+	
+	
+	<h2 id="SpriteItem-Programming">Programming</h2>
+	<p>
+	For creating a SpriteItem you have to create a Sprite first:
+	</p>
+<pre>
+Image image = null;
+try {
+	image = Image.createImage( "/sprite.png");
+	int frameWidth = 30;
+	int frameHeight = 30;
+	this.sprite = new Sprite( image, frameWidth, frameHeight );
+	//#style sprite
+	this.spriteItem = new SpriteItem( null, this.sprite, 200, 0, false );
+	this.spriteItem.addCommand( this.cmdStartGame );
+	this.spriteItem.setItemCommandListener( this );
+} catch (IOException e) {
+	//#debug error
+	System.out.println( "Unable to load /sprite.png" + e );
+}
+</pre>
+	<p>
+	The SpriteItem constructor accepts the following parameters:
+	</p>
+<pre>
+	SpriteItem(String label, Sprite sprite, long animationInterval, int defaultFrameIndex, boolean repeatAnimation )
+</pre>
+	<ul>
+		<li><code>String label</code>: the label</li>
+		<li><code>Sprite sprit</code>: the sprite that should be painted</li>
+		<li><code>long animationInterval</code>: the interval in milliseconds for animating this item</li>
+		<li><code>int defaultFrameIndex</code>: the frame that is shown when the SpriteItem is not focused</li>
+		<li><code>boolean repeatAnimation</code>: defines whether the animation should be repeated when the last frame of the frame sequence has been reached.</li>
+	</ul>
+	<p>You can set the animation sequence on the Sprite itself. Thanks to J2ME Polish' gaming API you can use Sprite on MIDP 1.0 
+	devices as well.
+	</p>
+
+	
+	<h2 id="SpriteItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SpriteItem.html">SpriteItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/game/Sprite.html">Sprite</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

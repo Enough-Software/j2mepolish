@@ -1,0 +1,60 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: pulsating-round-rect Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">pulsating-round-rect Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Display an background that changes its color over time.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-pulsating-round-rect.mov">
+        <param name='autoplay' value="true">
+        <param name='controller' value="false">
+        <param name='loop' value="true">
+        <param name='width' value="164">
+        <param name='height' value="43">
+        <embed src="<%= basedir%>images/gui-background-pulsating-round-rect.mov" autoplay="true" 
+        controller="false" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="164" height="43"
+        >
+        </embed>
+	</object>
+	</p>
+<pre>
+.itemMain {
+	padding: 2;
+}
+
+.itemMain:hover {
+	layout: expand | left;
+	font-style: bold;
+	background {
+		type: pulsating-round-rect;
+		start-color: #fff;
+		end-color: #0e0;
+		steps: 6;
+		back-and-forth: true;
+		arc: 6;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background pulsating-round-rect %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PulsatingRoundRectBackground.html">PulsatingRoundRectBackground</a></li>
+	</ul>
+
+<%include end.txt %>

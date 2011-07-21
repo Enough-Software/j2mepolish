@@ -1,0 +1,22 @@
+/** 
+  * This file defines changes to the default design 
+  * for all Nokia Series60 phones.
+  */
+
+title {
+	background: none;
+	border: none;
+}
+
+menu {
+	menubar-color: transparent;
+}
+
+.mainScreen {
+	background {
+		type: image;
+		color: transparent;
+		image: url( bg.png );
+	}
+}
+

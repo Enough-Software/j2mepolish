@@ -1,0 +1,434 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Visual Guide to Item Views %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Visual Guide to Item Views</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="extending-itemview.html">Create your own view-type</a></li>
+		<li><a href="gui-visualguide.html">Visual Guide</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Visual Guide to Backgrounds</a></li>
+		<li><a href="gui-visualguide-borders.html">Visual Guide to Borders</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Visual Guide to Text Effects</a></li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Visual Guide to Screen Transitions</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+		<li><a href="customization.html">Customization</a></li>
+		<li><a href="../lush/index.html">Lush (UI)</a></li>
+	</ul>
+	<%index %>
+	
+	<p>
+	Each UI component has its own default visualization in J2ME Polish. You can, however, specify additional <code>view-type</code>s
+	for changing the visualization. You can even <a href="extending-itemview.html">create your own view-type</a>.
+	</p>
+	
+	<h2 id="gui-viewtypes-item">Item View Types</h2>
+	<p>
+	Following <code>view-type</code>s can be used for all <a href="gui-visualguide.html#gui-items">items</a>.
+	</p>
+<h3 id="gui-viewtypes-item-fade-out">fade-in view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_fadein">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-fadein.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fadein", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-fadein.html">fade-in</a> view-type increases the opacity of an item to the specified amount.</td>
+	</tr></table>		
+<h3 id="gui-viewtypes-item-fade-out">fade-out view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_fadeout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-fadeout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fadeout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-fadeout.html">fade-out</a> view-type increases the translucency of an item to the specified amount.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-item-particle">particle view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_particle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-particle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_particle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-particle.html">particle</a> view-type scales an item in an explosion like manner.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-item-size-decrease">size-decrease view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-sizedecrease.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="111">
+	        <param name='height' value="90">
+	        <embed src="<%= basedir%>images/gui-viewtype-sizedecrease.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="111" height="90"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-sizedecrease.html">size-decrease</a> view-type decreases the height of an item.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-item-size-increase">size-increase view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-sizeincrease.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="111">
+	        <param name='height' value="90">
+	        <embed src="<%= basedir%>images/gui-viewtype-sizeincrease.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="111" height="90"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-sizeincrease.html">size-increase</a> view-type increases the height of an item.</td>
+	</tr></table>	
+	
+	
+		
+	
+	<h2 id="gui-viewtypes-container">View Types for Container based UI Components</h2>
+	<p>
+	You can apply the following <code>view-type</code>s for all Container based UI components - basically these are all
+	components that can contain a number of items. Examples include <a href="gui-item-choicegroup.html">ChoiceGroup</a>,
+	<a href="gui-screen-list.html">List</a>, <a href="gui-screen-form.html">Form</a>, <a href="gui-item-htmlbrowser.html">HtmlBrowser</a>
+	and <a href="gui-screenelement-menubar.html">commands menu</a>.
+	</p>
+	
+<h3 id="gui-viewtypes-container-carousel">carousel view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_carousel">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-carousel.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_carousel", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-carousel.html">carousel</a> view-type aligns items in a circle.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-container-dropping">dropping view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_dropping">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-dropping.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_dropping", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td valign="center">The <a href="gui-viewtype-dropping.html">dropping</a> view-type let items fall from the top of the screen.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-container-fisheye">fisheye view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_fisheye">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-fisheye.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fisheye", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-fisheye.html">fisheye</a> view-type smoothly scales all items and aligns them horizontally.</td>
+	</tr></table>		
+<h3 id="gui-viewtypes-container-grayout">grayout view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_grayout">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-grayout.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_grayout", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-grayout.html">grayout</a> view-type smoothly scales all items and aligns them horizontally.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-container-midp2">midp2 view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-midp2.html">
+			<img src="<%= basedir%>images/gui-viewtype-midp2.png" width="347" height="415" alt="The midp2 view-type" />		
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-midp2.html">midp2</a> view-type adds items so a maxmimum number fits into the given space.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-container-numbered">numbered view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-numbered.html">
+			<img src="<%= basedir%>images/gui-viewtype-numbered.png" width="347" height="414" alt="The numbered view-type" />		
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-numbered.html">numbered</a> view-type adds the position of each item as it's label.</td>
+	</tr></table>	
+
+<h3 id="gui-viewtypes-container-shuffle">shuffle view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_shuffle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-shuffle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_shuffle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-shuffle.html">shuffle</a> view-type moves in items from both the left and right edges of a screen.</td>
+	</tr></table>	
+
+<h3 id="gui-viewtypes-item-slide">slide view-type</h3>
+	<table><tr>
+		<td>
+		<div id="id_slide">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-slide.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_slide", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td valign="center">The <a href="gui-viewtype-slide.html">slide</a> view-type moves the item in the specified direction.</td>
+	</tr></table>
+	
+	
+	<h2 id="gui-viewtypes-choicegroup">ChoiceGroup View Types</h2>
+	<p>
+	Next to all <a href="#gui-viewtypes-container">Container View Types</a> there are some specific to <a href="gui-item-choicegroup.html">ChoiceGroups</a>:
+	</p>
+<h3 id="gui-viewtypes-choicegroup-exclusivechoice">exclusive-choice view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-exclusivechoice.html">
+			<img src="<%= basedir%>images/gui-viewtype-exclusivechoice.png" width="316" height="79" alt="The exclusive-choice view-type" />		
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-exclusivechoice.html">exclusive-choice</a> view-type shows one option of a ChoiceGroup at a time.</td>
+	</tr></table>		
+<h3 id="gui-viewtypes-choicegroup-horizontalchoice">horizontal-choice view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-horizontalchoice.html">
+			<img src="<%= basedir%>images/gui-viewtype-horizontalchoice.png" width="316" height="79" alt="The horizontal-choice view-type" />		
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-horizontalchoice.html">horizontal-choice</a> view-type shows all options of a ChoiceGroup in a row.</td>
+	</tr></table>		
+	
+	
+	<h2 id="gui-viewtypes-gauge">Gauge View Types</h2>
+	<p>
+	You can use a <a href="gui-item-gauge.html">Gauge</a> for selecting an entry from a numerical range or
+	to indicate progress. Here are some alternative visualizations:
+	</p>
+<h3 id="gui-viewtypes-gauge-horizontal-icons">gauge-horizontal-icons view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-gaugehorizontalicons.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="176">
+	        <param name='height' value="52">
+	        <embed src="<%= basedir%>images/gui-viewtype-gaugehorizontalicons.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="176" height="52"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-gaugehorizontalicons.html">gauge-horizontal-icons</a> view-type displays several images in sequence while viewing one image at a time.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-gauge-horizontal-spheres">gauge-horizontal-spheres view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-gaugehorizontalspheres.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="176">
+	        <param name='height' value="45">
+	        <embed src="<%= basedir%>images/gui-viewtype-gaugehorizontalspheres.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="176" height="45"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-gaugehorizontalspheres.html">gauge-horizontal-spheres</a> view-type displays several filled circles in a row while exchanging the color of one of them.</td>
+	</tr></table>		
+<h3 id="gui-viewtypes-gauge-cycling-icons">gauge-cycling-icons view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-gaugecyclingicons.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="44">
+	        <param name='height' value="61">
+	        <embed src="<%= basedir%>images/gui-viewtype-gaugecyclingicons.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="44" height="61"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-gaugecyclingicons.html">gauge-cycling-icons</a> view-type displays several images in a cycle while exchanging one of them.</td>
+	</tr></table>	
+	
+<h3 id="gui-viewtypes-gauge-cycling-spheres">gauge-cycling-spheres view-type</h3>
+	<table><tr>
+		<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-viewtype-gaugecyclingspheres.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="44">
+	        <param name='height' value="61">
+	        <embed src="<%= basedir%>images/gui-viewtype-gaugecyclingspheres.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="44" height="61"
+	        >
+	        </embed>
+		</object>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-gaugecyclingspheres.html">gauge-cycling-spheres</a> view-type displays several filled circles in a cycle while exchanging the color of one of them.</td>
+	</tr></table>			
+	
+	<h2 id="gui-viewtypes-chartitem">ChartItem View Types</h2>
+	<p>
+	You can use different visualizations for the <a href="gui-item-chartitem.html">ChartItem</a>:
+	</p>
+<h3 id="gui-viewtypes-container-chart-cake">chart-pie view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-chartpie.html">
+		<img src="<%= basedir%>images/gui-item-chartitem-cake.png"  width="307" height="315" alt="A ChartItem with a pie visualization" />
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-chartpie.html">chart-pie</a> view-type visualizes the data in a pie chart.</td>
+	</tr></table>	
+<h3 id="gui-viewtypes-container-chart-verticalbars">chart-vertical-bars view-type</h3>
+	<table><tr>
+		<td>
+		<a href="gui-viewtype-chartverticalbars.html">
+		<img src="<%= basedir%>images/gui-item-chartitem-verticalbars.png"  width="322" height="165" alt="A ChartItem with vertical bars" />
+		</a>
+		</td>
+		<td valign="center">The <a href="gui-viewtype-chartverticalbars.html">chart-vertical-bars</a> view-type visualizes the data in bars.</td>
+	</tr></table>	
+	
+
+	
+	<h2 id="gui-viewtype-extend">Your Own View-Type</h2>
+	<table><tr>
+		<td><a href="extending-itemview.html"><img src="<%= basedir%>images/extend.png" width="76" height="68" alt="Create Your Own View-Type" /></a></td>
+		<td valign="center">Realize your <a href="extending-itemview.html">own View-Type</a>.</td>
+	</tr></table>
+	
+	
+
+<%include end.txt %>

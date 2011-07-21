@@ -1,0 +1,287 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending J2ME Polish: Backgrounds %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Create New Backgrounds</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Existing Backgrounds</a></li>
+		<li><a href="extending-border.html">Borders</a></li>
+		<li><a href="extending-itemview.html">Item Views</a></li>
+		<li><a href="extending-texteffect.html">Text Effects</a></li>
+		<li><a href="extending-screenchangeanimation.html">ScreenChangeAnimation</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Realize your vision by creating a background. You can use your own background
+	for any item or screen.
+	</p>
+	
+	<h2 id="concepts">Concepts of Backgrounds</h2>
+	<p>
+	Realizing your own background is fairly simple:
+	<ol>
+		<li><b>Implement</b> your background by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Background.html">de.enough.polish.ui.Background</a>.</li>
+		<li><b>Register</b> the background in <i>${polish.home}/custom-css-attributes.xml</i>.</li>
+		<li><b>Apply </b> your background by specifying the <code>background</code> CSS attribute in your project's <i>polish.css</i> file.</li>
+	</ol>
+	</p>
+	
+	<h2 id="implementation">Implementing your Background</h2>
+	<p>
+	Create your own background by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Background.html">de.enough.polish.ui.Background</a>.
+	You only need to implement  the <code>paint( int x, int y, int width, int height, Graphics g )</code> method. 
+	<br />
+	You can override the <code>releaseResources()</code> method for freeing any stray resources when your background is not used anymore.
+	</p>
+	<p>In this example we implement a very simple background that paints a triangle. 
+	<br />
+	<img src="../images/extending-background.png" width="282" height="273" alt="the finished triangle background" />
+	<br />
+	Note that the triangle requires a color and can point into four different directions (to the top, bottom, left or right), 
+	so the constructor reads:
+<pre>
+public TriangleBackground( int color, int orientation )
+</pre>
+	</p>
+	<p>
+	Also note that the <code>Graphics.fillTriangle()</code> method is only available for MIDP 2.0 and higher devices, so we
+	use <code>DrawUtil.fillTriangle()</code> instead on other devices:
+<pre>
+//#if polish.midp2
+	g.fillTriangle( x1, y1, x2, y2, x3, y3 );
+//#else
+	DrawUtil.fillTriangle(x1, y1, x2, y2, x3, y3, g);
+//#endif
+</pre>
+	</p>
+	<p>
+	Now for all the gory details:
+<pre>
+//#condition polish.usePolishGui
+package de.enough.polish.ui.backgrounds;
+
+import javax.microedition.lcdui.Graphics;
+
+import de.enough.polish.ui.Background;
+import de.enough.polish.util.DrawUtil;
+
+/**
+ * Paints a filled rectangle as a background in a specific color and orientation.
+ */
+public class TriangleBackground 
+extends Background 
+{
+	private final static int TOP = 0; 
+	private final static int BOTTOM = 1;
+	private final static int LEFT = 2;
+	//private final static int RIGHT = 3; not used
+	
+	private int color;
+	private final int orientation;
+	
+
+	/**
+	 * Creates a new triangle background.
+	 * 
+	 * @param color the color of the background in RGB, e.g. 0xFFDD11
+	 * @param orientation the orientation, either TOP, BOTTOM, LEFT, RIGHT
+	 */
+	public TriangleBackground( int color, int orientation ) {
+		this.color = color;
+		this.orientation = orientation;
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Background#paint(int, int, int, int, javax.microedition.lcdui.Graphics)
+	 */
+	public void paint(int x, int y, int width, int height, Graphics g) {
+		g.setColor( this.color );
+		int x1, y1, x2, y2, x3, y3;
+		switch (this.orientation) {
+		case TOP:
+			x1 = x + (width >>> 1);
+			y1 = y;
+			x2 = x;
+			y2 = y + height;
+			x3 = x + width;
+			y3 = y2;
+			break;
+		case BOTTOM:
+			x1 = x + (width >>> 1);
+			y1 = y + height;
+			x2 = x;
+			y2 = y;
+			x3 = x + width;
+			y3 = y2;
+			break;
+		case LEFT:
+			x1 = x;
+			y1 = y + (height >>> 1);
+			x2 = x + width;
+			y2 = y;
+			x3 = x2;
+			y3 = y + height;
+			break;
+		default: // == RIGHT
+			x1 = x + width;
+			y1 = y + (height >>> 1);
+			x2 = x;
+			y2 = y;
+			x3 = x;
+			y3 = y + height;
+		}
+		//#if polish.midp2
+			g.fillTriangle( x1, y1, x2, y2, x3, y3 );
+		//#else
+			DrawUtil.fillTriangle(x1, y1, x2, y2, x3, y3, g);
+		//#endif
+	}
+
+}
+</pre>
+	</p>
+	
+	<h2 id="registration">Registering Your Background</h2>
+	<p>
+	After implementing your background you need to register it in <i>${polish.home}/custom-css-attributes.xml</i>:
+<pre>
+&lt;attribute name=&quot;background&quot;&gt;
+	&lt;mapping from=&quot;triangle&quot; to=&quot;de.enough.polish.ui.backgrounds.TriangleBackground&quot;&gt;
+		&lt;param name=&quot;color&quot; type=&quot;color&quot; primitive=&quot;true&quot; default=&quot;white&quot; /&gt;
+		&lt;param name=&quot;orientation&quot; type=&quot;integer&quot; values=&quot;top,bottom,left,right&quot; primitive=&quot;true&quot; default=&quot;top&quot; /&gt;
+	&lt;/mapping&gt;
+&lt;/attribute&gt;
+</pre>
+	</p>
+	<h3 id="registration-parameters">Background Parameters</h3>
+	<p>
+	Along with the background class you need to register all parameters of your constructor, so that J2ME Polish can automatically instantiate your background.
+	For each parameter you add one <code>&lt;param&gt;</code> element. Parameters can have different types - some types are additionally 
+	available as primitives as well as objects. Take for example <code>java.lang.Integer</code> and <code>int</code>. Both are modeled using
+	the <code>integer</code> type, but for using the primitive version, we additionally need to specify <code>primitive=&quot;true&quot;</code>.
+	Parameter types that are available as primitives as well as objects include <code>integer</code>, <code>color</code>, <code>boolean</code>
+	and <code>char</code>:
+<pre>
+&lt;param name=&quot;color&quot; type=&quot;color&quot; primitive=&quot;true&quot; default=&quot;white&quot; /&gt;
+</pre>
+	</p>
+	<p>
+	<code>integer</code> paramters can be additionally populated using strings, when only some strings are allowed. In that case you have
+	to specify the allowed values - the first value will be tranformed to <code>0</code>, the second one to <code>1</code> and so on. This
+	technology helps to minimize the memory and performance impact of UI elements:
+<pre>
+&lt;param name=&quot;orientation&quot; type=&quot;integer&quot; values=&quot;top,bottom,left,right&quot; primitive=&quot;true&quot; default=&quot;top&quot; /&gt;
+</pre>
+	</p>
+	<p>
+	Last but not least you can specify default values for parameters using the <code>default</code> attribute.
+	</p>
+	<h3 id="registration-parametertypes">Background Parameter Types</h3>
+	<p>
+	The following table shows you the available parameter types that you can use for your background constructors.
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type</th><th>Supports Primitive</th><th>Additional Attributes</th><th>Example</th><th>Explanation</th></tr>
+	<tr>
+	 <td>integer</td>
+	 <td>true</td>
+	 <td><code>values</code>: comma separated allowed string values that are transformed into integer values.</td>
+	 <td><code>&lt;param name=&quot;orientation&quot; type=&quot;integer&quot; values=&quot;top,bottom,left,right&quot; primitive=&quot;true&quot; default=&quot;top&quot; /&gt;</code></td>
+	 <td>An integer value - either <code>int</code> or <code>java.lang.Integer</code>.</td>
+	</tr>
+	<tr>
+	 <td>color</td>
+	 <td>true</td>
+	 <td><code>translucent</code>: true when corresponding color can be translucent (ARGB).</td>
+	 <td><code>&lt;param name=&quot;color&quot; type=&quot;color&quot; translucent=&quot;true&quot; primitive=&quot;true&quot; default=&quot;#8f00&quot; /&gt;</code></td>
+	 <td>A color value - either <code>int</code> or <code>de.enough.polish.ui.Color</code>. In the polish.css file you can
+	 specify colors in different ways, e.g. <code>argb( 70%, 100%, 0%, 0%)</code> or <code>#a833</code>.
+	 </td>
+	</tr>
+	<tr>
+	 <td>string</td>
+	 <td>false</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;format&quot; type=&quot;string&quot; default=&quot;hh:mm:ss&quot; /&gt;</code></td>
+	 <td>A string value.</td>
+	</tr>
+	<tr>
+	 <td>char</td>
+	 <td>true</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;first-letter&quot; type=&quot;char&quot; default=&quot;a&quot; /&gt;</code></td>
+	 <td>A character value, either <code>char</code> or <code>java.lang.Character</code>.</td>
+	</tr>
+	<tr>
+	 <td>boolean</td>
+	 <td>true</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;expand&quot; type=&quot;boolean&quot; default=&quot;false&quot; /&gt;</code></td>
+	 <td>A boolean value, either <code>boolean</code> or <code>java.lang.Boolean</code>.</td>
+	</tr>
+	<tr>
+	 <td>image-url</td>
+	 <td>false</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;image&quot; type=&quot;image-url&quot; /&gt;</code></td>
+	 <td>The URL of an image, is provided as a String value containing the path, e.g. <code>&quot;/myimage.png&quot;</code>.</td>
+	</tr>
+	</table>
+	
+	<h2 id="usage">Using Your Background</h2>
+	<p>
+	After registration you can apply your background to any item's or screen's style in your <i>polish.css</i> file:
+<pre>
+.myItem {
+	padding: 3;
+	background {
+		type: triangle;
+		color: red;
+		orientation: bottom;
+	}
+}
+</pre>
+	</p>
+	
+	<p>
+	That's it - you've done it!
+	<br />
+	<img src="../images/extending-background.png" width="282" height="273" alt="the finished triangle background" />
+	</p>
+	
+	<h2 id="advancedtopics">Animations in Backgrounds</h2>
+	<p>
+	You can realize animations by overriding either <code>public boolean animated()</code> or 
+	<code>public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)</code>
+	in your implementation:
+	</p>
+	<ul>
+		<li><code>public boolean animate()</code> causes a refresh of the whole background area when you return true.</li>
+		<li><code>public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)</code> 
+		allows you to refresh only parts of your background or an area that is outside of the parent item's original area.
+		You have to specify the area that requires a refresh by calling <code>repaintRegion.addRegion( int x, int y, int width, int height )</code>
+		or by calling <code>parent.addRelativeToBackgroundRegion( repaintRegion, x, y, width, height )</code>.
+		You can request a full refresh by calling <code>parent.addRelativeToBackgroundRegion( repaintRegion, 0, 0, parent.getBackgroundWidth(), parent.getBackgroundHeight() )</code>.		
+		</li>
+	</ul>
+	<p>If you want to trigger your animation only when the corresponding item or screen is made visible or when a
+	focused/hover style along with your background moves to a new item, you can override
+	<code>public void showNotify()</code> and <code>public void hideNotify()</code> in your implementation.
+	</p>
+	<p>
+	For a complete animation example, please refer to the <a href="extending-border.html">border documentation</a>.
+	</p>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Background.html">Background</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ClippingRegion.html">ClippingRegion</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a></li>
+	</ul>
+
+<%include end.txt %>

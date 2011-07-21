@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/src"/>
+	<classpathentry kind="src" path="source/server"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/cldc-1.1.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/midp-2.0.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/mmapi.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/nokia-ui.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/import/wmapi.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/lib/enough-j2mepolish-client.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/lib/enough-j2mepolish-rmi.jar"/>
+	<classpathentry kind="lib" path="%{INSTALL_PATH}/lib/javax.servlet.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

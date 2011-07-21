@@ -1,0 +1,61 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: scale filter %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">scale filter</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-filters.html">Other Filters</a></li>
+		<li><a href="gui-css-animations.html">CSS Animations</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+		<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/xqoENo--WTQ&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/xqoENo--WTQ&hl=en&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+	</p>
+	<p>
+		The <code>scale</code> filter scales UI elements up or down.
+	</p>
+	<h2 id="filter-Design">Usage</h2>
+	<p>
+	Use this filter like this:
+	</p>
+<pre>
+.mainItem {
+	font-style: bold;
+	font-size: medium;
+	padding: 0px;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+	<b>icon-filter: scale;
+	filter-scale-grade: 60%;
+	filter-scale-grade-animation {
+		on: defocus;
+		range: 100%..60%;
+		duration: 400ms;
+	}</b>
+}
+
+.mainItem:hover {
+	font-color: white;
+	text-effect: shadow;
+	<b>filter-scale-grade-animation {
+		on: focus;
+		range: 60%..100%;
+		duration: 400ms;
+	}</b>
+}
+</pre>
+	<%cssattributes de.enough.polish.ui.rgbfilters.ScaleRgbFilter %>
+
+	
+	
+	<h2 id="filter-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/rgbfilters/ScaleRgbFilter.html">ScaleRgbFilter</a>.
+	</p>
+
+<%include end.txt %>

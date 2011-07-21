@@ -1,0 +1,159 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.extending %>
+<%set title = J2ME Polish: Extending J2ME Polish %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Creating and Using Custom Preprocessing Directives</h1>
+<%index %>
+<p>
+You can easily use your own preprocessing directives by extending the de.enough.polish.preprocess.CustomPreprocessor 
+class and by integrating your preprocessor with the &lt;preprocessor&gt; element 
+in the &quot;build.xml&quot; file.
+</p>
+<h2 id="prepare">Preparations</h2>
+<p>
+Create a new project in your IDE and set the classpath so that it includes the 
+&quot;enough-j2mepolish-build.jar&quot;, which can be found in the 
+&quot;import&quot; folder of the installation directory. 
+Also include the &quot;ant.jar&quot; file from your Ant-installation into the classpath.
+</p>
+<h2 id="create">Creating the Preprocessor Class</h2>
+<p>
+Create a new class which extends <a href="<%= javadocdir %>../javadoc/build/de/enough/polish/preprocess/CustomPreprocessor.html" target="_blank">de.enough.polish.preprocess.CustomPreprocessor</a>. 
+</p>
+<h3 id="register">Using the registerDirective()-Method</h3>
+<p>
+The easiest way to use custom directive is by registering them with the &quot;registerDirective&quot;-method:
+<pre>
+	/**
+	 * Adds a directive which is searched for in the preprocessed source codes.
+	 * Whenever the directive is found, the appropriate method 
+	 * process[directive-name] is called.
+	 * When for example the preprocessing directive &quot;//#hello&quot; should be processed,
+	 * the subclass needs to implement the method 
+	 * processHello( String line, StringList lines, String className ).
+	 * &lt;pre&gt;
+	 * registerDirective(&quot;hello&quot;);
+	 * // is the same like
+	 * registerDirective(&quot;//#hello&quot;);
+	 * &lt;/pre&gt; 
+	 *  
+	 * @param directive the preprocessing directive which should be found.
+	 *        The directive needs to contain at least 2 characters (apart from
+	 * 		the beginning &quot;//#&quot;). 
+	 *		The &quot;//#&quot; beginning is added when not specified.
+	 * @throws BuildException when the corresponding method could not be found.
+	 */
+	protected void registerDirective( String directive ) throws BuildException
+</pre>
+</p>
+<p>
+When for example the directive &quot;date&quot; is registered, the public method 
+<code>processDate( String line, de.enough.polish.util.StringList lines, String className )</code> 
+needs to be implemented. 
+</p>
+<p>You can make use of following protected variables:</p>
+<ul>
+	<li>de.enough.polish.preprocess.Preprocessor preprocessor: the main preprocessor</li>
+	<li>de.enough.polish.preprocess.BooleanEvaluator booleanEvaluator : an evaluator for complex terms which can be used in the #if-directive.</li>
+</ul>
+<p>
+If you need further configuration settings, you can add them with the &lt;parameter&gt; construct, 
+which is discussed below.
+</p><p>
+In the processing method the line in which the preprocessing directive was found is usually 
+changed. When the line is changed, please make sure that the preprocessing-directive is 
+removed from the changed line, so that the following preprocessing can continue without errors.
+</p><p>
+When there is an exception, abort the build by throwing a org.apache.tools.ant.BuildException explaining the details why the preprocessing was aborted.
+</p><p>
+This example should illustrate the usage of the registerDirective()-method:
+<pre>
+package com.company.preprocess;
+
+import org.apache.tools.ant.BuildException;
+import de.enough.polish.preprocess.CustomPreprocessor;
+import de.enough.polish.util.StringList;
+import java.util.Date;
+
+public class MyPreprocessor extends CustomPreprocessor {
+
+ public MyPreprocessor() {
+	super();
+	registerDirective("date");
+ }
+
+ public void processDate( String line, StringList lines, String className ) {
+ 	int directiveStart = line.indexOf( "//#date");
+	String argument = line.substring( directiveStart + "//#date".length() ).trim();
+	int replacePos = argument.indexOf("${date}");
+	if (replacePos == -1) {
+	  throw new BuildException(className + " at line " 
+		+ (lines.getCurrentIndex() + 1) 
+		+ ": Unable to process #date-directive: found no ${date} sequence in line [" 
+		+ line + "." );
+	}
+	String result = argument.substring(0, replacePos )
+		+ ( new Date().toString() ) 
+		+ argument.substring( replacePos + "${date}".length() );
+	lines.setCurrent(result);
+ }	
+}
+</pre>
+</p>
+<h3 id="processClass">Using the processClass()-Method</h3>
+<p>
+For more complex situations, you can override the processClass()-method which allows you to process the whole java-file in one go:
+<pre>
+	/**
+	 * Processes the given class.
+	 * 
+	 * @param lines the source code of the class
+	 * @param className the name of the class
+	 */
+	public void processClass( StringList lines, String className ) {
+		while (lines.next()) {
+			String line = lines.getCurrent();
+			// now process the line...
+		}
+	}
+</pre></p>
+<h2 id="integrate">Integrating the Preprocessor into the build.xml</h2>
+<p>
+You can integrate your preprocessor with the usual &lt;preprocessor&gt; element in the 
+build.xml file (compare the <a href="build-build.html#preprocessor">&lt;preprocessor&gt; documentation</a>).
+<pre>
+&lt;preprocessor 
+	class=&quot;com.company.preprocess.MyPreprocessor&quot;
+	classPath=&quot;../preprocessor-project/bin/classes&quot;
+	&gt;
+	&lt;parameter name=&quot;scriptFile&quot; value=&quot;../scripts/preprocess.script&quot; /&gt;
+&lt;/preprocessor&gt;
+</pre>
+</p><p>
+The &quot;class&quot;-attribute needs to be set to the new class. The classPath-attribute can be used for pointing out the location of the preprocessor. This is only needed when the preprocessor is not on the Ant-classpath.
+</p>
+
+<h2 id="parameter">Configuring the Preprocessor with Parameters</h2>
+<p>
+The preprocessor can be configured using &lt;parameter&gt; subelements in the build.xml. 
+For each &lt;parameter&gt; a corresponding
+&quot;set[parameter-name]&quot;-method needs to be implemented, which either needs to have one File parameter, one boolean or one String parameter:
+<pre>
+	&lt;parameter name=&quot;scriptFile&quot; value=&quot;../scripts/obfuscate.script&quot; /&gt;
+</pre>
+</p><p>
+For the using the above parameter, the preprocessor needs to implement either the 
+public method setScriptFile( File file ) or the public method setScriptFile( String value ). 
+When a method with a File-parameter is used, relative file paths are resolved relative to the location of the build.xml file (or to be more precise relative to the project.getBaseDir() location). The file given as a parameter in the set-method uses an absolute path in that case.
+</p>
+
+<h2 id="javadoc">JavaDoc Resources</h2>
+<p>Please refer to these JavaDoc resources for detailed information:</p>
+<ul>
+	<li><b>CustomPreprocessor</b>: <a href="<%= javadocdir %>../javadoc/build/de/enough/polish/preprocess/CustomPreprocessor.html" target="_blank">de.enough.polish.preprocess.CustomPreprocessor</a></li>
+</ul>
+
+<%include end.txt %>

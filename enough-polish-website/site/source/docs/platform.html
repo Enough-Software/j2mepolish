@@ -1,0 +1,31 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: Platforms %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Platforms</h1>
+<p>
+J2ME Polish can be adjusted to support several platforms that support more than the normal MIDP profile.
+The key for this support is the <i>${polish.home}/platforms.xml</i> file (visible only if you install the external device database), 
+inclusion of platform specific (boot) classpaths, and the automatic selection and invocation of preprocessors, 
+postcompilers, finalizers and so on.
+</p>
+<p>
+Following Platforms are supported by J2ME Polish:
+</p>
+<ul>
+	<li><a href="platform-midp.html">MIDP</a></li>
+	<li><a href="platform-windowsmobile.html">Windows Mobile</a> (native support requires additional licensing:  <a href="mailto:service@enough.de">send inquiry</a>)</li>
+	<li><a href="platform-iphone.html">iPhone</a> (provided as an additional service: <a href="mailto:service@enough.de">send inquiry</a>)</li>
+	<li><a href="platform-android.html">Android</a></li>
+	<li><a href="platform-blackberry.html">BlackBerry</a></li>
+	<li><a href="platform-palm.html">Palm</a></li>
+	<li><a href="platform-doja.html">DoJa</a></li>
+	<li><a href="platform-javase.html">Java SE</a></li>
+</ul>
+<p>
+	<img src="<%= basedir%>images/platforms.png" width="594" height="292"/> 
+</p>
+
+<%include end.txt %>

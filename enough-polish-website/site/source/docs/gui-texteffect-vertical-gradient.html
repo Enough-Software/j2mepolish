@@ -1,0 +1,51 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Vertical-Gradient Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">vertical-gradient Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The vertical-gradient text-effect draws text with a vertical-gradient.
+	</p>
+	<h2 id="Vertical-Gradient-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-vertical-gradient.png"  width="139" height="24" alt="the vertical-gradient text-effect" />
+	<br />
+	The above effect has been realized for the screen's title with following settings:
+	</p>
+<pre>
+title {
+        text-effect: vertical-gradient;
+        text-vertical-gradient-end-color: #ff0099;
+        text-vertical-gradient-start-color: #ffffff;
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+        }
+        background-color: white;
+}	
+</pre>
+<p>
+	Specific design attributes of the vertical-gradient text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.VerticalGradientTextEffect %>
+	
+		
+	<h2 id="Shadow-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/VerticalGradientTextEffect.html">VerticalGradientTextEffect</a>.
+	</p>
+
+<%include end.txt %>

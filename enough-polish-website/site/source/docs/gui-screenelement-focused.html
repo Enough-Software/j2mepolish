@@ -1,0 +1,132 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Designing the Focused Element %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Designing the Focused Element</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screenelement-pressed.html">Pressed Style</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	
+	<p>
+	In most screens the user is able to focus various items. The <code>focused</code> style is used
+	to highlight the current item. You can, however, use item-specific styles for each element as well by
+	defining a <code>[style-name]:hover</code> style.
+	</p>
+	<p>You are not limited in the design, typically you will use a different background or a different border
+	for the focused state of an item, but depending on the item you can also exchange icon-images, font-styles, 
+	effects, animations and so on. Please refer to the <a href="gui-visualguide.html">visual guide</a> for 
+	details on the design possibilities for each item.
+	</p>
+	<p>
+	<img src="<%= basedir%>images/gui-screenelement-ticker.png"  width="240" height="320" alt="A focused element" />	
+	<br />
+	In the above screenshot we just exchange the orange border against a black border for the currently focused mail box by using
+	the <code>mailbox:hover</code> CSS style:
+	</p>
+<pre>
+colors {
+	focusedFontColor: #111;
+	focusedBorderColor: #444;
+	mailBoxBgColor: #eee;
+	mailBoxBorderColor: #fe0;
+	mailBoxFontColor: focusedFontColor;
+}
+
+.mailBox {
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: mailBoxBgColor;
+		border-color: mailBoxBorderColor;
+	}
+	font {
+		style: bold;
+		size: small;
+		color: mailBoxFontColor;
+	}
+	layout: expand | left;
+}
+
+<b>.mailBox:hover</b> {
+	background-border-color: focusedBorderColor;
+}
+</pre>
+	<p>
+	As you can see in the above example, you can modify the focused state of a CSS style by using the <code>[style-name]:hover</code> selector (same
+	as on normal webpages). You also should consider to implement the <code>focused</code> style, because this style is used whenever there is
+	no specialized <code>:hover</code> selector for an element. The usage of the <code>focused</code> style also unifies the user experience,
+	since the currently focused element will be rendered the same on all screens and menus (not counting elements with <code>:hover</code> selectors).
+	</p>
+	<h2 id="tipsandtricks">Tips and Tricks</h2>
+	<p>
+	You should aim to keep the user interface calm when the user moves the focus to another item. Here are some tips for designing the focused 
+	style of an element:
+	</p>
+	<ul>
+	<li><b>Same Size</b>: the focused item should have the same size as the not-focused one. So if you add or increase a border for 
+	marking the focused state, you should add the corresponding paddings or margins to the not-focused style of that item, too. The same
+	applies to other changes that influence the item's size like a (different) before/after/icon image, a change of paddings/margins, and so on.
+	</li>
+	<li><b>Keep Layout</b>: You should stick to the layout of the item. So do apply the same layout to the focused as well as the not-focused states of the item.</li>
+	<li><b>Trim Icons to the Same Size</b>: Bring all icon sizes of one menu/one screen to the same size. This eases the layout.</li>
+	<li><b>No Font Size Change</b>: Do not change the font size unless you really know the font sizes on your target device, so that you can adjust
+	the paddings and margins accordingly.
+	</li>
+	</ul>
+	<p>The following example shows the above example in which we increase the border width in the focused state. We accordingly adjust
+	the margins, so that there is no wobbling when the user moves to the next item:
+	</p>
+<pre>
+.mailBox {
+	<b>margin: 1;</b>
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: mailBoxBgColor;
+		border-color: mailBoxBorderColor;
+	}
+	font {
+		style: bold;
+		size: small;
+		color: mailBoxFontColor;
+	}
+	layout: expand | left;
+}
+
+.mailBox:hover {
+	<b>margin: 0;
+	background-border-width: 2;</b>
+	background-border-color: focusedBorderColor;
+}
+</pre>
+	
+	
+	<h2 id="Programming">Programming</h2>
+	<p>
+	You can get the currently focused item of any screen by calling <code>UiAccess.getFocusedItem( Screen screen )</code> and the 
+	index of the currently focused item by calling <code>UiAccess.getFocusedIndex( Screen screen )</code>.
+	</p>
+	<p>You can get notified when the user changes the focus by registering a <code>ScreenStateListener</code>
+	on that screen. Do this by calling <code>UiAccess.setScreenStateListener( Screen screen, ScreenStateListener listener )</code>.
+	</p>
+	<p>Last but not least you can change the focused element of a screen by calling <code>UiAccess.setFocusedIndex( Screen screen, int index )</code>
+	or  <code>UiAccess.setFocusedItem( Screen screen, Item item )</code>.
+	<br />You can focus an item and showing the corresponding screen at the same time by calling <code>Display.setCurrentItem( Item item )</code>.
+	</p>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ScreenStateListener.html">ScreenStateListener</a></li>
+	</ul>
+
+<%include end.txt %>

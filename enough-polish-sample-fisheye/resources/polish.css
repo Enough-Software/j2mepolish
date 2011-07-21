@@ -1,0 +1,364 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(90,121,239);
+	brightBgColor:  rgb(165,190,247);
+	brightFontColor: white;
+	fontColor: rgb( 66, 85, 148 ); 
+	translucentBgColor:  argb(130, 165,190,247);
+	
+	maskColor: red;
+}
+
+backgrounds {
+
+	titleGradient {
+		type: vertical-gradient;
+		top-color: white;
+		bottom-color: blue;
+	}
+	
+	maskBackground {
+		type: polygon;
+		points: 5,90 55,0 105,90 155,0 205,90;
+		reference-width: 210;
+		reference-height: 100;
+		scale-mode: scale;
+		color: maskColor;
+	}
+	
+	alertTop {
+		type: round-rect;
+		color: #fff;
+	}
+	
+	alertBg {
+		type: round-rect;
+		color: #a333;
+	}
+	
+	alertOverlay {
+		color: #9fff;
+	}
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	/*	
+	background-color: bgColor;
+	*/
+	
+	background: titleGradient;
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+	padding: 5;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: brightBgColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | center;	
+}
+
+/** 
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  */
+.mainScreen {
+	padding: 2;
+	padding-left: 10;
+	padding-right: 10;
+	background {
+		type: horizontal-stripes;
+		first-top-color: brightBgColor;
+		second-top-color: white;
+		first-bottom-color: blue;
+		second-bottom-color: black;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	/*
+	view-type: fisheye;
+	fisheyeview-scale: 60%;
+	fisheyeview-scale-end: 20%;
+	fisheyeview-remove-text: true;		
+	view-type: horizontal-gray-out;
+	*/
+	view-type: fisheye;
+	fisheyeview-scale-start: 70%;
+	fisheyeview-scale-end: 40%;
+	fisheyeview-alpha-start: 200;
+	fisheyeview-alpha-end: 80;
+	fisheyeview-remove-text: true;		
+	/* fisheyeview-max-visible: 3; */
+}
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "listitem" to design all
+  * items on the list-screens. 
+  * An interesting attribute is the "icon-image" URL, which uses
+  * the %INDEX% keyword. The first list-item will use the image
+  * "icon0.png", the second "icon1.png" and so on. 
+  */
+.mainCommand {
+	padding: 0;
+	padding-vertical: 0;
+	icon-image: url( iconlarge%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+}
+
+.mainCommand:hover {
+	font-style: bold;
+	font-size: small;
+	font-color: white;
+	text-effect: shadow;
+}
+
+.mainCommand:pressed {
+	view-type: particle;
+}
+
+
+
+.messageAlert {
+	padding: 20px;
+	padding-top: 1px;
+	view-type: none;
+	layout: horizontal-shrink | vertical-shrink | horizontal-center | vertical-center;
+	background {
+		type: layer;
+		layers: alertTop, alertBg;
+		margins: 10px, 0px;
+	}
+	repaint-previous-screen: true;
+	overlay-background: alertOverlay;
+	title-style: messageAlertTitle;
+	menubar-style: messageAlertMenuBar;
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#else
+		screen-change-animation: right;
+	//#endif
+}
+
+.messageAlertTitle {
+	padding-top: 20px;
+	font-color: #333;
+	font-style: bold;
+	font-size: normal;
+}
+
+.messageAlertMenuBar {
+	background-color: #333;
+}
+
+alertcontent {
+	font-color: white;
+	font-size: small;
+	font-style: bold;
+	text-effect: shadow;
+}
+
+.input {
+	margin: 1;
+	background-color: white;
+	layout: expand;
+}
+
+.input:hover {
+	margin: 0;
+	background-color: yellow;
+	border-color: black;
+}
+
+info {
+	margin: 1;
+	font-color: gray;
+	layout: right;
+}
+
+/*************   MENU BAR     *************/
+
+menubar {
+	margin: 0;
+	padding-top: 3;
+	padding: 2;
+	background {
+		type: vertical-gradient;
+		top-color: blue;
+		bottom-color: #fff;
+		start: 10%;
+		end: 100%;
+	}
+}
+
+/**
+ * Commands within the menubar on the left side
+ */
+leftcommand
+{
+	margin: 0;
+    //#if polish.key.MiddleSoftKey:defined or polish.MenuBar.useMiddleCommand
+    	/* the middle command is used, so lower the left and right commands relatively */
+		padding-top: 7;
+	//#endif
+	padding-bottom: 0;
+	font-color: white;
+	font-style: bold;
+	/*
+	text-effect: vertical-gradient;
+	text-vertical-gradient-end-color: #eee;
+	text-vertical-gradient-start-color: #000;
+	*/
+	text-effect: shadow;
+	text-shadow-color: #333;
+	font-size: small;
+}
+
+/**
+ * Commands within the menubar on the right side
+ */
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+middlecommand extends leftcommand {
+	padding-top: 1;
+	font-color: black;
+}
+
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  * The font-settings (font-color,
+  * font-face, font-style and font-size)
+  * are used to design the menu-texts
+  * (like Options, Select, or Cancel).
+  * With the focused-style attribute
+  * another style than the default "focused"
+  * style is used for the menu. 
+  */
+menu {
+	margin-left: 2;
+	padding: 2;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+	font-color: brightFontColor;
+	font-style: bold;
+	view-type: slide-up;
+	/*
+	view-type: numbered;
+	*/
+}
+
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/*
+	label-style: menuLabel;
+	*/
+}
+
+/**
+  * A focused menuItem
+  */
+menuItem:hover {
+	background-color: bgColor;
+	font-color: brightFontColor;
+	layout: left | horizontal-expand;
+	/*
+	label-style: menuLabelFocused;
+	include-label: true;
+	*/
+}
+
+/*
+.menuLabel {
+	padding: 3;
+	font-color: fontColor;
+	font-style: bold;
+}
+
+.menuLabelFocused {
+	padding: 2;
+	font-color: brightFontColor;
+	font-style: bold;
+	border {
+		type: circle;
+		width: 1;
+		color: brightFontColor;
+	}
+}
+
+*/

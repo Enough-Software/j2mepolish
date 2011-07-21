@@ -1,0 +1,140 @@
+<%define inScreenshotsSection %>
+<%set title = J2ME Polish: Screenshots %>
+<%include start.txt %>
+	
+	<h1>Sample Application</h1>
+	<p>For creating the screenshots the following standard MIDP application is used.
+	The different designs ae the result of using different resources folder.
+	The resource folder can be set by the "resDir" attribute of the 
+	<a href="docs/build-build.html">J2ME Polish Task.</a></p>
+	<p>This application is included in the <a href="download.html">J2ME Polish distribution</a>.</p>
+	<h2>Source Code</h2>
+<pre>
+/*
+ * Created on 04-Apr-2004 at 16:14:27.
+ * 
+ * Copyright (c) 2004 Robert Virkus / enough software
+ *
+ * This file is part of J2ME Polish.
+ *
+ * J2ME Polish is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * J2ME Polish is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * 
+ * Commercial licenses are also available, please
+ * refer to the accompanying LICENSE.txt or visit
+ * www.enough.de/j2mepolish for details.
+ */
+package de.enough.polish.example;
+
+import javax.microedition.lcdui.*;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+
+/**
+ * Shows a demonstration of the possibilities of J2ME Polish.
+ *
+ * copyright enough software 2004
+ * history
+ *        04-Apr-2004 - rob creation
+ * @author Robert Virkus, j2mepolish@enough.de
+ */
+public class MenuMidlet extends MIDlet implements CommandListener {
+	
+	List menuScreen;
+	Command startCmd = new Command( "Start game", Command.ITEM, 8 );
+	Command quitCmd = new Command( "Quit", Command.EXIT, 10 );
+	Display display;
+	Throwable error;
+	
+	public MenuMidlet() {
+		super();
+		//#debug
+		System.out.println("starting MenuMidlet");
+		//#style mainScreen
+		this.menuScreen = new List("J2ME Polish", List.IMPLICIT);
+		//#style mainCommand
+		this.menuScreen.append("Start game", null);
+		//#style mainCommand
+		this.menuScreen.append("Load game", null);
+		//#style mainCommand
+		this.menuScreen.append("Help", null);
+		//#style mainCommand
+		this.menuScreen.append("Quit", null);
+		this.menuScreen.setCommandListener(this);
+		this.menuScreen.addCommand( this.startCmd ); 
+		this.menuScreen.addCommand( this.quitCmd );
+				
+		// #debug
+		System.out.println("intialisation done.");
+	}
+
+	protected void startApp() throws MIDletStateChangeException {
+		//#debug
+		System.out.println("setting display.");
+		this.display = Display.getDisplay(this);
+		this.display.setCurrent( this.menuScreen );
+	}
+
+	protected void pauseApp() {
+		// ignore
+	}
+	
+	protected void destroyApp(boolean unconditional) throws MIDletStateChangeException {
+		// just quit
+	}
+	
+	public void commandAction(Command cmd, Displayable screen) {		
+		if (screen == this.menuScreen) {
+			if (cmd == List.SELECT_COMMAND) {
+				int selectedItem = this.menuScreen.getSelectedIndex();
+				switch (selectedItem) {
+					case 0: startGame(); break;
+					case 1: loadGame(); break;
+					case 2: showHighscore(); break;
+					default: notifyDestroyed(); 
+				}
+			} else if (cmd == this.startCmd) {
+				startGame();
+			} else if (cmd == this.quitCmd) {
+				quit();
+			}
+		}
+	}
+	
+	private void startGame() {
+		Alert alert = new Alert( "sorry", "start game not implemented", null, AlertType.INFO );
+		alert.setTimeout( Alert.FOREVER );
+		this.display.setCurrent( alert, this.menuScreen );
+	}
+	
+	private void loadGame() {
+		Alert alert = new Alert( "sorry", "load game not implemented", null, AlertType.INFO );
+		alert.setTimeout( Alert.FOREVER );
+		this.display.setCurrent( alert, this.menuScreen );
+	}
+	
+	private void showHighscore() {
+		Alert alert = new Alert( "sorry", "highscore not implemented", null, AlertType.INFO );
+		alert.setTimeout( Alert.FOREVER );
+		this.display.setCurrent( alert, this.menuScreen );
+	}
+	
+	private void quit() {
+		notifyDestroyed();
+	}
+	
+}
+</pre>
+<%include end.txt %>

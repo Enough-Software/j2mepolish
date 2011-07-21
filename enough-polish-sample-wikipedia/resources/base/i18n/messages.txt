@@ -1,0 +1,29 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application.               #
+#   Key and Value are separated       #
+#   by the equals-sign "=".           #
+#                                     #
+#######################################
+
+
+cmd.MainMenu=Main Menu
+cmd.Back=Back
+cmd.Exit=Exit
+cmd.Go=Go
+
+main.Title=mWikipedia
+main.StartPage=Start Page
+main.Search=Search
+main.About=About
+main.Exit=Exit
+
+browser.Title=mWikipedia
+
+about.Title=About
+about.Text=Enough Software (c) 2008
+
+search.Title=Search
+search.SearchLabel=Search for: 
+search.ProjectLabel=Search in: 

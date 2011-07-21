@@ -1,0 +1,77 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Patch Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Patch Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	The <code>patch</code> background adjusts an image automatically to the required size without using scaling. It uses a nine patch pattern:
+	</p>
+<ul>
+<li>4 corners (1-4) are painted normally</li>
+<li>The top and bottom patches (5, 6) between the left and right corners are tiled horizontally</li>
+<li>The left and right patches (7, 8) between the top and bottoms corners are tiled vertically</li>
+<li>The center patch (9) is tiled both horizontally and vertically</li>
+</ul>
+<p>
+	<img src="<%= basedir%>images/background-patch-structure.png"  width="410" height="315" alt="Patch background (structure)" />
+</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The following source background is used within the app to create differently sized backgrounds:
+	</p>
+	<table>
+	<tr><th align="center">source</th><th align="center">small</th><th align="center">large</th></tr>
+	<tr><td>
+	<img src="<%= basedir%>images/background-patch-original.png"  width="56" height="30" alt="Patch background (source)" />
+	</td><td>
+	<img src="<%= basedir%>images/background-patch-small.png"  width="199" height="273" alt="Patch background (small)" />	
+	</td><td>
+	<img src="<%= basedir%>images/background-patch-large.png"  width="328" height="364" alt="Patch background (large)" />	
+	</td></tr>
+	</table>
+<pre>
+.itemMain {
+	margin: 2px;
+	padding: 5px;
+	padding-bottom: 14px;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: small;
+	icon-image: url( icon%INDEX%.png );	
+	icon-image-align: top;
+	layout: expand | center | vertical-center;
+	min-height: 30%;
+}
+
+.itemMain:hover {
+	font-color: #fff;
+	<b>
+	background {
+		type: patch;
+		image: url( glass-button.png );
+		left-width: 14;
+		top-height: 14;
+		right-width: 14;
+		bottom-height: 14; 
+	}
+	</b>
+}</pre>
+	<p>
+	CSS attributes:
+	</p>
+	
+	<%cssmappings background patch %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PatchBackground.html">PatchBackground</a></li>
+	</ul>
+
+<%include end.txt %>

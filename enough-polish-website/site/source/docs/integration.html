@@ -1,0 +1,210 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.install %>
+<%define inDocumentationSection.integration %>
+<%set title = J2ME Polish: Integrating J2ME Polish into IDEs %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Integration</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="netbeans.html">NetBeans Integration</a></li>
+		<li><a href="mepose.html">Eclipse Integration</a></li>
+		<li><a href="install.html">J2ME Polish Installation</a></li>
+	</ul>
+	<%index %>
+
+<h2 id="integration">Integrating J2ME Polish into Eclipse</h2>
+<p>
+Please check out the <a href="mepose.html">Mepose Plugin</a> for controlling J2ME Polish from within Eclipse. If you prefer using Ant, please follow the steps below:
+</p>
+<p>
+To integrate J2ME Polish into Eclipse it is best to copy the sample application 
+(the &quot;sample&quot; folder of your J2ME Polish installation) in your workspace. 
+Then start Eclipse and create a new project called "sample". 
+Eclipse then automatically integrates all source-files and sets the classpath. 
+You should find the sample application now in the Package-Explorer (package de.enough.polish.example). 
+</p><p>
+If the sources have not been integrated automatically, set the source-directory of the project to the &quot;src&quot; directory: Select &quot;Project&quot; -> &quot;Properties...&quot; -> &quot;Java Build Path&quot; -> &quot;Source&quot; and add the source-folder &quot;src&quot; there.
+</p><p>
+When the classpath was not set correctly, please include the following jar-files from the 
+&quot;${polish.home}/import&quot; folder to your classpath: 
+<br/>import/midp2.jar, import/enough-j2mepolish-client.jar, import/mmapi.jar, import/nokia-ui.jar, import/wmapi.jar.
+<br/>Actually only the first two libraries are needed for the sample application, but when the others
+are included, future enhancements are easier to accomplish.
+</p><p>
+Optionally you can change the build-settings by
+modifying the file &quot;build.xml&quot; (which is located in the root of your project).
+<br/>For example you can change the deviceRequirements if you want to. 
+The example is optimized to Nokia Series 60 devices. 
+</p><p>
+You can now create the JAR and JAD files by right-clicking the build.xml file, selecting &quot;Run Ant&quot; and running Ant in the next dialog. 
+You will find the JAR and JAD files then in the &quot;dist&quot; folder of the project.
+If you want to access them from within Eclipse, you might need to refresh your project:
+<br/>Right-click the project and select &quot;Refresh&quot;.
+</p><p>
+If the &quot;Run Ant...&quot; command is not shown, select the &quot;build.xml&quot; file, then open the Menu &quot;Run&quot; and select &quot;External Tools&quot; -&gt; &quot;Run as&quot; -&gt; &quot;Ant Build&quot;.
+</p><p>
+After you have integrated the sample application into Eclipse, you will find following structure in your project 
+(assuming that your project is called &quot;myproject&quot; and your workspace &quot;workspace&quot;):
+</p>
+<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Folder / File&nbsp;&nbsp;</th><th>Description&nbsp;&nbsp;</th></tr>
+	<tr>
+	 <td>workspace/sample</td>
+	 <td>The applications project</td>
+	</tr>
+	<tr>
+	 <td>workspace/sample/build.xml</td>
+	 <td>The controller of the build process</td>
+	</tr>
+	<tr>
+	 <td>workspace/sample/resources</td>
+	 <td>Folder for all resources and design descriptions of the project</td>
+	</tr>
+	<tr>
+	 <td>workspace/sample/resources/polish.css</td>
+	 <td>Basic design description</td>
+	</tr>
+	<tr>
+	 <td>workspace/sample/build</td>
+	 <td>Temporary build folder, will be created automatically. Should not be shared in CVS and similar systems.</td>
+	</tr>
+	<tr>
+	 <td>workspace/sample/dist</td>
+	 <td>Folder for the ready-to-deploy applications. It will be created automatically. Should not be shared in CVS and similar systems.</td>
+	</tr>
+</table>
+
+
+<h2 id="jbuilder">Integrating J2ME Polish into Borland's JBuilder</h2>
+<p>
+To integrate J2ME Polish into JBuilder it is best to copy the sample application 
+(the &quot;sample&quot; folder of your J2ME Polish installation) in your workspace. 
+Then start JBuilder and create a new project called &quot;sample&quot;. 
+</p><p>
+In the project-dialog select the appropriate path and confirm the &quot;src&quot; 
+folder as the main source-folder. Switch to the &quot;Required Libraries&quot; tab and 
+select &quot;Add...&quot; and then &quot;New...&quot;. 
+Enter &quot;MIDP-Development&quot; or similar as the name of the library and 
+add the files &quot;enough-j2mepolish-client.jar&quot;, &quot;midp2.jar&quot;, 
+&quot;mmapi.jar&quot;, &quot;wmapi.jar&quot; and &quot;nokia-ui.jar&quot; from the
+&quot;{polish.home}/import&quot; folder to the library path. 
+</p><p>
+Note: only the first two libraries are actually needed by the sample application, 
+but if you later want to explore the full possibilities of J2ME Polish you already
+ have all important libraries included.
+</p><p>
+Now create the new project.
+</p><p>
+After the project has been created, you need to integrate the provided &quot;build.xml&quot; file: Select &quot;Wizard&quot; -&gt; &quot;Ant&quot; -&gt; &quot;Add...&quot; and select the file &quot;build.xml&quot; in the project-root. Now the &quot;build.xml&quot; is shown in the project-view. Important: you need to deactivate the Borland-compiler for building the actual applications: Right-click the &quot;build.xml&quot; file, select &quot;Properties...&quot; and de-select the &quot;Use Borland Java compiler&quot; check box. 
+</p><p>
+You can now build the sample application by right-clicking the &quot;build.xml&quot; file and selecting &quot;Make&quot;.
+You will find the created J2ME application files in the &quot;dist&quot; folder of your project, after you have switched to the &quot;File Browser&quot; view.
+</p>
+
+<h2 id="netbeans">Integrating J2ME Polish with NetBeans</h2>
+
+
+<h3 id="netbeans5">NetBeans 5.x</h3>
+<p>
+Please check out the <a href="netbeans.html">NetBeans Module</a> for controlling J2ME Polish from within NetBeans.
+<br />
+J2ME Polish provides NetBeans specific build scripts from J2ME Polish 1.3 Beta 3 onwards. You can now just open any of the provided sample applications, delete the default build.xml script and rename the build-netbeans.xml script to build.xml. You can from then on use the normal debugging, build and compile facilities of NetBeans.
+<br />
+Integrating a sample application in NetBeans:
+</p>
+<ul>
+	<li>Select File > Open Project... and select any sample application in ${polish.home}/samples. Just select a folder like the menu folder and select Open.</li>
+	<li>Now switch to the Files window by selecting Window > Files.</li>
+	<li>In this window delete or rename the build.xml script which is in the base folder of the project.</li>
+	<li>Now right-click the build-netbeans.xml script and rename it to build.xml. When the renaming does not work, do it directly from the file system (e.g. Windows Explorer).</li>
+	<li>From now on you can build, run, debug and compile with the normal NetBeans commands (e.g. F5 for debugging). J2ME Polish is then used for building etc.</li>
+</ul>
+<p>
+When you start a new project in NetBeans, just copy one of the sample build.xml scripts to your project's folder. Then adjust the settings according to your needs.
+</p>
+
+<h2 id="antsetup">Setup and Configuration of Ant</h2>
+<p>
+Ant only needs to be configured when it should be called from the command-line.
+Since Ant is integrated in every modern Java-IDE, you just need to right-click
+the &quot;build.xml&quot;-file in your IDE and choose &quot;Run Ant...&quot; (or similar).
+</p>
+<p>
+After you have downloaded and installed Ant (<a href="http://ant.apache.org" target="_blank">http://ant.apache.org</a>),
+you need to set your PATH-environment variable, so that the &quot;ant&quot;-command
+can be found. If you have installed Ant into &quot;C:\tools\ant&quot; then
+enter following command on your Windows-command-line (or your shell-script):
+<pre>
+SET PATH=%PATH%;C:\tools\ant\bin
+</pre>
+</p>
+<p>
+You can change the PATH variable permanently in the System-Settings of Windows 
+(Control Center -> System -> Advanced -> Environment variables).
+</p>
+<p>
+Now you need set the JAVA_HOME variable as well, e.g.:
+<pre>
+SET JAVA_HOME=C:\j2sdk1.4.2
+</pre>
+</p>
+<p>
+Under Unix/Linux/Mac OS X please use the &quot;export&quot; command instead of the &quot;SET&quot;
+command.
+</p>
+<p>
+Now you should be able to issue following calls from the command-line (make sure
+that you are in the &quot;sample&quot; folder of your J2ME Polish installation):
+<pre>
+echo Just calling ant to build and obfuscate the example:
+ant
+
+echo Now calling ant with the test-property set to true, so the build is faster:
+ant test j2mepolish
+</pre>
+</p>
+
+<h2 id="existing">Integrating J2ME Polish with an Existing Project</h2>
+<p>
+You can use J2ME Polish for any existing project by copying the 
+file &quot;sample/build.xml&quot; as well as the &quot;sample/resources&quot; 
+folder to the root-folder of the project. You then need to adjust the &quot;build.xml&quot; 
+and the &quot;resources/polish.css&quot; files. 
+</p>
+<p>Here are the required steps:
+</p>
+<ul>
+ <li>Make sure you use the latest release (current release is J2ME Polish <%= PolishVersion %>).
+ </li>
+ <li>Copy the &quot;sample/build.xml&quot;  and the &quot;sample/resources&quot; folder to your project-root. 
+ </li>
+ <li>Move your resources like images, sound-files etc into the &quot;resources&quot; folder of your project. Remember that you cannot use subfolders for resources, since subfolders are used for 
+ the automatic <a href="resource-assembling.html">resource assembling</a> of J2ME Polish.
+ </li>
+ <li>Adjust the &quot;build.xml&quot; file: you need to specify your MIDlet class in 
+ the &lt;midlet&gt; element. 
+ You might also want to adjust the &lt;deviceRequirements&gt; element, 
+ currently applications are build for 4 device-groups: 
+ <br/>1) Nokia Series 60 (&quot;Nokia/Series60&quot;), 
+ <br/>2) Nokia Series 60 with MIDP/2.0 (&quot;Nokia/Series60Midp2&quot;), 
+ <br/>3) Any MIDP/1.0 phone(&quot;Generic/midp1&quot;), 
+ <br/>4) Any MIDP/2.0 phone (&quot;Generic/midp2&quot;).
+ </li>
+ <li>If you want to use the J2ME Polish GUI, you need to make changes to the &quot;resources/polish.css&quot; file. 
+ <br/><b>Tip</b>: use dynamic styles like &quot;form&quot; and &quot;list&quot; for a start.
+ Have a look at the <a href="how-tos.html#how-gui-apply">how-to</a> explaining the first steps for using the J2ME Polish GUI.
+ </li>
+ <li>
+ If you do not want to use the J2ME Polish GUI, disable it by setting the &quot;usePolishGui&quot;-attribute of the &lt;build&gt; element to &quot;false&quot;.
+ </li>
+ <li>Ensure that your <a href="#antsetup">Ant-setup</a> is correct, do you have set the JAVA_HOME environment variable?
+ </li>
+ <li>Call &quot;ant&quot; within your project root to build your application.</li>
+</ul>
+<p>If you have any problems, please drop me a line at 
+<a href="mailto:j2mepolish@enough.de">j2mepolish@enough.de</a> or at the
+<a href="../discussion.html">forums</a>.
+</p>
+<%include end.txt %>

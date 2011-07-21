@@ -1,0 +1,103 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.tools %>
+<%set title = J2ME Polish: Standalone Tools %>
+<%set basedir = ../ %>
+<%include start.txt %>
+	
+	<h1 id="top">Standalone Tools</h1>
+	<%index %>
+	<p>J2ME Polish includes standalone tools for specialized tasks in
+	the <code>${polish.home}/bin</code> folder.
+	<br /><br />
+	<img src="../images/J2ME-Polish-bin-folder.png" alt="The bin folder of J2ME Polish." />
+	</p>
+	<h2 id="binaryeditor">Binary Editor</h2>
+	<p>
+Use the <i>binary-editor</i> for creating and modifying binary data like level data files.
+It can also generate the Java/J2ME code for loading that data for you.
+</p>
+<p>
+Please load the specification-file &quot;level.definition&quot; and the data-file &quot;level1.data&quot; from the &quot;bin&quot;-folder for getting a working example setup like shown in the following figure.
+<br /><br /><img src="../images/binaryeditor-osx.png" alt="The binary editor in action." />
+</p>
+<p>
+With the BinaryEditor you can easily adjust any kind of structured binary files like for example level data. The structure of the data is kept outside of the data-files themselves and has the extension &quot;.definition&quot;.  You can load definition-files with the &quot;Open Definition&quot; command or dragging and dropping the file on either the start-script or the editor like shown in following figure.
+<br /><img src="../images/dragndrop-binaryeditor-osx.png" alt="Use Drag and Drop for loading data." />
+</p>
+<p>
+In each definition you will have several entries which can have arbitrary names like &quot;playerX&quot;, &quot;playerY&quot; and so on. You can also define the type of each data-entry. There are predefined types available, but you can also combine your own types out of the basic types using &quot;Edit -> Add Custom Type&quot;. 
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type&nbsp;&nbsp;</th><th>Value&nbsp;&nbsp;</th><th>Explanation</th></tr>
+	<tr>
+	 <td>byte</td>
+ 	 <td>-128..+128</td>
+	 <td>Standard Java byte value.</td>
+	</tr>
+	<tr>
+	 <td>unsigned byte</td>
+ 	 <td>0..255</td>
+	 <td>Positive 8 bit value.</td>
+	</tr>
+	<tr>
+	 <td>short</td>
+ 	 <td>-32768..+32767</td>
+	 <td>Standard Java short value (uses 2 bytes).</td>
+	</tr>
+	<tr>
+	 <td>unsigned short</td>
+ 	 <td>0..231-1 (2147483647)</td>
+	 <td>Positive 16 bit value.</td>
+	</tr>
+	<tr>
+	 <td>int</td>
+ 	 <td>-2<sup>31</sup>..2<sup>31</sup>-1</td>
+	 <td>Standard Java int value (uses 4 bytes).</td>
+	</tr>
+	<tr>
+	 <td>long</td>
+ 	 <td>-2<sup>63</sup>..2<sup>63</sup>-1</td>
+	 <td>Standard Java long value (uses 8 bytes).</td>
+	</tr>
+	<tr>
+	 <td>boolean</td>
+ 	 <td>true, false</td>
+	 <td>One byte representing true (1) or false (0).</td>
+	</tr>
+	<tr>
+	 <td>ASCII-String</td>
+ 	 <td>Text</td>
+	 <td>A string consisting of ASCII characters with a max-length of 255 characters. The ASCII-String uses length + 1 bytes in the data file.</td>
+	</tr>
+	<tr>
+	 <td>UTF-String</td>
+ 	 <td>Text</td>
+	 <td>Standard Java String.</td>
+	</tr>
+	<tr>
+	 <td>PNG-Image</td>
+ 	 <td>Image</td>
+	 <td>A PNG image. Such images should usually be the last entry in a definition file, unless you generate your own code for loading the images.</td>
+	</tr>
+	</table>
+<p>
+Each data entry also has a &quot;count&quot; value, which determines how often the entry is repeated. You can insert &quot;static&quot; numbers here, but you can also be a bit more flexible by using a calculation. In the calculation you can use any entry which is listed before the affected entry. So far you can only use simple terms using one operation on a number of entries. In this way you can for example define first a number of columns and a number of rows and then use &quot;columns * rows&quot; for calculating the number of cells of a table structure. Just click into the respective &quot;count&quot; field to start the editor for changing the count-value of the entry.
+</p><p>
+The BinaryEditor can also generate the J2ME code for loading data files with the current definition - just select &quot;Code -> Generate Code&quot;.
+</p>
+	<h2 id="fonteditor">Font Editor</h2>
+	<p>
+The <i>font-editor</i> creates bitmap fonts (*.bmf) out of any true type fonts. Such
+bitmap fonts can be used by the J2ME Polish GUI with the <code>font-bitmap</code> CSS-attribute or directly with the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFont.html" target="_blank">de.enough.polish.util.BitMapFont</a> 
+<a href="utilities.html#bitmapfont">utiliy</a> class.
+<br /><br />
+<img src="../images/fonteditor-osx.png" alt="The font editor in action." />
+</p>
+<p>
+Since the font-editor does no yet optimize the generated font-images, you might want to optimize the images outside of the editor: Just select &quot;File -> Save PNG-Image As...&quot; and edit the image in your favorite image editing program, e.g. The Gimp. You might also want to use PNG-image optimizer like PNG-Crush (http://pmt.sourceforge.net/pngcrush/) or PNG-Out (http://advsys.net/ken/utils.htm#pngout). When you're done, just reload the PNG-image by selecting &quot;File -> Open PNG-Image&quot;.
+</p><p>
+You can also fine-tune every aspect of the bitmap-font by opening it in the BinaryEditor: select &quot;File -> Open in Binary Editor&quot; to do so.
+</p>
+	
+<%include end.txt %>

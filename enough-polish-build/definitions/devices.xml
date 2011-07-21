@@ -1,0 +1,74 @@
+<!-- here are the definitions of all supported J2ME devices -->
+<!-- the format is not totally clear so far, it might be that the 
+      xml format used in the J2EE client provisioning mechanism
+      is a more flexible approach, even though it is not really
+      human readable anymore (everything is just a capability) 
+      -->
+<devices>
+<!-- some user agents:
+Ericsson T68 SonyEricssonT68
+Motorola T720 MOT-T720
+Nokia 3100 Nokia3100
+Nokia 3200 Nokia3200
+Nokia 3650 Nokia3650
+Nokia 5100 Nokia5100
+Nokia 6100 Nokia6100
+Nokia 6610 Nokia6610
+Nokia 6800 Nokia6800
+Nokia 7210 Nokia7210
+Nokia 7250 Nokia7250
+Nokia 7650 Nokia7650
+Nokia 3510i Nokia3510i
+Samsung V200 SEC-SGHV200
+Siemens M55 SIE-M55
+Siemens S55 SIE-S55
+Siemens SL55 SIE-SL55
+Siemens SX1 SIE-SX1
+SonyEricsso   P800 SonyEricssonP800
+SonyEricsson P900 SonyEricssonP900
+SonyEricsson T300 SonyEricssonT300
+SonyEricsson T610 SonyEricssonT610
+SonyEricsson T68i  SonyEricssonT68
+-->
+<!-- Motorola devices -->
+	<device>
+		<identifier>
+		    Motorola/i50sx, Motorola/i55sr, Motorola/i85s
+		</identifier>
+		<user-agent>MOTi50sx</user-agent>
+		<capability name="SoftwarePlatform.JavaPlatform"
+					   value="MIDP/1.0" />
+		<capability name="HardwarePlatform.ScreenSize"
+					    value="111x100" />
+		<capability name="HardwarePlatform.BitsPerPixel"
+				       value="2" />
+		<capability name="HardwarePlatform.CameraResolution"
+				       value="300x200" />
+		<capability name="SoftwarePlatform.JavaProtocol"
+				       value="comm, socket, https, ssl, datagram" />
+		<capability name="SoftwarePlatform.JavaPackage"
+				       value="mmapi" />
+	</device>
+
+<!-- Nokia devices -->
+	<device>
+		<identifier>Nokia/3650</identifier>
+		<groups>Series60</groups>
+		<capability name="JavaPackage" value="mmapi, bluetooth, wmapi" />
+	</device>
+
+	<device>
+		<identifier>Nokia/6600</identifier>
+		<groups>Series60</groups>
+		<capability name="JavaPackage" value="mmapi, bluetooth, wmapi" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+	</device>
+
+<!-- Siemens devices -->
+	<device 
+		supportsPolishGui="true">
+		<identifier>Siemens/SX1</identifier>
+		<capability name="JavaPlatform" value="MIDP/1.0" />
+		<capability name="JavaPackage" value="nokia-ui-replacement" />
+	</device>
+</devices>

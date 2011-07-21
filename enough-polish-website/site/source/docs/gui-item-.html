@@ -1,0 +1,43 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Item %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Item</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The Item
+	</p>
+	<h2 id="Item-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-item-item.png"  width="" height="" alt="" />	
+	</p>
+	<p>
+	Specific design attributes of Item:
+	</p>
+	<%cssattributes de.enough.polish.ui.Item %>
+	
+	<h2 id="Item-Configuration">Configuration</h2>
+	<p>
+<pre>
+&lt;variable name=&quot;&quot; value=&quot;&quot; /&gt;
+</pre>
+	</p>
+	
+	<h2 id="Item-Programming">Programming</h2>
+	<p>
+	Please compare the  sample application.
+	</p>
+	
+	<h2 id="Item-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">de.enough.polish.ui.Item</a></li>
+	</ul>
+
+<%include end.txt %>

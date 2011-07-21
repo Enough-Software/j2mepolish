@@ -1,0 +1,74 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: fade-in Background %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">fade-in Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Fades in a background on MIDP 2.0 handsets.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	Quicktime:
+	<br />
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-background-fade-in.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="212">
+        <param name='height' value="57"> <!--  32 + 25 for the controller -->
+        <embed src="<%= basedir%>images/gui-background-fade-in.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="212" height="57"
+        >
+        </embed>
+	</object>
+</p>
+<p>
+Flash:
+<br />
+		<div id="id_fade_in">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-background-fade-in.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_fade_in", "212", "32", "9.0.0", false, flashvars, params, attributes);
+		</script>
+</p>
+<pre>
+.itemMain {
+	padding: 2;
+}
+.itemMain:hover {
+	layout: expand | left;
+	font-style: bold;
+	background {
+		type: fade-in;
+		target-argb-color: #bfff;
+	}
+}</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background fade-in %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/FadeInBackground.html">FadeInBackground</a></li>
+	</ul>
+
+<%include end.txt %>

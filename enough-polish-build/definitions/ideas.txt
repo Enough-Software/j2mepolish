@@ -1,0 +1,50 @@
+
+CSS-attributes should always named like "font-family", not "fontFamily" (principle of least astonishment) 
+
+=========================================================
+
+The types.xml, borders.xml and backgrounds.xml could be compiled to increase the performance of the
+build-process.
+
+=========================================================
+
+When in css-definition only "background-color" is defined, then automatically a simple background
+is assumed. When there are "background-image" (and possibly "background-color") defined,
+then an ImageBackground is assumed.
+
+=========================================================
+
+Debugging:
+das symbol "debug" hat eine besondere Bedeutung, da debugging fuer einzelne
+Klassen an- und ausgestellt werden kann, zB
+<debug enable="true /> 
+: stellt fuer alle Klassen debug an
+
+<debug enable="true" visual="false" level="error" verbose="false">
+	<filter pattern="com.company.package.*" level="info" />
+	<filter pattern="com.company.package2.MyClass" level="debug" />
+</debug>
+: stellt fuer alle Klassen debugging mit dem Level "error" an;
+die packages com.company.package und fuer
+die Klasse com.company.package2.MyClass haben besondere Einstellungen
+
+Da kann noch weiter gehen zu:
+//#debug
+System.err.println("help help");
+//#enddebug
+und: <debug enable="true" verbose="true" /> 
+dabei wird bei verbose==true eine Info ueber die Source-Datei zusaetzlich mit angegeben,
+so dass im Code steht:
+//#debug
+System.out.println("com.company.package.SomeClass line 23:");
+System.err.println("help help");
+//#enddebug
+
+weiter: //#debug info
+weiter: //#debug warn / warning
+weiter: //#debug error
+<debug enable="true" level="warn">
+	<filter level="debug" class="..." />
+	
+Wenn debug == true wird obfuscating automatisch ausgestellt?
+=========================================================

@@ -1,0 +1,15 @@
+
+.mainScreen {
+	screen-change-animation: verticalFlash;
+}
+
+
+.settingsScreen {
+	screen-change-animation: flash;
+	flash-screen-change-animation-speed: 5;
+}
+
+.aboutScreen {
+	screen-change-animation: leftShutter;
+	left-shutter-screen-change-animation-speed: 8;
+}

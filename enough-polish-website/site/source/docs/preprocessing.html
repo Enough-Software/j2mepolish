@@ -1,0 +1,40 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Preprocessing</h1>
+	<%index %>
+<p>
+Preprocessing changes the source code before it is compiled. With this mechanism any 
+device optimization can be done easily. An example is the inclusion of the J2ME&nbsp;Polish GUI, 
+which is &quot;weaved&quot; into the application by the build-process without any intervention of the developer.
+Most preprocessing is triggered by directives, which use either symbols or variables. 
+A symbol is like a boolean value - either it is defined or the symbol is not defined. 
+A variable, however, always contains a value, which can be used or compared during the 
+preprocessing.<br/>
+Symbols and variables are defined in several files:
+</p>
+<ul>
+ <li>build.xml: with the &quot;symbols&quot;-attribute of the &lt;build&gt; element and with the &lt;variables&gt; element</li>
+ <li>vendors.xml, groups.xml, devices.xml: symbols are defined by the &lt;features&gt; element, whereas variables are defined by the capabilities. Most capabilities also define symbols.</li>
+</ul>
+<p>Thanks to the integrated <a href="http://devices.j2mepolish.org">device database</a>,
+J2ME Polish supports a lot of useful <a href="preprocessing-variables.html">symbols and variables</a>, 
+with which device optimizations are easier than ever.</p>
+<p>
+Preprocessing <a href="preprocessing-directives.html">directives</a> always start 
+with a <code>&quot;//#&quot;</code> and often have one or more 
+arguments. All directives must not span several rows. 
+J2ME&nbsp;Polish supports all directives (and more) of the antenna preprocessor (antenna.sourceforge.net), 
+by the way. So if you migrate from antenna, you can keep your preprocessing directives.   
+</p>
+<ul>
+	<li><a href="preprocessing-directives.html">Directives</a> describe the available 
+	preprocessing directives in J2ME Polish.</li>
+	<li><a href="preprocessing-variables.html">Variables &amp; Symbols</a> describe the most common build-in 
+	symbols and variables which can be used for the preprocessing.</li>
+</ul>
+
+<%include end.txt %>

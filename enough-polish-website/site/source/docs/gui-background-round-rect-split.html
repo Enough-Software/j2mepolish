@@ -1,0 +1,59 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: round-rect-split Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">round-rect-split Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-texteffect-split.html">split text-effect</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	Paint a background with rounded corners and two colors using the <code>round-rect-split</code> background.
+	<br />
+	For improving the effect you can bundle this with the <a href="gui-texteffect-split.html">split text-effect</a>.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-split.png"  width="344" height="82" alt="The split text-effect with a round-rect-split background." />
+	<br />
+	The above design has been realized using following CSS settings:	
+	</p>
+<pre>
+title {
+	margin: 2;
+	padding: 2;
+	padding-top: 12;
+	padding-bottom: 12;
+	padding-right: 8;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: #fff;
+	layout: center | expand;
+	text-effect: split;
+	text-split-bottom-color: #ddd;
+	<b>background {
+		type: round-rect-split;
+		top-color: #073b46;
+		bottom-color: #042931;
+		split-pos: 50%;
+		arc-width: 8;
+		arc-height: 8;
+	}</b>
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background round-rect-split %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/VerticalSplitRoundRectBackground.html">VerticalSplitRoundRectBackground</a></li>
+	</ul>
+
+<%include end.txt %>

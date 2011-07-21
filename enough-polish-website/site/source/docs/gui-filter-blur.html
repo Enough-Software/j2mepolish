@@ -1,0 +1,58 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: blur filter %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">blur filter</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-filters.html">Other Filters</a></li>
+		<li><a href="gui-css-animations.html">CSS Animations</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+		<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/kAIA1FHjwOs&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/kAIA1FHjwOs&hl=en&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+	</p>
+	<p>
+		The <code>blur</code> filter blurs the affected elements in various degrees.
+	</p>
+	<h2 id="filter-Design">Usage</h2>
+	<p>
+	Use this filter like this:
+	</p>
+<pre>
+.mainItem {
+	font-style: bold;
+	font-size: medium;
+	padding: 0px;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+	<b>icon-filter: blur;
+	filter-blur-grade: 100%;
+	filter-blur-grade-animation {
+		on: defocus;
+		range: 0%..100%;
+	}</b>
+}
+
+.mainItem:hover {
+	font-color: white;
+	text-effect: shadow;
+	<b>filter-blur-grade-animation {
+		on: focus;
+		range: 100%..0%;
+	}</b>
+}</pre>
+	<%cssattributes de.enough.polish.ui.rgbfilters.GaussianBlurRgbFilter %>
+
+	
+	
+	<h2 id="filter-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/rgbfilters/GaussianBlurRgbFilter.html">GaussianBlurRgbFilter</a>.
+	</p>
+
+<%include end.txt %>

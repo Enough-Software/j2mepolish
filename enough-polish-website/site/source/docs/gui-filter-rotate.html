@@ -1,0 +1,62 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: rotate filter %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">rotate filter</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-filters.html">Other Filters</a></li>
+		<li><a href="gui-css-animations.html">CSS Animations</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+		<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/frqR_wUUKr0&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/frqR_wUUKr0&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+	</p>
+	<p>
+		The <code>rotate</code> filter rotates UI elements.
+	</p>
+	<h2 id="filter-Design">Usage</h2>
+	<p>
+	Use this filter like this (we concentrate on the rotation here):
+	</p>
+<pre>
+.mainItem {
+	font-style: bold;
+	font-size: medium;
+	padding: 0px;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+	<b>text-filter: rotate;
+	text-filter-layout: hcenter | vcenter;
+	filter-rotation-angle: -20;
+	filter-rotation-angle-animation {
+		on: defocus;
+		range: 0..-20;
+		duration: 400ms;
+	}</b>
+}
+
+.mainItem:hover {
+	font-color: white;
+	text-effect: shadow;
+	<b>filter-rotation-angle-animation {
+		on: focus;
+		range: -20..0;
+		duration: 400ms;
+	}</b>
+}
+</pre>
+	<%cssattributes de.enough.polish.ui.rgbfilters.RotateRgbFilter %>
+
+	
+	
+	<h2 id="filter-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/rgbfilters/RotateRgbFilter.html">RotateRgbFilter</a>.
+	</p>
+
+<%include end.txt %>

@@ -1,0 +1,54 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: scaling-image Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">scaling-image Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-background-image.html">Image Background</a></li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="extending-background.html">Create Your Own Background</a></li>
+	</ul>
+	<p>
+	You can automatically scale background images to the required size using the 
+	<code>scaling-image</code> background on MIDP 2.0+ devices.
+	<br />
+	This allows you to use a single set of image resources for various devices.
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-background-scaling-image.png"  width="351" height="416" alt="scaling-image background" />	
+</p>
+<pre>
+.screenMain {
+	layout: horizontal-center | vertical-center;
+	margin: 0;
+	padding: 10;
+	background {
+		//#if polish.midp2
+			type: scaling-image;
+		//#endif
+		image: url( splash.png );
+		color: #FDFFFC;
+		scale-mode: proportional;
+		anchor: bottom | right;
+		x-offset: -5;
+		y-offet: -5;
+		top: title;
+		bottom: menubar;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<%cssmappings background scaling-image %>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/ScalingImageBackground.html">ScalingImageBackground</a></li>
+	</ul>
+
+<%include end.txt %>

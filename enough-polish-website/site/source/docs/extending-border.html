@@ -1,0 +1,410 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = Extending J2ME Polish: Borders %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Create New Borders</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-borders.html">Existing Borders</a></li>
+		<li><a href="extending-background.html">Backgrounds</a></li>
+		<li><a href="extending-itemview.html">Item Views</a></li>
+		<li><a href="extending-texteffect.html">Text Effects</a></li>
+		<li><a href="extending-screenchangeanimation.html">ScreenChangeAnimation</a></li>
+	</ul>
+	<%index %>
+	<p>
+	Extend the J2ME Polish UI by implementing your own border. 
+	You can use your border for any item or screen.
+	</p>
+	
+	<h2 id="concepts">Concepts of Borders</h2>
+	<p>
+	Realizing your own border is fairly simple:
+	<ol>
+		<li><b>Implement</b> your border by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Border.html">de.enough.polish.ui.Border</a>.</li>
+		<li><b>Register</b> the border in <i>${polish.home}/custom-css-attributes.xml</i>.</li>
+		<li><b>Apply </b> your border by specifying the <code>border</code> CSS attribute in your project's <i>polish.css</i> file.</li>
+	</ol>
+	</p>
+	
+	<h2 id="implementation">Implementing your Border</h2>
+	<p>
+	Create your own border by extending <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Border.html">de.enough.polish.ui.Border</a>.
+	You only need to implement  the <code>paint( int x, int y, int width, int height, Graphics g )</code> method. 
+	<br />
+	You can override the <code>releaseResources()</code> method for freeing any stray resources when your border is not used anymore.
+	</p>
+	<p>We use the existing <a href="gui-border-square-sonar.html">square-sonar</a> border for demonstrating
+	the usage as well as the animation options for a border. 
+	<br />
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-square-sonar.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-square-sonar.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+	<br />
+	Note that the <code>square-sonar</code> border is actually painting itself outside of the item's area,
+	so we have to use the <code>public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)</code> 
+	method (see below for more details).
+	</p>
+<pre>
+//#condition polish.usePolishGui
+package de.enough.polish.ui.borders;
+
+import javax.microedition.lcdui.Graphics;
+
+import de.enough.polish.ui.Border;
+import de.enough.polish.ui.ClippingRegion;
+import de.enough.polish.ui.Item;
+import de.enough.polish.ui.Screen;
+import de.enough.polish.util.DrawUtil;
+
+/**
+ * Sends out square rectangles from around the item to the outside.
+ */
+public class SquareSonarBorder extends Border
+{
+	protected final int innerColor;
+	protected final int outerColor;
+	protected final int steps;
+	protected final int distance;
+	protected final int pause;
+	protected final int numSignals;
+	protected final int speed;
+	protected final boolean hasTranslucentColor;
+	
+	protected final int[] distances;
+	protected final int[] colors;
+	protected final boolean[] activeSignals;
+	protected long lastEmittingTime;
+	protected int emittedSignals;
+	protected boolean isOutbound = true;
+	protected boolean isAnimationStopped;
+
+	/**
+	 * Creates a new SquareSonarBorder
+	 * 
+	 * @param innerColor the color at the inner starting point.
+	 * @param outerColor the color at the outer end point.
+	 * @param steps the number of animation steps required for moving from the inner point to the outer point 
+	 * @param distance the distance from the inner point to the outer point in pixels
+	 * @param pause the pause in ms between different sonar signals
+	 * @param numSignals the number of signals that are send out. Use -1 for not limiting the number.
+	 * @param speed the constant speed by which signals move from the inner to the outer point - use -1 for
+	 *        moving fast in the beginning and then slowing down.
+	 */
+	public SquareSonarBorder( int innerColor, int outerColor, int steps, 
+			int distance, int pause, int numSignals, int speed )
+	{
+		this.innerColor = innerColor;
+		this.outerColor = outerColor;
+		this.steps = steps;
+		this.distance = distance;
+		this.pause = pause;
+		this.numSignals = numSignals;
+		this.speed = speed;
+		this.hasTranslucentColor = ( ((innerColor >>> 24) != 0) && ((innerColor >>> 24) != 0xff) ) 
+								|| ( ((outerColor >>> 24) != 0)  && ((outerColor >>> 24) != 0xff) );
+		this.distances = new int[ steps ];
+		if (speed != -1) {
+			for (int i = 0; i &lt; steps; i++)
+			{
+				this.distances[i] = i * speed;
+			}
+		} else {
+			int sum = 0;
+			int dist = distance;
+			for (int i = 0; i &lt; steps; i++)
+			{
+				int amount = dist / 3;
+				sum += amount;
+				dist -= amount;
+			}
+			dist = distance + (distance - sum);
+			sum = 0;
+			for (int i = 0; i &lt; steps; i++)
+			{
+				this.distances[i] = sum;
+				int amount = dist / 3;
+				sum += amount;
+				dist -= amount;
+			}
+		}
+		this.activeSignals = new boolean[ steps ];
+		this.colors = DrawUtil.getGradient(innerColor, outerColor, steps);
+		this.borderWidth = 0;
+	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Border#showNotify()
+	 */
+	public void showNotify()
+	{
+		super.showNotify();
+		for (int i = 0; i &lt; this.steps; i++)
+		{
+			this.activeSignals[i] = false;
+		}
+		this.emittedSignals = 0;
+		this.isAnimationStopped = false;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Border#animate(...)
+	 */
+	public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)
+	{
+		if (parent == null || this.isAnimationStopped) {
+			return;
+		}
+		int maxDist = 0;
+		for (int i = this.steps - 1; i > 0; i-- ) {
+			boolean active = this.activeSignals[ i - 1];
+			this.activeSignals[i] = active;
+			if (active && maxDist == 0) {
+				maxDist = this.distances[i];
+			}
+		}
+		this.activeSignals[ 0 ] = false;
+		if ((currentTime - this.lastEmittingTime > this.pause) && (this.numSignals == -1 || this.emittedSignals &lt; this.numSignals) ){
+			this.activeSignals[0] = true;
+			this.lastEmittingTime = currentTime;
+			if (maxDist == 0) {
+				maxDist = this.distances[0];
+			}
+			this.emittedSignals++;
+		}
+		if (maxDist == 0 && this.numSignals != -1 && this.emittedSignals >= this.numSignals) {
+			// add a last repaint request so that the most outer signal can be removed:
+			maxDist = this.distances[ this.steps - 1];
+			this.isAnimationStopped = true;
+		}
+		// specify the area that needs to be refreshed:
+		parent.addRelativeToBackgroundRegion(repaintRegion, 
+			-maxDist, 
+			-maxDist, 
+			parent.getBackgroundWidth() + (maxDist &lt;&lt; 1), 
+			parent.getBackgroundHeight() + (maxDist &lt;&lt; 1));
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Border#paint(int, int, int, int, javax.microedition.lcdui.Graphics)
+	 */
+	public void paint(int x, int y, int width, int height, Graphics g)
+	{
+		for (int i = 0; i &lt; this.steps; i++)
+		{
+			int dist = this.distances[i];
+			if (this.activeSignals[i]) {
+				int color = this.colors[ i ];
+				if (this.hasTranslucentColor) {
+					DrawUtil.drawLine(color, x - dist, y - dist,  x + width + dist, y - dist, g);
+					DrawUtil.drawLine(color, x - dist, y + height + dist,  x + width + dist, y + height + dist, g);
+					DrawUtil.drawLine(color, x - dist, y - dist, x - dist, y + height + dist, g);
+					DrawUtil.drawLine(color, x + width + dist, y - dist, x + width + dist, y + height + dist, g);
+				} else {
+					g.setColor(color);
+					g.drawRect( x - dist, y - dist, width + dist, height + dist );
+				}
+			}
+		}
+	}
+
+}
+
+</pre>
+	
+	<h2 id="registration">Registering Your Border</h2>
+	<p>
+	After implementing your border you need to register it in <i>${polish.home}/custom-css-attributes.xml</i>:
+<pre>
+&lt;attribute name=&quot;border&quot;&gt;
+	&lt;mapping from=&quot;square-sonar&quot;           to=&quot;de.enough.polish.ui.borders.SquareSonarBorder&quot; &gt;
+		&lt;param name=&quot;inner-color&quot; type=&quot;color&quot; primitive=&quot;true&quot; translucent=&quot;true&quot; default=&quot;#e999&quot; 
+			description=&quot;The color at the inner starting point.&quot; /&gt;
+		&lt;param name=&quot;outer-color&quot; type=&quot;color&quot; primitive=&quot;true&quot; translucent=&quot;true&quot; default=&quot;#9333&quot; 
+			description=&quot;The color at the outer end point.&quot; /&gt;
+		&lt;param name=&quot;steps&quot; type=&quot;integer&quot; primitive=&quot;true&quot; default=&quot;5&quot; 
+			description=&quot;The number of animation steps required for moving from the inner point to the outer point&quot; /&gt;
+		&lt;param name=&quot;distance&quot; type=&quot;integer&quot; primitive=&quot;true&quot; default=&quot;10&quot; 
+			description=&quot;The distance from the inner point to the outer point in pixels. Is ignored when the speed is not -1.&quot; /&gt;
+		&lt;param name=&quot;pause&quot; type=&quot;integer&quot; primitive=&quot;true&quot; default=&quot;300&quot; 
+			description=&quot;The pause in ms between different sonar signals&quot; /&gt;
+		&lt;param name=&quot;signals&quot; type=&quot;integer&quot; primitive=&quot;true&quot; default=&quot;3&quot; 
+			description=&quot;The number of signals that are send out. Use -1 for not limiting the number.&quot; /&gt;
+		&lt;param name=&quot;speed&quot; type=&quot;integer&quot; primitive=&quot;true&quot; default=&quot;2&quot; 
+			description=&quot;The constant speed by which signals move from the inner to the outer point - 
+				use -1 for moving fast in the beginning and then slowing down.&quot; /&gt;
+	&lt;/mapping&gt;
+&lt;/attribute&gt;
+</pre>
+	</p>
+	<h3 id="registration-parameters">Border Parameters</h3>
+	<p>
+	Along with the border class you need to register all parameters of your constructor, so that J2ME Polish can automatically instantiate your border.
+	For each parameter you add one <code>&lt;param&gt;</code> element. Parameters can have different types - some types are additionally 
+	available as primitives as well as objects. Take for example <code>java.lang.Integer</code> and <code>int</code>. Both are modeled using
+	the <code>integer</code> type, but for using the primitive version, we additionally need to specify <code>primitive=&quot;true&quot;</code>.
+	Parameter types that are available as primitives as well as objects include <code>integer</code>, <code>color</code>, <code>boolean</code>
+	and <code>char</code>:
+<pre>
+&lt;param name=&quot;color&quot; type=&quot;color&quot; primitive=&quot;true&quot; default=&quot;white&quot; /&gt;
+</pre>
+	</p>
+	<p>
+	<code>integer</code> paramters can be additionally populated using strings, when only some strings are allowed. In that case you have
+	to specify the allowed values - the first value will be tranformed to <code>0</code>, the second one to <code>1</code> and so on. This
+	approach helps to minimize the memory and performance impact of UI elements:
+<pre>
+&lt;param name=&quot;orientation&quot; type=&quot;integer&quot; values=&quot;top,bottom,left,right&quot; primitive=&quot;true&quot; default=&quot;top&quot; /&gt;
+</pre>
+	</p>
+	<p>
+	Last but not least you can specify default values for parameters using the <code>default</code> attribute.
+	</p>
+	<h3 id="registration-parametertypes">Border Parameter Types</h3>
+	<p>
+	Following table shows you the available parameter types that you can use for your border constructors.
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type</th><th>Supports Primitive</th><th>Additional Attributes</th><th>Example</th><th>Explanation</th></tr>
+	<tr>
+	 <td>integer</td>
+	 <td>true</td>
+	 <td><code>values</code>: comma separated allowed string values that are transformed into integer values.</td>
+	 <td><code>&lt;param name=&quot;orientation&quot; type=&quot;integer&quot; values=&quot;top,bottom,left,right&quot; primitive=&quot;true&quot; default=&quot;top&quot; /&gt;</code></td>
+	 <td>An integer value - either <code>int</code> or <code>java.lang.Integer</code>.</td>
+	</tr>
+	<tr>
+	 <td>color</td>
+	 <td>true</td>
+	 <td><code>translucent</code>: true when corresponding color can be translucent (ARGB).</td>
+	 <td><code>&lt;param name=&quot;color&quot; type=&quot;color&quot; translucent=&quot;true&quot; primitive=&quot;true&quot; default=&quot;#8f00&quot; /&gt;</code></td>
+	 <td>A color value - either <code>int</code> or <code>de.enough.polish.ui.Color</code>. In the polish.css file you can
+	 specify colors in different ways, e.g. <code>argb( 70%, 100%, 0%, 0%)</code> or <code>#a833</code>.
+	 </td>
+	</tr>
+	<tr>
+	 <td>string</td>
+	 <td>false</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;format&quot; type=&quot;string&quot; default=&quot;hh:mm:ss&quot; /&gt;</code></td>
+	 <td>A string value.</td>
+	</tr>
+	<tr>
+	 <td>char</td>
+	 <td>true</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;first-letter&quot; type=&quot;char&quot; default=&quot;a&quot; /&gt;</code></td>
+	 <td>A character value, either <code>char</code> or <code>java.lang.Character</code>.</td>
+	</tr>
+	<tr>
+	 <td>boolean</td>
+	 <td>true</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;expand&quot; type=&quot;boolean&quot; default=&quot;false&quot; /&gt;</code></td>
+	 <td>A boolean value, either <code>boolean</code> or <code>java.lang.Boolean</code>.</td>
+	</tr>
+	<tr>
+	 <td>image-url</td>
+	 <td>false</td>
+	 <td>n/a</td>
+	 <td><code>&lt;param name=&quot;image&quot; type=&quot;image-url&quot; /&gt;</code></td>
+	 <td>The URL of an image, is provided as a String value containing the path, e.g. <code>&quot;/myimage.png&quot;</code>.</td>
+	</tr>
+	</table>
+	
+	<h2 id="usage">Using Your Border</h2>
+	<p>
+	After registration you can apply your border to any item's or screen's style in your <i>polish.css</i> file:
+<pre>
+.itemMain {
+	layout: expand | left;
+	font {
+		face: system;
+		size: medium;
+		style: bold;
+		color: #000000;
+	}
+}
+.itemMain:hover {
+	background {
+		type: round-rect-translucent;
+		color: #adffffff;
+		arc-width: 8;
+		arc-height: 8;
+	}
+	<b>border {
+		type: square-sonar;
+		inner-color: #d2d2;
+		outer-color: #4161;
+	}</b>
+}
+</pre>
+	</p>
+	
+	<p>
+	That's it - you've done it!
+	<br />
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+	        <param name='src' value="<%= basedir%>images/gui-border-square-sonar.mov">
+	        <param name='autoplay' value="false">
+	        <param name='controller' value="true">
+	        <param name='loop' value="true">
+	        <param name='width' value="173">
+	        <param name='height' value="55">
+	        <embed src="<%= basedir%>images/gui-border-square-sonar.mov" autoplay="false" 
+	        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+	        width="173" height="55"
+	        >
+	        </embed>
+		</object>
+	</p>
+	
+	<h2 id="advancedtopics">Animations in Borders</h2>
+	<p>
+	You can realize animations by overriding either <code>public boolean animated()</code> or 
+	<code>public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)</code>
+	in your implementation:
+	</p>
+	<ul>
+		<li><code>public boolean animate()</code> causes a refresh of the whole border area when you return true.</li>
+		<li><code>public void animate(Screen screen, Item parent, long currentTime, ClippingRegion repaintRegion)</code> 
+		allows you to refresh only parts of your border or an area that is outside of the parent item's original area.
+		You have to specify the area that requires a refresh by calling <code>repaintRegion.addRegion( int x, int y, int width, int height )</code>
+		or by calling <code>parent.addRelativeToBackgroundRegion( repaintRegion, x, y, width, height )</code>.
+		You can request a full refresh by calling <code>parent.addRelativeToBackgroundRegion( repaintRegion, 0, 0, parent.getBorderWidth(), parent.getBorderHeight() )</code>.		
+		</li>
+	</ul>
+	<p>If you want to trigger your animation only when the corresponding item or screen is made visible or when a
+	focused/hover style along with your border moves to a new item, you can override
+	<code>public void showNotify()</code> and <code>public void hideNotify()</code> in your implementation.
+	</p>
+	<p>
+	For a complete animation sample, please refer to source code above.
+	</p>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Border.html">Border</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ClippingRegion.html">ClippingRegion</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a></li>
+	</ul>
+
+<%include end.txt %>

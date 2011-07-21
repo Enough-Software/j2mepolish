@@ -1,0 +1,71 @@
+#######################################
+#                                     #
+#   This file contains translations   #
+#   of the application.               #
+#   Key and Value are separated       #
+#   by the equals-sign "=".           #
+#                                     #
+#######################################
+
+# Setting JAD- or MANIFEST-attributes:
+
+MIDlet-Description=Durchsuchen Sie bequem und mobil die Wikipedia.
+MIDlet-Delete-Confirm=mWikipedia wirklich l\u00f6schen?
+
+
+# Setting appplication specific translations:
+
+cmd.MainMenu=Hauptmen\u00fc
+cmd.Back=Zur\u00fcck
+cmd.Exit=Ende
+cmd.Go=Go
+
+main.Title=mWikipedia
+main.StartPage=Startseite
+main.Search=Suche
+main.About=\u00dcber mWiki
+main.Exit=Ende
+
+browser.Title=mWikipedia
+
+about.Title=\u00dcber
+about.Text=Enough Software (c) 2008
+
+search.Title=Suche
+search.SearchLabel=Suche: 
+search.ProjectLabel=Suche in: 
+
+
+# J2ME Polish specific translations:
+polish.command.ok=OK
+polish.command.cancel=Abbruch
+polish.command.select=Ausw\u00e4hlen
+polish.command.mark=Ausw\u00e4hlen
+polish.command.unmark=Abw\u00e4hlen
+polish.command.options=Optionen
+# for deleting a single char:
+polish.command.delete=L\u00f6schen
+# for deleting a complete TextField:
+polish.command.clear=Leeren
+# for hiding menus on BlackBerry devices:
+polish.command.hide=Men\u00fc schliessen
+# for showing a default title when no label
+# is defined in a TextField. This is only
+# used when no direct input mode is activated:
+polish.title.input=Eingabe
+# used for showing a screen for selecting symbols within TextFields:
+polish.command.entersymbol=Symbol Hinzuf\u00fcgen
+# used by the HtmlBrowser for a links:
+polish.command.followlink=Los
+# used by the HtmlBrowser for submitting a form:
+polish.command.submit=Senden
+# used by the RssBrowser for returning to the previous page:
+polish.command.back=Zur\u00fcck
+# RSS commands:
+polish.rss.command.select=Anzeigen
+polish.rss.command.followlink=Go
+# DateField:
+polish.DateFormatEmptyText=TT-MM-JJJJ
+# TextField:
+polish.command.switch_keyboard=Eingabemodus
+

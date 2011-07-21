@@ -1,0 +1,261 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: StringItem %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">StringItem</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Existing Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Creating Your Own Text Effect</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The StringItem is responsible for viewing text and is used as a basis for many J2ME Polish components like
+	<a href="gui-item-textfield.html">TextFields</a>, <a href="gui-screenelement-title.html">screen titles</a>, 
+	<a href="gui-screenelement-ticker.html">screen tickers</a>, or <a href="gui-css-basics.html#label">item labels</a>.
+	</p>
+	<h2 id="StringItem-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-alienglow.png"  width="290" height="48" alt="A StringItem with an alien-glow text-effect" />	
+	</p>
+	<p>
+	You can vary the design of StringItems greatly by using bitmapfonts or text-effects, the above design uses the following settings:
+	</p>
+<pre>
+title {
+        //#if polish.midp2 and polish.hasFloatingPoint
+                text-effect: alien-glow;
+        //#endif
+        layout: horizontal-center | horizontal-expand;
+        font {
+                face: proportional;
+                size: large;
+                style: bold;
+                color: #fff;
+        }
+        background-color: #fff;
+}
+</pre>
+	<p>
+		On MIDP devices there are 3 different font sizes available: small, medium and large. When you specify the size in pixel like
+		<code>font-size: 22px;</code> J2ME Polish will pick the most appropriate font instead. 
+		<a href="platform-blackberry.html">BlackBerry</a> and <a href="platform-android.html">Android</a> platforms support
+		the pixel size values directly.
+	</p>
+	<p>
+	Here's a list of all StringItem specific design attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.StringItem %>
+	
+	<!-- 
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>font-color</td>
+		<td>black</td>
+		<td>color definition</td>
+		<td>
+		Either a direct definition or a reference to a color from the <code>colors</code> section of your <i>polish.css</i> file.
+<pre>
+font-color: #a00;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>font-style</td>
+		<td>normal</td>
+		<td>normal/default/plain, bold, italic/cursive, underlined/underline</td>
+		<td>
+		The style of the font - you can mix different styles:
+<pre>
+font-style: bold | italic;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>font-size</td>
+		normal</td>
+		<td><td>small/little, normal/default/medium, large/big</td>
+		<td>The size of the font.
+		</td>
+	</tr>
+	<tr>
+		<td>font-face</td>
+		<td>normal</td>
+		<td>system/default/normal, proportional, monospace</td>
+		<td>
+		The font face - often there are only two faces available: proportional and monospace - the system font face is
+		usually the proportional one.
+<pre>
+font-face: monospace;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>font-bitmap</td>
+		<td>-</td>
+		<td>URL</td>
+		<td>URL of the bitmapfont that should be used:
+<pre>
+font-bitmap: url( arial.bmf );
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-horizontal-adjustment</td>
+		<td>0</td>
+		<td>integer</td>
+		<td>
+		Adjusts the text by the specified number of pixels horizontally. Negative values move the text to the left.
+<pre>
+text-horizontal-adjustment: -5;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-vertical-adjustment</td>
+		<td>0</td>
+		<td>integer</td>
+		<td>Adjusts the text by the specified number of pixels vertically. Negative values move the text to the top.
+		</td>
+	</tr>
+	<tr>
+		<td>text-effect</td>
+		<td>-</td>
+		<td>see <a href="#StringItem-texteffects">text-effects</a></td>
+		<td>
+<pre>
+text-effect: shadow;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-wrap</td>
+		<td>true</td>
+		<td>true, false</td>
+		<td>Defines whether the text should be wrapped into the next row if it is too long for the current one.
+<pre>
+text-wrap: false;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>text-wrap-animate</td>
+		<td>true</td>
+		<td>true, false</td>
+		<td>You can deactivate animations for texts that should not be wrapped and which are too long for a single line by setting 
+		<code>text-wrap-animate</code> to <code>false</code>.
+<pre>
+text-wrap-animate: false;
+</pre>
+		</td>
+	</tr>
+	</table>
+	-->
+	<h2 id="StringItem-bitmapfonts">Bitmap Fonts</h2>
+	<p>
+	Bitmap fonts allow you to use any True Type Font in your application. Use the <i>font-editor</i> situated in the 
+	<i>${polish.home}/bin</i> folder to create bitmap fonts (*.bmf) out of any true type fonts.  Such
+bitmap fonts can be used by the J2ME Polish GUI with the <code>font-bitmap</code> CSS-attribute or directly with the 
+<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/BitMapFont.html" target="_blank">de.enough.polish.util.BitMapFont</a> 
+utiliy class.
+<br /><br />
+<img src="../images/fonteditor-osx.png" alt="The font editor in action." />
+</p>
+<p>
+Since the font-editor does no yet optimize the generated font-images, you might want to optimize the images outside 
+of the editor: Just select &quot;File -> Save PNG-Image As...&quot; and edit the image in your favorite image editing 
+program. You might also want to use a PNG-image optimizer like PNG-Crush (http://pmt.sourceforge.net/pngcrush/) 
+or PNG-Out (http://advsys.net/ken/utils.htm#pngout). When you're done, reload the PNG-image by 
+selecting &quot;File -> Open PNG-Image&quot;.
+</p><p>
+You can also fine-tune every aspect of the bitmap-font by opening it in the BinaryEditor: 
+select &quot;File -> Open in Binary Editor&quot; to do so.
+</p>
+<p>While editing bitmap fonts you have to take into account any character that you may need to render with that font. You need
+to include these characters in the font editor.
+</p>
+<pre>
+font-bitmap: url( fantasy.bmf );
+</pre>
+	<p>
+	Thanks to Vera Wahler (thanks!) you can also use an Ant task for generating many bitmap fonts in one go or as part of the build process:
+<pre>
+       &lt;taskdef name=&quot;bmfcreate&quot; 
+       		classname=&quot;de.enough.polish.font.BmfCreationTask&quot; 
+       		classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar&quot; /&gt;
+        &lt;target name=&quot;convertfonts&quot;&gt;
+                &lt;bmfcreate 
+                color=&quot;#ff0&quot; 
+                size=&quot;12&quot; 
+                antialiased=&quot;true&quot;
+                characterSpacing=&quot;3&quot; 
+                input=&quot;resources/test.ttf&quot;
+                output=&quot;/Users/vera/Desktop/test.bmf&quot;&gt;ABCDEFGHIJ...&lt;/bmfcreate&gt;
+        &lt;/target&gt;
+</pre>
+	
+	<h2 id="StringItem-texteffects">Text Effects</h2>
+	<p>
+	Text effects provide you with an easy way to spice up your fonts without needing to care
+	about sizes and availability of characters like for bitmap fonts. You can even go
+	and <a href="extending-texteffect.html">code your own text-effect</a>!
+	</p>
+	<p>Please look here for a <a href="gui-visualguide-texteffects.html">complete list of available text-effects</a>.</p>
+	
+	<h2 id="StringItem-Programming">Programming</h2>
+	<p>
+	Program StringItems with J2ME Polish like normal MIDP 2.0 StringItems, for example:
+<pre>
+//#style itemText
+StringItem item = new StringItem(&quot;info: &quot;, &quot;Welcome to J2ME Polish!&quot;);
+form.append( item );
+</pre>
+	</p>
+	
+	<h2 id="text-wrapping">Text Wrapping</h2>
+	<p>
+	Usually text is wrapped automatically when it is too long for a single row. You can deactivate this default behavior by setting the
+	<code>text-wrap</code> CSS attribute to false. In TextFields with enabled direct input mode the cursor will be kept in the visible
+	area, for other texts only parts remain visible. You could use this feature to show only the beginning of a message when an item is not
+	focused and show the complete text (by turning on text-wrap again) when an item is focused, for example:
+	</p>	
+<pre>
+.messageItem {
+	text-wrap: false;
+}
+.messageItem:hover {
+	text-wrap: true;
+}
+</pre>
+	<p>
+	Alternatively you might want to use the <code>max-lines</code> CSS property. This will limit the lines to the given number and end the 
+	last last line with a <code>...</code>/<code>TextUtil.MAXLINES_APPENDIX</code> or the ending specified in <code>max-lines-appendix</code>. By setting <code>max-lines</code> to 0 
+	or to a negative number, you will not limit the number of lines anymore. 
+	<br />
+	If you want to give all items the same
+	height you can either use the <code>min-height</code> CSS attribute or use <code>force-lines</code> for expanding StringItems with less text lines 
+	to the number defined in <code>max-lines</code>.
+	</p>
+<pre>
+.messageItem {
+	max-lines: 1;
+	max-lines-appendix: ..;
+}
+.messageItem:hover {
+	max-lines: -1;
+}
+</pre>
+	
+	<h2 id="StringItem-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/StringItem.html">StringItem</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/TextEffect.html">TextEffect</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/BitMapFont.html">BitMapFont</a></li>
+	</ul>
+
+<%include end.txt %>

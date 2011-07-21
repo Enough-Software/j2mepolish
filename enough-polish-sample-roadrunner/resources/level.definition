@@ -1,0 +1,29 @@
+<!-- created by J2ME Polish on Wed Nov 17 16:16:38 CET 2004 -->
+<data-definition>
+	<description>This file defines the structure of the level-data files used within the RoadRunner-game.</description>
+	<extension>.data</extension>
+	<type name="BytePosition"><subtype type="byte" /><subtype type="byte" /></type>
+	<type name="ShortPosition"><subtype type="short" /><subtype type="short" /></type>
+	<entry name="playerX" type="short" count="1" />
+	<entry name="playerY" type="short" count="1" />
+	<entry name="numberOfRoads" type="byte" count="1" />
+	<entry name="roadYPositions" type="short" count="numberOfRoads" />
+	<entry name="carSpeed" type="byte" count="1" />
+	<entry name="numberOfCars" type="byte" count="1" />
+	<entry name="carPositions" type="BytePosition" count="numberOfCars" />
+	<entry name="vanSpeed" type="byte" count="1" />
+	<entry name="numberOfVans" type="byte" count="1" />
+	<entry name="vanPositions" type="BytePosition" count="numberOfVans" />
+	<entry name="truckSpeed" type="byte" count="1" />
+	<entry name="numberOfTrucks" type="byte" count="1" />
+	<entry name="truckPositions" type="BytePosition" count="numberOfTrucks" />
+	<entry name="numberOfTargets" type="byte" count="1" />
+	<entry name="targetPositions" type="ShortPosition" count="numberOfTargets" />
+	<entry name="tileImage" type="ASCII-String" count="1" />
+	<entry name="numberOfCols" type="byte" count="1" />
+	<entry name="numberOfRows" type="byte" count="1" />
+	<entry name="cells" type="byte" count="numberOfCols * numberOfRows" />
+	<entry name="levelTime" type="short" count="1" />
+	<entry name="backgroundAnimationLength" type="byte" count="1" />
+	<entry name="backgroundAnimation" type="byte" count="backgroundAnimationLength" />
+</data-definition>

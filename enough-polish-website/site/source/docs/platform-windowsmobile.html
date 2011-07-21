@@ -1,0 +1,135 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: Windows Mobile Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+<h1 id="top">Developing for Windows Mobile Devices</h1>
+<p>
+With J2ME Polish you can either create Java ME applications for Windows Mobile (tm) handsets or convert your application into a native 
+Windows Mobile executable.
+</p>
+<h2 id="windowsmobile-javeme">Creating Java Applications For Windows Mobile</h2>
+<p>
+You can create your application for Windows Mobile devices with a Java Virtual Machine (JVM) normally like for any other 
+device. If you want to create a generic version for all Windows Mobile phones you can target the <i>Native/WindowsMobile</i> phone
+in your <a href="build-deviceRequirements.html">&lt;deviceRequirements&gt;</a> section.
+</p>
+<p>
+Since there are different JVMs available for Windows Mobile, J2ME Polish cannot create device optimized versions for some of the
+device features like soft key values. We recommend, therefore, to turn off the rendering of the commands menu and the direct input mode 
+of TextFields for Windows Mobile devices by specifying some conditional <a href="build-build.html#variables">variables</a> in your
+<i>build.xml</i> file:
+</p>
+<pre>
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;${ isOS( Windows ) }&quot; /&gt;
+&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; unless=&quot;polish.hasPointerEvents or isOS(Windows)&quot;/&gt;
+</pre>
+<p>
+Note that some Java Virtual Machines/MIDlet Managers require an absolute <code>MIDlet-Jar-URL</code> within
+the JAD file so that the application can be installed correctly via OTA.
+</p>
+
+<h2 id="windowsmobile-native">Porting Your Mobile Java Application Into A Native Windows Mobile Application</h2>
+<p>
+In the near future you will be able to port your application into a native Windows Mobile application automatically with
+a commercial J2ME Polish extension. Apply now
+for reduced rates while we are improving the commercial viability of this solution by sending an email to services(at)enough(dot)de!
+</p>
+<h3 id="windowsmobile-native-abstract">Abstract</h3>
+<p>
+Running Java applications on Windows MobileTM platforms provides a suboptimal user 
+experience. For ensuring a seamless integration into the Windows Mobile environment, best 
+performance  and an optimal user experience, a native application is necessary. 
+The J2ME PolishTM Native Windows Mobile Extensions translate mobile Java applications into 
+native executables that require no installed Java Virtual Machine and run with a blazingly fast 
+graphics support. This allows you to leverage existing mobile Java applications and port them 
+unmodified and fully automated to native Windows Mobile applications. 
+</p>
+<h3 id="windowsmobile-native-motivation">Motivation</h3>
+<p>
+Running mobile Java applications on Windows Mobile platforms is possible, but it has various 
+drawbacks: 
+</p>
+<ul>
+	<li>The user needs to purchase and install a Java Virtual Machine (JVM). Sometimes this is 
+done by the carrier or the device manufacturer as well.</li>
+	<li>There are various JVMs available for Windows Mobile, so you cannot know which JVM 
+your user has installed. This means that you cannot optimize your application for a 
+specific JVM. Softbuttons, which are not defined within the mobile Java standard, are 
+mapped to different keys, for example.</li>
+	<li>Most JVMs do not support all options for lowlevel LCDUI usage - often keys like the 
+typical &quot;back/delete&quot; key do not trigger events but close the application without allowing 
+the programmer to prevent this.</li>
+	<li>Often the performance of JVMs results in considerably slower applications than native ones.</li>
+	<li>You can launch Java applications only by first launching the MIDlet Manager of the 
+installed JVM. Your application is not a first class citizen available directly within the 
+start menu.</li>
+	<li>Last but not least you also need to launch the MIDlet Manager for deinstalling your 
+application.</li>
+</ul>
+<p>
+These reasons accumulate to a poor user experience for mobile Java applications on Windows 
+Mobile phones.
+</p>
+
+<h3 id="windowsmobile-native-technology">Porting Technology</h3>
+<p>
+The automated porting is realized by transcoding your Java source code into C# source code. It 
+is then compiled and linked with a MIDP wrapper API. This optimized wrapper provides mobile 
+Java functionality to Windows Mobile applications and uses high performance graphics, which is 
+even faster than the graphics of the .NET Compact Framework. The complete application is 
+than bundled into a CAB installer. This also allows your users to install the application using 
+Microsoft's Active Sync/Windows Mobile Device Center(tm).
+</p>
+
+<h3 id="windowsmobile-native-javatech">Supported Java Technologies</h3>
+<p>
+You can access the full MIDP 2.0 functionality set with our native Windows Mobile technology 
+with the exception of high level user interface components like Form or List. We recommend 
+the usage of the low level user interface API or using the J2ME Polish UI for realizing your user 
+interface. 
+<br />
+Adding support for further libraries is possible.
+</p>
+
+<h3 id="windowsmobile-native-wmtech">Accessing Advanced Windows Mobile APIs From Within Java Applications</h3>
+<p>
+You can access all functions of the .NET Compact Framework from within your Java application. 
+A corresponding Java library is delivered as part of the porter. 
+</p>
+
+
+<h3 id="windowsmobile-native-licenses">Licenses</h3>
+<p>
+ou can choose between different options for porting your mobile Java application into a native 
+Windows Mobile application: 
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>License&nbsp;&nbsp;</th><th>Explanation&nbsp;&nbsp;</th><th>Pricing</th></tr>
+	<tr><td>One Shot</td>
+	 <td>You can port your application a single time by using our hosted porting service.</td>
+	 <td><nobr>990.00 Euro</nobr><br />per port</td>
+	</tr>
+	<tr><td>Single Application</td>
+	 <td>You can port a single application as many times as you want using our hosted porting service.  
+	 </td>
+	 <td><nobr>4,990.00 Euro</nobr><br />per year</td>
+	</tr>
+	<tr><td>Enterprise License
+	</td>
+	 <td>You can fully license our porting technology for local installation. With this license you can 
+port all your applications as often as you like. 
+You can also use the resulting C# source code 
+for manually optimizing your application 
+further.</td>
+	 <td><nobr>19,990.00 Euro</nobr><br />per year 
+</td>
+	</tr>
+</table>
+<p>
+Please send inquiries to services(at)enough(dot)de.
+</p>
+
+
+<%include end.txt %>

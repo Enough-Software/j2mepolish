@@ -1,0 +1,102 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: Alert %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using Alerts</h1>
+	<p>Notify your user about errors or finished tasks with Alerts.
+	<br />
+	<img src="<%= basedir%>images/gui-screen-alert.png" width="352" height="413" alt="showing an alert as popup"/>
+</p>
+<h2 id="design">Design</h2>
+<p>	The above design has been realized with following CSS code:</p>
+<pre>
+.mailForm {
+	padding: 5;
+	padding-left: 5;
+	padding-right: 5;
+	background-color: black;
+	layout: horizontal-expand | horizontal-center | top;
+	//#if !polish.useScrollBar
+		scrollindicator-up-image: url( arrowUp.png );
+		scrollindicator-down-image: url( arrowDown.png );
+	//#endif
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#endif
+	//#if polish.api.mmapi
+		title-style: .mailFormTitle;
+	//#endif
+}
+
+.mailAlert extends .mailForm {
+	title-style: none;
+	margin-right: 10;
+	margin-left: 10;
+	padding-left: 5;
+	padding-right: 5;
+	layout: horizontal-center | bottom | horizontal-shrink | vertical-shrink;
+	repaint-previous-screen: true;
+	//#if polish.midp2 || polish.api.nokia-ui
+		border {
+			type: drop-shadow;
+			width: 6;
+			inner-color: #aff0;
+			outer-color: #2002;
+			orientation: top-right;
+		}
+	//#endif
+	//#if polish.midp2
+		screen-change-animation: fade;
+	//#endif
+	background-color: green;
+}
+
+alertcontent {
+	font-color: white;
+}
+</pre>
+
+<h3 id="attributes-alert">Alert CSS Attributes</h3>
+<p>You can use the following CSS attributes for the Alert:</p>
+<%cssattributes de.enough.polish.ui.Alert %>
+
+<h3 id="attributes-iconitem">alertcontent CSS Attributes</h3>
+<p>Use the predefined style <code>alertcontent</code> for designing the text and optional image of the alert or select a 
+custom style using the <code>content-style</code> CSS attribute.
+<br />You can use all settings that are available for the <a href="gui-item-iconcustomitem.html">IconCustomItem</a> for the Alert's content as well:
+</p>
+<%cssattributes de.enough.polish.ui.IconItem %>
+
+
+<h2 id="programming">Programming</h2>
+<p>
+Use a <code>javax.microedition.lcdui.Alert</code> as you would normally in your application and
+use <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a> for
+using J2ME Polish specific functionalities like:
+</p>
+<ul>
+	<li><code>setStyle( Alert alert )</code>: Sets a style in conjuntion with a <code>style</code> preprocessing directive.</li>
+	<li><code>setStyle( Alert alert, Style style )</code>: Sets a style programmatically.</li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+<p>You translate the default dismiss command of an Alert without timeout using the 
+<code>variables</code> section of your <i>build.xml</i> script or the <i>messages.txt</i> file. 
+Refer to the <a href="localization.html">localization documentation</a> for more details on this.
+</p>
+<pre>
+# sets the text of an Alert's dismiss command (default=OK):
+polish.command.ok=Done
+</pre>
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Alert.html">Alert</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

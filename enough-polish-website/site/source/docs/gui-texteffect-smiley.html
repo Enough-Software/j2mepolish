@@ -1,0 +1,75 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Smiley Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Smiley Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-textfield.html">TextField</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The smiley text-effect replaces textual smileys like <code>:-)</code> with smiley images.
+	</p>
+	<h2 id="Smiley-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-smiley.png"  width="123" height="26" alt="the smiley text-effect" />
+	<br />
+	The above effect has been realized for the input field with following settings:
+	</p>
+<pre>
+.itemInput {
+        text-effect: smiley;
+        layout: horizontal-center | horizontal-expand;
+        font {
+           face: proportional;
+           size: large;
+           style: bold;
+           color: black;
+        }
+        background-color: #7196b5;
+}	
+</pre>
+	<p>Additionally following settings have been made in the <i>build.xml</i> script:
+	</p>
+<pre>
+&lt;variable file=&quot;configuration/smileys.properties&quot; /&gt;
+</pre>	
+	<p>In the corresponding <i>configuration/smileys.properties</i> following settings are made:
+	</p>
+<pre>
+smileys={new Smiley(new String[]{":-)",":)"},"/smiley_1.png","smile"),new Smiley(new String[]{":-P",":P"},"/smiley_2.png","cheekie"),new Smiley(new String[]{":-(",":("},"/smiley_3.png","ouch")}
+</pre>
+<p>
+Note that the definitions are made within a properties file rather than directly within the <i>build.xml</i> script, since
+we use many quotation-marks which otherwise would need to be quoted as <code>&amp;quot;</code> in the <i>build.xml</i> script.
+</p>
+<p>
+For each smiley you need to add a smiley constructor with following parameters:
+</p>
+<ol>
+	<li><code>String[] smileys</code>: an array of textual representations that should be replaced</li>
+	<li><code>String imageUrl</code>: the URL of the corresponding smiley image</li>
+	<li><code>String description</code>: optional name of the smiley</li>
+</ol>
+<p><b>IMPORTANT</b>: usage might/will probably change with the J2ME Polish 2.1.</p>
+<!-- 
+<p>
+	Specific design attributes of the smiley text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.SmileyTextEffect %>
+ -->
+		
+	<h2 id="Smiley-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/SmileyTextEffect.html">SmileyTextEffect</a>.
+	</p>
+
+<%include end.txt %>

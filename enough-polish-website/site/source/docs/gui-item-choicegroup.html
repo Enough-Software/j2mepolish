@@ -1,0 +1,171 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: ChoiceGroup %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">ChoiceGroup</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-viewtypes.html#gui-viewtypes-choicegroup">ChoiceGroup View Types</a></li>
+		<li><a href="gui-screen-list.html">List</a></li>
+		<li><a href="gui-item-filteredchoicegroup.html">FilteredChoiceGroup</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Text Effects</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	A <code>ChoiceGroup</code> displays several items which can be selected depending on it's choice type (either <code>Choice.EXCLUSIVE</code>,
+	<code>Choice.MULTIPLE</code> or <code>Choice.POPUP</code>).
+	<br />
+	The ChoiceGroup in the screenshot below uses the <a href="gui-viewtype-exclusivechoice.html">exclusive-single-line</a> <code>view-type</code>.
+	</p>
+	<h2 id="ChoiceGroup-Design">Design</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-viewtype-horizontalchoice.png" width="316" height="79" alt="A ChoiceGroup with a horizontal-choice view-type" />		
+	<br />
+	The above design has been realized with these CSS settings:
+	</p>
+<pre>
+.horizontalChoice {
+	label-style: choiceGroupLabel;
+	background-type: round-rect;
+	background-color: focusedBgColor;
+	include-label: true;
+	layout: expand;
+	<b>view-type: horizontal-choice;
+	horizontalview-left-arrow: url( arrow-left.png );
+	horizontalview-right-arrow: url( arrow-right.png );</b>
+}
+
+.horizontalChoice:hover {
+	background-color: white;
+}
+
+.choiceItem {
+	font-color: gray;
+	font-style: bold;
+	text-wrap: false;
+}
+
+.choiceItem:hover {
+	font-color: black;
+}
+
+.choiceGroupLabel {
+	font-style: italic;
+	font-size: small;
+	layout: newline-after;
+}
+</pre>
+	<h3 id="attributes-choicegroup">ChoiceGroup CSS Attributes</h3>
+	<p>
+	Here's a list of all ChoiceGroup specific design attributes:
+	</p>
+	<%cssattributes de.enough.polish.ui.ChoiceGroup %>
+	
+	<h3 id="attributes-choiceitem">Choice Item CSS Attributes</h3>
+	<p>
+	Use the following CSS attributes for the styles of ChoiceGroup items:
+	</p>
+	<%cssattributes de.enough.polish.ui.ChoiceItem %>
+	
+	<h2 id="ChoiceGroup-Programming">Programming</h2>
+	<p>
+	Use ChoiceGroups normally in your programming:
+	</p>
+<pre>
+//#style horizontalChoice
+ChoiceGroup group = new ChoiceGroup("Limit search to:", ChoiceGroup.EXCLUSIVE, style );
+//#style choiceItem
+group.append( "All", null );
+//#style choiceItem
+group.append( "Events", null );
+//#style choiceItem
+group.append( "Concerts", null );
+//#style choiceItem
+group.append( "Cinema", null );
+//#style choiceItem
+group.append( "Plays", null );
+form.append( group );
+</pre>
+<p>You can focus a ChoiceGroup item without selecting it by calling 
+<code>de.enough.polish.ui.UiAccess.focus( ChoiceGroup choiceGroup, int index )</code>.
+</p>
+
+<h2 id="configuration">Configuration</h2>
+<p>
+You can configure if a List should not show commands like &quot;Select&quot; for implicit and exclusive Lists or &quot;Mark&quot;
+for multiple lists. By default such commands are shown. Specify these configuration settings in the <code>variables</code>
+section of your <i>build.xml</i> script.
+</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Variable&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>polish.ChoiceGroup.suppressCommands</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates all commands.
+<pre>
+&lt;variable name=&quot;polish.ChoiceGroup.suppressCommands&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.ChoiceGroup.suppressSelectCommand</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates the Select command for implicit and exclusive ChoiceGroups.
+<pre>
+&lt;variable name=&quot;polish.ChoiceGroup.suppressSelectCommand&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>polish.ChoiceGroup.suppressMarkCommands</td>
+		<td>false</td>
+		<td>true, false</td>
+		<td>
+		Deactivates the Mark/Unmark commands for multiple ChoiceGroups.
+<pre>
+&lt;variable name=&quot;polish.ChoiceGroup.suppressMarkCommands&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+<!-- 
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>
+<pre>
+&lt;variable name=&quot;polish.List.&quot; value=&quot;true&quot; /&gt;
+</pre>
+		</td>
+	</tr>
+ -->
+
+</table>
+<p>You can also change or translate the default commands used in a ChoiceGroup with following settings
+in either <i>messages.txt</i> or using variables in your <i>build.xml</i> script.
+For more information about translations please refer to the <a href="localization.html">localization section</a>.
+</p>
+<pre>
+# text for the 'Select' command:
+polish.command.select=Choose;
+# texts for'Mark' and 'Unmark' commands:
+polish.command.mark=Select
+polish.command.unmark=Deselect
+</pre>
+
+	
+	<h2 id="ChoiceGroup-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ChoiceGroup.html">ChoiceGroup</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+<%include end.txt %>

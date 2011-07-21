@@ -1,0 +1,229 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.build %>
+<%set title = J2ME Polish: Documentation %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="preprocessing-top">Variables and Symbols</h1>
+	<%index %>
+<p>
+Most preprocessing is triggered by directives, which use either symbols or variables. 
+A symbol is like a boolean value - either it is defined or the symbol is not defined. 
+A variable, however, always contains a value, which can be used or compared during the 
+preprocessing.<br/>
+Symbols and variables are defined in several files:
+</p>
+<ul>
+ <li>build.xml: with the &quot;symbols&quot;-attribute of the &lt;build&gt; element and with the &lt;variables&gt; element</li>
+ <li>vendors.xml, groups.xml, devices.xml: symbols are defined by the &lt;features&gt; element, whereas variables are defined by the capabilities. Most capabilities also define symbols.</li>
+</ul>
+<p>Thanks to the integrated <a href="../devices-overview.html">device database</a>,
+J2ME Polish supports a lot of useful symbols and variables, with which device
+optimizations are easier than ever.</p>
+<p>
+
+<h2 id="preprocessing-devicespecific">Device Specific Variables and Symbols</h2>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type</th><th>Symbol</th><th>Variable</th><th>Explanation</th></tr>
+	<tr>
+	 <td>Platform</td>
+	 <td>polish.midp1, polish.midp2, polish.midp3</td>
+	 <td>polish.JavaPlatform</td>
+	 <td>When a device supports the MIDP 1.0, 2.0 or 3.0 platform, the symbols &quot;polish.midp1&quot;, &quot;polish.midp2&quot;, and &quot;polish.midp3&quot; respectively are defined.
+	 Regardless of the version the &quot;polish.midp&quot; symbol is defined for all devices supporting the MIDP platform.
+	 </td>
+	</tr>
+	<tr>
+	 <td>Platform</td>
+	 <td>polish.blackberry</td>
+	 <td>polish.JavaPlatform</td>
+	 <td>When a device supports the BlackBerry platform, the &quot;polish.blackbery&quot;-symbol is defined.</td>
+	</tr>
+	<tr>
+	 <td>Platform</td>
+	 <td>polish.doja</td>
+	 <td>polish.JavaPlatform</td>
+	 <td>When a device supports the DoJa platform or NTT Docomo, the &quot;polish.doja&quot;-symbol is defined.</td>
+	</tr>
+	<tr>
+	 <td>Configuration</td>
+	 <td>polish.cldc, polish.cldc1.0, polish.cldc1.1, polish.hasFloatingPoint</td>
+	 <td>polish.JavaConfiguration</td>
+	 <td>Depending on the supported configuration, either &quot;polish.cldc1.0&quot; or &quot;polish.cldc1.1&quot; is defined. 
+	 For all CLDC devices the &quot;polish.cldc&quot; symbol is defined. When you want to check if the target device supports
+	 floating point calculations, we recommend to check for the &quot;polish.hasFloatingPoint&quot; instead of &quot;polish.cldc1.1&quot;,
+	 because in this way you can use the <a href="floater.html">Floater</a> tool.
+	 </td>
+	</tr>
+	<tr>
+	 <td>api</td>
+	 <td>polish.api.mmapi, polish.api.wmapi, polish.api.nokia-ui, etc.</td>
+	 <td>polish.JavaPackage</td>
+	 <td>For each API which a device supports, the &quot;polish.api.[api-name]&quot;-symbol
+	 is defined. When a device supports the Mobile Media API, the &quot;polish.api.mmapi&quot;-symbol
+	 is defined, for example.</td>
+	</tr>
+	<tr>
+	 <td>audio</td>
+	 <td>polish.audio.wav, polish.audio.midi, polish.audio.mp3, etc.</td>
+	 <td>polish.SoundFormat</td>
+	 <td>For each sound format which is supported by the device, the
+	 symbol &quot;polish.audio.[format-name]&quot; is defined.</td>
+	</tr>
+	<tr>
+	 <td>video</td>
+	 <td>polish.video.h.263, polish.video.mpeg-4, polish.video.3gpp, etc.</td>
+	 <td>polish.VideoFormat</td>
+	 <td>For each video format which is supported by the device, the
+	 symbol &quot;polish.video.[format-name]&quot; is defined.</td>
+	</tr>
+	<tr>
+	 <td>colors</td>
+	 <td>polish.BitsPerPixel.12, polish.BitsPerPixel.16, etc.</td>
+	 <td>polish.BitsPerPixel</td>
+	 <td>Depending on the color depth of a device, the appropriate "polish.BitsPerPixel"-symbol
+	 is defined. The color depth can be compared within an &quot;#if&quot;-clause:
+	 <pre>
+//#if polish.BitsPerPixel >= 12
+	// this device supports at least 4096 colors.
+//#endif
+	 </pre>
+	 </td>
+	</tr>
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.ScreenSize:defined</td>
+	 <td>polish.ScreenSize</td>
+	 <td>When the screen-size of a device is known, the &quot;polish.ScreenSize:defined&quot;
+	 symbol is defined.</td>
+	</tr>
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.ScreenWidth:defined</td>
+	 <td>polish.ScreenWidth</td>
+	 <td>When the screen-size of a device is known, the &quot;polish.ScreenWidth:defined&quot;
+	 symbol is defined. The screen width can be used with the &quot;#=&quot;-directive: 
+<pre>
+//#ifdef polish.ScreenWidth:defined
+	//#= int width = ${ polish.ScreenWidth };
+//#else
+	int width = getCanvas().getWidth();
+//#endif
+</pre>
+	 </td>
+	</tr>
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.ScreenHeight:defined</td>
+	 <td>polish.ScreenHeight</td>
+	 <td>Compare polish.ScreenWidth.</td>
+	</tr>	
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.CanvasSize:defined</td>
+	 <td>polish.CanvasSize</td>
+	 <td>The canvas size can differ from the screen size, when no fullscreen mode is available.</td>
+	</tr>
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.CanvasWidth:defined</td>
+	 <td>polish.CanvasWidth</td>
+	 <td>Compare ScreenWidth.</td>
+	</tr>
+	<tr>
+	 <td>screen dimension</td>
+	 <td>polish.CanvasHeight:defined</td>
+	 <td>polish.CanvasHeight</td>
+	 <td>Compare CanvasWidth.</td>
+	</tr>
+	<tr>
+	 <td>network</td>
+	 <td>polish.JavaProtocol.http, polish.JavaProtocol.https, polish.JavaProtocol.serial, etc.</td>
+	 <td>polish.JavaProtocol</td>
+	 <td>The JavaProtocol describes the network protocols which are supported by the device.</td>
+	</tr>
+	<tr>
+	 <td>memory</td>
+	 <td>polish.HeapSize:defined</td>
+	 <td>polish.HeapSize</td>
+	 <td>The heap size defines the maximum possible memory, which can be allocated by an application.</td>
+	</tr>
+	</table>
+	
+<h2 id="preprocessing-other">Other Useful Variables and Symbols</h2>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>Type</th><th>Symbol</th><th>Variable</th><th>Explanation</th></tr>
+	<tr>
+	 <td>Full-screen class</td>
+	 <td>polish.classes.fullscreen:defined</td>
+	 <td>polish.classes.fullscreen</td>
+	 <td>When a device supports a specific full-screen-class, this varible can be used
+	 for a flexible inheritance structure:
+<pre>
+public class MyCanvas 
+//#ifdef polish.classes.fullscreen:defined
+	//#= extends ${polish.classes.fullscreen}
+//#else
+	//# extends Canvas
+//#endif
+{
+	[...]
+</pre>
+	 </td>
+	</tr>
+	 <td>MIDlet classes</td>
+	 <td>--</td>
+	 <td>polish.classes.midlet-1, polish.classes.midlet-2, polish.classes.midlet-n</td>
+	 <td>For each used MIDlet class the corresponding <code>polish.classes.midlet-n</code> variable is defined.</td>
+	</tr>
+	<tr>
+	 <td>animation</td>
+	 <td>-</td>
+	 <td>polish.animationInterval</td>
+	 <td>Defines the interval in milliseconds for animations. This defaults to 100 ms, but you can change this value within the &lt;variables&gt; element of the &lt;build&gt; section.</td>
+	</tr>
+	<tr>
+	 <td>logging</td>
+	 <td>polish.debugEnabled</td>
+	 <td>-</td>
+	 <td>Is defined when the logger is enabled.
+	 </td>
+	</tr>
+	<tr>
+	 <td>logging</td>
+	 <td>polish.debugVerbose</td>
+	 <td>-</td>
+	 <td>Is defined when the verbose-mode of the logger is enabled. Exception should
+	 provide more details when the &quot;polish.debugVerbose&quot; symbol is defined.
+	 </td>
+	</tr>
+	<tr>
+	 <td>memory</td>
+	 <td>polish.skipArgumentCheck</td>
+	 <td>-</td>
+	 <td>Can be defined in the symbols-attribute of the 
+	 &lt;build&gt; element within the 
+	 &quot;build.xml&quot; file. When this symbol is defined, all GUI classes of J2ME Polish will not 
+	 check the input variables. This is useful for minimizing the memory footprint when an application is stable.
+	 </td>
+	</tr>
+	<tr>
+	 <td>GUI</td>
+	 <td>polish.usePolishGui</td>
+	 <td>-</td>
+	 <td>Is defined when the GUI of J2ME Polish is used for the current device.
+	 </td>
+	</tr>
+	<tr>
+	 <td>GUI</td>
+	 <td>polish.usePolishTitle</td>
+	 <td>-</td>
+	 <td>When the variable &quot;polish.usePolishTitle&quot; is set to &quot;true&quot;,
+	 the title-style will be used on MIDP/2.0 devices as well. On such devices
+	 usually the native title is used instead, unless a fullscreen mode
+	 is used.
+	 </td>
+	</tr>
+	</table>
+	
+<%include end.txt %>

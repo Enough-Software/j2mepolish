@@ -1,0 +1,262 @@
+colors {
+	bgColor: white;
+	highlightedBgColor: silver;
+	titleColor: #6262d4;
+	titleShadowColor: silver;
+	screenBgColor: #7272f4;
+	screenBgBottomColor: #99f;
+	fontColor: black;
+	focusedFontColor: black;
+	inactiveFontColor: white;
+	menubarColor: #6262d4;
+	activeTabColor: #7272f4; 
+	inactiveTabColor: silver;
+	/* the color which is used for overlays when a screen defines the repaint-previous-screen CSS attribute: */
+	overlay: argb( 150, 0, 0, 0 );
+}
+
+.tabbedForm {
+	padding: 4;
+	layout: hcenter | vcenter;
+	background {
+		type: vertical-gradient;
+		top-color: screenBgColor;
+		bottom-color: screenBgBottomColor;
+		start: 10%;
+		end: 80%;
+		top: title;
+		bottom: menubar;
+	}
+	/* not supported because we use the extended menu bar:
+	menubar-color: menubarColor;
+	*/
+	scrollindicator-up-image: url( arrowU.png );
+	scrollindicator-down-image: url( arrowD.png );
+	title-style: solidTitle;
+	/* position the tabbar at the bottom: 
+	subtitle-position: bottom;
+	*/
+}
+
+tabbar {
+	background-color: white;
+	layout: expand;
+	padding-bottom: 0;
+	tabbar-left-arrow: url( left.png );
+	tabbar-right-arrow: url( right.png );
+	tabbar-arrow-y-offset: 3;
+	tabbar-roundtrip: true;
+	/* not supported, since we use arrow images:
+	tabbar-scrolling-indicator-color: COLOR_FOREGROUND;
+	*/
+}
+
+tabbar:hover {
+	background-color: red;
+}
+
+activetab {
+	padding: 3;
+	padding-left: 10;
+	padding-right: 8;
+	padding-top: 7;
+	background-type: round-tab;
+	background-color: activeTabColor;
+	background-arc: 8;
+	font-color: black;
+	font-style: bold;
+}
+
+inactivetab {
+	margin-left: 2;
+	margin-right: 2;
+	margin-bottom: 1;
+	padding: 3;
+	padding-left: 6;
+	padding-right: 4;
+	background-type: round-tab;
+	background-color: inactiveTabColor;
+	background-arc: 8;
+	font-color: gray;
+}
+
+.settingsChoice {
+	padding: 2;
+	layout: expand | left;
+}
+
+.settingsItem {
+	radiobox-plain: none;
+	radiobox-selected: url( selected.png );
+	padding: 3;
+	padding-horizontal: 5;
+	font-color: fontColor;
+	font-size: small;
+	icon-image: url( dog.png );
+	layout: expand | left;
+}
+
+.settingsItem:hover {
+	padding: 2;
+	padding-horizontal: 5;
+	border-width: 1;
+	border-color: black;
+}
+
+
+focused {
+	padding: 2;
+	layout: expand | left;
+	font-color: focusedFontColor;
+	font-size: small;
+	font-style: bold;
+	background-color: highlightedBgColor;
+	label-style: .labelFocused;	
+}
+
+title {
+	padding-top: 3;
+	padding-bottom: 3;
+	font-color: titleColor;
+	text-effect: shadow;
+	text-shadow-color: titleShadowColor;
+	layout: expand | center;	
+}
+
+.solidTitle extends title {
+	background-color: white;
+}
+
+label {
+	padding: 2;
+	font-color: inactiveFontColor;
+	font-size: small;
+	font-style: bold;
+	layout: left;
+}
+
+.labelFocused extends label {
+	font-color: fontColor;
+}
+
+.input {
+	label-style: inputLabel;
+	padding: 1px;
+	margin: 1px;
+	background-color: silver;
+	font-color: #333;
+	layout: expand | left;
+	font-size: small;
+	font-style: bold;
+}
+
+.input:hover {
+	margin: 0px;
+	font-color: #000;
+	background-color: #fff;
+	border {
+		color: #000;
+		width: 1;
+	}
+}
+
+.inputLabel{
+	min-width: 30%;
+}
+
+info {
+	margin-right: 10;
+	margin-top: 4;
+	padding: 2;
+	font-size: small;
+	layout: right;
+	background-color: argb( 200, 255, 255, 255 );
+}
+
+menu {
+	margin-top: 24;
+	/* background-color: argb( 200, 255, 255, 255 ); */
+	background-color: gray;
+	min-width: 120;
+	font-style: bold;
+	font-size: small;
+	font-color: fontColor;	
+	border-color: red;
+}
+
+menu1 extends menu {
+	margin-bottom: 1;
+	border-color: black;
+}
+
+
+menuitem {
+	padding: 2;
+	font-style: bold;
+	font-size: small;
+	font-color: COLOR_FOREGROUND;	
+	/*
+	command-child-indicator: url( arrowR.png );
+	*/
+	command-child-indicator-width: 4;
+	command-child-indicator-height: 4;
+}
+
+menubar {
+	background-color: COLOR_BACKGROUND;
+	min-width: 120;
+}
+
+leftcommand extends menuitem {
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+
+.notificationAlert {
+	padding: 3;
+	layout: h-shrink | v-shrink | h-center | v-center; /* bottom; */
+	background {
+		type: round-rect;
+		color: yellow;
+		border-color: titleColor;
+		border-width: 2;
+	}
+	repaint-previous-screen: true;
+}
+
+alertText {
+	font-color: inactiveFontColor;
+	font-size: small;
+	font-style: bold;	
+}
+
+.textFieldSymbolList {
+	padding: 3;
+	margin-left: 3;
+	margin-right: 3;
+	layout: horizontal-shrink | vertical-shrink | horizontal-center | bottom;
+	columns: 4;
+	columns-width: equal;
+	repaint-previous-screen: true;
+	focused-style: .textFieldSymbolFocused;
+	background {
+		type: round-rect;
+		color: rgb( 220, 220, 220 );
+		border-color: titleColor;
+		border-width: 2;
+	}
+}
+
+.textFieldSymbolItem {
+	layout: expand | center;
+	font-color: gray;
+	font-style: bold;
+}
+
+.textFieldSymbolFocused extends .textFieldSymbolItem {
+	font-color: black;
+	background-color: yellow;
+}
+

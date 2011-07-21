@@ -1,0 +1,131 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: GUI: SnapshotScreen %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Using SnapshotScreens</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide.html#gui-overview">Screen Elements</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	<img src="<%= basedir%>images/gui-screen-snapshotscreen.png" width="351" height="414" alt="A SnapshotScreen."/>
+	<br />
+	The <code>SnapshotScreen</code> allows you to take camera snapshots on phones that support image capturing with the Multimedia API (<code>polish.api.mmapi</code>).
+	</p>
+	
+<h2 id="design">Design</h2>
+
+<p>You can only design the <a href="gui-visualguide-backgrounds.html">background</a>,  <a href="gui-screenelement-title.html">title</a> 
+and <a href="gui-screenelement-menubar.html">menubar</a> of a SnapshotScreen.</p>
+
+<p>You can use following general purpose CSS attributes for SnapshotScreens:</p>
+<%cssattributes de.enough.polish.ui.SnapshotScreen %>
+
+<h2 id="programming">Programming</h2>
+<p>
+Taking snapshots is a breeze using <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SnapshotScreen.html">SnapshotScreen</a>.
+Note that the SnapshotScreen requires MMAPI support, so you must not even import it when there is no MMAPI present in your target device.
+</p>
+<pre>
+import javax.microedition.lcdui.Alert;
+import javax.microedition.lcdui.AlertType;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.Image;
+import javax.microedition.media.MediaException;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+import de.enough.polish.event.ThreadedCommandListener;
+<b>//#if polish.api.mmapi
+	import de.enough.polish.ui.SnapshotScreen;
+//#endif</b>
+
+public class SnapshotMidlet extends MIDlet CommandListener {
+	
+	private Command cmdTakeScreenshot = new Command("Take Screenshot", Command.OK, 3 );
+	private Command cmdQuit = new Command("Quit", Command.EXIT, 9);
+	private Display display;
+	
+	public SnapshotMidlet(){
+		// see startApp	
+	}
+
+	protected void startApp() throws MIDletStateChangeException {
+		this.display = Display.getDisplay( this );
+		//#if polish.api.mmapi
+			//#style mainScreen
+			SnapshotScreen screen = new SnapshotScreen( "Snapshot" );
+			screen.addCommand( this.cmdQuit );
+			screen.addCommand( this.cmdTakeScreenshot );
+			screen.setCommandListener( new ThreadedCommandListener( this ) );
+			this.display.setCurrent( screen );
+		//#else
+			//#style mainScreen
+			Form form = new Form("No MMAPI");
+			form.addCommand( this.cmdQuit );
+			form.setCommandListener( this );
+			this.display.setCurrent( form );			
+		//#endif
+	}
+	
+	protected void pauseApp() {
+		// ignore
+	}
+
+	protected void destroyApp(boolean unconditional) throws MIDletStateChangeException {
+		// nothing the clean up
+	}
+
+	public void commandAction(Command cmd, Displayable dis) {
+		if (cmd == this.cmdQuit ) {
+			notifyDestroyed();
+		//#if polish.api.mmapi
+		} else if (cmd == this.cmdTakeScreenshot) {
+			SnapshotScreen screen = (SnapshotScreen) dis;
+			try {
+				Image image = screen.getSnapshotImage();
+				// now use image, e.g. send it to a server using RMI
+			} catch (MediaException e) {
+				Alert alert = new Alert( "Media-Error", e.toString(), null, AlertType.ERROR );
+				this.display.setCurrent( alert );
+			}
+		//#endif
+		}
+		
+	}
+
+}
+</pre>
+<p>You can use following methods of the SnapshotScreen:</p>
+<ul>
+	<li><code>SnapshotScreen(String title)</code>: Creates a new SnapshotScreen, can be used with a <code>style</code> preprocessing directive.</li>
+	<li><code>static String[] getSnapshotEncodings()</code>: Retrieves all supported snapshot encodings as a String array.</li>
+	<li><code>Image getSnapshotImage() throws MediaException</code>: Retrieves a snapshot image in the default encoding.</li>
+	<li><code>Image getSnapshotImage(String encoding) throws MediaException</code>: Retrieves a snapshot image in the specified encoding.</li>
+	<li><code>byte[] getSnapshot(String encoding) throws MediaException</code>: Retrieves snapshot data in the specified encoding.</li>
+	<!-- 
+	<li><code></code>: </li>
+	<li><code></code>: </li>
+	 -->
+</ul>
+<p>Have a look at the &quot;rmi&quot; sample application that uses the SnapshotScreen.</p>
+
+
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SnapshotScreen.html">SnapshotScreen</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+	</ul>
+
+
+
+<%include end.txt %>

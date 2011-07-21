@@ -1,0 +1,5 @@
+CLDC/1.0
+CLDC/1.0.4
+CLDC/1.1
+CDC/1.0
+android

@@ -1,0 +1,106 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Design: Partial Gradient Background %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">Partial-Gradient Background</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-backgrounds.html">Backgrounds</a></li>
+		<li><a href="gui-background-combined.html">combined Background</a></li>
+		<li><a href="gui-background-mask.html">mask Background</a></li>
+		<li><a href="gui-background-partial-gradient.html">partial-gradient Background</a></li>
+	</ul>
+	<p>
+	</p>
+	<h2 id="Design">Design</h2>
+	<p>
+	The <code>partial</code> background fills a part of the background.
+	It is usually used in a <a href="gui-background-combined.html">combined</a> or in a 
+	<a href="gui-background-mask.html">mask</a> background.
+	<br />
+	<img src="<%= basedir%>images/background-partial.png" width="350" height="38" />
+	<br />
+	The above background has been realized with the following settings:
+	</p>
+<pre>
+backgrounds {
+	titleForeground {
+		type: partial;
+		start: 0%;
+		end: 40%;
+		color: #0f0;
+		
+	}
+	titleBackground {
+		type: partial;
+		start: 40%;
+		end: 100%;
+		color: blue;
+	}
+}
+
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	
+	background {
+		type: combined;
+		foreground: titleForeground;
+		background: titleBackground;
+	}
+}
+</pre>
+	<p>
+	CSS attributes:
+	</p>
+	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
+	<tr><th>CSS Attribute&nbsp;&nbsp;</th><th>Default</th><th>Values</th><th>Explanation</th></tr>
+	<tr>
+		<td>type</td><td>partial</td><td>-</td>
+		<td>
+		Set the <code>type</code> to <code>partial</code>.
+		</td>
+	</tr>
+	<tr>
+		<td>color</td><td>white</td><td>color definition</td>
+		<td>
+		The color of the background, can be a rbg/hexadecimal value of the color or the name of the color as defined in the colors section.
+		</td>
+	</tr>
+	<tr>
+		<td>start</td><td>30%</td><td>percent value</td>
+		<td>
+		The desired start point of the gradient.
+<pre>
+	background-start: 20%;
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>end</td><td>70%</td><td>percent value</td>
+		<td>
+		The desired end point of the gradient.
+<pre>
+	background-bottom: 70%;
+</pre>
+		</td>
+	</tr>
+	</table>
+	
+	<h2 id="JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PartialSimpleBackground.html">PartialBackground</a>.
+	</p>
+
+<%include end.txt %>

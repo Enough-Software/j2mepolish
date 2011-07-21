@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+  <!--
+  <module name="PackageHtml"/>
+  -->
+
+  <module name="TreeWalker">
+    <!-- Javadoc -->
+    <!--
+    <module name="Header">
+        <property name="headerFile" value="checkstyle.header"/>
+        <property name="ignoreLines" value="2, 3, 4"/>
+    </module>
+    <module name="JavadocType"/>
+    -->
+	<!--
+    <module name="JavadocMethod">
+        <property name="scope" value="protected"/>
+		<property name="allowMissingJavadoc" value="true"/>
+        <property name="allowUndeclaredRTE" value="true"/>
+        <property name="allowMissingParamTags" value="true"/>
+    </module>
+	-->
+    <!--
+    <module name="JavadocVariable"/>
+    <module name="JavadocStyle">
+      <property name="checkEmptyJavadoc" value="false"/>
+      <property name="checkFirstSentence" value="false"/>
+    </module>
+    -->
+
+    <module name="RedundantImport"/>
+    <!--
+    <module name="ImportOrder">
+        <property name="groups" value="de,java,javax,org"/>
+        <property name="ordered" value="true"/>
+        <property name="separated" value="true"/>
+    </module>
+    -->
+    <module name="UnusedImports"/>
+    <module name="AvoidStarImport"/>
+    <!--
+    <module name="ConstantName"/>
+	-->
+    <module name="EmptyBlock">
+		<property name="option" value="text" />
+	</module>
+	<!--
+	<module name="ModifierOrder"/>
+    -->
+    <module name="RedundantModifier"/>
+    <module name="SimplifyBooleanExpression"/>
+    <!-- Produces many false positives.
+    <module name="RequireThis">
+        <property name="checkMethods" value="false"/>
+    </module>
+    -->
+    <!--
+    <module name="UnnecessaryParentheses"/>
+    -->
+	<module name="ArrayTypeStyle" />
+	<module name="UpperEll"/>
+	<!--
+	<module name="HiddenField">
+		<property name="tokens" value="VARIABLE_DEF"/>
+	</module>
+	-->
+	<!-- This is allowed for CLDC 1.0.
+	<module name="IllegalInstantiation">
+		<property name="classes" value="java.lang.Boolean"/>
+	</module>
+	-->
+	<!--
+	<module name="InnerAssignment"/>
+	-->
+	<module name="StringLiteralEquality"/>
+
+  </module>
+
+  <module name="SuppressionFilter">
+    <property name="file" value="checkstyle-suppressions.xml"/>
+  </module>
+
+</module>

@@ -1,0 +1,291 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%set title = J2ME Polish: Android Development %>
+<%set basedir = ../ %> 
+
+<%include start.txt %>
+
+
+<h1 id="top">Developing for Android Devices</h1>
+<%index %>
+<p>
+<br />
+The Android platform is an operating system and application environment for mobile devices developed by Google.
+J2ME Polish will convert your MIDlet applications to this platform without further work on your site.
+</p>
+<h2 id="android-preparation">Preparations</h2>
+<p>To create and deploy an application for Android you need the Android SDK with a version of 1.0 or higher. Please visit the <a
+	href="http://code.google.com/android/download.html">Android
+Download Site</a> to download the SDK for your operation system and install
+it.</p>
+<p>Optionally, you can install the Android ADT Plugins for eclipse.
+For further information how to install the plugins, go to the <a
+	href="http://code.google.com/android/intro/installing.html">Android
+Installation Guide</a>.</p>
+<p>After the installation of the Android SDK you should define the <code>android.home</code> property
+in either <i>${polish.home}/global.properties</i>,
+${project.home}/${user.name}.properties or in your <i>build.xml</i>
+script. In your <i>build.xml</i> script the definition could look like
+this:
+<pre>
+&lt;property 
+	name=&quot;android.home&quot; 
+	location=&quot;C:/Program Files/android-sdk-windows-1.5_r1&quot; 
+/&gt;
+</pre>
+</p>
+<h2 id="android-building">Building Android Application</h2>
+<p>To compile, convert and package your source code for the Android
+platform, you build your application for the device <code>Generic/android</code>. To depend on a specific SDK version use <code>Generic/android1.1</code> for Android 1.1 phones and
+<code>Generic/android1.5</code> for Android 1.5 phones. You can also target a specific phone like <code>HTC/G1</code>.
+</p>
+<p>The building of the application is done in these steps (fully automatically):
+</p>
+<ol>
+	<li>An activity is created in <code>/activity</code> of the
+	Android build folder. </li>
+	<li>The <i>R.java</i> / <i>Manifest.java</i> files are created from the resources and
+	sources via <code>aapt</code> of the Android SDK</li>
+	<li>The code is compiled with <code>target</code> and <code>source</code> set to <code>Java 1.5</code></li>
+	<li>A file named <i>classes.dex</i> is created from the source code using the <code>dx</code> utility 
+	of the Android SDK</li>
+	<li>The resources are packed to a <i>.ap_</i> file with <code>aapt</code></li>
+	<li>The application is packaged to a <i>.apk</i> file with the SDK's <code>apkbuilder</code> command</li>
+</ol>
+The Android platform is based on Java 1.5 and your application can use the full range of features of this Java version.
+<h2 id="android-testing">Testing Android application</h2>
+<p>
+There are two possibilities to test Android applications which are build with J2ME Polish:
+</p>
+<ul>
+<li>
+If the Ant property <code>test</code> is set to true or if you call the <code>emulator</code> target, 
+the Android emulator is started automatically 
+and the application is installed. Before launching your application, please wait for the <i>build.xml</i>
+to output <i>Successfully installed</i>. To rebuild the application and test it, just cancel 
+the running <i>build.xml</i> and leave the emulator running, the build process will automatically detect 
+if there's an emulator running and install the application to the running emulator. 
+If you application is running at deployment time, it will be shut down beforehand. You can also 
+start the emulator before the build process is started.
+</li>
+<li>
+The created activity in the <code>build</code> folder can be imported to Eclipse and used to 
+test via the Android ADT Plugins if they're installed. Please note that you need to fix the project to use it with the ADT
+plugins. To do so, right-click the imported activity and run <i>Android
+Tools / Fix Project Properties</i>.
+</li>
+</ul>
+<p>
+To view output send to <code>System.out</code> or <code>System.err</code> you can either use the Eclipse plugin 
+or start the Android tool <code>ddms</code>, which you can find in <i>${android.home}/tools</i>.
+</p>
+
+<h2 id="android-configuring">Configure your Manifest.xml file</h2>
+<p>
+You can customize the generated Manifest.xml file by defining variables in the build.xml file.
+<pre>
+	&lt;j2mepolish&gt;
+	&lt;build&gt;
+		&lt;variable name="android.targetSdkVersion" value="4" /&gt;
+	&lt;/build&gt;
+	&lt;/j2mepolish>
+</pre>
+</p>
+
+<table class="borderedTable" cellspacing="0" cellpadding="3" border="1">
+<tr>
+	<th>Variable</th>
+	<th>Description</th>
+</tr>
+	<tr>
+		<td>android.minSdkVersion</td>
+		<td>See <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#min">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#min</a> for details.</td>
+	</tr>
+	<tr>
+		<td>android.targetSdkVersion</td>
+		<td>See <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target</a> for details.</td>
+	</tr>
+	<tr>
+		<td>android.maxSdkVersion</td>
+		<td>See <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#max">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#max</a> for details.</td>
+	</tr>
+	<tr>
+		<td>android.versionCode</td>
+		<td>See <a href="http://developer.android.com/guide/topics/manifest/manifest-element.html#vcode">http://developer.android.com/guide/topics/manifest/manifest-element.html#vcode</a> for details.</td>
+	</tr>
+	<tr>
+		<td>android.versionName</td>
+		<td>See <a href="http://developer.android.com/guide/topics/manifest/manifest-element.html#vname">http://developer.android.com/guide/topics/manifest/manifest-element.html#vname</a> for details. </td>
+	</tr>
+	<tr>
+		<td>MIDlet-Icon</td>
+		<td>This variable is the path to an icon.</td>
+	</tr>
+	<tr>
+		<td>android.hideStatusBar</td>
+		<td>Set this variable to the value <em>true</em> to hide the status bar at the top of the screen.</td>
+	</tr>
+	<tr></tr>
+</table>
+
+<h2 id="android-signing">Sign your Application</h2>
+<p>Every Android application needs to be signed. The build process will automatically sign your application with a development signature which is accepted by a device or an emulator. To sign
+your application with your own signature you can use the signing mechanism provided by J2ME Polish. Please see the <a href="build-build.html#sign"><code>sign</code> tag</a> for details.</p>
+<p>Tip: Changing the signature of an application will not change its identity. If you try to install an already installed application with the same id but a different signature,
+the system will assume fraud and will not allow the operation. So in order to change the development signature to a real one you need to deinstall the old application first. This also implies
+that you should not deploy an application with a development signature to your customers. The customer would be forced to deinstall the application by hand in case you want to update the application.</p>
+
+<h2 id="android-market">Publish your Application on Android Market</h2>
+<p>The Android Market is the One-Stop-Shop for applications on any Android handset. A published application can be downloaded by every Android user and you need not provide hosting and delivery methods.</p>
+<p>To publish your application you need an Android Market account. Please see <a href="http://www.android.com/market">the offical Android Market site</a> for details.</p>
+
+<h2 id="android-configuring">Configure Commands</h2>
+<p>
+The rendering of commands can be done by J2ME Polish or by the Android system. A command rendered by J2ME Polish will be stylable by you where a system rendered command will look nativly.</p>
+<p>This is being configured with the fullscreen mode of J2ME Polish
+ - set it to <code>false</code> for using native Android commands and to <code>menu</code> for using J2ME Polish rendered commands. 
+ Note that at the moment you need to use J2ME Polish rendering when using subcommands.
+</p>
+<pre>
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;polish.android&quot; /&gt;
+</pre>
+<p>
+This setting needs to be applied to the <code>&lt;variables&gt;</code> section of the <code>&lt;j2mepolish&gt;</code> task in your
+<i>build.xml</i> script.
+<br />Here you can see the difference in the rendering behavior in the J2ME Polish <i>rssbrowser</i> sample application:
+</p>
+<table>
+<tr>
+<td>
+<img src="<%= basedir%>images/gui-android-commands-j2mepolish.png" width="319" height="481" alt="Commands rendered by J2ME Polish." />
+<br />
+Commands rendered by J2ME Polish.
+</td>
+<td>
+<img src="<%= basedir%>images/gui-android-commands-native.png" width="319" height="479" alt="Commands rendered by Android." /> 
+<br />
+Native Android commands.
+</td>
+</tr>
+</table>
+<p>
+<br />When using native commands, you cannot design colors or the general design of the commands, but like in normal J2ME Polish commands
+you can specify command images with <code>icon-image</code> CSS attribute:
+</p>
+<p>In your Java code use a <code>#style</code> preprocessing directive to bind a style to a specific command:</p>
+<pre>
+//#style commandNext
+Command cmdNext = new Command( "Next", Command.SCREEN, 2 );
+</pre>
+<p>Then define this style in your <i>polish.css</i> file accordingly:</p>
+<pre>
+.commandNext {
+	icon-image: url( cmd_next.png ); 
+}
+</pre>
+
+<h2 id="android-APIs">Supported APIs</h2>
+<p>
+The following J2ME APIs are supported by J2ME Polish:
+</p>
+<ul>
+	<li><b>JSR 139 CLDC 1.1</b>: The basic Java technologies are provided by the Android stack itself</li>
+	<li><b>JSR 118 MIDP 2.0</b>: The basic mobile information device profile APIs are supported, including RMS, low level LCDUI functionalities, HTTP connections, and <code>http:</code> and <code>tel:</code> platform requests</li>
+	<li><b>JSR 075 FileConnection</b>: Access the filesystem on the device.</li>
+	<li><b>JSR 075 PIM</b>: Read information from the native address book.</li>
+	<li><b>JSR 179 Location</b>: Access GPS information.</li>
+</ul>
+<p>
+For playing back audio please use the <code>de.enough.polish.multimedia.AudiPlayer</code> for now. Direct usage of the MMAPI is not yet supported.
+</p>
+
+
+<h2 id="android-roadmap">Roadmap</h2>
+<p>
+Future versions of the Android conversion will support the conversion of the following Java Packages: 
+</p>
+<ul>
+	<li>MMAPI (use  <code>de.enough.polish.multimedia.AudiPlayer</code> for now) </li>
+	<li>Bluetooth API</li>
+</ul>
+
+
+
+<h2 id="android-troubleshooting">Troubleshooting</h2>
+<p>You might encounter some issues when building Android applications:</p>
+<h3 id="android-troubleshooting-dex">OutOfMemory for dex</h3>
+<p>
+	The creation of the .dex file terminates with an OutOfMemoryError.
+This error is quite common and due to insufficient memory settings in the dx executable of the android installation.
+Please go to <i>${android.home}/tools</i> and remove the <code>REM</code> from the line
+</p>
+<pre>
+REM set javaOpts=-Xmx256M
+</pre>
+<p>
+and rerun the build process. If the error occurs again, increase the settings for <code>-Xmx</code> to a higher amount, e.g. <code>-Xmx512M</code>.
+</p>
+<h3 id="android-troubleshooting-libraries">Verifier Error when using binary libraries</h3>
+<p>
+	From J2ME Polish 2.1.3 onwards you can use binary libraries normally with Android:
+</p>
+<pre>
+&lt;libraries&gt;
+    &lt;library file=&quot;lib/mylib.jar&quot; /&gt;   
+&lt;/libraries&gt;
+</pre>
+<p>
+	This works fine but the Android Virtual Machine cannot cope with several variables having the same name but different types.
+	Obfuscators can produce such 'name shadowing' as this is allowed in Java bytecode. In case you are encountering such
+	problems, please either use the library in source code or ask the vendor of the library to provide a version without overloaded variable names. 
+</p>
+
+<h3 id="android-troubleshooting-packagehierarchy">Error: Missing argument for flag --package.</h3>
+<p>
+The problem:
+</p>
+<pre>
+[j2mepolish] Invoking precompiler [de.enough.polish.android.AndroidPreCompiler]... 
+[j2mepolish] android: Usage: 
+[j2mepolish] android: Error: Missing argument for flag --package. 
+[j2mepolish] android: android [global options] action [action options] 
+[j2mepolish] android: Global options: 
+[j2mepolish] android: -h --help This help. 
+[j2mepolish] android: -s --silent Silent mode: only errors are printed out. 
+[j2mepolish] android: -v --verbose Verbose mode: errors, warnings and informational messages are printed. 
+[j2mepolish] android: Action "create project": 
+[j2mepolish] android: Creates a new Android Project. 
+[j2mepolish] android: Options: 
+[j2mepolish] android: -k --package Package name [required] 
+[j2mepolish] android: -n --name Project name 
+[j2mepolish] android: -a --activity Activity name [required] 
+[j2mepolish] android: -t --target Target id of the new project [required] 
+[j2mepolish] android: -p --path Location path of new project [required] 
+
+BUILD FAILED 
+C:\somewhere\build.xml:92: Unable to create activity / project: android returned 1
+</pre>
+<p>
+The solution: Your MIDlet needs a package hierarchy of at least two. Add a package definition to your MIDlet file like this:
+</p>
+<pre>
+package foo.bar;
+</pre>
+
+<h3 id="android-troubleshooting-packagehierarchy">Failure [-12]</h3>
+<p>
+The problem: When you build for the Android platform, you get the error <code>message Failure [-12]</code>.
+</p>
+<p>
+The solution: Your <code>android.home</code> points to an old Android SDK version. Please upgrade your Android installation and point the build property <code>android.home</code> to this upgraded installation.
+</p>
+
+<h3 id="android-troubleshooting-screenresolution">Screen Resolution is too low</h3>
+<p>
+The problem: Your application is running on a device with a WVGA screen but the application is not using all available space.
+</p>
+<p>
+The solution: Make sure you address the right target API. Different screen resolutions support from API version 4 upwards. Use the variables <em>android.targetSdkVersion</em>, <em>android.minSdkVersion</em> and <em>android.maxSdkVersion</em> to adjust the API versions.
+</p>
+
+<%include end.txt %>

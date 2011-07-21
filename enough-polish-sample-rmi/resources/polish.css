@@ -1,0 +1,217 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	bgColor:  rgb(132,143,96);
+	brightBgColor:  rgb(238,241,229);
+	translucentBgColor:  argb(130, 238,241,229);
+	brightFontColor: rgb(238,241,229);
+	fontColor: rgb( 30, 85, 86 );
+}
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: brightFontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+	padding: 5;
+	background {
+		type: round-rect;
+		arc: 8;
+		color: brightBgColor;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	font {
+		style: bold;
+		color: fontColor;
+		size: small;
+	}
+	layout: expand | center;	
+}
+
+/** 
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  * An interesting attribute is the "columns" attribute which
+  * is used to use a table with two columns instead of the default
+  * layout.
+  */
+.mainScreen {
+	padding: 5;
+	padding-left: 15;
+	padding-right: 15;
+	background {
+		color: brightBgColor;
+	}
+	layout: horizontal-expand | horizontal-center | vertical-center;
+}
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "listitem" to design all
+  * items on the list-screens. 
+  * An interesting attribute is the "icon-image" URL, which uses
+  * the %INDEX% keyword. The first list-item will use the image
+  * "icon0.png", the second "icon1.png" and so on. 
+  */
+.mainCommand {
+	margin: 2; /* for the missing border of the focused style */
+	padding: 5;
+	background: none;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: small;
+	layout: center;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+}
+
+alert extends .mainScreen {
+}
+
+alertcontent {
+	font-color: fontColor;
+	font-size: small;
+	font-style: bold;
+}
+
+.loadGameAlert {
+	margin: 20;
+	padding: 5;
+	padding-left: 15;
+	padding-right: 15;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	background-color: argb( 150, 255, 255, 255 ); /*translucentBgColor; */
+	show-dismiss-command: false;
+}
+
+
+/*********************   MENU BAR     *******************************************************************************************************/
+/* You need to activate the extended menubar that allows this finetuned design by setting the 
+   "polish.MenuBar.useExtendedMenuBar" variable to "true" in your build.xml script. */
+
+menubar
+{
+	padding-top: 3px;
+	padding: 2px;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2px;
+	margin-right: 2px;
+	min-width: 60%;
+	padding: 2px;
+	background {
+		type: round-rect;
+		color: brightBgColor;
+	}
+}
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2px;
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+.menuItem:hover {
+	background-color: bgColor;
+	font-color: brightFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0px; /* default */
+	padding-top: 3px;
+	padding-bottom: 0px;
+	font-color: brightFontColor;
+	font-style: bold;
+	layout: left;
+}
+
+leftcommand:pressed {
+	font-color: #333;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+rightcommand:pressed {
+	font-color: #333;
+}
+

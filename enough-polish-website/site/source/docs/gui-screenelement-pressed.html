@@ -1,0 +1,96 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Designing the Pressed Element %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="top">Designing the Pressed Element</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-screenelement-focused.html">Focused Style</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	
+	<p>
+	The user can select items like buttons, commands, and so on by pressing fire on the keyboard.
+	In J2ME Polish you can give your user a visual feedback by defining a 
+	<code>[style-name]:pressed</code> style:
+	</p>
+<pre>
+menuItem {
+	padding: 2;
+	font-color: black;
+}
+
+menuItem:hover {
+	background-color: #222;
+	font-color: white;
+}
+
+<b>menuItem:pressed {
+	background-color: #9f9;
+	font-color: #222;
+}</b>
+</pre>
+	<p>You are not limited in the design, typically you will use a different background or a different border
+	for the pressed state of an item, but depending on the item you can also exchange icon-images, font-styles, 
+	effects, animations and so on. Please refer to the <a href="gui-visualguide.html">visual guide</a> for 
+	details on the design possibilities for each item.
+	</p>
+	<p>
+	The following example uses the <a href="gui-viewtype-particle.html">particle</a> <code>view-type</code>
+	for giving visual feedback while the user holds down the fire key:
+	<br />
+		<div id="id_particle">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-viewtype-particle.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_particle", "176", "208", "9.0.0", false, flashvars, params, attributes);
+		</script>
+				
+	
+	<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B'  codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+        <param name='src' value="<%= basedir%>images/gui-viewtype-particle.mov">
+        <param name='autoplay' value="false">
+        <param name='controller' value="true">
+        <param name='loop' value="true">
+        <param name='width' value="176">
+        <param name='height' value="231">
+        <embed src="<%= basedir%>images/gui-viewtype-particle.mov" autoplay="false" 
+        controller="true" loop="true" pluginspage='http://www.apple.com/quicktime/download/'
+        width="176" height="231"
+        >
+        </embed>
+	</object>
+	</p>
+<pre>
+.mainCommand {
+	padding: 0;
+	padding-vertical: 0;
+	icon-image: url( iconlarge%INDEX%.png );
+	icon-image-align: top;
+	layout: center;
+}
+
+.mainCommand:hover {
+	font-style: bold;
+	font-size: small;
+	font-color: white;
+	text-effect: shadow;
+}
+
+<b>.mainCommand:pressed {
+	view-type: particle;
+}</b>
+</pre>
+
+<%include end.txt %>
