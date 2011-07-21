@@ -968,7 +968,7 @@ public class Display
 			return;
 		}
 
-		//#if polish.blackberry
+		//#if polish.blackberry || polish.android
 			if (this.nativeDisplay.notifyDisplayableChange( this.currentDisplayable, nextDisplayable )) {
 				this.nextOrCurrentDisplayable = null;
 				return;
@@ -2427,9 +2427,10 @@ public class Display
 	 */
 	protected void notifyFocusSet(Item item)
 	{
-		// ignore
+		// ignore - this is implemented by de.enough.polish.blackberry.ui.BaseScreen
 	}
 	//#endif
+	
 	
 	//#if !polish.blackberry
 	/**
@@ -2798,7 +2799,7 @@ public class Display
 			if (this.commandListener != null) {
 				this.commandListener.commandAction((Command)c, this.currentDisplayable );
 			} else if (this.currentCanvas instanceof Screen) {
-                            	((Screen)this.currentCanvas).handleCommand( (Command)c);
+				((Screen)this.currentCanvas).handleCommand( (Command)c);
 			}
 		}
 	}
@@ -3016,5 +3017,6 @@ public class Display
     	System.out.println("input method set : " + inputMethod);
     	this.inputMethod = inputMethod;
     }
+
 
 }

@@ -155,8 +155,6 @@ import de.enough.polish.util.IdentityArrayList;
 public class Command
 //#if polish.midp
 	extends javax.microedition.lcdui.Command
-//#elif polish.android
-	//# extends de.enough.polish.android.lcdui.Command
 //#endif
 {
 	/**
@@ -408,7 +406,7 @@ public class Command
 	{
 		//#if polish.midp1
 			//# super( getValidLabel(shortLabel), getValidType(commandType), priority);
-		//#else
+		//#elif !polish.android
 			super( getValidLabel(shortLabel), longLabel, getValidType(commandType), priority);
 		//#endif
 		this.label = shortLabel;

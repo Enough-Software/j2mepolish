@@ -536,4 +536,8 @@ public final class Font extends Object
 	public Typeface getTypeface() {
 		return this.typeface;
 	}
+	
+	public float getTextSize() {
+		return this.paint.getTextSize();
+	}
 }

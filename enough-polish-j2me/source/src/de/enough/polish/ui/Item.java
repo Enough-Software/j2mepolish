@@ -30,6 +30,11 @@ import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+//#if polish.android
+	import de.enough.polish.android.lcdui.AndroidDisplay;
+	import de.enough.polish.android.lcdui.AndroidItemView;
+//#endif
+	
 //#debug ovidiu
 import de.enough.polish.benchmark.Benchmark;
 
@@ -778,6 +783,9 @@ public abstract class Item implements UiElement, Animatable
 	//#if polish.blackberry
 		/** a blackberry specific internal field */
 		public Field _bbField;
+	//#endif
+	//#if polish.android
+		protected AndroidItemView _androidView;
 	//#endif
 	protected Style focusedStyle;
 	protected boolean isPressed;
@@ -4955,6 +4963,11 @@ public abstract class Item implements UiElement, Animatable
 			if (oldStyle == null) {
 				oldStyle = StyleSheet.defaultStyle;
 			}
+			//#if polish.android
+			if (this._androidView != null) {
+				this._androidView.getAndroidView().requestFocus();
+			}
+			//#endif
 			//#if tmp.handleEvents
 				EventManager.fireEvent( EventManager.EVENT_FOCUS, this, new Integer(direction));
 			//#endif
@@ -5146,7 +5159,15 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 		//#if polish.blackberry
 			if (this.isFocused  && this._bbField != null) {
-				getScreen().notifyFocusSet(this);
+				Display.getInstance().notifyFocusSet(this);
+			}
+		//#endif
+		//#if polish.android
+			if (this instanceof TextField) {
+				System.out.println("Item.showNotify with androidView=" + this._androidView + " for " + this);
+			}
+			if (this._androidView != null) {
+				AndroidDisplay.getInstance().onShow(this._androidView);
 			}
 		//#endif
 		//#if tmp.handleEvents
@@ -5197,6 +5218,11 @@ public abstract class Item implements UiElement, Animatable
 		if (this.isPressed) {
 			notifyItemPressedEnd();
 		}
+		//#if polish.android
+			if (this._androidView != null) {
+				AndroidDisplay.getInstance().onHide(this._androidView);
+			}
+		//#endif
 		//#if tmp.handleEvents
 			EventManager.fireEvent( EventManager.EVENT_HIDE, this, null );
 		//#endif
