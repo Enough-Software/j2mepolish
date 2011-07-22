@@ -548,7 +548,10 @@
 			<param name="layers" type="background[]" array-type="Background" separator="," default="" description="Comma separated list of backgrounds that runs from top to bottom, e.g. layers: first, second, third, bg;"/>
 			<param name="margins" type="dimension[]" array-type="Dimension" separator="," default="none" description="Comma separated list of margins that runs from top to bottom, e.g. margins: 10px, 6px, 4px, 0px;"/>
 		</mapping>
-		
+		<mapping from="vertical-stripes"               to="de.enough.polish.ui.backgrounds.VerticalStripesBackground" >
+			<param name="stripe-colors" type="color[]" array-type="Color" separator="," default="none" description="Comma separated list of colors for each stripe, e.g. stripe-color: #f00, #0f0, #00f;"/>
+			<param name="stripe-widths" type="dimension[]" array-type="Dimension" separator="," default="none" description="Comma separated list of widths for each stripe, e.g. stripe-widths: 10px, 5%, 4px;"/>
+		</mapping>		
 	</attribute>
 	
 	<attribute
@@ -1035,6 +1038,7 @@
 
 	<attribute
 		name="gauge-width"
+		deprecated="Use width instead"
 		type="integer"
 		appliesTo="Gauge"
 		description="The width of the progress bar."
@@ -1044,6 +1048,7 @@
 
 	<attribute
 		name="gauge-height"
+		deprecated="Use height instead"
 		type="integer"
 		appliesTo="Gauge"
 		description="The height of the progress bar."
@@ -1074,7 +1079,7 @@
 
 	<attribute
 		name="gauge-gap-width"
-		type="integer"
+		type="dimension"
 		appliesTo="Gauge"
 		description="The width of gaps in pixels between single chunks. Only used in the &quot;chunked&quot; gauge-mode."
 		default="3"
@@ -1084,7 +1089,7 @@
 
 	<attribute
 		name="gauge-chunk-width"
-		type="integer"
+		type="dimension"
 		appliesTo="Gauge"
 		description="The width of single chunks in pixels. Only used in the &quot;chunked&quot; gauge-mode."
 		id="24"
@@ -4277,7 +4282,7 @@
 		name="gauge-background-color"
 		type="color"
 		appliesTo="Gauge"
-		description="the background color of the gauge progress bar"
+		description="The background color of the gauge slider bar. Alternatively you can define to use a background using gauge-background."
 		default="white"
 		id="353"
 		since="J2ME Polish 2.1"
@@ -5506,7 +5511,7 @@
 		appliesTo="CalendarItem"
 		description="The style for days of the current month that are outside of the specified valid period within an CalendarItem."
 		id="480"
-		since="J2ME Polish 2.2"
+		since="J2ME Polish 2.2.2"
 	/>
 	
 	<attribute
@@ -5516,7 +5521,7 @@
 		description="The duration of the animation."
 		default="800ms"
 		id="481"
-		since="J2ME Polish 2.2"
+		since="J2ME Polish 2.2.2"
 	/>
 	
 	<attribute
@@ -5527,9 +5532,28 @@
 		default="default"
 		values="default,open,close"
 		id="482"
-		since="J2ME Polish 2.2"
+		since="J2ME Polish 2.2.2"
 	/>
 	
+	<!--  TODO add vertical-doors setting here -->
+	
+	<attribute
+		name="gauge-background"
+		type="background"
+		appliesTo="Gauge"
+		description="A background name from the backgrounds section. The background is drawn behind the slider/progress bar across the used width."
+		id="485"
+	/>
+	
+	<attribute
+		name="gauge-slider"
+		type="background"
+		appliesTo="Gauge"
+		description="A background name from the backgrounds section. The background is rendering the slider/progress bar."
+		id="486"
+	/>
+	
+		
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"

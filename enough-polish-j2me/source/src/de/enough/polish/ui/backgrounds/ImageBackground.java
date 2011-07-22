@@ -2,7 +2,7 @@
 /*
  * Created on 14-Mar-2004 at 21:31:51.
  *
- * Copyright (c) 2004-2005 Robert Virkus / Enough Software
+ * Copyright (c) 2004-2011 Robert Virkus / Enough Software
  *
  * This file is part of J2ME Polish.
  *
@@ -56,13 +56,8 @@ import de.enough.polish.ui.StyleSheet;
  * </ul>
  * </p>
  *
- * <p>Copyright Enough Software 2004 - 2009</p>
-
- * <pre>
- * history
- *        14-Mar-2004 - rob creation
- * </pre>
- * @author Robert Virkus, robert@enough.de
+ * <p>Copyright Enough Software 2004 - 2011</p>
+ * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ImageBackground 
 extends Background

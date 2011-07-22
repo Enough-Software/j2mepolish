@@ -32,6 +32,10 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import de.enough.polish.ui.backgrounds.ImageBackground;
+import de.enough.polish.ui.backgrounds.SimpleBackground;
+import de.enough.polish.ui.backgrounds.VerticalStripesBackground;
+
 /**
  * Implements a graphical display, such as a bar graph, of an integer
  * value.  The <code>Gauge</code> contains a <em>current value</em>
@@ -279,13 +283,11 @@ implements ImageConsumer
 	private String valueString;
 	private int maxValue;
 	private boolean isInteractive;
-	private int color = 0x0000FF; //default color is blue
-	private boolean useBackgroundColor;
-	private int backgroundColor = 0xFFFFFF; //default color is white
+	private Color color = new Color( 0x0000FF ); //default color is blue
 	private int mode = MODE_CHUNKED;
-	private int chunkWidth = 6;
-	private int gapWidth = 3;
-	private int gapColor = 0xFFFFFF; // default gap color is white
+	private Dimension chunkWidth = new Dimension(6);
+	private Dimension gapWidth = new Dimension(3);
+	private Color gapColor = new Color( 0xFFFFFF ); // default gap color is white
 	private Image image;
 	//#if polish.css.gauge-button-image
 		private boolean useImageAsButton;
@@ -295,7 +297,6 @@ implements ImageConsumer
 		private Image sliderImage;
 	//#endif
 	private int imageYOffset;
-	private Image indicatorImage;
 	private boolean isIndefinite;
 	private int indefinitePos;
 	private boolean showValue = true;
@@ -318,6 +319,12 @@ implements ImageConsumer
 	//#endif
 	private int valuePosition = POSITION_LEFT;
 	//private boolean isShown;
+	private Background sliderBackground;
+	private Background slider;
+
+	private int indefinitePosMax;
+
+	private boolean isDefaultChunkedSliderUsed;
 
 
 	/**
@@ -525,104 +532,11 @@ implements ImageConsumer
 				this.valueString += '%';
 			}
 		//#endif
-		//#if polish.css.view-type
-		if (this.view == null) {
-		//#endif		
-			if (isInitialized()) {
-				if (this.isIndefinite) {
-					updateIndefiniteIndicatorImage();
-				} else if (this.image == null && this.mode != MODE_CONTINUOUS){
-					createIndicatorImage();
-				}
-			}
-		//#if polish.css.view-type
-		}
-		//#endif
 		if (this.isShown) {
 			repaint();
 		}
 	}
 
-	/**
-	 * Calculates the position of the indicator and creator the appropriate image.
-	 * This method must not be called when the gauge has not yet been initialised.
-	 */
-	private void createIndicatorImage() {
-		int percentage = (this.value * 100) / this.maxValue;
-		int position = (percentage * (this.contentWidth - this.valueWidth)) / 100;
-		if (position == 0) {
-			position = 1;
-		}
-		this.indicatorImage = Image.createImage( position, this.contentHeight );
-		Graphics g = this.indicatorImage.getGraphics();
-		if (this.image != null) {
-			int imageWidth = this.image.getWidth();
-			int x = 0;
-			while ( x < position ) {
-				g.drawImage(this.image, x, 0, Graphics.TOP | Graphics.LEFT );
-				x += imageWidth;
-			}
-		} else if (this.mode == MODE_CHUNKED) {
-			/*
-			if (this.chunkWidth == 0) {
-				int spacePerChunk = this.contentWidth / this.maxValue;
-				if (spacePerChunk > 5) {
-					this.gapWidth = 3;
-					this.chunkWidth = spacePerChunk - this.gapWidth;
-				} else {
-					
-				}
-			} */
-			// paint the filling:
-			g.setColor( this.color );
-			g.fillRect( 0, 0, position, this.contentHeight );
-			// paint the gaps:
-			g.setColor( this.gapColor );
-			int x = this.chunkWidth;
-			while (x < position) {
-				g.fillRect( x, 0, this.gapWidth, this.contentHeight );
-				x += this.gapWidth + this.chunkWidth;
-			}
-		} else {
-			// mode == CONTINUOUS
-			g.setColor( this.color );
-			g.fillRect( 0, 0, position, this.contentHeight );
-		}
-		
-	}
-
-	/**
-	 * Updates the indicator image for an indefinite gauge.
-	 */
-	private void updateIndefiniteIndicatorImage() {
-		Graphics g = this.indicatorImage.getGraphics();
-		if (this.value == CONTINUOUS_IDLE || this.value == INCREMENTAL_IDLE) {
-			g.setColor( this.gapColor );
-			g.fillRect( 0, 0, this.contentWidth, this.contentHeight );
-		} else if (this.value == CONTINUOUS_RUNNING ) {
-			g.setColor( this.color );
-			g.fillRect( 0, 0, this.contentWidth, this.contentHeight );
-			g.setColor( this.gapColor );
-			int cWidth = this.chunkWidth + this.gapWidth;
-			int x =  this.indefinitePos - cWidth;
-			while (x < this.contentWidth) {
-				g.fillRect( x, 0, this.gapWidth, this.contentHeight );
-				x += cWidth;
-			}
-		} else { // value == INCREMENTAL_UPDATE
-			int percentage = (this.indefinitePos * 100) / this.maxValue;
-			int position = (percentage * this.contentWidth) / 100;
-			g.setColor( this.gapColor );
-			g.fillRect( 0, 0, this.contentWidth, this.contentHeight );
-			g.setColor( this.color );
-			int cWidth = this.chunkWidth + this.gapWidth;
-			int x = 0;
-			while (x < position) {
-				g.fillRect( x, 0, this.chunkWidth, this.contentHeight );
-				x += cWidth;
-			}
-		}
-	}
 
 	/**
 	 * Gets the current value of this <code>Gauge</code> object.
@@ -741,11 +655,22 @@ implements ImageConsumer
 	 * @see de.enough.polish.ui.Item#paint(int, int, javax.microedition.lcdui.Graphics)
 	 */
 	public void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
-		if (this.showValue && this.valuePosition == POSITION_LEFT) {
-			g.setFont( this.font );
-			g.setColor( this.fontColor );
-			g.drawString( this.valueString, x, y, Graphics.TOP | Graphics.LEFT );
-			x += this.valueWidth;
+		int sliderWidth = this.contentWidth;
+		int valueX = x;
+		int valueAnchor = Graphics.BOTTOM | Graphics.LEFT;
+		if (this.showValue) {
+			if (this.valuePosition == POSITION_LEFT) {
+				x += this.valueWidth;
+				sliderWidth -= this.valueWidth;
+			} else	if (this.valuePosition == POSITION_RIGHT) {
+				valueX = rightBorder;
+				valueAnchor = Graphics.BOTTOM | Graphics.RIGHT;
+				sliderWidth -= this.valueWidth;
+			} else if (this.valuePosition == POSITION_CENTER) {
+				valueX = leftBorder + ((rightBorder - leftBorder)/2);
+				valueAnchor = Graphics.BOTTOM | Graphics.HCENTER;
+			} 
+
 		}
 		//#ifdef polish.css.gauge-inactive-image
 			if (this.inactiveImage != null) {
@@ -755,8 +680,16 @@ implements ImageConsumer
 		if (this.isIndefinite) {
 			if (this.image != null) {
 				g.drawImage( this.image, x + this.indefinitePos, y + this.imageYOffset,  Graphics.TOP | Graphics.LEFT );
-			} else if (this.indicatorImage != null ) {
-				g.drawImage(this.indicatorImage, x, y + this.imageYOffset, Graphics.TOP | Graphics.LEFT );
+			} else {
+				int clipX = g.getClipX();
+				int clipY = g.getClipX();
+				int clipWidth = g.getClipWidth();
+				int clipHeight = g.getClipHeight();
+				g.clipRect( x, y, this.contentWidth, this.contentHeight );
+				int gapPlusChunkWidth = this.indefinitePosMax; 
+				int sliderX = x + this.indefinitePos - gapPlusChunkWidth;
+				this.slider.paint( sliderX, y, this.contentWidth + this.indefinitePosMax, this.contentHeight, g );
+				g.setClip( clipX, clipY, clipWidth, clipHeight );
 			}
 		} else if (this.image != null) {
 			//#if polish.css.gauge-button-image
@@ -789,38 +722,17 @@ implements ImageConsumer
 				//#endif
 			}
 		} else {
-			if (this.mode == MODE_CONTINUOUS) {
-				int maxWidth = this.contentWidth;
-				//#if polish.css.gauge-background-color
-				if(this.useBackgroundColor)
-				{
-					g.setColor(this.backgroundColor);
-					g.fillRect(x, y, this.contentWidth, this.contentHeight );
-				}
-				//#endif
-				if (this.showValue && this.valuePosition != POSITION_CENTER) {
-					maxWidth -= this.valueWidth;
-				}
-				int w = (maxWidth * this.value) / this.maxValue;
-				g.setColor( this.color );
-				g.fillRect(x, y, w + 1, this.contentHeight );
-			} else {
-				g.drawImage(this.indicatorImage, x, y, Graphics.TOP | Graphics.LEFT );
+			if (this.sliderBackground != null) {
+				this.sliderBackground.paint(x, y, sliderWidth, this.contentHeight, g );
 			}
+			int w = (sliderWidth * this.value) / this.maxValue;
+			this.slider.paint(x, y, w, this.contentHeight, g );
 		}
 		if (this.showValue) {
-			if (this.valuePosition == POSITION_RIGHT) {
-				g.setFont( this.font );
-				g.setColor( this.fontColor );
-				g.drawString( this.valueString, rightBorder, y, Graphics.TOP | Graphics.RIGHT );
-			} else if (this.valuePosition == POSITION_CENTER) {
-				g.setFont( this.font );
-				g.setColor( this.fontColor );
-				g.drawString( this.valueString, leftBorder + ((rightBorder - leftBorder) >> 1), y, Graphics.TOP | Graphics.HCENTER );				
-			}
+			g.setFont( this.font );
+			g.setColor( this.fontColor );
+			g.drawString( this.valueString, valueX, y + this.font.getHeight(), valueAnchor );
 		}
-//		g.setColor( 0xff0000 );
-//		g.drawRect( getAbsoluteX(), getAbsoluteY(), this.itemWidth, itemHeight );
 	}
 
 	/* (non-Javadoc)
@@ -907,21 +819,14 @@ implements ImageConsumer
 				}
 			} else {
 				this.maxValue = 20;
+				this.indefinitePosMax = this.contentWidth;
+				if (this.isDefaultChunkedSliderUsed) {
+					this.indefinitePosMax = this.gapWidth.getValue(this.contentWidth) + this.chunkWidth.getValue(this.contentWidth);
+				}
 			}
-			int imageWidth = this.contentWidth - this.valueWidth; //Math.max( 1, this.contentWidth - this.valueWidth );
-			int imageHeight =  this.contentHeight; // Math.max( 1, this.contentHeight );
-			if (imageWidth > 0 && imageHeight > 0) {
-				this.indicatorImage = Image.createImage( imageWidth, imageHeight );
-				updateIndefiniteIndicatorImage();
-			} else {
-				//#if polish.debug.error
-					throw new IllegalArgumentException( "invalid lineWidth for gauge: " + availWidth );
-				//#else
-					//# throw new IllegalArgumentException();
-				//#endif
-			}
-		} else if (this.image == null && this.mode != MODE_CONTINUOUS){ // this is a definite gauge
-			createIndicatorImage();
+		}
+		if (this.slider == null) {
+			this.slider = new SimpleBackground( this.color);
 		}
 	}
 
@@ -1012,6 +917,7 @@ implements ImageConsumer
 			if (sliderImageUrl != null) {
 				try {
 					this.sliderImage = StyleSheet.getImage( sliderImageUrl, this, false );
+					this.slider = new ImageBackground(Color.TRANSPARENT, this.sliderImage, Graphics.TOP | Graphics.LEFT);
 				} catch (IOException e) {
 					//#debug error
 					System.out.println("unable to load gauge-slider-image [" + sliderImageUrl + "]: " + e );
@@ -1024,6 +930,25 @@ implements ImageConsumer
 				this.isPercent = isPercentBool.booleanValue();
 			}
 		//#endif
+		//#ifdef polish.css.gauge-background
+			Background gaugeBackgroundObj = (Background) style.getObjectProperty("gauge-background");
+			if (gaugeBackgroundObj != null) {
+				this.sliderBackground = gaugeBackgroundObj;
+			}
+		//#endif
+		//#ifdef polish.css.gauge-slider
+			Background gaugeSliderObj = (Background) style.getObjectProperty("gauge-slider");
+			if (gaugeSliderObj != null) {
+				this.slider = gaugeSliderObj;
+			}
+		//#endif
+
+		if (this.mode == MODE_CHUNKED && this.slider == null) {
+			this.isDefaultChunkedSliderUsed = true;
+			Color[] stripeColors = new Color[]{ this.color, this.gapColor };
+			Dimension[] stripeWidhs = new Dimension[]{ this.chunkWidth, this.gapWidth };
+			this.slider = new VerticalStripesBackground(stripeColors, stripeWidhs);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -1032,18 +957,18 @@ implements ImageConsumer
 	public void setStyle(Style style, boolean resetStyle ) {
 		super.setStyle(style, resetStyle);
 		//#ifdef polish.css.gauge-color
-			Integer gaugeColor = style.getIntProperty("gauge-color");
-			if (gaugeColor != null) {
-				this.color = gaugeColor.intValue();
+			Color gaugeColorObj = (Color) style.getObjectProperty("gauge-color");
+			if (gaugeColorObj != null) {
+				this.color = gaugeColorObj;				
 			}
 		//#endif
-		//#ifdef polish.css.gauge-color
-			Integer gaugeBackgroundColor = style.getIntProperty("gauge-background-color");
+		//#ifdef polish.css.gauge-background-color
+			Color gaugeBackgroundColor = (Color) style.getObjectProperty("gauge-background-color");
 			if (gaugeBackgroundColor != null) {
-				this.backgroundColor = gaugeBackgroundColor.intValue();
-				this.useBackgroundColor = true;
+				this.sliderBackground = new SimpleBackground(gaugeBackgroundColor);
 			}
 		//#endif
+		
 		//#ifdef polish.css.gauge-width
 			Integer width = style.getIntProperty( "gauge-width");
 			if (width != null) {
@@ -1057,21 +982,21 @@ implements ImageConsumer
 			}
 		//#endif
 		//#ifdef polish.css.gauge-gap-color
-			Integer gapColorInt = style.getIntProperty( "gauge-gap-color");
-			if (gapColorInt != null) {
-				this.gapColor = gapColorInt.intValue();
+			Color gapColorObj = (Color) style.getObjectProperty( "gauge-gap-color");
+			if (gapColorObj != null) {
+				this.gapColor = gapColorObj;
 			}
 		//#endif
 		//#ifdef polish.css.gauge-gap-width
-			Integer gapWidthInt = style.getIntProperty( "gauge-gap-width");
-			if (gapWidthInt != null) {
-				this.gapWidth = gapWidthInt.intValue();
+			Dimension gapWidthDim = (Dimension) style.getObjectProperty( "gauge-gap-width");
+			if (gapWidthDim != null) {
+				this.gapWidth = gapWidthDim;
 			}
 		//#endif
 		//#ifdef polish.css.gauge-chunk-width
-			Integer chunkWidthInt = style.getIntProperty( "gauge-chunk-width");
-			if (chunkWidthInt != null) {
-				this.chunkWidth = chunkWidthInt.intValue();
+			Dimension chunkWidtDim = (Dimension) style.getObjectProperty( "gauge-chunk-width");
+			if (chunkWidtDim != null) {
+				this.chunkWidth = chunkWidtDim;
 			}
 		//#endif
 		
@@ -1233,10 +1158,9 @@ implements ImageConsumer
 				this.indefinitePos++;
 			//#endif
 			if (this.image == null) {
-				if (this.indefinitePos > (this.chunkWidth + this.gapWidth)) {
+				if (this.indefinitePos > this.indefinitePosMax) {
 					this.indefinitePos = 0;
 				}
-				updateIndefiniteIndicatorImage();
 			} else if (this.indefinitePos > this.maxValue) {				
 				this.indefinitePos = -this.image.getWidth();
 			}
