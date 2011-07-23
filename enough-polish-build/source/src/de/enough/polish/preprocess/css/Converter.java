@@ -218,7 +218,7 @@ public class Converter {
 				url = url.substring( startPos + 1, endPos ).trim();
 			}
 		}
-		if ( url.charAt(0) != '/' ) {
+		if ( url.length() > 0 && url.charAt(0) != '/' ) {
 			url = "/" + url;
 		}
 		return url;
@@ -250,7 +250,7 @@ public class Converter {
 		if ( anchorValue.indexOf('|') != -1 ) {
 			anchors = StringUtil.splitAndTrim( anchorValue, '|');
 		} else if ( anchorValue.indexOf('&') != -1 ) {
-				anchors = StringUtil.splitAndTrim( anchorValue, '&');
+			anchors = StringUtil.splitAndTrim( anchorValue, '&');
 		} else if ( anchorValue.indexOf(',') != -1 ) {
 			anchors = StringUtil.splitAndTrim( anchorValue, ',');
 		} else if ( anchorValue.indexOf(" and ") != -1 ) {
