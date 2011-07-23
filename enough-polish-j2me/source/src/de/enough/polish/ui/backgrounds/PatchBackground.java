@@ -171,6 +171,7 @@ public class PatchBackground extends ImageResourceBackground {
 		
 		// draw vertical right fill
 		srcX = this.imageWidth - this.rightWidth;
+		srcWidth = this.rightWidth;
 		dstX = x + (width - this.rightWidth);
 		
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
