@@ -37,7 +37,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
 /**
  * <p>Creates a shadow-like border.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public class ShadowBorderConverter extends BorderConverter {

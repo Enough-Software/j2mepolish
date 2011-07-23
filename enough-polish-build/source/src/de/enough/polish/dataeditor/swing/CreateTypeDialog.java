@@ -52,7 +52,7 @@ import de.enough.polish.dataeditor.DataType;
 /**
  * <p>Provides a dialog for entering a new type-definition.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -53,7 +53,7 @@ import de.enough.polish.util.StringUtil;
  * <p>Manages all known J2ME devices.</p>
  * <p>The devices are defined in the devices.xml file</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

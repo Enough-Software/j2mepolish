@@ -28,7 +28,7 @@ package de.enough.polish.exceptions;
 /**
  * <p>Is thrown when a defintion of a polish-component (device, vendor, group) contains errors.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

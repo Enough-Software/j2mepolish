@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * <p>Represents a CSS-style-definition.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * 
  * <pre>
  * history

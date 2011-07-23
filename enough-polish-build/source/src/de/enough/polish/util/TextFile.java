@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * <p>Handles text files.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

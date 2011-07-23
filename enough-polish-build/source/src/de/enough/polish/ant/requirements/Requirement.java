@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * <p>A requirement which a supported device needs to satisfy.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

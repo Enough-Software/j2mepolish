@@ -34,7 +34,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
 /**
  * <p>Creates a simple background with one color.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

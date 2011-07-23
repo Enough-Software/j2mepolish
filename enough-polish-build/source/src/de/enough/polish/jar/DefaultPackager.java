@@ -38,7 +38,7 @@ import de.enough.polish.util.JarUtil;
 /**
  * <p>Uses the internal J2ME Polish functions to create a jar-file.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

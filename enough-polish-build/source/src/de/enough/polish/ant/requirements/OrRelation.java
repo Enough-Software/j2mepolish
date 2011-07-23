@@ -30,7 +30,7 @@ import de.enough.polish.Device;
 /**
  * <p>Contains a list of requirements of which at least one requirement must be met by the device.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

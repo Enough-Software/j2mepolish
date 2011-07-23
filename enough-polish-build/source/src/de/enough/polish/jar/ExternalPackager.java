@@ -40,7 +40,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Calls an external packager-tool.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

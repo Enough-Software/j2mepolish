@@ -34,7 +34,7 @@ import de.enough.polish.Environment;
 /**
  * <p>Selects a device that fullfill a preprocessing term.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

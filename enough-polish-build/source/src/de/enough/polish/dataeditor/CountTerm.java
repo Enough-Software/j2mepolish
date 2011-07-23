@@ -30,7 +30,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Represents a simple term for calculating the number of entries of a specific data entry.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

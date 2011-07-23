@@ -48,7 +48,7 @@ import de.enough.polish.util.SwingUtil;
 /**
  * <p>An utility for creating bitmap-font-files, which can be used by the J2ME Polish client classes.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

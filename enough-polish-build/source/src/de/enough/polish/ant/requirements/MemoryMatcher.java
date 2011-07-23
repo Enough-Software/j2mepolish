@@ -32,7 +32,7 @@ import java.util.HashMap;
 /**
  * <p>Compares memory value like "120+ kb" and "5mb".</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

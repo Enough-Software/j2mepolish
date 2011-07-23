@@ -32,7 +32,7 @@ import de.enough.polish.BuildException;
 /**
  * <p>Creates different borders from CSS declarations.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public abstract class BorderConverter extends Converter {

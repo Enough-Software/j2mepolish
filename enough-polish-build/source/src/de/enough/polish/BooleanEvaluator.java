@@ -37,7 +37,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Evaluates boolean expressions based on defined (or undefined) symbols and the operators &amp;&amp;, ||, ! and ^.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

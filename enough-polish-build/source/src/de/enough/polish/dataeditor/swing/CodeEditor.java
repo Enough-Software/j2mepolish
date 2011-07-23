@@ -51,7 +51,7 @@ import de.enough.polish.util.SwingUtil;
 /**
  * <p>Shows the generated code and makes it available for the clipboard etc.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

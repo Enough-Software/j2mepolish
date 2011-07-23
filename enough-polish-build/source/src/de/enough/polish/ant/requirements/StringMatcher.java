@@ -28,7 +28,7 @@ package de.enough.polish.ant.requirements;
 /**
  * <p>Matches several string-values.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

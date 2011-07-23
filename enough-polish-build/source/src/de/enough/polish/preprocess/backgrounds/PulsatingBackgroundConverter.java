@@ -37,7 +37,7 @@ import de.enough.polish.util.CastUtil;
 /**
  * <p>Creates the PulsatingBackground from CSS values.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

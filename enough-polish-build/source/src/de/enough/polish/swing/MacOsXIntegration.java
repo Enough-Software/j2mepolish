@@ -35,7 +35,7 @@ import com.apple.eawt.ApplicationListener;
 
 /**
  * <p>Integrates Mac OS X for a swing application.</p>
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * <p>Represents an "AND", "OR", "XOR" and "NOT" relation between several requirements.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

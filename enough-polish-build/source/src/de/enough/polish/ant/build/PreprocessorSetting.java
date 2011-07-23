@@ -30,7 +30,7 @@ import de.enough.polish.ExtensionSetting;
 /**
  * <p>Is used for defining additional user-defined preprocessors.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

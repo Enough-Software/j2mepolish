@@ -33,7 +33,7 @@ import de.enough.polish.Variable;
 /**
  * <p>Represents a Java Application Description file.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

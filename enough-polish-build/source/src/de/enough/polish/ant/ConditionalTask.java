@@ -32,7 +32,7 @@ import org.apache.tools.ant.Task;
 /**
  * <p>A task which execution can be triggered and stopped with if and unless parameters.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -48,7 +48,7 @@ import de.enough.polish.util.FileUtil;
 /**
  * <p>Manages a complete data-file/definition with data-types, data-entries and so on.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

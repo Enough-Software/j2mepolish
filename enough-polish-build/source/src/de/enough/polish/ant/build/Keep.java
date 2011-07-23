@@ -28,7 +28,7 @@ package de.enough.polish.ant.build;
 /**
  * <p>Represents a class which should be obfuscated.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

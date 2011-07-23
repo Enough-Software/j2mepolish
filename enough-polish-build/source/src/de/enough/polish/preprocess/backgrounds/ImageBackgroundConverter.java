@@ -36,7 +36,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
 /**
  * <p>Creates the Image- or the BorderedImageBackground.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

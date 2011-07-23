@@ -28,7 +28,7 @@ package de.enough.polish.dataeditor;
 /**
  * <p>GUI implementations should implement and register this interface, so that the data-model can notify the GUI about events.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

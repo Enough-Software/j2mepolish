@@ -40,7 +40,7 @@ import java.util.ArrayList;
  * <p>Writes the list of included files to the specified text-file.</p>
  * <p>This tasks accepts an arbitrary number of nested file names.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

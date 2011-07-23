@@ -32,7 +32,7 @@ import java.io.InputStream;
  * since the standard error pipes might run fully and then block
  * the executed process completely. Weird, but that's how it is.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

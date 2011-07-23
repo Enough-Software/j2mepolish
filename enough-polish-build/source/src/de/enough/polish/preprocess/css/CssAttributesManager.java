@@ -49,7 +49,7 @@ import org.jdom.input.SAXBuilder;
 /**
  * <p>Manages all CSS attribute definitions loaded from [standard-css-attributes.xml] and [custom-css-aatributes.xml].</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

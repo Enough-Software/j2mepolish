@@ -43,7 +43,7 @@ import de.enough.polish.devices.LibraryManager;
  * <p>An obfuscator is used to obfuscate and shrink the code.</p>
  * <p>This class is used to handle any external obfuscator.</p>
  * 
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

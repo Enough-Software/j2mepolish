@@ -32,7 +32,7 @@ import java.io.PrintStream;
 /**
  * <p>Can be used to log the output of any stream, e.g. of an external process.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

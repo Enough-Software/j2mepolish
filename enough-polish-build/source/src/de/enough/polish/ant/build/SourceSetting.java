@@ -32,7 +32,7 @@ import de.enough.polish.ant.Setting;
 /**
  * <p>Allows the fine-tuned setting of source-directories.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

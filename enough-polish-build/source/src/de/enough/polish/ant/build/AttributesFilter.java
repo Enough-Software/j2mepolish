@@ -38,7 +38,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Sorts JAD or MANIFEST attributes in a user-specific way.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
@@ -112,7 +112,7 @@ extends ConditionalElement
 	/**
 	 * <p>A filter element is responsible for extracting the specified attribute(s) in the correct order.</p>
 	 *
-	 * <p>Copyright Enough Software 2004, 2005</p>
+	 * <p>Copyright Enough Software 2004 - 2011</p>
 
 	 * <pre>
 	 * history

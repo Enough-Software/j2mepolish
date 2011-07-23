@@ -31,7 +31,7 @@ import java.util.Comparator;
 /**
  * <p>Compares two polish components by their identifier.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -37,7 +37,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Base class for several Creator classes.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * <pre>
  * history
  *        10-Mar-2004 - rob creation

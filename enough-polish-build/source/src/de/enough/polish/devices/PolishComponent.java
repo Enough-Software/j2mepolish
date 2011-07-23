@@ -41,7 +41,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Provides common functionalities for PolishProject, Vendor, DeviceGroup and Device.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

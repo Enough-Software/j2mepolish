@@ -29,7 +29,7 @@ package de.enough.polish.stacktrace;
 /**
  * <p>Stores information about a binary stacktrace (e.g. " at de/enough/polish/Screen.animate(+244)".</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

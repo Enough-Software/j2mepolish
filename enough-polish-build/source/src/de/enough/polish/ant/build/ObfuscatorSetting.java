@@ -36,7 +36,7 @@ import de.enough.polish.ExtensionSetting;
  * <p>Can be used for a more detailed setting than just using the 
  * &lt;build&gt;attributes "obfuscator" and "obfuscate".</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
