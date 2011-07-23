@@ -5120,7 +5120,7 @@ implements UiElement, Animatable
 						int left = cont.relativeX;
 						int top = cont.relativeY - this.titleHeight;
 						int right = left + cont.itemWidth;
-						int bottom = top + Math.min( this.contentY + this.contentHeight, cont.itemHeight );
+						int bottom = top + Math.min( this.contentY + this.contentHeight, this.titleHeight + cont.itemHeight );
 						if (x <= left || y <= top
 							 || x >= right || y >= bottom)
 						{
