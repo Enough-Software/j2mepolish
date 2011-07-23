@@ -25,10 +25,8 @@
  */
 package de.enough.polish.preprocess.borders;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
-
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -36,11 +34,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
 /**
  * <p>Creates a drop shadow border.</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        22-Aug-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005-2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class DropShadowBorderConverter extends BorderConverter {
@@ -55,17 +49,17 @@ public class DropShadowBorderConverter extends BorderConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style,
+	protected String createNewStatement(AttributesGroup border, Style style,
 			StyleSheet styleSheet) 
 	throws BuildException 
 	{
-		String offset = (String) border.get("offset");
+		String offset = border.getValue("offset");
 		if (offset == null) {
 			offset = "1"; // default ofset
 		} else {
 			parseInt( "offset", offset );
 		}
-		String innerColorStr = (String) border.get("inner-color");
+		String innerColorStr = border.getValue("inner-color");
 		if (innerColorStr == null ) {
 			innerColorStr = this.color;
 		}
@@ -74,7 +68,7 @@ public class DropShadowBorderConverter extends BorderConverter {
 			int innerColor = Integer.parseInt(innerColorStr.substring(2), 16) | 0xFF000000;
 			innerColorStr = "0x" + Integer.toHexString( innerColor );
 		}
-		String outerColorStr = (String) border.get("outer-color");
+		String outerColorStr = border.getValue("outer-color");
 		if (outerColorStr == null ) {
 			outerColorStr = this.color;
 		}

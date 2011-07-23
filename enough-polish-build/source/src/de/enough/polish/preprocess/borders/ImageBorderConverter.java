@@ -25,22 +25,16 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
-import de.enough.polish.BuildException;
-
-import java.util.Map;
-
 /*
  * <p>Creates am image border.</p>
  *
- * <p>Copyright Enough Software 2007</p>
- * <pre>
- * history
- *        9-May-2005 - mkoch creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2011</p>
  * @author Michael Koch, michael.koch@enough.de
  */
 public class ImageBorderConverter
@@ -57,16 +51,16 @@ public class ImageBorderConverter
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet)
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet)
 		throws BuildException
 	{
-		String borderWidthStr = (String) border.get("border-width");
+		String borderWidthStr = border.getValue("border-width");
 
 		if (borderWidthStr == null) {
 			throw new BuildException("no width attribute found");
 		}
 
-		String image = (String) border.get("image");
+		String image = border.getValue("image");
 
 		if (image == null) {
 			throw new BuildException("no image attribute found");

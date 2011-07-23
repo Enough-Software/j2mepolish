@@ -25,9 +25,8 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -40,7 +39,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
  */
 public class DoubleGradientVerticalBackgroundConverter extends BackgroundConverter {
 
-	protected String createNewStatement(Map map, Style stlye,
+	protected String createNewStatement(AttributesGroup map, Style stlye,
 			StyleSheet styleSheet) throws BuildException {
 		String firstTopColor = "0xFFFFFF";
 		String firstTopColorStr = (String) map.get("first-top-color");

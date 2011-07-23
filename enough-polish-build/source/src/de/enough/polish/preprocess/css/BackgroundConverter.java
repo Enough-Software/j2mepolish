@@ -28,7 +28,6 @@ package de.enough.polish.preprocess.css;
 import de.enough.polish.BuildException;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * <p>The base class for all backgrounds.</p>
@@ -77,7 +76,7 @@ public abstract class BackgroundConverter extends Converter {
 	 * @throws BuildException when there are invalid CSS declarations in the given background
 	 */
 	public void addBackground( ArrayList codeList, 
-			Map background,
+			AttributesGroup background,
 			String backgroundName,
 			Style style, 
 			StyleSheet styleSheet,
@@ -86,7 +85,7 @@ public abstract class BackgroundConverter extends Converter {
 	{
 		this.styleName = backgroundName;
 		// check if no background at all should be used:
-		String bg = (String) background.get("background");
+		String bg = background.getValue("background");
 		if (bg != null && "none".equals(bg) ) {
 			if (isStandalone) {
 				codeList.add( STANDALONE_MODIFIER + "Background " + backgroundName + "Background = null;\t// background:none was specified");
@@ -96,7 +95,7 @@ public abstract class BackgroundConverter extends Converter {
 			return;
 		}
 		// parse standard values:
-		this.color = (String) background.get("color");
+		this.color = background.getValue("color");
 		if (this.color == null) {
 			this.color = "0xFFFFFF"; // white is default background color
 		} else {
@@ -104,13 +103,13 @@ public abstract class BackgroundConverter extends Converter {
 		}
 		this.colorConstructor = this.colorConverter.generateColorConstructor( this.color );
 		
-		this.borderWidth = (String) background.get("border-width");
+		this.borderWidth = background.getValue("border-width");
 		if (this.borderWidth != null) {
 			// check if the border with is a correct value:
 			this.borderWidth = Integer.toString( parseInt( "border-width", this.borderWidth ) );
 			this.hasBorder = true;
 		}
-		this.borderColor = (String) background.get("border-color");
+		this.borderColor = background.getValue("border-color");
 		if (this.borderColor != null) {
 			this.hasBorder = true;
 			this.borderColor = this.colorConverter.parseColor( this.borderColor );
@@ -145,7 +144,7 @@ public abstract class BackgroundConverter extends Converter {
 	 * @throws BuildException when there are invalid CSS declarations in the given background
 	 */
 	protected abstract String createNewStatement( 
-			Map background, 
+			AttributesGroup background, 
 			Style style, 
 			StyleSheet styleSheet )
 	throws BuildException;

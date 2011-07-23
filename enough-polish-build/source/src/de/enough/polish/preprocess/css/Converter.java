@@ -38,7 +38,6 @@ import de.enough.polish.util.StringUtil;
  * <p>Base class for several Creator classes.</p>
  *
  * <p>Copyright Enough Software 2004, 2005</p>
-
  * <pre>
  * history
  *        10-Mar-2004 - rob creation
@@ -50,7 +49,7 @@ public class Converter {
 	protected final static String STANDALONE_MODIFIER_NON_FINAL = "\tpublic static ";
 	protected ColorConverter colorConverter;
 
-	public static final Map ANCHORS = new HashMap();
+	public static final Map<String, String> ANCHORS = new HashMap<String, String>();
 	static {
 		ANCHORS.put( "left", "Graphics.LEFT" );
 		ANCHORS.put( "right", "Graphics.RIGHT" );
@@ -287,5 +286,15 @@ public class Converter {
 		return this.colorConverter.isAlphaColor( color );
 	}
 
-	
+	/**
+	 * Prints the specified attributes for logging purposes
+	 * @param attributes the attributes that should be printed
+	 */
+	public void print(Map attributes) {
+		Object[] keys = attributes.keySet().toArray();
+		for (int i = 0; i < keys.length; i++) {
+			Object key = keys[i];
+			System.out.println(key + ": " + attributes.get(key) + ";");
+		}
+	}
 }

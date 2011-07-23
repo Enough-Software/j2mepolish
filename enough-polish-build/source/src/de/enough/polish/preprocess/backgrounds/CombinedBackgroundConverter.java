@@ -26,9 +26,8 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -80,23 +79,23 @@ public class CombinedBackgroundConverter extends BackgroundConverter
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.css.BackgroundConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.css.Style, de.enough.polish.preprocess.css.StyleSheet)
 	 */
-	protected String createNewStatement(Map background, Style style,
+	protected String createNewStatement(AttributesGroup background, Style style,
 			StyleSheet styleSheet) throws BuildException
 	{
-		String foregroundReference = (String) background.get(this.attribute1);
+		String foregroundReference = background.getValue(this.attribute1);
 		if (foregroundReference == null) {
-			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background is missing the \"" + this.attribute1 + "\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background is missing the \"" + this.attribute1 + "\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		if (styleSheet.getBackgrounds().get(foregroundReference) == null) {
-			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background contains the invalid \"" + this.attribute1 +": " + foregroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background contains the invalid \"" + this.attribute1 +": " + foregroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		foregroundReference += "Background";
-		String backgroundReference  = (String) background.get(this.attribute2);
+		String backgroundReference  = background.getValue(this.attribute2);
 		if (backgroundReference == null) {
-			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background is missing the \"" + this.attribute2 + "\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background is missing the \"" + this.attribute2 + "\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		if (styleSheet.getBackgrounds().get(backgroundReference) == null) {
-			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background contains the invalid \"" + this.attribute2 + ": " + backgroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"" + this.name + "\" background contains the invalid \"" + this.attribute2 + ": " + backgroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		backgroundReference += "Background";
 		String result = "new " + BACKGROUNDS_PACKAGE + this.className + "(" 

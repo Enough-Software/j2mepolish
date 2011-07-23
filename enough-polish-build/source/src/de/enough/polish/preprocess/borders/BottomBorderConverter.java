@@ -25,23 +25,16 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
-import de.enough.polish.BuildException;
-
-import java.util.Map;
-
 /**
  * <p>Creates the source code for a simple border.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
-
- * <pre>
- * history
- *        10-Mar-2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public class BottomBorderConverter extends BorderConverter {
@@ -56,8 +49,9 @@ public class BottomBorderConverter extends BorderConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet) throws BuildException {
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet) throws BuildException {
 		return "new " + BORDERS_PACKAGE + "BottomBorder( " + this.color 
 													+ ", " + this.width + ")";	
 	}
+
 }

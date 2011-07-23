@@ -25,9 +25,8 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -55,7 +54,7 @@ public class SimpleBackgroundConverter extends BackgroundConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BackgroundConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map background, Style style, StyleSheet styleSheet) throws BuildException {
+	protected String createNewStatement(AttributesGroup background, Style style, StyleSheet styleSheet) throws BuildException {
 		boolean hasAlphaColor = isAlphaColor(this.color);
 		if (this.hasBorder ) {
 			return "new " + BACKGROUNDS_PACKAGE + "BorderedSimpleBackground( " 

@@ -185,7 +185,7 @@ implements Comparable
 				DeviceGroup group = groupManager.getGroup(groupName);
 				if (group == null) {
 					throw new InvalidComponentException(
-							MessageFormat.format( invalidGroupMessage, new String[]{ this.identifier, groupName } ) );
+							MessageFormat.format( invalidGroupMessage, (Object[]) new String[]{ this.identifier, groupName } ) );
 				}
 				//System.out.println( this.identifier + ": adding group [" + groupName + "], JavaPackage=" + group.getCapability("polish.JavaPackage") );
 				addComponent( group );

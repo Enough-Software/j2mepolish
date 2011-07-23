@@ -25,10 +25,8 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
-
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -40,36 +38,36 @@ public class XmasSnowBackgroundConverter extends BackgroundConverter {
 		super();
 	}
 	
-	protected String createNewStatement(Map map, Style stlye,
+	protected String createNewStatement(AttributesGroup background, Style stlye,
 			StyleSheet styleSheet) throws BuildException {
 		String result = "new de.enough.polish.ui.backgrounds.XmasSnowBackground(" 
 			+ this.color + ", ";
 		String image;
-		String imageStr = (String) map.get("image");
+		String imageStr = (String) background.get("image");
 		if (imageStr == null) {
-			throw new BuildException("Invalid CSS: You need to specify the \"image\" attribute for the background.");
+			throw new BuildException("Invalid CSS: You need to specify the \"image\" attribute for the background: " + background);
 		}
 		image =  '"' + getUrl( imageStr ) + '"';
 		int width ;
-		String widthStr = (String)map.get("width");
+		String widthStr = (String)background.get("width");
 		if ( widthStr == null ) {
-			throw new BuildException("Invalid CSS: You need to specify the \"width\" attribute for the background.");			
+			throw new BuildException("Invalid CSS: You need to specify the \"width\" attribute for the background: " + background);			
 		}
 		width =  parseInt(widthStr, widthStr);
 		int height ;
-		String heightStr =  (String)map.get("height");
+		String heightStr =  (String)background.get("height");
 		if ( heightStr == null ) {
-			throw new BuildException("Invalid CSS: You need to specify the \"height\" attribute for the background.");			
+			throw new BuildException("Invalid CSS: You need to specify the \"height\" attribute for the background: " + background);			
 		}
 		height =  parseInt(heightStr, heightStr);
 		int far ;
-		String farStr =  (String)map.get("far");
+		String farStr =  (String)background.get("far");
 		if ( farStr == null ) {
-			throw new BuildException("Invalid CSS: You need to specify the \"far\" attribute for the background.");			
+			throw new BuildException("Invalid CSS: You need to specify the \"far\" attribute for the background: " + background);			
 		}
 		far =  parseInt(farStr, farStr);
 		int number = 1;
-		String numberStr =  (String)map.get("number");
+		String numberStr =  (String)background.get("number");
 		if ( numberStr != null ) {
 			number =  parseInt(numberStr, numberStr);			
 		}

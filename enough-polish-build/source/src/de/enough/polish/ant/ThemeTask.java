@@ -288,7 +288,7 @@ public class ThemeTask extends PolishTask {
 			serializerClass = this.loader.loadClass(serializerClassPath);
 			Constructor[] constr = serializerClass.getDeclaredConstructors();
 			constr[0].setAccessible(true);
-			return constr[0].newInstance( null );
+			return constr[0].newInstance( (String)null );
 		} catch (ClassNotFoundException e) {
 			System.out.println("unable to load serializer " + e);
 			e.printStackTrace();

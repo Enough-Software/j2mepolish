@@ -149,30 +149,30 @@ public class CssConverter extends Converter {
 		ArrayList codeList = new ArrayList();
 		
 		this.referencedStyles = new ArrayList();
-		// initialise the syle sheet:
+		// initialize the style sheet:
 		styleSheet.inherit();
 		// set the color-definitions:
 		this.colorConverter.setTemporaryColors( styleSheet.getColors() );
 		// add the font-definitions:
 		boolean defaultFontDefined = false;
-		HashMap fonts = styleSheet.getFonts();
-		Set keys = fonts.keySet();
-		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			String groupName = (String) iter.next();
+		Map<String, AttributesGroup> fonts = styleSheet.getFonts();
+		Set<String> keys = fonts.keySet();
+		for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+			String groupName = iter.next();
 			//System.out.println("processing font " + fonts.get( groupName ) );
 			if ("default".equals(groupName)) {
 				defaultFontDefined = true;
-				HashMap group = (HashMap) fonts.get( groupName );
+				AttributesGroup group = fonts.get( groupName );
 				processFont(group, groupName, null, codeList, styleSheet, true, env );
 			} else {
-				HashMap group = (HashMap) fonts.get( groupName );
+				AttributesGroup group = fonts.get( groupName );
 				processFont(group, groupName, null, codeList, styleSheet, true, env );
 			}
 		}
 		
 		// add the backgrounds-definition:
 		boolean defaultBackgroundDefined = false;
-		HashMap backgrounds = styleSheet.getBackgrounds();
+		Map<String, AttributesGroup> backgrounds = styleSheet.getBackgrounds();
 		Object[] backgroundKeys = BackgroundComparator.sort( backgrounds, (ParameterizedCssAttribute) this.backgroundAttribute );
 		
 		//Arrays.sort( backgroundKeys, new BackgroundComparator( backgrounds, (ParameterizedCssAttribute) this.backgroundAttribute ));
@@ -182,20 +182,20 @@ public class CssConverter extends Converter {
 			if ("default".equals(groupName)) {
 				defaultBackgroundDefined = true;
 			} 
-			HashMap group = (HashMap) backgrounds.get( groupName );
+			AttributesGroup group = (AttributesGroup) backgrounds.get( groupName );
 			processBackground(groupName, group, null, codeList, false, styleSheet, true, env );
 		}
 		
 		// add the borders-definition:
 		boolean defaultBorderDefined = false;
-		HashMap borders = styleSheet.getBorders();
+		Map<String, AttributesGroup> borders = styleSheet.getBorders();
 		keys = borders.keySet();
-		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			String groupName = (String) iter.next();
+		for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+			String groupName = iter.next();
 			if ("default".equals(groupName)) {
 				defaultBorderDefined = true;
 			} 
-			HashMap group = (HashMap) borders.get( groupName );
+			AttributesGroup group = borders.get( groupName );
 			processBorder(groupName, group, null, codeList, false, styleSheet, true, env );
 		}
 		ArrayList staticCodeList = new ArrayList();
@@ -486,7 +486,7 @@ public class CssConverter extends Converter {
 	protected void processDefaultStyle(boolean defaultFontDefined, boolean defaultBackgroundDefined, boolean defaultBorderDefined, ArrayList codeList, ArrayList staticCodeList, boolean defineStylesOutside, StyleSheet styleSheet, Device device, Environment environment ) {
 		//System.out.println("PROCESSSING DEFAULT STYLE " + styleSheet.getStyle("default").toString() );
 		Style copy = new Style( styleSheet.getStyle("default"));
-		HashMap group = copy.getGroup("font");
+		AttributesGroup group = copy.getGroup("font");
 //		if (!defaultFontDefined) {
 //			if (group == null) {
 //				codeList.add( STANDALONE_MODIFIER + "int defaultFontColor = 0x000000;");
@@ -513,15 +513,15 @@ public class CssConverter extends Converter {
 		}
 		// set default values:
 		//copy.setSelector("defaultStyle");
-		group = new HashMap();
+		group = new AttributesGroup(copy, "font");
 		if (defaultFontDefined) {
 			group.put("font", "default");
 		}
 		copy.addGroup("font", group );
-		group = new HashMap();
+		group = new AttributesGroup(copy, "background");
 		group.put("background", "default");
 		copy.addGroup("background", group );
-		group = new HashMap();
+		group = new AttributesGroup(copy, "border");
 		group.put("border", "default");
 		copy.addGroup("border", group );
 		// now process the rest of the style completely normal:
@@ -568,8 +568,8 @@ public class CssConverter extends Converter {
 		// process all animations, do this here so animations can also be done for margins, paddings, font settings etc:
 		CssAnimationSetting[] cssAnimations = extractAnimationSettings(style);
 		ArrayList animationsList = new ArrayList();
-		for (int g=0; g<cssAnimations.length; g++) {
-			CssAnimationSetting cssAnimation = cssAnimations[g];
+		for (int cssAnimationIndex=0; cssAnimationIndex<cssAnimations.length; cssAnimationIndex++) {
+			CssAnimationSetting cssAnimation = cssAnimations[cssAnimationIndex];
 			//System.out.println("got animation for " + cssAnimation.getCssAttributeName()  + " in style " + styleName + " with trigger " + cssAnimation.getOn() );
 			String cssAttributeName = cssAnimation.getCssAttributeName();
 			CssAttribute  attribute = this.attributesManager.getAttribute( cssAttributeName );
@@ -635,7 +635,7 @@ public class CssConverter extends Converter {
 //			codeList.add("\t\t1,1,1,1,1,1,\t// default padding");
 //		}
 		// process the layout:
-		Map group = style.removeGroup("layout");
+		AttributesGroup group = style.removeGroup("layout");
 		if ( group != null ) {
 			processLayout( group, style, codeList, styleSheet, environment );
 		} else {
@@ -645,17 +645,17 @@ public class CssConverter extends Converter {
 		// process font references:
 		group = style.getGroup("font");
 		if (group != null) {
-			String font = (String) group.get("font");
-			if (font != null) {
-				Map fontGroup = (Map) styleSheet.getFonts().get(font);
+			String fontReference = (String) group.get("font");
+			if (fontReference != null) {
+				AttributesGroup fontGroup = styleSheet.getFonts().get(fontReference);
 				if (fontGroup == null) {
-					fontGroup = (Map) styleSheet.getFonts().get(font + "Font");
+					fontGroup = styleSheet.getFonts().get(fontReference + "Font");
 					if (fontGroup == null) {
-						if ("default".equals(font)) {
-							fontGroup = new HashMap();
+						if ("default".equals(fontReference)) {
+							fontGroup = new AttributesGroup(style, "font");
 							styleSheet.getFonts().put("default", fontGroup);
 						} else {
-							throw new BuildException("Invalid CSS: invalid font-reference \"font: " + font + "\" - please check your polish.css style " + style.getSelector() + "." );
+							throw new BuildException("Invalid CSS: invalid font-reference \"font: " + fontReference + "\" - please check your polish.css: " + group );
 						}
 					}
 				}
@@ -779,7 +779,7 @@ public class CssConverter extends Converter {
 						// the CSS attribute is nowhere used in the preprocessing code,
 						// now check if it has been registered in css-attributes.xml/custom-css-attributes.xml:
 						if (attribute == null) {
-							throw new BuildException("Invalid CSS: The CSS setting \"" + attributeName + ": " + value + ";\" is not supported. Please check style \"" + style.getSelector() + "\" in your \"polish.css\" file(s).");
+							throw new BuildException("Invalid CSS: The CSS setting \"" + attributeName + ": " + value + ";\" is not supported. Please check style : " + group);
 						}
 					}
 					keyList.append( attributesId );
@@ -879,19 +879,22 @@ public class CssConverter extends Converter {
 	 * @param string
 	 * @param backgroundAttributeNames2
 	 */
-	private void preserveAttributes(Map group, Style style, String groupName,
+	private void preserveAttributes(AttributesGroup group, Style style, String groupName,
 			String[] names)
 	{
-		HashMap preserveGroup = new HashMap();
+		AttributesGroup preserveGroup = null;
 		for (int i = 0; i < names.length; i++)
 		{
 			String name = names[i];
-			Object value = group.get(name);
+			String value = group.get(name);
 			if (value != null) {
+				if (preserveGroup == null) {
+					preserveGroup = new AttributesGroup(style, groupName);
+				}
 				preserveGroup.put( name, value );
 			}
 		}
-		if (preserveGroup.size() > 0) {
+		if (preserveGroup != null) {
 			style.addGroup(groupName, preserveGroup);
 		}
 	}
@@ -987,7 +990,7 @@ public class CssConverter extends Converter {
 	 * @param codeList the source code
 	 * @param styleSheet the parent style sheet
 	 */
-	protected void processLayout(Map group, Style style, ArrayList codeList, 
+	protected void processLayout(AttributesGroup group, Style style, ArrayList codeList, 
 			StyleSheet styleSheet, Environment env) 
 	{
 		String layoutValue = (String) group.get("layout");
@@ -1053,7 +1056,7 @@ public class CssConverter extends Converter {
 	 * @param isStandalone true when a new public border-field should be created,
 	 *        otherwise the border will be embedded in a style instantiation. 
 	 */
-	protected void processBorder(String borderName, Map group, Style style, ArrayList codeList, boolean defineStylesOutside, StyleSheet styleSheet, boolean isStandalone, Environment env ) {
+	protected void processBorder(String borderName, AttributesGroup group, Style style, ArrayList codeList, boolean defineStylesOutside, StyleSheet styleSheet, boolean isStandalone, Environment env ) {
 		//System.out.println("processing border " + borderName + " = "+ group.toString() );
 		String reference = (String) group.get("border");
 		if (reference != null && group.size() == 1) {
@@ -1108,12 +1111,12 @@ public class CssConverter extends Converter {
 				creator.setColorConverter(this.colorConverter);
 				creator.addBorder( codeList, group, borderName, style, styleSheet, isStandalone );
 			} catch (ClassNotFoundException e) {
-				throw new BuildException("Invalid CSS: unable to load border-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting.", e );
+				throw new BuildException("Invalid CSS: unable to load border-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting. Style: " + group, e );
 			} catch (BuildException e) {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new BuildException("Invalid CSS: unable to load border-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting.", e );
+				throw new BuildException("Invalid CSS: unable to load border-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting. Style: " + group, e );
 			}
 		}
 	}
@@ -1130,7 +1133,7 @@ public class CssConverter extends Converter {
 	 * @param isStandalone true when a new public background-field should be created,
 	 *        otherwise the background will be embedded in a style instantiation. 
 	 */
-	protected void processBackground(String backgroundName, Map group, Style style, ArrayList codeList, boolean defineStylesOutside, StyleSheet styleSheet, boolean isStandalone, Environment env ) {
+	protected void processBackground(String backgroundName, AttributesGroup group, Style style, ArrayList codeList, boolean defineStylesOutside, StyleSheet styleSheet, boolean isStandalone, Environment env ) {
 		//System.out.println("processing background " + backgroundName + " = " + group.toString() );
 		// check if the background is just a reference to another background:
 		String reference = (String) group.get("background");
@@ -1200,12 +1203,12 @@ public class CssConverter extends Converter {
 				creator.setColorConverter(this.colorConverter);
 				creator.addBackground( codeList, group, backgroundName, style, styleSheet, isStandalone );
 			} catch (ClassNotFoundException e) {
-				throw new BuildException("Invalid CSS: unable to load background-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting.", e );
+				throw new BuildException("Invalid CSS: unable to load background-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting. Style: "+ group, e );
 			} catch (BuildException e) {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new BuildException("Invalid CSS: unable to load background-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting.", e );
+				throw new BuildException("Invalid CSS: unable to load background-type [" + type + "] with class [" + className + "]:" + e.getMessage() +  " (" + e.getClass().getName() + ")\nMaybe you need to adjust the CLASSPATH setting. Style: " + group, e );
 			}		
 		}
 	}

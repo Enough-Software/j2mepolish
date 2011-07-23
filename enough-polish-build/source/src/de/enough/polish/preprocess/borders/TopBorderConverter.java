@@ -25,13 +25,11 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
-
-import de.enough.polish.BuildException;
-
-import java.util.Map;
 
 /**
  * <p>Creates the source code for a simple border.</p>
@@ -56,7 +54,7 @@ public class TopBorderConverter extends BorderConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet) throws BuildException {
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet) throws BuildException {
 		return "new " + BORDERS_PACKAGE + "TopBorder( " + this.color 
 													+ ", " + this.width + ")";	
 	}

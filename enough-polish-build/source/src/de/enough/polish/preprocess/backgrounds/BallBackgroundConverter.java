@@ -25,16 +25,15 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
 public class BallBackgroundConverter extends BackgroundConverter {
 
-	protected String createNewStatement(Map map, Style stlye,
+	protected String createNewStatement(AttributesGroup map, Style stlye,
 			StyleSheet styleSheet) throws BuildException {
 		String result = "new de.enough.polish.ui.backgrounds.BallBackground(" 
 			+ this.color + ", ";
@@ -46,19 +45,19 @@ public class BallBackgroundConverter extends BackgroundConverter {
 		String image;
 		String imageStr = (String) map.get("image");
 		if (imageStr == null) {
-			throw new BuildException("Invalid CSS: You need to specify the \"image\" attribute for the background.");
+			throw new BuildException("Invalid CSS: You need to specify the \"image\" attribute for the background in " + map);
 		}
 		image =  '"' + getUrl( imageStr ) + '"';
 		int width ;
 		String widthStr =  (String)map.get("image-width");
 		if ( widthStr == null ) {
-			throw new BuildException("Invalid CSS: You need to specify the \"image-width\" attribute for the background.");			
+			throw new BuildException("Invalid CSS: You need to specify the \"image-width\" attribute for the background in " + map);			
 		}
 		width =  parseInt(widthStr, widthStr);
 		int height ;
 		String heightStr =  (String)map.get("image-height");
 		if ( heightStr == null ) {
-			throw new BuildException("Invalid CSS: You need to specify the \"image-height\" attribute for the background.");			
+			throw new BuildException("Invalid CSS: You need to specify the \"image-height\" attribute for the background in " + map);			
 		}
 		height =  parseInt(heightStr, heightStr);
 		int number = 1;

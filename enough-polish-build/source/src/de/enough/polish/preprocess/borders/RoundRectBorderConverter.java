@@ -25,13 +25,11 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
-
-import de.enough.polish.BuildException;
-
-import java.util.Map;
 
 /**
  * <p>Creates a border with round edges.</p>
@@ -56,21 +54,21 @@ public class RoundRectBorderConverter extends BorderConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet) throws BuildException 
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet) throws BuildException 
 	{
-		String arc = (String) border.get("arc");
+		String arc = border.getValue("arc");
 		if (arc != null) {
 			parseInt( "arc", arc );
 		} else {
 			arc = "10";
 		}
-		String arcHeight = (String) border.get("arc-height");
+		String arcHeight = border.getValue("arc-height");
 		if (arcHeight != null) {
 			parseInt( "arc-height", arc );
 		} else {
 			arcHeight = arc;
 		}
-		String arcWidth = (String) border.get("arc-width");
+		String arcWidth = border.getValue("arc-width");
 		if (arcWidth != null) {
 			parseInt( "arc-width", arc );
 		} else {

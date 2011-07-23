@@ -40,9 +40,9 @@ import de.enough.polish.util.StringUtil;
 public class CssAnimationSetting
 {
 	
-	private static final Map TIMING_FUNCTION_BY_NAME;
+	private static final Map<String, String> TIMING_FUNCTION_BY_NAME;
 	static {
-		TIMING_FUNCTION_BY_NAME = new HashMap();
+		TIMING_FUNCTION_BY_NAME = new HashMap<String, String>();
 		TIMING_FUNCTION_BY_NAME.put("ease", "CssAnimation.FUNCTION_EASE");
 		TIMING_FUNCTION_BY_NAME.put("ease-out", "CssAnimation.FUNCTION_EASE_OUT");
 		TIMING_FUNCTION_BY_NAME.put("ease-in", "CssAnimation.FUNCTION_EASE_IN");
