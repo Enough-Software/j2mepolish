@@ -149,6 +149,7 @@ public class PartialGradientBackground extends Background
 			this.lastHeight = height;
 		}
 		g.setColor( this.topColor );
+		width--;
 		for (int i = startOffset; i < endOffset; i++) {
 			int color = grad[i - startOffset ];
 			g.setColor( color );
