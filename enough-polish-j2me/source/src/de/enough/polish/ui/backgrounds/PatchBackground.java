@@ -47,6 +47,12 @@ public class PatchBackground extends ImageResourceBackground {
 	public void paint(int x, int y, int width, int height, Graphics g) {
 		if (!this.isLoaded) {
 			load();
+			if (this.imageWidth - this.leftWidth - this.rightWidth  < 1) {
+				throw new IllegalArgumentException("Invalid patch-width: left=" + this.leftWidth + ", right=" + this.rightWidth + ", image-width=" + this.imageWidth + " of " + this.imageUrl);
+			}
+			if (this.imageHeight - this.topHeight - this.bottomHeight  < 1) {
+				throw new IllegalArgumentException("Invalid patch-height: top=" + this.topHeight + ", bottom=" + this.bottomHeight + ", image-height=" + this.imageHeight + " of " + this.imageUrl);
+			}
 		}
 		
 		int clipX = g.getClipX();
