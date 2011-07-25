@@ -126,6 +126,7 @@ public class PatchBackground extends ImageResourceBackground {
 		
 		// draw horizontal bottom tiles:
 		srcY = this.imageHeight - this.bottomHeight;
+		srcHeight = this.bottomHeight;
 		dstY = y + (height - this.bottomHeight); 
 		
 		for (int xOffset = 0; xOffset < fillWidth; xOffset = xOffset + srcWidth) {

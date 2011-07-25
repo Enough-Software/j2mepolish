@@ -552,20 +552,21 @@ public abstract class ContentSource {
 	 * @throws ContentException
 	 *             if an error occurs
 	 */
-	public void sweep() throws ContentException {
+	public void sweep(boolean includeSources) throws ContentException {
 		if (hasStorage()) {
-			for (int index = 0; index < this.storageIndex.size(); index++) {
+			while(this.storageIndex.size() > 0) {
 				StorageReference reference = this.storageIndex
-						.getReference(index);
-
+						.getReference(0);
 				// destroy the content
 				destroyContent(reference);
 			}
 		}
 		
-		for (int index = 0; index < this.sources.size(); index++) {
-			ContentSource source = (ContentSource) this.sources.get(index);
-			source.sweep();
+		if(includeSources) {
+			for (int index = 0; index < this.sources.size(); index++) {
+				ContentSource source = (ContentSource) this.sources.get(index);
+				source.sweep(true);
+			}
 		}
 	}
 

@@ -5530,6 +5530,27 @@
 		since="J2ME Polish 2.2"
 	/>
 	
+	<attribute
+		name="vertical-doors-screen-change-animation-delay"
+		type="time"
+		appliesTo="VerticalDoorsScreenChangeAnimation"
+		description="The delay between the upper and the lower door of the animation."
+		default="0ms"
+		id="483"
+		since="J2ME Polish 2.2"
+	/>
+	
+	<attribute
+		name="color"
+		type="color"
+		appliesTo="Item"
+		description="A color attribute to be used for various needs and concerns"
+		default="black"
+		id="484"
+		since="J2ME Polish 2.2"
+	/>
+	
+	
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"

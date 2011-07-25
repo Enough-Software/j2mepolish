@@ -996,11 +996,14 @@ public class Container extends Item {
 		
 		if (!isInitialized() && this.autoFocusEnabled) {
 			// setting the index for automatically focusing the appropriate item
-			// during the initialisation:
+			// during the initialization:
 			//#debug
 			System.out.println("Container: Setting autofocus-index to " + index );
 			this.autoFocusIndex = index;
 		} 
+		if (this.isFocused) {
+			this.autoFocusEnabled = false;
+		}
 		
 		if (index == this.focusedIndex && item.isFocused && item == this.focusedItem) {
 			//#debug

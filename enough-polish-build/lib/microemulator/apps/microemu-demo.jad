@@ -1,8 +1,8 @@
 MIDlet-Jar-URL: microemu-demo.jar
-MIDlet-Jar-Size: 33610
+MIDlet-Jar-Size: 33606
 MIDlet-Name: microemu-demo
 MIDlet-Vendor: MicroEmulator Team
-MIDlet-Version: 2.0.4
+MIDlet-Version: 2.0.3
 Created-By: Bartek Teodorczyk
 MIDlet-Icon: /me2-icon.png
 MicroEdition-Configuration: CLDC-1.1

@@ -544,7 +544,7 @@ These namespaces/schemas will be used soon.
   
    <device supportsPolishGui="true">
     <identifier>Generic/android</identifier>
-    <parent>Generic/android2.1</parent>
+    <parent>Generic/android2.3</parent>
   </device>
   
   <device supportsPolishGui="true">

@@ -5425,6 +5425,31 @@ public final class UiAccess {
 	}
 	//#endif
 	
+	//#if polish.midp
+	/**
+	 * Paints the content of the specified Canvas.
+	 * 
+	 * @param canvas the canvas that should be painted
+	 * @param g the Graphics on which the canvas should be painted.
+	 */
+	public static void paint(javax.microedition.lcdui.Canvas canvas, Graphics g) {
+		// ignore
+	}
+	//#endif
+	
+	//#if polish.usePolishGui
+	/**
+	 * Paints the content of the specified Canvas.
+	 * 
+	 * @param canvas the canvas that should be painted
+	 * @param g the Graphics on which the canvas should be painted.
+	 */
+	public static void paint(Canvas canvas, Graphics g) {
+		canvas.paint(g);
+	}
+	//#endif
+
+	
 	/**
 	 * Returns the current left margin of the given item
 	 * @param item the item
