@@ -48,21 +48,17 @@ import de.enough.polish.util.StringUtil;
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        16-Feb-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class DeviceGroupManager {
 	
-	private HashMap groups;
+	private HashMap<String,DeviceGroup> groups;
 	
 	/**
 	 * Creates a new group manager.
 	 * 
 	 * @param groupsIS the InputStream containing the groups definitions.
-	 * 			Usally this is the groups.xml file in the current directory.
+	 * 			Usually this is the groups.xml file in the current directory.
 	 * @param capabilityManager the manager of capabilities
 	 * @throws JDOMException when there are syntax errors in groups.xml
 	 * @throws IOException when groups.xml could not be read
@@ -71,7 +67,7 @@ public class DeviceGroupManager {
 	public DeviceGroupManager( InputStream groupsIS, CapabilityManager capabilityManager ) 
 	throws InvalidComponentException, JDOMException, IOException 
 	{
-		this.groups = new HashMap();
+		this.groups = new HashMap<String,DeviceGroup>();
 		loadGroups( groupsIS, capabilityManager );
 		groupsIS.close();
 	}
@@ -135,8 +131,8 @@ public class DeviceGroupManager {
 	 * @param create when true is given, the group will be created when it does not exist
 	 * @return the group with the specified name.
 	 */
-	public Object getGroup(String name, boolean create) {
-		DeviceGroup group = (DeviceGroup) this.groups.get( name );
+	public DeviceGroup getGroup(String name, boolean create) {
+		DeviceGroup group = this.groups.get( name );
 		if (group == null && create) {
 			group = new DeviceGroup( name );
 			group.isVirtual = true;

@@ -5535,6 +5535,17 @@
 		since="J2ME Polish 2.2.2"
 	/>
 	
+	<attribute
+		name="vertical-doors-screen-change-animation-door"
+		type="integer"
+		appliesTo="VerticalDoorsScreenChangeAnimation"
+		description="The door which should be operated during the animation."
+		default="both"
+		values="both,top,bottom"
+		id="483"
+		since="J2ME Polish 2.2.2"
+	/>
+	
 	<!--  TODO add vertical-doors setting here -->
 	
 	<attribute

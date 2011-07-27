@@ -38,10 +38,6 @@ import de.enough.polish.util.StringUtil;
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        23-May-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class Bug extends PolishComponent {
@@ -115,7 +111,7 @@ public class Bug extends PolishComponent {
 	 * @return all devices that have this bug.
 	 */
 	public Device[] getDevices(DeviceManager manager) {
-		ArrayList list = new ArrayList();
+		ArrayList<Device> list = new ArrayList<Device>();
 		Device[] devices = manager.getDevices();
 		for (int i = 0; i < devices.length; i++) {
 			Device device = devices[i];
@@ -135,7 +131,7 @@ public class Bug extends PolishComponent {
 	}
 	
 	
-	public int compareTo(Object o) {
+	public int compareTo(PolishComponent o) {
 		if (o instanceof Bug) {
 			return this.name.compareToIgnoreCase( ((Bug)o).name ); 
 		} else {

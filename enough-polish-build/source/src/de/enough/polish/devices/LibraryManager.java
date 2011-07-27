@@ -63,11 +63,11 @@ public class LibraryManager {
 	private final File wtkLibPath;
 	private final File projectLibPath;
 	private final File polishLibPath;
-	private final HashMap librariesByName = new HashMap();
-	private final ArrayList libraries = new ArrayList();
-	private final HashMap resolvedClassPaths = new HashMap();
-	private final HashMap resolvedLibraryPaths = new HashMap();
-	private final Map antProperties;
+	private final HashMap<String,Library> librariesByName = new HashMap<String,Library>();
+	private final ArrayList<Library> libraries = new ArrayList<Library>();
+	private final HashMap<String,String[]> resolvedClassPaths = new HashMap<String,String[]>();
+	private final HashMap<String,String> resolvedLibraryPaths = new HashMap<String,String>();
+	private final Map<String,String> antProperties;
 
 	/**
 	 * Creates a new ApiManager.
@@ -80,7 +80,7 @@ public class LibraryManager {
 	 * @throws IOException when apis.xml could not be read
 	 * @throws InvalidComponentException when an api definition has errors
 	 */
-	public LibraryManager( Map antProperties, File apisHome, File wtkHome, InputStream is) 
+	public LibraryManager( Map<String,String> antProperties, File apisHome, File wtkHome, InputStream is) 
 	throws JDOMException, IOException, InvalidComponentException 
 	{
 		this.antProperties = antProperties;
@@ -151,7 +151,7 @@ public class LibraryManager {
 		if (libNames == null) {
 			return new Library[ 0 ];
 		}
-		ArrayList libs = new ArrayList();
+		ArrayList<Library> libs = new ArrayList<Library>();
 		for (int i = 0; i < libNames.length; i++) {
 			String libName = libNames[i];
 			Library library = (Library) this.librariesByName.get( libName );
@@ -170,17 +170,19 @@ public class LibraryManager {
 	 *         could not be found, a warning will be printed to System.out.
 	 */
 	public String[] getClassPaths( Device device ) {
-		if (device.getSupportedApisAsString() == null) {
+		String supportedApisAsString = device.getSupportedApisAsString();
+		String optionalApisAsString = device.getOptionalApisAsString();
+		if (supportedApisAsString == null && optionalApisAsString == null) {
 			return new String[0];
 		}
 		// first check if the device's libraries have been resolved already:
-		String[] resolvedPaths = (String[]) this.resolvedClassPaths.get( device.getSupportedApisAsString() );
+		String[] resolvedPaths = (String[]) this.resolvedClassPaths.get( supportedApisAsString + optionalApisAsString );
 		if (resolvedPaths != null) {
 			return resolvedPaths;
 		}
 		// now resolve the path to each supported library:
-		String[] libNames = device.getSupportedApis();
-		ArrayList libPaths = new ArrayList();
+		String[] libNames = device.getAllApis();
+		ArrayList<String> libPaths = new ArrayList<String>();
 		for (int i = 0; i < libNames.length; i++) {
 			String libName = libNames[i];
 			Library lib = getLibrary( libName );
@@ -238,7 +240,7 @@ public class LibraryManager {
 			}
 		}
 		resolvedPaths = (String[]) libPaths.toArray( new String[ libPaths.size() ] );
-		this.resolvedClassPaths.put( device.getSupportedApisAsString(), resolvedPaths );
+		this.resolvedClassPaths.put( supportedApisAsString + optionalApisAsString, resolvedPaths );
 		return resolvedPaths;
 	}
 

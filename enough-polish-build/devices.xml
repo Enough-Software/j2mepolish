@@ -268,6 +268,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, JTWI/1.0" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="btapi, fileconnection,mmapi,wmapi" />
+    <capability name="OptionalPackage" value="nokia-ui,samsung" />
     <capability name="SoundFormat" value="midi, amr, wav" />
     <capability name="HeapSize" value="1MB" />
     <capability name="key.LeftSoftKeys" value="-6,-21,21,57345,-1,-202" />

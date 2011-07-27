@@ -39,10 +39,6 @@ import java.util.Map;
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        23-May-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class Library extends PolishComponent {
@@ -63,7 +59,7 @@ public class Library extends PolishComponent {
 	private File polishLibPath;
 	private String path;
 	private boolean isInitialised;
-	private final Map antProperties;
+	private final Map<String,String> antProperties;
 	private final String[] symbols;
 	private final boolean hasPackage;
 	private final int position;
@@ -79,7 +75,7 @@ public class Library extends PolishComponent {
 	 * @param manager the library manager
 	 * @throws InvalidComponentException when the given api definition has errors
 	 */
-	public Library( Map antProperties, 
+	public Library( Map<String,String> antProperties, 
 			File wtkLibPath, 
 			File projectLibPath,
 			File polishLibPath,
