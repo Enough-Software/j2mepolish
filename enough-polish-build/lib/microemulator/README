@@ -1,4 +1,5 @@
-MicroEmulator 2.0.4
+MicroEmulator 2.0.3
+[note: 2.0.4 has a bug when rendering translucent RGB arrays, so J2ME Polish uses this version]
 
 J2ME Device Emulator is pure Java implementation of J2ME in J2SE.
 It allows demonstrate MIDlet (MIDP/CLDC) based applications as a
