@@ -206,7 +206,7 @@ public class RecordStore extends Object {
 			return recordStore;
 		}
 		
-		// Try the datadabase.
+		// Try the database.
 		recordStore = sqlDao.getRecordStore(recordStoreName);
 		if (recordStore != null) {
 			cacheRecordStore(recordStoreName,recordStore);
@@ -639,6 +639,10 @@ public class RecordStore extends Object {
 	 * @throws RecordStoreException - if a general record store exception occurs
 	 */
 	public int getRecordSize(int recordId) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+		byte[] recordData = getRecord(recordId);
+		if (recordData != null) {
+			return recordData.length;
+		}
 		return 0;
 	}
 

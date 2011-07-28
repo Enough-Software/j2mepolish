@@ -8,8 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import de.enough.polish.android.lcdui.AndroidDisplay;
-import de.enough.polish.android.midlet.MIDlet;
+import de.enough.polish.android.midlet.MidletBridge;
 
 /**
  * This DAO manages one database. It is a singleton and is only valid for one application.
@@ -195,7 +194,7 @@ public class SqlDao {
 	}
 	
 	private void init() {
-		Context context = AndroidDisplay.getDisplay(MIDlet.midletInstance).getContext();
+		Context context = MidletBridge.getInstance();
 		SQLiteOpenHelper recordStoreSqliteOpenHelper = new RecordStoreSqliteOpenHelper(context, "recordstoredb", null, 3);
 		database = recordStoreSqliteOpenHelper.getWritableDatabase();
 	}
@@ -234,7 +233,7 @@ public class SqlDao {
 
 	/**
 	 * 
-	 * @param recordStoreFk the primary key of the recordstore this record is created in. This value must be valid as it is not cheched.
+	 * @param recordStoreFk the primary key of the recordstore this record is created in. This value must be valid as it is not checked.
 	 * @param data Must not be null.
 	 * @return the id of the added record
 	 * @throws RecordStoreException 
