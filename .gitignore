@@ -3,3 +3,8 @@ CVS
 .launch
 .polishSettings
 .binaryeditor.settings
+
+bin/
+build/
+dist/
+tmp/
