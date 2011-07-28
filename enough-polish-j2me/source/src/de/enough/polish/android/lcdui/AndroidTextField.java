@@ -43,6 +43,7 @@ implements AndroidItemView, View.OnFocusChangeListener
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		boolean processed = super.onKeyDown(keyCode, event);
+		//#debug
 		System.out.println("EditText.onKeyDown processed=" + processed+ ", keyCode=" + keyCode);
 		if ( !processed 
 				&& (keyCode == KeyEvent.KEYCODE_DPAD_UP 
@@ -57,19 +58,19 @@ implements AndroidItemView, View.OnFocusChangeListener
 		return processed;
 	}
 
-	@Override
-	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-		boolean processed = super.onKeyMultiple(keyCode, repeatCount, event);
-		System.out.println("EditText.onKeyMultiple processed=" + processed);
-		return processed;
-	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		boolean processed = super.onKeyUp(keyCode, event);
-		System.out.println("EditText.onKeyUp processed=" + processed + ", keyCode=" + keyCode);
-		return processed;
-	}
+//	@Override
+//	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
+//		boolean processed = super.onKeyMultiple(keyCode, repeatCount, event);
+//		System.out.println("EditText.onKeyMultiple processed=" + processed);
+//		return processed;
+//	}
+//
+//	@Override
+//	public boolean onKeyUp(int keyCode, KeyEvent event) {
+//		boolean processed = super.onKeyUp(keyCode, event);
+//		System.out.println("EditText.onKeyUp processed=" + processed + ", keyCode=" + keyCode);
+//		return processed;
+//	}
 	
 	public void applyTextField() {
 		TextField field = this.textField;
@@ -85,14 +86,18 @@ implements AndroidItemView, View.OnFocusChangeListener
 			//setLineSpacing( (float)style.getPaddingVertical(100), 1F);
 			setLineSpacing( 0F, 1F);
 		}
+		int type;
 		if (field.isConstraintsPhoneNumber()) {
-			setInputType(InputType.TYPE_CLASS_PHONE);
+			type = InputType.TYPE_CLASS_PHONE;
 		} else if (field.isConstraintsNumeric() || field.isConstraintsDecimal()) {
-			setInputType(InputType.TYPE_CLASS_NUMBER);
-		}  
-		if (field.isConstraintsPassword()) {
-			setInputType( InputType.TYPE_TEXT_VARIATION_PASSWORD );
+			type = InputType.TYPE_CLASS_NUMBER;
+		} else {
+			type = InputType.TYPE_CLASS_TEXT;
 		}
+		if (field.isConstraintsPassword()) {
+			type |= InputType.TYPE_TEXT_VARIATION_PASSWORD;
+		}
+		setInputType( type );
 	}
 	
 	

@@ -29,14 +29,14 @@ import de.enough.polish.util.IdentityArrayList;
  * devices of the system. It includes methods for retrieving properties of the
  * device and for requesting that objects be displayed on the device. Other
  * methods that deal with device attributes are primarily used with <A
- * HREF="../../../javax/microedition/lcdui/Canvas.html"><CODE>Canvas</CODE></A>
+ * HREF="Canvas.html"><CODE>Canvas</CODE></A>
  * objects and are thus defined there instead of here.
  * <p>
  * 
  * There is exactly one instance of Display per <A
- * HREF="../../../javax/microedition/midlet/MIDlet.html"><CODE>MIDlet</CODE></A>
+ * HREF="../midlet/MIDlet.html"><CODE>MIDlet</CODE></A>
  * and the application can get a reference to that instance by calling the <A
- * HREF="../../../javax/microedition/lcdui/Display.html#getDisplay(javax.microedition.midlet.MIDlet)"><CODE>getDisplay()</CODE></A>
+ * HREF="Display.html#getDisplay(javax.microedition.midlet.MIDlet)"><CODE>getDisplay()</CODE></A>
  * method. The application may call the <code>getDisplay()</code> method at
  * any time during course of its execution. The <code>Display</code> object
  * returned by all calls to <code>getDisplay()</code> will remain the same
@@ -49,7 +49,7 @@ import de.enough.polish.util.IdentityArrayList;
  * <LI><STRONG>startApp</STRONG> - the application is moving from the paused
  * state to the active state. Initialization of objects needed while the
  * application is active should be done. The application may call <A
- * HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent()</CODE></A>
+ * HREF="Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent()</CODE></A>
  * for the first screen if that has not already been done. Note that
  * <code>startApp()</code> can be called several times if
  * <code>pauseApp()</code> has been called in between. This means that
@@ -66,7 +66,7 @@ import de.enough.polish.util.IdentityArrayList;
  * 
  * <P>
  * The user interface objects that are shown on the display device are contained
- * within a <A HREF="../../../javax/microedition/lcdui/Displayable.html"><CODE>Displayable</CODE></A>
+ * within a <A HREF="Displayable.html"><CODE>Displayable</CODE></A>
  * object. At any time the application may have at most one
  * <code>Displayable</code> object that it intends to be shown on the display
  * device and through which user interaction occurs. This
@@ -76,9 +76,9 @@ import de.enough.polish.util.IdentityArrayList;
  * 
  * <P>
  * The <code>Display</code> class has a <A
- * HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent()</CODE></A>
+ * HREF="Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent()</CODE></A>
  * method for setting the current <code>Displayable</code> and a <A
- * HREF="../../../javax/microedition/lcdui/Display.html#getCurrent()"><CODE>getCurrent()</CODE></A>
+ * HREF="Display.html#getCurrent()"><CODE>getCurrent()</CODE></A>
  * method for retrieving the current <code>Displayable</code>. The
  * application has control over its current <code>Displayable</code> and may
  * call <code>setCurrent()</code> at any time. Typically, the application will
@@ -86,7 +86,7 @@ import de.enough.polish.util.IdentityArrayList;
  * action. This is not always the case, however. Another thread may change the
  * current <code>Displayable</code> in response to some other stimulus. The
  * current <code>Displayable</code> will also be changed when the timer for an
- * <A HREF="../../../javax/microedition/lcdui/Alert.html"><CODE>Alert</CODE></A>
+ * <A HREF="Alert.html"><CODE>Alert</CODE></A>
  * elapses.
  * </P>
  * 
@@ -117,10 +117,10 @@ import de.enough.polish.util.IdentityArrayList;
  * shown the next time the application is brought into the foreground. The
  * application can determine whether a <code>Displayable</code> is actually
  * visible on the display by calling <A
- * HREF="../../../javax/microedition/lcdui/Displayable.html#isShown()"><CODE>isShown()</CODE></A>.
+ * HREF="Displayable.html#isShown()"><CODE>isShown()</CODE></A>.
  * In the case of <code>Canvas</code>, the <A
- * HREF="../../../javax/microedition/lcdui/Canvas.html#showNotify()"><CODE>showNotify()</CODE></A>
- * and <A HREF="../../../javax/microedition/lcdui/Canvas.html#hideNotify()"><CODE>hideNotify()</CODE></A>
+ * HREF="Canvas.html#showNotify()"><CODE>showNotify()</CODE></A>
+ * and <A HREF="Canvas.html#hideNotify()"><CODE>hideNotify()</CODE></A>
  * methods are called when the <code>Canvas</code> is made visible and is
  * hidden, respectively.
  * </P>
@@ -128,7 +128,7 @@ import de.enough.polish.util.IdentityArrayList;
  * <P>
  * Each <code>MIDlet</code> application has its own current
  * <code>Displayable</code>. This means that the <A
- * HREF="../../../javax/microedition/lcdui/Display.html#getCurrent()"><CODE>getCurrent()</CODE></A>
+ * HREF="Display.html#getCurrent()"><CODE>getCurrent()</CODE></A>
  * method returns the <code>MIDlet's</code> current <code>Displayable</code>,
  * regardless of the <code>MIDlet's</code> foreground/background state. For
  * example, suppose a <code>MIDlet</code> running in the foreground has
@@ -223,16 +223,6 @@ implements NativeDisplay //, OnTouchListener
 
 	private View mainView;
 
-	private boolean isTextInputEnabled;
-
-	private int positionRight;
-
-	private int positionLeft;
-
-	private int positionBottom;
-
-	private int positionTop;
-
 //	@Override
 //	protected void onRestoreInstanceState(Parcelable state) {
 //		//#debug
@@ -269,7 +259,7 @@ implements NativeDisplay //, OnTouchListener
 	 * The value of <code>LIST_ELEMENT</code> is <code>1</code>.
 	 * </P>
 	 * <DT><B>See Also: </B> <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
+	 * HREF="Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
 	 * imageType)</CODE></A>
 	 * 
 	 * @since MIDP 2.0
@@ -283,7 +273,7 @@ implements NativeDisplay //, OnTouchListener
 	 * The value of <code>CHOICE_GROUP_ELEMENT</code> is <code>2</code>.
 	 * </P>
 	 * <DT><B>See Also: </B> <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
+	 * HREF="Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
 	 * imageType)</CODE></A>
 	 * 
 	 * @since MIDP 2.0
@@ -297,7 +287,7 @@ implements NativeDisplay //, OnTouchListener
 	 * The value of <code>ALERT</code> is <code>3</code>.
 	 * </P>
 	 * <DT><B>See Also: </B> <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
+	 * HREF="Display.html#getBestImageHeight(int)"><CODE>getBestImageHeight(int
 	 * imageType)</CODE></A>
 	 * 
 	 * @since MIDP 2.0
@@ -511,7 +501,7 @@ implements NativeDisplay //, OnTouchListener
 	 * may not actually be visible on the display if the <code>MIDlet</code>
 	 * is running in the background, or if the <code>Displayable</code> is
 	 * obscured by a system screen. The <A
-	 * HREF="../../../javax/microedition/lcdui/Displayable.html#isShown()"><CODE>Displayable.isShown()</CODE></A>
+	 * HREF="Displayable.html#isShown()"><CODE>Displayable.isShown()</CODE></A>
 	 * method may be called to determine whether the <code>Displayable</code>
 	 * is actually visible on the display.
 	 * 
@@ -607,7 +597,7 @@ implements NativeDisplay //, OnTouchListener
 	 * 
 	 * <p>
 	 * If the <code>Displayable</code> passed to <code>setCurrent()</code>
-	 * is an <A HREF="../../../javax/microedition/lcdui/Alert.html"><CODE>Alert</CODE></A>,
+	 * is an <A HREF="Alert.html"><CODE>Alert</CODE></A>,
 	 * the previously current <code>Displayable</code>, if any, is restored
 	 * after the <code>Alert</code> has been dismissed. If there is a current
 	 * <code>Displayable</code>, the effect is as if
@@ -626,7 +616,7 @@ implements NativeDisplay //, OnTouchListener
 	 * <p>
 	 * To specify the <code>Displayable</code> to be shown after an
 	 * <code>Alert</code> is dismissed, the application should use the <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Alert,
+	 * HREF="Display.html#setCurrent(javax.microedition.lcdui.Alert,
 	 * javax.microedition.lcdui.Displayable)"><CODE>setCurrent(Alert,
 	 * Displayable)</CODE></A> method. If the application calls
 	 * <code>setCurrent()</code> while an <code>Alert</code> is current, the
@@ -667,13 +657,14 @@ implements NativeDisplay //, OnTouchListener
 	
 
 	public void setCurrent(Displayable nextDisplayable) {
-		//#debug
+		// #debug
 		System.out.println("AndroidDisplay.setCurrent: "  + nextDisplayable);
 		if (nextDisplayable instanceof Canvas) {
 			Canvas androidCanvas = (Canvas)nextDisplayable;
 			CanvasBridge bridge = androidCanvas._getBridge();
 			if (bridge == null) {
-				bridge = new CanvasBridge(getContext());
+				System.out.println("Creating a new bridge with context " + MidletBridge.getInstance());
+				bridge = new CanvasBridge(MidletBridge.getInstance());
 				bridge.setCanvas(androidCanvas);
 			}
 			if (this.mainView != null) {
@@ -685,8 +676,8 @@ implements NativeDisplay //, OnTouchListener
 			}
 			this.mainView = bridge;
 			bridge.showNotify();
-			addView( this.mainView, 0 );
-			this.mainView.requestFocus();
+			addView( bridge, 0 );
+			bridge.requestFocus();
 			return;
 		}		
 	}
@@ -708,7 +699,7 @@ implements NativeDisplay //, OnTouchListener
 	 * 
 	 * <p>
 	 * In other respects, this method behaves identically to <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent(Displayable)</CODE></A>.
+	 * HREF="Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent(Displayable)</CODE></A>.
 	 * </p>
 	 * 
 	 * @param alert -
@@ -732,7 +723,7 @@ implements NativeDisplay //, OnTouchListener
 	 * so that this <code>Item</code> is visible, and possibly assigns the
 	 * focus to this <code>Item</code>. The containing
 	 * <code>Displayable</code> is first made current as if <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent(Displayable)</CODE></A>
+	 * HREF="Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>setCurrent(Displayable)</CODE></A>
 	 * had been called. When the containing <code>Displayable</code> becomes
 	 * current, or if it is already current, it is scrolled if necessary so that
 	 * the requested <code>Item</code> is made visible. Then, if the
@@ -959,10 +950,10 @@ implements NativeDisplay //, OnTouchListener
 	/**
 	 * Returns the best image width for a given image type. The image type must
 	 * be one of <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#LIST_ELEMENT"><CODE>LIST_ELEMENT</CODE></A>,
+	 * HREF="Display.html#LIST_ELEMENT"><CODE>LIST_ELEMENT</CODE></A>,
 	 * <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#CHOICE_GROUP_ELEMENT"><CODE>CHOICE_GROUP_ELEMENT</CODE></A>,
-	 * or <A HREF="../../../javax/microedition/lcdui/Display.html#ALERT"><CODE>ALERT</CODE></A>.
+	 * HREF="Display.html#CHOICE_GROUP_ELEMENT"><CODE>CHOICE_GROUP_ELEMENT</CODE></A>,
+	 * or <A HREF="Display.html#ALERT"><CODE>ALERT</CODE></A>.
 	 * 
 	 * @param imageType -
 	 *            the image type
@@ -980,10 +971,10 @@ implements NativeDisplay //, OnTouchListener
 	/**
 	 * Returns the best image height for a given image type. The image type must
 	 * be one of <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#LIST_ELEMENT"><CODE>LIST_ELEMENT</CODE></A>,
+	 * HREF="Display.html#LIST_ELEMENT"><CODE>LIST_ELEMENT</CODE></A>,
 	 * <A
-	 * HREF="../../../javax/microedition/lcdui/Display.html#CHOICE_GROUP_ELEMENT"><CODE>CHOICE_GROUP_ELEMENT</CODE></A>,
-	 * or <A HREF="../../../javax/microedition/lcdui/Display.html#ALERT"><CODE>ALERT</CODE></A>.
+	 * HREF="Display.html#CHOICE_GROUP_ELEMENT"><CODE>CHOICE_GROUP_ELEMENT</CODE></A>,
+	 * or <A HREF="Display.html#ALERT"><CODE>ALERT</CODE></A>.
 	 * 
 	 * @param imageType -
 	 *            the image type
@@ -1006,7 +997,7 @@ implements NativeDisplay //, OnTouchListener
 			if (nextDisp instanceof Alert) {
 				final Alert alert = (Alert) nextDisp;
 				alert.setNextDisplayable(currentDisp); 
-				AlertDialog.Builder builder = new AlertDialog.Builder(MidletBridge.getInstance());
+				final AlertDialog.Builder builder = new AlertDialog.Builder(MidletBridge.getInstance());
 				builder.setTitle(alert.getTitle());
 				if (alert.getTitle() != alert.getString()) {
 					builder.setMessage(alert.getString());
@@ -1057,8 +1048,11 @@ implements NativeDisplay //, OnTouchListener
 //						System.out.println(" the cancel listner invoked");
 //					}
 //				});
-
-				builder.show();
+				MidletBridge.getInstance().runOnUiThread( new Runnable() {
+					public void run() {
+						builder.show();
+					}
+				});
 				return true;
 			}
 		//#endif

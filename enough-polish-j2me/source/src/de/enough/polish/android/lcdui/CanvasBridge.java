@@ -100,7 +100,7 @@ implements OnTouchListener //, OnKeyListener
 				this.lcduiCanvas.paint(this.graphics);
 			} catch (Exception e) {
 				//#debug error
-				System.out.println("XXXWarning: unable to paint screen: " + this.lcduiCanvas + ", dimension=" + this.lcduiCanvas.getWidth() + "x" + this.lcduiCanvas.getHeight() + ", isShown=" + this.lcduiCanvas.isShown() + e );
+				System.out.println("Error: unable to paint screen: " + this.lcduiCanvas + ", dimension=" + this.lcduiCanvas.getWidth() + "x" + this.lcduiCanvas.getHeight() + ", isShown=" + this.lcduiCanvas.isShown() + e );
 			}
 		}
 		AndroidDisplay.getInstance().callSeriallies();
