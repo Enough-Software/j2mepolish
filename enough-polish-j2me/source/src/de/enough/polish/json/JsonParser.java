@@ -26,6 +26,8 @@ package de.enough.polish.json;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * This class parses JSON data encoded as a string and returns an equivalent native object tree.
@@ -104,7 +106,7 @@ public class JsonParser {
 	/**
 	 * The underlying InputStream of the parser 
 	 */
-	InputStream stream;
+	Reader inputReader;
 	
 	/**
 	 * Convenience method for throwing a JSONException
@@ -152,7 +154,7 @@ public class JsonParser {
 	protected void skipWhitespace() throws IOException, JsonException {
 		// Read character tokens until a non-whitespace one is encountered
 		while ( this.currentChar == TOKEN_WHITESPACE_SPACE || this.currentChar == TOKEN_WHITESPACE_TAB || this.currentChar == TOKEN_WHITSPACE_LINE_FEED || this.currentChar == TOKEN_WHITESPACE_CARRIAGE_RETURN ) {
-			this.currentChar = this.stream.read();
+			this.currentChar = this.inputReader.read();
 		}	
 		
 		// Check for end of the stream and throw an error if found
@@ -182,7 +184,23 @@ public class JsonParser {
 	 * @throws JsonException
 	 */
 	public Object parseJson(InputStream inputStream) throws IOException, JsonException {
-		this.stream = inputStream;
+		return parseJson( inputStream, null);
+	}
+	
+	/**
+	 * Parses JSON data from an InputStream
+	 * @param inputStream the InputStream containing the JSON data
+	 * @param encoding the encoding of the stream
+	 * @return the native object hierarchy corresponding to the JSON data
+	 * @throws IOException
+	 * @throws JsonException
+	 */
+	public Object parseJson(InputStream inputStream, String encoding) throws IOException, JsonException {
+		if (encoding != null) {
+			this.inputReader = new InputStreamReader( inputStream, encoding );
+		} else {
+			this.inputReader = new InputStreamReader( inputStream );
+		}
 		this.currentChar = TOKEN_WHITESPACE_SPACE;
 		skipWhitespace();
 		return readEntity();
@@ -206,13 +224,13 @@ public class JsonParser {
     	Object value;    	
 		
 		// Move inside the body of the object
-		this.currentChar = this.stream.read();
+		this.currentChar = this.inputReader.read();
 
 		// Read the first character in the object's body and check if it's the end of object token, just in case the object is empty
 		skipWhitespace();   		
 		if ( this.currentChar == TOKEN_END_OBJECT) {			
 			// Move outside the body of the object, to the next character in the stream, and return an empty object.
-			this.currentChar = this.stream.read();			
+			this.currentChar = this.inputReader.read();			
 			return result;
 		}
     	
@@ -240,7 +258,7 @@ public class JsonParser {
     		}
     		    		
     		// Read to the begining of the value
-    		this.currentChar = this.stream.read();
+    		this.currentChar = this.inputReader.read();
     		skipWhitespace();
     		
     		// Read the value
@@ -255,11 +273,11 @@ public class JsonParser {
     		if ( this.currentChar == TOKEN_END_OBJECT) {
     			// If we have reached the end of the object's body, move outside the body of the object
     			// to the next character in the stream, and return the object   			
-    			this.currentChar = this.stream.read();
+    			this.currentChar = this.inputReader.read();
     			return result;
     		} else if ( this.currentChar == TOKEN_VALUE_SEPARATOR ) {
     			// If we have reached a value separator token, read until the beginning of the next member name
-    			this.currentChar = this.stream.read();
+    			this.currentChar = this.inputReader.read();
     			skipWhitespace();
     		} else {
     			// If we have read something else, throw an unexpected token exception
@@ -288,13 +306,13 @@ public class JsonParser {
     	JsonArray result = new JsonArray();
     	
     	// Move inside the body of the array
-    	this.currentChar = this.stream.read();
+    	this.currentChar = this.inputReader.read();
     	
 		// Read the first character in the array and check if it's the end of array token, just in case the array is empty
 		skipWhitespace();   		
 		if ( this.currentChar == TOKEN_END_ARRAY) {			
 			// Move outside the body of the array, to the next character in the stream, and return an empty array    			
-			this.currentChar = this.stream.read();			
+			this.currentChar = this.inputReader.read();			
 			return result;
 		}
     	
@@ -309,11 +327,11 @@ public class JsonParser {
     		if ( this.currentChar == TOKEN_END_ARRAY) {    			
     			// If we have reached the end of the array's body, move outside the body of the array
     			// to the next character in the stream and return the array.    			
-    			this.currentChar = this.stream.read();
+    			this.currentChar = this.inputReader.read();
     			return result;
     		} else if ( this.currentChar == TOKEN_VALUE_SEPARATOR ) {
     			// If we have reached a value separator token, read until the beginning of the next value
-    			this.currentChar = this.stream.read();
+    			this.currentChar = this.inputReader.read();
     			skipWhitespace();
     		} else {
     			// If we have read something else, throw an unexpected token exception
@@ -415,7 +433,7 @@ public class JsonParser {
     		}    		
 
     		// Read the next character from the stream
-    		this.currentChar = this.stream.read();
+    		this.currentChar = this.inputReader.read();
     	}
     
     	// Everything went OK. Return the corresponding object
@@ -459,7 +477,7 @@ public class JsonParser {
 		// Handle the initial minus sign (if any)
     	if ( this.currentChar == '-' ) {
     		result.append('-');
-    		this.currentChar = this.stream.read();
+    		this.currentChar = this.inputReader.read();
     	}		
 		
     	// Handle the rest of the number
@@ -520,7 +538,7 @@ public class JsonParser {
     		result.append((char) this.currentChar);
     		
     		// Go to the next character
-    		this.currentChar = this.stream.read();
+    		this.currentChar = this.inputReader.read();
     	}
     }
     
@@ -543,7 +561,7 @@ public class JsonParser {
     	StringBuffer unicodeBuffer = new StringBuffer(4);
     	
     	// Move into the body of the string
-    	this.currentChar = this.stream.read();
+    	this.currentChar = this.inputReader.read();
     	
     	do {    		
     		
@@ -556,12 +574,12 @@ public class JsonParser {
 	    			
 	    		// End of string has been reached. Move outside the body of the string and return the result
 	    		case TOKEN_QUOTATION_MARK:
-	    			this.currentChar = this.stream.read();
+	    			this.currentChar = this.inputReader.read();
 	    			return buffer.toString();    			    			
 	    			
 	    		// Decode an escape character
 	    		case TOKEN_ESCAPE_CHARACTER:
-	    			this.currentChar = this.stream.read();
+	    			this.currentChar = this.inputReader.read();
 	    			switch (this.currentChar) {
 	    				case  't':
 	    					buffer.append(CHARACTER_TAB);
@@ -598,7 +616,7 @@ public class JsonParser {
 	    					
 	    					// First, get the four digits into the unicode string buffer.
 	    					while (unicodeIndex < 4) {
-	    						this.currentChar = this.stream.read();
+	    						this.currentChar = this.inputReader.read();
 	    						
 	    						if ( this.currentChar == -1 ) {
 	    							throwJsonException(EXCEPTION_UNEXPECTED_END_OF_STREAM, "while trying to read next unicode character in string \"" + buffer.toString() + "...\"");
@@ -627,7 +645,7 @@ public class JsonParser {
     		}
     		
     		// Read the next char in the string
-    		this.currentChar = this.stream.read();
+    		this.currentChar = this.inputReader.read();
     		
     	} while (true);
     }
