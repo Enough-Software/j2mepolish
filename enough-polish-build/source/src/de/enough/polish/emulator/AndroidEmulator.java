@@ -167,12 +167,13 @@ extends Emulator
 			// If an emulator is not already running ...`
 			if(new ProcessCondition(this.stateArguments,".*unknown.*").isMet())
 			{
-				System.out.println(this.device.getIdentifier() + ": launching emulator.");
 				// Open the emulator
 				if (ArgumentHelper.isAndroidVersionHigherOrEquals15(env)) {
 					this.emulatorArguments.add(1, "-avd");
 					this.emulatorArguments.add(2, avd);
 				}
+				System.out.println(this.device.getIdentifier() + ": launching emulator:");
+				print(this.emulatorArguments);
 				ProcessUtil.exec( this.emulatorArguments, this.device.getIdentifier() + ": ", false);
 				
 				System.out.println(this.device.getIdentifier() + ": Waiting for emulator to start up...");
@@ -214,6 +215,19 @@ extends Emulator
 		} finally {
 			this.isFinished = true;
 		}
+	}
+
+	private void print(ArrayList args) {
+		for (int i=0; i<args.size(); i++) {
+			String arg = (String) args.get(i);
+			if (arg.indexOf(' ') != -1) {
+				arg = '"' + arg + "\" ";
+			} else {
+				arg += ' ';
+			}
+			System.out.print(arg);
+		}
+		System.out.println();
 	}
 
 	private String getAVDforIdentifier(String identifier) {

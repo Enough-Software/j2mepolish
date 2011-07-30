@@ -22,4 +22,5 @@ enough-polish-sample-serialization
 enough-polish-sample-tabbedform
 enough-polish-sample-tabbedpane
 enough-polish-sample-tableitem
+enough-polish-sample-themes
 enough-polish-sample-wikipedia
