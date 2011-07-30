@@ -5511,7 +5511,7 @@
 		appliesTo="CalendarItem"
 		description="The style for days of the current month that are outside of the specified valid period within an CalendarItem."
 		id="480"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.2"
 	/>
 	
 	<attribute
@@ -5535,7 +5535,27 @@
 		since="J2ME Polish 2.2.2"
 	/>
 	
-	<!--  TODO add vertical-doors setting here -->
+	<attribute
+		name="vertical-doors-screen-change-animation-door"
+		type="integer"
+		appliesTo="VerticalDoorsScreenChangeAnimation"
+		description="The door which should be operated during the animation."
+		default="both"
+		values="both,top,bottom"
+		id="483"
+		since="J2ME Polish 2.2.2"
+	/>
+	
+	<attribute
+		name="color"
+		type="color"
+		appliesTo="Item"
+		description="A color attribute to be used for various needs and concerns"
+		default="black"
+		id="484"
+		since="J2ME Polish 2.2.2"
+	/>
+
 	
 	<attribute
 		name="gauge-background"
