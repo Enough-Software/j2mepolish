@@ -5,6 +5,8 @@
 <%include start.txt %>
 
 	<h1 id="top">Using Alerts</h1>
+	<%index %>
+	
 	<p>Notify your user about errors or finished tasks with Alerts.
 	<br />
 	<img src="<%= basedir%>images/gui-screen-alert.png" width="352" height="413" alt="showing an alert as popup"/>
@@ -77,11 +79,80 @@ use <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">U
 using J2ME Polish specific functionalities like:
 </p>
 <ul>
-	<li><code>setStyle( Alert alert )</code>: Sets a style in conjuntion with a <code>style</code> preprocessing directive.</li>
+	<li><code>setStyle( Alert alert )</code>: Sets a style in conjunction with a <code>style</code> preprocessing directive.</li>
 	<li><code>setStyle( Alert alert, Style style )</code>: Sets a style programmatically.</li>
 </ul>
 
-<h2 id="configuration">Configuration</h2>
+<h2 id="configuration-buttons">Configuration: Use Buttons instead of Commands</h2>
+<p>
+	You can use buttons instead of commands for Alerts which makes selecting options much easier on touch enabled phones. 
+	For this to work you need these two preprocesing configuration variables in your <i>build.xml</i> script defined:
+</p>
+<pre>
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.Item.suppressDefaultCommand&quot; value=&quot;true&quot; /&gt;
+	&lt;variable name=&quot;polish.Alert.useButtonsForCommands&quot; value=&quot;true&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+<p>
+For the buttons the style <code>.alertButton</code> along with its <code>:hover</code> and <code>:pressed</code> styles is used, if defined.
+<br />Alternatively you can use the <code>#style</code> preprocessing directive when adding a command to an <code>Alert</code>:
+</p>
+<pre>
+//#style messageAlert
+Alert alert = new Alert( "Alert", "My message", null, AlertType.INFO );
+alert.setTimeout( Alert.FOREVER );
+alert.addCommand( new Command( "default", Command.OK, 1)); // here the .alertButton style is being used...
+<b>//#style alertButton2</b>
+alert.addCommand( new Command( "custom", Command.SCREEN, 2));
+</pre>
+<p>In your <i>polish.css</i> you have to define these styles:</p>
+<pre>
+
+<b>.alertButton</b> {
+	font-color: #666;
+}
+
+.alertButton:hover {
+	border-color: #000;
+	font-color: #000;
+}
+
+.alertButton:pressed {
+	border-color: #000;
+	background-color: #333;
+	font-color: #fff;
+}
+
+<b>.alertButton2</b> {
+	font-color: #333;
+}
+
+.alertButton2:hover {
+	border-color: #f00;
+	font-color: #f00;
+}
+
+.alertButton2:pressed {
+	border-color: #f00;
+	font-color: #fff;
+	background-color: #a00;
+}
+</pre>
+ 
+
+<h2 id="configuration-buttons">Configuration: Native Alerts</h2>
+<p>
+On BlackBerry and Android platforms you can use native Alerts, which is highly recommended. 
+Just define the <code>polish.useNativeAlerts</code> preprocessing variable in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;true&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+
+<h2 id="localization">Localization</h2>
 <p>You translate the default dismiss command of an Alert without timeout using the 
 <code>variables</code> section of your <i>build.xml</i> script or the <i>messages.txt</i> file. 
 Refer to the <a href="localization.html">localization documentation</a> for more details on this.
