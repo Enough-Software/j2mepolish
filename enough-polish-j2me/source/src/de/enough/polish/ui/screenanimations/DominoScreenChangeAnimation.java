@@ -90,7 +90,7 @@ public class DominoScreenChangeAnimation extends ScreenChangeAnimation {
 	
 	
 	
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
 		int row = 0;
 		int column = 0;
 		int length = this.rgbData.length-1;

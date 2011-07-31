@@ -30,27 +30,21 @@ package de.enough.polish.ui.screenanimations;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import de.enough.polish.ui.Color;
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
 
 /**
- * <p>Moves the new screen from the left to the front.</p>
+ * <p>Expands the new screen from the horizontal center to left and right.</p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        31-May-2005 - mkoch creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Michael Koch, michael@enough.de
  */
 public class FlashScreenChangeAnimation extends ScreenChangeAnimation
 {	
 	private int currentX;
 	private int currentSize;
-	//#if polish.css.vertical-flash-screen-change-animation-speed
-		private int speed = -1;
-	//#endif
-	//#if polish.css.vertical-flash-screen-change-animation-color
+	//#if polish.css.flash-screen-change-animation-color
 		private int color = 0;
 	//#endif
 
@@ -62,71 +56,44 @@ public class FlashScreenChangeAnimation extends ScreenChangeAnimation
 		// Do nothing here.
 	}
 
-	
-	
+	//#if polish.css.flash-screen-change-animation-color
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
 		super.setStyle(style);
-		if (this.isForwardAnimation) {
-			this.currentX = this.screenWidth / 2;
-			this.currentSize = 0;
-		} else {
-			this.currentX = 0;
-			this.currentSize = this.screenWidth;
-		}
-		//#if polish.css.vertical-flash-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty("vertical-flash-screen-change-animation-speed");
-			if (speedInt != null)
-			{
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
-		
-		//#if polish.css.vertical-flash-screen-change-animation-color
-			Integer colorInt = style.getIntProperty("vertical-flash-screen-change-animation-color");
+		//#if polish.css.flash-screen-change-animation-color
+			Color colorInt = (Color) style.getObjectProperty("flash-screen-change-animation-color");
 			if (colorInt != null)
 			{
-				this.color = colorInt.intValue();
+				this.color = colorInt.getColor();
 			}
 		//#endif
 	}
+	//#endif
 
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
-		int adjust;
-		//#if polish.css.vertical-flash-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust = this.speed;
-			} else {
-		//#endif
-				adjust = this.currentX / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.vertical-flash-screen-change-animation-speed
-			}
-		//#endif		
-		if (this.isForwardAnimation) {
-			if (this.currentX > 0)
-			{
-				this.currentX -= adjust;
-				this.currentSize += adjust << 1;
-				return true;
-			}
-		} else if (this.currentSize > 0) {
-			this.currentX += adjust;
-			this.currentSize -= adjust << 1;
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		return false;
+		int startValue, endValue;
+	
+		if (this.isForwardAnimation) {
+			startValue = 0;
+			endValue = this.screenWidth / 2;
+		} else {
+			startValue = this.screenWidth / 2;
+			endValue = 0;
+		}
+		int value = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		this.currentX = this.screenWidth / 2 - value;
+		this.currentSize = value * 2;
+		return true;
 	}
 
 	/* (non-Javadoc)

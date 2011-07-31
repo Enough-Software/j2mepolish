@@ -1527,30 +1527,39 @@
 		<mapping from="top" to="new de.enough.polish.ui.screenanimations.TopScreenChangeAnimation()" />
 		<mapping from="bottom" to="new de.enough.polish.ui.screenanimations.BottomScreenChangeAnimation()" />
 		<mapping from="diagonal" to="new de.enough.polish.ui.screenanimations.DiagonalScreenChangeAnimation()" />
-		<mapping from="3drotation" to="new de.enough.polish.ui.screenanimations.Rotate3DScreenChangeAnimation()"  condition="polish.api.3d" />
-		<mapping from="3dRotation" to="new de.enough.polish.ui.screenanimations.Rotate3DScreenChangeAnimation()"  condition="polish.api.3d" />
-		<mapping from="3d" to="new de.enough.polish.ui.screenanimations.Rotate3DScreenChangeAnimation()"  condition="polish.api.3d" />
 		<mapping from="rotate3d-m3g" to="new de.enough.polish.ui.screenanimations.RotatingScreenM3GScreenChangeAnimation()"  condition="polish.javapackage.jsr184" />
 		<mapping from="rotate3d-gles" to="new de.enough.polish.ui.screenanimations.RotatingScreenGLESScreenChangeAnimation()"  condition="polish.javapackage.jsr239" />
 		<mapping from="scale" to="new de.enough.polish.ui.screenanimations.ScaleScreenChangeAnimation()" />
+		<mapping from="left-shutter" to="new de.enough.polish.ui.screenanimations.LeftShutterScreenChangeAnimation()" />
 		<mapping from="leftshutter" to="new de.enough.polish.ui.screenanimations.LeftShutterScreenChangeAnimation()" />
 		<mapping from="leftShutter" to="new de.enough.polish.ui.screenanimations.LeftShutterScreenChangeAnimation()" />
+		<mapping from="right-shutter" to="new de.enough.polish.ui.screenanimations.RightShutterScreenChangeAnimation()" />
 		<mapping from="rightshutter" to="new de.enough.polish.ui.screenanimations.RightShutterScreenChangeAnimation()" />
 		<mapping from="rightShutter" to="new de.enough.polish.ui.screenanimations.RightShutterScreenChangeAnimation()" />
 		<mapping from="shutter" to="new de.enough.polish.ui.screenanimations.TopShutterScreenChangeAnimation()" />
+		<mapping from="top-shutter" to="new de.enough.polish.ui.screenanimations.TopShutterScreenChangeAnimation()" />
 		<mapping from="topshutter" to="new de.enough.polish.ui.screenanimations.TopShutterScreenChangeAnimation()" />
 		<mapping from="topShutter" to="new de.enough.polish.ui.screenanimations.TopShutterScreenChangeAnimation()" />
+		<mapping from="bottom-shutter" to="new de.enough.polish.ui.screenanimations.BottomShutterScreenChangeAnimation()" />
 		<mapping from="bottomshutter" to="new de.enough.polish.ui.screenanimations.BottomShutterScreenChangeAnimation()" />
 		<mapping from="bottomShutter" to="new de.enough.polish.ui.screenanimations.BottomShutterScreenChangeAnimation()" />
 		<mapping from="verticaldoors" to="new de.enough.polish.ui.screenanimations.VerticalDoorsScreenChangeAnimation()" />
 		<mapping from="vertical-doors" to="new de.enough.polish.ui.screenanimations.VerticalDoorsScreenChangeAnimation()" />
+		<mapping from="horizontal-flash" to="new de.enough.polish.ui.screenanimations.FlashScreenChangeAnimation()" />
 		<mapping from="flash" to="new de.enough.polish.ui.screenanimations.FlashScreenChangeAnimation()" />
+		<mapping from="vertical-flash" to="new de.enough.polish.ui.screenanimations.VerticalFlashScreenChangeAnimation()" />
 		<mapping from="verticalflash" to="new de.enough.polish.ui.screenanimations.VerticalFlashScreenChangeAnimation()" />
 		<mapping from="verticalFlash" to="new de.enough.polish.ui.screenanimations.VerticalFlashScreenChangeAnimation()" />
+		<mapping from="zoom-out" to="new de.enough.polish.ui.screenanimations.ZoomOutScreenChangeAnimation()">
+			<condition>polish.midp2</condition>
+		</mapping>
 		<mapping from="zoomout" to="new de.enough.polish.ui.screenanimations.ZoomOutScreenChangeAnimation()">
 			<condition>polish.midp2</condition>
 		</mapping>
 		<mapping from="zoomOut" to="new de.enough.polish.ui.screenanimations.ZoomOutScreenChangeAnimation()">
+			<condition>polish.midp2</condition>
+		</mapping>
+		<mapping from="zoom-in" to="new de.enough.polish.ui.screenanimations.ZoomInAndHideScreenChangeAnimation()">
 			<condition>polish.midp2</condition>
 		</mapping>
 		<mapping from="zoomin" to="new de.enough.polish.ui.screenanimations.ZoomInAndHideScreenChangeAnimation()">
@@ -1563,6 +1572,9 @@
 			<condition>polish.midp2</condition>
 		</mapping>
 		<mapping from="zoomInAndHide" to="new de.enough.polish.ui.screenanimations.ZoomInAndHideScreenChangeAnimation()">
+			<condition>polish.midp2</condition>
+		</mapping>
+		<mapping from="zoom-both" to="new de.enough.polish.ui.screenanimations.ZoomBothScreenChangeAnimation()">
 			<condition>polish.midp2</condition>
 		</mapping>
 		<mapping from="zoomboth" to="new de.enough.polish.ui.screenanimations.ZoomBothScreenChangeAnimation()">
@@ -1580,7 +1592,9 @@
 		<mapping from="bwToColor" to="new de.enough.polish.ui.screenanimations.BwToColorScreenChangeAnimation()">
 			<condition>polish.midp2</condition>
 		</mapping>
-		
+		<mapping from="bw-to-color" to="new de.enough.polish.ui.screenanimations.BwToColorScreenChangeAnimation()">
+			<condition>polish.midp2</condition>
+		</mapping>
 		<mapping from="cube" to="new de.enough.polish.ui.screenanimations.CardScreenChangeAnimation()" condition="polish.midp2" />
 		<mapping from="Cube" to="new de.enough.polish.ui.screenanimations.CardScreenChangeAnimation()"  condition="polish.midp2" />
 		<mapping from="cage" to="new de.enough.polish.ui.screenanimations.CageScreenChangeAnimation()"  condition="polish.midp2"/>
@@ -1612,6 +1626,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="63"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 
 	<attribute
@@ -1621,6 +1636,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="64"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1630,6 +1646,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="65"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 
 	<attribute
@@ -1639,6 +1656,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="66"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1648,6 +1666,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="67"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1666,6 +1685,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="69"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1684,6 +1704,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="71"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1702,6 +1723,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="73"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1720,6 +1742,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="75"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1738,6 +1761,7 @@
 		description="The constant speed of the animation. By default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="77"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	
 	<attribute
@@ -1811,15 +1835,8 @@
 		id="85"
 	/>
 	
-	<attribute
-		name="cube-screen-change-animation-background-color"
-		type="color"
-		appliesTo="CubeScreenChangeAnimation"
-		description="Sets the background of a cube screen change animation."
-		default="black"
-		id="86"
-	/>
-	
+	<!--  free slot: 86 -->
+		
 	<attribute
 		name="clip-screen-info"
 		type="boolean"
@@ -3020,6 +3037,7 @@
 		description="Number of animation steps."
 		default="6"
 		id="216"
+		deprecated="Use screen-change-animation-duration instead"
 	/>
 	<attribute
 		name="left-screen-change-animation-move-previous"
@@ -3060,6 +3078,7 @@
 		description="The constant speed of the animation - by default the animation uses a somewhat quadratic de-acceleration."
 		default="-1"
 		id="221"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	<attribute
 		name="diagonal-screen-change-animation-move-previous"
@@ -3084,6 +3103,7 @@
 		description="The number of steps of the animation."
 		default="6"
 		id="224"
+		deprecated="Use screen-change-animation-duration instead."
 	/>
 	<attribute
 		name="fadeOutFadeIn-screen-change-animation-background-color"
@@ -5515,34 +5535,13 @@
 	/>
 	
 	<attribute
-		name="vertical-doors-screen-change-animation-duration"
-		type="time"
-		appliesTo="VerticalDoorsScreenChangeAnimation"
-		description="The duration of the animation."
-		default="800ms"
-		id="481"
-		since="J2ME Polish 2.2.2"
-	/>
-	
-	<attribute
-		name="vertical-doors-screen-change-animation-direction"
-		type="integer"
-		appliesTo="VerticalDoorsScreenChangeAnimation"
-		description="The direction of the animation."
-		default="default"
-		values="default,open,close"
-		id="482"
-		since="J2ME Polish 2.2.2"
-	/>
-	
-	<attribute
 		name="vertical-doors-screen-change-animation-door"
 		type="integer"
 		appliesTo="VerticalDoorsScreenChangeAnimation"
 		description="The door which should be operated during the animation."
 		default="both"
 		values="both,top,bottom"
-		id="483"
+		id="481"
 		since="J2ME Polish 2.2.2"
 	/>
 	
@@ -5552,7 +5551,7 @@
 		appliesTo="Item"
 		description="A color attribute to be used for various needs and concerns"
 		default="black"
-		id="484"
+		id="482"
 		since="J2ME Polish 2.2.2"
 	/>
 
@@ -5562,7 +5561,8 @@
 		type="background"
 		appliesTo="Gauge"
 		description="A background name from the backgrounds section. The background is drawn behind the slider/progress bar across the used width."
-		id="485"
+		id="483"
+		since="J2ME Polish 2.2.2"
 	/>
 	
 	<attribute
@@ -5570,9 +5570,52 @@
 		type="background"
 		appliesTo="Gauge"
 		description="A background name from the backgrounds section. The background is rendering the slider/progress bar."
-		id="486"
+		id="484"
+		since="J2ME Polish 2.2.2"
 	/>
 	
+	
+	<attribute
+		name="screen-change-animation-duration"
+		type="time"
+		appliesTo="ScreenChangeAnimation"
+		description="The duration of the animation."
+		default="400ms"
+		id="485"
+		since="J2ME Polish 2.2.2"
+	/>
+	
+	<attribute
+		name="screen-change-animation-direction"
+		type="integer"
+		appliesTo="ScreenChangeAnimation"
+		description="The direction of the animation - by default the direction depends on the circumstances - when entering a screen the direction is forward, when leaving it is backward."
+		values="forward,backward"
+		id="486"
+		since="J2ME Polish 2.2.2"
+	/>
+
+	<attribute
+		name="screen-change-animation-function-forward"
+		type="integer"
+		appliesTo="ScreenChangeAnimation"
+		description="The function for calculating animation range values for a forward running animation."
+		default="exponential-in"
+		values="ease, linear, ease-in, ease-out, exponential-in, exponential-out"
+		id="487"
+		since="J2ME Polish 2.2.2"
+	/>
+	
+	<attribute
+		name="screen-change-animation-function-backward"
+		type="integer"
+		appliesTo="ScreenChangeAnimation"
+		description="The function for calculating animation range values for a forward running animation."
+		default="exponential-out"
+		values="ease, linear, ease-in, ease-out, exponential-in, exponential-out"
+		id="488"
+		since="J2ME Polish 2.2.2"
+	/>
 		
 <!--
 	<attribute

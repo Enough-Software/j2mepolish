@@ -49,10 +49,14 @@ public class CssAnimationSetting
 		TIMING_FUNCTION_BY_NAME.put("ease-in-out", "CssAnimation.FUNCTION_EASE");
 		TIMING_FUNCTION_BY_NAME.put("ease-out-in", "CssAnimation.FUNCTION_EASE");
 		TIMING_FUNCTION_BY_NAME.put("linear", "CssAnimation.FUNCTION_LINEAR");
+		TIMING_FUNCTION_BY_NAME.put("exponential-out", "CssAnimation.FUNCTION_EXPONENTIAL_OUT");
+		TIMING_FUNCTION_BY_NAME.put("expontential-in", "CssAnimation.FUNCTION_EXPONENTIAL_IN");
 		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_EASE", "CssAnimation.FUNCTION_EASE");
 		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_EASE_OUT", "CssAnimation.FUNCTION_EASE_OUT");
 		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_EASE_IN", "CssAnimation.FUNCTION_EASE_IN");
 		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_LINEAR", "CssAnimation.FUNCTION_LINEAR");
+		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_EXPONENTIAL_OUT", "CssAnimation.FUNCTION_EXPONENTIAL_OUT");
+		TIMING_FUNCTION_BY_NAME.put("CssAnimation.FUNCTION_EXPONENTIAL_IN", "CssAnimation.FUNCTION_EXPONENTIAL_IN");
 	}
 	
 	private String cssAttributeName;

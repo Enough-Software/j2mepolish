@@ -42,25 +42,17 @@ import de.enough.polish.util.ImageUtil;
  * .myAlert {
  * 		//#if polish.midp2
  * 			screen-change-animation: zoomBoth;
- * 			zoomBoth-screen-change-animation-factor: 300; (260 is default)
- * 			zoomBoth-screen-change-animation-steps: 4; (6 is default)
  * 		//#endif
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        30-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ZoomBothScreenChangeAnimation extends ScreenChangeAnimation {
 	private int outerScaleFactor = 260;
 	private int innerScaleFactor = 460;
-	private int steps = 6;
-	private int currentStep;
 	private int[] nextCanvasScaledRgb;
 	private int[] lastCanvasScaledRgb;
 	private int currentMagnifyFactor;
@@ -84,58 +76,55 @@ public class ZoomBothScreenChangeAnimation extends ScreenChangeAnimation {
 		int size = width * height;
 		this.lastCanvasScaledRgb = new int[ size ];
 		this.nextCanvasScaledRgb = new int[ size ];					
-		//ImageUtil.scale( 200, this.scaleFactor, this.screenWidth, this.screenHeight, this.lastScreenRgb, this.scaledScreenRgb);
 		super.onShow(style, dsplay, width, height, lstDisplayable,
 				nxtDisplayable, isForward );
-		if (isForward) {
-			this.currentStep = 0;
-			System.arraycopy( this.lastCanvasRgb, 0, this.lastCanvasScaledRgb, 0,  width * height );
-		} else {
-			this.currentStep = this.steps;
-			animate();
-		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		int[] first;
-		int[] second;
-		int[] firstScaled;
-		int[] secondScaled;
-		if (this.isForwardAnimation) {
-			this.currentStep++;
-			if (this.currentStep >= this.steps) {
-				this.lastCanvasScaledRgb = null;
-				this.nextCanvasScaledRgb = null;
-				return false;
-			}
-			first = this.lastCanvasRgb;
-			firstScaled = this.lastCanvasScaledRgb;
-			second = this.nextCanvasRgb;
-			secondScaled = this.nextCanvasScaledRgb;
-		} else {
-			this.currentStep--;
-			if (this.currentStep <= 0) {
-				this.lastCanvasScaledRgb = null;
-				this.nextCanvasScaledRgb = null;
-				return false;
-			}
-			first = this.nextCanvasRgb;
-			firstScaled = this.nextCanvasScaledRgb;
-			second = this.lastCanvasRgb;
-			secondScaled = this.lastCanvasScaledRgb;	
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.nextCanvasScaledRgb = null;
+			this.lastCanvasScaledRgb = null;
+			return false;
 		}
-		int magnifyFactor = 100 + (this.outerScaleFactor - 100) * this.currentStep / this.steps;
-		//ImageUtil.scale(magnifyFactor, this.screenWidth, this.screenHeight, this.lastCanvasRgb, this.lastCanvasScaledRgb);
-		ImageUtil.scale(magnifyFactor, this.screenWidth, this.screenHeight, first, firstScaled);
-		//magnifyFactor = (100 + (this.innerScaleFactor - 100) * this.currentStep / this.steps * 100 ) / this.innerScaleFactor;
-		magnifyFactor = ((100 + (this.innerScaleFactor - 100) * this.currentStep / this.steps) * 100) / this.innerScaleFactor;
-		int opacity = (magnifyFactor * 255) / 100;
+		int startFactor1, startFactor2, endFactor1, endFactor2;
+		int startOpacity, endOpacity;
+		int[] rgbFirstOriginal;
+		int[] rgbSecondOriginal;
+		int[] rgbFirstScaled;
+		int[] rgbSecondScaled;
+		if (this.isForwardAnimation) {
+			startFactor1 = 100;
+			endFactor1 = this.innerScaleFactor;
+			startFactor2 = 30;
+			endFactor2 = 100; //this.outerScaleFactor;
+			startOpacity = 10;
+			endOpacity = 255;
+			rgbFirstOriginal = this.lastCanvasRgb;
+			rgbFirstScaled = this.lastCanvasScaledRgb;
+			rgbSecondOriginal = this.nextCanvasRgb;
+			rgbSecondScaled = this.nextCanvasScaledRgb;
+		} else {
+			startFactor1 = this.innerScaleFactor;
+			endFactor1 = 100;
+			startFactor2 = this.outerScaleFactor;
+			endFactor2 = 100;
+			startOpacity = 255;
+			endOpacity = 10;
+			rgbFirstOriginal = this.nextCanvasRgb;
+			rgbFirstScaled = this.nextCanvasScaledRgb;
+			rgbSecondOriginal = this.lastCanvasRgb;
+			rgbSecondScaled = this.lastCanvasScaledRgb;	
+		}
+		int magnifyFactor = calculateAnimationPoint(startFactor1, endFactor1, passedTime, duration);
+		ImageUtil.scale(magnifyFactor, this.screenWidth, this.screenHeight, rgbFirstOriginal, rgbFirstScaled);
+		magnifyFactor = calculateAnimationPoint(startFactor2, endFactor2, passedTime, duration);
+		int opacity = calculateAnimationPoint(startOpacity, endOpacity, passedTime, duration);
 		this.currentMagnifyFactor = magnifyFactor;
-		//ImageUtil.scale(opacity, magnifyFactor, this.screenWidth, this.screenHeight, this.nextCanvasRgb, this.nextCanvasScaledRgb);
-		ImageUtil.scale(opacity, magnifyFactor, this.screenWidth, this.screenHeight, second, secondScaled);
+		ImageUtil.scale(opacity, magnifyFactor, this.screenWidth, this.screenHeight, rgbSecondOriginal, rgbSecondScaled);
 		return true;
 	}
 	

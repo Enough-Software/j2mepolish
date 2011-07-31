@@ -74,11 +74,7 @@ import javax.microedition.lcdui.Image;
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  * @see #onShow(Style, Display, int, int, Displayable, Displayable, boolean)
  * @see #animate()
@@ -87,6 +83,16 @@ public abstract class ScreenChangeAnimation
 extends Canvas
 implements Runnable
 {
+	/**
+	 * A forward running animation
+	 */
+	protected static final int DIRECTION_FORWARD = 0;
+	/**
+	 * A backward running animation
+	 */
+	protected static final int DIRECTION_BACKWARD = 1;
+	protected static final long DEFAULT_DURATION = 400L;
+	
 	//#if (polish.useFullScreen || polish.useMenuFullScreen)
 		//#define tmp.useFullScreen
 	//#endif
@@ -111,6 +117,12 @@ implements Runnable
 	protected int lastContentY;
 	protected boolean supportsDifferentScreenSizes;
 	protected boolean abort = false;
+	/** duration of this animation */
+	protected long animationDuration = DEFAULT_DURATION;
+	/** The start time when onShow() was called and this animation started */
+	protected long startTime;
+	protected int animationForwardFunction = CssAnimation.FUNCTION_EXPONENTIAL_IN;
+	protected int animationBackwardFunction = CssAnimation.FUNCTION_EXPONENTIAL_OUT;
 	
 
 	/**
@@ -127,6 +139,7 @@ implements Runnable
 	/**
 	 * Starts the animation.
 	 * Please note that an animation can be re-used for several screens.
+	 * At the end of starting animation(long,long) is called before the painting starts.
 	 * 
 	 * @param style the associated style.
 	 * @param dsplay the display, which is used for setting this animation
@@ -204,7 +217,10 @@ implements Runnable
 			//#endif
 		}
 		this.isForwardAnimation = isForward;
+		this.startTime = System.currentTimeMillis();
 		setStyle( style );
+		// set default position:
+		animate(0, this.animationDuration);
 	}
 	
 	protected Image toImage(Displayable displayable, Screen nextScreen, Screen lastScreen, int width, int height) {
@@ -308,16 +324,63 @@ implements Runnable
 	 */
 	protected void setStyle(Style style)
 	{
-		// let subclasses override this
+		//#if polish.css.screen-change-animation-duration
+			Integer durationInt = style.getIntProperty("screen-change-animation-duration");
+			if (durationInt != null) {
+				this.animationDuration = durationInt.intValue();
+			}
+		//#endif
+		//#if polish.css.screen-change-animation-direction
+			Integer directionInt = style.getIntProperty("screen-change-animation-direction");
+			if (directionInt != null) {
+				this.isForwardAnimation = (directionInt.intValue() == DIRECTION_FORWARD);
+			}
+		//#endif
+		//#if polish.css.screen-change-animation-function-forward
+			Integer functionForwardInt = style.getIntProperty("screen-change-animation-function-forward");
+			if (functionForwardInt != null) {
+				this.animationForwardFunction = functionForwardInt.intValue();
+			}
+		//#endif
+		//#if polish.css.screen-change-animation-function-backward
+			Integer functionBackwardInt = style.getIntProperty("screen-change-animation-function-backward");
+			if (functionBackwardInt != null) {
+				this.animationBackwardFunction = functionBackwardInt.intValue();
+			}
+		//#endif
 	}
+	
+	/**
+	 * Helper method for calculating a point of the animation.
+	 * 
+	 * @param startValue the start value
+	 * @param endValue the end value
+	 * @param passedTime the passed time
+	 * @param duration the maximum time
+	 * @return the corresponding value
+	 */
+	protected int calculateAnimationPoint( int startValue, int endValue, long passedTime, long duration ) {
+		int function;
+		if (this.isForwardAnimation) {
+			function = this.animationForwardFunction;
+		} else {
+			function = this.animationBackwardFunction;
+		}
+		return CssAnimation.calculatePointInRange(startValue, endValue, passedTime, duration, function );
+	}
+
+	
 
 	/**
 	 * Animates this animation.
 	 * 
+	 * @param passedTime the passed time in milliseconds
+	 * @param duration the maximum duration of this animation
 	 * @return true when the animation should continue, when false is returned the animation
 	 *         will be stopped and the next screen will be shown instead.
+	 * @see #calculateAnimationPoint(int, int, long, long)
 	 */
-	protected abstract boolean animate();
+	protected abstract boolean animate(long passedTime, long duration);
 	
 	/**
 	 * Paints the animation.
@@ -553,7 +616,8 @@ implements Runnable
 	 */
 	public void run() {
 		try {
-			if (this.nextCanvas != null && animate() && !this.abort) {
+			long passedTime = System.currentTimeMillis() - this.startTime;
+			if (this.nextCanvas != null && animate(passedTime, this.animationDuration) && !this.abort) {
 				repaint();
 			} else {
 				//#debug
@@ -575,7 +639,7 @@ implements Runnable
 					//Displayable current = disp.getCurrent();
 					//if (current == this && next != null) {
 					if (next != null) {
-						disp.setCurrent( next );
+						disp.setCurrent( next, false, null );
 					}
 				}
 			}
@@ -585,7 +649,7 @@ implements Runnable
 			Display disp = this.display;
 			Displayable next = this.nextDisplayable;
 			if (disp != null && next != null) {
-				disp.setCurrent( next );
+				disp.setCurrent( next, false, null );
 			}
 		}
 	}

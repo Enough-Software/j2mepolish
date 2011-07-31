@@ -17,7 +17,6 @@ import javax.microedition.m3g.World;
 import de.enough.polish.graphics3d.m3g.nodes.TexturePlane;
 import de.enough.polish.graphics3d.m3g.utils.UtilitiesM3G;
 
-import de.enough.polish.ui.AnimationThread;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.ScreenChangeAnimation;
@@ -28,7 +27,7 @@ import de.enough.polish.ui.Style;
  * <p>
  * Renders in retained mode.
  * <p>
- * Note: steps are taken to accommodate the blocking delay that occours when Image2D are created
+ * Note: steps are taken to accommodate the blocking delay that occurs when Image2D are created
  * 
  * @author Anders Bo Pedersen, anders@wicore.dk
  */
@@ -46,24 +45,38 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     
     protected boolean rotateDirection = false; 
     protected float rotateYAngle = .0f;
-    protected float degreesPerSec = 180; //rotation speed
-    protected float degreesPerFrame = .0f; //rotation speed
+//    protected float degreesPerSec = 180; //rotation speed
+//    protected float degreesPerFrame = .0f; //rotation speed
     protected float scaleFactor = .0f;
     
     private boolean doneSwitch = false;
     private volatile boolean initializedNewTexplane = false;
+
+	private int lastDegreesValue;
     
-	protected boolean animate()
-	{
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
+	 */
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
+		}
 		Node child = texPlaneRoot.getChild(0);
 		
 		//candidate for new angle in next frame
-		float newAngle = this.rotateYAngle - this.degreesPerFrame;
+		int startValue = 0;
+		int endValue = 180*100;
+		int lastValue = this.lastDegreesValue;
+		int nextValue = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		this.lastDegreesValue = nextValue;
+		float degreeFrame = (float)(lastValue - nextValue) / 100f;
+		float newAngle = this.rotateYAngle - degreeFrame; //this.degreesPerFrame;
 		
-		if(newAngle < -89f && !this.doneSwitch)
+		if (newAngle < -89f && !this.doneSwitch)
 		{
 			//is state correct and has 2nd textureplane been initialized?
-	    	if(child == texMatrixOne && this.initializedNewTexplane)
+	    	if (child == texMatrixOne && this.initializedNewTexplane)
 	    	{
 	    		texPlaneRoot.removeChild(texMatrixOne);
 	    		texPlaneRoot.addChild(child = texMatrixTwo);
@@ -72,29 +85,35 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
 	    		
 	    		this.doneSwitch = true;
 	    	}
-	    	else
+	    	else 
+	    	{
 	    		newAngle = -90f;
+	    	}
 		}
 		else
-		//is animation complete?
-		if(this.doneSwitch && newAngle < 0.001f)
 		{
-			this.rotateYAngle = .0f;
-			if(null != texMatrixOne)
-				texMatrixOne.setOrientation(this.rotateYAngle, 0f, 1f, 0f);
-			if(null != texMatrixTwo)
-				texMatrixTwo.setOrientation(this.rotateYAngle, 0f, 1f, 0f);
-			return false;
+			//is animation complete?
+			if (this.doneSwitch && newAngle < 0.001f)
+			{
+				this.rotateYAngle = .0f;
+				if (null != texMatrixOne) {
+					texMatrixOne.setOrientation(this.rotateYAngle, 0f, 1f, 0f);
+				}
+				if (null != texMatrixTwo) {
+					texMatrixTwo.setOrientation(this.rotateYAngle, 0f, 1f, 0f);
+				}
+				return false;
+			}
 		}
 		
 		this.rotateYAngle = newAngle;
 		
-		//#debug debug
+		//#debug
 		System.out.println("this.rotateYAngle: "+this.rotateYAngle);
 		
-		if(null != child)
+		if(null != child) {
 			child.setOrientation(this.rotateYAngle, 0f, 1f, 0f);
-		
+		}
 		return true;
 	}
 
@@ -115,13 +134,14 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#onShow(de.enough.polish.ui.Style, de.enough.polish.ui.Display, int, int, de.enough.polish.ui.Displayable, de.enough.polish.ui.Displayable, boolean)
+	 */
 	protected void onShow(Style style, Display dsplay, int width, int height,
 			Displayable lstDisplayable, Displayable nxtDisplayable,
 			boolean isForward) 
 	{
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable,
-				isForward);
-		
     	//#mdebug debug
     	try 
     	{
@@ -135,7 +155,7 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     	
     	this.rotateYAngle = .0f;
     	
-    	this.degreesPerFrame = this.degreesPerSec * ((float)AnimationThread.ANIMATION_INTERVAL/1000f);
+    	//this.degreesPerFrame = this.degreesPerSec * ((float)AnimationThread.ANIMATION_INTERVAL/1000f);
     	
     	if(null == this.g3d)
     		this.g3d = Graphics3D.getInstance();
@@ -169,12 +189,12 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     			// default surface specs
     			final Material planeMaterial = new Material();
     			
-    			// Plane polygn mode, ensure precise rendering of texture surface
+    			// Plane polygon mode, ensure precise rendering of texture surface
     			final PolygonMode polymode = new PolygonMode();
     			polymode.setShading(PolygonMode.SHADE_FLAT);
     			polymode.setPerspectiveCorrectionEnable(true);
     			
-    			//create Plane apperance
+    			//create Plane appearance
     			final Appearance appearance = new Appearance();
     			appearance.setMaterial(planeMaterial);
     			appearance.setPolygonMode(polymode);
@@ -189,7 +209,7 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     			
     			scene.setActiveCamera(cam);
     			
-    			//load in seperate thread to avoid blocking
+    			//load in separate thread to avoid blocking
     			this.initializedNewTexplane = false;
     			new Thread()
     			{
@@ -217,7 +237,7 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     			
     			texMatrixOne.setTexture(this.lastCanvasImage);
     			
-    			//load in seperate thread to avoid blocking
+    			//load in separate thread to avoid blocking
     			this.initializedNewTexplane = false;
     			new Thread()
     			{
@@ -244,8 +264,9 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
    		this.scaleFactor = baseScale * ratioScale * cameraDistanceScaleFactor;
    		
     	texMatrixOne.setScale( this.scaleFactor, this.scaleFactor, 1f);
-    	if(null != texMatrixTwo)
+    	if(null != texMatrixTwo) {
     		texMatrixTwo.setScale( this.scaleFactor, this.scaleFactor, 1f);
+    	}
     	
    		//#mdebug debug
 	    	
@@ -258,5 +279,9 @@ public class RotatingScreenM3GScreenChangeAnimation extends ScreenChangeAnimatio
     		e.printStackTrace();
 		}
     	//#enddebug
+    	
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable,
+				isForward);
+		
 	}
 }

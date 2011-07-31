@@ -22,8 +22,6 @@ public class RainScreenChangeAnimation extends ScreenChangeAnimation {
 	private int[] scaleableHeight;
 	private int[] scaleableWidth;
  	//the scale from the row
-//	//kann nachher weg nur zum testen
-//	private boolean first = true;
 	
 	public RainScreenChangeAnimation() {
 		super();
@@ -56,59 +54,19 @@ public class RainScreenChangeAnimation extends ScreenChangeAnimation {
 				this.down[i] = height;
 			}
 			this.rgbData = new int [size];
-			super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 			System.arraycopy( this.lastCanvasRgb, 0, this.rgbData, 0, size );
+			super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
 	
 	
-	protected boolean animate() {
-//		// TODO Auto-generated method stub
-//		this.cubeEffect();
-//		int row = 0,column = 0;
-//		int length = this.rgbData.length-1;
-//		int sH,c,scalePercentH,scalePercentWidth,r,newI,sW = 0,left = 0,right = this.screenWidth;
-//		scalePercentWidth = this.screenWidth;
-//		for(int i = 0; i < length;i++){
-//			row = (row + 1) % this.screenWidth;
-//			if(row == 0){
-//				column++;	
-//				left = this.left[column];
-//				right = this.right[column];
-//				sW = this.scaleableWidth[column];
-//				scalePercentWidth = ((sW*100) / this.screenWidth);
-//			}
-//			sH = this.scaleableHeight[row];
-//			
-//			if(left > row || right < row || this.down[row] < column || this.up[row] > column){
-//				this.rgbData[i] = this.rgbbuffer[i];
-//			}
-//			else{
-//				c = column - (this.screenHeight - sH);
-//				if(c < 1)c++;
-//				scalePercentH = (((this.screenHeight-((this.screenHeight-sH)))*100)/this.screenHeight);
-//				this.row = left + ((this.screenWidth - right)/this.screenWidth);
-//				if(this.row <= row){
-//					r = row - this.row;
-//					scalePercentWidth = (sW*100) / this.screenWidth;
-//				}else{
-//					r = row;
-//					scalePercentWidth = (this.row*100) / this.screenWidth;
-//				}
-//				
-////				if(r < 1)r++;
-////				if(sW < 1)sW++;
-//				scalePercentWidth = (((this.screenWidth-((this.screenWidth-sW)))*100)/this.screenWidth);
-//				if(scalePercentWidth < 1)scalePercentWidth++;
-//				if(scalePercentH < 1)scalePercentH++;
-//				newI = ((r*100)/scalePercentWidth)+(this.screenWidth * ((c*100)/scalePercentH));
-//				if(newI >= length)newI = length;
-//				if(newI < 0)newI = 0;
-//
-//				this.rgbData[i] = this.lstrgbbuffer[newI];
-//			}
-		// TODO Auto-generated method stub
-		this.cubeEffect();
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
+	 */
+	protected boolean animate(long passedTime, long duration) {
+		cubeEffect();
 		int length = this.rgbData.length-1;
 		int sH,c,scalePercentH,scalePercentWidth,r,newI,sW = 0,left = 0,right = this.screenWidth;
 		scalePercentWidth = this.screenWidth;
@@ -154,7 +112,9 @@ public class RainScreenChangeAnimation extends ScreenChangeAnimation {
 
 		}
 		
-		if(this.scaleableHeight[this.scaleableHeight.length-1] <= 0)this.stillRun = false;
+		if(this.scaleableHeight[this.scaleableHeight.length-1] <= 0) {
+			this.stillRun = false;
+		}
 		return this.stillRun;
 	}
 	

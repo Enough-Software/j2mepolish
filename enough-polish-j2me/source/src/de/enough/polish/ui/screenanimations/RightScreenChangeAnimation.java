@@ -39,25 +39,17 @@ import de.enough.polish.ui.Style;
  * <pre>
  * .myAlert {
  * 		screen-change-animation: right;
- * 		right-screen-change-animation-speed: 4; ( -1 is default )
  * 		right-screen-change-animation-move-previous: true; ( false is default )
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class RightScreenChangeAnimation extends ScreenChangeAnimation {
 	
 	private int currentX;
-	//#if polish.css.right-screen-change-animation-speed
-		private int speed = -1;
-	//#endif
 	//#if polish.css.right-screen-change-animation-move-previous
 		private boolean movePrevious;
 	//#endif
@@ -71,25 +63,13 @@ public class RightScreenChangeAnimation extends ScreenChangeAnimation {
 	}
 
 
+	//#if polish.css.right-screen-change-animation-move-previous
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
 		super.setStyle(style);
-		if (this.isForwardAnimation) {
-			this.currentX = this.screenWidth;
-		} else {
-			this.currentX = 0; 
-		}
-		//#if polish.css.right-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty( "right-screen-change-animation-speed" );
-			if (speedInt != null ) {
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
 		//#if polish.css.right-screen-change-animation-move-previous
 			Boolean movePreviousBool = style.getBooleanProperty("right-screen-change-animation-move-previous");
 			if (movePreviousBool != null) {
@@ -99,35 +79,26 @@ public class RightScreenChangeAnimation extends ScreenChangeAnimation {
 			}
 		//#endif
 	}
+	//#endif
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		int adjust;
-		//#if polish.css.right-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust =  this.speed;
-			} else {
-		//#endif
-				adjust = this.currentX / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.right-screen-change-animation-speed
-			}
-		//#endif
-		if (this.isForwardAnimation) {
-			if (this.currentX > 0) {
-				this.currentX -= adjust;
-				return true;
-			}
-		} else if (this.currentX < this.screenWidth) {
-			this.currentX += adjust;
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		return false;
+		int startValue, endValue;
+		if (this.isForwardAnimation) {
+			startValue = this.screenWidth;
+			endValue = 0;
+		} else  {
+			startValue = 0;
+			endValue = this.screenWidth;
+		}
+		this.currentX = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		return true;
 	}
 
 	/* (non-Javadoc)

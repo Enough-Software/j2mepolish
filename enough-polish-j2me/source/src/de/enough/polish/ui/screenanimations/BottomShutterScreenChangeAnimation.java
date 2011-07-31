@@ -30,25 +30,19 @@ package de.enough.polish.ui.screenanimations;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import de.enough.polish.ui.Color;
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
 
 /**
  * <p>Moves the new screen from the bottom to the front.</p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        31-May-2005 - mkoch creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Michael Koch, michael@enough.de
  */
 public class BottomShutterScreenChangeAnimation extends ScreenChangeAnimation
 {	
 	private int currentY;
-	//#if polish.css.bottom-shutter-screen-change-animation-speed
-	private int speed = -1;
-	//#endif
 	//#if polish.css.bottom-shutter-screen-change-animation-color
 	private int color = 0;
 	//#endif
@@ -61,67 +55,41 @@ public class BottomShutterScreenChangeAnimation extends ScreenChangeAnimation
 		// Do nothing here.
 	}
 	
+	//#if polish.css.bottom-shutter-screen-change-animation-color
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
-		if (this.isForwardAnimation) {
-			this.currentY = this.screenHeight;
-		} else {
-			this.currentY = 0;
-		}
-		//#if polish.css.bottom-shutter-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty("bottom-shutter-screen-change-animation-speed");
-			if (speedInt != null)
-			{
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
 		//#if polish.css.bottom-shutter-screen-change-animation-color
-			Integer colorInt = style.getIntProperty("bottom-shutter-screen-change-animation-color");
+			Color colorInt = (Color) style.getObjectProperty("bottom-shutter-screen-change-animation-color");
 			if (colorInt != null)
 			{
-				this.color = colorInt.intValue();
+				this.color = colorInt.getColor();
 			}
 		//#endif
 		super.setStyle(style);
 	}
+	//#endif
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
-		int adjust;
-		//#if polish.css.bottom-shutter-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust = this.speed;
-			} else {
-		//#endif
-				adjust = this.currentY / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.bottom-shutter-screen-change-animation-speed
-			}
-		//#endif			
-		
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
+		}
+		int startValue, endValue;
 		if (this.isForwardAnimation) {
-			if (this.currentY > 0)
-			{
-				this.currentY -= adjust;
-				return true;
-			}
+			startValue = this.screenHeight;
+			endValue = 0;
+		} else {
+			startValue = 0;
+			endValue = this.screenHeight;
 		}
-		else if (this.currentY < this.screenHeight)
-		{
-			this.currentY += adjust;
-			return true;
-		}
-		return false;
+		this.currentY = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -140,9 +108,9 @@ public class BottomShutterScreenChangeAnimation extends ScreenChangeAnimation
 		}
 		g.drawImage(first, 0, 0, Graphics.TOP | Graphics.LEFT);
 		//#if polish.css.bottom-shutter-screen-change-animation-color
-		g.setColor(this.color);
+			g.setColor(this.color);
 		//#else
-		g.setColor(0);
+			g.setColor(0);
 		//#endif
 		g.drawLine(0, this.currentY - 1, this.screenWidth, this.currentY - 1);
 		g.setClip(0, this.currentY, this.screenWidth, this.screenHeight - this.currentY);

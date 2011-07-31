@@ -42,7 +42,7 @@ public class CageScreenChangeAnimation extends ScreenChangeAnimation {
 		this.useNextCanvasRgb = true;
 	}
 	
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
 		boolean doSwitchRow = true;
 		int column = 0;
 		for(int i = 0; i < this.lastCanvasRgb.length;i++){		

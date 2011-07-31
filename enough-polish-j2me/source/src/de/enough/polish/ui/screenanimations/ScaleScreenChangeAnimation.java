@@ -30,6 +30,7 @@ package de.enough.polish.ui.screenanimations;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
@@ -38,20 +39,13 @@ import de.enough.polish.util.ImageUtil;
 /**
  * <p>Magnifies the new screen.</p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ScaleScreenChangeAnimation extends ScreenChangeAnimation {
-	private int scaleFactor = 60;
-	private int steps = 6;
-	private int currentStep;
-	private int[] nextScreenRgb;
-	private boolean scaleDown;
+	private int scaleFactor = 10;
 	private int[] scaledScreenRgb;
+	private int currentScaleFactor;
 
 	/**
 	 * Creates a new animation 
@@ -67,40 +61,42 @@ public class ScaleScreenChangeAnimation extends ScreenChangeAnimation {
 	protected void onShow(Style style, Display dsplay, int width, int height,
 			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
 	{
+		if (isForward) {
+			this.useLastCanvasRgb = false;
+			this.useNextCanvasRgb = true;			
+		} else {
+			this.useLastCanvasRgb = true;
+			this.useNextCanvasRgb = false;
+		}
+		this.scaledScreenRgb = new int[ width * height ];
 		super.onShow(style, dsplay, width, height, lstDisplayable,
 				nxtDisplayable, isForward );
-		this.nextScreenRgb = new int[ width * height ];
-		this.nextCanvasImage.getRGB( this.nextScreenRgb, 0, width, 0, 0, width, height );
-		this.scaledScreenRgb = new int[ width * height ];
-		System.arraycopy(this.nextScreenRgb, 0, this.scaledScreenRgb, 0, width * height );
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		int step = this.currentStep;
-		if (this.scaleDown) {
-			step--;
-			if (step <= 0) {
-				// set default values:
-				this.scaleFactor = 200;
-				this.currentStep = 0;
-				this.nextScreenRgb = null;
-				this.scaledScreenRgb = null;
-				this.scaleDown = false;
-				return false;
-			}
-		} else {
-			step++;
-			if (step > this.steps) {
-				this.scaleDown = true;
-				return true;
-			}
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.scaledScreenRgb = null;
+			return false;
 		}
-		this.currentStep = step;
-		int factor = 100 + ( this.scaleFactor * step ) / this.steps; 
-		ImageUtil.scale(factor, this.screenWidth, this.screenHeight, this.nextScreenRgb, this.scaledScreenRgb );
+		int startValue, endValue;
+		int[] rgb;
+		if (this.isForwardAnimation) {
+			startValue = this.scaleFactor;
+			endValue = 100;
+			rgb = this.nextCanvasRgb;
+		} else {
+			startValue = 100;
+			endValue = this.scaleFactor;
+			rgb = this.lastCanvasRgb;
+		}
+		
+		int factor = calculateAnimationPoint(startValue, endValue, passedTime, duration); 
+		ImageUtil.scale(factor, this.screenWidth, this.screenHeight, rgb, this.scaledScreenRgb );
+		this.currentScaleFactor = factor;
 		
 		return true;
 	}
@@ -109,6 +105,16 @@ public class ScaleScreenChangeAnimation extends ScreenChangeAnimation {
 	 * @see javax.microedition.lcdui.Canvas#paint(javax.microedition.lcdui.Graphics)
 	 */
 	public void paintAnimation(Graphics g) {
+		Image img;
+		if (this.isForwardAnimation) {
+			img = this.lastCanvasImage;
+		} else {
+			img = this.nextCanvasImage;
+		}
+		g.drawImage(img, 0, 0, Graphics.TOP | Graphics.LEFT);
+        final int targetWidth = (this.screenWidth * this.currentScaleFactor) / 100;
+        final int targetHeight = (this.screenHeight * this.currentScaleFactor) / 100;
+        g.clipRect( (this.screenWidth - targetWidth)/2, (this.screenHeight - targetHeight)/2, targetWidth, targetHeight );
 		g.drawRGB(this.scaledScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight, false );
 	}
 

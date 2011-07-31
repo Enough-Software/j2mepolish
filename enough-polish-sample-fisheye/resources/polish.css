@@ -174,11 +174,6 @@ focused {
 	padding-top: 1px;
 	view-type: none;
 	layout: horizontal-shrink | vertical-shrink | horizontal-center | vertical-center;
-	background {
-		type: layer;
-		layers: alertTop, alertBg;
-		margins: 10px, 0px;
-	}
 	repaint-previous-screen: true;
 	overlay-background: alertOverlay;
 	title-style: messageAlertTitle;
@@ -188,6 +183,11 @@ focused {
 	//#else
 		screen-change-animation: right;
 	//#endif
+	background {
+		type: layer;
+		layers: alertTop, alertBg;
+		margins: 10px, 0px;
+	}
 }
 
 .messageAlertTitle {

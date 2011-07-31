@@ -47,17 +47,11 @@ import de.enough.polish.util.ImageUtil;
  * </pre>
  * </p>
  *
- * <p>Copyright (c) 2009 Enough Software</p>
- * <pre>
- * history
- *        28-July-2007 - rob creation
- * </pre>
+ * <p>Copyright (c) 2009 - 2011 Enough Software</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ParticleScreenChangeAnimation extends ScreenChangeAnimation {
-	private int scaleFactor = 260;
-	private int steps = 10;
-	private int currentStep;
+	private int scaleFactor = 460;
 	private int[] scaledScreenRgb;
 
 	/**
@@ -75,49 +69,41 @@ public class ParticleScreenChangeAnimation extends ScreenChangeAnimation {
 			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
 	{
 		if (isForward) {
-			this.currentStep = 0;
 			this.useLastCanvasRgb = true;
 			this.useNextCanvasRgb = false;
 		} else {
-			this.currentStep = 10;
 			this.useLastCanvasRgb = false;
 			this.useNextCanvasRgb = true;
 		}
+		this.scaledScreenRgb = new int[ width * height ];
 		super.onShow(style, dsplay, width, height, lstDisplayable,
 				nxtDisplayable, isForward );
-		this.scaledScreenRgb = new int[ width * height ];
-		if (isForward) {
-			System.arraycopy( this.lastCanvasRgb, 0, this.scaledScreenRgb, 0,  width * height );
-		} else {
-			animate();
-		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.scaledScreenRgb = null;
+			return false;
+		}
 		int[] originalRgb;
+		int startFactor, endFactor;
 		if (this.isForwardAnimation) {
-			this.currentStep++;
-			if (this.currentStep >= this.steps) {
-	//			this.scaleFactor = 260;
-	//			this.steps = 10;
-	//			this.currentStep = 0;
-				this.scaledScreenRgb = null;
-				return false;
-			}
+			startFactor = 100;
+			endFactor = this.scaleFactor;
 			originalRgb = this.lastCanvasRgb;
-		} else {
-			this.currentStep--;
-			if (this.currentStep <= 0) {
-				this.scaledScreenRgb = null;
-				return false;
-			}
+		} else  {
+			startFactor = this.scaleFactor;
+			endFactor = 100;
 			originalRgb = this.nextCanvasRgb;
 		}
+		
 		// increase factor similar to exponential:
-		int factor = 100 + (this.scaleFactor - 100) * (this.currentStep * this.currentStep) / ( (this.steps - 1) * (this.steps - 1));
+		int factor = calculateAnimationPoint(startFactor, endFactor, passedTime, duration);
 		// linear scale:
 		//int factor = 100 + (this.scaleFactor - 100) * this.currentStep / (this.steps - 1);
 		ImageUtil.particleScale(factor, this.screenWidth, this.screenHeight, originalRgb, this.scaledScreenRgb);

@@ -42,14 +42,13 @@ import de.enough.polish.ui.Style;
  * .myAlert {
  * 		//#if polish.midp2
  * 			screen-change-animation: fadeOutFadeIn;
- * 			fadeOutFadeIn-screen-change-animation-steps: 4; (6 is default)
  * 			fadeOutFadeIn-screen-change-animation-background-color: white;  (black is default)
  * 		//#endif
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) 2009 Enough Software</p>
+ * <p>Copyright (c) 2009 - 2011 Enough Software</p>
  * <pre>
  * history
  *        15-April-2007 - rob creation
@@ -57,11 +56,10 @@ import de.enough.polish.ui.Style;
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class FadeOutFadeInScreenChangeAnimation extends ScreenChangeAnimation {
-	private int steps = 6;
 	private int backgroundColor = 0;
-	private int currentStep;
 	private int[] shownScreenRgb;
 	private boolean isFadingPreviousScreen;
+	private int currentOpacity;
 
 	/**
 	 * Creates a new animation 
@@ -77,12 +75,6 @@ public class FadeOutFadeInScreenChangeAnimation extends ScreenChangeAnimation {
 	protected void onShow(Style style, Display dsplay, int width, int height,
 			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
 	{
-		//#if polish.css.fadeOutFadeIn-screen-change-animation-steps
-			Integer stepsInt = style.getIntProperty("fade-screen-change-animation-steps");
-			if (stepsInt != null) {
-				this.steps = stepsInt.intValue();
-			}
-		//#endif
 		//#if polish.css.fadeOutFadeIn-screen-change-animation-background-color
 			Color color = style.getColorProperty("fadeOutFadeIn-screen-change-animation-background-color");
 			if (color != null) {
@@ -92,47 +84,38 @@ public class FadeOutFadeInScreenChangeAnimation extends ScreenChangeAnimation {
 		if ( this.shownScreenRgb == null ) {
 			this.shownScreenRgb = new int[ width * height ];
 		}
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
-		//nxtScreenImage.getRGB( this.shownScreenRgb, 0, width, 0, 0, width, height );
-		this.lastCanvasImage.getRGB( this.shownScreenRgb, 0, width, 0, 0, width, height );
 		this.isFadingPreviousScreen = true;
-		//addOpacity( 255/this.steps, this.shownScreenRgb );
-		this.currentStep = 0;
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
+		this.lastCanvasImage.getRGB( this.shownScreenRgb, 0, width, 0, 0, width, height );
 		
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		this.currentStep++;
-		if (this.isFadingPreviousScreen) {
-			if (this.currentStep >= this.steps) {
-				this.nextCanvasImage.getRGB( this.shownScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight );
-				addOpacity( 255/(this.steps+1), this.shownScreenRgb );
-				this.currentStep = 0;
-				this.isFadingPreviousScreen = false;
-			} else {
-				int opacity = (255 * (this.steps - this.currentStep) )  / this.steps;
-				addOpacity( opacity, this.shownScreenRgb );
-			}
-			return true;
-		} else {
-			if (this.currentStep >= this.steps) {
-				//this.steps = 10;
-				this.currentStep = 0;
-				this.shownScreenRgb = null;
-				this.isFadingPreviousScreen = true;
-				return false;
-			}
-			int opacity = (255 * this.currentStep )  / this.steps;
-			addOpacity( opacity, this.shownScreenRgb );
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
+		if (this.isFadingPreviousScreen) {
+			if (passedTime <= duration/2) {
+				this.currentOpacity = calculateAnimationPoint(255, 0, passedTime, duration/2);
+			} else {
+				this.isFadingPreviousScreen = false;
+				this.nextCanvasImage.getRGB( this.shownScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight );
+				this.currentOpacity = calculateAnimationPoint(0, 255, passedTime - duration/2, duration/2);
+			}
+		} else {
+			this.currentOpacity = calculateAnimationPoint(0, 255, passedTime - duration/2, duration/2);
+		}
+		//#if !polish.blackberry
+			addOpacity(this.currentOpacity, this.shownScreenRgb);
+		//#endif
+		return true;
 	}
 	
-	
-
+	//#if !polish.blackberry
 	/**
 	 * Adds the specified opacity to the RGB data.
 	 * 
@@ -145,6 +128,7 @@ public class FadeOutFadeInScreenChangeAnimation extends ScreenChangeAnimation {
 			data[i] = (data[i] | 0xff000000) & opacity;
 		}
 	}
+	//#endif
 
 
 	/* (non-Javadoc)
@@ -153,7 +137,21 @@ public class FadeOutFadeInScreenChangeAnimation extends ScreenChangeAnimation {
 	public void paintAnimation(Graphics g) {
 		g.setColor( this.backgroundColor );
 		g.fillRect( 0, 0, this.screenWidth, this.screenHeight );
-		g.drawRGB(this.shownScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight, true );
+		//#if polish.blackberry
+			net.rim.device.api.ui.Graphics bbGraphics = null;
+			//# bbGraphics = g.g;
+			bbGraphics.setGlobalAlpha( this.currentOpacity );
+			net.rim.device.api.system.Bitmap bitmap = null;
+			if (this.isFadingPreviousScreen) {
+				//# bitmap = this.lastCanvasImage.getBitmap();
+			} else {
+				//# bitmap = this.nextCanvasImage.getBitmap();
+			}
+			bbGraphics.drawBitmap(0, 0, this.screenWidth, this.screenHeight, bitmap, 0, 0 ); 
+			bbGraphics.setGlobalAlpha( 0xff ); // reset to fully opaque
+		//#else
+			g.drawRGB(this.shownScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight, true );
+		//#endif
 	}
 
 }

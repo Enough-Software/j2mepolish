@@ -44,11 +44,7 @@ import de.enough.polish.util.DrawUtil;
  * </pre>
  * </p>
  *
- * <p>Copyright Enough Software 2007 - 2010</p>
- * <pre>
- * history
- *        Apr 15, 2007 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class BwToColorScreenChangeAnimation 
@@ -56,8 +52,6 @@ extends ScreenChangeAnimation
 {
 	
 	private int[] currentScreenRgb;
-	private int steps = 5;
-	private int currentStep;
 
 	/**
 	 * Creates a new animation.
@@ -74,49 +68,38 @@ extends ScreenChangeAnimation
 	{
 		super.setStyle(style);
 		this.currentScreenRgb = new int[ this.screenWidth * this.screenHeight ];
-		// render a black and white version out of the nextScreenRgb array:
-		int color,red,green,blue;
-		for(int i = 0;i < this.currentScreenRgb.length;i++){
-			color = this.nextCanvasRgb[i];			
-			red = (0x00FF & (color >>> 16));	
-			green = (0x0000FF & (color >>> 8));
-			blue = color & (0x000000FF );
-			int brightness = (red + green + blue) / 3;
-			if ( brightness > 127 ) {
-				this.currentScreenRgb[i] = 0xFFFFFF;
-			} else {
-				this.currentScreenRgb[i] = 0x000000;
-			}
-		}
-		this.currentStep = 0;
 	}
 
-
-	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		if (this.currentStep < this.steps) {
-			int currentColor;
-			int targetColor;
-			int permille = 1000 * this.currentStep / this.steps;
-			for (int i = 0; i < this.currentScreenRgb.length; i++) {
-				currentColor = this.currentScreenRgb[i];
-				targetColor = this.nextCanvasRgb[i];
-				if (currentColor != targetColor) {
-					this.currentScreenRgb[i] = DrawUtil.getGradientColor(currentColor, targetColor, permille );
-				}
-			}
-			this.currentStep++;
-			return true;
-		} else {
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
 			this.currentScreenRgb = null;
 			this.nextCanvasRgb = null;
-			this.currentStep = 0;
 			return false;
 		}
-	
+		int startColor;
+		int targetColor;
+		int permille = calculateAnimationPoint(0, 1000, passedTime, duration);
+		int red,green,blue;
+		for (int i = 0; i < this.currentScreenRgb.length; i++) {
+			targetColor = this.nextCanvasRgb[i];
+			red = (0x00FF & (targetColor >>> 16));	
+			green = (0x0000FF & (targetColor >>> 8));
+			blue = targetColor & (0x000000FF );
+			int brightness = (red + green + blue) / 3;
+			if (brightness > 127) {
+				startColor = 0xffffff;
+			} else {
+				startColor = 0x000000;
+			}
+			if (startColor != targetColor) {
+				this.currentScreenRgb[i] = DrawUtil.getGradientColor(startColor, targetColor, permille );
+			}
+		}
+		return true;
 	}
 
 	

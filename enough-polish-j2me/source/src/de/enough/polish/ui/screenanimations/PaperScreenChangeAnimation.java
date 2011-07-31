@@ -61,9 +61,11 @@ public class PaperScreenChangeAnimation extends ScreenChangeAnimation {
 			super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
-	protected boolean animate() {
-		// TODO Auto-generated method stub
-		boolean Rowswitch = true;
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
+	 */
+	protected boolean animate(long passedTime, long duration) {
 		int row = 0;
 		for(int i = 0; i < this.lastCanvasRgb.length;i++){		
 			if(row <= this.row && this.scaleableHeight[row] !=0){
@@ -72,7 +74,9 @@ public class PaperScreenChangeAnimation extends ScreenChangeAnimation {
 			row = (row + 1) % this.width;
 		}
 		this.row+=4;
-		if(this.row >= this.width)this.stillRun=false;
+		if(this.row >= this.width) {
+			this.stillRun=false;
+		}
 		return this.stillRun;
 	}
 

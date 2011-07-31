@@ -581,20 +581,7 @@ public class Display
 	//#if polish.Bugs.noSoftKeyReleasedEvents
 		private boolean isIgnoreReleasedEvent;
 	//#endif
-	//#if polish.ScreenChangeAnimation.forward:defined
-		//#if false
-			private static ScreenChangeAnimation forwardAnimation;
-			private static ScreenChangeAnimation backwardAnimation;			
-		//#endif
-		//#= private static ScreenChangeAnimation forwardAnimation = ${polish.ScreenChangeAnimation.forward};
-		//#if polish.ScreenChangeAnimation.back:defined
-			//#= private static ScreenChangeAnimation backwardAnimation = ${polish.ScreenChangeAnimation.back};
-		//#elif polish.ScreenChangeAnimation.backward:defined
-			//#= private static ScreenChangeAnimation backwardAnimation = ${polish.ScreenChangeAnimation.backward};
-		//#else
-			//#abort You need to define the polish.ScreenChangeAnimation.backward screen change animation as well, when you define the forward animation!
-		//#endif
-	//#endif
+
 	//#if tmp.screenOrientation && polish.hasPointerEvents
 		private final Point pointerEventPoint;
 	//#endif
@@ -945,10 +932,95 @@ public class Display
 	 * screen, regardless of whether <code>setCurrent()</code> has
 	 * been delayed. </p>
 	 * 
-	 * @param nextDisplayable - the Displayable requested to be made current; null is allowed
+	 * @param nextDisplayable the Displayable requested to be made current; null is allowed
 	 * @see #getCurrent()
 	 */
 	public void setCurrent( Displayable nextDisplayable)
+	{
+		Style screenTransitionStyle = null;
+		boolean isTransitionForward = true;
+		//#if tmp.screenTransitions
+			try {
+				Screen nextScreen = null;
+				if ( nextDisplayable instanceof Screen ) {
+					nextScreen = (Screen) nextDisplayable;
+				}
+				ScreenChangeAnimation screenAnimation = null;
+	
+				Screen lastScreen = null;
+
+				//#ifdef polish.useDynamicStyles
+					// check if the next screen has got a style:
+					if (nextScreen != null && nextScreen.style == null) {
+						nextScreen.cssSelector = nextScreen.createCssSelector();
+						nextScreen.setStyle( StyleSheet.getStyle( nextScreen ) );
+					}
+				//#endif
+				if (nextScreen != null && nextScreen.style != null && nextScreen.enableScreenChangeAnimation) {
+					screenTransitionStyle = nextScreen.style;
+					screenAnimation = (ScreenChangeAnimation) screenTransitionStyle.getObjectProperty("screen-change-animation");
+				}
+				Displayable lastDisplayable = this.currentDisplayable;
+				if (lastDisplayable != null && (lastDisplayable instanceof ScreenChangeAnimation) ) {
+					//#debug
+					System.out.println("StyleSheet: last displayable is a ScreenChangeAnimation" );
+					lastDisplayable = ((ScreenChangeAnimation) lastDisplayable).nextDisplayable;
+				}
+				if (lastDisplayable != null && lastDisplayable instanceof Screen) {
+					//#debug
+					System.out.println("StyleSheet: last displayble is a Screen");
+					lastScreen = (Screen) lastDisplayable;
+					Command lastCommand = lastScreen.lastTriggeredCommand;
+					if (lastCommand != null && (lastCommand.getCommandType() == Command.BACK  || lastCommand.getCommandType() == Command.CANCEL) ) {
+						isTransitionForward = false;
+					}
+					if ( (screenAnimation == null || !isTransitionForward || lastScreen instanceof Alert) 
+							&& (lastScreen.style != null)
+							&& (lastScreen.enableScreenChangeAnimation)
+					) {
+						ScreenChangeAnimation animation = (ScreenChangeAnimation) lastScreen.style.getObjectProperty("screen-change-animation");
+						if (screenAnimation == null || animation != null) {
+							screenTransitionStyle = lastScreen.style;
+							isTransitionForward = false;
+						} else {
+							isTransitionForward = true;
+						}
+						//#debug
+						System.out.println("StyleSheet: Using screen animation of last screen");
+					}
+				}
+
+			} catch (Exception e) {
+				//#debug error
+				System.out.println("Screen: unable to start screen change animation" + e );
+			}
+		//#endif
+		setCurrent( nextDisplayable, isTransitionForward, screenTransitionStyle );
+	}
+	
+	/**
+	 * Same as setCurrent(Displayable) but additionally allows you to specify a screen-change-animation that is played forward by default.
+	 * Typical usage is with the #style preprocessing directive:
+	 * <pre>
+	 * //#style nextTransition
+	 * display.setCurrent( nextScreen );
+	 * </pre> 
+	 * @param nextDisplayable the next displayable
+	 * @param screenTransitionStyle a style that should contain at least the 'screen-change-animation' CSS attribute.
+	 */
+	public void setCurrent( Displayable nextDisplayable, Style screenTransitionStyle)
+	{
+		setCurrent(nextDisplayable, true, screenTransitionStyle);
+	}
+	
+	/**
+	 * Same as setCurrent(Displayable) but additionally allows you to specify a screen-change-animation.
+	 * 
+	 * @param nextDisplayable the next displayable
+	 * @param isTransitionForward true when the transition should be played forward. This can be overridden by the CSS attribute 'screen-change-animation-direction' in the specified style.
+	 * @param screenTransitionStyle a style that should contain at least the 'screen-change-animation' CSS attribute.
+	 */
+	public void setCurrent( Displayable nextDisplayable, boolean isTransitionForward, Style screenTransitionStyle)
 	{
 		//#debug
 		System.out.println("Display.setCurrent " + nextDisplayable + ", current=" + this.currentDisplayable + ", isShown=" + isShown() );
@@ -1008,98 +1080,45 @@ public class Display
 			// to prevent the run() / callSerially() combo of 
 			// ScreenChangeAnimation to set its next Displayable
 			// while another Displayable has already been set
-			if(this.currentCanvas instanceof ScreenChangeAnimation)
+			if (this.currentCanvas instanceof ScreenChangeAnimation)
 			{
 				ScreenChangeAnimation animation = (ScreenChangeAnimation)this.currentCanvas;
 				animation.abort();
 				if(animation.nextCanvas != null) {
 					animation.nextCanvas._hideNotify();
 				}
-			} else if (this.enableScreenChangeAnimations) { // check if a screen transition should be played
+			} else if (this.enableScreenChangeAnimations && screenTransitionStyle != null) { // check if a screen transition should be played
 				try {
+					ScreenChangeAnimation screenAnimation = (ScreenChangeAnimation) screenTransitionStyle.getObjectProperty("screen-change-animation");;
+					Displayable lastDisplayable = this.currentDisplayable;
+					//#if !tmp.fullScreen
+						if (lastDisplayable != null && lastDisplayable instanceof Screen) {
+						//#debug
+						System.out.println("StyleSheet: last displayble is a Screen");
+						Screen lastScreen = (Screen) lastDisplayable;
+							Object[] commands = lastScreen._commands == null ? null : lastScreen._commands.getInternalArray();
+							if (commands != null) {
+								for (int i = 0; i < commands.length; i++)
+								{
+									Command cmd = (Command) commands[i];
+									if (cmd == null) {
+										break;
+									}
+									removeCommand( cmd );
+								}
+							}
+						}
+					//#endif							
 					Screen nextScreen = null;
 					if ( nextDisplayable instanceof Screen ) {
 						nextScreen = (Screen) nextDisplayable;
 					}
-					ScreenChangeAnimation screenAnimation = null;
-					boolean isForwardAnimation = true;
-		
-					Screen lastScreen = null;
-					Style screenstyle = null;
-					//#if polish.ScreenChangeAnimation.forward:defined
-						if (this.currentCanvas != null && this.currentCanvas instanceof UiElement) {
-							lastScreen = (Screen) this.currentCanvas;
-							Command lastCommand = lastScreen.lastTriggeredCommand;
-							if (lastCommand != null && (lastCommand.getCommandType() == Command.BACK  || lastCommand.getCommandType() == Command.CANCEL) ) {
-								screenAnimation = backwardAnimation;
-								screenstyle = lastScreen.style;
-								isForwardAnimation = false;
-							}
+					//#if polish.Screen.showScreenChangeAnimationOnlyForScreen
+						if ( nextScreen == null ) {
+							screenAnimation = null;
 						}
-						if ( screenAnimation == null ) {
-							screenAnimation = forwardAnimation;
-							if (nextScreen != null) {
-								screenstyle = nextScreen.style;
-							}
-						}
-					//#else	
-						//#ifdef polish.useDynamicStyles
-							// check if the next screen has got a style:
-							if (nextScreen != null && nextScreen.style == null) {
-								nextScreen.cssSelector = nextScreen.createCssSelector();
-								nextScreen.setStyle( StyleSheet.getStyle( nextScreen ) );
-							}
-						//#endif
-						if (nextScreen != null && nextScreen.style != null && nextScreen.enableScreenChangeAnimation) {
-							screenstyle = nextScreen.style;
-							screenAnimation = (ScreenChangeAnimation) screenstyle.getObjectProperty("screen-change-animation");
-						}
-						Displayable lastDisplayable = this.currentDisplayable;
-						if (lastDisplayable != null && lastDisplayable instanceof ScreenChangeAnimation ) {
-							//#debug
-							System.out.println("StyleSheet: last displayable is a ScreenChangeAnimation" );
-							lastDisplayable = ((ScreenChangeAnimation) lastDisplayable).nextDisplayable;
-						}
-						if (lastDisplayable != null && lastDisplayable instanceof Screen) {
-							//#debug
-							System.out.println("StyleSheet: last displayble is a Screen");
-							lastScreen = (Screen) lastDisplayable;
-							//#if !tmp.fullScreen
-								Object[] commands = lastScreen._commands == null ? null : lastScreen._commands.getInternalArray();
-								if (commands != null) {
-									for (int i = 0; i < commands.length; i++)
-									{
-										Command cmd = (Command) commands[i];
-										if (cmd == null) {
-											break;
-										}
-										removeCommand( cmd );
-									}
-								}
-							//#endif							
-							Command lastCommand = lastScreen.lastTriggeredCommand;
-							if (lastCommand != null && (lastCommand.getCommandType() == Command.BACK  || lastCommand.getCommandType() == Command.CANCEL) ) {
-								isForwardAnimation = false;
-							}
-							if ( (screenAnimation == null || !isForwardAnimation || lastScreen instanceof Alert) && lastScreen.style != null && lastScreen.enableScreenChangeAnimation) {
-								ScreenChangeAnimation animation = (ScreenChangeAnimation) lastScreen.style.getObjectProperty("screen-change-animation");
-								if (screenAnimation == null || animation != null) {
-									screenstyle = lastScreen.style;
-									screenAnimation = animation;
-									isForwardAnimation = false;
-								} else {
-									isForwardAnimation = true;
-								}
-								//#debug
-								System.out.println("StyleSheet: Using screen animation of last screen");
-							}
-						}
-						//#if polish.Screen.showScreenChangeAnimationOnlyForScreen
-							if ( nextScreen == null ) {
-								screenAnimation = null;
-							}
-						//#endif
 					//#endif
+						
 					if (screenAnimation != null) {
 						int width = this.screenWidth;
 						int height = this.screenHeight;
@@ -1127,24 +1146,21 @@ public class Display
 							}
 						//#endif
 						this.currentDisplayable = nextDisplayable;
-						screenAnimation.onShow( screenstyle, this, width, height, lastDisplayable, nextDisplayable, isForwardAnimation );
+						screenAnimation.onShow( screenTransitionStyle, this, width, height, lastDisplayable, nextDisplayable, isTransitionForward );
 						
 						this.currentCanvas = screenAnimation;
 						this.currentDisplayable = screenAnimation;
 						
-						if ( screenstyle == null ) {
-							screenstyle = StyleSheet.defaultStyle;
-						}
 						if (nextScreen != null) {
 							nextScreen._showNotify();
+							//#if !tmp.fullScreen
+								screenAnimation.setTitle( nextScreen.getTitle() );
+							//#endif
 						}
 						
-						if (lastScreen != null) {
-							lastScreen._hideNotify();
+						if (lastDisplayable instanceof Canvas) {
+							((Canvas)lastDisplayable)._hideNotify();
 						}
-						//#if !tmp.fullScreen
-							screenAnimation.setTitle( nextScreen.getTitle() );
-						//#endif
 						screenAnimation._showNotify();
 						if ( !isShown() ) {
 							this.nativeDisplay.setCurrent( this );

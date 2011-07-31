@@ -59,8 +59,11 @@ public class RotatingScreenGLESScreenChangeAnimation extends ScreenChangeAnimati
     private boolean doneSwitch = false;
     private volatile boolean initializedNewTexplane = false;
     
-	protected boolean animate()
-	{
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
+	 */
+	protected boolean animate(long passedTime, long duration) {
    		//#mdebug debug
     	try
     	{
@@ -141,8 +144,6 @@ public class RotatingScreenGLESScreenChangeAnimation extends ScreenChangeAnimati
 			Displayable lstDisplayable, Displayable nxtDisplayable,
 			boolean isForward) 
 	{
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable,
-				isForward);
 		
     	//#mdebug debug
     	try 
@@ -251,6 +252,10 @@ public class RotatingScreenGLESScreenChangeAnimation extends ScreenChangeAnimati
     		e.printStackTrace();
 		}
     	//#enddebug
+    	
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable,
+				isForward);
+
 	}
 	
 	private void bindGraphics()

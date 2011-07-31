@@ -19,6 +19,8 @@
 		<li><a href="../lush/index.html">Lush (UI)</a></li>
 	</ul>
 	<%index %>
+	
+<h1 id="direction">Screen Transitions</h1>
 	<p>
 	This guide shows you the available effects for screen transitions.
 	<br />You can apply any effect by setting the <code>screen-change-animation</code> attribute
@@ -32,6 +34,7 @@
 	<b>screen-change-animation: left;</b>
 }
 </pre>
+<h2 id="direction">Direction of the Transition</h2>
 	<p>
 	Screen transitions may have a direction - when you show a screen with a defined
 	<code>screen-change-animation</code>, the animation will be played in the <i>forward</i> mode. When
@@ -39,13 +42,69 @@
 	screen has a defined animation, the animation will be played in the <i>backward</i> direction.
 	<br />
 	When both the previous as well as the next screen do have a <code>screen-change-animation</code>, the
-	animation of the next screen will take precedence and it will be played in the <i>foward</i> direction.
+	animation of the next screen will take precedence and it will be played in the <i>forward</i> direction.
 	The only exception to this rule is when the previous screen is an Alert - in that case the
 	Alert's <code>screen-change-animation</code> will be played in the <i>backward</i> direction, even 
 	if the next screen has also a defined animation.
 	<br />
 	Note that not all animations do honor the direction of the transition.
 	</p>
+	<p>
+	You can override the automatic direction detection with the <code>screen-change-animation-direction</code> CSS attribute that can have <code>forward</code>
+	or <code>backward</code> as values""
+ 	</p>
+<pre>
+.myAnimation {
+  screen-change-animation: left-shutter;
+  screen-change-animation-direction: forward;
+}
+</pre>
+
+<h2 id="duration">Duration of the Transition</h2>
+ 	<p>
+ 	Most transitions can be timed using the <code>screen-change-animation-duration</code> CSS attribute. The default duration is 400ms.
+ 	</p>
+<pre>
+.myAnimation {
+  screen-change-animation: left-shutter;
+  screen-change-animation-duration: 2s;
+}
+</pre>
+
+<h2 id="functions">Acceleration Function of the Transition</h2>
+ 	<p>
+ 	The acceleration of the transition is calculated in the same way as for <a href="gui-css-animations.html">CSS animations</a>. You can specify a function for the forward-running 
+ 	and another one for the backward-running transition: 
+ 	</p>
+<pre>
+.myAnimation {
+  screen-change-animation: left-shutter;
+  screen-change-animation-function-forward: linear;
+  screen-change-animation-function-backward: exponential-out;
+}
+</pre>
+ 
+<h2 id="programmaticcontrol">Specifying Animations Programmatically</h2>
+ 	<p>
+ 	Sometimes you want to specify which transition is being used when displaying a screen. You can do this by specifying a style when calling <code>Display.setCurrent(Displayable)</code>. This
+ 	style then needs to contain a <code>screen-change-animation</code> CSS attribute.
+ 	</p>
+<p><i>polish.css:</i></p>
+<pre>
+.myAnimation {
+  screen-change-animation: left-shutter;
+  screen-change-animation-duration: 800mx;
+  screen-change-animation-direction: forward;
+}
+</pre>
+<p><i>Java code:</i></p>
+<pre>
+//#style myAnimation
+display.setCurrent( nextScreen );
+</pre>
+ 
+
+<h1 id="list">Show Cases</h1>
 	<p>The following movies show the main menu as the last screen and the
 	popup alert as the next screen, before returning to the main menu again.
 	</p>
@@ -73,7 +132,7 @@
 		</td>
 	</tr></table>
 
-<h2 id="screenchangeanimation-bottomshutter">bottomshutter Animation</h2>
+<h2 id="screenchangeanimation-bottomshutter">bottom-shutter Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_bottomshutter">
@@ -93,11 +152,11 @@
 
 		</td>
 		<td>Move in the next screen from the bottom using a shutter
-		with the  <a href="gui-screenchangeanimation-bottomshutter.html">bottomshutter screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-bottomshutter.html">bottom-shutter screen-change-animation</a>.</td>
 	</tr></table>
 	
 	
-	<h2 id="screenchangeanimation-bwToColor">bwToColor Animation</h2>
+	<h2 id="screenchangeanimation-bwToColor">bw-to-color Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_bwToColor">
@@ -117,7 +176,7 @@
 
 		</td>
 		<td>Fade the next screen from black/white to the original color
-		with the  <a href="gui-screenchangeanimation-bwToColor.html">bwToColor screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-bwToColor.html">bw-to-color screen-change-animation</a>.</td>
 	</tr></table>
 
 <h2 id="screenchangeanimation-cage">cage Animation</h2>
@@ -216,7 +275,7 @@
 	</tr></table>
 	
 	
-<h2 id="screenchangeanimation-fadeOutFadeIn">fadeOutFadeIn Animation</h2>
+<h2 id="screenchangeanimation-fadeOutFadeIn">fade-out-fade-in Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_fadeOutFadeIn">
@@ -236,7 +295,7 @@
 
 		</td>
 		<td>Fade out the last screen, then fade in the next screen using
-		the  <a href="gui-screenchangeanimation-fadeOutFadeIn.html">fadeOutFadeIn screen-change-animation</a>.</td>
+		the  <a href="gui-screenchangeanimation-fadeOutFadeIn.html">fade-out-fade-in screen-change-animation</a>.</td>
 	</tr></table>
 	
 
@@ -288,7 +347,7 @@
 	</tr></table>
 	
 		
-<h2 id="screenchangeanimation-leftshutter">leftshutter Animation</h2>
+<h2 id="screenchangeanimation-leftshutter">left-shutter Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_leftshutter">
@@ -308,7 +367,7 @@
 
 		</td>
 		<td>Move in the next screen from the left with a shutter
-		using the  <a href="gui-screenchangeanimation-leftshutter.html">leftshutter screen-change-animation</a>.</td>
+		using the  <a href="gui-screenchangeanimation-leftshutter.html">left-shutter screen-change-animation</a>.</td>
 	</tr></table>
 	
 		
@@ -408,7 +467,7 @@
 	</tr></table>
 	
 		
-<h2 id="screenchangeanimation-rightshutter">rightshutter Animation</h2>
+<h2 id="screenchangeanimation-rightshutter">right-shutter Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_rightshutter">
@@ -428,7 +487,7 @@
 
 		</td>
 		<td>Move in the next screen from the right with a shutter using
-		the  <a href="gui-screenchangeanimation-rightshutter.html">rightshutter screen-change-animation</a>.</td>
+		the  <a href="gui-screenchangeanimation-rightshutter.html">right-shutter screen-change-animation</a>.</td>
 	</tr></table>
 	
 		
@@ -505,7 +564,7 @@
 
 
 	
-<h2 id="screenchangeanimation-topshutter">topshutter Animation</h2>
+<h2 id="screenchangeanimation-topshutter">top-shutter Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_topshutter">
@@ -525,11 +584,33 @@
 
 		</td>
 		<td>Move in the next screen from the top with a shutter using 
-		the  <a href="gui-screenchangeanimation-topshutter.html">topshutter screen-change-animation</a>.</td>
+		the  <a href="gui-screenchangeanimation-topshutter.html">top-shutter screen-change-animation</a>.</td>
 	</tr></table>
-	
 
-<h2 id="screenchangeanimation-verticalflash">verticalflash Animation</h2>
+<h2 id="screenchangeanimation-vertical-doors">vertical-doors Animation</h2>
+	<table><tr>
+		<td>
+		<div id="id_verticaldoors">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-vertical-doors.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_verticaldoors", "176", "221", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+		</td>
+		<td>Displays the next screens by something like doors that close from top and bottom and meet in the middle
+		with the  <a href="gui-screenchangeanimation-vertical-doors.html">vertical-doors screen-change-animation</a>.</td>
+	</tr></table>	
+
+<h2 id="screenchangeanimation-verticalflash">vertical-flash Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_verticalflash">
@@ -549,12 +630,12 @@
 
 		</td>
 		<td>Tear the last screen vertically open from within its center
-		with the  <a href="gui-screenchangeanimation-verticalflash.html">verticalflash screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-verticalflash.html">vertical-flash screen-change-animation</a>.</td>
 	</tr></table>	
 
 
 
-<h2 id="screenchangeanimation-zoomboth">zoomboth Animation</h2>
+<h2 id="screenchangeanimation-zoomboth">zoom-both Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_zoomboth">
@@ -574,11 +655,11 @@
 
 		</td>
 		<td>Zoom both the previous as well as the next screen 
-		with the  <a href="gui-screenchangeanimation-zoomboth.html">zoomboth screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-zoomboth.html">zoom-both screen-change-animation</a>.</td>
 	</tr></table>
 
 	
-<h2 id="screenchangeanimation-zoomin">zoomin Animation</h2>
+<h2 id="screenchangeanimation-zoomin">zoom-in Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_zoomin">
@@ -598,11 +679,11 @@
 
 		</td>
 		<td>Zoom in the next screen
-		with the  <a href="gui-screenchangeanimation-zoomin.html">zoomin screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-zoomin.html">zoom-in screen-change-animation</a>.</td>
 	</tr></table>
 
 
-<h2 id="screenchangeanimation-zoomout">zoomout Animation</h2>
+<h2 id="screenchangeanimation-zoomout">zoom-out Animation</h2>
 	<table><tr>
 		<td>
 		<div id="id_zoomout">
@@ -622,7 +703,7 @@
 
 		</td>
 		<td>Zoom out the next screen
-		with the  <a href="gui-screenchangeanimation-zoomout.html">zoomout screen-change-animation</a>.</td>
+		with the  <a href="gui-screenchangeanimation-zoomout.html">zoom-out screen-change-animation</a>.</td>
 	</tr></table>
 
 <%include end.txt %>

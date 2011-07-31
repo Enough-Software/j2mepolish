@@ -77,11 +77,14 @@ public class ItemScreenChangeAnimation extends ScreenChangeAnimation
 
 
 
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
+		}
 		return false;
 	}
 

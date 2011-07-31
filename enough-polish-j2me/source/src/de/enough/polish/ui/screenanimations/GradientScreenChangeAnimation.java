@@ -76,16 +76,16 @@ extends ScreenChangeAnimation
 	protected void onShow(Style style, Display dsplay, int width, int height,
 			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
 	{
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 		this.currentScreenRgb = new int[ width * height ];
-		System.arraycopy( this.lastCanvasRgb, 0, this.currentScreenRgb, 0, width * height);
 		this.currentStep = 0;
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
 		if (this.currentStep < this.steps) {
 			int lastColor;
 			int targetColor;

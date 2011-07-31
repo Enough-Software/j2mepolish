@@ -1,0 +1,54 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: verticalflash Screen-Change-Animation %>
+<%set basedir = ../ %>
+<%include start_flash.txt %>
+
+	<h1 id="verticalflash">vertical-doors Screen-Change-Animation</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-visualguide-screenchangeanimations.html">Other Screen-Change-Animations</a></li>
+		<li><a href="extending-screenchangeanimation.html">Create Your Own Screen-Change-Animation</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<p>
+		<div id="id_verticalflash">
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		</div>
+		<script type="text/javascript">
+				var flashvars = {};
+				flashvars.clip = "../images/gui-screenchangeanimation-vertical-doors.flv"; /* relative to swf file */
+				var params = {};
+				params.loop = "false";
+				params.quality = "best";
+				var attributes = {};
+				swfobject.embedSWF("<%= basedir%>scripts/videoplayer.swf", "id_verticalflash", "176", "221", "9.0.0", false, flashvars, params, attributes);
+		</script>
+
+	</p>
+	<p>
+		Displays the next screens by something like doors that close from top and bottom and meet in the middle
+		with the <code>vertical-doors</code> screen-change-animation.	
+	</p>
+	<h2 id="Screen-Change-Animation-Design">Usage</h2>
+	<p>
+	Use this animation like this:
+	</p>
+<pre>
+.myScreen {
+	screen-change-animation: vertical-doors;
+}
+</pre>
+	<%cssattributes de.enough.polish.ui.screenanimations.VerticalDoorsScreenChangeAnimation %>
+
+	
+	
+	<h2 id="Screen-Change-Animation-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/screenanimations/VerticalDoorsScreenChangeAnimation.html">VerticalDoorsScreenChangeAnimation</a>.
+	</p>
+
+<%include end.txt %>

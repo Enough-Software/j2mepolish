@@ -59,7 +59,6 @@ public class CardScreenChangeAnimation extends ScreenChangeAnimation {
 	protected void onShow(Style style, Display dsplay, int width, int height,
 			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
 	{
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 		//#if polish.css.cube-screen-change-animation-background-color
 		Integer colorInt = style.getIntProperty( "cube-screen-change-animation-background-color" ); 
 		if (colorInt != null ) { 
@@ -83,12 +82,13 @@ public class CardScreenChangeAnimation extends ScreenChangeAnimation {
 		this.rgbData = new int [size];
 		System.arraycopy( this.lastCanvasRgb, 0, this.rgbData, 0, size);
 		//lstScreenImage.getRGB(this.rgbData, 0, width, 0, 0, width, height );
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
 
 	
 	
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
 		int currentX = 0,currentY = 0;
 		int length = this.rgbData.length;
 		int currentScalableHeight,targetY,verticalShrinkFactorPercent,horizontalScaleFactorPercent,sourceX,targetArrayIndex;

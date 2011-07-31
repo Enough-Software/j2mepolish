@@ -29,6 +29,7 @@ package de.enough.polish.ui.screenanimations;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
@@ -43,7 +44,6 @@ import de.enough.polish.util.ImageUtil;
 public class RotateScreenChangeAnimation extends ScreenChangeAnimation
 {
 
-	private int degrees;
 	private int[] rotatedScreenRgb;
 
 	/**
@@ -51,7 +51,7 @@ public class RotateScreenChangeAnimation extends ScreenChangeAnimation
 	 */
 	public RotateScreenChangeAnimation()
 	{
-		this.useLastCanvasRgb = true;
+		super();
 	}
 	
 	
@@ -65,40 +65,48 @@ public class RotateScreenChangeAnimation extends ScreenChangeAnimation
 		if (isForward) {
 			this.useLastCanvasRgb = false;
 			this.useNextCanvasRgb = true;			
-			this.degrees = 270;
 		} else {
 			this.useLastCanvasRgb = true;
 			this.useNextCanvasRgb = false;
-			this.degrees = 90;
 		}
+		this.rotatedScreenRgb = new int[ width * height ];
 		super.onShow(style, dsplay, width, height, lstDisplayable,
 				nxtDisplayable, isForward );
-		this.rotatedScreenRgb = new int[ width * height ];
-		animate();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
-		boolean continueAnimation;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.rotatedScreenRgb = null;
+			return false;
+		}
 		int[] source;
+		int startDegree, endDegree;
+		int startOpacity, endOpacity;
 		if (this.isForwardAnimation) {
 			source = this.nextCanvasRgb;
-			this.degrees += 15;
-			continueAnimation = (this.degrees < 345);
+			startDegree = 270;
+			endDegree = 360;
+			startOpacity = 10;
+			endOpacity = 255;
 		} else {
 			source = this.lastCanvasRgb;
-			this.degrees -= 15;
-			continueAnimation = (this.degrees > 15);
+			startDegree = 360;
+			endDegree = 270;
+			startOpacity = 255;
+			endOpacity = 10;
 		}
+		int degrees = calculateAnimationPoint(startDegree, endDegree, passedTime, duration);
+		int opacity =  calculateAnimationPoint(startOpacity, endOpacity, passedTime, duration);
 		// rotate(int[] sourceRgbData, int width, int height, int referenceX, int referenceY, int backgroundColor, double degreeCos, double degreeSin, int[] rotatedRGB, int rotatedWidth, int rotatedHeight) {
-		double degreeCos = Math.cos(Math.PI*this.degrees/180);
-		double degreeSin = Math.sin(Math.PI*this.degrees/180);		
-		ImageUtil.rotate( source, this.screenWidth, this.screenHeight, this.screenWidth >> 1, this.screenHeight >>1, 0, degreeCos, degreeSin,  this.rotatedScreenRgb, this.screenWidth, this.screenHeight );
-		return continueAnimation;
+		double degreeCos = Math.cos(Math.PI*degrees/180);
+		double degreeSin = Math.sin(Math.PI*degrees/180);
+		int backgroundArgb = 0;
+		ImageUtil.rotate( source, this.screenWidth, this.screenHeight, this.screenWidth >> 1, this.screenHeight >>1, backgroundArgb, degreeCos, degreeSin,  this.rotatedScreenRgb, this.screenWidth, this.screenHeight, opacity );
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -106,7 +114,15 @@ public class RotateScreenChangeAnimation extends ScreenChangeAnimation
 	 */
 	protected void paintAnimation(Graphics g)
 	{
-		g.drawRGB(this.rotatedScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight, false);
+		Image canvasImage;
+		if (this.isForwardAnimation) {
+			canvasImage = this.lastCanvasImage;
+		} else {
+			canvasImage = this.nextCanvasImage;
+		}
+		g.drawImage(canvasImage, 0, 0, Graphics.TOP | Graphics.LEFT);
+
+		g.drawRGB(this.rotatedScreenRgb, 0, this.screenWidth, 0, 0, this.screenWidth, this.screenHeight, true);
 	}
 
 }

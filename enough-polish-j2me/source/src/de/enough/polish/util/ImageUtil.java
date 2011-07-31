@@ -849,7 +849,7 @@ public final class ImageUtil {
      *
      * @param sourceRgbData the rgb data to be rotated.
      * @param width the width of the source rgb data.
-     * @param height the heigth of the source rgb data.
+     * @param height the height of the source rgb data.
      * @param referenceX the x position for the center of rotation.
      * @param referenceY the y position for the center of rotation.
      * @param backgroundColor the ARGB color used for the background
@@ -860,65 +860,93 @@ public final class ImageUtil {
      * @param rotatedHeight the height of the rotated rgb data
      */
      public static void rotate(int[] sourceRgbData, int width, int height, int referenceX, int referenceY, int backgroundColor, double degreeCos, double degreeSin, int[] rotatedRGB, int rotatedWidth, int rotatedHeight) {
+    	 rotate(sourceRgbData, width, height, referenceX, referenceY, backgroundColor, degreeCos, degreeSin, rotatedRGB, rotatedWidth, rotatedHeight, 255 );
+     }
+     //#endif
+     
+     //#if polish.hasFloatingPoint
+     /**
+      * Rotates the source RGB data and stores it within the target RGB data array.
+      *
+      * @param sourceRgbData the rgb data to be rotated.
+      * @param width the width of the source rgb data.
+      * @param height the height of the source rgb data.
+      * @param referenceX the x position for the center of rotation.
+      * @param referenceY the y position for the center of rotation.
+      * @param backgroundColor the ARGB color used for the background
+      * @param degreeCos the cosine of the degree value: Math.cos(Math.PI*degree/180)
+      * @param degreeSin the sine of the degree value: Math.sin(Math.PI*degree/180)
+      * @param rotatedRGB the RGB data array for storing the rotated pixel data
+      * @param rotatedWidth the width of the rotated rgb data
+      * @param rotatedHeight the height of the rotated rgb data
+      * @param opacity the opacity between 0 (fully transparent) to 255 (fully opaque)
+      */
+     public static void rotate(int[] sourceRgbData, int width, int height, int referenceX, int referenceY, int backgroundColor, double degreeCos, double degreeSin, int[] rotatedRGB, int rotatedWidth, int rotatedHeight, int opacity) {
 
-        // Declare needed variables
-        int sourcePos;
-        int xMinusRefXTimesDegCosXPlusHalfWidth ;
-        int xMinusRefXTimesDegSinXMinusHalfOfHeight ;
-        int newX, newY;
-        int x, y;
-        final int halfOfWidth = width / 2;
-        final int halfOfHeight = height / 2;
-        final int halfOfRotatedHeight = rotatedHeight/2;
-        final int halfOfRotatedWidth = rotatedWidth/2;
-        final int degCos = (int) (1024 * degreeCos) ;
-        final int degSin = (int) (1024 * degreeSin) ;
-        final int rotatedHeightMinus1 = rotatedHeight -1;
-        final int rgbDataLen = sourceRgbData.length -1;
-        final int maxWidth = width -1;
+    	 int alpha = (opacity << 24); // is now 0xAA000000
 
-        // Initialize and precalculate trigonometry data
-        // Thse calculations are used many times throughout the rotation
-        // and as such it is worth it to precalculate them
-        final int[] yMinusRefYTimesDegSin = new int[rotatedHeight];
-        final int[] yMinusRefYTimesDegCos = new int[rotatedHeight];
+    	 // Declare needed variables
+    	 int sourcePos;
+    	 int xMinusRefXTimesDegCosXPlusHalfWidth ;
+    	 int xMinusRefXTimesDegSinXMinusHalfOfHeight ;
+    	 int newX, newY;
+    	 int x, y;
+    	 final int halfOfWidth = width / 2;
+    	 final int halfOfHeight = height / 2;
+    	 final int halfOfRotatedHeight = rotatedHeight/2;
+    	 final int halfOfRotatedWidth = rotatedWidth/2;
+    	 final int degCos = (int) (1024 * degreeCos) ;
+    	 final int degSin = (int) (1024 * degreeSin) ;
+    	 final int rotatedHeightMinus1 = rotatedHeight -1;
+    	 final int rgbDataLen = sourceRgbData.length -1;
+    	 final int maxWidth = width -1;
 
-        for (y = 0; y < rotatedHeight; y++) {
-            yMinusRefYTimesDegSin[y] = ( halfOfWidth ) + (((y - halfOfRotatedHeight) * degSin) >> 10);
-            yMinusRefYTimesDegCos[y] = ( halfOfHeight) + (((y - halfOfRotatedHeight) * degCos) >> 10);
-        }
+    	 // Initialize and precalculate trigonometry data
+    	 // Thse calculations are used many times throughout the rotation
+    	 // and as such it is worth it to precalculate them
+    	 final int[] yMinusRefYTimesDegSin = new int[rotatedHeight];
+    	 final int[] yMinusRefYTimesDegCos = new int[rotatedHeight];
 
-        // Rotate the image!
-        // We use the standard 2D Matrix rotation formula, except we
-        // precalculate as many things as possible before going into
-        // the inner loop (see also the two arrays above).
-        // The long variable names show what exactly we have concatenated
-        // into each variable. :)
+    	 for (y = 0; y < rotatedHeight; y++) {
+    		 yMinusRefYTimesDegSin[y] = ( halfOfWidth ) + (((y - halfOfRotatedHeight) * degSin) >> 10);
+    		 yMinusRefYTimesDegCos[y] = ( halfOfHeight) + (((y - halfOfRotatedHeight) * degCos) >> 10);
+    	 }
 
-        x=-1;
-        while ( ++x < rotatedWidth) {
+    	 // Rotate the image!
+    	 // We use the standard 2D Matrix rotation formula, except we
+    	 // precalculate as many things as possible before going into
+    	 // the inner loop (see also the two arrays above).
+    	 // The long variable names show what exactly we have concatenated
+    	 // into each variable. :)
 
-            xMinusRefXTimesDegCosXPlusHalfWidth = (((x - halfOfRotatedWidth) * degCos) >> 10)  ;
-            xMinusRefXTimesDegSinXMinusHalfOfHeight = (((x - halfOfRotatedWidth) * degSin) >> 10)  ;
+    	 x=-1;
+    	 while ( ++x < rotatedWidth) {
+
+    		 xMinusRefXTimesDegCosXPlusHalfWidth = (((x - halfOfRotatedWidth) * degCos) >> 10)  ;
+    		 xMinusRefXTimesDegSinXMinusHalfOfHeight = (((x - halfOfRotatedWidth) * degSin) >> 10)  ;
 
 
-            y=-1;
-            while ( ++y < rotatedHeightMinus1){
-                newX = xMinusRefXTimesDegCosXPlusHalfWidth + yMinusRefYTimesDegSin[y] ;
-                if (newX < 0 || newX > maxWidth) {
-                    continue;
-                }
-                newY = yMinusRefYTimesDegCos[y] - xMinusRefXTimesDegSinXMinusHalfOfHeight ;
-                sourcePos = newX + newY * width;
-                if ( (sourcePos < 0) || (sourcePos > rgbDataLen) ) {
-                    continue;
-                }
-                rotatedRGB[x + y  * rotatedWidth] = sourceRgbData[sourcePos];
-            }
-        }
+    		 y=-1;
+    		 while ( ++y < rotatedHeightMinus1){
+    			 newX = xMinusRefXTimesDegCosXPlusHalfWidth + yMinusRefYTimesDegSin[y] ;
+    			 if (newX < 0 || newX > maxWidth) {
+    				 continue;
+    			 }
+    			 newY = yMinusRefYTimesDegCos[y] - xMinusRefXTimesDegSinXMinusHalfOfHeight ;
+    			 sourcePos = newX + newY * width;
+    			 if ( (sourcePos < 0) || (sourcePos > rgbDataLen) ) {
+    				 continue;
+    			 }
+    			 int sourcePixel = sourceRgbData[sourcePos];
+    			 if (opacity != 255) {
+    				 sourcePixel = (sourcePixel & 0x00ffffff) | alpha;
+    			 }
+    			 rotatedRGB[x + y  * rotatedWidth] = sourcePixel;
+    		 }
+    	 }
 
-    }
-    //#endif
+     }
+     //#endif
 
     //#if polish.hasFloatingPoint
     /**
