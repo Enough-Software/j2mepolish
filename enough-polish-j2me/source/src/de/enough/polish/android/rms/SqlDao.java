@@ -303,13 +303,14 @@ public class SqlDao {
 	 * @param recordStorePk
 	 * @param recordId
 	 * @return the data, or null
+	 * @throws InvalidRecordIDException 
 	 */
-	public synchronized byte[] getRecord(long recordStorePk, int recordId) {
+	public synchronized byte[] getRecord(long recordStorePk, int recordId) throws InvalidRecordIDException {
 		Cursor resultCursor = database.query(TABLENAME_RECORD,new String[] {COLUMNNAME_RECORD_DATA},COLUMNNAME_RECORD_RECORDNUMBER+"=? AND "+COLUMNNAME_RECORD_RECORDSTORE_FK+"=?",new String[] {Long.toString(recordId),Long.toString(recordStorePk)},null,null,null);
 		byte[] data;
 		try {
 			if(resultCursor.getCount() == 0) {
-				return null;
+				throw new InvalidRecordIDException("for " + recordId);
 			}
 			resultCursor.moveToFirst();
 			data = resultCursor.getBlob(0);
