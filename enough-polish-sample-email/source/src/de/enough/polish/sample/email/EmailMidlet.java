@@ -39,6 +39,7 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 import javax.microedition.lcdui.Ticker;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
@@ -121,7 +122,24 @@ implements CommandListener, ItemStateListener
 		/*
 		form.setTicker( ticker );
 		*/
+		
+		//#style messageInput, input, addressInput
+		TextField text = new TextField( "message: ", "Hello J2ME Polish World with two lines!", 255, TextField.ANY );
+		form.append( text );
 
+		//#style messageInput, input, addressInput
+		text = new TextField( "PIN: ", "", 255, TextField.NUMERIC | TextField.PASSWORD );
+		form.append( text );
+
+		//#style messageInput, input, addressInput
+		text = new TextField( "Decimal: ", "2", 255, TextField.DECIMAL);
+		form.append( text );
+		
+		//#style messageInput, input, addressInput
+		text = new TextField( "Pass: ", "secret", 255, TextField.ANY | TextField.PASSWORD );
+		form.append( text );
+
+		
 		form.setCommandListener( this );
 		form.setItemStateListener( this );
 		form.addCommand( this.createNewCommand );

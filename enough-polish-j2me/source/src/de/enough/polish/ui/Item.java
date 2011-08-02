@@ -3322,6 +3322,10 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 
 		this.contentX = this.marginLeft + getBorderWidthLeft() + this.paddingLeft;
+		//#ifdef polish.css.before
+			this.contentX += getBeforeWidthWithPadding();
+		//#endif
+		
 		int noneContentHeight = this.marginTop + getBorderWidthTop() + this.paddingTop;
 		this.contentY = noneContentHeight; 
 		noneContentHeight += this.paddingBottom + getBorderWidthBottom() + this.marginBottom;
@@ -5571,6 +5575,20 @@ public abstract class Item implements UiElement, Animatable
 	public Item getParent() {
 		return this.parent;
 	}
+	
+	/**
+	 * Retrieves the parent root of this item.
+	 * 
+	 * @return this item's super parent, either this item itself or it's last known ancestor.
+	 */
+	public Item getParentRoot() {
+		Item p = this;
+		while (p.parent != null) {
+			p = p.parent;
+		}
+		return p;
+	}
+
 	
 	/**
 	 * Sets a parent for this item.

@@ -10,17 +10,20 @@ import android.graphics.Region.Op;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.EditText;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Alert;
 import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.Command;
+import de.enough.polish.ui.Container;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.NativeDisplay;
 import de.enough.polish.ui.Screen;
+import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.ArrayList;
 import de.enough.polish.util.IdentityArrayList;
 
@@ -1108,10 +1111,22 @@ implements NativeDisplay //, OnTouchListener
 	}
 	
 	public void onShow(AndroidItemView androidView) {
-		addView( androidView.getAndroidView() );
+		//#debug
+		System.out.println("onShow for " + androidView.getPolishItem());
+		View view = androidView.getAndroidView();
+		ViewParent parent = view.getParent();
+		if (parent == this) {
+			return; // already added
+		}
+		if (parent != null) {
+			((ViewGroup)parent).removeView(view);
+		}
+		addView( view );
 	}
 	
 	public void onHide(AndroidItemView androidView) {
+		//#debug
+		System.out.println("onHide for " + androidView.getPolishItem());
 		removeView( androidView.getAndroidView() );
 	}
 
@@ -1205,8 +1220,10 @@ implements NativeDisplay //, OnTouchListener
         //int yOffset = 0;
         Rect clip = null;
         Screen screen = getCurrentPolishScreen();
+        Container rootContainer = null;
 		if (screen != null) {
 			//yOffset = screen.getRootContainer().getScrollYOffset();
+			rootContainer = screen.getRootContainer();
 			int contX = screen.getScreenContentX();
 			int contY = screen.getScreenContentY();
     		clip = new Rect( contX, contY, contX + screen.getScreenContentWidth(), contY + screen.getScreenContentHeight() );
@@ -1216,17 +1233,25 @@ implements NativeDisplay //, OnTouchListener
         	canvas.save();
     		canvas.clipRect(clip, Op.REPLACE);
     	}
+    	
         for (int i = 1; i < count; i++) {
-            View child = getChildAt(i);
-            Item item = ((AndroidItemView) child).getPolishItem();
+            View view = getChildAt(i);
+            Item item = ((AndroidItemView) view).getPolishItem();
             int x = item.getAbsoluteX() + item.getContentX();
             int y = item.getAbsoluteY() + item.getContentY();
-            if (y != child.getTop()) {
-            	child.layout(x, y, x + child.getMeasuredWidth(), y + child.getMeasuredHeight());
+            if (y != view.getTop()) {
+            	view.layout(x, y, x + view.getMeasuredWidth(), y + view.getMeasuredHeight());
             }
-        	canvas.translate(x, y);
-        	child.draw(canvas);
+        	boolean usePreviousClipping = (clip != null) && (item.getParentRoot() != rootContainer);
+			if (usePreviousClipping) {
+        		canvas.restore();
+        	}
+			canvas.translate(x, y);
+        	view.draw(canvas);
         	canvas.translate(-x, -y);
+        	if (usePreviousClipping) {
+        		canvas.clipRect(clip, Op.REPLACE);
+        	}
         }
 		if (clip != null) {
 			canvas.restore();
@@ -1268,6 +1293,12 @@ implements NativeDisplay //, OnTouchListener
 		        int width = MeasureSpec.getSize(widthMeasureSpec);
 		        int height = MeasureSpec.getSize(heightMeasureSpec);
 		        this.mainView.measure(width, height);
+		        
+//		        Screen screen = getCurrentPolishScreen();
+//		        if (screen != null) {
+//		        	UiAccess.init(screen);
+//		        }
+		        
 		        // other views are measured by the J2ME Polish items
 		        setMeasuredDimension(width, height);
 //		        
@@ -1284,12 +1315,13 @@ implements NativeDisplay //, OnTouchListener
 //		        // measure main view:
 //		        getChildAt(0).measure(width, height);
 //		        // measure native AndroidItemViews and the main view:
-//		        for (int i = 1; 0 < count; i++) {
+//		        for (int i = 1; i < count; i++) {
 //		            final View child = getChildAt(i);
-//		            AndroidItemView itemView = (AndroidItemView) child;
-//		            Item item = itemView.getPolishItem();
+//		            if (child instanceof AndroidItemView) {
+//			            AndroidItemView itemView = (AndroidItemView) child;
+//			            Item item = itemView.getPolishItem();
 //		            //if (child.getVisibility() != GONE) {
-//		                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+//		                //final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 //		                int availableChildWidth;
 //		                if (item.getAvailableContentWidth() < item.itemWidth) {
 //		                	availableChildWidth = item.getAvailableContentWidth();
@@ -1312,6 +1344,7 @@ implements NativeDisplay //, OnTouchListener
 //
 //		                xpos += childw + lp.horizontal_spacing;
 //		            //}
+//		            }
 //		        }
 //		        this.line_height = line_height;
 //

@@ -710,7 +710,7 @@ implements
 		//#else
 	    	super.paintContent(x, y, leftBorder, rightBorder, g);
 		//#endif
-		//#if tmp.directInput && !polish.blackberry
+		//#if tmp.directInput && !(polish.blackberry || polish.android)
 			if ( this.isFocused ) {
 				String head = this.text.substring( 0, this.editIndex );
 				int headWidth = stringWidth( head );
@@ -742,7 +742,7 @@ implements
 					//#endif
 				}
 			}
-		//#elif !polish.blackberry
+		//#elif !(polish.blackberry || polish.android)
 			if (this.showCaret) {
 				if (this.text == null) {
 					// when the text is null the appropriate font and color
@@ -835,7 +835,7 @@ implements
 		//#endif
 	}
 	
-	//#if !polish.blackberry
+	//#if !(polish.blackberry || polish.android)
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#animate()
 	 */

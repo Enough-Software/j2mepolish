@@ -358,10 +358,10 @@ import de.enough.polish.android.midlet.MidletBridge;
  * @since MIDP 1.0
  */
 public class TextField extends StringItem
-//#if (polish.TextField.useDirectInput || polish.android) && !polish.blackberry
+//#if polish.TextField.useDirectInput && !(polish.blackberry || polish.android)
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
-//#elif polish.css.textfield-direct-input && !polish.blackberry
+//#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android)
 	//#define tmp.directInput
 	//#define tmp.allowDirectInput
 //#elif polish.api.windows
@@ -1485,7 +1485,6 @@ public class TextField extends StringItem
 				}
 				String currentText = this._androidTextField.getText().toString();
 				if (!currentText.equals(text)) {
-					System.out.println("SETTING TEXT [" + text + "]");
 					this._androidTextField.setTextKeepState(text);
 					if (cursorAdjustment != 0) {
 						this._androidTextField.moveCursor( cursorAdjustment );
@@ -2605,6 +2604,7 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if polish.android
+			this._androidTextField.forceLayout(); // this forces a relayout only for the view, not for it's parents
 			this._androidTextField.measure(
 					MeasureSpec.makeMeasureSpec(availWidth, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(availHeight, MeasureSpec.AT_MOST)
@@ -3175,6 +3175,7 @@ public class TextField extends StringItem
 		super.animate(currentTime, repaintRegion);
 	}
 
+	//#if !polish.android
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#animate()
 	 */
@@ -3241,8 +3242,9 @@ public class TextField extends StringItem
 			}
 		//#endif
 	}
+	//#endif
 	
-	//#if !polish.blackberry
+	//#if !(polish.blackberry || polish.android)
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleKeyPressed(int, int)
 	 */
@@ -4076,7 +4078,7 @@ public class TextField extends StringItem
 	
 	
 			
-	//#if !polish.blackberry && tmp.directInput
+	//#if !(polish.blackberry || polish.android) && tmp.directInput
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleKeyRepeated(int, int)
 	 */
@@ -4158,7 +4160,7 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if !polish.blackberry && tmp.directInput
+	//#if !(polish.blackberry || polish.android) && tmp.directInput
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleKeyReleased(int, int)
 	 */
@@ -5018,6 +5020,10 @@ public class TextField extends StringItem
 
 	public boolean isConstraintsPhoneNumber() {
 		return ((this.constraints & PHONENUMBER) == PHONENUMBER);
+	}
+
+	public boolean isConstraintsEmail() {
+		return ((this.constraints & EMAILADDR) == EMAILADDR);
 	}
 
 	public boolean isConstraintsNumeric() {

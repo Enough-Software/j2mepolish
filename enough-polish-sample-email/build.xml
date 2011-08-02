@@ -16,7 +16,7 @@
 	<taskdef 
 		name="j2mepolish"
 		classname="de.enough.polish.ant.PolishTask" 
-		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" 
+		classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar:${polish.home}/lib/enough-j2mepolish-build.jar" 
 	/>
 
 		
@@ -39,12 +39,11 @@
 <target depends="init" name="j2mepolish">
 	<j2mepolish>
 	    <!-- general settings -->
-		<info copyright="Copyright 2008 Enough Software. All rights reserved." 
+		<info copyright="Copyright 2011 Enough Software. All rights reserved." 
 			description="A TreeItem example." 
 			infoUrl="http://www.enough.de" 
 			jarName="${polish.vendor}-${polish.name}-${polish.locale}-email.jar" 
 			jarUrl="${deploy-url}${polish.jarName}" 
-			license="GPL" 
 			name="MobileMail" 
 			vendorName="Enough Software" 
 			version="1.0.4"
@@ -64,15 +63,13 @@
 			<requirement name="Identifier" value="${devices}"/>
 		</deviceRequirements>
 	    <!-- build settings -->
-		<build fullscreen="menu" 
-                polishDir="../enough-polish-j2me/source/src" 
-                symbols="polish.skipArgumentCheck" 
-                usePolishGui="true"
+		<build usePolishGui="true"
 			>
 			<!-- midlets definition -->
 			<midlet class="de.enough.polish.sample.email.EmailMidlet" name="MobileMail"/>
 			<!-- project-wide variables - used for preprocessing  -->
 			<variables>
+				<variable name="polish.FullScreen" value="menu" unless="polish.blackberry or polish.android" />
 				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 				<variable name="polish.TextField.includeInputInfo" value="false" />
 				<variable name="polish.TextField.usePredictiveInput" value="true" />

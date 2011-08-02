@@ -4103,14 +4103,18 @@ public final class UiAccess {
 	}
 	//#endif
 	
-	//#if polish.usePolishGui && polish.TextField.useDirectInput && polish.TextField.supportSymbolsEntry && !polish.blackberry
+	//#if polish.usePolishGui
 	/**
 	 * Initializes the symbols list and returns it 
 	 * @return the symbols list
 	 */
 	public static List getTextFieldSymbols() {
-		TextField.initSymbolsList();
-		return TextField.symbolsList;
+		List result = null;
+		//#if polish.TextField.useDirectInput && polish.TextField.supportSymbolsEntry && !(polish.blackberry || polish.android)
+			TextField.initSymbolsList();
+			result = TextField.symbolsList;
+		//#endif
+		return result;
 	}
 	//#endif
 		

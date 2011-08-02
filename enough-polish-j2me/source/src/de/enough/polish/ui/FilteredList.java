@@ -35,11 +35,7 @@ import de.enough.polish.util.ArrayList;
 /**
  * <p>Displays a list of choices that can be limited by the user by entering some input.</p>
  *
- * <p>Copyright Enough Software 2007 - 2010</p>
- * <pre>
- * history
- *        Jun 21, 2007 - michael creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2011</p>
  * @author Michael Koch
  * @author Robert Virkus, j2mepolish@enough.de
  */
@@ -215,6 +211,7 @@ implements ItemStateListener //, CommandListener
 		this.filterHeight = this.filterTextField.getItemHeight( this.contentWidth, this.contentWidth, this.contentHeight / 2 );
 		this.contentHeight -= this.filterHeight;
 		this.container.setScrollHeight( this.contentHeight );
+		this.filterTextField.relativeX = x;
 		if (this.filterPosition == FIELD_POSITION_TOP) {
 			this.filterTextField.relativeY = this.contentY;
 			this.contentY += this.filterHeight;
@@ -230,6 +227,7 @@ implements ItemStateListener //, CommandListener
 	public void showNotify() {
 		//#debug
 		System.out.println("showNotify of FilteredList" + this );
+		this.filterTextField.showNotify();
 		if (!this.filterTextField.isFocused) {
 			this.filterTextField.setShowInputInfo( false );
 			this.filterTextField.focus( this.filterTextField.getFocusedStyle(), 0 );
@@ -239,6 +237,15 @@ implements ItemStateListener //, CommandListener
 		//#endif
 		itemStateChanged( this.filterTextField );
 		super.showNotify();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#hideNotify()
+	 */
+	public void hideNotify() {
+		this.filterTextField.hideNotify();
+		super.hideNotify();
 	}
 	
 	//#if polish.blackberry
@@ -275,7 +282,8 @@ implements ItemStateListener //, CommandListener
 	 * @see de.enough.polish.ui.Screen#paintScreen(javax.microedition.lcdui.Graphics)
 	 */
 	protected void paintScreen(Graphics g) {
-		this.filterTextField.paint( this.contentX, this.filterTextField.relativeY, this.contentX, this.contentX + this.contentWidth, g );
+		TextField textField = this.filterTextField;
+		textField.paint( textField.relativeX, textField.relativeY, this.contentX, this.contentX + this.contentWidth, g );
 		super.paintScreen(g);
 	}
 	

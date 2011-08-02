@@ -163,8 +163,8 @@ public class MidletBridge extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//#endif
-		//TODO: Remove this as we do not want to shrink the application on softkeyboard display.
-//		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		// shrink the application on softkeyboard display:
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
