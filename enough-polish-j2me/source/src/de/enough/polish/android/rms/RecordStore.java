@@ -589,7 +589,7 @@ public class RecordStore extends Object {
 	}
 
 	// TODO: What about concurrent updates?
-	private void updateRecordStoreInstance(RecordStore recordStore) throws RecordStoreException {
+	private synchronized void updateRecordStoreInstance(RecordStore recordStore) throws RecordStoreException {
 		this.name = recordStore.name;
 		this.nextRecordID = recordStore.nextRecordID;
 		this.numRecords = recordStore.numRecords;

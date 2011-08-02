@@ -358,8 +358,9 @@ public class SqlDao {
 		int version = recordStore.getVersion() + 1;
 		values.put(COLUMNNAME_RECORDSTORE_SIZE, new Integer(size));
 		values.put(COLUMNNAME_RECORDSTORE_VERSION, new Integer(version));
+		values.put(COLUMNNAME_RECORDSTORE_NUMBER_OF_RECORDS, new Integer(recordStore.getNumRecords()-1));
 		database.update(TABLENAME_RECORDSTORE, values, COLUMNNAME_RECORDSTORE_RECORDSTORE_PK + "= ?" , new String[] {Long.toString(recordStorePk)});
-		database.delete(TABLENAME_RECORD,COLUMNNAME_RECORD_RECORDNUMBER+"=? AND "+COLUMNNAME_RECORD_RECORDSTORE_FK+"=?",new String[] {Integer.toString(recordId),Long.toString(recordStorePk)});
+		database.delete(TABLENAME_RECORD,COLUMNNAME_RECORD_RECORDNUMBER+"=? AND "+COLUMNNAME_RECORD_RECORDSTORE_FK+"=?", new String[] {Integer.toString(recordId),Long.toString(recordStorePk)});
 	}
 
 	public synchronized int[] getRecordIdsForRecordStore(long recordStorePk) {
