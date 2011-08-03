@@ -264,68 +264,32 @@ implements OnTouchListener //, OnKeyListener
 	}
 	
 	public boolean onTouch(View view, MotionEvent event) {
+		if(this.lcduiCanvas == null) {
+			return view.onTouchEvent(event);
+		}
 		float x = event.getX();
 		float y = event.getY();
+		int truncatedX = (int)x;
+		int truncatedY = (int)y;
+
 		int action = event.getAction();
 		//#debug
 		System.out.println("onTouchEvent: action="+action + ", x=" + x + ", y=" + y);
 		requestFocus();
 		switch(action) {
 			case MotionEvent.ACTION_DOWN:
-				onPointerPressed(x,y);
+				this.lcduiCanvas.pointerPressed(truncatedX,truncatedY);
 				return true;
 			case MotionEvent.ACTION_UP:
-				onPointerReleased(x,y);
+				this.lcduiCanvas.pointerReleased(truncatedX,truncatedY);
 				return true;
 			case MotionEvent.ACTION_MOVE:
-				onPointerDragged(x,y);
+				this.lcduiCanvas.pointerDragged(truncatedX,truncatedY);
 				return true;
 			default: return view.onTouchEvent(event);
 		}
 	}
 	
-
-
-	/**
-	 * 
-	 * @param x physical x position
-	 * @param y physical y position
-	 */
-	private void onPointerPressed(float x, float y) {
-		//#debug
-		System.out.println("onPointerPressed.x="+x+".y="+y);
-			
-		if(this.lcduiCanvas == null) {
-			return;
-		}
-		int truncatedX = (int)x;
-		int truncatedY = (int)y;
-		this.lcduiCanvas.pointerPressed(truncatedX,truncatedY);
-		
-	}
-	
-	private void onPointerReleased(float x, float y) {
-		//#debug
-		System.out.println("onPointerReleased.x="+x+".y="+y);
-		if(this.lcduiCanvas == null) {
-			return;
-		}
-		int truncatedX = (int)x;
-		int truncatedY = (int)y;
-		this.lcduiCanvas.pointerReleased(truncatedX,truncatedY);
-	}
-	
-	private void onPointerDragged(float x, float y) {
-		//#debug
-		System.out.println("onPointerDragged.x="+x+".y="+y);
-		if(this.lcduiCanvas == null) {
-			return;
-		}
-		int truncatedX = (int)x;
-		int truncatedY = (int)y;
-		this.lcduiCanvas.pointerDragged(truncatedX,truncatedY);
-	}
-
 	public void hideNotify() {
 		this.lcduiCanvas._hideNotify();
 	}

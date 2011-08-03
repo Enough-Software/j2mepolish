@@ -433,7 +433,7 @@ implements UiElement, Animatable
 						
 		// creating standard container:
 		if (createDefaultContainer) {
-			//#if polish.hasVirtualKeyboard
+			//#if polish.hasVirtualKeyboard || polish.android
 				this.container = new Container( false );
 			//#else
 				this.container = new Container( true );

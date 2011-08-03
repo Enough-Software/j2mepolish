@@ -127,12 +127,12 @@ implements CommandListener, ItemStateListener
 		TextField text = new TextField( "message: ", "Hello J2ME Polish World with two lines!", 255, TextField.ANY );
 		form.append( text );
 
-		//#style messageInput, input, addressInput
-		text = new TextField( "PIN: ", "", 255, TextField.NUMERIC | TextField.PASSWORD );
+		//#style pininput
+		text = new TextField( "PIN: ", "", 4, TextField.NUMERIC | TextField.PASSWORD );
 		form.append( text );
 
 		//#style messageInput, input, addressInput
-		text = new TextField( "Decimal: ", "2", 255, TextField.DECIMAL);
+		text = new TextField( "Decimal: ", "2", 6, TextField.DECIMAL);
 		form.append( text );
 		
 		//#style messageInput, input, addressInput

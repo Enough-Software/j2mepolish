@@ -2604,7 +2604,7 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if polish.android
-			this._androidTextField.forceLayout(); // this forces a relayout only for the view, not for it's parents
+			this._androidTextField.requestLayout();
 			this._androidTextField.measure(
 					MeasureSpec.makeMeasureSpec(availWidth, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(availHeight, MeasureSpec.AT_MOST)
@@ -4806,6 +4806,25 @@ public class TextField extends StringItem
 	public void setHelpStyle(Style style)
 	{
 		this.helpItem.setStyle(style);
+	}
+	//#endif
+	
+	//#if polish.TextField.showHelpText
+	/**
+	 * Retrieves the help text for this TextField.
+	 * This method is only available when you have set the <code>polish.TextField.showHelpText</code> preprocessing variable to <code>true</code>
+	 * in the build.xml.
+	 * @return the help text
+	 * @see #setHelpText(String)
+	 * @see #setHelpText(String,Style)
+	 */
+	public String getHelpText()
+	{
+		String text = null;
+		if (this.helpItem != null) {
+			text = this.helpItem.getText();
+		}
+		return text;
 	}
 	//#endif
 

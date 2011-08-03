@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.EditText;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Alert;
@@ -23,7 +22,6 @@ import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.NativeDisplay;
 import de.enough.polish.ui.Screen;
-import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.ArrayList;
 import de.enough.polish.util.IdentityArrayList;
 
@@ -224,7 +222,7 @@ implements NativeDisplay //, OnTouchListener
 	private ArrayList<Runnable> seriallyRunnables = new ArrayList<Runnable>();
 	DisplayUtil util;
 
-	private View mainView;
+	private CanvasBridge mainView;
 
 //	@Override
 //	protected void onRestoreInstanceState(Parcelable state) {
@@ -1092,6 +1090,7 @@ implements NativeDisplay //, OnTouchListener
 //			default: return false;
 //		}
 //	}
+	
 
 	public void shutdown() {
 		if(this.currentPolishCanvas != null) {
@@ -1130,6 +1129,9 @@ implements NativeDisplay //, OnTouchListener
 		removeView( androidView.getAndroidView() );
 	}
 
+	protected CanvasBridge getCurrentCanvasBridge() {
+		return this.mainView;
+	}
 	
 //	//#if polish.javaplatform >= Android/1.5
 //	@Override
@@ -1216,6 +1218,8 @@ implements NativeDisplay //, OnTouchListener
 
 	@Override
 	public void dispatchDraw(android.graphics.Canvas canvas) {
+		//System.out.println("dispatch draw with clip=" + canvas.getClipBounds());
+		
         final int count = getChildCount();
         //int yOffset = 0;
         Rect clip = null;
@@ -1230,8 +1234,9 @@ implements NativeDisplay //, OnTouchListener
 		}
     	this.mainView.draw(canvas);
     	if (clip != null) {
+    		// make sure that native views are not drawn above the title of the screen:
         	canvas.save();
-    		canvas.clipRect(clip, Op.REPLACE);
+    		canvas.clipRect(clip, Op.INTERSECT);
     	}
     	
         for (int i = 1; i < count; i++) {
@@ -1244,13 +1249,14 @@ implements NativeDisplay //, OnTouchListener
             }
         	boolean usePreviousClipping = (clip != null) && (item.getParentRoot() != rootContainer);
 			if (usePreviousClipping) {
+				// this is a native view within a frame:
         		canvas.restore();
         	}
 			canvas.translate(x, y);
         	view.draw(canvas);
         	canvas.translate(-x, -y);
         	if (usePreviousClipping) {
-        		canvas.clipRect(clip, Op.REPLACE);
+        		canvas.clipRect(clip, Op.INTERSECT);
         	}
         }
 		if (clip != null) {
@@ -1260,7 +1266,7 @@ implements NativeDisplay //, OnTouchListener
 
 		
 		
-	 private Screen getCurrentPolishScreen() {
+	 Screen getCurrentPolishScreen() {
 		Displayable displayable = Display.getInstance().getCurrent();
 		if (displayable instanceof Screen) {
 			return (Screen) displayable;
@@ -1269,8 +1275,6 @@ implements NativeDisplay //, OnTouchListener
 	}
 
 
-
-		private int line_height;
 
 		    public static class LayoutParams extends ViewGroup.LayoutParams {
 		        public final int horizontal_spacing;

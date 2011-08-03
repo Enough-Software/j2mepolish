@@ -233,6 +233,20 @@ info {
 	}
 }
 
+
+
+.pinInput extends input {
+	margin-left: 10%;
+}
+
+.pinInput:hover {
+	include-label: false;
+	background {
+		type: round-rect;
+		color: white;
+	}
+}
+
 .messageInput extends .input {
 	min-height: 20%;
 }

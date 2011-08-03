@@ -2,10 +2,12 @@
 package de.enough.polish.android.lcdui;
 
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -13,11 +15,12 @@ import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
 import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Item;
+import de.enough.polish.ui.Screen;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TextField;
 
 public class AndroidTextField extends EditText
-implements AndroidItemView, View.OnFocusChangeListener
+implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 {
 	
 	 //private static final int MODE_SHIFT = 30;
@@ -27,6 +30,8 @@ implements AndroidItemView, View.OnFocusChangeListener
 	private final TextField textField;
 	private int cursorPosition;
 	private boolean isNumericPassword;
+	private float yPosAtPointerPress;
+	private int scrollOffsetAtPointerPress;
 
 	public AndroidTextField(TextField textField) {
 		super(MidletBridge.getInstance());
@@ -37,7 +42,8 @@ implements AndroidItemView, View.OnFocusChangeListener
 		setPadding(0, 0, 0, 0); // no padding for me
 		setCompoundDrawables(null, null, null, null); // remove borders
 		setOnFocusChangeListener(this);
-		applyTextField();		
+		applyTextField();
+		setOnTouchListener(this);
 	}
 
 	@Override
@@ -86,7 +92,13 @@ implements AndroidItemView, View.OnFocusChangeListener
 			//setLineSpacing( (float)style.getPaddingVertical(100), 1F);
 			setLineSpacing( 0F, 1F);
 		}
+		setFilters( new InputFilter[] { new InputFilter.LengthFilter(field.getMaxSize()) } );
 		//TODO apply help text (setHint(), setHintColor() when help texts are being used
+		//#if polish.TextField.showHelpText
+			if (field.getHelpText() != null) {
+				setHint(field.getHelpText());
+			}
+		//#endif
 		this.isNumericPassword = false;
 		int type =  InputType.TYPE_TEXT_FLAG_MULTI_LINE;
 		if (field.isConstraintsPhoneNumber()) {
@@ -143,10 +155,10 @@ implements AndroidItemView, View.OnFocusChangeListener
 	}
 	
 //	@Override
-//	public void draw(Canvas arg0) {
+//	public void draw(android.graphics.Canvas arg0) {
 //		//System.out.println("DRAWING ANDROID TEXT FIELD, text=" + getText() + ", color=" + Integer.toHexString(getCurrentTextColor()) + ", pos=" + getLeft() + ", " + getTop() + " - " + getRight() + ", " + getBottom() + ", focus=" + AndroidDisplay.getInstance().findFocus() + "/" +  AndroidDisplay.getInstance().getFocusedChild() + ", childCount=" + AndroidDisplay.getInstance().getChildCount());
 //		//System.out.println("Drawing textfield " + this.textField + " (" + System.currentTimeMillis() + ")");
-//		System.out.println( "draw edit " + getText() + " at " + getLeft() + ", " + getRight() + ", " + getTop() + ", " + getBottom() + ": " + getText() );
+//		System.out.println( "draw edit " + getText() );
 //		super.draw(arg0);
 //	}
 //
@@ -250,6 +262,36 @@ implements AndroidItemView, View.OnFocusChangeListener
 //		super.onLayout(changed, l, t, r, b );
 //	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
+	 */
+	public boolean onTouch(View view, MotionEvent event) {
+		// we want to allow scrolling while the user touches the native EditField,
+		// at the same time we don't want to interfere with the MotionEvent processing,
+		// so we always return false (=we have not handled the event)
+		//System.out.println("AndroidTextField.onTouch " + event);
+		int action = event.getAction();
+		if (action == MotionEvent.ACTION_DOWN) {
+			Screen screen = AndroidDisplay.getInstance().getCurrentPolishScreen();
+			if (screen != null) {
+				this.yPosAtPointerPress = event.getRawY();
+				this.scrollOffsetAtPointerPress = screen.getScrollYOffset();
+			}
+		}
+		if (action == MotionEvent.ACTION_MOVE) {
+			Screen screen = AndroidDisplay.getInstance().getCurrentPolishScreen();
+			if (screen != null) {
+				int diff = (int) (this.yPosAtPointerPress - event.getRawY());
+				int newOffset = this.scrollOffsetAtPointerPress - diff;
+				screen.setScrollYOffset(newOffset, false);
+				AndroidDisplay.getInstance().invalidate();
+			}
+		}
+		return false;
+	}
+
+	
 	
 	private static class NumericPasswordInputConnection 
 	extends BaseInputConnection 
@@ -270,6 +312,7 @@ implements AndroidItemView, View.OnFocusChangeListener
 			return this.editable;
 		}
 	}
+
 
 
 }
