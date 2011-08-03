@@ -43,6 +43,7 @@ import de.enough.polish.BooleanEvaluator;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.PolishProject;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.ColorConverter;
 import de.enough.polish.preprocess.css.CssAttributesManager;
 import de.enough.polish.preprocess.css.Style;
@@ -55,7 +56,7 @@ import de.enough.polish.util.TextFileManager;
 /**
  * <p>Preprocesses source code.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
@@ -1664,14 +1665,14 @@ public class Preprocessor {
 			this.environment.addSymbols( styleSheet.getCssPreprocessingSymbols( device ) );
 			
 			// add colors of the style sheet as preprocessing variables:
-			Map colors = styleSheet.getColors();
+			Map<String,AttributesGroup> colors = styleSheet.getColors();
 			Object[] keys = colors.keySet().toArray();
 			// set the color-definitions:
 			ColorConverter colorConverter = new ColorConverter();
 			colorConverter.setTemporaryColors( colors );
 			for (int i = 0; i < keys.length; i++) {
 				Object key = keys[i];
-				String color = (String) ((Map)colors.get( key )).get( key );
+				String color = colors.get( key ).get( key );
 				this.environment.addVariable( "polish.color." + key, colorConverter.parseColor(color) );
 			}
 			

@@ -28,7 +28,7 @@ package de.enough.polish.util;
 /**
  * <p>A helper class for casting values between different types.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

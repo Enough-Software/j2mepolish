@@ -33,7 +33,7 @@ import de.enough.polish.Device;
 /**
  * <p>A filter for requirements and requirement-groups which all need to be met.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

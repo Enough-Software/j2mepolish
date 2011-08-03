@@ -65,7 +65,7 @@ import de.enough.polish.util.SwingUtil;
 /**
  * <p>Provides a swing-based GUI for the binary data editor.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -28,7 +28,7 @@ package de.enough.polish.ant.requirements;
 /**
  * <p>A class used for comparing a requirement-value with a device-property.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

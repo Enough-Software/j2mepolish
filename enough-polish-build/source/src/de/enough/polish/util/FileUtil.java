@@ -51,7 +51,7 @@ import java.util.Arrays;
 /**
  * <p>Provides some often used methods for handling files.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

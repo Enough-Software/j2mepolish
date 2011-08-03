@@ -41,7 +41,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Provides common functionalities for PolishProject, Vendor, DeviceGroup and Device.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
@@ -185,7 +185,7 @@ implements Comparable
 				DeviceGroup group = groupManager.getGroup(groupName);
 				if (group == null) {
 					throw new InvalidComponentException(
-							MessageFormat.format( invalidGroupMessage, new String[]{ this.identifier, groupName } ) );
+							MessageFormat.format( invalidGroupMessage, (Object[]) new String[]{ this.identifier, groupName } ) );
 				}
 				//System.out.println( this.identifier + ": adding group [" + groupName + "], JavaPackage=" + group.getCapability("polish.JavaPackage") );
 				addComponent( group );

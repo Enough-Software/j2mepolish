@@ -41,7 +41,7 @@ import javax.swing.JTextField;
 /**
  * <p>Asks the user for the package-name as well as the class-name for the to-be-generated Java code.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

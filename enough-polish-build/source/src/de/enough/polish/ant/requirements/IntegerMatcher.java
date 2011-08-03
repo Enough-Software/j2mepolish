@@ -29,7 +29,7 @@ package de.enough.polish.ant.requirements;
 /**
  * <p>Provides help for comparing integers, e.g. 150 with "40+"</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

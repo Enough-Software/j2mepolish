@@ -25,29 +25,24 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
-import de.enough.polish.BuildException;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <p>Creates a shadow-like border.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
-
- * <pre>
- * history
- *        10-Mar-2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public class ShadowBorderConverter extends BorderConverter {
 	
-	private static final Map TYPES = new HashMap();
+	private static final Map<String, String> TYPES = new HashMap<String, String>();
 	static {
 		TYPES.put("bottom-right-shadow", BORDERS_PACKAGE + "BottomRightShadowBorder");
 		TYPES.put("right-bottom-shadow", BORDERS_PACKAGE + "BottomRightShadowBorder");
@@ -64,15 +59,15 @@ public class ShadowBorderConverter extends BorderConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet) throws BuildException {
-		String typeName = (String) border.get("type");
-		String type = (String) TYPES.get( typeName );
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet) throws BuildException {
+		String typeName = border.getValue("type");
+		String type = TYPES.get( typeName );
 		if (type == null) {
-			throw new BuildException("Invalid CSS: the shadow border [" + typeName + "] is not supported. Please define another shadow-border in the [type] argument, e.g. \"type: bottom-right-shadow\".");
+			throw new BuildException("Invalid CSS: the shadow border [" + typeName + "] is not supported. Please define another shadow-border in the [type] argument, e.g. \"type: bottom-right-shadow\": " + border);
 		}
-		String offset = (String) border.get("offset");
+		String offset = border.getValue("offset");
 		if (offset == null) {
-			offset = "1"; // default ofset
+			offset = "1"; // default offset
 		} else {
 			parseInt( "offset", offset );
 		}

@@ -55,7 +55,12 @@ public class PixelScreenChangeAnimation extends ScreenChangeAnimation {
 
 	
 	
-	protected boolean animate() {
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
+	 */
+	protected boolean animate(long passedTime, long duration) {
 		int row = 0;
 		for(int i = 0; i < this.lastCanvasRgb.length;i++){		
 			if(i == row){	
@@ -64,7 +69,9 @@ public class PixelScreenChangeAnimation extends ScreenChangeAnimation {
 			}		
 		}
 		this.row-=1;
-		if(this.row == 0)this.stillRun=false;
+		if(this.row == 0) {
+			this.stillRun=false;
+		}
 		return this.stillRun;
 	}
 

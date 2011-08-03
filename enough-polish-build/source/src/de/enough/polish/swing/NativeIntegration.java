@@ -29,7 +29,7 @@ import javax.swing.JMenu;
 
 /**
  * <p>Integrates the underlying operating system, especially Mac OS X.</p>
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

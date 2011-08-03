@@ -39,10 +39,12 @@ import de.enough.polish.util.MathUtil;
 public abstract class CssAnimation 
 {
 	
-	public static final int FUNCTION_EASE = 1;
-	public static final int FUNCTION_LINEAR = 2;
-	public static final int FUNCTION_EASE_IN = 3;
-	public static final int FUNCTION_EASE_OUT = 4;
+	public static final int FUNCTION_EASE = 0;
+	public static final int FUNCTION_LINEAR = 1;
+	public static final int FUNCTION_EASE_IN = 2;
+	public static final int FUNCTION_EASE_OUT = 3;
+	public static final int FUNCTION_EXPONENTIAL_IN = 4;
+	public static final int FUNCTION_EXPONENTIAL_OUT = 5;
 	public static final Object ANIMATION_FINISHED = new Object();
 	
 	protected final int cssAttributeId;
@@ -105,6 +107,15 @@ public abstract class CssAnimation
 	public abstract Object animate(Style style, Object styleValue, long passedTime);
 
 		
+	/**
+	 * Helper method for calculating a point of the animation.
+	 * 
+	 * @param startValue the start value
+	 * @param endValue the end value
+	 * @param passedTime the passed time
+	 * @param duration the maximum time
+	 * @return the corresponding value
+	 */
 	public static int calculatePointInRange( int startValue, int endValue, long passedTime, long duration, int function ) {
 
 				
@@ -133,6 +144,13 @@ public abstract class CssAnimation
 				current = passedTime^2;
 				return (int) (startValue + ((current * valueRange)/max));
 			}
+		case FUNCTION_EXPONENTIAL_IN:
+			long promille = (1000L * passedTime * passedTime) / (duration * duration);
+			return startValue + (int)((promille * valueRange) / 1000);
+		case FUNCTION_EXPONENTIAL_OUT:
+			promille = 1000 - (1000L * (duration-passedTime) * (duration - passedTime)) / (duration * duration);
+			//System.out.println("out: promille=" + promille);
+			return startValue + (int)((promille * valueRange) / 1000);			
 		default:
 			throw new IllegalArgumentException();
 		}
@@ -154,27 +172,8 @@ public abstract class CssAnimation
 			//System.out.println("too long, returning " + endValue);
 			return endColor;
 		}
-		switch (function) {
-		case FUNCTION_EASE:
-			int time250Promille = (int)((passedTime * 250) / duration);
-			int apxSin = MathUtil.apxSin(time250Promille);
-			return DrawUtil.getGradientColor(startColor, endColor, apxSin);
-		case FUNCTION_LINEAR:
-			return DrawUtil.getGradientColor(startColor, endColor, (int) ((passedTime*1000) / duration) );
-		case FUNCTION_EASE_IN:
-		case FUNCTION_EASE_OUT:
-			long max = duration^2;
-			long current;
-			if (function == FUNCTION_EASE_OUT) {
-				current = (duration-passedTime)^2;
-				return DrawUtil.getGradientColor(endColor, startColor, (int) ((current * 1000)/max) );
-			} else {
-				current = passedTime^2;
-				return DrawUtil.getGradientColor(startColor, endColor, (int) ((current * 1000)/max) );
-			}
-		default:
-			throw new IllegalArgumentException();
-		}
+		int permille = calculatePointInRange(0, 1000, passedTime, duration, function);
+		return DrawUtil.getGradientColor(startColor, endColor, permille );
 	}
 
 	/**

@@ -45,7 +45,7 @@ import de.enough.polish.dataeditor.DataEntry;
 /**
  * <p>Allows the editing of data with count greater than 1.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

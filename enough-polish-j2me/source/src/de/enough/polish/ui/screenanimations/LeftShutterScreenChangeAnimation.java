@@ -30,19 +30,19 @@ package de.enough.polish.ui.screenanimations;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import de.enough.polish.ui.Color;
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
 
 /**
  * <p>Moves the new screen from the right to the front.</p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Michael Koch, michael@enough.de
  */
 public class LeftShutterScreenChangeAnimation extends ScreenChangeAnimation
 {	
 	private int currentX;
-	private int speed = -1;
 	//#if polish.css.left-shutter-screen-change-animation-color
 		private int color = 0;
 	//#endif
@@ -56,65 +56,43 @@ public class LeftShutterScreenChangeAnimation extends ScreenChangeAnimation
 	}
 
 
+	//#if polish.css.left-shutter-screen-change-animation-color
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
 		super.setStyle(style);
-		if (this.isForwardAnimation) {
-			this.currentX = 0;
-		} else {
-			this.currentX = this.screenWidth;
-		}
-		//#if polish.css.left-shutter-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty("left-shutter-screen-change-animation-speed");
-			if (speedInt != null)
-			{
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
-		
 		//#if polish.css.left-shutter-screen-change-animation-color
-			Integer colorInt = style.getIntProperty("left-shutter-screen-change-animation-color");
+			Color colorInt = (Color) style.getObjectProperty("left-shutter-screen-change-animation-color");
 			if (colorInt != null)
 			{
-				this.color = colorInt.intValue();
+				this.color = colorInt.getColor();
 			}
 		//#endif	
 	}
+	//#endif	
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
-		int adjust;
-		//#if polish.css.left-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust =  this.speed;
-			} else {
-		//#endif
-				adjust = (this.screenWidth - this.currentX) / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.left-screen-change-animation-speed
-			}
-		//#endif
-		if (this.isForwardAnimation) {
-			if (this.currentX < this.screenWidth) {
-				this.currentX += adjust;
-				return true;
-			}
-		} else if (this.currentX > 0) {
-			this.currentX -= adjust;
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		return false;
+		int startValue, endValue;
+		if (this.isForwardAnimation) {
+			startValue = 0;
+			endValue = this.screenWidth;
+		} else  {
+			startValue = this.screenWidth;
+			endValue = 0;
+		}
+		this.currentX = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		return true;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#paint(javax.microedition.lcdui.Graphics)

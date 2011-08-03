@@ -4,13 +4,11 @@ package de.enough.polish.ui.backgrounds;
 
 import javax.microedition.lcdui.Graphics;
 
-import de.enough.polish.ui.Color;
-import de.enough.polish.ui.Item;
-import de.enough.polish.util.ImageUtil;
 
 /**
  * Creates a patch-based background
- * @author Ovidiu
+ * 
+ * @author Ovidiu, Andre Schmidt, Robert Virkus
  *
  */
 public class PatchBackground extends ImageResourceBackground {
@@ -47,8 +45,14 @@ public class PatchBackground extends ImageResourceBackground {
 	public void paint(int x, int y, int width, int height, Graphics g) {
 		if (!this.isLoaded) {
 			load();
+			if (this.imageWidth - (this.leftWidth + this.rightWidth)  < 1) {
+				throw new IllegalArgumentException("Invalid patch-width: left=" + this.leftWidth + ", right=" + this.rightWidth + ", image-width=" + this.imageWidth + " of " + this.imageUrl);
+			}
+			if (this.imageHeight- (this.topHeight + this.bottomHeight)  < 1) {
+				throw new IllegalArgumentException("Invalid patch-height: top=" + this.topHeight + ", bottom=" + this.bottomHeight + ", image-height=" + this.imageHeight + " of " + this.imageUrl);
+			}
 		}
-		
+		//System.out.println("paint patch");
 		int clipX = g.getClipX();
 		int clipY = g.getClipY();
 		int clipWidth = g.getClipWidth();
@@ -103,6 +107,7 @@ public class PatchBackground extends ImageResourceBackground {
 		
 		int srcWidth = this.imageWidth - (this.leftWidth + this.rightWidth);
 		int srcHeight = this.topHeight;
+		//System.out.println("horizontal tiles: srcWidth=" + srcWidth + ", srcHeight=" + srcHeight);
 		
 		int dstX = x + this.leftWidth;
 		int dstY;
@@ -110,11 +115,11 @@ public class PatchBackground extends ImageResourceBackground {
 		int fillWidth = width - (this.leftWidth + this.rightWidth);
 		
 		storeClipping(g);
-		g.clipRect(dstX, y, fillWidth, height);
 		clipX = dstX;
 		clipY = y;
 		clipWidth = fillWidth;
 		clipHeight = height;
+		g.clipRect(clipX, clipY, clipWidth, clipHeight);
 		
 		// draw horizontal top tiles:
 		srcY = 0;
@@ -146,7 +151,6 @@ public class PatchBackground extends ImageResourceBackground {
 	 * @param g the Graphics instance
 	 */
 	private void paintVerticalTiles(int x, int y, int width, int height, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
-		// draw vertical left fill
 		int srcX = 0;
 		int srcY = this.topHeight;
 		
@@ -160,18 +164,20 @@ public class PatchBackground extends ImageResourceBackground {
 		int fillHeight = height - this.topHeight - this.bottomHeight;
 		
 		storeClipping(g);
-		g.clipRect(x, dstY, width, fillHeight);
 		clipX = x;
 		clipY = dstY;
 		clipWidth = width;
 		clipHeight = fillHeight;
+		g.clipRect(clipX, clipY, clipWidth, clipHeight);
 		
+		// draw vertical left fill:
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
 			drawRegion(this.image, srcX, srcY, srcWidth, srcHeight, dstX, dstY + yOffset, clipX, clipY, clipWidth, clipHeight, g);
 		}
 		
-		// draw vertical right fill
+		// draw vertical right fill:
 		srcX = this.imageWidth - this.rightWidth;
+		srcWidth = this.rightWidth;
 		dstX = x + (width - this.rightWidth);
 		
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
@@ -179,6 +185,7 @@ public class PatchBackground extends ImageResourceBackground {
 		}
 		
 		restoreClipping(g);
+
 	}
 	
 	/**
@@ -194,7 +201,8 @@ public class PatchBackground extends ImageResourceBackground {
 		int dstY = y +  this.topHeight;
 		
 		int fillWidth = width - (this.leftWidth + this.rightWidth);
-		int fillHeight = height - this.topHeight - this.bottomHeight;
+		int fillHeight = height - (this.topHeight + this.bottomHeight);
+		
 
 		int srcX = this.leftWidth;
 		int srcY = this.topHeight;
@@ -202,11 +210,11 @@ public class PatchBackground extends ImageResourceBackground {
 		int srcHeight = this.imageHeight - (this.topHeight + this.bottomHeight);
 		
 		storeClipping(g);
-		g.clipRect(dstX, y, fillWidth, height);
 		clipX = dstX;
 		clipY = dstY;
 		clipWidth = fillWidth;
 		clipHeight = fillHeight;
+		g.clipRect(clipX, clipY, clipWidth, clipHeight);
 
 
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
@@ -217,6 +225,7 @@ public class PatchBackground extends ImageResourceBackground {
 		}
 		
 		restoreClipping(g);
+
 
 	}
 }

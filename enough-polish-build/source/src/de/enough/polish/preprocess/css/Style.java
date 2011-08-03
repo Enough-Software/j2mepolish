@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * <p>Represents a CSS-style-definition.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * 
  * <pre>
  * history
@@ -47,15 +47,15 @@ import java.util.Set;
  */
 public class Style {
 	
-	private final static Map REFERENCE_ATTRIBUTES = new HashMap();
+	private final static Map<String,Boolean> REFERENCE_ATTRIBUTES = new HashMap<String,Boolean>();
 	static {
 		REFERENCE_ATTRIBUTES.put("background", Boolean.TRUE );
 		REFERENCE_ATTRIBUTES.put("border", Boolean.TRUE );
 		REFERENCE_ATTRIBUTES.put("font", Boolean.TRUE );
 	}
 	private HashMap properties;
-	private HashMap groupsByName;
-	private ArrayList groupNamesList;
+	private HashMap<String, AttributesGroup> groupsByName;
+	private ArrayList<String> groupNamesList;
 	private String selector;
 	private String parentName;
 	private String styleName;
@@ -73,8 +73,8 @@ public class Style {
 		this.isDynamic = isDynamic;
 		this.parentName = parent;
 		this.properties = new HashMap();
-		this.groupsByName = new HashMap();
-		this.groupNamesList = new ArrayList();
+		this.groupsByName = new HashMap<String, AttributesGroup>();
+		this.groupNamesList = new ArrayList<String>();
 		this.declarationBlocks = new ArrayList();
 		add( cssBlock );
 	}
@@ -96,10 +96,10 @@ public class Style {
 		HashMap target = new HashMap();
 		Set keys = source.keySet();
 		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			Object key = iter.next();
-			HashMap original = (HashMap) source.get( key );
-			HashMap copy = new HashMap( original );
-			target.put(key, copy );
+			String groupName = (String) iter.next();
+			AttributesGroup original = (AttributesGroup) source.get( groupName );
+			HashMap copy = new AttributesGroup( this, groupName, original );
+			target.put(groupName, copy );
 		}
 		this.groupsByName = target;
 	}
@@ -110,8 +110,8 @@ public class Style {
 	
 	/**
 	 * Sets all style declarations of the parent.
-	 * All styles implicitely extend the default-style. Theuy also
-	 * can extend another style explicitely with the "extends" keyword.
+	 * All styles implicitly extend the default-style. They also
+	 * can extend another style explicitly with the "extends" keyword.
 	 * 
 	 * @param parent the parent of this style.
 	 */
@@ -122,9 +122,9 @@ public class Style {
 //		}
 		// set the standard properties:
 		this.declarationBlocks.addAll( parent.declarationBlocks );
-		Set set = parent.properties.keySet();
-		for (Iterator iter = set.iterator(); iter.hasNext();) {
-			String key = (String) iter.next();
+		Set<String> set = parent.properties.keySet();
+		for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
+			String key = iter.next();
 			if ( this.properties.get(key) == null) {
 				this.properties.put( key, parent.properties.get(key));
 			}
@@ -137,7 +137,7 @@ public class Style {
 //				System.out.println("group-name=" + groupName);
 //			}
 			// check for cases, in which a style extends another style which uses this style as its focused style:
-			HashMap parentGroup = parent.getGroup(groupName);
+			AttributesGroup parentGroup = parent.getGroup(groupName);
 			String referencedStyleName = (String) parentGroup.get("style");
 			if (referencedStyleName != null) {
 //				System.out.println("detected style reference in CSS attribute: " + parentGroup + ", child.selector=" + this.selector + ", referencedStyleName.toLowerCase()=" + referencedStyleName.toLowerCase() + ", parent.selector=" + parent.selector);
@@ -168,7 +168,7 @@ public class Style {
 //						System.out.println("removing focused-style reference");
 						// there is more than the "style" attribute in the "focused" group,
 						// so remove
-						HashMap parentGroupCopy = new HashMap( parentGroup.size() );
+						AttributesGroup parentGroupCopy = new AttributesGroup( this, parentGroup.getGroupName(), parentGroup.size() );
 						parentGroupCopy.putAll( parentGroup );
 						parentGroupCopy.remove( "style" );
 						parentGroup = parentGroupCopy;					
@@ -177,20 +177,21 @@ public class Style {
 //					System.out.println( "NO MATCH FOR [" + referencedStyleName.toLowerCase() + "] and [" + parent.selector + "]");
 				}
 			}
-			HashMap targetGroup = (HashMap) this.groupsByName.get( groupName );
+			AttributesGroup targetGroup = getGroup( groupName );
 			if (targetGroup == null) {
 				//System.out.println("setting group [" + groupName + "].");
 				// set the complete group when it is not defined:
-				this.groupsByName.put( groupName, new HashMap( parentGroup ) ); 
+				this.groupsByName.put( groupName, new AttributesGroup( this, groupName, parentGroup ) ); 
 				this.groupNamesList.add( groupName );
 			} else if (targetGroup.get(groupName) == null){
 				//System.out.println("setting only new group-properties of  [" + groupName + "].");
 				// only set the properties which are not defined yet:
 				set = parentGroup.keySet();
-				for (Iterator iter = set.iterator(); iter.hasNext();) {
+				boolean isCombinedType = "combined".equals(parentGroup.get("type"));
+				for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
 					String key = (String) iter.next();
 					if ( (targetGroup.get(key) == null) 
-							&& !isReferenceAttribute( groupName, key ) ) 
+							&& (isCombinedType || !isReferenceAttribute( groupName, key )) ) 
 						
 					{
 						//System.out.println("setting property [" + key + "] with value [" + parentGroup.get(key) + "]." );
@@ -263,16 +264,17 @@ public class Style {
 		String[] groupNames = cssBlock.getGroupNames();
 		for (int i = 0; i < groupNames.length; i++) {
 			String groupName = groupNames[i];
-			HashMap group = cssBlock.getGroupDeclarations( groupName );
-			HashMap targetGroup = (HashMap) this.groupsByName.get( groupName );
+			AttributesGroup group = cssBlock.getGroupDeclarations( groupName );
+			AttributesGroup targetGroup = (AttributesGroup) this.groupsByName.get( groupName );
 			if (targetGroup == null) {
+				group.setStyle(this);
 				this.groupsByName.put( groupName, group ); 
 				this.groupNamesList.add( groupName );
 			} else {
 				// check if a type: none; directive has been specified earlier,
 				// e.g. "background: none;". This directive is now obsolete,
 				// since more specific values are added.
-				// But for margins and paddings it is still usefull - so only
+				// But for margins and paddings it is still useful - so only
 				// remove it for border and background:
 				if ("border".equals(groupName) || "background".equals(groupName)) {
 					targetGroup.remove( groupName );
@@ -300,8 +302,8 @@ public class Style {
 		String[] groupNames = style.getGroupNames();
 		for (int i = 0; i < groupNames.length; i++) {
 			String groupName = groupNames[i];
-			HashMap group = style.getGroup( groupName );
-			HashMap targetGroup = (HashMap) this.groupsByName.get( groupName );
+			AttributesGroup group = style.getGroup( groupName );
+			AttributesGroup targetGroup = this.groupsByName.get( groupName );
 			if (targetGroup == null) {
 				this.groupsByName.put( groupName, group ); 
 				this.groupNamesList.add( groupName );
@@ -309,7 +311,7 @@ public class Style {
 				// check if a type: none; directive has been specified earlier,
 				// e.g. "background: none;". This directive is now obsolete,
 				// since more specific values are added.
-				// But for margins and paddings it is still usefull - so only
+				// But for margins and paddings it is still useful - so only
 				// remove it for border and background:
 				if ("border".equals(groupName) || "background".equals(groupName)) {
 					targetGroup.remove( groupName );
@@ -326,8 +328,8 @@ public class Style {
 	 * @param groupName the name of the group
 	 * @return the map containing all defined attributes of the group
 	 */
-	public HashMap getGroup(String groupName ) {
-		return (HashMap) this.groupsByName.get( groupName );
+	public AttributesGroup getGroup(String groupName ) {
+		return (AttributesGroup) this.groupsByName.get( groupName );
 	}
 
 	/**
@@ -336,9 +338,9 @@ public class Style {
 	 * @param groupName the name of the group
 	 * @return the map containing all defined attributes of the group
 	 */
-	public HashMap removeGroup(String groupName ) {
+	public AttributesGroup removeGroup(String groupName ) {
 		this.groupNamesList.remove(groupName);
-		return (HashMap) this.groupsByName.remove( groupName );
+		return (AttributesGroup) this.groupsByName.remove( groupName );
 	}	
 	/**
 	 * Retrieves the names of all stored groups.
@@ -373,7 +375,7 @@ public class Style {
 	 * @param groupName the name of the group
 	 * @param group the group
 	 */
-	public void addGroup(String groupName, Map group) {
+	public void addGroup(String groupName, AttributesGroup group) {
 		boolean addName = this.groupsByName.get( groupName ) == null;
 		this.groupsByName.put( groupName, group );
 		if (addName) {
@@ -383,7 +385,7 @@ public class Style {
 	
 	/**
 	 * Creates String representation of this style.
-	 * Is used for debugging puposes only,
+	 * Is used for debugging purposes only,
 	 * 
 	 * @return the buffer plus contents as a string
 	 */
@@ -566,9 +568,9 @@ public class Style {
 			this.properties.put( attributeName, attributeValue );
 		}
 		String groupName = attributeName.substring(0, splitPos );
-		HashMap group = getGroup(groupName);
+		AttributesGroup group = getGroup(groupName);
 		if (group == null) {
-			group = new HashMap();
+			group = new AttributesGroup(this, groupName);
 			this.groupsByName.put( groupName, group);
 			this.groupNamesList.add( groupName );
 		}
@@ -653,17 +655,11 @@ public class Style {
 	 */
 	public String getValue(String groupName, String key)
 	{
-		HashMap group = getGroup(groupName);
+		AttributesGroup group = getGroup(groupName);
 		if (group == null) {
 			return null;
 		}
-		String value = (String) group.get(key);
-		if (value == null) {
-			value = (String) group.get(groupName + "-" + key);
-		}
-		return value;
+		return group.getValue(key);
 	}
-
-
 	
 }

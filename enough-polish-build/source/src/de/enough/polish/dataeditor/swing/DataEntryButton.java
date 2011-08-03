@@ -32,7 +32,7 @@ import de.enough.polish.dataeditor.DataEntry;
 /**
  * <p>A button which has a corresponding data entry.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

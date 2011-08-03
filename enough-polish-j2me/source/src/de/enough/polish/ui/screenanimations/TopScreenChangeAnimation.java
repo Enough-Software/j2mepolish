@@ -39,25 +39,17 @@ import de.enough.polish.ui.Style;
  * <pre>
  * .myAlert {
  * 		screen-change-animation: top;
- * 		top-screen-change-animation-speed: 4; ( -1 is default )
  * 		top-screen-change-animation-move-previous: true; ( false is default )
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class TopScreenChangeAnimation extends ScreenChangeAnimation {
 	
 	private int currentY;
-	//#if polish.css.top-screen-change-animation-speed
-		private int speed = -1;
-	//#endif
 	//#if polish.css.top-screen-change-animation-move-previous
 		private boolean movePrevious;
 	//#endif
@@ -72,25 +64,13 @@ public class TopScreenChangeAnimation extends ScreenChangeAnimation {
 	}
 	
 	
+	//#if polish.css.top-screen-change-animation-move-previous
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
 		super.setStyle(style);
-		if (this.isForwardAnimation) {
-			this.currentY = this.screenHeight;
-		} else {
-			this.currentY = 0;
-		}
-		//#if polish.css.top-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty( "top-screen-change-animation-speed" );
-			if (speedInt != null ) {
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
 		//#if polish.css.top-screen-change-animation-move-previous
 			Boolean movePreviousBool = style.getBooleanProperty("top-screen-change-animation-move-previous");
 			if (movePreviousBool != null) {
@@ -100,37 +80,28 @@ public class TopScreenChangeAnimation extends ScreenChangeAnimation {
 			}
 		//#endif
 	}
+	//#endif
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		int adjust;
-		//#if polish.css.top-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust = this.speed;
-			} else {
-		//#endif
-				adjust = this.currentY / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.top-screen-change-animation-speed
-			}
-		//#endif
-		
-		if (this.isForwardAnimation) {
-			if (this.currentY > 0) {
-				this.currentY -= adjust;
-				return true;
-			}
-		} else if (this.currentY < this.screenHeight) {
-			this.currentY += adjust;
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		return false;
+		int startValue, endValue;
+		if (this.isForwardAnimation) {
+			startValue = this.screenHeight;
+			endValue = 0;
+		} else {
+			startValue = 0;
+			endValue = this.screenHeight;
+		}
+		this.currentY = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		return true;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#paint(javax.microedition.lcdui.Graphics)

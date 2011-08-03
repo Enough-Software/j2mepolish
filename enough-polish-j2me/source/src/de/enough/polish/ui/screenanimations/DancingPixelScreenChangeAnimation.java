@@ -52,15 +52,15 @@ public class DancingPixelScreenChangeAnimation extends ScreenChangeAnimation {
 					this.up[i] = 0;
 					this.down[i] = height;
 				}
-				super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 				this.rgbbuffer = new int[size];
 				this.nextCanvasImage.getRGB(this.rgbbuffer, 0, width, 0, 0, width, height );
+				super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 		}
 		
 		
 		
-		protected boolean animate() {
-			this.cubeEffect();
+		protected boolean animate(long passedTime, long duration) {
+			cubeEffect();
 			int length = this.nextCanvasRgb.length-1;
 			int sH,c,scalePercentH,scalePercentWidth,r,newI,sW = 0,left = 0,right = this.screenWidth;
 			for(int y = 0; y < this.screenHeight;y++){

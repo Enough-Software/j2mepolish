@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * <p>Manages a collection of textfiles.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

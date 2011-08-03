@@ -25,22 +25,16 @@
  */
 package de.enough.polish.preprocess.borders;
 
+import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
-import de.enough.polish.BuildException;
-
-import java.util.Map;
-
 /*
  * <p>Creates am image border.</p>
  *
- * <p>Copyright Enough Software 2007</p>
- * <pre>
- * history
- *        9-May-2005 - mkoch creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2011</p>
  * @author Michael Koch, michael.koch@enough.de
  */
 public class MultiImageBorderConverter
@@ -56,23 +50,23 @@ public class MultiImageBorderConverter
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map border, Style style, StyleSheet styleSheet)
+	protected String createNewStatement(AttributesGroup border, Style style, StyleSheet styleSheet)
 		throws BuildException
 	{
-		String borderWidthStr = (String) border.get("border-width");
+		String borderWidthStr = border.getValue("border-width");
 
 		if (borderWidthStr == null) {
 			borderWidthStr = "0";
 		}
 
-		String topLeft = (String) border.get("top-left");
-		String topCenter = (String) border.get("top-center");
-		String topRight = (String) border.get("top-right");
-		String middleLeft = (String) border.get("middle-left");
-		String middleRight = (String) border.get("middle-right");
-		String bottomLeft = (String) border.get("bottom-left");
-		String bottomCenter = (String) border.get("bottom-center");
-		String bottomRight = (String) border.get("bottom-right");
+		String topLeft = border.getValue("top-left");
+		String topCenter = border.getValue("top-center");
+		String topRight = border.getValue("top-right");
+		String middleLeft = border.getValue("middle-left");
+		String middleRight = border.getValue("middle-right");
+		String bottomLeft = border.getValue("bottom-left");
+		String bottomCenter = border.getValue("bottom-center");
+		String bottomRight = border.getValue("bottom-right");
 
 		if (topLeft == null || topCenter == null || topRight == null
 			|| middleLeft == null || middleRight == null || bottomLeft == null

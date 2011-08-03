@@ -53,7 +53,7 @@ import de.enough.polish.util.SwingUtil;
 
 /**
  * <p>Base class for standalong swing applications.</p>
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

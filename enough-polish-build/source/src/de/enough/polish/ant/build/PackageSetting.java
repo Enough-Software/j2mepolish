@@ -30,7 +30,7 @@ import de.enough.polish.ExtensionSetting;
 /**
  * <p>Allows the usage of different packagers for the project.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

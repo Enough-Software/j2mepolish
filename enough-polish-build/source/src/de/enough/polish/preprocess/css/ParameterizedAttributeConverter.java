@@ -25,8 +25,6 @@
  */
 package de.enough.polish.preprocess.css;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
 import de.enough.polish.Environment;
 
@@ -34,10 +32,6 @@ import de.enough.polish.Environment;
  * <p>Converts parameterized CSS attributes like backgrounds and borders without specific converter classes.</p>
  *
  * <p>Copyright Enough Software 2007</p>
- * <pre>
- * history
- *        May 8, 2007 - rob creation
- * </pre>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ParameterizedAttributeConverter extends Converter {
@@ -45,7 +39,7 @@ public class ParameterizedAttributeConverter extends Converter {
 	public String createNewStatement( 
 			CssAttribute attribute,
 			ParameterizedCssMapping mapping,
-			Map cssValues, 
+			AttributesGroup cssValues, 
 			Environment environment )
 	throws BuildException
 	{
@@ -70,7 +64,7 @@ public class ParameterizedAttributeConverter extends Converter {
 					System.out.println( j + "=" + parameters[j].getType() + "=" + parameters[j].getName() );
 				}
 				System.out.println("CSS values for parameter " + i + ": " + cssValues.get(paramName));
-				throw new BuildException("Invalid CSS: there is no value for \"" + mapping.getFrom() + "-"  + paramName + "\" specified - please adjust your design in polish.css accordingly.");
+				throw new BuildException("Invalid CSS: there is no value for \"" + mapping.getFrom() + "-"  + paramName + "\" specified - please adjust your design in polish.css accordingly: " + cssValues);
 			}
 			buffer.append( parameter.getValue(paramValue, environment));
 			if (i != parameters.length -1) {
@@ -90,7 +84,7 @@ public class ParameterizedAttributeConverter extends Converter {
 	 * @return
 	 */
 	private String getParamValue(CssAttribute parameter, String paramName,
-			ParameterizedCssMapping mapping, Map cssValues,
+			ParameterizedCssMapping mapping, AttributesGroup cssValues,
 			Environment environment, int overflowIndex)
 	{
 		if (overflowIndex > 10) {

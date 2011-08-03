@@ -30,7 +30,7 @@ import de.enough.polish.Device;
 /**
  * <p>Selects a device by its screen height.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

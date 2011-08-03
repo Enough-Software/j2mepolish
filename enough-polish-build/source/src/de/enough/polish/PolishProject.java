@@ -32,7 +32,7 @@ import de.enough.polish.preprocess.DebugManager;
 /**
  * <p>Represents a J2ME project defined by the ant settings in the build.xml file.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

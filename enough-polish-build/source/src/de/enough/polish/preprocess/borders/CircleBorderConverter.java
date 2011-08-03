@@ -26,10 +26,8 @@
  */
 package de.enough.polish.preprocess.borders;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
-
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BorderConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -44,12 +42,8 @@ import de.enough.polish.preprocess.css.StyleSheet;
  * 	<li><b>stroke-style</b>: the stroke-style, either "dotted" or "solid". Defaults to "solid". </li>
  * </ul>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        17-Jul-2004 - rob creation
- * </pre>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class CircleBorderConverter extends BorderConverter {
@@ -62,12 +56,12 @@ public class CircleBorderConverter extends BorderConverter {
 	 * @see de.enough.polish.preprocess.BorderConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
 	protected String createNewStatement(
-			Map border, 
+			AttributesGroup border, 
 			Style style,
 			StyleSheet styleSheet ) 
 	throws BuildException 
 	{
-		String strokeStyle = (String) border.get("stroke-style");
+		String strokeStyle = border.getValue("stroke-style");
 		String strokeStyleCode;
 		if (strokeStyle != null) {
 			if ("dotted".equalsIgnoreCase(strokeStyle)) {

@@ -33,7 +33,7 @@ import org.jdom.Element;
 /**
  * <p>Represents a Java based platform like MIDP/1.0, WIPI/2.0 or DoJa/3.0.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -37,7 +37,7 @@ import de.enough.polish.ExtensionSetting;
 /**
  * <p>Includes the settings for running the emulator.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

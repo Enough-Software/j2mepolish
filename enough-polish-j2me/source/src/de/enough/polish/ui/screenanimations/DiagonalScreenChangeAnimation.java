@@ -40,25 +40,18 @@ import de.enough.polish.ui.Style;
  * <pre>
  * .myAlert {
  * 		screen-change-animation: diagonal;
- * 		diagonal-screen-change-animation-speed: 4; ( 2 is default )
- * 		diagonal-screen-change-animation-move-previous: true; ( false is default )
+ * 		diagonal-screen-change-animation-move-previous: true;    ( false is default )
+ * 		diagonal-screen-change-animation-background-color: #f00; ( white is default )
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class DiagonalScreenChangeAnimation extends ScreenChangeAnimation {
 	private int currentX;
 	private int currentY;
-	//#if polish.css.diagonal-screen-change-animation-speed
-		private int speed = -1;
-	//#endif
 	//#if polish.css.diagonal-screen-change-animation-move-previous
 		private boolean movePrevious;
 	//#endif
@@ -87,12 +80,6 @@ public class DiagonalScreenChangeAnimation extends ScreenChangeAnimation {
 			this.currentX = this.screenWidth;
 			this.currentY = this.screenHeight;
 		}
-		//#if polish.css.diagonal-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty( "diagonal-screen-change-animation-speed" );
-			if (speedInt != null ) {
-				this.speed = speedInt.intValue();
-			}
-		//#endif
 		//#if polish.css.diagonal-screen-change-animation-move-previous
 			Boolean movePreviousBool = style.getBooleanProperty("diagonal-screen-change-animation-move-previous");
 			if (movePreviousBool != null) {
@@ -107,54 +94,33 @@ public class DiagonalScreenChangeAnimation extends ScreenChangeAnimation {
 		//#endif	
 	}
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		if (this.isForwardAnimation) {
-			if (this.currentY < this.screenHeight) {
-				//#if polish.css.diagonal-screen-change-animation-speed
-					if (this.speed != -1) {
-						this.currentY += this.speed;
-					} else {
-				//#endif
-						int adjust = (this.screenHeight - this.currentY) / 3;
-						if (adjust < 3) {
-							adjust = 3;
-						}
-						this.currentY += adjust;
-				//#if polish.css.diagonal-screen-change-animation-speed
-					}
-				//#endif
-				this.currentX = ( this.currentY * this.screenWidth ) / this.screenHeight;
-				return true;
-			} 
-		} else {
-			if (this.currentY > 0) {
-				//#if polish.css.diagonal-screen-change-animation-speed
-					if (this.speed != -1) {
-						this.currentY -= this.speed;
-					} else {
-				//#endif
-						int adjust = (this.screenHeight - this.currentY) / 3;
-						if (adjust < 3) {
-							adjust = 3;
-						}
-						this.currentY -= adjust;
-				//#if polish.css.diagonal-screen-change-animation-speed
-					}
-				//#endif
-				this.currentX = ( this.currentY * this.screenWidth ) / this.screenHeight;
-				return true;
-			} 
-
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		//#if polish.css.diagonal-screen-change-animation-speed
-			this.speed = -1;
-		//#endif
-		return false;
+		int startX, endX;
+		int startY, endY;
+		if (this.isForwardAnimation) {
+			startX = 0;
+			endX = this.screenWidth;
+			startY = 0;
+			endY = this.screenHeight;
+		} else  {
+			startX = this.screenWidth;
+			endX = 0;
+			startY = this.screenHeight;
+			endY = 0;
+		}
+		this.currentX = calculateAnimationPoint(startX, endX, passedTime, duration);
+		this.currentY = calculateAnimationPoint(startY, endY, passedTime, duration);
+		return true;
 	}
+
+
 
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#paint(javax.microedition.lcdui.Graphics)

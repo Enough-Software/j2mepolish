@@ -36,7 +36,7 @@ import java.util.ArrayList;
 /**
  * <p>Represents the info-section of a polish project.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

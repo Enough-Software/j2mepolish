@@ -83,9 +83,9 @@ font-color-animation {
 		independent animations: <code>fire-event: myCustomEvent;</code>
 		</li>
 		<li><b>function</b>: The function by which values are modified during the animation. 
-		Supported values are <code>ease</code>, <code>ease-in</code>, <code>ease-out</code> and <code>linear</code>.
+		Supported values are <code>ease</code>, <code>ease-in</code>, <code>ease-out</code>, <code>linear</code>, <code>exponential-in</code> and <code>exponential-out</code>.
 		<code>ease</code> results in a slow beginning (<code>ease-in</code>) or ending (<code>ease-out</code>) or both a smooth ending and beginning (<code>ease</code>).
-		The <code>linear</code> function will change the value purely linear to the passed time. The <code>ease</code> function 
+		The <code>linear</code> function will change the value purely linear to the passed time. <code>exponential-in</code> starts slowly and then accelerates exponentially, <code>exponential-out</code> begins exponentially and then decelerates. The <code>ease</code> function 
 		is the default function:
 		<code>function: ease;</code></li>
 	</ul>

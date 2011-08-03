@@ -55,9 +55,6 @@ import de.enough.polish.ui.Style;
 public class BottomScreenChangeAnimation extends ScreenChangeAnimation {
 	
 	protected int currentY;
-	//#if polish.css.bottom-screen-change-animation-speed
-		private int speed = -1;
-	//#endif
 	//#if polish.css.bottom-screen-change-animation-move-previous
 		private boolean movePrevious;
 	//#endif
@@ -72,25 +69,13 @@ public class BottomScreenChangeAnimation extends ScreenChangeAnimation {
 	}
 	
 	
+	//#if polish.css.bottom-screen-change-animation-move-previous
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ScreenChangeAnimation#setStyle(de.enough.polish.ui.Style)
 	 */
 	protected void setStyle(Style style)
 	{
 		super.setStyle(style);
-		if (this.isForwardAnimation) {
-			this.currentY = 0;
-		} else {
-			this.currentY = this.screenHeight;
-		}
-		//#if polish.css.bottom-screen-change-animation-speed
-			Integer speedInt = style.getIntProperty( "bottom-screen-change-animation-speed" );
-			if (speedInt != null ) {
-				this.speed = speedInt.intValue();
-			} else {
-				this.speed = -1;
-			}
-		//#endif
 		//#if polish.css.bottom-screen-change-animation-move-previous
 			Boolean movePreviousBool = style.getBooleanProperty("bottom-screen-change-animation-move-previous");
 			if (movePreviousBool != null) {
@@ -100,37 +85,29 @@ public class BottomScreenChangeAnimation extends ScreenChangeAnimation {
 			}
 		//#endif
 	}
+	//#endif
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		int adjust;
-		//#if polish.css.bottom-screen-change-animation-speed
-			if (this.speed != -1) {
-				adjust = this.speed;
-			} else {
-		//#endif
-				adjust = (this.screenHeight - this.currentY) / 3;
-				if (adjust < 2) {
-					adjust = 2;
-				}
-		//#if polish.css.bottom-screen-change-animation-speed
-			}
-		//#endif
-		
-		if (this.isForwardAnimation) {
-			if (this.currentY < this.screenHeight) {
-				this.currentY += adjust;
-				return true;
-			}
-		} else if (this.currentY > 0) {
-			this.currentY -= adjust;
-			return true;
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			return false;
 		}
-		return false;
+		int startValue, endValue;
+		if (this.isForwardAnimation) {
+			startValue = 0;
+			endValue = this.screenHeight;
+		} else {
+			startValue = this.screenHeight;
+			endValue = 0;
+		}
+		this.currentY = calculateAnimationPoint(startValue, endValue, passedTime, duration);
+		return true;
 	}
+
+
 
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#paint(javax.microedition.lcdui.Graphics)

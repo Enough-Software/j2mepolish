@@ -49,7 +49,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * <p>Methods for the fast and simple creation of jar files.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

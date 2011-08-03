@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * <p>Represents a single library.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

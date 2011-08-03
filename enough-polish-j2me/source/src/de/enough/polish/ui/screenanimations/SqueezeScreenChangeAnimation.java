@@ -45,14 +45,12 @@ import de.enough.polish.util.ImageUtil;
  * }
  * </pre>
  *
- * <p>Copyright Enough Software 2008</p>
+ * <p>Copyright Enough Software 2008 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class SqueezeScreenChangeAnimation extends ScreenChangeAnimation {
 	
 	private int[] scaledRgb;
-	private int currentStep;
-	private int steps = 5;
 	private int currentHeight;
 	
 	/**
@@ -72,43 +70,37 @@ public class SqueezeScreenChangeAnimation extends ScreenChangeAnimation {
 		if (isForward) {
 			this.useLastCanvasRgb = true;
 			this.useNextCanvasRgb = false;
-			this.currentStep = 0;
 		} else {
 			this.useLastCanvasRgb = false;
 			this.useNextCanvasRgb = true;			
-			this.currentStep = this.steps;
 		}
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 		this.scaledRgb = new int [width * height];
-		animate();
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
-	
-	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate()
-	{
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.scaledRgb = null;
+			return false;
+		}
 		int[] original;
+		int startValue, endValue;
 		if (this.isForwardAnimation) {
-			this.currentStep++;
-			if (this.currentStep >= this.steps) {
-				this.scaledRgb = null;
-				return false;
-			}
+			startValue = this.screenHeight;
+			endValue = 10;
 			original = this.lastCanvasRgb;
 		} else {
-			this.currentStep--;
-			if (this.currentStep <= 0) {
-				this.scaledRgb = null;
-				return false;
-			}
+			startValue = 10;
+			endValue = this.screenHeight;
 			original = this.nextCanvasRgb;
 		}
-		int h = (this.screenHeight * (this.steps - this.currentStep)) / this.steps;
+		int h = calculateAnimationPoint(startValue, endValue, passedTime, duration);
 		this.currentHeight = h;
-		ImageUtil.scale(original,this.screenWidth, h ,this.screenWidth, this.screenHeight, this.scaledRgb);
+		ImageUtil.scale(original, this.screenWidth, h, this.screenWidth, this.screenHeight, this.scaledRgb);
 		return true;
 	}
 	
@@ -126,7 +118,7 @@ public class SqueezeScreenChangeAnimation extends ScreenChangeAnimation {
 			canvasImage = this.lastCanvasImage;
 		}
 		g.drawImage(canvasImage, 0, 0, Graphics.TOP | Graphics.LEFT);
-		g.drawRGB(this.scaledRgb,0,this.screenWidth,0,this.screenHeight - this.currentHeight,this.screenWidth,this.currentHeight,false);
+		g.drawRGB(this.scaledRgb, 0, this.screenWidth, 0, this.screenHeight - this.currentHeight, this.screenWidth, this.currentHeight, false);
 	}
 
 }

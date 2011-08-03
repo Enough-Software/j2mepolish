@@ -127,7 +127,7 @@ public class MapCssAttribute extends CssAttribute {
 				if (startIndex == -1) {
 					startIndex = this.shell.indexOf('}');
 					if (startIndex == -1) {
-						throw new BuildException("Invalid css definition - the shell value " + this.shell + " is  invalid, neither ')' nor '}' found. Check the CSS attribute definition of " + this.name + " in your custom-css-attributes.xml.");
+						throw new BuildException("Invalid CSS definition - the shell value " + this.shell + " is  invalid, neither ')' nor '}' found. Check the CSS attribute definition of " + this.name + " in your custom-css-attributes.xml.");
 					}
 				}
 				convertedValueBuffer.insert(0, this.shell.substring(0, startIndex) );

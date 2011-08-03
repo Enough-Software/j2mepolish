@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * <p>Helps to parse properties in the form of ${ property.name }.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

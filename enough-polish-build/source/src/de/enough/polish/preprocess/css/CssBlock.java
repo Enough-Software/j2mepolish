@@ -58,7 +58,7 @@ public class CssBlock {
 	protected static final Pattern INNER_BLOCK_PATTERN = Pattern.compile(INNER_BLOCK_PATTERN_STR);
 	private String selector;
 	private final HashMap declarationsByName;
-	private final HashMap groupsByNames;
+	private final HashMap<String, AttributesGroup> groupsByNames;
 	private final ArrayList groups;
 	private final ArrayList declarationBlocks;
 	
@@ -72,7 +72,7 @@ public class CssBlock {
 		//System.out.println("CssBlock for block \n\"" + cssCode + "\"...");
 		String original = cssCode;
 		this.declarationsByName = new HashMap();
-		this.groupsByNames = new HashMap();
+		this.groupsByNames = new HashMap<String, AttributesGroup>();
 		this.groups = new ArrayList();
 		this.declarationBlocks = new ArrayList();
 		int parenthesisPos = cssCode.indexOf('{');
@@ -183,9 +183,9 @@ public class CssBlock {
 			subAttribute = attribute.substring(hyphenPos + 1);
 		}
 		this.declarationsByName.put(attribute, value);
-		HashMap group = (HashMap) this.groupsByNames.get( groupName );
+		AttributesGroup group = this.groupsByNames.get( groupName );
 		if (group == null) {
-			group = new HashMap();
+			group = new AttributesGroup(null, groupName);
 			this.groupsByNames.put( groupName, group );
 			this.groups.add( groupName );
 		}
@@ -294,11 +294,11 @@ public class CssBlock {
 	/**
 	 * Retrieves the declarations for the specific group.
 	 * 
-	 * @param group the name of the group.
+	 * @param groupName the name of the group.
 	 * @return all declaration of the specified group in a HashMap
 	 */
-	public HashMap getGroupDeclarations( String group ) {
-		return (HashMap) this.groupsByNames.get( group );
+	public AttributesGroup getGroupDeclarations( String groupName ) {
+		return (AttributesGroup) this.groupsByNames.get( groupName );
 	}
 
 	/**

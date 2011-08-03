@@ -38,7 +38,7 @@ import de.enough.polish.Variable;
 /**
  * <p>PoulateUtil is used to set variables via reflection.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

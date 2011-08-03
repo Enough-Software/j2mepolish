@@ -31,7 +31,7 @@ package de.enough.polish.preprocess;
  * <p>The background creator is responsible for creating backgrounds
  *    for styles.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

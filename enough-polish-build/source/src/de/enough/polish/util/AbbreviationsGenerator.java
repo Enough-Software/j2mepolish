@@ -40,7 +40,7 @@ import de.enough.polish.BuildException;
  * instead of full names, which saves some memory.
  * </p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

@@ -52,7 +52,7 @@ public class BackgroundComparator
 	 * @param backgroundTypes the background types
 	 * @return a sorted array of the given background names
 	 */
-	public static Object[] sort( HashMap backgrounds, ParameterizedCssAttribute backgroundTypes)
+	public static Object[] sort( Map<String, AttributesGroup> backgrounds, ParameterizedCssAttribute backgroundTypes)
 	{
 		Object[] backgroundNames = backgrounds.keySet().toArray();
 		ArrayList backgroundsWithoutDependencies = new ArrayList();
@@ -60,7 +60,7 @@ public class BackgroundComparator
 		for (int i = 0; i < backgroundNames.length; i++)
 		{
 			Object name = backgroundNames[i];
-			Map background = (Map) backgrounds.get(name);
+			AttributesGroup background = backgrounds.get(name);
 			String type = (String) background.get("type");
 			if (type == null) {
 				// must be a simple background without dependencies:

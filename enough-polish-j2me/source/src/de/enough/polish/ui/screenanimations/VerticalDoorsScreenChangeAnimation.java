@@ -27,16 +27,11 @@
  */
 package de.enough.polish.ui.screenanimations;
 
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
-import de.enough.polish.ui.CssAnimation;
-import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.ScreenChangeAnimation;
 import de.enough.polish.ui.Style;
-import de.enough.polish.ui.UiAccess;
 
 /**
  * <p>Moves the new screen like two snapping doors from top and bottom that meet in the middle.</p>
@@ -46,20 +41,12 @@ import de.enough.polish.ui.UiAccess;
  */
 public class VerticalDoorsScreenChangeAnimation extends ScreenChangeAnimation
 {	
-	private static final int DIRECTION_DEFAULT = 0;
-	private static final int DIRECTION_CLOSE = 1;
-	private static final int DIRECTION_OPEN = 2;
+	private static final int DOOR_BOTH = 0;
+	private static final int DOOR_TOP = 1;
+	private static final int DOOR_BOTTOM = 2;
 	
 	private int currentY;
-	private long duration = 500;
-	private int direction = DIRECTION_DEFAULT;
-	private long startTime;
-	//#if polish.css.vertical-doors-screen-change-animation-delay
-		//#define tmp.pauseSupported
-		private long pauseStartTime;
-		private long pauseDelay;
-		private boolean isBeforePause;
-	//#endif
+	private int door = DOOR_BOTH;
 
 	/**
 	 * Creates a new animation 
@@ -78,95 +65,35 @@ public class VerticalDoorsScreenChangeAnimation extends ScreenChangeAnimation
 	{
 		super.setStyle(style);
 		this.currentY = this.screenHeight / 2;
-
-		//#if polish.css.vertical-doors-screen-change-animation-duration
-			Integer durationInt = style.getIntProperty("vertical-doors-screen-change-animation-duration");
-			if (durationInt != null)
+		//#if polish.css.vertical-doors-screen-change-animation-door
+			Integer doorInt = style.getIntProperty("vertical-doors-screen-change-animation-door");
+			if (doorInt != null)
 			{
-				this.duration = durationInt.longValue();
-			}
-		//#endif
-		//#if polish.css.vertical-doors-screen-change-animation-direction
-			Integer directionInt = style.getIntProperty("vertical-doors-screen-change-animation-direction");
-			if (durationInt != null)
-			{
-				this.direction = directionInt.intValue();
+				this.door = doorInt.intValue();
 			} else {
-				this.direction = DIRECTION_DEFAULT;
+				this.door = DOOR_BOTH;
 			}
 		//#endif
-		//#if polish.css.vertical-doors-screen-change-animation-delay
-			Integer delayInt = style.getIntProperty("vertical-doors-screen-change-animation-delay");
-			if (delayInt != null)
-			{
-				this.pauseDelay = delayInt.longValue();
-			}
-		//#endif
-
+		
 	}
 	
 	
 
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#onShow(de.enough.polish.ui.Style, de.enough.polish.ui.Display, int, int, de.enough.polish.ui.Displayable, de.enough.polish.ui.Displayable, boolean)
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected void onShow(Style style, Display dsplay, int width, int height,
-			Displayable lstDisplayable, Displayable nxtDisplayable,
-			boolean isForward) 
-	{
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable,
-				isForward);
-		this.startTime = System.currentTimeMillis();
-		//#if tmp.pauseSupported
-			this.isBeforePause = true;
-			this.pauseStartTime = 0;
-		//#endif
-		//#if polish.css.vertical-doors-screen-change-animation-direction
-			if (this.direction == DIRECTION_CLOSE) {
-				this.isForwardAnimation = true;
-			} else if (this.direction == DIRECTION_OPEN) {
-				this.isForwardAnimation = false;
-			}
-		//#endif
-	}
-
-
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
-	 */
-	protected boolean animate()
-	{
-		long passedTime = System.currentTimeMillis() - this.startTime;
-		int nextY = CssAnimation.calculatePointInRange(this.screenHeight/2, 0, passedTime, this.duration, CssAnimation.FUNCTION_EASE_OUT);
+	protected boolean animate(long passedTime, long duration) {
+		int nextY = calculateAnimationPoint(this.screenHeight/2, 0, passedTime, duration);
 
 		if (nextY > 0)
 		{
 			this.currentY = nextY;
 			return true;
 		}
-		//#if tmp.pauseSupported
-			if (this.pauseDelay != 0 && this.isBeforePause) {
-				if (this.pauseStartTime == 0) {
-					this.pauseStartTime = System.currentTimeMillis();
-				} else {
-					passedTime += this.startTime - this.pauseStartTime;
-					if (passedTime > this.pauseDelay) {
-						this.isBeforePause = false;
-						this.startTime = System.currentTimeMillis();
-					} else {
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							// ignore
-						}
-					}
-				}
-				return true;
-			}
-		//#endif		
-		return false;
+		return false;	
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -177,43 +104,44 @@ public class VerticalDoorsScreenChangeAnimation extends ScreenChangeAnimation
 		Image first;
 		Image second;
 		int height;
-		Canvas next = null;
 		if (this.isForwardAnimation) {
 			first = this.lastCanvasImage;
 			second = this.nextCanvasImage;
 			height = (this.screenHeight/2) - this.currentY;
 		} else {
-			next = this.nextCanvas;
 			first = this.nextCanvasImage;
 			second = this.lastCanvasImage;
 			height = this.currentY;
 		}
-		if (next != null) {
-			UiAccess.paint(next, g );
-		} else {
-			g.drawImage(first, 0, 0, Graphics.TOP | Graphics.LEFT);
-		}
-		// paint top door:
-		//#if tmp.pauseSupported
-			if (this.pauseDelay == 0 || this.isBeforePause) {
+		// draw last (direction==DIRECTION_CLOSING/isForwardAnimation) or next screen:
+		g.drawImage(first, 0, 0, Graphics.TOP | Graphics.LEFT);
+		// draw top door:
+		//#if polish.css.vertical-doors-screen-change-animation-door
+			if (this.door == DOOR_BOTH || this.door == DOOR_TOP) {
 		//#endif
 				g.setClip(0, 0, this.screenWidth, height );
 				g.drawImage(second, 0, height - (this.screenHeight/2), Graphics.TOP | Graphics.LEFT);
-		//#if tmp.pauseSupported
+		//#if polish.css.vertical-doors-screen-change-animation-door
+			} else {
+				g.setClip(0, 0, this.screenWidth, this.screenHeight/2 );
+				g.drawImage(second, 0, 0, Graphics.TOP | Graphics.LEFT);				
 			}
 		//#endif
-		
-		// paint bottom door:
-		//#if tmp.pauseSupported
-			if (this.pauseDelay == 0 || !this.isBeforePause) {
+			
+		// draw bottom door:
+			//#if polish.css.vertical-doors-screen-change-animation-door
+			if (this.door == DOOR_BOTH || this.door == DOOR_BOTTOM) {
 		//#endif
 				g.setClip(0, this.screenHeight-height, this.screenWidth, height );
 				g.drawImage(second, 0, (this.screenHeight/2) - height , Graphics.TOP | Graphics.LEFT);
-		//#if tmp.pauseSupported
+		//#if polish.css.vertical-doors-screen-change-animation-door
 			} else {
-				g.setClip(0, this.screenHeight/2, this.screenWidth, this.screenHeight/2 );
-				g.drawImage(second, 0, 0 , Graphics.TOP | Graphics.LEFT);
+				g.setClip(0, this.screenHeight/2, this.screenWidth, this.screenHeight/2 + 1 );
+				g.drawImage(second, 0, 0, Graphics.TOP | Graphics.LEFT);				
 			}
 		//#endif
 	}
+
+
+
 }

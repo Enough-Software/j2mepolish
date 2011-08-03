@@ -61,8 +61,7 @@ public class DisplayScreenChangeAnimation extends ScreenChangeAnimation {
 	}
 
 
-	protected boolean animate() {
-		// TODO Auto-generated method stub
+	protected boolean animate(long passedTime, long duration) {
 		int row = 0,column = 5;
 		for(int i = 0; i < this.rgbData.length;i++){
 			if(row < this.row ){		

@@ -34,7 +34,7 @@ import de.enough.polish.BuildException;
  * <p>Selects devices by the size of specific features.</p>
  * <p>The size-based capability needs to be defined as "11x22" etc.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

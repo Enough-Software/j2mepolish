@@ -37,7 +37,7 @@ import java.util.ArrayList;
 /**
  * <p>Loads resources either from the disk or from the jar file.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

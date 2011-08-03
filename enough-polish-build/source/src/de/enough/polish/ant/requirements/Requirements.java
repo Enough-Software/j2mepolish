@@ -37,7 +37,7 @@ import de.enough.polish.ant.ConditionalElement;
 /**
  * <p>A list of requirements which each supported device needs to satisfy.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

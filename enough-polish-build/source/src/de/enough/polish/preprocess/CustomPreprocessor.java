@@ -48,7 +48,7 @@ import de.enough.polish.util.StringList;
 /**
  * <p>Preprocesses the source-code in a user-defined manner.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

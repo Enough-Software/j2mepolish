@@ -25,20 +25,14 @@
  */
 package de.enough.polish.preprocess.css;
 
-import de.enough.polish.BuildException;
-
 import java.util.ArrayList;
-import java.util.Map;
+
+import de.enough.polish.BuildException;
 
 /**
  * <p>Creates different borders from CSS declarations.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
-
- * <pre>
- * history
- *        10-Mar-2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public abstract class BorderConverter extends Converter {
@@ -70,7 +64,7 @@ public abstract class BorderConverter extends Converter {
 	 * @throws BuildException when there are invalid CSS declarations in the given background
 	 */
 	public void addBorder( ArrayList codeList, 
-			Map border, 
+			AttributesGroup border, 
 			String borderName,
 			Style style, 
 			StyleSheet styleSheet,
@@ -114,7 +108,7 @@ public abstract class BorderConverter extends Converter {
 	 * @throws BuildException when there are invalid CSS declarations in the given background
 	 */
 	protected abstract String createNewStatement( 
-			Map border, 
+			AttributesGroup border, 
 			Style style, 
 			StyleSheet styleSheet )
 	throws BuildException;

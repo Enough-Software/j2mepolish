@@ -117,9 +117,9 @@ implements ImageConsumer
 	//#endif
 	
 	
-	protected void drawRegion( Image img, int x_src, int y_src, int width, int height, int x_dest, int y_dest, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
-		g.clipRect( x_dest, y_dest, width, height );
-		g.drawImage(img, x_dest - x_src, y_dest - y_src, Graphics.TOP | Graphics.LEFT );
+	protected void drawRegion( Image img, int xSrc, int ySrc, int width, int height, int xDest, int yDest, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
+		g.clipRect( xDest, yDest, width, height );
+		g.drawImage(img, xDest - xSrc, yDest - ySrc, Graphics.TOP | Graphics.LEFT );
 		g.setClip(clipX, clipY, clipWidth, clipHeight);
 	}
 }

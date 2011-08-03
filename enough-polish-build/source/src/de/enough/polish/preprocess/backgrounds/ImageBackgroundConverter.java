@@ -26,9 +26,9 @@
 package de.enough.polish.preprocess.backgrounds;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -36,7 +36,7 @@ import de.enough.polish.preprocess.css.StyleSheet;
 /**
  * <p>Creates the Image- or the BorderedImageBackground.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
@@ -68,7 +68,7 @@ public class ImageBackgroundConverter extends BackgroundConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BackgroundConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map background, Style style, StyleSheet styleSheet) throws BuildException {
+	protected String createNewStatement(AttributesGroup background, Style style, StyleSheet styleSheet) throws BuildException {
 		//TODO rob also allow other CSS settings:
 		// background-attachment,
 		// background-position ???,
@@ -76,11 +76,7 @@ public class ImageBackgroundConverter extends BackgroundConverter {
 		if (imageUrl== null) {
 			imageUrl = (String) background.get("background-image");
 			if (imageUrl== null) {
-				if (style != null) {
-					throw new BuildException("Invalid CSS: the every image background needs to define the \"image\" CSS attribute - check the " + style.getSelector() + " style.");
-				} else {
-					throw new BuildException("Invalid CSS: the every image background needs to define the \"image\" CSS attribute.");
-				}
+				throw new BuildException("Invalid CSS: the every image background needs to define the \"image\" CSS attribute in " + background);
 			}
 		}
 		imageUrl = getUrl( imageUrl );
@@ -91,7 +87,7 @@ public class ImageBackgroundConverter extends BackgroundConverter {
 		if (repeat != null) {
 			String rep = (String) REPEAT_TYPES.get( repeat );
 			if (rep == null) {
-				throw new BuildException("Invalid CSS: the repeat-type [" + repeat +"] is not supported by the image background.");
+				throw new BuildException("Invalid CSS: the repeat-type [" + repeat +"] is not supported by the image background: " + background);
 			}
 			if (rep.length() > 1) {
 				repeat = rep;

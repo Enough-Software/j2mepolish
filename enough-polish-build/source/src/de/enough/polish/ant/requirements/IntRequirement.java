@@ -32,7 +32,7 @@ import de.enough.polish.Device;
 /**
  * <p>Selects devices by matching simple numbers, e.g. "4" matches "2+".</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

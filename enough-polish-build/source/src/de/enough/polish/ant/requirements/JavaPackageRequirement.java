@@ -29,7 +29,7 @@ package de.enough.polish.ant.requirements;
 /**
  * <p>Selects a device by its support of specific software-APIs.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

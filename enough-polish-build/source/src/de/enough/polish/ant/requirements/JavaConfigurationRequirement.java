@@ -34,7 +34,7 @@ import de.enough.polish.BuildException;
 /**
  * <p>Selects a device by the supported platform. A platform is for example "MIDP/1.0"</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

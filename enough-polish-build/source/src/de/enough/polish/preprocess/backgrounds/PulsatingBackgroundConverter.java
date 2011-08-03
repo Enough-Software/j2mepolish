@@ -26,9 +26,9 @@
 package de.enough.polish.preprocess.backgrounds;
 
 import java.awt.Color;
-import java.util.Map;
 
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -37,7 +37,7 @@ import de.enough.polish.util.CastUtil;
 /**
  * <p>Creates the PulsatingBackground from CSS values.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history
@@ -55,27 +55,27 @@ public class PulsatingBackgroundConverter extends BackgroundConverter {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.BackgroundConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.Style, de.enough.polish.preprocess.StyleSheet)
 	 */
-	protected String createNewStatement(Map background, Style style,
+	protected String createNewStatement(AttributesGroup background, Style style,
 			StyleSheet styleSheet) 
 	throws BuildException 
 	{
 		StringBuffer buffer = new StringBuffer();
 		String startColorStr = (String) background.get("start-color");
 		if (startColorStr == null) {
-			throw new BuildException("Invalid CSS: the background type [pulsating] needs to define the attribute [start-color].");
+			throw new BuildException("Invalid CSS: the background type [pulsating] needs to define the attribute [start-color]: " + background);
 		}
 		startColorStr = this.colorConverter.parseColor(startColorStr);
 		if (isAlphaColor(startColorStr)) {
-			throw new BuildException("Invalid CSS: the background type [pulsating] needs to have a RGB [start-color], alpha/transparent values are not supported. The value [" + startColorStr + "] is invalid.");
+			throw new BuildException("Invalid CSS: the background type [pulsating] needs to have a RGB [start-color], alpha/transparent values are not supported. The value [" + startColorStr + "] is invalid: " + background);
 		}
 		int startColor = Integer.decode( startColorStr ).intValue();
 		String endColorStr = (String) background.get("end-color");
 		if (endColorStr == null) {
-			throw new BuildException("Invalid CSS: the background type [pulsating] needs to define the attribute [end-color].");
+			throw new BuildException("Invalid CSS: the background type [pulsating] needs to define the attribute [end-color]: " + background);
 		}
 		endColorStr = this.colorConverter.parseColor(endColorStr);
 		if (isAlphaColor(endColorStr)) {
-			throw new BuildException("Invalid CSS: the background type [pulsating] needs to have a RGB [end-color], alpha/transparent values are not supported. The value [" + endColorStr + "] is invalid.");
+			throw new BuildException("Invalid CSS: the background type [pulsating] needs to have a RGB [end-color], alpha/transparent values are not supported. The value [" + endColorStr + "] is invalid: " + background);
 		}
 		int endColor = Integer.decode( endColorStr ).intValue();
 		String stepsStr = (String) background.get("steps");
@@ -83,7 +83,7 @@ public class PulsatingBackgroundConverter extends BackgroundConverter {
 		if (stepsStr != null) {
 			steps = parseInt( "steps", stepsStr );
 			if (steps < 2) {
-				throw new BuildException("Invalid CSS: the [steps] attribute of the background type [pulsating] needs to be at least 2; the value [" + steps + "] is not valid.");
+				throw new BuildException("Invalid CSS: the [steps] attribute of the background type [pulsating] needs to be at least 2; the value [" + steps + "] is not valid: " + background);
 			}
 		}
 		Color rgbColor = new Color( startColor );

@@ -1,15 +1,14 @@
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
 
 public class TigerStripesBackgroundConverter extends BackgroundConverter {
 
-	protected String createNewStatement(Map map, Style style, StyleSheet styleSheet) 
+	protected String createNewStatement(AttributesGroup map, Style style, StyleSheet styleSheet) 
 	throws BuildException 
 	{
 		String result = "new de.enough.polish.ui.backgrounds.TigerStripesBackground(" 

@@ -27,6 +27,7 @@
  */
 package de.enough.polish.ui.screenanimations;
 
+import de.enough.polish.ui.CssAnimation;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
 import javax.microedition.lcdui.Graphics;
@@ -48,17 +49,11 @@ import de.enough.polish.util.ImageUtil;
  * </pre>
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        27-May-2005 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ZoomOutScreenChangeAnimation extends ScreenChangeAnimation {
-	private int scaleFactor = 200;
-	private int steps = 6;
-	private int currentStep;
+	private int scaleFactor = 800;
 	private int[] scaledScreenRgb;
 
 	/**
@@ -66,6 +61,8 @@ public class ZoomOutScreenChangeAnimation extends ScreenChangeAnimation {
 	 */
 	public ZoomOutScreenChangeAnimation() {
 		super();
+		this.animationForwardFunction = CssAnimation.FUNCTION_EXPONENTIAL_OUT;
+		this.animationBackwardFunction = CssAnimation.FUNCTION_EXPONENTIAL_IN;
 	}
 
 
@@ -78,39 +75,42 @@ public class ZoomOutScreenChangeAnimation extends ScreenChangeAnimation {
 		if (isForward) {
 			this.useLastCanvasRgb = false;
 			this.useNextCanvasRgb = true;
-			this.currentStep = this.steps;
 		} else {
-			this.currentStep = 0;
 			this.useLastCanvasRgb = true;
 			this.useNextCanvasRgb = false;			
 		}
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 		this.scaledScreenRgb = new int[ width * height ];
-		animate();
+		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
+			this.scaledScreenRgb = null;
+			return false;
+		}
 		int[] rgb;
+		int startFactor, endFactor;
+		int startOpacity, endOpacity;
 		if (this.isForwardAnimation) {
-			this.currentStep--;
-			if (this.currentStep <= 0) {
-				this.scaledScreenRgb = null;
-				return false;
-			}	
+			startFactor = this.scaleFactor;
+			endFactor = 100;
+			startOpacity = 10;
+			endOpacity = 255;
 			rgb = this.nextCanvasRgb;
-		} else { 
-			this.currentStep++;
-			if (this.currentStep >= this.steps ) {
-				this.scaledScreenRgb = null;
-				return false;
-			}
+		} else {
+			startFactor = 100;
+			endFactor = this.scaleFactor;
+			startOpacity = 255;
+			endOpacity = 10;
 			rgb = this.lastCanvasRgb;
 		}
-		int factor = 100 + ( (this.scaleFactor - 100) * this.currentStep ) / this.steps;
-		int opacity = 255 / this.steps * ( this.steps - this.currentStep );
+		int promille = calculateAnimationPoint(0, 1000, passedTime, duration);
+		int factor = startFactor + ((endFactor - startFactor) * promille) / 1000;
+		int opacity = startOpacity + ((endOpacity - startOpacity) * promille) / 1000;
 		ImageUtil.scale( opacity, factor, this.screenWidth, this.screenHeight, rgb, this.scaledScreenRgb);
 		
 		return true;

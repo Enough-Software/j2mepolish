@@ -41,7 +41,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Translates the stacktrace given by J2ME emulators to a normal error message stating the line-number and the source-code file.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

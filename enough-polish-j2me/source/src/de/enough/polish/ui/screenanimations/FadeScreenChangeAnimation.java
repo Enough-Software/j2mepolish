@@ -27,12 +27,9 @@
  */
 package de.enough.polish.ui.screenanimations;
 
-import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
 import javax.microedition.lcdui.Graphics;
 
 import de.enough.polish.ui.ScreenChangeAnimation;
-import de.enough.polish.ui.Style;
 
 /**
  * <p>Fades in the new screen.</p>
@@ -41,22 +38,17 @@ import de.enough.polish.ui.Style;
  * .myAlert {
  * 		//#if polish.midp2
  * 			screen-change-animation: fade;
- * 			fade-screen-change-animation-steps: 4; (6 is default)
  * 		//#endif
  * }
  * </pre>
  * </p>
  *
- * <p>Copyright (c) 2009 Enough Software</p>
- * <pre>
- * history
- *        15-April-2007 - rob creation
- * </pre>
+ * <p>Copyright (c) 2009 - 2011 Enough Software</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class FadeScreenChangeAnimation extends ScreenChangeAnimation {
-	private int steps = 6;
-	private int currentStep;
+	
+	int currentOpacity;
 
 	/**
 	 * Creates a new animation 
@@ -64,53 +56,25 @@ public class FadeScreenChangeAnimation extends ScreenChangeAnimation {
 	public FadeScreenChangeAnimation() {
 		super();
 		//#if !polish.blackberry
-		this.useNextCanvasRgb = true;
+			this.useNextCanvasRgb = true;
 		//#endif
 	}
 
-
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#show(de.enough.polish.ui.Style, javax.microedition.lcdui.Display, int, int, javax.microedition.lcdui.Image, javax.microedition.lcdui.Image, de.enough.polish.ui.Screen)
-	 */
-	protected void onShow(Style style, Display dsplay, int width, int height,
-			Displayable lstDisplayable, Displayable nxtDisplayable, boolean isForward  ) 
-	{
-		//#if polish.css.fade-screen-change-animation-steps
-			Integer stepsInt = style.getIntProperty("fade-screen-change-animation-steps");
-			if (stepsInt != null) {
-				this.steps = stepsInt.intValue();
-			}
-		//#endif
-		this.currentStep = 0;
-		
-		super.onShow(style, dsplay, width, height, lstDisplayable, nxtDisplayable, isForward );
-		//#if !polish.blackberry
-			addOpacity( 255/this.steps, this.nextCanvasRgb );
-		//#endif
-	}
 	
-	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate()
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ScreenChangeAnimation#animate(long, long)
 	 */
-	protected boolean animate() {
-		this.currentStep++;
-		if (this.currentStep >= this.steps) {
-			//this.steps = 10;
-			this.currentStep = 0;
-			//#if !polish.blackberry
-				this.nextCanvasRgb = null;
-			//#endif
+	protected boolean animate(long passedTime, long duration) {
+		if (passedTime > duration) {
 			return false;
 		}
+		this.currentOpacity = calculateAnimationPoint(0, 255, passedTime, duration);
 		//#if !polish.blackberry
-			int opacity = (255 * this.currentStep )  / this.steps;
-			addOpacity( opacity, this.nextCanvasRgb );
+			addOpacity(this.currentOpacity, this.nextCanvasRgb);
 		//#endif
 		return true;
 	}
-	
-	
 
 	//#if !polish.blackberry
 	/**
@@ -136,8 +100,7 @@ public class FadeScreenChangeAnimation extends ScreenChangeAnimation {
 		//#if polish.blackberry
 			net.rim.device.api.ui.Graphics bbGraphics = null;
 			//# bbGraphics = g.g;
-			int opacity = (255 * this.currentStep )  / this.steps;
-			bbGraphics.setGlobalAlpha( opacity );
+			bbGraphics.setGlobalAlpha( this.currentOpacity );
 			net.rim.device.api.system.Bitmap bitmap = null;
 			//# bitmap = this.nextCanvasImage.getBitmap(); 
 			bbGraphics.drawBitmap(0, 0, this.screenWidth, this.screenHeight, bitmap, 0, 0 ); 

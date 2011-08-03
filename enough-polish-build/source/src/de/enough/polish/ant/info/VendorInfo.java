@@ -28,7 +28,7 @@ package de.enough.polish.ant.info;
 /**
  * <p>Stores information about a vendor of J2ME project.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

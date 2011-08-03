@@ -51,7 +51,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Represents the build settings of a polish J2ME project.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
  * <pre>
  * history

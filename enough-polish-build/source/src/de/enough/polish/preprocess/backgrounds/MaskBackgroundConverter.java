@@ -26,10 +26,9 @@
  */
 package de.enough.polish.preprocess.backgrounds;
 
-import java.util.Map;
-
 import de.enough.polish.BuildException;
 import de.enough.polish.Environment;
+import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.BackgroundConverter;
 import de.enough.polish.preprocess.css.Style;
 import de.enough.polish.preprocess.css.StyleSheet;
@@ -59,15 +58,15 @@ public class MaskBackgroundConverter extends BackgroundConverter
 	/* (non-Javadoc)
 	 * @see de.enough.polish.preprocess.css.BackgroundConverter#createNewStatement(java.util.HashMap, de.enough.polish.preprocess.css.Style, de.enough.polish.preprocess.css.StyleSheet)
 	 */
-	protected String createNewStatement(Map background, Style style,
+	protected String createNewStatement(AttributesGroup background, Style style,
 			StyleSheet styleSheet) throws BuildException
 	{
 		String maskReference = (String) background.get("mask");
 		if (maskReference == null) {
-			throw new BuildException( "Invalid CSS: a \"mask\" background is missing the \"mask\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"mask\" background is missing the \"mask\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		if (styleSheet.getBackgrounds().get(maskReference) == null) {
-			throw new BuildException( "Invalid CSS: a \"mask\" background contains the invalid \"mask: " + maskReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"mask\" background contains the invalid \"mask: " + maskReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		maskReference += "Background";
 		
@@ -80,10 +79,10 @@ public class MaskBackgroundConverter extends BackgroundConverter
 		
 		String backgroundReference  = (String) background.get("background");
 		if (backgroundReference == null) {
-			throw new BuildException( "Invalid CSS: a \"mask\" background is missing the \"background\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"mask\" background is missing the \"background\" CSS attribute which needs to refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		if (styleSheet.getBackgrounds().get(backgroundReference) == null) {
-			throw new BuildException( "Invalid CSS: a \"mask\" background contains the invalid \"background: " + backgroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file.");
+			throw new BuildException( "Invalid CSS: a \"mask\" background contains the invalid \"background: " + backgroundReference +";\" CSS attribute. Please refer to a background defined within the backgrounds section of your polish.css file: " + background);
 		}
 		backgroundReference += "Background";
 		

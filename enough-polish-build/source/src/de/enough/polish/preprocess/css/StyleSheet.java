@@ -112,10 +112,10 @@ public class StyleSheet {
 
 	private HashMap stylesByName;
 	private ArrayList styles;
-	private HashMap backgrounds;
-	private HashMap borders;
-	private HashMap fonts;
-	private HashMap colors;
+	private Map<String, AttributesGroup> backgrounds;
+	private Map<String, AttributesGroup> borders;
+	private Map<String, AttributesGroup> fonts;
+	private Map<String, AttributesGroup> colors;
 	private HashMap usedStyles;
 	
 	private boolean isInitialised;
@@ -138,10 +138,10 @@ public class StyleSheet {
 		this.stylesByName = new HashMap();
 		this.usedStyles = new HashMap();
 		this.styles = new ArrayList();
-		this.backgrounds = new HashMap();
-		this.borders = new HashMap();
-		this.fonts = new HashMap();
-		this.colors = new HashMap();
+		this.backgrounds = new HashMap<String, AttributesGroup>();
+		this.borders = new HashMap<String, AttributesGroup>();
+		this.fonts = new HashMap<String, AttributesGroup>();
+		this.colors = new HashMap<String, AttributesGroup>();
 	}
 	
 	/**
@@ -185,14 +185,14 @@ public class StyleSheet {
 	 * @param source the source map containing other HashMaps
 	 * @param target the target 
 	 */
-	private void copyHashMap(HashMap source, HashMap target) {
-		Set keys = source.keySet();
-		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			Object key = iter.next();
-			HashMap original = (HashMap) source.get( key );
-			HashMap existing = (HashMap) target.get( key );
+	private void copyHashMap(Map<String, AttributesGroup> source, Map<String, AttributesGroup> target) {
+		Set<String> keys = source.keySet();
+		for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+			String key = iter.next();
+			AttributesGroup original = source.get( key );
+			AttributesGroup existing = target.get( key );
 			if (existing == null ) {
-				HashMap copy = new HashMap( original );
+				AttributesGroup copy = new AttributesGroup( original );
 				target.put(key, copy );
 			} else {
 				existing.putAll( original );
@@ -467,11 +467,11 @@ public class StyleSheet {
 		this.isInitialised = false;
 		String selector = cssBlock.getSelector().toLowerCase();
 		String[] groupNames = cssBlock.getGroupNames();
-		HashMap[] groups = new HashMap[ groupNames.length ];
+		AttributesGroup[] groups = new AttributesGroup[ groupNames.length ];
 		for (int i = 0; i < groups.length; i++) {
 			groups[i] = cssBlock.getGroupDeclarations(groupNames[i]);
 		}
-		HashMap target = null;
+		Map<String, AttributesGroup> target = null;
 		if ("colors".equals(selector)) {
 			target = this.colors;
 		} else if ("fonts".equals(selector)) {
@@ -484,8 +484,8 @@ public class StyleSheet {
 		if (target != null) {
 			for (int i = 0; i < groups.length; i++) {
 				String name = groupNames[i];
-				HashMap group = groups[i]; 
-				HashMap targetGroup = (HashMap) target.get( name );
+				AttributesGroup group = groups[i]; 
+				AttributesGroup targetGroup = (AttributesGroup) target.get( name );
 				if (targetGroup == null) {
 					target.put( name, group );
 				} else {
@@ -543,7 +543,7 @@ public class StyleSheet {
 				}
 				cssBlock.setSelector( selector );
 				if (parentStyle != null) {
-					HashMap referenceMap = new HashMap(1);
+					AttributesGroup referenceMap = new AttributesGroup(parentStyle, subName, 1);
 					referenceMap.put("style", parent + subName );
 					parentStyle.addGroup(subName, referenceMap );
 				}
@@ -680,12 +680,12 @@ public class StyleSheet {
 	 * This method is automatically called when the sourcecode 
 	 * will be retrieved.
 	 * 
-	 * @throws BuildException when invalid heritances are found.
+	 * @throws BuildException when invalid inheritances are found.
 	 * @see #isInherited()
 	 * @see #getSourceCode()
 	 */
 	public void oldInherit() {
-		// create default-style when not explicitely defined:
+		// create default-style when not explicitly defined:
 		if (this.stylesByName.get("default") == null ) {
 			addCssBlock(DEFAULT_STYLE);
 		}
@@ -854,7 +854,7 @@ public class StyleSheet {
 	 * 
 	 * @return the list of colors which have been defined.
 	 */
-	public HashMap getColors() {
+	public Map<String, AttributesGroup> getColors() {
 		return this.colors;
 	}
 	
@@ -863,7 +863,7 @@ public class StyleSheet {
 	 * 
 	 * @return a map with all defined fonts.
 	 */
-	public HashMap getFonts() {
+	public Map<String, AttributesGroup> getFonts() {
 		return this.fonts;
 	}
 	
@@ -872,7 +872,7 @@ public class StyleSheet {
 	 * 
 	 * @return all backgrounds in a map.
 	 */
-	public HashMap getBackgrounds() {
+	public Map<String, AttributesGroup> getBackgrounds() {
 		return this.backgrounds;
 	}
 	
@@ -881,7 +881,7 @@ public class StyleSheet {
 	 * 
 	 * @return all borders in a map.
 	 */
-	public HashMap getBorders() {
+	public Map<String, AttributesGroup> getBorders() {
 		return this.borders;
 	}
 

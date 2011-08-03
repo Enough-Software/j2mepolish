@@ -253,7 +253,9 @@ implements CommandListener
 	//#if polish.css.show-dismiss-command
 		private boolean showDismissCommand = true;
 	//#endif
-
+	//#if polish.Alert.useButtonsForCommands && polish.Item.suppressDefaultCommand && ((polish.useNativeAlerts != true) || (!polish.blackberry && !polish.android))
+		 //#define tmp.useButtonsForCommands
+	//#endif
 	private int numberOfCommands;
 
 	private Style contentStyle;
@@ -442,15 +444,35 @@ implements CommandListener
 		super.setCommandListener( this );
 	}
 	
-	
+	//#if tmp.useButtonsForCommands
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#addCommand(javax.microedition.lcdui.Command)
+	 */
+	public void addCommand(Command cmd, Style buttonStyle) {
+		addCommand(cmd);
+		if (buttonStyle != null) {
+			Item last = this.container.get(this.container.size()-1);
+			last.setStyle(buttonStyle);
+		}
+	}
+	//#endif
 
 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Screen#addCommand(javax.microedition.lcdui.Command)
 	 */
 	public void addCommand(Command cmd) {
-		super.removeCommand( DISMISS_COMMAND );
-		super.addCommand(cmd);
+		//#if tmp.useButtonsForCommands
+			removeCommand( DISMISS_COMMAND );
+			System.out.println("adding command " + cmd.getLabel());
+			//#style alertButton?
+			StringItem item = new StringItem( null, cmd.getLabel() );
+			item.setDefaultCommand(cmd);
+			this.container.add(item);
+		//#else
+			super.removeCommand( DISMISS_COMMAND );
+			super.addCommand(cmd);
+		//#endif
 		this.numberOfCommands++;
 		if (this.numberOfCommands > 1) {
 			this.timeout = FOREVER;
@@ -463,17 +485,29 @@ implements CommandListener
 	 * @see de.enough.polish.ui.Screen#removeCommand(javax.microedition.lcdui.Command)
 	 */
 	public void removeCommand(Command cmd) {
-		super.removeCommand(cmd);
-		this.numberOfCommands--;
-		if (this.numberOfCommands == 0) {
-			//#if polish.css.show-dismiss-command
-				if (this.showDismissCommand || this.timeout == FOREVER) {
-					super.addCommand( DISMISS_COMMAND );
+		//#if tmp.useButtonsForCommands
+			try { throw new RuntimeException("removing  " +  cmd.getLabel()); } catch (Exception e) { e.printStackTrace(); }
+			//System.out.println("removing command " + cmd.getLabel());
+			for (int itemIndex = 0; itemIndex < this.container.size(); itemIndex++) {
+				Item item = this.container.get(itemIndex);
+				if (item.getDefaultCommand() == cmd) {
+					this.container.remove(itemIndex);
+					break;
 				}
-			//#else
-				super.addCommand( DISMISS_COMMAND );
-			//#endif
-		}
+			}
+		//#else
+			super.removeCommand(cmd);
+			this.numberOfCommands--;
+			if (this.numberOfCommands == 0) {
+				//#if polish.css.show-dismiss-command
+					if (this.showDismissCommand || this.timeout == FOREVER) {
+						super.addCommand( DISMISS_COMMAND );
+					}
+				//#else
+					super.addCommand( DISMISS_COMMAND );
+				//#endif
+			}
+		//#endif
 	}
 
 	/* (non-Javadoc)

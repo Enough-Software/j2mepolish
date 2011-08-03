@@ -25,6 +25,7 @@
  */
 package de.enough.polish.ui;
 
+import de.enough.polish.util.MathUtil;
 import junit.framework.TestCase;
 
 /**
@@ -46,14 +47,40 @@ public class CssAnimationTest extends TestCase
 //			lastDifference = difference;
 //			lastValue = currentValue;
 //		}
-		
+		System.out.println("EASE OUT:");
 		long duration = 1000;
-		int startValue = 30;
-		int endValue = 0;
-		for (long time = 0; time < duration; time += 50) {
+		int startValue = 0;
+		int endValue = 100;
+		for (long time = 0; time <= duration; time += 50) {
 			System.out.println( time + "ms = " + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EASE_OUT));
 		}
 		
+	}
+	
+	public void testFunctionExponential() {
+//		int lastValue = 0;
+//		int lastDifference = 0;
+//		for (int i=0; i<100; i++) {
+//			int currentValue = i*i*i;
+//			int difference = currentValue - lastValue;
+//			System.out.println(i + "=" + currentValue + " (+" + difference + ") /  (+" + (difference - lastDifference) + ")"  );
+//			lastDifference = difference;
+//			lastValue = currentValue;
+//		}
+		System.out.println("EXPONENTIAL:");
+		long duration = 1000;
+		int startValue = 0;
+		int endValue = 100;
+		for (long time = 0; time <= duration; time += 50) {
+			System.out.println( time + "ms: in=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EXPONENTIAL_IN) + ", out=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EXPONENTIAL_OUT) + ", linear=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_LINEAR) + ", ease=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EASE));
+		}
+
+		System.out.println("EXPONENTIAL - TO 10000");
+		startValue = 0;
+		endValue = 1000;
+		for (long time = 0; time <= duration; time += 50) {
+			System.out.println( time + "ms: in=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EXPONENTIAL_IN) + ", out=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EXPONENTIAL_OUT) + ", linear=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_LINEAR) + ", ease=" + CssAnimation.calculatePointInRange(startValue, endValue, time, duration, CssAnimation.FUNCTION_EASE));
+		}
 	}
 
 }
