@@ -54,6 +54,18 @@
 		<type>list</type>
 		<implicit-group>api</implicit-group>
 	</capability>
+	
+	<capability>
+		<identifier>OptionalPackage</identifier>
+		<extension-mode>append</extension-mode>
+		<group>Platform</group>
+		<required>no</required>
+		<type>list</type>
+		<!-- 
+		<implicit-group>api</implicit-group>
+		 -->
+	</capability>
+	
 
 	<capability>
 		<identifier>SoundFormat</identifier>

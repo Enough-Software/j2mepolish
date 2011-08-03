@@ -95,6 +95,10 @@ public class Device extends PolishComponent {
 	public static final String JAVA_PROTOCOL = "polish.JavaProtocol";
 
 	public static final String JAVA_PACKAGE = "polish.JavaPackage";
+	
+	public static final String OPTIONAL_PACKAGE = "polish.OptionalPackage";
+
+	public static final String HAS_OPTIONAL_PACKAGES = "polish.HasOptionalApis";
 
 	public static final String HEAP_SIZE = "polish.HeapSize";
 
@@ -225,8 +229,8 @@ public class Device extends PolishComponent {
 
 
 		//add implicit groups:
-		ArrayList groupNamesList = new ArrayList();
-		ArrayList groupsList = new ArrayList();		
+		ArrayList<String> groupNamesList = new ArrayList<String>();
+		ArrayList<DeviceGroup> groupsList = new ArrayList<DeviceGroup>();		
 
 		// load capabilities and features:
 		loadCapabilities(definition, this.identifier, "devices.xml");
@@ -343,6 +347,33 @@ public class Device extends PolishComponent {
 			}
 			this.supportedApis = apis;
 		}
+		// set optional api-support:
+		String optionalApisString = getCapability(OPTIONAL_PACKAGE);
+		if (optionalApisString != null) {
+			addFeature(HAS_OPTIONAL_PACKAGES);
+			//System.out.println(this.identifier + " found apis: [" +
+			// optionalApisString + "].");
+			String[] apis = StringUtil.splitAndTrim(optionalApisString, ',');
+			for (int i = 0; i < apis.length; i++) {
+				String api = apis[i].toLowerCase();
+				Library library = libraryManager.getLibrary( api );
+				String symbol;
+				String[] symbols;
+				if (library != null) {
+					symbol = library.getSymbol();
+					symbols = library.getSymbols();
+				} else {
+					symbol = api;
+					symbols = new String[]{ api };
+				}
+				apis[i] = symbol;
+				for (int j = 0; j < symbols.length; j++) {
+					symbol = symbols[j];
+					addFeature("optional-api." + symbol);
+				}
+			}
+		}
+		
 		//set audio-support:
 		String soundFormatStr = getCapability(SOUND_FORMAT);
 		if (soundFormatStr != null ) {
@@ -500,7 +531,7 @@ public class Device extends PolishComponent {
         return this.parentDevice;
     }
 
-    private void addImplicitGroups(PolishComponent component, ArrayList groupNamesList, ArrayList groupsList, DeviceGroupManager groupManager ) {
+    private void addImplicitGroups(PolishComponent component, ArrayList<String> groupNamesList, ArrayList<DeviceGroup> groupsList, DeviceGroupManager groupManager ) {
 		String groupsStr = component.getCapability("build.ImplicitGroups");
 		if (groupsStr != null) {
 			String[] localGroupNames = StringUtil.splitAndTrim( groupsStr, ',');
@@ -565,6 +596,57 @@ public class Device extends PolishComponent {
 	public String getSupportedApisAsString() {
 		return this.supportedApisString;
 	}
+	
+	/**
+	 * Retrieves all optionally supported APIs.
+	 * Optional APIs are not necessarily supported by the device, but it can be useful for devices such as Generic/AnyPhone etc to use device specific APIs using dynamic class loading.
+	 * 
+	 * @return any optional APIs as String, null when no optional APIs are supported
+	 */
+	public String getOptionalApisAsString() {
+		String capability = getCapability(OPTIONAL_PACKAGE);
+		return capability;
+	}
+	
+	/**
+	 * Retrieves all optionally supported APIs.
+	 * Optional APIs are not necessarily supported by the device, but it can be useful for devices such as Generic/AnyPhone etc to use device specific APIs using dynamic class loading.
+	 * 
+	 * @return any optional APIs in an array, null when none are supported
+	 */
+	public String[] getOptionalApis() {
+		String capability = getCapability(OPTIONAL_PACKAGE);
+		if (capability == null) {
+			return null;
+		}
+		String[] optionalApis = StringUtil.splitAndTrim(capability, ',');
+		return optionalApis;
+	}
+	
+
+	/**
+	 * Retrieves both the supported and the optional APIs of this device.
+	 * @return an array of the supported and optional arrays, can be empty but not null.
+	 */
+	public String[] getAllApis() {
+		String[] supportedApis = getSupportedApis();
+		String[] optionalApis = getOptionalApis();
+		if (supportedApis == null && optionalApis == null) {
+			return new String[0];
+		}
+		if (optionalApis == null) {
+			return supportedApis;
+		}
+		if (supportedApis == null) {
+			return optionalApis;
+		}
+		String[] both = new String[supportedApis.length + optionalApis.length];
+		System.arraycopy(supportedApis, 0, both, 0, supportedApis.length);
+		System.arraycopy(optionalApis, 0, both, supportedApis.length, optionalApis.length);
+		return both;
+	}
+
+
 
 	/**
 	 * @return Returns the classesDir.
@@ -664,7 +746,7 @@ public class Device extends PolishComponent {
 		if (allNames == null || this.groupManager == null) {
 			return null;
 		}
-		ArrayList groups = new ArrayList();
+		ArrayList<String> groups = new ArrayList<String>();
 		for (int i = 0; i < allNames.length; i++) {
 			String name = allNames[i];
 			if (this.groupManager.hasGroup(name) ) {

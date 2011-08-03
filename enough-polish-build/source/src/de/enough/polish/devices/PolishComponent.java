@@ -42,25 +42,20 @@ import de.enough.polish.util.StringUtil;
  * <p>Provides common functionalities for PolishProject, Vendor, DeviceGroup and Device.</p>
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
-
- * <pre>
- * history
- *        15-Jan-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class PolishComponent
-implements Comparable
+implements Comparable<PolishComponent>
 {
 	
 	protected String identifier;
 	protected PolishComponent parent;
 	protected boolean supportsPolishGui;
-	protected HashMap features;
-	protected HashMap capabilities;
+	protected HashMap<String,Boolean> features;
+	protected HashMap<String,String> capabilities;
 	private String featuresAsString;
 	protected CapabilityManager capabilityManager;
-	protected final HashMap implicitGroupsByName;
+	protected final HashMap<String,Boolean> implicitGroupsByName;
 	protected String description;
 	
 	/**
@@ -81,10 +76,10 @@ implements Comparable
 	public PolishComponent( PolishComponent parent, CapabilityManager capabilityManager, Element definition ) {
 		this.parent = parent;
 		this.capabilityManager = capabilityManager;
-		this.capabilities = new HashMap();
+		this.capabilities = new HashMap<String,String>();
 		//this.capabilitiesList = new ArrayList();
-		this.features = new HashMap();
-		this.implicitGroupsByName = new HashMap();
+		this.features = new HashMap<String,Boolean>();
+		this.implicitGroupsByName = new HashMap<String,Boolean>();
 		//this.featuresList = new ArrayList();
 		if (parent != null) {
 			this.capabilities.putAll( parent.getCapabilities() );
@@ -211,9 +206,9 @@ implements Comparable
 	 */
 	public void addComponent(PolishComponent component ) {
 		// 1. set the capabilities:
-		HashMap caps = component.getCapabilities();
-		for (Iterator iter = caps.keySet().iterator(); iter.hasNext();) {
-			String name = (String) iter.next();
+		HashMap<String,String> caps = component.getCapabilities();
+		for (Iterator<String> iter = caps.keySet().iterator(); iter.hasNext();) {
+			String name = iter.next();
 			String componentValue = (String) caps.get( name );
 			boolean add = this.capabilities.get(name) == null;
 			if (!add) {
@@ -228,9 +223,9 @@ implements Comparable
 		}
 		
 		// 2. set all features (overwriting will do no harm):
-		Set feats = component.features.keySet();
-		for ( Iterator iter = feats.iterator(); iter.hasNext(); ) {
-			String name = (String) iter.next();
+		Set<String> feats = component.features.keySet();
+		for ( Iterator<String> iter = feats.iterator(); iter.hasNext(); ) {
+			String name = iter.next();
 			this.features.put( name, Boolean.TRUE );
 		}
 		
@@ -253,9 +248,9 @@ implements Comparable
 	{
 		//System.out.println("REMOVING " + component.getIdentifier());
 		// 1. remove the capabilities:
-		HashMap caps = component.getCapabilities();
-		for (Iterator iter = caps.keySet().iterator(); iter.hasNext();) {
-			String name = (String) iter.next();
+		HashMap<String,String> caps = component.getCapabilities();
+		for (Iterator<String> iter = caps.keySet().iterator(); iter.hasNext();) {
+			String name = iter.next();
 			String componentValue = (String) caps.get( name );
 			String feature = name + "." + componentValue;
 			this.features.remove( feature );
@@ -286,9 +281,9 @@ implements Comparable
 		}
 		
 		// 2. remove all features:
-		Set feats = component.features.keySet();
-		for ( Iterator iter = feats.iterator(); iter.hasNext(); ) {
-			String name = (String) iter.next();
+		Set<String> feats = component.features.keySet();
+		for ( Iterator<String> iter = feats.iterator(); iter.hasNext(); ) {
+			String name = iter.next();
 			this.features.remove( name );
 			//System.out.println("REMOVED: " + name);
 		}
@@ -316,8 +311,8 @@ implements Comparable
 	 * </p>
 	 * @return the HashMap containing all names of the defined symbols as keys.
 	 */
-	public HashMap getFeatures() {
-		return new HashMap( this.features );
+	public HashMap<String,Boolean> getFeatures() {
+		return new HashMap<String,Boolean>( this.features );
 	}
 	
 	/**
@@ -339,10 +334,10 @@ implements Comparable
 	 * </p>
 	 * @return a HashMap containing all names of the defined variables as the keys.
 	 */
-	public HashMap getCapabilities() {
+	public HashMap<String,String> getCapabilities() {
 		//HashMap copy = new HashMap( this.capabilities.size() + 20 );
 		//copy.putAll( this.capabilities );
-		return new HashMap( this.capabilities );
+		return new HashMap<String,String>( this.capabilities );
 	}
 	
 	/**
@@ -668,9 +663,9 @@ implements Comparable
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object o) {
-		if (this.identifier != null && o instanceof PolishComponent) {
-			String otherIdentifier = ((PolishComponent)o).identifier;
+	public int compareTo(PolishComponent o) {
+		if (this.identifier != null) {
+			String otherIdentifier = o.identifier;
 			if (otherIdentifier != null) {
 				return this.identifier.compareTo(otherIdentifier);
 			//} else {
