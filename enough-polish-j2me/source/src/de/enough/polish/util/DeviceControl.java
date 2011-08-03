@@ -343,7 +343,7 @@ public class DeviceControl
 	public static boolean isSoftKeyboardShown() {
 		boolean result = false;
 		//#if polish.javaplatform >= Android/1.5
-			result = MidletBridge.instance.isSoftKeyboadShown();
+			result = MidletBridge.instance.isSoftKeyboardShown();
 		//#elif polish.blackberry && polish.hasPointerEvents && polish.usePolishGui
 			Display disp = Display.getInstance();
 			if (disp != null) {

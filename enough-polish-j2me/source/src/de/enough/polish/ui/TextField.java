@@ -4285,12 +4285,14 @@ public class TextField extends StringItem
 	//#endif
 	
 
-	//#if polish.hasPointerEvents && (polish.showSoftKeyboardOnShowNotify != false)
+	//#if polish.hasPointerEvents && (polish.showSoftKeyboardOnShowNotify != false) 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handleOnFocusSoftKeyboardDisplayBehavior()
 	 */
 	public void handleOnFocusSoftKeyboardDisplayBehavior() {
-		DeviceControl.showSoftKeyboard();
+		//#if !polish.android
+			DeviceControl.showSoftKeyboard();
+		//#endif
 	}
 	//#endif
 	
@@ -4556,9 +4558,11 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand 
+	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
 	protected Style focus(Style focStyle, int direction) {
-		//#if tmp.directInput || polish.blackberry
+		//#if polish.android
+			DeviceControl.showSoftKeyboard();
+		//#elif tmp.directInput || polish.blackberry
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {
 			//#endif
@@ -4580,9 +4584,9 @@ public class TextField extends StringItem
 				}
 			//#endif
 		//#endif
-		
+
 		Style unfocusedStyle = super.focus(focStyle, direction);
-		//#if tmp.updateDeleteCommand && !polish.blackberry
+		//#if tmp.updateDeleteCommand && !(polish.blackberry || polish.android)
 			updateDeleteCommand( this.text );
 		//#endif
 					
