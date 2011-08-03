@@ -4,6 +4,9 @@ package de.enough.polish.util;
 	import de.enough.polish.ui.Display;
 	import de.enough.polish.ui.StyleSheet;
 //#endif
+//#if polish.HasOptionalApis
+	import de.enough.polish.util.devicecontrol.DeviceController;
+//#endif
 //#if polish.android
 	import de.enough.polish.android.midlet.MidletBridge;
 //#endif
@@ -39,10 +42,45 @@ public class DeviceControl
 	private static Object vibrateLock = new Object();
 	private boolean lightOff = false;
 	private static boolean fallbackOnGpsDisabled = true; 
+	//#if polish.HasOptionalApis
+		private static String[] controllerClassNames = new String[] {
+			//TODO implement and use ${classname(String)} property function
+			"de.enough.polish.util.devicecontrol.NokiaDeviceController",
+			"de.enough.polish.util.devicecontrol.SamsungDeviceController"
+		};
+		private static boolean controllerInitializationDone = false;
+		private static DeviceController controller;
+	//#endif
 	
 	private DeviceControl() {
 		// disallow instantiation
 	}
+	
+	//#if polish.HasOptionalApis
+	/**
+	 * Initializes dynamic controllers for devices that contain optional APIs (OptionalPackage).
+	 */
+	private static void initController() {
+		try {
+			String[] classNames = controllerClassNames;
+			for (int i = 0; i < classNames.length; i++) {
+				String className = classNames[i];
+				try {
+					DeviceController control = (DeviceController) Class.forName(className).newInstance();
+					// okay, this class could be loaded
+					controller = control;
+					break;
+				} catch (Exception e) {
+					// ignore, try next class
+				}
+			}
+		} finally {
+			controllerInitializationDone = true;
+		}
+		
+	}
+	//#endif
+
 	
 	public void run()
 	{
@@ -93,61 +131,78 @@ public class DeviceControl
 	}
 	
 	/**
-	 * Turns the backlight on on a device until lightOff is called
+	 * Turns the backlight on on a device until lightOff() is called
 	 * 
 	 * @return true when backlight is supported on this device.
+	 * @see #lightOff()
 	 */
 	public static boolean lightOn()
 	{
-		
-		//#if polish.android
+		//#if polish.HasOptionalApis
+			if (!controllerInitializationDone) {
+				initController();
+			}
+			if (controller != null) {
+				return controller.lightOn();
+			} else {
+				//# return false;
+			}
+		//#elif polish.android
 			MidletBridge.instance.backlightOn();
 			//# return true;
 		//#else
-		synchronized(lightsLock) {
-			boolean success = false;
-			//#if tmp.useNokiaUi 
-				com.nokia.mid.ui.DeviceControl.setLights(0,100);
-				success = true;
-			//#elif tmp.useBlackBerry
-				net.rim.device.api.system.Backlight.enable(true);
-				success = true;
-			//#elif tmp.useThread
-				if (thread == null) {
-					if (isLightSupported()) {
-						DeviceControl dc = new DeviceControl();
-						dc.start();
-						success = true;
+			synchronized(lightsLock) {
+				boolean success = false;
+				//#if tmp.useNokiaUi 
+					com.nokia.mid.ui.DeviceControl.setLights(0,100);
+					success = true;
+				//#elif tmp.useBlackBerry
+					net.rim.device.api.system.Backlight.enable(true);
+					success = true;
+				//#elif tmp.useThread
+					if (thread == null) {
+						if (isLightSupported()) {
+							DeviceControl dc = new DeviceControl();
+							dc.start();
+							success = true;
+						}
 					}
-				}
-			//#endif
-			return success;
-		}
+				//#endif
+				return success;
+			}
 		//#endif
 	}
 	
+
 	/**
 	 * Turns the backlight off
-	 *
+	 * @see #lightOn()
 	 */
 	public static void lightOff()
 	{
-		//#if polish.android
+		//#if polish.HasOptionalApis
+			if (!controllerInitializationDone) {
+				initController();
+			}
+			if (controller != null) {
+				controller.lightOn();
+			}
+		//#elif polish.android
 			MidletBridge.instance.backlightRelease();
 		//#else
-		synchronized(lightsLock) {
-			//#if tmp.useNokiaUi
-				com.nokia.mid.ui.DeviceControl.setLights(0,0);
-			//#elif tmp.useBlackBerry
-				net.rim.device.api.system.Backlight.enable(false);
-			//#elif tmp.useThread
-				DeviceControl dc = thread;
-				if (dc != null) {
-					dc.switchLightOff();
-					thread = null;
-				}
-			//#endif
-		}
+			synchronized(lightsLock) {
+				//#if tmp.useNokiaUi
+					com.nokia.mid.ui.DeviceControl.setLights(0,0);
+				//#elif tmp.useBlackBerry
+					net.rim.device.api.system.Backlight.enable(false);
+				//#elif tmp.useThread
+					DeviceControl dc = thread;
+					if (dc != null) {
+						dc.switchLightOff();
+						thread = null;
+					}
+				//#endif
+			}
 		//#endif
 	}
 	
@@ -161,7 +216,14 @@ public class DeviceControl
 	public static boolean isLightSupported()
 	{
 		boolean isSupported = false;
-		//#if polish.android
+		//#if polish.hasOptionalApis
+			if (!controllerInitializationDone) {
+				initController();
+			}
+			if (controller != null) {
+				isSupported = controller.isLightSupported();
+			}
+		//#elif polish.android
 			isSupported = true;
 		//#elif polish.api.nokia-ui && !polish.Bugs.NoBacklight
 			isSupported = true;
