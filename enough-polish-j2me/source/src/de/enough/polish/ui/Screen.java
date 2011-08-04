@@ -6560,6 +6560,20 @@ implements UiElement, Animatable
 		addCommand( new Command(null, Command.SEPARATOR, priority, separatorStyle));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		if (this.style != null) {
+			buffer.append(this.style.name).append(": ");
+		} else {
+			buffer.append("<no style>: ");
+		}
+		buffer.append(super.toString());
+		return buffer.toString();
+	}
 
 
 //#ifdef polish.Screen.additionalMethods:defined
