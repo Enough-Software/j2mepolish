@@ -341,18 +341,14 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Generic/AnyMsaBasicPhone</identifier>
+    <parent>Generic/AnyPhone</parent>
     <description>A MIDP 2.0 and CLDC 1.1 phone that supports softkeys and the fullscreen mode and the JTWI standard. Use this phone to run a single application on various platforms like Nokia, Motorola, Samsung and so on.</description>
     <features>isVirtual, hasPointerEvents, hasCommandKeyEvents, isDynamic</features>
     <capability name="JavaPlatform" value="MIDP/2.0, MSA/1.0" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="mmapi,wmapi" />
+    <capability name="JavaPackage" value="mmapi,wmapi,fileconnection" />
     <capability name="SoundFormat" value="midi, amr, wav" />
     <capability name="HeapSize" value="1MB" />
-    <capability name="key.LeftSoftKeys" value="-6,-21,21,57345,-1,-202" />
-    <capability name="key.RightSoftKeys" value="-7,-22,22,57346,-4,-203" />
-    <capability name="key.maybeSupportsAsciiKeyMap" value="true" />
-    <capability name="MenuBar.OptionsPosition" value="left" />
-    <capability name="Bugs" value="SoftKeyMappedToFire,noSoftKeyReleasedEvents,displaySetCurrentFlickers,needsBottomOrientiationForStringDrawing,BacklightRequiresLightOff" />
   </device>
   <device supportsPolishGui="true">
     <identifier>Generic/AnyMsaBasicPhone_240x320</identifier>
@@ -375,18 +371,12 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Generic/AnyMsaPhone</identifier>
+    <parent>Generic/AnyMsaBasicPhone</parent>
     <description>A MIDP 2.0 and CLDC 1.1 phone that supports softkeys and the fullscreen mode and the JTWI standard. Use this phone to run a single application on various platforms like Nokia, Motorola, Samsung and so on.</description>
     <features>isVirtual, hasPointerEvents, hasCommandKeyEvents, isDynamic</features>
     <capability name="JavaPlatform" value="MIDP/2.0, MSA/1.0" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="JSR238, JSR234, JSR211, JSR180, JSR179, JSR177, JSR172" />
-    <capability name="SoundFormat" value="midi, amr, wav" />
-    <capability name="HeapSize" value="1MB" />
-    <capability name="key.LeftSoftKeys" value="-6,-21,21,57345,-1,-202" />
-    <capability name="key.RightSoftKeys" value="-7,-22,22,57346,-4,-203" />
-    <capability name="key.maybeSupportsAsciiKeyMap" value="true" />
-    <capability name="MenuBar.OptionsPosition" value="left" />
-    <capability name="Bugs" value="SoftKeyMappedToFire,noSoftKeyReleasedEvents,displaySetCurrentFlickers,needsBottomOrientiationForStringDrawing,BacklightRequiresLightOff" />
   </device>
   <device supportsPolishGui="true">
     <identifier>Generic/AnyMsaPhone_240x320</identifier>
