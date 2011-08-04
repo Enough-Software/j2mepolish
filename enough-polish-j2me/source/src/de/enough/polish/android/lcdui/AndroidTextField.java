@@ -1,15 +1,12 @@
 //#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Selection;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
@@ -129,25 +126,11 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 	
 	@Override
 	public InputConnection onCreateInputConnection(EditorInfo info) {
+		InputConnection inputConnection = super.onCreateInputConnection(info);
 		if (this.isNumericPassword) {
 			info.inputType = InputType.TYPE_CLASS_NUMBER;
-			if (focusSearch(FOCUS_DOWN) != null) {
-				// An action has not been set, but the enter key will move to
-				// the next focus, so set the action to that.
-				info.imeOptions |= EditorInfo.IME_ACTION_NEXT;
-			} else {
-				// An action has not been set, and there is no focus to move
-				// to, so let's just supply a "done" action.
-				info.imeOptions |= EditorInfo.IME_ACTION_DONE;
-			}
-			Editable editable = getText();
-			InputConnection ic = new NumericPasswordInputConnection(editable, this);
-			info.initialSelStart = Selection.getSelectionStart(editable);
-			info.initialSelEnd = Selection.getSelectionEnd(editable);
-			return ic;
-
 		}
-		return super.onCreateInputConnection(info);
+		return inputConnection;
 	}
 
 	public TextField getTextField() {
@@ -290,30 +273,6 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 		}
 		return false;
 	}
-
-	
-	
-	private static class NumericPasswordInputConnection 
-	extends BaseInputConnection 
-	{
-		
-		private final Editable editable;
-
-		public NumericPasswordInputConnection( Editable editable, View targetView) {
-			super( targetView, true );
-			this.editable = editable;
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see android.view.inputmethod.BaseInputConnection#getEditable()
-		 */
-		public Editable getEditable() {
-			return this.editable;
-		}
-	}
-
-
 
 }
 
