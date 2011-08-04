@@ -612,8 +612,7 @@ implements Displayable
 		if (this.canvasBridge != null) {
 			return this.canvasBridge.getAvailableHeight();
 		}
-		//TODO implement getHeight()
-		return 99;
+		return CanvasBridge.DISPLAY_HEIGHT_PIXEL;
 	}
 	
 	/**
@@ -631,8 +630,7 @@ implements Displayable
 		if (this.canvasBridge != null) {
 			return this.canvasBridge.getAvailableWidth();
 		}
-		//TODO implement getWidth()
-		return 99;
+		return CanvasBridge.DISPLAY_WIDTH_PIXEL;
 	}
 	
     /**

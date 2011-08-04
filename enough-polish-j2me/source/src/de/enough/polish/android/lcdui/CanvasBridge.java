@@ -53,9 +53,11 @@ implements OnTouchListener //, OnKeyListener
 	private Canvas lcduiCanvas;
 	private DisplayUtil util;
 	private Graphics graphics;
-	private int availableWidth = 100;
-	private int availableHeight = 100;
+	private int availableWidth = DISPLAY_HEIGHT_PIXEL;
+	private int availableHeight = DISPLAY_WIDTH_PIXEL;
 	private static CanvasBridge current;
+	public static int DISPLAY_HEIGHT_PIXEL;
+	public static int DISPLAY_WIDTH_PIXEL;
 
 	/**
 	 * @param context
@@ -73,15 +75,6 @@ implements OnTouchListener //, OnKeyListener
 		//setOnKeyListener( this );
 	}
 
-	@Override
-	protected void onMeasure(int width, int height) {
-		//TODO specify screen width and height
-		//super.onMeasure(width, height);
-		setMeasuredDimension(this.availableWidth, this.availableHeight);
-		System.out.println("CanvasBridge: onMeasure: " + width + "x" + height);
-	}
-
-	
 
 	/* (non-Javadoc)
 	 * @see android.view.View#onDraw(android.graphics.Canvas)
@@ -108,7 +101,7 @@ implements OnTouchListener //, OnKeyListener
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		// #debug
+		//#debug
 		System.out.println("onSizeChanged with width '"+w+"' and height '"+h+"'");
 		this.availableWidth = w;
 		this.availableHeight = h;

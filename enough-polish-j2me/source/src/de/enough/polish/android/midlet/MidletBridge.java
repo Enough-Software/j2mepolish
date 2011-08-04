@@ -27,6 +27,7 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 import de.enough.polish.android.helper.ResourcesHelper;
 import de.enough.polish.android.io.ConnectionNotFoundException;
 import de.enough.polish.android.lcdui.AndroidDisplay;
+import de.enough.polish.android.lcdui.CanvasBridge;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Container;
 import de.enough.polish.ui.Display;
@@ -166,6 +168,10 @@ public class MidletBridge extends Activity {
 		//#endif
 		// shrink the application on softkeyboard display:
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		CanvasBridge.DISPLAY_HEIGHT_PIXEL = metrics.heightPixels;
+		CanvasBridge.DISPLAY_WIDTH_PIXEL = metrics.widthPixels;
 		
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
