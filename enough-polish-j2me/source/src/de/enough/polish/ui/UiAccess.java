@@ -4313,6 +4313,39 @@ public final class UiAccess {
 	}
 	//#endif
 
+	//#if polish.usePolishGui && polish.midp
+	/**
+	 * Casts the given MIDP Displayable into a J2ME Polish Displayable
+	 * @param disp the displayable
+	 * @return the casted displayable
+	 */
+	public static Display cast(javax.microedition.lcdui.Display disp)
+	{
+		return null;
+	}
+	//#endif
+	
+	//#if polish.usePolishGui
+	/**
+	 * Casts the given J2ME Polish Displayable into a MIDP Displayable
+	 * @param disp the displayable
+	 * @return the casted displayable
+	 */
+	public static 
+	//#if polish.LibraryBuild
+		javax.microedition.lcdui.Display
+	//#else
+		//# Display
+	//#endif
+	cast(Display disp)
+	{
+		//#if polish.LibraryBuild
+			return null;
+		//#else
+			//# return disp;
+		//#endif
+	}
+	//#endif
 
 	//#if polish.usePolishGui && polish.midp
 	/**
