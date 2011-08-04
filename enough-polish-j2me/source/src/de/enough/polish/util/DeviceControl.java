@@ -20,8 +20,17 @@ package de.enough.polish.util;
 /**
  * 
  * <p>Controls backlight and vibration in an device-independent manner</p>
- *
- * <p>Copyright Enough Software 2007 - 2010</p>
+ * <p>In order to use DeviceControl on dynamic devices such as Generic/AnyPhone or Generic/AnyMsaPhone, you need to add following keep elements to 
+ *    the obfuscator section in the build.xml script:
+ * </p>
+ * <pre>
+ * 	&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;cfg.debug || test&quot;&gt;
+ *		&lt;keep class=&quot;de.enough.polish.util.devicecontrol.NokiaDeviceController&quot; /&gt;
+ *		&lt;keep class=&quot;de.enough.polish.util.devicecontrol.SamsungDeviceController&quot; /&gt;
+ *	&lt;/obfuscator&gt;
+ * </pre> 
+ * <p>Copyright Enough Software 2007 - 2011</p>
+ * 
  * @author Andre Schmidt
  * @author Robert Virkus
  */
