@@ -3663,6 +3663,8 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 		setInitialized(true);
 		//#debug
+		System.out.println("Item.init(): contentHeight=" + this.contentHeight + ", itemHeight=" + this.itemHeight + " for " + this);
+		//#debug
 		System.out.println("Item.init(): contentWidth=" + this.contentWidth + ", itemWidth=" + this.itemWidth + ", backgroundWidth=" + this.backgroundWidth);
 	}
 	

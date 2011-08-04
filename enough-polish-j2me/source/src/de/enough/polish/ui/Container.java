@@ -1667,8 +1667,8 @@ public class Container extends Item {
 				} else {
 					item.relativeX = 0;
 				}				
-
 				myContentHeight += height != 0 ? height + this.paddingVertical : 0;
+				//System.out.println( i + ": height=" + height + ", myContentHeight=" + myContentHeight + ", item=" + item + ", style=" + (this.style == null ? "<none>" : this.style.name));
 				//System.out.println("item.yTopPos=" + item.yTopPos);
 			} // cycling through all items
 			
