@@ -1112,21 +1112,29 @@ implements NativeDisplay //, OnTouchListener
 	public void onShow(AndroidItemView androidView) {
 		//#debug
 		System.out.println("onShow for " + androidView.getPolishItem());
-		View view = androidView.getAndroidView();
-		ViewParent parent = view.getParent();
+		final View view = androidView.getAndroidView();
+		final ViewParent parent = view.getParent();
 		if (parent == this) {
 			return; // already added
 		}
-		if (parent != null) {
-			((ViewGroup)parent).removeView(view);
-		}
-		addView( view );
+		MidletBridge.getInstance().runOnUiThread( new Runnable() {
+			public void run() {
+				if (parent != null) {
+					((ViewGroup)parent).removeView(view);
+				}
+				addView( view );
+			}
+		});
 	}
 	
-	public void onHide(AndroidItemView androidView) {
+	public void onHide(final AndroidItemView androidView) {
 		//#debug
 		System.out.println("onHide for " + androidView.getPolishItem());
-		removeView( androidView.getAndroidView() );
+		MidletBridge.getInstance().runOnUiThread( new Runnable() {
+			public void run() {
+				removeView( androidView.getAndroidView() );
+			}
+		});
 	}
 
 	protected CanvasBridge getCurrentCanvasBridge() {
