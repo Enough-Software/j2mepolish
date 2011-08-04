@@ -3513,6 +3513,21 @@ public abstract class Item implements UiElement, Animatable
                  } else if (isLayoutRight()) {
                      labelX = this.itemWidth - availWidth;
                  }
+                //#if polish.css.include-label
+                 else if (this.includeLabel) {
+                	 labelX += this.marginLeft;
+                 }
+                //#endif
+                //#if polish.css.complete-background
+                 else if (this.completeBackground != null) {
+                	 labelX += this.marginLeft;
+                 }
+                //#endif
+                //#if polish.css.complete-border
+                 else if (this.completeBorder != null) {
+                	 labelX += this.marginLeft;
+                 }
+                //#endif
                  if (this.label.isLayoutCenter()) {
                      labelX += (availWidth - labelWidth)/2;
                  } else if (this.label.isLayoutRight()) {
