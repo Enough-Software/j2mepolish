@@ -85,6 +85,7 @@ implements Externalizable, Comparator, Comparable
 	/**
 	 * Clones the specified TimePoint
 	 * @param tp the TimePoint that should be cloned
+	 * @throws NullPointerException when tp is null
 	 */
 	public TimePoint(TimePoint tp) {
 		this(tp.year, tp.month, tp.day, tp.hour, tp.minute, tp.second, tp.millisecond, tp.timeZone );
@@ -93,6 +94,7 @@ implements Externalizable, Comparator, Comparable
 	/**
 	 * Creates a new TimePoint that replicates the specified calendar
 	 * @param cal the calendar which should be copied
+	 * @throws NullPointerException when cal is null
 	 */
 	public TimePoint(Calendar cal) {
 		this(cal.get( Calendar.YEAR), cal.get( Calendar.MONTH ), cal.get(Calendar.DAY_OF_MONTH), 
@@ -103,6 +105,7 @@ implements Externalizable, Comparator, Comparable
 	/**
 	 * Creates a new TimePoint with the specified Date in the default TimeZone
 	 * @param date the date of this TimePoint
+	 * @throws NullPointerException when date is null
 	 */
 	public TimePoint(Date date) {
 		setDate( date );
