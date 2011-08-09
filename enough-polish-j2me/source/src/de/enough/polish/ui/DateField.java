@@ -1425,7 +1425,11 @@ implements
 	 * @see android.app.DatePickerDialog.OnDateSetListener#onDateSet(android.widget.DatePicker, int, int, int)
 	 */
 	public void onDateSet(DatePicker picker, int year, int month, int day) {
-		TimePoint tp = new TimePoint( getDate() );
+		Date currentDate = getDate();
+		if (currentDate == null) {
+			currentDate = new Date();
+		}
+		TimePoint tp = new TimePoint( currentDate );
 		tp.setYear(year);
 		tp.setMonth(month);
 		tp.setDay(day);
@@ -1445,7 +1449,11 @@ implements
 	 * @see android.app.TimePickerDialog.OnTimeSetListener#onTimeSet(android.widget.TimePicker, int, int)
 	 */
 	public void onTimeSet(TimePicker picker, int hour, int minute) {
-		TimePoint tp = new TimePoint( getDate() );
+		Date currentDate = getDate();
+		if (currentDate == null) {
+			currentDate = new Date();
+		}
+		TimePoint tp = new TimePoint( currentDate );
 		tp.setHour(hour);
 		tp.setMinute(minute);
 		setTimePoint( tp );
