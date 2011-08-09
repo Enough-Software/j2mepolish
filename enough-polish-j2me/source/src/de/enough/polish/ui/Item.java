@@ -5184,9 +5184,6 @@ public abstract class Item implements UiElement, Animatable
 			}
 		//#endif
 		//#if polish.android
-			if (this instanceof TextField) {
-				System.out.println("Item.showNotify with androidView=" + this._androidView + " for " + this);
-			}
 			if (this._androidView != null) {
 				AndroidDisplay.getInstance().onShow(this._androidView);
 			}
