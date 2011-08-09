@@ -82,7 +82,8 @@ or start the Android tool <code>ddms</code>, which you can find in <i>${android.
 
 <h2 id="android-configuring">Configure your Manifest.xml file</h2>
 <p>
-You can customize the generated Manifest.xml file by defining variables in the build.xml file.
+You can customize the generated <i>AndroidManifest.xml</i> file by defining variables in the build.xml file.
+</p>
 <pre>
 	&lt;j2mepolish&gt;
 	&lt;build&gt;
@@ -90,7 +91,28 @@ You can customize the generated Manifest.xml file by defining variables in the b
 	&lt;/build&gt;
 	&lt;/j2mepolish>
 </pre>
+<p>
+Alternatively you can specify the path to an existing <i>AndroidManifest.xml</i> file. In that case the element of the specified manifest will be added to the generated manifest:
 </p>
+<pre>
+	&lt;j2mepolish&gt;
+	&lt;build&gt;
+		&lt;variable name="android.manifest" value="configuration/AndroidManifestStub.xml" /&gt;
+	&lt;/build&gt;
+	&lt;/j2mepolish>
+</pre>
+<i>configuration/AndroidManifestStub.xml:</i>
+<pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+    &lt;supports-screens android:resizeable=&quot;true&quot;
+                  android:smallScreens=&quot;true&quot;
+                  android:normalScreens=&quot;true&quot;
+                  android:largeScreens=&quot;true&quot;
+                  android:xlargeScreens=&quot;true&quot;
+	/&gt;
+&lt;/manifest&gt;
+</pre>
 
 <table class="borderedTable" cellspacing="0" cellpadding="3" border="1">
 <tr>
@@ -124,6 +146,10 @@ You can customize the generated Manifest.xml file by defining variables in the b
 	<tr>
 		<td>android.hideStatusBar</td>
 		<td>Set this variable to the value <em>true</em> to hide the status bar at the top of the screen.</td>
+	</tr>
+	<tr>
+		<td>android.manifest</td>
+		<td>Path to a manifest file - all elements in that file will be added to the generated manifest.</td>
 	</tr>
 	<tr></tr>
 </table>

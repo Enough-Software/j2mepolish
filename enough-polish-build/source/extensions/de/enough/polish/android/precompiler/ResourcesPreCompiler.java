@@ -33,6 +33,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.jdom.Document;
@@ -57,11 +58,7 @@ import de.enough.polish.util.ProcessUtil;
 /**
  * <p>Creates the R.java and Manifest.java</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008-2011</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ResourcesPreCompiler extends PreCompiler {
@@ -89,7 +86,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 
 		String aapt = ArgumentHelper.aapt(env);
 		if (aapt != null) {
-			ArrayList arguments = getDefaultArguments(aapt,env);
+			ArrayList<String> arguments = getDefaultArguments(aapt,env);
 			try {
 				
 				System.out.println("aapt: Generating R.java / AndroidManifest.xml from the resources...");
@@ -115,9 +112,9 @@ public class ResourcesPreCompiler extends PreCompiler {
 			document = builder.build(manifestFile);
 			//System.out.println("Got MANIFEST " + print(document));
 		} catch (JDOMException e) {
-			throw new BuildException("Could not parse file '"+manifestPath+"'",e);
+			throw new BuildException("Could not parse file '"+manifestPath+"': " + e, e);
 		} catch (IOException e) {
-			throw new BuildException("Could not parse file '"+manifestPath+"'",e);
+			throw new BuildException("Could not read file '"+manifestPath+"': " + e, e);
 		}
 		Element rootElement = document.getRootElement();
 		Namespace namespace = rootElement.getNamespace("android");
@@ -210,6 +207,30 @@ public class ResourcesPreCompiler extends PreCompiler {
 			}
 		} else {
 			System.err.println("Warning: No icon was defined in this build. You will not be able to deploy this application in the Android Market. Please define an icon with the attribte \"icon\" in the <info> tag of the build.xml file.");
+		}
+		
+		// check if further elements should be added:
+		String furtherManifestPath = env.getVariable("android.manifest");
+		if (furtherManifestPath != null) {
+			File furtherManifestFile = env.resolveFile(furtherManifestPath );
+			Document furtherManifestDocument = null;
+			try {
+				builder = new SAXBuilder();
+				furtherManifestDocument = builder.build(furtherManifestFile);
+				//System.out.println("Got MANIFEST " + print(document));
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new BuildException("Could not read or parse file '"+furtherManifestPath+"': please check your \"android.manifest\" variable in your build.xml script: " + e, e);
+			}
+			Element furtherManifestRootElement = furtherManifestDocument.getRootElement();
+			//Namespace namespace = rootElement.getNamespace("android");
+			List children = furtherManifestRootElement.getChildren();
+			for (int childIndex=0; childIndex < children.size(); childIndex++ ) {
+				Element childElement = (Element) children.get(childIndex);
+				childElement.detach();
+				rootElement.addContent(childElement);
+			}
+			
 		}
 		
 		// TODO: This does not work. Instead we need to alter the file res/values/string.xml, add the description as a string resource
@@ -319,11 +340,11 @@ public class ResourcesPreCompiler extends PreCompiler {
 	 * @param env the environment
 	 * @return the ArrayList
 	 */
-	static ArrayList getDefaultArguments(String executable, Environment env)
+	static ArrayList<String> getDefaultArguments(String executable, Environment env)
 	{
 		String androidJar = ArgumentHelper.getAndroidJar(env); 
 		
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		arguments.add("package");
 		arguments.add("-m");
