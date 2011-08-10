@@ -229,8 +229,18 @@ public class ResourcesPreCompiler extends PreCompiler {
 				Element childElement = (Element) children.get(childIndex);
 				childElement.detach();
 				rootElement.addContent(childElement);
+				
 			}
-			
+			children = furtherManifestRootElement.getContent();
+			for (int childIndex=0; childIndex < children.size(); childIndex++ ) {
+				Object childContent = children.get(childIndex);
+				if (childContent instanceof Element) {
+					Element childElement = (Element) childContent;
+					childElement.detach();
+					rootElement.addContent(childElement);
+				}
+				
+			}
 		}
 		
 		// TODO: This does not work. Instead we need to alter the file res/values/string.xml, add the description as a string resource
