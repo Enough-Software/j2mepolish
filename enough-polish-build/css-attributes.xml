@@ -506,12 +506,12 @@
 		
 		<mapping from="patch"
 			to="de.enough.polish.ui.backgrounds.PatchBackground">
-			<param name="image" type="image-url" description="The 9-patch source image" since="2.2.2" />
-			<param name="left-width" type="int" primitive="true" default="0" description="The width of the corners on the left side in pixel" since="2.2.2" />
-			<param name="top-height" type="int" primitive="true" default="0" description="The height of the corners on the top side in pixel" since="2.2.2" />
-			<param name="right-width" type="int" primitive="true" default="0"  description="The width of the corners on the right side in pixel" since="2.2.2" />
-			<param name="bottom-height" type="int" primitive="true" default="0"  description="The height of the corners on the bottom side in pixel" since="2.2.2" />
-			<param name="transparent-fill" type="boolean" primitive="true" default="false" description="Set to true when the center region should not be tiled at all" since="2.2.2" />
+			<param name="image" type="image-url" description="The 9-patch source image" since="2.3" />
+			<param name="left-width" type="int" primitive="true" default="0" description="The width of the corners on the left side in pixel" since="2.3" />
+			<param name="top-height" type="int" primitive="true" default="0" description="The height of the corners on the top side in pixel" since="2.3" />
+			<param name="right-width" type="int" primitive="true" default="0"  description="The width of the corners on the right side in pixel" since="2.3" />
+			<param name="bottom-height" type="int" primitive="true" default="0"  description="The height of the corners on the bottom side in pixel" since="2.3" />
+			<param name="transparent-fill" type="boolean" primitive="true" default="false" description="Set to true when the center region should not be tiled at all" since="2.3" />
 		</mapping>
 	</attribute>
 	
@@ -5542,7 +5542,7 @@
 		default="both"
 		values="both,top,bottom"
 		id="481"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 	
 	<attribute
@@ -5552,7 +5552,7 @@
 		description="A color attribute to be used for various needs and concerns"
 		default="black"
 		id="482"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 
 	
@@ -5562,7 +5562,7 @@
 		appliesTo="Gauge"
 		description="A background name from the backgrounds section. The background is drawn behind the slider/progress bar across the used width."
 		id="483"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 	
 	<attribute
@@ -5571,7 +5571,7 @@
 		appliesTo="Gauge"
 		description="A background name from the backgrounds section. The background is rendering the slider/progress bar."
 		id="484"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 	
 	
@@ -5582,7 +5582,7 @@
 		description="The duration of the animation."
 		default="400ms"
 		id="485"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 	
 	<attribute
@@ -5592,7 +5592,7 @@
 		description="The direction of the animation - by default the direction depends on the circumstances - when entering a screen the direction is forward, when leaving it is backward."
 		values="forward,backward"
 		id="486"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 
 	<attribute
@@ -5603,7 +5603,7 @@
 		default="exponential-in"
 		values="ease, linear, ease-in, ease-out, exponential-in, exponential-out"
 		id="487"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 	
 	<attribute
@@ -5614,7 +5614,7 @@
 		default="exponential-out"
 		values="ease, linear, ease-in, ease-out, exponential-in, exponential-out"
 		id="488"
-		since="J2ME Polish 2.2.2"
+		since="J2ME Polish 2.3"
 	/>
 		
 <!--
