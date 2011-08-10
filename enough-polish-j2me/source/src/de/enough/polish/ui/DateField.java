@@ -90,10 +90,10 @@ implements
 //#if (polish.DateField.useDirectInput == true || polish.Bugs.dateFieldBroken || polish.blackberry) && !polish.android
 	//#define tmp.directInput
 //#endif
-//#if (!tmp.directInput || (polish.hasPointerEvents && !polish.DateField.useDirectInputForPointer)) && (polish.midp && !polish.blackberry)
+//#if (!tmp.directInput || (polish.hasPointerEvents && !polish.DateField.useDirectInputForPointer)) && (polish.midp && !(polish.blackberry || polish.android))
 	//#define tmp.useMidp
 //#endif
-//#if polish.DateField.useDirectInputForPointer && polish.hasPointerEvents
+//#if polish.DateField.useDirectInputForPointer && polish.hasPointerEvents && !(polish.blackberry || polish.android)
 	//#define tmp.directInputPointer
 //#endif
 //#if tmp.directInput
