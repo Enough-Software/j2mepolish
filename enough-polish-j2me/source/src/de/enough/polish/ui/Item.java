@@ -32,7 +32,7 @@ import javax.microedition.lcdui.Image;
 
 //#if polish.android
 	import de.enough.polish.android.lcdui.AndroidDisplay;
-	import de.enough.polish.android.lcdui.AndroidItemView;
+	import android.view.View;
 //#endif
 	
 //#debug ovidiu
@@ -785,7 +785,7 @@ public abstract class Item implements UiElement, Animatable
 		public Field _bbField;
 	//#endif
 	//#if polish.android
-		protected AndroidItemView _androidView;
+		protected View _androidView;
 	//#endif
 	protected Style focusedStyle;
 	protected boolean isPressed;
@@ -4986,7 +4986,7 @@ public abstract class Item implements UiElement, Animatable
 			}
 			//#if polish.android
 			if (this._androidView != null) {
-				this._androidView.getAndroidView().requestFocus();
+				this._androidView.requestFocus();
 			}
 			//#endif
 			//#if tmp.handleEvents
@@ -5185,7 +5185,7 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 		//#if polish.android
 			if (this._androidView != null) {
-				AndroidDisplay.getInstance().onShow(this._androidView);
+				AndroidDisplay.getInstance().onShow(this._androidView, this);
 			}
 		//#endif
 		//#if tmp.handleEvents
@@ -5238,7 +5238,7 @@ public abstract class Item implements UiElement, Animatable
 		}
 		//#if polish.android
 			if (this._androidView != null) {
-				AndroidDisplay.getInstance().onHide(this._androidView);
+				AndroidDisplay.getInstance().onHide(this._androidView, this);
 			}
 		//#endif
 		//#if tmp.handleEvents

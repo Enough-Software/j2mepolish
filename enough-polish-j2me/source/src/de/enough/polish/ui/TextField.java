@@ -2033,18 +2033,18 @@ public class TextField extends StringItem
 			if (this.isShown) {
 				if (this._androidView != null) {
 					// remove existing view first:
-					AndroidDisplay.getInstance().onHide(this._androidView);
+					AndroidDisplay.getInstance().onHide(this._androidView, this);
 				}
-			}
-			MidletBridge.getInstance().runOnUiThread( new Runnable() {
-				public void run() {
-					TextField.this._androidTextField = new AndroidTextField(TextField.this); 
-					TextField.this._androidView = TextField.this._androidTextField;
-					if (TextField.this.isShown) {
-						AndroidDisplay.getInstance().onShow(TextField.this._androidView);
+				MidletBridge.getInstance().runOnUiThread( new Runnable() {
+					public void run() {
+						TextField.this._androidTextField = new AndroidTextField(TextField.this); 
+						TextField.this._androidView = TextField.this._androidTextField;
+						if (TextField.this.isShown) {
+							AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
+						}
 					}
-				}
-			});
+				});
+			}
 		//#endif
 		//#if polish.blackberry
 						

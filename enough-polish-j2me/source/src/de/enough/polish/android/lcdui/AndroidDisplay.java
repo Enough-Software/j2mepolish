@@ -1,6 +1,8 @@
 //#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
+import java.util.HashMap;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -221,10 +223,11 @@ implements NativeDisplay //, OnTouchListener
 	/** This instance may be null*/
 	private de.enough.polish.android.lcdui.Canvas currentPolishCanvas;
 	// following variables are implicitly defined by getter- or setter-methods:
-	private ArrayList<Runnable> seriallyRunnables = new ArrayList<Runnable>();
+	private final ArrayList<Runnable> seriallyRunnables = new ArrayList<Runnable>();
 	DisplayUtil util;
 
 	private CanvasBridge mainView;
+	private final HashMap<View, Item> itemsByViewMap = new HashMap<View, Item>();
 
 //	@Override
 //	protected void onRestoreInstanceState(Parcelable state) {
@@ -1123,15 +1126,15 @@ implements NativeDisplay //, OnTouchListener
 		}
 	}
 	
-	public void onShow(final AndroidItemView androidView) {
+	public void onShow(final View view, final Item item) {
 		//#debug
-		System.out.println("onShow for " + androidView.getPolishItem());
-		final View view = androidView.getAndroidView();
+		System.out.println("onShow for " + item);
+		this.itemsByViewMap.put(view, item);
 		final ViewParent parent = view.getParent();
 		if (parent == this) {
-			if (androidView.getPolishItem().isFocused()) {
+			if (item.isFocused()) {
 				view.requestFocus();
-				if (androidView.getPolishItem() instanceof TextField) {
+				if (item instanceof TextField) {
 					//TODO this does not work here:
 					MidletBridge.getInstance().showSoftKeyboard();
 				}
@@ -1144,9 +1147,9 @@ implements NativeDisplay //, OnTouchListener
 					((ViewGroup)parent).removeView(view);
 				}
 				addView( view );
-				if (androidView.getPolishItem().isFocused()) {
+				if (item.isFocused()) {
 					view.requestFocus();
-					if (androidView.getPolishItem() instanceof TextField) {
+					if (item instanceof TextField) {
 						//TODO this does not work here:
 						MidletBridge.getInstance().showSoftKeyboard();
 					}
@@ -1155,12 +1158,13 @@ implements NativeDisplay //, OnTouchListener
 		});
 	}
 	
-	public void onHide(final AndroidItemView androidView) {
+	public void onHide(final View view, final Item item) {
 		//#debug
-		System.out.println("onHide for " + androidView.getPolishItem());
+		System.out.println("onHide for " + item);
+		this.itemsByViewMap.remove(view);
 		MidletBridge.getInstance().runOnUiThread( new Runnable() {
 			public void run() {
-				removeView( androidView.getAndroidView() );
+				removeView( view );
 			}
 		});
 	}
@@ -1277,7 +1281,7 @@ implements NativeDisplay //, OnTouchListener
     	
         for (int i = 1; i < count; i++) {
             View view = getChildAt(i);
-            Item item = ((AndroidItemView) view).getPolishItem();
+            Item item = this.itemsByViewMap.get(view);
             int x = item.getAbsoluteX() + item.getContentX();
             int y = item.getAbsoluteY() + item.getContentY();
             if (y != view.getTop()) {
@@ -1420,8 +1424,7 @@ implements NativeDisplay //, OnTouchListener
 		            if (child == this.mainView) {
 		            	child.layout(0, 0, r-l, b-t);
 		            } else {
-			            AndroidItemView itemView = (AndroidItemView) child;
-			            Item item = itemView.getPolishItem();
+		            	Item item = this.itemsByViewMap.get(child);
 		                xpos = item.getAbsoluteX() + item.getContentX();
 		                ypos = item.getAbsoluteY() + item.getContentY();
 		                child.layout(xpos, ypos, xpos + child.getMeasuredWidth(), ypos + child.getMeasuredHeight());

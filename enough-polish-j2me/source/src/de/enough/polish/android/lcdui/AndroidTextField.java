@@ -18,7 +18,7 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TextField;
 
 public class AndroidTextField extends EditText
-implements AndroidItemView, View.OnTouchListener
+implements View.OnTouchListener
 {
 	
 	private final TextField textField;
