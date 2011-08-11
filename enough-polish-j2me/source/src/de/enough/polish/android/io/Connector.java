@@ -1,7 +1,11 @@
 //#condition polish.android
 package de.enough.polish.android.io;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import de.enough.polish.android.io.file.FileConnection;
 import de.enough.polish.android.io.file.FileConnectionImpl;
@@ -75,7 +79,29 @@ public class Connector {
 		}
 	}
 	
+	public static InputStream openInputStream(String url) throws IOException {
+		StreamConnection connection = (StreamConnection) open(url, READ_WRITE, true);
+		return connection.openInputStream();
+	}
+	
+	public static OutputStream openOutputStream(String url) throws IOException {
+		StreamConnection connection = (StreamConnection) open(url, READ_WRITE, true);
+		return connection.openOutputStream();
+	}
 
+
+	public static DataInputStream openDataInputStream(String url) throws IOException {
+		StreamConnection connection = (StreamConnection) open(url, READ_WRITE, true);
+		return connection.openDataInputStream();
+	}
+
+	public static DataOutputStream openDataOutputStream(String url) throws IOException {
+		StreamConnection connection = (StreamConnection) open(url, READ_WRITE, true);
+		return connection.openDataOutputStream();
+	}
+
+	
+	
 	private static Connection createSmsConnection(String url, int mode, boolean timeouts) {
 		return new MessageConnectionImpl(url,mode,timeouts);
 	}
