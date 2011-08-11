@@ -430,6 +430,10 @@ implements CommandListener
 	{
 		super( title, style, true );
 		if ( alertText != null || alertImage != null ) {
+			if ("".equals(alertText) && title != null) {
+				setTitle((String)null);
+				alertText = title;
+			}
 			createItem( alertText, alertImage, null );
 		}
 		//#ifdef polish.i18n.useDynamicTranslations
