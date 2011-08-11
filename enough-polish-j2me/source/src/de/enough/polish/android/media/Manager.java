@@ -5,6 +5,7 @@ package de.enough.polish.android.media;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.enough.polish.android.helper.ResourceInputStream;
 import de.enough.polish.android.media.enough.AudioPlaybackPlayer;
 import de.enough.polish.android.media.enough.AudioRecordingPlayer;
 
@@ -257,17 +258,21 @@ public final class Manager extends Object
 	 * <code>Manager</code> may throw a <code>MediaException</code>
 	 * to indicate that.
 	 * 
-	 * @param stream - The InputStream that delivers the input media.
-	 * @param type - The ContentType of the media.
+	 * @param stream The InputStream that delivers the input media.
+	 * @param type The ContentType of the media.
 	 * @return A new Player.
-	 * @throws IllegalArgumentException - Thrown if stream is null.
-	 * @throws MediaException - Thrown if a Player cannot be created for the given stream and type.
-	 * @throws IOException - Thrown if there was a problem reading data from the InputStream.
-	 * @throws SecurityException - Thrown if the caller does not have security permission to create the Player.
+	 * @throws IllegalArgumentException Thrown if stream is null.
+	 * @throws MediaException Thrown if a Player cannot be created for the given stream and type.
+	 * @throws IOException Thrown if there was a problem reading data from the InputStream.
+	 * @throws SecurityException Thrown if the caller does not have security permission to create the Player.
 	 */
 	public static Player createPlayer( InputStream stream, String type) throws IOException, MediaException
 	{
-		throw new RuntimeException("Not implemented");
+		if (stream instanceof ResourceInputStream) {
+			AudioPlaybackPlayer player = new AudioPlaybackPlayer((ResourceInputStream)stream);
+			return player;			
+		}
+		throw new MediaException("Not implemented for non-resource input streams");
 	}
 
 	/**

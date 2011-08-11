@@ -2,10 +2,14 @@
 package de.enough.polish.android.media.enough;
 
 import java.io.IOException;
+import java.io.InputStream;
 
+import android.R;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import de.enough.polish.android.helper.ResourceInputStream;
 import de.enough.polish.android.media.Control;
 import de.enough.polish.android.media.MediaException;
 import de.enough.polish.android.media.control.VolumeControl;
@@ -19,10 +23,7 @@ public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl
 	public AudioPlaybackPlayer(String locator) throws MediaException {
 		this.mediaPlayer = new MediaPlayer();
 		this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		if(locator == null) {
-			throw new RuntimeException("The parameter 'locator' must not be null.");
-		}
-		if(locator.startsWith("http://")){
+		if(locator != null){
 			try {
 				this.mediaPlayer.setDataSource(locator);
 			} catch (IllegalArgumentException e) {
@@ -34,6 +35,20 @@ public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl
 			}
 		}
 		this.androidAudioManager = (AudioManager)MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);
+	}
+
+	public AudioPlaybackPlayer(ResourceInputStream stream) throws MediaException {
+		this((String)null);
+		try {
+			AssetFileDescriptor descriptor = MidletBridge.getInstance().getAssets().openFd( stream.getCleanedResourceUrl() );
+			this.mediaPlayer.setDataSource( descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getDeclaredLength() );
+			descriptor.close();
+		} catch (Exception e) {
+			//#debug error
+			System.out.println("Unable to initialize player for " + stream.getResourceUrl() + ": " + e);
+			throw new MediaException(e.toString());
+		}
+		
 	}
 
 	protected void doClose() {
