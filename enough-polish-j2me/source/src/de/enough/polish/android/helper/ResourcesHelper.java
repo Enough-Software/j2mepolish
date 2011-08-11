@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.util.Log;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
+import de.enough.polish.util.TextUtil;
 
 public class ResourcesHelper {
 
@@ -38,8 +40,9 @@ public class ResourcesHelper {
 	 * @return the name without illegal characters
 	 */
 	public static String cleanResourceName(String resourceName) {
-		//TODO remove other illegal characters like several dots, etc.
 		String cleanedName = resourceName.replace('-', '_');
+		cleanedName = cleanedName.replace(' ', '_');
+		cleanedName = TextUtil.replace(cleanedName, ".", "_dot_");
 		int lastIndexOfSlash = cleanedName.lastIndexOf(File.separatorChar);
 		if(lastIndexOfSlash > 0) {
 			cleanedName = cleanedName.substring(lastIndexOfSlash+1);
@@ -53,7 +56,28 @@ public class ResourcesHelper {
 		resources = MidletBridge.instance.getResources();
 		int id = -1;
 		try
-		{	
+		{
+			AssetManager assetManager = resources.getAssets();
+			try {
+				print( "", assetManager.list(""));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				print( "images", assetManager.list("images"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				print( "sounds", assetManager.list("sounds"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				print( "webkit", assetManager.list("webkit"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			for(id=start; id<end; id++)
 			{
 				String name = resources.getString(id);
@@ -67,10 +91,21 @@ public class ResourcesHelper {
 		}
 		catch(NullPointerException e)
 		{
-			Log.e(MIDlet.TAG, "Caught NullPointerException, either you're calling FileUtil.loadFileName(name) in the MIDlet constructur or you're just doing it wrong");
+			e.printStackTrace();
 		}
 	}
 	
+
+	private static void print(String path, String[] list) {
+		if (list == null || list.length == 0) {
+			System.out.println("path: [" + path + "]: no resources" );
+			return;
+		}
+		for (int i = 0; i < list.length; i++) {
+			String string = list[i];
+			System.out.println("path: [" + path + "]: " + string );
+		}
+	}
 
 	public static int getResourceID(String resourceName) throws IOException
 	{
@@ -86,27 +121,60 @@ public class ResourcesHelper {
 			if (idInteger == null) {
 				throw new IOException("resource does not exist: " + resourceName);
 			}
+			resourceMap.put(resourceName, idInteger);
 		}
 		int resourceId = idInteger.intValue();
 		return resourceId;
 	}
 	
+	/**
+	 * Retrieves a resource as an input stream
+	 * 
+	 * @param resourceName the path of the resource, e.g. /myimage.png
+	 * @return the resource as input stream, either null when not found or as a ResourceInputStream
+	 * @see ResourceInputStream
+	 */
 	public static InputStream getResourceAsStream(String resourceName)
 	{
-		try
-		{
-			int id = ResourcesHelper.getResourceID(resourceName);
-			InputStream is = MidletBridge.instance.getResources().openRawResource(id);
-			if (is == null) {
-				return null;
+		//#if polish.JavaPlatform >= Android/1.5
+			try {
+				if (resources == null) {
+					resources = MidletBridge.getInstance().getResources();
+				}
+				String cleanedResourceName = resourceName.substring(1);
+				InputStream in = resources.getAssets().open(cleanedResourceName);
+				return new ResourceInputStream(resourceName, cleanedResourceName, 0, in);
+			} catch (IOException e) {
+				//#debug error
+				System.out.println("Unable to get resource [" + resourceName + "]" + e );
 			}
-			return new ResourceInputStream( resourceName, id, is );
-		} catch (IOException e)
-		{
-			//#debug error
-			System.out.println("Unable to get resource " + resourceName + e );
-			return null;
-		}
+		//#else
+			try {
+				String cleanedResourceName = resourceName.toLowerCase();
+				if(resourceMap == null) {
+					initResources();
+				}
+				Integer idInteger = resourceMap.get(cleanedResourceName);
+				if (idInteger == null) {
+					cleanedResourceName = cleanResourceName(cleanedResourceName);
+					idInteger = resourceMap.get(cleanedResourceName);
+					if (idInteger == null) {
+						throw new IOException("resource does not exist: " + resourceName );
+					}
+					resourceMap.put(resourceName, idInteger);
+				}
+				int resourceId = idInteger.intValue();
+				InputStream is = resources.openRawResource(resourceId);
+				if (is == null) {
+					return null;
+				}
+				return new ResourceInputStream( resourceName, cleanedResourceName, resourceId, is );
+			} catch (IOException e) {
+				//#debug error
+				System.out.println("Unable to get resource [" + resourceName + "]" + e );
+			}
+		//#endif
+		return null;
 	}
 
 	/**
@@ -114,7 +182,8 @@ public class ResourcesHelper {
 	 * 
 	 * @param clazz the class
 	 * @param resourceName the path of the resource, e.g. /myimage.png
-	 * @return the resource as input stream
+	 * @return the resource as input stream, either null when not found or as a ResourceInputStream
+	 * @see ResourceInputStream
 	 */
 	public static InputStream getResourceAsStream(Class clazz, String resourceName)
 	{

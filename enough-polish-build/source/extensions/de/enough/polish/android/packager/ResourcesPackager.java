@@ -40,11 +40,7 @@ import de.enough.polish.util.ProcessUtil;
 /**
  * <p>Creates an resource (.ap_) package</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008-2011</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ResourcesPackager extends Packager{
@@ -59,7 +55,7 @@ public class ResourcesPackager extends Packager{
 	{
 		String aapt = ArgumentHelper.aapt(env);
 		if (aapt != null) {
-			ArrayList arguments = getDefaultArguments(aapt,env);
+			ArrayList<String> arguments = getDefaultArguments(aapt,env);
 			File directory = new File(ArgumentHelper.getPlatformTools(env));
 			
 			System.out.println("resource package (aapt): Packaging resources...");
@@ -88,11 +84,11 @@ public class ResourcesPackager extends Packager{
 	 * @param env the environment
 	 * @return the ArrayList
 	 */
-	static ArrayList getDefaultArguments(String executable, Environment env)
+	static ArrayList<String> getDefaultArguments(String executable, Environment env)
 	{
 		String androidJar = ArgumentHelper.getAndroidJar(env);
 		
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		arguments.add("package");
 		arguments.add("-f");
@@ -100,6 +96,8 @@ public class ResourcesPackager extends Packager{
 		arguments.add(ArgumentHelper.getActivity(env) + "/AndroidManifest.xml");
 		arguments.add("-S");
 		arguments.add(ArgumentHelper.getRes(env));
+		arguments.add("-A");
+		arguments.add(ArgumentHelper.getAssets(env));
 		arguments.add("-I");
 		arguments.add(androidJar);
 		arguments.add("-F");

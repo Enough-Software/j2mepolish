@@ -77,7 +77,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 		System.out.println("aapt: Copying resources to " + ArgumentHelper.getRaw(env) + "...");		
 		try {
 			// generate jadprops.txt:
-			storeJadProperties( new File( ArgumentHelper.getRaw(env)), env);
+			storeJadProperties( new File( ArgumentHelper.getAssets(env)), env);
 			copyResources(device, env);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,7 +132,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 		for (int i = 0; i < permissions.length; i++) {
 			permissionElement = new Element("uses-permission");
 			String permission = permissions[i];
-			permissionElement.setAttribute("name","android.permission."+permission,namespace);
+			permissionElement.setAttribute("name","android.permission."+permission, namespace);
 			rootElement.addContent(permissionElement);
 		}
 		
@@ -141,16 +141,16 @@ public class ResourcesPreCompiler extends PreCompiler {
 		if(minSdkVersion == null || minSdkVersion.length() == 0) {
 			minSdkVersion = "3";
 		}
-		usesSdkElement.setAttribute("minSdkVersion", minSdkVersion,namespace);
+		usesSdkElement.setAttribute("minSdkVersion", minSdkVersion, namespace);
 		
 		String targetSdkVersion = env.getVariable("android.targetSdkVersion");
 		if(targetSdkVersion != null && targetSdkVersion.length() > 0) {
-			usesSdkElement.setAttribute("targetSdkVersion", targetSdkVersion,namespace);
+			usesSdkElement.setAttribute("targetSdkVersion", targetSdkVersion, namespace);
 		}
 		
 		String maxSdkVersion = env.getVariable("android.maxSdkVersion");
 		if(maxSdkVersion != null && maxSdkVersion.length() > 0) {
-			usesSdkElement.setAttribute("maxSdkVersion", maxSdkVersion,namespace);
+			usesSdkElement.setAttribute("maxSdkVersion", maxSdkVersion, namespace);
 		}
 		
 		rootElement.addContent(usesSdkElement);
@@ -164,23 +164,27 @@ public class ResourcesPreCompiler extends PreCompiler {
 			int versionCodeNumber = computeVersionCode(version);
 			versionCode = String.valueOf(versionCodeNumber);
 		}
-		rootElement.setAttribute("versionCode", versionCode,namespace);
+		rootElement.setAttribute("versionCode", versionCode, namespace);
 		
 		String versionName = env.getVariable("android.versionName");
 		if(versionName == null || versionName.length() == 0) {
 			versionName = version;
 		}
-		rootElement.setAttribute("versionName", versionName,namespace);
+		rootElement.setAttribute("versionName", versionName, namespace);
 		
 		String midletName = env.getBuildSetting().getMidlets(env)[0].name;
 
 		Element applicationElement = rootElement.getChild("application");
-		applicationElement.setAttribute("label",midletName,namespace);
-		applicationElement.setAttribute("debuggable","true",namespace);
+		applicationElement.setAttribute("label",midletName, namespace);
+		applicationElement.setAttribute("debuggable","true", namespace);
 		
 		Element activityElement = applicationElement.getChild("activity");
-		activityElement.setAttribute("configChanges","mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|fontScale",namespace);
-		activityElement.setAttribute("label",midletName,namespace);
+		activityElement.setAttribute("configChanges","mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|fontScale", namespace);
+		activityElement.setAttribute("label", midletName, namespace);
+		String screenOrientation = env.getVariable("android.screenOrientation");
+		if (screenOrientation != null) {
+			activityElement.setAttribute("screenOrientation", screenOrientation, namespace);
+		}
 		
 		String trapHomeButtonFlag = env.getVariable("android.traphomebutton");
 		if("true".equals(trapHomeButtonFlag)) {
@@ -195,15 +199,15 @@ public class ResourcesPreCompiler extends PreCompiler {
 		}
 		
 		String iconUrl = env.getVariable("MIDlet-Icon");
-		if(iconUrl != null) {
-			int indexOfPoint = iconUrl.indexOf(".");
-			if(indexOfPoint != -1) {
-				// Remove the affix as android needs only the name of the resource.
-				iconUrl = iconUrl.substring(0,indexOfPoint);
-			}
-			if(iconUrl.length() != 0) {
-				applicationElement.setAttribute("icon","@raw"+iconUrl,namespace);
-				activityElement.setAttribute("icon","@raw"+iconUrl,namespace);
+		if (iconUrl != null && iconUrl.length() > 0) {
+			String cleanedIconUrl = cleanResourceName(iconUrl);
+			try {
+				FileUtil.copy( new File(device.getResourceDir(), iconUrl.substring(1)), new File( ArgumentHelper.getRaw(env) + cleanedIconUrl));
+				applicationElement.setAttribute("icon","@raw"+cleanedIconUrl, namespace);
+				activityElement.setAttribute("icon","@raw"+cleanedIconUrl, namespace);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} else {
 			System.err.println("Warning: No icon was defined in this build. You will not be able to deploy this application in the Android Market. Please define an icon with the attribte \"icon\" in the <info> tag of the build.xml file.");
@@ -249,7 +253,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 //		if(description == null || description.length() == 0) {
 //			description = "";
 //		}
-//		applicationElement.setAttribute("description",description,namespace);
+//		applicationElement.setAttribute("description",description, namespace);
 		
 		XMLOutputter xmlOutputter = new XMLOutputter();
 		FileWriter fileWriter;
@@ -377,46 +381,56 @@ public class ResourcesPreCompiler extends PreCompiler {
 	 */
 	void copyResources(Device device, Environment env) throws IOException
 	{
-		FilenameFilter filenameFilter = new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				if(".svn".equals(name)) {
-					return false;
-				}
-				return true;
-			}
-			
-		};
-		String[] fileNames = FileUtil.filterDirectory(device.getResourceDir(), null, filenameFilter, true);
-		String resourceDir = device.getResourceDir().getAbsolutePath();		
-		String rawDirectory = ArgumentHelper.getRaw(env);
-		
-		for (int i = 0; i < fileNames.length; i++) {
-			String fileName = fileNames[i];
-			File srcFile = new File(resourceDir + File.separator + fileName);
-			String targetFileName = fileName.toLowerCase();
-			int pathSeparatorIndex = targetFileName.lastIndexOf(File.separatorChar );
-			if (pathSeparatorIndex != -1) {
-				targetFileName = targetFileName.substring( pathSeparatorIndex + 1 );
-			}
-			String cleanedTargetFileName = cleanResourceName(targetFileName);
-			File destFile = new File(rawDirectory + File.separator + cleanedTargetFileName);
-			
-			FileUtil.copy(srcFile, destFile);
-		}
+		String assetsPath = ArgumentHelper.getAssets(env);
+		FileUtil.copyDirectoryContents( device.getResourceDir(), new File( assetsPath), true);
+//		
+//		String rawPath = ArgumentHelper.getRaw(env);
+//
+//		FilenameFilter filenameFilter = new FilenameFilter() {
+//			public boolean accept(File dir, String name) {
+//				if(".svn".equals(name)) {
+//					return false;
+//				}
+//				if("CVS".equals(name)) {
+//					return false;
+//				}
+//				return true;
+//			}
+//			
+//		};
+//		String[] fileNames = FileUtil.filterDirectory(device.getResourceDir(), null, filenameFilter, true);
+//		String resourceDir = device.getResourceDir().getAbsolutePath();		
+//		String rawDirectory = ArgumentHelper.getRaw(env);
+//		
+//		for (int i = 0; i < fileNames.length; i++) {
+//			String fileName = fileNames[i];
+//			File srcFile = new File(resourceDir + File.separator + fileName);
+//			String targetFileName = fileName.toLowerCase();
+//			int pathSeparatorIndex = targetFileName.lastIndexOf(File.separatorChar );
+//			if (pathSeparatorIndex != -1) {
+//				targetFileName = targetFileName.substring( pathSeparatorIndex + 1 );
+//			}
+//			String cleanedTargetFileName = cleanResourceName(targetFileName);
+//			File destFile = new File(rawDirectory + File.separator + cleanedTargetFileName);
+//			
+//			FileUtil.copy(srcFile, destFile);
+//		}
 	}
 	
 	/**
 	 * Cleans the filename. Android does not allow the minus sign in the name of a resource file.
 	 * The path is also flattened as android does not allow resources in subfolders.
-	 * TODO: This method must be equal to the one in ResourceHelper. Its hard to take the same class as
+	 * TODO: This method must be equal to the one in de.enough.polish.android.helper.ResourceHelper. Its hard to take the same class as
 	 * the classpath is different for building and at runtime.
 	 * @param resourceName Must not be null
-	 * @return Never null.
+	 * @return the resource name that only contains valid Android resource characters
 	 */
 	private String cleanResourceName(String resourceName) {
 		String cleanedName = resourceName.replace('-', '_');
-		int lastIndexOfSlash = cleanedName.lastIndexOf(File.separator);
-		if(lastIndexOfSlash > -0) {
+		cleanedName = cleanedName.replace(' ', '_');
+		cleanedName = cleanedName.replace(".", "_dot_");
+		int lastIndexOfSlash = cleanedName.lastIndexOf(File.separatorChar);
+		if(lastIndexOfSlash > 0) {
 			cleanedName = cleanedName.substring(lastIndexOfSlash+1);
 		}
 		return cleanedName;

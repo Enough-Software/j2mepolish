@@ -448,4 +448,8 @@ public class ArgumentHelper {
 		}
 		return targetVersion;
 	}
+
+	public static String getAssets(Environment env) {
+		return getActivity(env) + File.separator + "assets";
+	}
 }

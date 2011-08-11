@@ -38,6 +38,7 @@ public class ResourceInputStream extends InputStream {
 	private final InputStream in;
 	private final String url;
 	private final int id;
+	private final String cleanedUrl;
 
 	/**
 	 * Creates a new resource input stream
@@ -47,18 +48,41 @@ public class ResourceInputStream extends InputStream {
 	 * @param in the actual input stream
 	 */
 	public ResourceInputStream(String url, int id, InputStream in) {
+		this( url, null, id, in );
+	}
+
+	/**
+	 * Creates a new resource input stream
+	 * 
+	 * @param url the URL of the resource
+	 * @param id the ID of the resource (R.java)
+	 * @param in the actual input stream
+	 */
+	public ResourceInputStream(String url, String cleanedUrl, int id, InputStream in) {
 		this.url = url;
+		this.cleanedUrl = cleanedUrl;
 		this.id = id;
 		this.in = in;
 	}
 	
+	
 	/**
-	 * Retrieves the url or the original resource
+	 * Retrieves the MIDP url or the original resource
 	 * @return the resource URL, e.g. /image.png
 	 */
 	public String getResourceUrl() {
 		return this.url;
 	}
+	
+	/**
+	 * Retrieves the Android url with only valid characters or the original resource
+	 * @return the resource URL, e.g. /image.png
+	 */
+	public String getCleanedResourceUrl() {
+		return this.cleanedUrl;
+	}
+	
+	
 	
 	/**
 	 * Retrieves the ID of the resource within R.java
