@@ -100,16 +100,16 @@ implements OnTouchListener //, OnKeyListener
 	}
 
 	@Override
-	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+	protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 		//#debug
 		System.out.println("onSizeChanged with width '"+w+"' and height '"+h+"'");
 		this.availableWidth = w;
 		this.availableHeight = h;
-		super.onSizeChanged(w, h, oldw, oldh);
+		super.onSizeChanged(w, h, oldW, oldH);
 		if(this.lcduiCanvas != null) {
 			this.lcduiCanvas.sizeChanged(w,h);
 		}
-		MidletBridge.instance.onSizeChanged(w, h);
+		MidletBridge.instance.onSizeChanged(w, h, oldW, oldH );
 	}
 	
 
@@ -126,18 +126,11 @@ implements OnTouchListener //, OnKeyListener
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// #debug
+		//#debug
 		System.out.println("CanvasBridge.onKeyDown: keyCode=" + keyCode + ", flags=" + event.getFlags() + ", action=" + event.getAction() + ", isFromSoftKeyBoard=" + ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD));
 		if(this.lcduiCanvas == null) {
 			return false;
 		}
-		//#if polish.android1.5
-		if(keyCode == KeyEvent.KEYCODE_ENTER && ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD)) {
-			//#debug
-			System.out.println("Hiding Softkeyboard in onKeyUp");
-			return true;
-		}
-		//#endif
 		if(this.util == null)
 		{
 			this.util = new DisplayUtil(event.getDeviceId());
@@ -169,14 +162,6 @@ implements OnTouchListener //, OnKeyListener
 		if(this.lcduiCanvas == null) {
 			return false;
 		}
-//		//#if polish.android1.5
-//		if(keyCode == KeyEvent.KEYCODE_ENTER && ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD)) {
-//			//#debug
-//			System.out.println("Hiding Softkeyboard");
-//			//MidletBridge.instance.hideSoftKeyboard();
-//			return true;
-//		}
-//		//#endif
 		if(this.util == null)
 		{
 			this.util = new DisplayUtil(event.getDeviceId());
@@ -238,20 +223,22 @@ implements OnTouchListener //, OnKeyListener
 		int action = event.getAction();
 		//#debug
 		System.out.println("onKey for " + view + " (this=" + this + "), keyCode=" + keyCode + ", action=" + event.getAction());
+		//#if !tmp.fullScreen
+			if (keyCode == KeyEvent.KEYCODE_MENU) {
+				return false;
+			}
+		//#endif
 		if (view != this) {
 			//bringToFront();
 			requestFocus();
 		}
 		switch (action) {
 		case KeyEvent.ACTION_DOWN:
-			onKeyDown(keyCode, event);
-			return true;
+			return onKeyDown(keyCode, event);
 		case KeyEvent.ACTION_UP:
-			onKeyUp(keyCode, event);
-			return true;
+			return onKeyUp(keyCode, event);
 		case KeyEvent.ACTION_MULTIPLE:
-			onKeyMultiple(keyCode, event.getRepeatCount(), event);
-			return true;
+			return onKeyMultiple(keyCode, event.getRepeatCount(), event);
 		}
 		return false;
 	}

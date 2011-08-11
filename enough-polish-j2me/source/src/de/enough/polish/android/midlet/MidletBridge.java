@@ -123,6 +123,7 @@ public class MidletBridge extends Activity {
 			true
 		//#endif
 	;
+	private boolean isSoftKeyboardShown;
 	private static MIDlet midlet;
 	
 
@@ -313,11 +314,16 @@ public class MidletBridge extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		//#debug
+		// #debug
 		System.out.println("Config changed:"+newConfig);
+		
 		Locale locale = newConfig.locale;
 		String language = locale.getLanguage();
-		setSystemProperty("microedition.locale", language);
+		String previousLanguage = System.getProperty("microedition.locale");
+		if (!language.equals(previousLanguage)) {
+			setSystemProperty("microedition.locale", language);
+			//TODO reload resources when dynamic translations are used
+		}
 	}
 
 	/* (non-Javadoc)
@@ -694,7 +700,6 @@ public class MidletBridge extends Activity {
 	public void hideSoftKeyboard() {
 		//#debug
 		System.out.println("MidletBridge.hideSoftKeyboard");
-
 		//#if polish.javaplatform >= Android/1.5
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
 			View focusedView = AndroidDisplay.getInstance().findFocus();
@@ -729,10 +734,12 @@ public class MidletBridge extends Activity {
 	 * @return true when the virtual keyboard is shown
 	 */
 	public boolean isSoftKeyboardShown() {
-		InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
-		View focusedView = AndroidDisplay.getInstance().findFocus();
-		boolean isActive = inputMethodManager.isActive(focusedView);
-		return isActive;
+		// this works only for the first time, when a softkeyboard has not been shown yet:
+//		InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
+//		View focusedView = AndroidDisplay.getInstance().findFocus();
+//		boolean isActive = inputMethodManager.isActive(focusedView);
+//		return isActive;
+		return this.isSoftKeyboardShown;
 	}
 
 	
@@ -800,10 +807,12 @@ public class MidletBridge extends Activity {
 		inputMethodManager.showInputMethodPicker();
 	}
 
-	public void onSizeChanged( int w, int h) {
-//		//#if polish.javaplatform >= Android/1.5
-//			hideSoftKeyboard();
-//		//#endif
+	public void onSizeChanged( int w, int h, int oldW, int oldH) {
+		if (h < oldH) {
+			this.isSoftKeyboardShown = true;
+		} else {
+			this.isSoftKeyboardShown = false;	
+		}
 	}
 	
 	
