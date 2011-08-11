@@ -1,6 +1,7 @@
 //#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
+import android.graphics.Rect;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.TypedValue;
@@ -17,13 +18,9 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TextField;
 
 public class AndroidTextField extends EditText
-implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
+implements AndroidItemView, View.OnTouchListener
 {
 	
-	 //private static final int MODE_SHIFT = 30;
-     //private static final int MODE_MASK  = 0x3 << MODE_SHIFT;
-
-
 	private final TextField textField;
 	private int cursorPosition;
 	private boolean isNumericPassword;
@@ -38,59 +35,19 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 		setBackgroundDrawable(null); // no background
 		setPadding(0, 0, 0, 0); // no padding for me
 		setCompoundDrawables(null, null, null, null); // remove borders
-		setOnFocusChangeListener(this);
 		applyTextField();
 		setOnTouchListener(this);
 	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		boolean processed = super.onKeyDown(keyCode, event);
-		//#debug
-		System.out.println("EditText.onKeyDown processed=" + processed+ ", keyCode=" + keyCode);
-		if ( !processed 
-				&& (keyCode == KeyEvent.KEYCODE_DPAD_UP 
-						|| keyCode == KeyEvent.KEYCODE_DPAD_DOWN 
-						|| keyCode == KeyEvent.KEYCODE_MENU 
-						|| keyCode == KeyEvent.KEYCODE_BACK
-				)
-		) {
-			//AndroidDisplay.getInstance().toggleTextInput(this.textField);
-			return CanvasBridge.current().onKey( this, keyCode, event );
-		}
-		return processed;
-	}
-
-//	@Override
-//	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-//		boolean processed = super.onKeyMultiple(keyCode, repeatCount, event);
-//		System.out.println("EditText.onKeyMultiple processed=" + processed);
-//		return processed;
-//	}
-//
-//	@Override
-//	public boolean onKeyUp(int keyCode, KeyEvent event) {
-//		boolean processed = super.onKeyUp(keyCode, event);
-//		System.out.println("EditText.onKeyUp processed=" + processed + ", keyCode=" + keyCode);
-//		return processed;
-//	}
 	
-	public void applyTextField() {
+	
+	private void applyTextField() {
 		TextField field = this.textField;
 		Style style = field.getStyle();
 		if (style != null) {
-			Font font = (Font)(Object)style.getFont();
-			if (font == null) {
-				font = Font.getDefaultFont();
-			}
-			setTypeface( font.getTypeface() );
-			setTextSize( TypedValue.COMPLEX_UNIT_PX, font.getTextSize() - 0.352F ); 
-			setTextColor( 0xff000000 | style.getFontColor() );
-			//setLineSpacing( (float)style.getPaddingVertical(100), 1F);
-			setLineSpacing( 0F, 1F);
+			setStyle( style );
 		}
 		setFilters( new InputFilter[] { new InputFilter.LengthFilter(field.getMaxSize()) } );
-		//TODO apply help text (setHint(), setHintColor() when help texts are being used
+		//TODO apply setHintColor() when help texts are being used
 		//#if polish.TextField.showHelpText
 			if (field.getHelpText() != null) {
 				setHint(field.getHelpText());
@@ -108,7 +65,6 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 				// normal numeric field:
 				type |= InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
 			}
-			//TODO allow password fields
 		} else if (field.isConstraintsDecimal()) {
 			type |= InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL;
 		} else if (field.isConstraintsEmail()) {
@@ -121,6 +77,37 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 		}
 		setInputType( type );
 	}
+	
+	public void setStyle( Style style ) {
+		Font font = (Font)(Object)style.getFont();
+		if (font == null) {
+			font = Font.getDefaultFont();
+		}
+		setTypeface( font.getTypeface() );
+		setTextSize( TypedValue.COMPLEX_UNIT_PX, font.getTextSize() - 0.352F ); 
+		setTextColor( 0xff000000 | style.getFontColor() );
+		//setLineSpacing( (float)style.getPaddingVertical(100), 1F);
+		setLineSpacing( 0F, 1F);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean processed = super.onKeyDown(keyCode, event);
+		//#debug
+		System.out.println("EditText.onKeyDown processed=" + processed+ ", keyCode=" + keyCode);
+		if ( !processed 
+				&& (keyCode == KeyEvent.KEYCODE_DPAD_UP 
+						|| keyCode == KeyEvent.KEYCODE_DPAD_DOWN 
+						|| keyCode == KeyEvent.KEYCODE_MENU 
+						|| keyCode == KeyEvent.KEYCODE_BACK
+				)
+		) {
+			boolean onKeyDownHandled = CanvasBridge.current().onKey( this, keyCode, event );
+			return onKeyDownHandled;
+		}
+		return processed;
+	}
+
 	
 	
 	
@@ -136,21 +123,6 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 	public TextField getTextField() {
 		return this.textField;
 	}
-	
-//	@Override
-//	public void draw(android.graphics.Canvas arg0) {
-//		//System.out.println("DRAWING ANDROID TEXT FIELD, text=" + getText() + ", color=" + Integer.toHexString(getCurrentTextColor()) + ", pos=" + getLeft() + ", " + getTop() + " - " + getRight() + ", " + getBottom() + ", focus=" + AndroidDisplay.getInstance().findFocus() + "/" +  AndroidDisplay.getInstance().getFocusedChild() + ", childCount=" + AndroidDisplay.getInstance().getChildCount());
-//		//System.out.println("Drawing textfield " + this.textField + " (" + System.currentTimeMillis() + ")");
-//		System.out.println( "draw edit " + getText() );
-//		super.draw(arg0);
-//	}
-//
-//	@Override
-//	public void bringToFront() {
-//		System.out.println("ANDROID TEXT FIELD: bringToFront()");
-//		super.bringToFront();
-//		
-//	}
 
 	public Item getPolishItem() {
 		return this.textField;
@@ -160,16 +132,18 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 		return this;
 	}
 	
+
 	/*
 	 * (non-Javadoc)
-	 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
+	 * @see android.widget.TextView#onFocusChanged(boolean, int, android.graphics.Rect)
 	 */
-	public void onFocusChange(View view, boolean hasFocus) {
+	protected void onFocusChanged (boolean gainFocus, int direction, Rect previouslyFocusedRect) {
 		//#debug
-		System.out.println("Focus changed for " + view + ": hasFocus=" + hasFocus);
-		if (hasFocus && !this.textField.isFocused()) {
+		System.out.println("Focus changed for " + this.textField + ": hasFocus=" + gainFocus);
+		if (gainFocus && !this.textField.isFocused()) {
 			this.textField.getScreen().focus(this.textField);
 		}
+		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
 	}
 
 	/*
@@ -202,6 +176,10 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 		super.onTextChanged(text, start, before, after);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.TextView#onSelectionChanged(int, int)
+	 */
 	protected void onSelectionChanged(int selStart, int selEnd) {
 		super.onSelectionChanged(selStart, selEnd);
 		if (selStart == selEnd) {
@@ -226,24 +204,6 @@ implements AndroidItemView, View.OnFocusChangeListener, View.OnTouchListener
 			System.out.println("unable to set cursor position" + e);
 		}
 	}
-	
-
-//	@Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//		System.out.println("AndroidTextField.onMeasure: lineCount=" + getLineCount() + ", lineHeight=" + getLineHeight() + ", layout=" + getLayout());
-//        int width = MeasureSpec.getSize(widthMeasureSpec);
-//        int height = MeasureSpec.getSize(heightMeasureSpec);
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//		//System.out.println("onMasure: width: avail=" + width + ", measured=" + getMeasuredWidth());
-//		System.out.println("onMeasure: height: avail=" + height + ", measured=" + getMeasuredHeight() );
-//		
-//	}
-//
-//	@Override
-//    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//		System.out.println("on layout: " + l+  ", " + t + ", " + r + ", " + b + ") for " + getPolishItem());
-//		super.onLayout(changed, l, t, r, b );
-//	}
 	
 	/*
 	 * (non-Javadoc)

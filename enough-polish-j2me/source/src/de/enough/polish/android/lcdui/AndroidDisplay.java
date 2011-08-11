@@ -22,6 +22,8 @@ import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.NativeDisplay;
 import de.enough.polish.ui.Screen;
+import de.enough.polish.ui.ScreenChangeAnimation;
+import de.enough.polish.ui.TextField;
 import de.enough.polish.util.ArrayList;
 import de.enough.polish.util.IdentityArrayList;
 
@@ -658,12 +660,13 @@ implements NativeDisplay //, OnTouchListener
 	
 
 	public void setCurrent(Displayable nextDisplayable) {
-		// #debug
+		//#debug
 		System.out.println("AndroidDisplay.setCurrent: "  + nextDisplayable);
 		if (nextDisplayable instanceof Canvas) {
 			Canvas androidCanvas = (Canvas)nextDisplayable;
 			CanvasBridge bridge = androidCanvas._getBridge();
 			if (bridge == null) {
+				//#debug
 				System.out.println("Creating a new bridge with context " + MidletBridge.getInstance());
 				bridge = new CanvasBridge(MidletBridge.getInstance());
 				bridge.setCanvas(androidCanvas);
@@ -1057,6 +1060,17 @@ implements NativeDisplay //, OnTouchListener
 				return true;
 			}
 		//#endif
+		// check if we should hide the softkeyboard:
+		if (nextDisp instanceof ScreenChangeAnimation) {
+			nextDisp = ((ScreenChangeAnimation)nextDisp).getNextDisplayable();
+		}
+		if (nextDisp instanceof Screen) {
+			Screen nextScreen = (Screen) nextDisp;
+			Item focusedItem = nextScreen.getRootContainer().getFocusedChild();
+			if (!(focusedItem instanceof TextField)) {
+				MidletBridge.getInstance().hideSoftKeyboard();
+			}
+		}
 		return false;
 	}
 
@@ -1109,12 +1123,19 @@ implements NativeDisplay //, OnTouchListener
 		}
 	}
 	
-	public void onShow(AndroidItemView androidView) {
+	public void onShow(final AndroidItemView androidView) {
 		//#debug
 		System.out.println("onShow for " + androidView.getPolishItem());
 		final View view = androidView.getAndroidView();
 		final ViewParent parent = view.getParent();
 		if (parent == this) {
+			if (androidView.getPolishItem().isFocused()) {
+				view.requestFocus();
+				if (androidView.getPolishItem() instanceof TextField) {
+					//TODO this does not work here:
+					MidletBridge.getInstance().showSoftKeyboard();
+				}
+			}
 			return; // already added
 		}
 		MidletBridge.getInstance().runOnUiThread( new Runnable() {
@@ -1123,6 +1144,13 @@ implements NativeDisplay //, OnTouchListener
 					((ViewGroup)parent).removeView(view);
 				}
 				addView( view );
+				if (androidView.getPolishItem().isFocused()) {
+					view.requestFocus();
+					if (androidView.getPolishItem() instanceof TextField) {
+						//TODO this does not work here:
+						MidletBridge.getInstance().showSoftKeyboard();
+					}
+				}
 			}
 		});
 	}

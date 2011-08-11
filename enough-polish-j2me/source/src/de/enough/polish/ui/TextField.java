@@ -2036,11 +2036,15 @@ public class TextField extends StringItem
 					AndroidDisplay.getInstance().onHide(this._androidView);
 				}
 			}
-			this._androidTextField = new AndroidTextField(this); 
-			this._androidView = this._androidTextField;
-			if (this.isShown) {
-				AndroidDisplay.getInstance().onShow(this._androidView);
-			}
+			MidletBridge.getInstance().runOnUiThread( new Runnable() {
+				public void run() {
+					TextField.this._androidTextField = new AndroidTextField(TextField.this); 
+					TextField.this._androidView = TextField.this._androidTextField;
+					if (TextField.this.isShown) {
+						AndroidDisplay.getInstance().onShow(TextField.this._androidView);
+					}
+				}
+			});
 		//#endif
 		//#if polish.blackberry
 						
@@ -2861,7 +2865,7 @@ public class TextField extends StringItem
 			//#endif
 		//#endif
 		//#if polish.android
-			this._androidTextField.applyTextField();
+			this._androidTextField.setStyle(style);
 		//#endif
 	}
 	

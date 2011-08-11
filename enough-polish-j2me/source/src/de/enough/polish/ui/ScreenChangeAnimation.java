@@ -653,5 +653,14 @@ implements Runnable
 			}
 		}
 	}
+	
+	/**
+	 * Retrieves the next displayable that should be shown.
+	 * @return the next displayable
+	 * @see ScreenChangeAnimation#onShow(Style, Display, int, int, Displayable, Displayable, boolean) where the next displayable is being specified
+	 */
+	public Displayable getNextDisplayable() {
+		return this.nextDisplayable;
+	}
 
 }
