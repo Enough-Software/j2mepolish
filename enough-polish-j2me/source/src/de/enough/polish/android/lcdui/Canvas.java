@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import de.enough.polish.android.midlet.MIDlet;
 import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Displayable;
+import de.enough.polish.ui.Style;
 
 /**
  * The <code>Canvas</code> class is a base class for writing
@@ -763,6 +764,29 @@ implements Displayable
 	 */
 	public boolean isShown() {
 		return this._isShown;
+	}
+	
+	/**
+	 * Adds a command to the <code>Displayable</code>. The implementation may
+	 * choose, for example, to add the command to any of the available soft
+	 * buttons or place it in a menu. If the added command is already in the
+	 * screen (tested by comparing the object references), the method has no
+	 * effect. If the <code>Displayable</code> is actually visible on the
+	 * display, and this call affects the set of visible commands, the
+	 * implementation should update the display as soon as it is feasible to do
+	 * so.
+	 * 
+	 * @param cmd
+	 *            - the command to be added
+	 * @throws NullPointerException
+	 *             - if cmd is null
+	 */
+	public void addCommand( de.enough.polish.ui.Command cmd, Style style )
+	{
+		if (style != null) {
+			cmd.setStyle(style);
+		}
+		MidletBridge.instance.addCommand(cmd);
 	}
 
 	/**

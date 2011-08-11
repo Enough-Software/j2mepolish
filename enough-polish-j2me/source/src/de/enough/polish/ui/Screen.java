@@ -4058,7 +4058,6 @@ implements UiElement, Animatable
 		//#endif
 	}
 	
-	//#ifdef tmp.menuFullScreen
 	/**
 	 * Adds a command to this screen with the specified style.
 	 * 
@@ -4066,139 +4065,145 @@ implements UiElement, Animatable
 	 * @param commandStyle the style for the command
 	 */
 	public void addCommand(Command cmd, Style commandStyle ) {
-		int cmdType = cmd.getCommandType();
-		//#if polish.Item.suppressItemCommands
-			if (cmdType == Command.ITEM) {
-				return;
+		//#if !tmp.menuFullScreen
+			if (commandStyle != null) {
+				cmd.setStyle(commandStyle);
 			}
-		//#endif
-		//#debug
-		System.out.println("adding command [" + cmd.getLabel() + "] to screen [" + this + "].");
-		//#if tmp.useExternalMenuBar && polish.vendor.siemens
-			if (this.menuBar == null) {
-				//#debug
-				System.out.println("Ignoring command [" + cmd.getLabel() + "] that is added while Screen is not even initialized.");
-				return;
-			}
-		//#endif
-		if ( cmdType == Command.OK 
-				&&  (this.okCommand == null || this.okCommand.getPriority() > cmd.getPriority() ) ) 
-		{
-			this.okCommand = cmd;
-		}
-		//#if tmp.triggerCancelCommand
-			else if ( cmdType == Command.CANCEL
-					&& (this.cancelCommand == null || this.cancelCommand.getPriority() > cmd.getPriority()) ) 
-			{
-				this.cancelCommand = cmd;
-			}
-		//#endif
-		
-		//#ifdef tmp.triggerBackCommand
-			else if ( (cmdType == Command.BACK
-					//#if ! tmp.triggerCancelCommand
-					|| cmdType == Command.CANCEL 
-					//#endif
-					|| cmdType == Command.EXIT ) 
-				&& ( this.backCommand == null || this.backCommand.getPriority() > cmd.getPriority())  ) 
-			{
-				//#debug
-				System.out.println("setting new backcommand=" + cmd.getLabel() + " for screen " + this + " " + getTitle() );
-				this.backCommand = cmd;
-			}
-		//#endif
-		//#ifdef tmp.useExternalMenuBar
-			this.menuBar.addCommand(cmd, commandStyle);
-			if (this.isInitialized || this.screenWidth > 0) {
-				initMenuBar();
-			}
-			if (super.isShown()) {
-				requestRepaint();
-			}
+			super.addCommand(cmd);
 		//#else
-			if (this.menuCommands == null) {
-				this.menuCommands = new ArrayList( 6, 50 );
-				//#style menu, default
-				 this.menuContainer = new Container( true );
-				 this.menuContainer.screen = this;
-				 if (this.menuContainer.style != null) {
-					 //System.out.println("setting style for menuContainer " + this.menuContainer);
-					 this.menuContainer.setStyle( this.menuContainer.style );
-				 }
-				 this.menuContainer.layout |= Item.LAYOUT_SHRINK;
-			}
-			if (cmd == this.menuSingleLeftCommand 
-					|| cmd == this.menuSingleRightCommand 
-					|| this.menuCommands.contains(cmd)) 
-			{
-				// do not add an existing command again...
-				//#debug
-				System.out.println("Ignoring existing command " + cmd.getLabel() );
-				return;
-			}
-			if ( (cmdType == Command.BACK || cmdType == Command.CANCEL || cmdType == Command.EXIT) ) 
-			{
-				if ( (this.menuSingleRightCommand == null)
-						|| (cmd.getPriority() < this.menuSingleRightCommand.getPriority())	)
-				{
-					// okay set the right menu command:
-					if (this.menuSingleRightCommand != null) {
-						// the right menu command is replaced by the new one,
-						// so insert the original one into the options-menu:
-						CommandItem menuItem = new CommandItem( this.menuSingleRightCommand, this.menuContainer, commandStyle  );
-						menuItem.screen = this;
-						this.menuContainer.add( menuItem );
-						if (this.menuContainer.size() == 1) {
-							this.menuSingleLeftCommand = this.menuSingleRightCommand;
-						} else {
-							this.menuSingleLeftCommand = null;
-						}
-						this.menuCommands.add( this.menuSingleRightCommand );
-					}					
-					// this is a command for the right side of the menu:
-					this.menuSingleRightCommand = cmd;
-					updateMenuTexts();
-					requestRepaint();
+			int cmdType = cmd.getCommandType();
+			//#if polish.Item.suppressItemCommands
+				if (cmdType == Command.ITEM) {
 					return;
 				}
+			//#endif
+			//#debug
+			System.out.println("adding command [" + cmd.getLabel() + "] to screen [" + this + "].");
+			//#if tmp.useExternalMenuBar && polish.vendor.siemens
+				if (this.menuBar == null) {
+					//#debug
+					System.out.println("Ignoring command [" + cmd.getLabel() + "] that is added while Screen is not even initialized.");
+					return;
+				}
+			//#endif
+			if ( cmdType == Command.OK 
+					&&  (this.okCommand == null || this.okCommand.getPriority() > cmd.getPriority() ) ) 
+			{
+				this.okCommand = cmd;
 			}
-			CommandItem menuItem = new CommandItem( cmd, this.menuContainer, commandStyle  );
-			menuItem.screen = this;
-			if ( this.menuCommands.size() == 0 ) {
-				// using this command as the single-left-command:
-				this.menuCommands.add( cmd );
-				this.menuContainer.add( menuItem );
-				this.menuSingleLeftCommand = cmd;
-			} else {
-				this.menuSingleLeftCommand = null;
-				// there are already several commands,
-				// so add this cmd to the appropriate sorted position:
-				int priority = cmd.getPriority();
-				Command[] myCommands = (Command[]) this.menuCommands.toArray( new Command[ this.menuCommands.size() ]);
-				boolean inserted = false;
-				for (int i = 0; i < myCommands.length; i++) {
-					Command command = myCommands[i];
-					if ( cmd == command ) {
-						// ignore existing command:
+			//#if tmp.triggerCancelCommand
+				else if ( cmdType == Command.CANCEL
+						&& (this.cancelCommand == null || this.cancelCommand.getPriority() > cmd.getPriority()) ) 
+				{
+					this.cancelCommand = cmd;
+				}
+			//#endif
+			
+			//#ifdef tmp.triggerBackCommand
+				else if ( (cmdType == Command.BACK
+						//#if ! tmp.triggerCancelCommand
+						|| cmdType == Command.CANCEL 
+						//#endif
+						|| cmdType == Command.EXIT ) 
+					&& ( this.backCommand == null || this.backCommand.getPriority() > cmd.getPriority())  ) 
+				{
+					//#debug
+					System.out.println("setting new backcommand=" + cmd.getLabel() + " for screen " + this + " " + getTitle() );
+					this.backCommand = cmd;
+				}
+			//#endif
+			//#ifdef tmp.useExternalMenuBar
+				this.menuBar.addCommand(cmd, commandStyle);
+				if (this.isInitialized || this.screenWidth > 0) {
+					initMenuBar();
+				}
+				if (super.isShown()) {
+					requestRepaint();
+				}
+			//#else
+				if (this.menuCommands == null) {
+					this.menuCommands = new ArrayList( 6, 50 );
+					//#style menu, default
+					 this.menuContainer = new Container( true );
+					 this.menuContainer.screen = this;
+					 if (this.menuContainer.style != null) {
+						 //System.out.println("setting style for menuContainer " + this.menuContainer);
+						 this.menuContainer.setStyle( this.menuContainer.style );
+					 }
+					 this.menuContainer.layout |= Item.LAYOUT_SHRINK;
+				}
+				if (cmd == this.menuSingleLeftCommand 
+						|| cmd == this.menuSingleRightCommand 
+						|| this.menuCommands.contains(cmd)) 
+				{
+					// do not add an existing command again...
+					//#debug
+					System.out.println("Ignoring existing command " + cmd.getLabel() );
+					return;
+				}
+				if ( (cmdType == Command.BACK || cmdType == Command.CANCEL || cmdType == Command.EXIT) ) 
+				{
+					if ( (this.menuSingleRightCommand == null)
+							|| (cmd.getPriority() < this.menuSingleRightCommand.getPriority())	)
+					{
+						// okay set the right menu command:
+						if (this.menuSingleRightCommand != null) {
+							// the right menu command is replaced by the new one,
+							// so insert the original one into the options-menu:
+							CommandItem menuItem = new CommandItem( this.menuSingleRightCommand, this.menuContainer, commandStyle  );
+							menuItem.screen = this;
+							this.menuContainer.add( menuItem );
+							if (this.menuContainer.size() == 1) {
+								this.menuSingleLeftCommand = this.menuSingleRightCommand;
+							} else {
+								this.menuSingleLeftCommand = null;
+							}
+							this.menuCommands.add( this.menuSingleRightCommand );
+						}					
+						// this is a command for the right side of the menu:
+						this.menuSingleRightCommand = cmd;
+						updateMenuTexts();
+						requestRepaint();
 						return;
 					}
-					if (command.getPriority() > priority ) {
-						this.menuCommands.add( i, cmd );
-						this.menuContainer.add(i, menuItem);
-						inserted = true;
-						break;
-					}
 				}
-				if (!inserted) {
+				CommandItem menuItem = new CommandItem( cmd, this.menuContainer, commandStyle  );
+				menuItem.screen = this;
+				if ( this.menuCommands.size() == 0 ) {
+					// using this command as the single-left-command:
 					this.menuCommands.add( cmd );
 					this.menuContainer.add( menuItem );
+					this.menuSingleLeftCommand = cmd;
+				} else {
+					this.menuSingleLeftCommand = null;
+					// there are already several commands,
+					// so add this cmd to the appropriate sorted position:
+					int priority = cmd.getPriority();
+					Command[] myCommands = (Command[]) this.menuCommands.toArray( new Command[ this.menuCommands.size() ]);
+					boolean inserted = false;
+					for (int i = 0; i < myCommands.length; i++) {
+						Command command = myCommands[i];
+						if ( cmd == command ) {
+							// ignore existing command:
+							return;
+						}
+						if (command.getPriority() > priority ) {
+							this.menuCommands.add( i, cmd );
+							this.menuContainer.add(i, menuItem);
+							inserted = true;
+							break;
+						}
+					}
+					if (!inserted) {
+						this.menuCommands.add( cmd );
+						this.menuContainer.add( menuItem );
+					}
 				}
-			}
-			updateMenuTexts();
-			requestRepaint();
+				updateMenuTexts();
+				requestRepaint();
+			//#endif
 		//#endif
 	}
-	//#endif
 	
 	/**
 	 * Retrieves the CommandItem used for rendering the specified command. 
