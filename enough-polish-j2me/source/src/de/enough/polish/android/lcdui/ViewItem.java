@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 
 import de.enough.polish.ui.Item;
+import de.enough.polish.ui.Style;
 
 /**
  * <p>ViewItem allows you to embed native Android views in your J2ME Polish UI</p>
@@ -36,11 +37,30 @@ import de.enough.polish.ui.Item;
  * @author Robert Virkus
  *
  */
-public class ViewItem extends Item  {
+public class ViewItem 
+extends Item
+implements View.OnFocusChangeListener
+{
 	
+	/**
+	 * Creates a new ViewItem
+	 * @param nativeView the native Android view that should be displayed as content
+	 */
 	public ViewItem( View nativeView ) {
-		this._androidView = nativeView;
+		this( nativeView, null);
 	}
+	
+	/**
+	 * Creates a new ViewItem
+	 * @param nativeView the native Android view that should be displayed as content
+	 * @param style the J2ME Polish style associated with this item
+	 */
+	public ViewItem( View nativeView, Style style ) {
+		super( style );
+		this._androidView = nativeView;
+		nativeView.setOnFocusChangeListener(this);
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -55,7 +75,7 @@ public class ViewItem extends Item  {
 		);
 		this.contentWidth = nativeView.getMeasuredWidth();
 		this.contentHeight = nativeView.getMeasuredHeight();
-
+		this.appearanceMode = INTERACTIVE; //TODO not all views are interactive...
 	}
 
 	/*
@@ -64,7 +84,6 @@ public class ViewItem extends Item  {
 	 */
 	protected void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
 		// leave empty as the content is rendered by the native view
-
 	}
 
 	/*
@@ -73,6 +92,21 @@ public class ViewItem extends Item  {
 	 */
 	protected String createCssSelector() {
 		return "native";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
+	 */
+	public void onFocusChange(View view, boolean receivedFocus) {
+		//#debug
+		System.out.println("ViewItem.onFocusChange for " + view + ", receivedFocus=" + receivedFocus + ", item.isFocused()=" + isFocused() + ", screen=" + getScreen());
+		if (receivedFocus) {
+			if (!isFocused()) {
+				getScreen().focus(this);
+			}
+		}
+		
 	}
 
 }
