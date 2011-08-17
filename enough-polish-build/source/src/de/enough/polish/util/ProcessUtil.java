@@ -244,7 +244,7 @@ public final class ProcessUtil {
 	 * @param arguments the arguments of the process
 	 * @return a single string with spaces between single arguments and quotation marks around arguments that contain spaces themselves.
 	 */
-	public static String toString( ArrayList arguments ) {
+	public static String toString( ArrayList<String> arguments ) {
 		StringBuffer call = new StringBuffer();
 		for (int i=0; i<arguments.size(); i++) {
 			String arg = (String) arguments.get(i);

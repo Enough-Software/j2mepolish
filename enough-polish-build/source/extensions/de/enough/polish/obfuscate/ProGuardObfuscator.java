@@ -219,7 +219,7 @@ implements OutputFilter
 			env.addVariable(Preverifier.BUILDCONTROL_PREVERIFIER_ENABLED, "false");
 		}
 		
-		ArrayList argsList = new ArrayList();
+		ArrayList<String> argsList = new ArrayList<String>();
 		// the executable:
 		argsList.add( "java" );
 		argsList.add( "-jar" );
@@ -257,11 +257,12 @@ implements OutputFilter
 			//JarUtil.exec( this.proGuardJarFile, argsList, getClass().getClassLoader() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("ProGuard arguments: " + argsList.toString() );
+			System.out.println( "ProGuard arguments: " + ProcessUtil.toString(argsList) );
+			//System.out.println("ProGuard arguments: " + argsList.toString() );
 			throw new BuildException("ProGuard is unable to obfuscate: " + e.toString(), e );
 		}
 		if (result != 0) {
-			System.out.println("ProGuard arguments: " + argsList.toString() );
+			System.out.println( "ProGuard arguments: " + ProcessUtil.toString(argsList) );
 			throw new BuildException("ProGuard was unable to obfuscate - got return value [" + result + "].");
 		}
 		/*
