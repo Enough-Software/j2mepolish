@@ -212,6 +212,31 @@ public class ResourcesPreCompiler extends PreCompiler {
 		} else {
 			System.err.println("Warning: No icon was defined in this build. You will not be able to deploy this application in the Android Market. Please define an icon with the attribte \"icon\" in the <info> tag of the build.xml file.");
 		}
+		// add PuhsRegistry receiver to <application>:
+//	    <receiver android:enabled="true"
+//	              android:exported="false"
+//	              android:label="PushRegistry"
+//	              android:name="de.enough.polish.io.PushRegistry"
+//	              android:process=":remote">
+//	    </receiver>
+		Element receiverElement = new Element("receiver");
+		receiverElement.setAttribute("enabled", "true", namespace);
+		receiverElement.setAttribute("exported", "false", namespace);
+		receiverElement.setAttribute("label", "PushRegistry", namespace);
+		receiverElement.setAttribute("name", "de.enough.polish.android.io.PushRegistry", namespace);
+		receiverElement.setAttribute("process", ":remote", namespace);
+		applicationElement.addContent(receiverElement);
+
+		
+		// add default supports-screens element:
+		Element supportsScreensElement = new Element("supports-screens");
+		supportsScreensElement.setAttribute("anyDensity", "true", namespace);
+		supportsScreensElement.setAttribute("resizeable", "true", namespace);
+		supportsScreensElement.setAttribute("smallScreens", "true", namespace);
+		supportsScreensElement.setAttribute("normalScreens", "true", namespace);
+		supportsScreensElement.setAttribute("largeScreens", "true", namespace);
+		supportsScreensElement.setAttribute("xlargeScreens", "true", namespace);
+		rootElement.addContent(supportsScreensElement);
 		
 		// check if further elements should be added:
 		String furtherManifestPath = env.getVariable("android.manifest");
