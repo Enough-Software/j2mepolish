@@ -130,13 +130,7 @@ public class MidletBridge extends Activity {
 //	private PowerManager.WakeLock wakeLock;
 
 	/**
-	 * Protected constructor for subclasses. The application management software
-	 * is responsible for creating MIDlets and creation of MIDlets is
-	 * restricted. MIDlets should not attempt to create other MIDlets.
-	 * 
-	 * @throws SecurityException -
-	 *             unless the application management software is creating the
-	 *             MIDlet.
+	 * Creates a new MIDlet Bridge
 	 */
 	public MidletBridge() {
 		instance = this;
@@ -145,6 +139,7 @@ public class MidletBridge extends Activity {
 		//#= this.appProperties.put("MIDlet-Vendor", "${MIDlet-Vendor}");
 		//#= this.appProperties.put("MIDlet-Version", "${MIDlet-Version}");
 		//#= this.appProperties.put("microedition.pim.version", "1.0");
+		
 	}
 	
 	public void openOptionsMenu() {
@@ -164,8 +159,8 @@ public class MidletBridge extends Activity {
 		super.onCreate(icicle);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//#if polish.android.hideStatusBar
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//#endif
 		// shrink the application on softkeyboard display:
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -173,7 +168,7 @@ public class MidletBridge extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		CanvasBridge.DISPLAY_HEIGHT_PIXEL = metrics.heightPixels;
 		CanvasBridge.DISPLAY_WIDTH_PIXEL = metrics.widthPixels;
-		
+		//System.out.println("METRICS: DESIRED=" + desiredWindowWidth + "x" + desiredWindowHeight + ", defaultDisplay=" + CanvasBridge.DISPLAY_WIDTH_PIXEL + "x" + CanvasBridge.DISPLAY_HEIGHT_PIXEL);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
 		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -460,7 +455,7 @@ public class MidletBridge extends Activity {
 				//
 			}
 		}
-		if(this.suicideOnExit) {
+		if (this.suicideOnExit) {
 			int myPid = Process.myPid();
 			Process.killProcess(myPid);
 		}
