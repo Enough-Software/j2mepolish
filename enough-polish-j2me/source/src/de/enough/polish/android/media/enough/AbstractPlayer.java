@@ -15,7 +15,7 @@ import de.enough.polish.android.media.PlayerListener;
  */
 public abstract class AbstractPlayer implements Player {
 
-	private int meState = Player.UNREALIZED;
+	protected int meState = Player.UNREALIZED;
 	private ArrayList listeners = new ArrayList();
 	
 	public final void addPlayerListener(PlayerListener playerListener) {
