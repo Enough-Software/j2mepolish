@@ -235,7 +235,9 @@ public class ResourcesPreCompiler extends PreCompiler {
 		supportsScreensElement.setAttribute("smallScreens", "true", namespace);
 		supportsScreensElement.setAttribute("normalScreens", "true", namespace);
 		supportsScreensElement.setAttribute("largeScreens", "true", namespace);
-		supportsScreensElement.setAttribute("xlargeScreens", "true", namespace);
+		if (env.isConditionFulfilled("polish.JavaPackage >= Android/2.3")) {
+			supportsScreensElement.setAttribute("xlargeScreens", "true", namespace);
+		}
 		rootElement.addContent(supportsScreensElement);
 		
 		// check if further elements should be added:
