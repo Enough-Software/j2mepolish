@@ -1161,10 +1161,10 @@ implements NativeDisplay //, OnTouchListener
 	public void onHide(final View view, final Item item) {
 		//#debug
 		System.out.println("onHide for " + item);
-		this.itemsByViewMap.remove(view);
 		MidletBridge.getInstance().runOnUiThread( new Runnable() {
 			public void run() {
 				removeView( view );
+				AndroidDisplay.this.itemsByViewMap.remove(view);
 			}
 		});
 	}

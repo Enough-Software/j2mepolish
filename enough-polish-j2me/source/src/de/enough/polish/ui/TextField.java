@@ -2029,25 +2029,24 @@ public class TextField extends StringItem
 		//#if polish.css.text-wrap
 			this.animateTextWrap = this.isUneditable;
 		//#endif
+			
 		//#if polish.android
-			if (this.isShown) {
-				if (this._androidView != null) {
-					// remove existing view first:
-					AndroidDisplay.getInstance().onHide(this._androidView, this);
-				}
-				MidletBridge.getInstance().runOnUiThread( new Runnable() {
-					public void run() {
-						TextField.this._androidTextField = new AndroidTextField(TextField.this); 
-						TextField.this._androidView = TextField.this._androidTextField;
-						if (TextField.this.isShown) {
-							AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
-						}
+			MidletBridge.getInstance().runOnUiThread( new Runnable() {
+				public void run() {
+					if ( (TextField.this.isShown) && (TextField.this._androidView != null) ) {
+						// remove existing view first:
+						AndroidDisplay.getInstance().onHide(TextField.this._androidView, TextField.this);
 					}
-				});
-			}
+					TextField.this._androidTextField = new AndroidTextField(TextField.this); 
+					TextField.this._androidView = TextField.this._androidTextField;
+					if (TextField.this.isShown) {
+						AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
+					}
+				}
+			});
 		//#endif
+			
 		//#if polish.blackberry
-						
 			int filterType = TextFilter.DEFAULT;
 			long bbStyle = Field.FOCUSABLE;
 			if (this.isUneditable) {
@@ -2608,13 +2607,19 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if polish.android
-			this._androidTextField.requestLayout();
-			this._androidTextField.measure(
-					MeasureSpec.makeMeasureSpec(availWidth, MeasureSpec.EXACTLY),
-					MeasureSpec.makeMeasureSpec(availHeight, MeasureSpec.AT_MOST)
-			);
-			this.contentWidth = this._androidTextField.getMeasuredWidth();
-			this.contentHeight = this._androidTextField.getMeasuredHeight();
+			AndroidTextField nativeView = this._androidTextField;
+			if (nativeView == null) {
+				this.contentWidth = availWidth;
+				this.contentHeight = getFontHeight();
+			} else {
+				nativeView.requestLayout();
+				nativeView.measure(
+						MeasureSpec.makeMeasureSpec(availWidth, MeasureSpec.EXACTLY),
+						MeasureSpec.makeMeasureSpec(availHeight, MeasureSpec.AT_MOST)
+				);
+				this.contentWidth = nativeView.getMeasuredWidth();
+				this.contentHeight = nativeView.getMeasuredHeight();
+			}
 		//#else	
 			super.initContent(firstLineWidth, availWidth, availHeight);
 			//#if polish.blackberry
@@ -2865,7 +2870,9 @@ public class TextField extends StringItem
 			//#endif
 		//#endif
 		//#if polish.android
-			this._androidTextField.setStyle(style);
+			if (this._androidTextField != null) {
+				this._androidTextField.setStyle(style);
+			}
 		//#endif
 	}
 	
