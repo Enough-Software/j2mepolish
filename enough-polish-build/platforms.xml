@@ -358,6 +358,18 @@
     </platform>
 
     <platform>
+        <identifier>Android/2.0.1</identifier>
+        <features>android, android2.0, android2.0.1, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.0.1.jar" />
+        <capability name="build.Android.Platform.Version" value="2.0.1" />
+        <capability name="build.Android.Platform.Target" value="android-6" />
+        <capability name="build.Android.Platform.Api" value="6" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+
+    <platform>
         <identifier>Android/2.1</identifier>
         <features>android, android2.1, midp2, hasPointerEvents, hasPointerMotionEvents</features>
         <parent>Android/1.1</parent>
@@ -381,7 +393,7 @@
         <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 	
-	    <platform>
+	<platform>
         <identifier>Android/2.3</identifier>
         <features>android, android2.3, midp2, hasPointerEvents, hasPointerMotionEvents</features>
         <parent>Android/1.1</parent>
@@ -392,17 +404,67 @@
         <capability name="android1.1" value="" />
         <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
-	
-	    <platform>
-        <identifier>Android/3.0</identifier>
-        <features>android, android3.0, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+    
+    <platform>
+        <identifier>Android/2.3.3</identifier>
+        <features>android, android2.3, android2.3.3, midp2, hasPointerEvents, hasPointerMotionEvents</features>
         <parent>Android/1.1</parent>
-        <capability name="build.BootClassPath" value="android-3.0.jar" />
-        <capability name="build.Android.Platform.Version" value="3.0" />
+        <capability name="build.BootClassPath" value="android-2.3.3.jar" />
+        <capability name="build.Android.Platform.Version" value="2.3.3" />
         <capability name="build.Android.Platform.Target" value="android-10" />
         <capability name="build.Android.Platform.Api" value="10" />
         <capability name="android1.1" value="" />
         <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
+    
+    <platform>
+        <identifier>Android/2.3.4</identifier>
+        <features>android, android2.3, android2.3.4, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-2.3.3.jar" />
+        <capability name="build.Android.Platform.Version" value="2.3.4" />
+        <capability name="build.Android.Platform.Target" value="android-10" />
+        <capability name="build.Android.Platform.Api" value="10" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+    
+	
+	<platform>
+        <identifier>Android/3.0</identifier>
+        <features>android, android3.0, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-3.0.jar" />
+        <capability name="build.Android.Platform.Version" value="3.0" />
+        <capability name="build.Android.Platform.Target" value="android-11" />
+        <capability name="build.Android.Platform.Api" value="11" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+
+	<platform>
+        <identifier>Android/3.1</identifier>
+        <features>android, android3.1, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-3.1.jar" />
+        <capability name="build.Android.Platform.Version" value="3.1" />
+        <capability name="build.Android.Platform.Target" value="android-12" />
+        <capability name="build.Android.Platform.Api" value="12" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+
+	<platform>
+        <identifier>Android/3.2</identifier>
+        <features>android, android3.2, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-3.2.jar" />
+        <capability name="build.Android.Platform.Version" value="3.2" />
+        <capability name="build.Android.Platform.Target" value="android-13" />
+        <capability name="build.Android.Platform.Api" value="13" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+		
 		
 </platforms>
