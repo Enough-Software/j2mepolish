@@ -3,6 +3,7 @@ package de.enough.polish.android.lcdui;
 
 import de.enough.polish.ui.Dimension;
 import android.graphics.Paint;
+import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Typeface;
 
 /**
@@ -166,6 +167,8 @@ public final class Font extends Object
 	private int baselinePosition;
 	
 	private Paint paint;
+
+	private int descent;
 	
 	private Font( int face, int style ) { 
 		this.face = face;
@@ -221,9 +224,6 @@ public final class Font extends Object
 
 		this.height = (int)androidSize;
 		initPaint( this.paint );
-		
-		int decent = this.paint.getFontMetricsInt().descent;
-		this.baselinePosition = this.height - decent;
 	}
 	
 	private Font( int face, int style, Dimension size ) { 
@@ -239,11 +239,7 @@ public final class Font extends Object
 		//#endif
 
 		this.height = size.getValue( (int)(this.paint.getTextSize() * factor) );
-
 		initPaint( this.paint );
-		
-		int decent = this.paint.getFontMetricsInt().descent;
-		this.baselinePosition = this.height - decent;
 	}
 
 	/**
@@ -497,6 +493,10 @@ public final class Font extends Object
 			p.setTextSkewX(0f);			
 		}
 		p.setTextSize( this.height );
+
+		FontMetricsInt fontMetricsInt = p.getFontMetricsInt();
+		this.descent =  fontMetricsInt.descent;
+		this.baselinePosition = (int) (p.getTextSize() - p.getFontMetrics().descent) + 1;
 	}
 
 	/**
@@ -539,5 +539,9 @@ public final class Font extends Object
 	
 	public float getTextSize() {
 		return this.paint.getTextSize();
+	}
+	
+	public int getDescent() {
+		return this.descent;
 	}
 }
