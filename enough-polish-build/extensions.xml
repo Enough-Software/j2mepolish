@@ -94,6 +94,7 @@
 			 -->
 		</mappings>
 		
+		<!-- mapping of BlackBerry imports -->
 		<mappings if="polish.usePolishGui and polish.blackberry">
 			<mapping from="javax.microedition.midlet.*" to="de.enough.polish.blackberry.midlet.*" />
 			<mapping from="javax.microedition.midlet.MIDlet" to="de.enough.polish.blackberry.midlet.MIDlet" />
@@ -107,6 +108,30 @@
 					import de.enough.polish.blackberry.ui.Graphics;
 					import de.enough.polish.blackberry.ui.Image; 
 					import de.enough.polish.ui.*
+				</to>
+			</mapping>
+			<mapping from="javax.microedition.io.PushRegistry" to="de.enough.polish.blackberry.io.PushRegistry" />
+			<mapping from="javax.microedition.io.*" to="de.enough.polish.blackberry.io.*" >
+				<to>
+					de.enough.polish.blackberry.io.PushRegistry;
+					import javax.microedition.io.CommConnection;
+					import javax.microedition.io.Connection;
+					import javax.microedition.io.ConnectionNotFoundException;
+					import javax.microedition.io.Connector;
+					import javax.microedition.io.ContentConnection;
+					import javax.microedition.io.Datagram;
+					import javax.microedition.io.DatagramConnection;
+					import javax.microedition.io.HttpConnection;
+					import javax.microedition.io.HttpsConnection;
+					import javax.microedition.io.InputConnection;
+					import javax.microedition.io.OutputConnection;
+					import javax.microedition.io.SecureConnection;
+					import javax.microedition.io.SecurityInfo;
+					import javax.microedition.io.ServerSocketConnection;
+					import javax.microedition.io.ServerConnection;
+					import javax.microedition.io.StreamConnection;
+					import javax.microedition.io.StreamConnectionNotifier;
+					import javax.microedition.io.UDPDatagramConnection
 				</to>
 			</mapping>
 		</mappings>
