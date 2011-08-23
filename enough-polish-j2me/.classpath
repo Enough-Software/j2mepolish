@@ -17,12 +17,12 @@
 	<classpathentry kind="lib" path="/enough-polish-build/import/sensor.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/windows.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/advancedmultimedia-1.0.jar"/>
-	<classpathentry kind="lib" path="/enough-polish-build/import/blackberry-6.0.0.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/jsr234.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/mmapi.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/wmapi-2.0.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/nokia-ui.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/siemens-extension-api.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/android-2.1.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/blackberry-7.0.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
