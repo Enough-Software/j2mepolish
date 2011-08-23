@@ -498,6 +498,15 @@ These namespaces/schemas will be used soon.
   </device>
 
   <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1</identifier>
+    <features>isVirtual</features>
+    <description>An Android compatible device with the 2.0.1 firmware.</description>
+    <groups>android</groups>
+    <capability name="JavaPlatform" value="Android/2.0.1" />
+    <capability name="JavaConfiguration" value="Android/2.0.1" />
+  </device>
+
+  <device supportsPolishGui="true">
     <identifier>Generic/android2.1</identifier>
     <features>isVirtual</features>
     <description>An Android compatible device with the 2.1 firmware.</description>
