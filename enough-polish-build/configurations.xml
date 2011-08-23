@@ -118,10 +118,35 @@
 	</configuration>
 	
 	<configuration>
+		<identifier>Android/2.3.3</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-2.3.3.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	
+	<configuration>
 		<identifier>Android/3.0</identifier>
 		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
 		<description>android</description>
 		<capability name="build.BootClassPath" value="android-3.0.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/3.1</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-3.1.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
+	
+	<configuration>
+		<identifier>Android/3.2</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-3.2.jar" />
 		<capability name="SupportFloatingPoint" value="true" />
 	</configuration>
 	
