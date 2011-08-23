@@ -69,6 +69,19 @@
 	
 	<%cssmappings background patch %>
 	
+
+	<h2 id="Performance">Performance Considerations</h2>
+	<p>
+	Patch background images should not be too small, otherwise they take too long to paint at least for large areas. An example should clarify this:
+	consider an area of 10x10 pixels that should be covered by the center patch (9). If the center patch is 1x1 pixel large, 100 paint calls are necessary.
+	When the center patch is 5x5 pixels, only 4 calls are necessary. 
+	<br/>
+	Performance should always be considered in these circumstances: 
+	</p>
+<ul>
+<li>Patch backgrounds are used for many items, or</li>
+<li>A patch background is used for large area, e.g. a screen background</li>
+</ul>
 	<h2 id="JavaDoc">JavaDoc</h2>
 	<ul>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/backgrounds/PatchBackground.html">PatchBackground</a></li>
