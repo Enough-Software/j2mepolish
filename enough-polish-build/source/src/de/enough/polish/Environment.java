@@ -71,15 +71,15 @@ public class Environment {
 
 	protected static final Pattern FUNCTION_PATTERN = Pattern.compile(FUNCTION_PATTERN_STR);
 
-	private final Map symbols;
+	private final Map<String, Boolean> symbols;
 
-	private final Map variables;
+	private final Map<String, String> variables;
 
 	/** holds all temporary defined variables */
-	private final HashMap temporaryVariables;
+	private final HashMap<String, String> temporaryVariables;
 
 	/** holds all temporary defined symbols */
-	private final HashMap temporarySymbols;
+	private final HashMap<String, Boolean> temporarySymbols;
 
 	private ExtensionManager extensionManager;
 
@@ -93,9 +93,9 @@ public class Environment {
 
 	private LibraryManager libraryManager;
 
-	private final HashMap exchangeStore;
+	private final HashMap<String, Object> exchangeStore;
 
-	private Map basicProperties;
+	private Map<String, String> basicProperties;
 
 	private File baseDir;
 
@@ -104,11 +104,11 @@ public class Environment {
 	 */
 	public Environment() {
 		super();
-		this.symbols = new HashMap();
-		this.variables = new HashMap();
-		this.exchangeStore = new HashMap();
-		this.temporarySymbols = new HashMap();
-		this.temporaryVariables = new HashMap();
+		this.symbols = new HashMap<String, Boolean>();
+		this.variables = new HashMap<String, String>();
+		this.exchangeStore = new HashMap<String, Object>();
+		this.temporarySymbols = new HashMap<String, Boolean>();
+		this.temporaryVariables = new HashMap<String, String>();
 		this.extensionManager = null;
 		this.booleanEvaluator = new BooleanEvaluator(this);
 		this.basicProperties = null;
@@ -122,11 +122,11 @@ public class Environment {
 	 * @param polishHome the path to the J2ME Polish installation directory
 	 */
 	public Environment(File polishHome) {
-		this.symbols = new HashMap();
-		this.variables = new HashMap();
-		this.exchangeStore = new HashMap();
-		this.temporarySymbols = new HashMap();
-		this.temporaryVariables = new HashMap();
+		this.symbols = new HashMap<String, Boolean>();
+		this.variables = new HashMap<String, String>();
+		this.exchangeStore = new HashMap<String, Object>();
+		this.temporarySymbols = new HashMap<String, Boolean>();
+		this.temporaryVariables = new HashMap<String, String>();
 		if (polishHome != null) {
 			set("polish.home", polishHome);
 		}
@@ -153,13 +153,13 @@ public class Environment {
 	 * @param baseDir
 	 *            the base directory like the project's home directory
 	 */
-	public Environment(ExtensionManager extensionsManager, Map properties, File baseDir) {
+	public Environment(ExtensionManager extensionsManager, Map<String, String> properties, File baseDir) {
 		super();
-		this.symbols = new HashMap();
-		this.variables = new HashMap();
-		this.exchangeStore = new HashMap();
-		this.temporarySymbols = new HashMap();
-		this.temporaryVariables = new HashMap();
+		this.symbols = new HashMap<String, Boolean>();
+		this.variables = new HashMap<String, String>();
+		this.exchangeStore = new HashMap<String, Object>();
+		this.temporarySymbols = new HashMap<String, Boolean>();
+		this.temporaryVariables = new HashMap<String, String>();
 		this.extensionManager = extensionsManager;
 		this.booleanEvaluator = new BooleanEvaluator(this);
 		this.variables.putAll(properties);
@@ -194,7 +194,7 @@ public class Environment {
 	/**
 	 * @param features
 	 */
-	public void setSymbols(Map features) {
+	public void setSymbols(Map<String, Boolean> features) {
 		this.symbols.clear();
 		this.symbols.putAll(features);
 	}
@@ -202,7 +202,7 @@ public class Environment {
 	/**
 	 * @param capabilities
 	 */
-	public void setVariables(Map capabilities) {
+	public void setVariables(Map<String,String> capabilities) {
 		this.variables.clear();
 		this.variables.putAll(capabilities);
 	}
@@ -335,10 +335,10 @@ public class Environment {
 	 * @param name
 	 */
 	public void addSymbol(String name) {
-		// if ( name.indexOf("screen-change-animation") != -1) {
-		// System.out.println("ADDING SYMBOL "+ name);
-		// throw new IllegalArgumentException("hier");
-		// }
+//		 if ( name.indexOf("hasPointerEvents") != -1) {
+//		 System.out.println("ADDING SYMBOL "+ name);
+//		 throw new IllegalArgumentException("for " + name);
+//		 }
 		this.symbols.put(name, Boolean.TRUE);
 		name = name.toLowerCase();
 		this.symbols.put(name, Boolean.TRUE);
@@ -612,14 +612,14 @@ public class Environment {
 	 * 
 	 * @return all defined variables
 	 */
-	public Map getVariables() {
+	public Map<String, String> getVariables() {
 		return this.variables;
 	}
 
 	/**
 	 * @param additionalSymbols
 	 */
-	public void addSymbols(Map additionalSymbols) {
+	public void addSymbols(Map<String, Boolean> additionalSymbols) {
 		this.symbols.putAll(additionalSymbols);
 	}
 
@@ -630,9 +630,9 @@ public class Environment {
 	/**
 	 * @param vars
 	 */
-	public void addVariables(Map vars) {
-		for (Iterator iter = vars.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry entry = (Map.Entry) iter.next();
+	public void addVariables(Map<String, String> vars) {
+		for (Iterator<Map.Entry<String, String>> iter = vars.entrySet().iterator(); iter.hasNext();) {
+			Map.Entry<String, String> entry = iter.next();
 			String name = (String) entry.getKey();
 			String value = (String) entry.getValue();
 			addVariable(name, value);
@@ -686,7 +686,7 @@ public class Environment {
 	 * @return a map containing the names of all defined symbols. The value for
 	 *         the symbols is always Boolean.TRUE
 	 */
-	public Map getSymbols() {
+	public Map<String, Boolean> getSymbols() {
 		return this.symbols;
 	}
 
@@ -765,7 +765,7 @@ public class Environment {
 	 * @param properties
 	 *            a map of properties
 	 */
-	public void putAll(Map properties) {
+	public void putAll(Map<String, String> properties) {
 		this.variables.putAll(properties);
 	}
 
@@ -812,7 +812,7 @@ public class Environment {
 	 * Sets the basic properties which are available the whole time.
 	 * @param properties the properties
 	 */
-	public void setBaseProperties( Map properties ) {
+	public void setBaseProperties( Map<String, String> properties ) {
 		this.variables.putAll(properties);
 		this.basicProperties = properties;
 	}
