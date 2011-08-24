@@ -123,6 +123,9 @@ extends ItemView
 		private int pointerPressedX;
 	//#endif
 
+	private long scrollStartTime;
+	private int scrollStartXOffset;
+	private long scrollDuration = 300; // ms
 
 	/**
 	 * Creates a new view
@@ -141,20 +144,9 @@ extends ItemView
 		int target = this.targetXOffset;
 		int current = this.xOffset;
 		if (target != current) {
-			int speed = (target - current) / 3;
-			
-			speed += target > current ? 1 : -1;
-			current += speed;
-			if ( ( speed > 0 && current > target) || (speed < 0 && current < target ) ) {
-				current = target;
-			}
-			int diff = Math.abs( current - this.xOffset);
-			this.xOffset = current;
-//			if (this.focusedItem != null && this.focusedItem.backgroundYOffset != 0) {
-//				this.focusedItem.backgroundYOffset = (this.targetYOffset - this.yOffset);
-//			}
-			// # debug
-			//System.out.println("animate(): adjusting yOffset to " + this.yOffset );
+			long passedTime = (currentTime - this.scrollStartTime);
+			int nextOffset = CssAnimation.calculatePointInRange(this.scrollStartXOffset, target, passedTime, this.scrollDuration , CssAnimation.FUNCTION_EXPONENTIAL_OUT );
+			this.xOffset = nextOffset;
 			
 			// add repaint region:
 			int x, y, width, height;
@@ -166,7 +158,7 @@ extends ItemView
 				width += scr.getScrollBarWidth();
 			//#endif
 			height = this.parentContainer.itemHeight;
-			repaintRegion.addRegion( x, y, width, height + diff + 1 );
+			repaintRegion.addRegion( x, y, width, height + 1 );
 		}
 		int speed = this.scrollSpeed;
 		if (speed != 0) {
@@ -242,6 +234,8 @@ extends ItemView
 		//#debug
 		System.out.println("Setting scrollXOffset from " + this.xOffset + "/" + this.targetXOffset + " to " + offset + ", smooth=" + smooth +  " for " + this);
 		//try { throw new RuntimeException("for xOffset=" + offset); } catch (Exception e) { e.printStackTrace(); }
+		this.scrollStartXOffset = this.xOffset;
+		this.scrollStartTime = System.currentTimeMillis();
 		if (!smooth  
 		//#ifdef polish.css.scroll-mode
 			|| !this.parentContainer.scrollSmooth
@@ -1453,6 +1447,12 @@ extends ItemView
 		System.out.println("Setting style for " + this );
 		super.setStyle( style );
 		//this.columnsSetting = NO_COLUMNS;
+		//#ifdef polish.css.scroll-duration
+			Integer scrollDurationInt = style.getIntProperty("scroll-duration");
+			if (scrollDurationInt != null) {
+				this.scrollDuration = scrollDurationInt.intValue();
+			}
+		//#endif
 		//#ifdef polish.css.columns
 			Integer columns = style.getIntProperty("columns");
 			if (columns != null) {

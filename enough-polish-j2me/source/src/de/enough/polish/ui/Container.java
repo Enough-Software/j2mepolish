@@ -151,6 +151,9 @@ public class Container extends Item {
 		private boolean allowBouncing = true;
 	//#endif
 	private FocusListener focusListener;
+	private long scrollStartTime;
+	private int scrollStartYOffset;
+	private long scrollDuration = 300; // ms
 	
 	/**
 	 * Creates a new empty container.
@@ -2636,6 +2639,12 @@ public class Container extends Item {
 				this.scrollSmooth = (scrollModeInt.intValue() == SCROLL_SMOOTH);
 			}
 		//#endif
+		//#ifdef polish.css.scroll-duration
+			Integer scrollDurationInt = style.getIntProperty("scroll-duration");
+			if (scrollDurationInt != null) {
+				this.scrollDuration = scrollDurationInt.intValue();
+			}
+		//#endif
 			
 		//#if tmp.checkBouncing
 			Boolean allowBounceBool = style.getBooleanProperty("bounce");
@@ -3127,28 +3136,9 @@ public class Container extends Item {
 		int current = this.yOffset;
 		int diff = 0;
 		if (target != current) {
-			if (this.scrollHeight != -1 && Math.abs(target - current) > this.scrollHeight) {
-				// maximally scroll one page:
-				if (current < target) {
-					current = target - this.scrollHeight;
-				} else {
-					current = target + this.scrollHeight;
-				}
-			}
-			int speed = (target - current) / 3;
-			
-			speed += target > current ? 1 : -1;
-			current += speed;
-			if ( ( speed > 0 && current > target) || (speed < 0 && current < target ) ) {
-				current = target;
-			}
-			diff = Math.abs( current - this.yOffset);
-			this.yOffset = current;
-//			if (this.focusedItem != null && this.focusedItem.backgroundYOffset != 0) {
-//				this.focusedItem.backgroundYOffset = (this.targetYOffset - this.yOffset);
-//			}
-			// # debug
-			//System.out.println("animate(): adjusting yOffset to " + this.yOffset );
+			long passedTime = (currentTime - this.scrollStartTime);
+			int nextOffset = CssAnimation.calculatePointInRange(this.scrollStartYOffset, target, passedTime, this.scrollDuration , CssAnimation.FUNCTION_EXPONENTIAL_OUT );
+			this.yOffset = nextOffset;
 			addFullRepaintRegion = true;
 		}
 		int speed = this.scrollSpeed;
@@ -4119,6 +4109,8 @@ public class Container extends Item {
 			((Container)this.parent).setScrollYOffset(offset, smooth);
 			return;
 		}
+		this.scrollStartTime = System.currentTimeMillis();
+		this.scrollStartYOffset = this.yOffset;
 		if (!smooth  
 		//#ifdef polish.css.scroll-mode
 			|| !this.scrollSmooth

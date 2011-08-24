@@ -5574,7 +5574,6 @@
 		since="J2ME Polish 2.3"
 	/>
 	
-	
 	<attribute
 		name="screen-change-animation-duration"
 		type="time"
@@ -5616,7 +5615,18 @@
 		id="488"
 		since="J2ME Polish 2.3"
 	/>
-		
+	
+	<attribute
+		name="scroll-duration"
+		type="time"
+		appliesTo="Container,FakeContainerCustomItem,ContainerView"
+		description="The duration of a scroll animation."
+		default="300ms"
+		id="489"
+		since="J2ME Polish 2.3"
+	/>
+	
+	
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"
