@@ -664,7 +664,11 @@ public class PushRegistry extends BroadcastReceiver
 		intent.putExtra( EXTRA_MIDLET_NAME, midlet);
 		PendingIntent sender = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(MidletBridge.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, time, sender);
+		if (time != 0) {
+			alarmManager.set(AlarmManager.RTC_WAKEUP, time, sender);
+		} else {
+			alarmManager.cancel(sender);
+		}
 		long previousAlarmTimeTmp = previousAlarmTime;
 		previousAlarmTime = time;
 		return previousAlarmTimeTmp;
