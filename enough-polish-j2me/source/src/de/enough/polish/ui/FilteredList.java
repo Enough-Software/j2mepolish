@@ -714,7 +714,7 @@ implements ItemStateListener //, CommandListener
 					if (isMatch) {
 						matchingItems.add(cItem);
 						if (cItem == focItem) {
-							focIndex = i;
+							focIndex = matchingItems.size() - 1;
 						}
 					}
 				}
@@ -723,7 +723,8 @@ implements ItemStateListener //, CommandListener
 			if (focIndex != -1) {
 				super.focus( focIndex, focItem, false );
 			} else if (matchingItems.size() > 0) {
-				super.focus( 0, (Item) matchingItems.get(0), false );
+				focItem = (Item) matchingItems.get(0);
+				super.focus( 0, focItem, false );
 			}
 			if (checkForSelectedRadioItem && this.getSelectedIndex() != -1) {
 				( (ChoiceGroup)this.container ).setSelectedIndex( matchingItems.indexOf( this.itemsList.get( getSelectedIndex() ) ) , true);
