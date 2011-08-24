@@ -109,6 +109,7 @@ public class AnimationThread extends Thread
 	 * the total delta (animation, serviceRepaints, sleep) of the last frame
 	 */
 	long totalDelta = -1;
+	private boolean isStopRequested;
 
 	/**
 	 * Creates a new animation thread.
@@ -142,7 +143,7 @@ public class AnimationThread extends Thread
 		long lastIdleTime = 0;
 		int sleepIntervalCounter = 0;
 		
-		while ( true ) {
+		while ( !this.isStopRequested ) {
 			try {
 				Screen screen = StyleSheet.currentScreen;
 				//System.out.println("AnimationThread: animating " + screen + ", current=" + StyleSheet.display.getCurrent());
@@ -284,6 +285,13 @@ public class AnimationThread extends Thread
 
 		}
 
+	}
+	
+	/**
+	 * Stops the animation thread.
+	 */
+	public void requestStop() {
+		this.isStopRequested = true;
 	}
 
 	/**

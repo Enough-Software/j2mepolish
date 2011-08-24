@@ -42,6 +42,7 @@ import de.enough.polish.android.helper.ResourcesHelper;
 import de.enough.polish.android.io.ConnectionNotFoundException;
 import de.enough.polish.android.lcdui.AndroidDisplay;
 import de.enough.polish.android.lcdui.CanvasBridge;
+import de.enough.polish.ui.AnimationThread;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Container;
 import de.enough.polish.ui.Display;
@@ -49,6 +50,7 @@ import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.Screen;
 import de.enough.polish.ui.Style;
+import de.enough.polish.ui.StyleSheet;
 import de.enough.polish.util.IdentityArrayList;
 
 
@@ -483,6 +485,11 @@ public class MidletBridge extends Activity {
 	public final void notifyDestroyed() {
 		if( ! this.shuttingDown) {
 			this.shuttingDown = true;
+			AnimationThread thread = StyleSheet.animationThread;
+			if (thread != null) {
+				StyleSheet.animationThread = null;
+				thread.requestStop();
+			}
 			super.finish();
 		}
 		

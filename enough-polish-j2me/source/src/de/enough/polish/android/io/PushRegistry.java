@@ -659,7 +659,6 @@ public class PushRegistry extends BroadcastReceiver
 	public static long registerAlarm(String midlet, long time) throws ClassNotFoundException, ConnectionNotFoundException
 	{
 		MidletBridge context = MidletBridge.getInstance();
-		context.setSuicideOnExit(false);
 		Intent intent = new Intent(context, PushRegistry.class);
 		intent.putExtra( EXTRA_MIDLET_NAME, midlet);
 		PendingIntent sender = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
