@@ -1,0 +1,156 @@
+/**
+  * The polish.css files contains all
+  * design information about a project.
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  *
+  * Tip: use names that describe their meaning, not names that describe the color:
+  * Good name: backgroundColor
+  * Bad name:  lightGreen
+  * This allows you to change the design later onwards without ending up with
+  * color definitions like "lightGreen: red;".
+  */
+colors {
+	fontColor: #ccc;
+	focusedFontColor: #000;
+	bgColor:  #222;
+	focusedBgColor:  #ee4;
+	borderColor: fontColor;
+	focusedBorderColor: focusedFontColor;
+}
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles unless you specify a 'title-style' attribute within a screen style.
+  */
+title {
+	padding: 2px;
+	font-size: large;
+	font-style: bold;
+	font-color: fontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+}
+
+/**
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  */
+.mainScreen {
+	padding: 2px;
+	padding-left: 5%;
+	padding-right: 5%;
+	background-color: #666;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+}
+
+alert {
+	repaint-previous-screen: true;
+	background-color: white;
+	layout: vertical-shrink | bottom;
+	padding: 5px;
+}
+
+
+/*********************   SCROLL BAR   ******************************************************************************************************/
+/* You need to activate the scrollbar by setting the "polish.useScrollBar" variable to "true" in your build.xml script. */
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 3;
+}
+
+/*********************   MENU BAR     *******************************************************************************************************/
+/* You need to activate the extended menubar that allows this finetuned design by setting the 
+   "polish.MenuBar.useExtendedMenuBar" variable to "true" in your build.xml script. */
+
+menubar
+{
+	padding-top: 3px;
+	padding: 2px;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2px;
+	margin-right: 2px;
+	min-width: 60%;
+	padding: 2px;
+	background {
+		type: round-rect;
+		color: focusedBgColor;
+		border-width: 2;
+		border-color: bgColor;
+	}
+}
+
+/** Style for the first layer of subcommands: **/
+menu1 extends menu {
+	background-color: argb(150, 255, 255, 0 );
+	background-type: simple;
+      layout: right;
+      margin-bottom: 4px;
+      margin-right: 4px;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2px;
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+.menuItem:hover {
+	background-color: bgColor;
+	font-color: focusedFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0px; /* default */
+	padding-top: 3px;
+	padding-bottom: 0px;
+	font-color: fontColor;
+	font-style: bold;
+	layout: left;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
