@@ -210,7 +210,7 @@ implements Comparable<PolishComponent>
 		for (Iterator<String> iter = caps.keySet().iterator(); iter.hasNext();) {
 			String name = iter.next();
 			String componentValue = (String) caps.get( name );
-			boolean add = this.capabilities.get(name) == null;
+			boolean add = (this.capabilities.get(name) == null);
 			if (!add) {
 				Capability capability = this.capabilityManager.getCapability(name);
 				if (capability != null && !capability.overwrite()) {
@@ -348,7 +348,7 @@ implements Comparable<PolishComponent>
 	 */
 	public void addCapability( String name, String value ) {
 		//System.out.println("adding capability " + name + " with value " + value );
-		// when the capability starts with "SoftwarePlatform." or similiar, 
+		// when the capability starts with "SoftwarePlatform." or similar, 
 		// make it also accessible without it:
 		if (name.startsWith("SoftwarePlatform.")) {
 			name = name.substring( 17 );

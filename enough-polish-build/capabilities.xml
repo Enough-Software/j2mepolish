@@ -47,6 +47,14 @@
 	</capability>
 
 	<capability>
+		<identifier>Emulator.Class</identifier>
+		<extension-mode>overwrite</extension-mode>
+		<group>Build</group>
+		<required>no</required>
+		<type>singleValue</type>
+	</capability>
+
+	<capability>
 		<identifier>JavaPackage</identifier>
 		<extension-mode>append</extension-mode>
 		<group>Platform</group>

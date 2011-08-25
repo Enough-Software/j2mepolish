@@ -567,6 +567,138 @@
 		<path>import/iphone.jar</path>
 	</api>
 
+	<api>
+		<name>android-lge-real3d-api8</name>
+		<description>
+		LGE Real3D API for Android with API Level 8 (Android 2.2).
+		</description>
+		<names>android-lge-real3d-api8</names>
+		<symbol>android-lge-real3d-api8</symbol>
+		<files>android-lge-real3d-api8.jar</files>
+		<path>import/android-lge-real3d-api8.jar</path>
+	</api>
+
+	<api>
+		<name>android-google-maps-api8</name>
+		<description>
+		Google Maps API for Android with API Level 8 (Android 2.2).
+		</description>
+		<names>android-google-maps-api8</names>
+		<symbol>android-google-maps-api8</symbol>
+		<files>android-google-maps-api8.jar</files>
+		<path>import/android-google-maps-api8.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-maps-api9</name>
+		<description>
+		Google Maps API for Android with API Level 9 (Android 2.3).
+		</description>
+		<names>android-google-maps-api9</names>
+		<symbol>android-google-maps-api9</symbol>
+		<files>android-google-maps-api9.jar</files>
+		<path>import/android-google-maps-api9.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-maps-api10</name>
+		<description>
+		Google Maps API for Android with API Level 10 (Android 2.3.3).
+		</description>
+		<names>android-google-maps-api10</names>
+		<symbol>android-google-maps-api10</symbol>
+		<files>android-google-maps-api10.jar</files>
+		<path>import/android-google-maps-api10.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-maps-api11</name>
+		<description>
+		Google Maps API for Android with API Level 11 (Android 3.0).
+		</description>
+		<names>android-google-maps-api11</names>
+		<symbol>android-google-maps-api11</symbol>
+		<files>android-google-maps-api11.jar</files>
+		<path>import/android-google-maps-api11.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-maps-api12</name>
+		<description>
+		Google Maps API for Android with API Level 12 (Android 3.1).
+		</description>
+		<names>android-google-maps-api12</names>
+		<symbol>android-google-maps-api12</symbol>
+		<files>android-google-maps-api12.jar</files>
+		<path>import/android-google-maps-api12.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-maps-api13</name>
+		<description>
+		Google Maps API for Android with API Level 13 (Android 3.2).
+		</description>
+		<names>android-google-maps-api13</names>
+		<symbol>android-google-maps-api13</symbol>
+		<files>android-google-maps-api13.jar</files>
+		<path>import/android-google-maps-api13.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-usb-api10</name>
+		<description>
+		Google USB accessory API for Android with API Level 10 (Android 2.3.3).
+		</description>
+		<names>android-google-usb-api10</names>
+		<symbol>android-google-usb-api10</symbol>
+		<files>android-google-usb-api10.jar</files>
+		<path>import/android-google-usb-api10.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-usb-api12</name>
+		<description>
+		Google USB accessory API for Android with API Level 12 (Android 3.1).
+		</description>
+		<names>android-google-usb-api12</names>
+		<symbol>android-google-usb-api12</symbol>
+		<files>android-google-usb-api12.jar</files>
+		<path>import/android-google-usb-api12.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-usb-api13</name>
+		<description>
+		Google USB accessory API for Android with API Level 13 (Android 3.2).
+		</description>
+		<names>android-google-usb-api13</names>
+		<symbol>android-google-usb-api13</symbol>
+		<files>android-google-usb-api13.jar</files>
+		<path>import/android-google-usb-api13.jar</path>
+	</api>
+	
+	<api>
+		<name>android-sony-ericsson-eventstream-api10</name>
+		<description>
+		Sony Ericsson Timescape/event stream API for Android with API Level 10 (Android 2.3.3)
+		</description>
+		<names>android-sony-ericsson-eventstream-api10</names>
+		<symbol>android-sony-ericsson-eventstream-api10</symbol>
+		<files>android-sony-ericsson-eventstream-api10.jar</files>
+		<path>import/android-sony-ericsson-eventstream-api10.jar</path>
+	</api>
+	
+	<api>
+		<name>android-sony-ericsson-infinite-api10</name>
+		<description>
+		Sony Ericsson Music Infinite API for Android with API Level 10 (Android 2.3.3)
+		</description>
+		<names>android-sony-ericsson-infinite-api10</names>
+		<symbol>android-sony-ericsson-infinite-api10</symbol>
+		<files>android-sony-ericsson-infinite-api10.jar</files>
+		<path>import/android-sony-ericsson-infinite-api10.jar</path>
+	</api>
+
 <!--
 	You can use this block to define a new API
 	( remove these XML-comments ):

@@ -43,17 +43,12 @@ import de.enough.polish.exceptions.InvalidComponentException;
 /**
  * <p>Manages capabilities that are used by PolishComponents.</p>
  *
- * <p>Copyright Enough Software 2005</p>
-
- * <pre>
- * history
- *        23-May-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2011</p>
  * @author Robert Virkus, robert@enough.de
  */
 public class CapabilityManager {
 	
-	private final HashMap capabilitiesByIdentifier = new HashMap();
+	private final HashMap<String, Capability> capabilitiesByIdentifier = new HashMap<String, Capability>();
 
 	/**
 	 * Creates a new BugManager.
@@ -64,7 +59,7 @@ public class CapabilityManager {
 	 * @throws IOException when apis.xml could not be read
 	 * @throws InvalidComponentException when an api definition has errors
 	 */
-	public CapabilityManager( Map antProperties, InputStream is) 
+	public CapabilityManager( Map<String, String> antProperties, InputStream is) 
 	throws JDOMException, IOException, InvalidComponentException 
 	{
 		loadCapabilities( is );

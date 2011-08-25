@@ -111,6 +111,16 @@
 	</vendor>
 
 	<vendor>
+		<name>Google</name>
+		<features></features>
+	</vendor>
+
+	<vendor>
+		<name>Android</name>
+		<features></features>
+	</vendor>
+
+	<vendor>
 		<name>Alcatel</name>
 		<features></features>
 	</vendor>

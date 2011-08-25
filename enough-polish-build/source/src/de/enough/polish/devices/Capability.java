@@ -214,5 +214,22 @@ public class Capability {
     public String[] getSingleValues( String combinedValue ) {
     	return StringUtil.splitAndTrim( combinedValue, this.singleValuesSeparator );
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+    	StringBuffer buffer = new StringBuffer();
+    	buffer.append(this.identifier).append(": {");
+    	buffer.append("prepend: ").append(this.prependValues).append(", ");
+    	buffer.append("append: ").append(this.appendValues).append(", ");
+    	buffer.append("overwrite: ").append(overwrite()).append(", ");
+    	buffer.append("required: ").append(this.required).append(", ");
+    	buffer.append("group: ").append(this.group).append(", ");
+    	buffer.append("type: ").append(this.type).append("}");
+    	buffer.append(' ').append(super.toString());
+    	return buffer.toString();
+    }
 
 }

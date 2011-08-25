@@ -203,7 +203,7 @@ public class Device extends PolishComponent {
 			CapabilityManager capabilityManager ) 
 	throws InvalidComponentException 
 	{
-		super( vendor, capabilityManager , definition );
+		super( vendor, capabilityManager, definition );
 		this.identifier = identifier;
 		this.name = deviceName;
 		this.groupManager = groupManager;
