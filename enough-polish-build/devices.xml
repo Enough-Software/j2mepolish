@@ -804,6 +804,106 @@ These namespaces/schemas will be used soon.
   </device>
   
   <device supportsPolishGui="true">
+    <identifier>Samsung/GalaxyTab</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible GALAXY Tab with the 2.2 firmware and the Google Maps API (API Level 8).</description>
+    <capability name="polish.Emulator.Skin" value="GALAXY Tab" />
+    <capability name="build.Android.Platform.Target" value="Samsung Electronics Co., Ltd.:GALAXY Tab Addon:8" />
+    <capability name="build.Android.Platform.Api" value="8" />
+    <capability name="JavaPackage" value="android-google-maps-api8" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Kyocera/DTS400</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible KYOCERA device with the 2.2 firmware and the Dualscreen API (API Level 8).</description>
+    <capability name="polish.Emulator.Skin" value="DTS400" />
+    <capability name="build.Android.Platform.Target" value="KYOCERA Corporation:DTS Add-On:8" />
+    <capability name="build.Android.Platform.Api" value="8" />
+    <capability name="JavaPackage" value="android-kyocera-dualscreen-api8" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Kyocera/DTS800</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible KYOCERA device with the 2.2 firmware and the Dualscreen API (API Level 8).</description>
+    <capability name="polish.Emulator.Skin" value="DTS800" />
+    <capability name="build.Android.Platform.Target" value="KYOCERA Corporation:DTS Add-On:8" />
+    <capability name="build.Android.Platform.Api" value="8" />
+    <capability name="JavaPackage" value="android-kyocera-dualscreen-api8" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/Photon</identifier>
+    <parent>Generic/android2.3.3</parent>
+    <description>qHDA Android 2.3.3 device without physical keyboard. Based on Android 2.3.3 (API level 10).</description>
+	<capability name="AnnouncementDate" value="2011-08-02" />
+    <capability name="polish.Emulator.Skin" value="PHOTON" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:PHOTON:10" />
+    <capability name="build.Android.Platform.Api" value="10" />
+    <capability name="JavaPackage" value="android-motorola-storage-api10, android-motorola-hdmi-api10, android-motorola-edm-api10" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/DroidX2</identifier>
+    <parent>Generic/android2.3.3</parent>
+    <description>qHD Android 2.3.3 device without physical keyboard. Based on Android 2.3.3 (API level 10).</description>
+	<capability name="AnnouncementDate" value="2011-08-02" />
+    <capability name="polish.Emulator.Skin" value="DroidX2" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:DroidX2:10" />
+    <capability name="build.Android.Platform.Api" value="10" />
+    <capability name="JavaPackage" value="android-motorola-hdmi-api10, android-motorola-edm-api10" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/Atrix,Motorola/MB860</identifier>
+    <parent>Generic/android2.3.3</parent>
+    <description>WVGA Android 2.3.3 MB860. Based on Android 2.3.3 (API level 10).</description>
+	<capability name="AnnouncementDate" value="2011-07-25" />
+    <capability name="polish.Emulator.Skin" value="MB860" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:MB860:10" />
+    <capability name="build.Android.Platform.Api" value="10" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/Titanium</identifier>
+    <parent>Generic/android2.1</parent>
+    <description> Motorola Titanium Device. Based on Android 2.1-update1 (API level 7).</description>
+	<capability name="AnnouncementDate" value="2011-07-08" />
+    <capability name="polish.Emulator.Skin" value="TITANIUM" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:Motorola Titanium APIs:7" />
+    <capability name="build.Android.Platform.Api" value="7" />
+    <capability name="JavaPackage" value="android-motorola-iexchange-api8, android-motorola-provider-api7" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/Droid3, Motorola/XT862</identifier>
+    <parent>Generic/android2.3.3</parent>
+    <description>WVGA Android 2.3.3 device without physical keyboard. Based on Android 2.3.3 (API level 10).</description>
+	<capability name="AnnouncementDate" value="2011-07-07" />
+    <capability name="polish.Emulator.Skin" value="Droid3" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:XT862:10" />
+    <capability name="build.Android.Platform.Api" value="10" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Motorola/DroidX</identifier>
+    <parent>Generic/android2.3.3</parent>
+    <description>WVGA Android 2.3.3 device without physical keyboard. Based on Android 2.3.3 (API level 10).</description>
+	<capability name="AnnouncementDate" value="2011-06-20" />
+    <capability name="polish.Emulator.Skin" value="DroidX" />
+	<capability name="Emulator.Class" value="AndroidEmulator" />
+    <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:DroidX:10" />
+    <capability name="build.Android.Platform.Api" value="10" />
+  </device>
+  
+  
+  <device supportsPolishGui="true">
     <identifier>Motorola/OPhone</identifier>
     <features></features>
     <description>An Motorola Android device for ChinaMobile</description>

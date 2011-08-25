@@ -699,6 +699,72 @@
 		<path>import/android-sony-ericsson-infinite-api10.jar</path>
 	</api>
 
+	<api>
+		<name>android-kyocera-dualscreen-api8</name>
+		<description>
+		KYOCERA dualscreen API for Android with API Level 8 (Android 2.2)
+		</description>
+		<names>android-kyocera-dualscreen-api8</names>
+		<symbol>android-kyocera-dualscreen-api8</symbol>
+		<files>android-kyocera-dualscreen-api8.jar</files>
+		<path>import/android-kyocera-dualscreen-api8.jar</path>
+	</api>
+
+	<api>
+		<name>android-motorola-storage-api10</name>
+		<description>
+		Motorola Mobile internal and external SD card library for Android with API Level 10 (Android 2.3.3).
+		</description>
+		<names>android-motorola-storage-api10</names>
+		<symbol>android-motorola-storage-api10</symbol>
+		<files>android-motorola-storage-api10.jar</files>
+		<path>import/android-motorola-storage-api10.jar</path>
+	</api>
+
+	<api>
+		<name>android-motorola-hdmi-api10</name>
+		<description>
+		Motorola Mobile HDMI Dual screen support for Android with API Level 10 (Android 2.3.3).
+		</description>
+		<names>android-motorola-hdmi-api10</names>
+		<symbol>android-motorola-hdmi-api10</symbol>
+		<files>android-motorola-hdmi-api10.jar</files>
+		<path>import/android-motorola-hdmi-api10.jar</path>
+	</api>
+
+	<api>
+		<name>android-motorola-edm-api10</name>
+		<description>
+		Motorola Enterprise Device Management for Android with API Level 10 (Android 2.3.3).
+		</description>
+		<names>android-motorola-edm-api10</names>
+		<symbol>android-motorola-edm-api10</symbol>
+		<files>android-motorola-edm-api10.jar</files>
+		<path>import/android-motorola-edm-api10.jar</path>
+	</api>
+
+	<api>
+		<name>android-motorola-iexchange-api7</name>
+		<description>
+		 APIs for Motorola iExchange service for Android with API Level 7 (Android 2.1).
+		</description>
+		<names>android-motorola-iexchange-api7</names>
+		<symbol>android-motorola-iexchange-api7</symbol>
+		<files>android-motorola-iexchange-api7.jar</files>
+		<path>import/android-motorola-iexchange-api7.jar</path>
+	</api>
+
+	<api>
+		<name>android-motorola-provider-api7</name>
+		<description>
+		APIs for Motorola iDEN contacts provider for Android with API Level 7 (Android 2.1).
+		</description>
+		<names>android-motorola-provider-api7</names>
+		<symbol>android-motorola-provider-api7</symbol>
+		<files>android-motorola-provider-api7.jar</files>
+		<path>import/android-motorola-provider-api7.jar</path>
+	</api>
+
 <!--
 	You can use this block to define a new API
 	( remove these XML-comments ):

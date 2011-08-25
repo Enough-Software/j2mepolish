@@ -48,7 +48,6 @@
 	<vendor>
 		<name>Motorola</name>
 		<features>hasCommandKeyEvents</features>
-		<capability name="JavaConfiguration" value="CLDC/1.0" />
 		<capability name="key.LeftSoftKey" value="-21" />
 		<capability name="key.RightSoftKey" value="-22" />
 		<capability name="key.MiddleSoftKey" value="-23" />
