@@ -1,0 +1,15 @@
+Building J2MEPolishSample using Eclipse and Ant build script
+
+1) Open project in Eclipse. Open build.xml build script in Ant view.
+
+2) Copy „build.properties_template” file in project folder to „build.properties” file and modify
+values that refer to external sources that are not included within the project ($polish.home, $maps.lib). You must have J2MEPolish installed on your system. 
+
+3) Build J2MEPolishSample project by executing „buildJ2MEPolishSample_releaseVersion” (obfuscated) or „buildJ2MEPolishSample_localTest”
+(unobfuscated) targets. Results are placed under dist folder in project (unless changed in build.properties).
+
+
+How to customize the project using J2MEPolish refer to J2MEPolish documentation at http://www.j2mepolish.org/cms/leftsection/documentation.html 
+
+
+

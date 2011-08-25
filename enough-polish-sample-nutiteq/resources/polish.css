@@ -1,0 +1,427 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	fontColor: #FFFFFF;
+	
+	bgColorTop: #2d92ca;
+	bgColorBottom: #e8202a;
+
+	screenColorTop1: #fff;
+	screenColorBottom1: #fff;
+	screenColorTop2: #ff0;
+	screenColorBottom2: #ff0;
+	
+	
+	fontShadowColor: #fff;
+	focusedFontColor: #000000;
+	focusedBackgroundColor: #eee;
+	focusedBorderColor: #444;
+	
+	placeFormColor: rgb(100,156,7);
+	placeFormItemFontColor: rgb(199,123,229);
+}
+
+
+
+backgrounds {
+	GradientBg{
+		type: vertical-gradient;
+		top-color: bgColorTop;
+		bottom-color: bgColorBottom;
+		start: 0%;
+		end: 100%;
+	}
+	
+	roundBg {
+		type: round-rect;
+		arc: 8;
+		color: transparent;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	
+	
+}
+
+borders {
+	dropShadow {
+		type: round-rect-drop-shadow;
+		inner-color: #9fff;
+		outer-color: #3fff;
+		border-width: 3;
+		orientation: all;
+	}
+}
+
+
+/**********************  Common styles   **********************************************************************************************************************/
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2px;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: #fff;
+	layout: center | horizontal-expand;
+}
+
+/**********************  Main Screen   **********************************************************************************************************************/
+
+
+
+/** 
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  * An interesting attribute is the "columns" attribute which
+  * is used to use a table with two columns instead of the default
+  * layout.
+  */
+.mainScreen {
+	margin-top: 4px;
+	padding: 5px;
+	padding-left: 8%;
+	padding-right: 8%;
+	padding-vertical: 5px;
+	padding-horizontal: 5px;
+	background: GradientBg;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	columns: 2;
+	columns-width: equal;
+}
+
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * An interesting attribute is the "icon-image" URL, which uses
+  * the %INDEX% keyword. The first list-item will use the image
+  * "icon0.png", the second "icon1.png" and so on. 
+  */
+.mainCommand {
+	padding: 5px;
+	layout: center | expand;
+	icon-image: url( main%INDEX%.png );
+	icon-image-align: top;
+	background {
+		type: round-rect-split;
+		top-color: #181830;
+		bottom-color: #02041d;
+	}
+	font-color: #fefefe;
+	font-size: small;
+	font-style: bold;
+}
+
+.mainCommand:hover {
+	icon-image: url( mainFoc%INDEX%.png );
+	background {
+		type: round-rect;
+		color: #fff;
+	}
+	bgborder: dropShadow;
+	font-color: #02041d;
+}
+
+.mainCommand:pressed {
+	font-color: #fefe55;		
+}
+
+
+/****************   Service / Settings screen   ************************************************************************************************/
+
+.serviceList extends .mainScreen {
+	padding: 0px;
+	layout: top | center; 
+	columns: 1;
+}
+
+
+.serviceListItem {
+	margin-top: 1px;
+	margin-bottom: 1px;
+	padding-horizontal: 5px;
+	padding-left: 5%;
+	icon-image-align: right ;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: medium;
+	background {
+		type: split;
+		top-color: #181830;
+		bottom-color: #02041d;
+	}
+	layout: horizontal-expand | left | vertical-center;
+	checkbox-plain: url( choice.png );
+	checkbox-selected: url( choice_sel.png );
+}
+
+.serviceListItem:hover {
+	font-color: #02041d;
+	background-type: simple;
+	background-color: #fff;
+	bgborder: dropShadow;
+	checkbox-plain: url( choice_f.png );
+	checkbox-selected: url( choice_sel_f.png );
+}
+
+
+/****************   Other screens and items   ************************************************************************************************/
+
+.htmlBrowser {
+	view-type: midp2;
+}
+
+.heading {
+	font-color: #333;
+	font-style: plain;
+	font-size: small;
+}
+
+.centeredCell {
+	margin:0;
+	padding-top: 12;
+	padding-left:3;
+	min-height: 50;
+	padding-horizontal: 1;
+	/*background-color: bgColor;*/
+	font-color: gray;
+	font-size: small;
+	layout: center;
+}
+
+
+.photoItemOnDetailsScreen{
+	padding: 0;
+	font-color: fontColor;
+	font-size: small;
+	layout: center;
+}
+
+.playingControlsItem{
+	margin: 1; /* compensation for the border of the focused style*/
+	padding: 3;
+	padding-horizontal: 5;
+	font-color: fontColor;
+	font-style: plain;
+	radiobox-plain: none;
+	background-color: green;
+}
+
+.playingControlsitemFocused{
+	padding: 3;
+	padding-horizontal: 5;
+	
+}
+
+.placeTree {
+	padding-vertical: 3;
+	treeitem-closed-indicator: url( arrowRight.png );
+	treeitem-opened-indicator: url( arrowLeft.png );
+}
+
+.placeForm{
+	padding-vertical: 3;
+	background {
+		type: round-rect;
+		/*color: brightBgColor;*/
+		border-color: rgb(255,255,255);
+	}
+	layout: center;
+}
+
+
+/*Details formi pealkirjad*/
+
+
+.mapScreen{
+	padding-vertical: 0;
+	background: GradientBg;
+}
+
+
+.placeDetailItem {
+	margin-top: 0;
+	padding: 1;
+	padding-left: 9;
+	padding-right: 9;
+	border: none;
+	background-color: rgb(195,200,183);
+	font {
+		style: bold;
+		size: medium;
+		color: fontColor;
+	}
+	layout: expand | center;
+}
+
+.place {
+	margin: 3;
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background-color: #656565;
+	font {
+		style: bold;
+		size: small;
+		color: #eee;
+	}
+	layout: expand | left;
+}
+
+.place:hover {
+	margin: 0;
+	background-color: white;
+	/*background-color: brightBgColor;*/
+	font-color: black;
+	border {
+		type: drop-shadow;
+		inner-color: #CC8D8D67;
+		outer-color: #AA2D2D25;
+		width: 3;
+		orientation: all-sides;
+	}
+}
+.placeDetail {
+	padding: 2;
+	background: blue;
+	font {
+		style: plain;
+		size: small;
+		color: fontColor;
+	}
+
+}
+
+
+.btnFocus{
+	padding: 2;
+	min-width:80;
+	max-height: 25;
+	font {
+		style: bold;
+		size: small;
+		color: white;
+	}
+	
+	
+	background {
+		type: round-rect;
+		arc: 8;
+		color: rgb(132,143,96);
+		border-color: fontColor;
+		border-width: 2;
+	}
+
+	/*label-style: .menuItem;*/
+	layout: expand | center;
+}	
+
+
+
+
+
+
+.placeAddress{
+	padding: 3;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: #999;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: #000;
+	}
+}
+
+/*************    Scrollbar          ***************************************************************************************************/
+scrollbar {
+	scrollbar-slider-color: #fff;
+	scrollbar-slider-width: 4;
+	scrollbar-fadeout: true;
+	opacity: 80%;
+}
+	
+
+/********************** commands menu ************************************************************************************/
+
+menubar {
+}
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the opened fullscreen-menu.
+  */
+menu {
+	margin-left: 2px;
+	padding: 0px;
+	font-color: fontColor;
+	font-style: bold;
+	view-type: slide-up;
+	background-color: #eee;
+	max-width: 65%;
+}
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  */
+menuItem {
+	padding: 2px;
+	padding-left: 4px;
+	font {
+		color: #333;
+		size: medium;
+		style: bold;
+	}
+	layout: left | expand;
+}
+
+menuItem:hover {
+	background-color: #02041d;
+	font-color: #fff;
+}
+	
+
+leftcommand {
+	font-color: white;
+	font-style: bold;
+}
+
+leftcommand:pressed {
+	font-color: #02041d;
+}
+
+rightcommand extends leftcommand {
+	layout: right;
+}
+
+rightcommand:pressed {
+	font-color: #02041d;
+}
+
+

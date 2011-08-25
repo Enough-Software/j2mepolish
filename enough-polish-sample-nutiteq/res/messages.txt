@@ -1,0 +1,22 @@
+MIDlet-Description=Sample Application using MGMaps Library and J2ME Polish
+TITLE=nutiteq
+QUIT=quit
+OPENMAP=Show map
+CHOICE_2=Choice 2
+TOMAINSCREEN=main menu
+AGENDA=Agenda
+COORDINATES=Coordinates:
+PHONE=Phone:
+ADDRESS=Address:
+SERVICES=Services
+PLACELIST=Place List
+DESCRIPTION=description:
+FOCUSMAP=Map Center
+BACK=back
+DETAILS=details
+GPS=GPS
+
+CMD_BACK=back
+CMD_DONE=done
+CMD_SELECT=select
+CMD_BACK=back

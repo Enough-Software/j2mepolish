@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="nutiteq_maps_lib_src_1_1_0/thirdparty/src"/>
+	<classpathentry kind="src" path="nutiteq_maps_lib_src_1_1_0/src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/enough-polish-j2me"/>
+	<classpathentry exported="true" kind="lib" path="nutiteq_maps_library_0.10.0_src/ivy-libs/j2me-ext-motorola-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/enough-polish-build/import/fileconnection.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/btapi.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/cldc-1.0.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/location.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/midp-2.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/mkoch/local/WTK2.2/docs/api/midp/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

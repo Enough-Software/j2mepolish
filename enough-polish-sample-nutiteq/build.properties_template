@@ -1,0 +1,15 @@
+polish.home=C:/EclipseProjects/workspace/enough-polish-build
+polish.client.source=C:/EclipseProjects/workspace/enough-polish-j2me/source/src
+
+
+####### WTK ############
+wtk.home=c:/WTK2.5.2_01
+device=Generic/AnyMsaPhone
+
+build.dir=${basedir}/build
+src.dir=${basedir}/src
+lib.dir=${basedir}/ivy-libs
+resources.dir=${basedir}/res
+
+nutiteq.home=C:\EclipseProjects\workspace\J2MEPolishSample\nutiteq_maps_library_0.10.0_src
+path.to.maps.library.jar=../maps_lib_trunk/dist/maps_lib-0.9.0.jar

@@ -1,0 +1,108 @@
+<project name="J2MEPolishSample" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" default="j2mepolish">
+
+	<!-- import user specific properties                          -->
+	<property file="${user.name}.properties" />
+
+	<!-- The polish.home property needs to point to the directory -->
+	<!-- containing the J2ME Polish installation.                 -->
+	<property name="polish.home" location="C:\Program Files\J2ME-Polish2.10-Preview" />
+
+	<!-- import global properties                                 -->
+	<property file="${polish.home}/global.properties" />
+
+
+	<!-- the device for the test mode - you can define it on the command-line
+	     using the -D switch, e.g. ant -Ddevice=Generic/midp2 emulator -->
+	<property name="device" value="Generic/AnyMsaPhone" />
+	<property name="devices" value="${device}" />
+
+	<!-- Definition of the J2ME Polish task:                      -->
+	<taskdef name="j2mepolish" classname="de.enough.polish.ant.PolishTask" classpath="${polish.home}/bin/classes:${polish.home}/lib/jdom.jar" />
+
+	<target name="clean">
+		<delete dir="${basedir}/build" />
+	</target>
+
+	<target name="init">
+		<property name="emulate" value="false" />
+		<property name="dir.work" value="build/real" />
+		<property name="deploy-url" value="" />
+		<property name="nutiteq.home" value="nutiteq_maps_lib_src_1_1_0" />
+		<property name="lib.dir" value="${nutiteq.home}/ivy-libs" />
+		<property name="dir.work" value="build/real" />
+	</target>
+
+	<target name="j2mepolish" depends="init" description="This is the controller for the J2ME build process." >
+
+
+	<j2mepolish>
+		<info name="J2ME Polish Map" 
+			vendorName="Nutiteq" 
+			jarName="J2MEPolishMap_${polish.vendor}_${polish.name}_${polish.locale}.jar" 
+			icon="/nutiteq.png" 
+			jarUrl="${polish.jarName}" 
+			version="1.0.0" 
+		/>
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}" />
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<requirement name="Identifier" value="${devices}" />
+		</deviceRequirements>
+		<build 
+			fullscreen="menu" 
+			usePolishGui="true"
+			workDir="${dir.work}"
+			>
+			<jad>
+				<attribute name="MIDlet-Web-Session" value="EMT WAP" if="polish.vendor == Motorola" />
+			</jad>
+			
+			<sources>
+				<source dir="src" />
+				<!-- include nutiteq sources: -->
+				<source dir="${nutiteq.home}/src" />
+				<source dir="${nutiteq.home}/thirdparty/src" />
+			</sources>
+
+			<midlet class="com.nutiteq.polish.J2MEPolishSample" name="J2ME Polish Map" 	/>
+			
+			<variables>
+				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+				<variable name="polish.useScrollBar" value="true" />
+			</variables>
+
+			<resources dir="resources" defaultexcludes="yes">
+				<localization locales="en_US" />
+				<root dir="${nutiteq.home}/resources" includeSubDirs="true" includeBaseDir="false" />
+			</resources>
+
+			<obfuscator name="ProGuard" unless="emulate || polish.blackberry" />
+		</build>
+		
+		<emulator if="emulate"/>
+	</j2mepolish>
+	
+	</target>
+
+	<target name="init-ivy">
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
+			<classpath>
+				<pathelement location="${basedir}/lib/ivy-2.0.0-beta2.jar" />
+			</classpath>
+		</taskdef>
+	</target>
+
+	<target name="retrieve-jars" depends="init-ivy" description="Retrieves all Ivy dependencies into the libs directory">
+		<ivy:retrieve pattern="${basedir}/ivy-libs/[artifact]-[revision].[ext]" />
+	</target>
+
+	<target name="enableEmulator">
+		<property name="emulate" value="true" />
+		<property name="dir.work" value="build/test" />
+	</target>
+	<target name="emulator" depends="enableEmulator, j2mepolish" />
+
+	<target name="cleanbuild" depends="clean,j2mepolish" />
+
+</project>

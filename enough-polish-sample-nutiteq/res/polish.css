@@ -1,0 +1,437 @@
+/** 
+  * The polish.css files contains all
+  * design information about a project.
+  * It can be adjusted for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder.
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files. 
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  */
+colors {
+	/*bgColor:  rgb(132,143,96);
+	brightBgColor:  rgb(238,241,229);
+	translucentBgColor:  argb(130, 238,241,229);
+	brightFontColor: rgb(238,241,229);*/
+	fontColor: #FFFFFF;
+	
+	bgColorTop: #2d92ca;
+	bgColorBottom: #e8202a;
+
+	screenColorTop1: #fff;
+	screenColorBottom1: #fff;
+	screenColorTop2: #ff0;
+	screenColorBottom2: #ff0;
+	
+	
+	fontShadowColor: #fff;
+	focusedFontColor: #000000;
+	focusedBackgroundColor: #eee;
+	focusedBorderColor: #444;
+	
+	placeFormColor: rgb(100,156,7);
+	placeFormItemFontColor: rgb(199,123,229);
+}
+
+htmlBrowser{
+	
+}
+
+
+backgrounds {
+
+	
+	GradientBg{
+		type: vertical-gradient;
+		top-color: bgColorTop;
+		bottom-color: bgColorBottom;
+		start: 0%;
+		end: 100%;
+	}
+	
+	roundBg {
+		type: round-rect;
+		arc: 8;
+		color: transparent;
+		border-color: fontColor;
+		border-width: 2;
+	}
+	
+	
+}
+
+
+/**
+  * the menu style is a predefined style for
+  * designing the fullscreen-menu.
+  * The font-settings (font-color,
+  * font-face, font-style and font-size)
+  * are used to design the menu-texts
+  * (like Options, Select, or Cancel).
+  * With the focused-style attribute
+  * another style than the default "focused"
+  * style is used for the menu. 
+  * The menubar-color can be set to any
+  * color. When "transparent" is used,
+  * the background shines through.
+  */
+menu {
+	margin-left: 2;
+	padding: 2;
+	font-color: fontColor;
+	font-style: bold;
+	menubar-color: transparent;
+	view-type: slide-up;
+}
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2;
+	padding: 2;
+	padding-left: 5;
+	font {
+		color: fontColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+}
+
+/**
+  * This is a custom style for selected
+  * menu items. It is used, because it has
+  * been defined in the menu style. 
+  */
+.menuFocused extends .menuItem {
+
+}
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles.
+  */
+title {
+	padding: 2;
+	margin-top: 0;
+	margin-bottom: 5;
+	margin-left: 0;
+	margin-right: 0;
+	height: 30;
+	font-face: proportional;
+	font-size: large;
+	font-style: bold;
+	font-color: fontColor;
+	border: none;
+	layout: left | horizontal-expand;
+}
+
+/**
+  * The focused style is a predefined style which
+  * is used by lists, forms, choice-groups and so on.
+  * This style will be used for highlighting the currently
+  * focused item.
+  */
+focused {
+/*
+	padding: 5;
+	background-color: #777777;
+	border {
+		type: drop-shadow;
+		inner-color: #a0e0;
+		outer-color: #5050;
+		width: 5;
+		orientation: all-sides;
+	}
+	
+	layout: expand | center;
+	*/	
+}
+
+/** 
+  * The .mainScreen style is a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "list" to design all
+  * list-screens. 
+  * An interesting attribute is the "columns" attribute which
+  * is used to use a table with two columns instead of the default
+  * layout.
+  */
+.mainScreen {
+	padding: 5;
+	padding-left: 10;
+	padding-right: 10;
+	padding-vertical: 10;
+	background: GradientBg;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	columns: 2;
+	columns-width: equal;
+}
+
+.serviceList extends .mainScreen {
+	padding: 0;
+	padding-left: 0;
+	padding-right: 0;
+	padding-vertical: 0;
+	layout: top | expand; 
+	background: GradientBg;
+	/*popup-background-color: red;*/
+	columns: 1;
+	padding-vertical: 0;
+}
+
+
+
+.serviceListItem {
+
+	padding: 0;
+	padding-left: 0;
+	padding-right: 0;
+	padding-vertical: 0;
+	/*min-width:100;*/
+	min-height: 30;
+	icon-image-align: right ;
+	font-color: fontColor;
+	font-style: bold;
+	font-size: large;
+	background-color: black;
+	layout: horizontal-expand | left;
+}
+
+.serviceListItem:hover extends .serviceListItem{
+	background-color: bgColorTop;
+	/*layout: left | expand ;*/
+
+}
+
+/**
+  * The .mainCommand style is also a static style, which
+  * is set in the MIDlet source-code with the //#style directive.
+  * If the source-code would not have defined this
+  * style, we could use the dynamic style "listitem" to design all
+  * items on the list-screens. 
+  * An interesting attribute is the "icon-image" URL, which uses
+  * the %INDEX% keyword. The first list-item will use the image
+  * "icon0.png", the second "icon1.png" and so on. 
+  */
+.mainCommand {
+	/* margin: 2; for the missing border of the focused style */
+	padding: 5;
+	
+	layout: center | expand;
+	max-width: 100;
+	icon-image: url( icon%INDEX%.png );
+	icon-image-align: top;
+}
+
+.mainCommand:hover {
+	/* margin: 2; for the missing border of the focused style */
+	padding: 5;
+
+	layout: center | expand;
+	max-width: 100;
+	icon-image: url( iconOn%INDEX%.png );
+	icon-image-align: top;
+	/*
+	border {
+		type: drop-shadow;
+		max-width: 102;
+		max-height: 102;
+		inner-color: #FFFFFF;
+		outer-color: #FFF;
+		width: 3;
+		orientation: all-sides;
+	}*/
+	
+}
+
+
+
+
+.heading {
+	font-color: #333;
+	font-style: plain;
+	font-size: small;
+}
+
+.centeredCell {
+	margin:0;
+	padding-top: 12;
+	padding-left:3;
+	min-height: 50;
+	padding-horizontal: 1;
+	/*background-color: bgColor;*/
+	font-color: gray;
+	font-size: small;
+	layout: center;
+}
+
+
+.photoItemOnDetailsScreen{
+	padding: 0;
+	font-color: fontColor;
+	font-size: small;
+	layout: center;
+}
+
+.playingControlsItem{
+	margin: 1; /* compensation for the border of the focused style*/
+	padding: 3;
+	padding-horizontal: 5;
+	font-color: fontColor;
+	font-style: plain;
+	radiobox-plain: none;
+	background-color: green;
+}
+
+.playingControlsitemFocused{
+	padding: 3;
+	padding-horizontal: 5;
+	
+}
+
+.placeTree {
+	padding-vertical: 3;
+	treeitem-closed-indicator: url( arrowRight.png );
+	treeitem-opened-indicator: url( arrowLeft.png );
+}
+
+.placeForm{
+	padding-vertical: 3;
+	background {
+		type: round-rect;
+		/*color: brightBgColor;*/
+		border-color: rgb(255,255,255);
+	}
+	layout: center;
+}
+
+
+/*Details formi pealkirjad*/
+
+
+.mapScreen{
+	padding-vertical: 0;
+	background: GradientBg;
+}
+
+
+.placeDetailItem {
+	margin-top: 0;
+	padding: 1;
+	padding-left: 9;
+	padding-right: 9;
+	border: none;
+	background-color: rgb(195,200,183);
+	font {
+		style: bold;
+		size: medium;
+		color: fontColor;
+	}
+	layout: expand | center;
+}
+
+.place {
+	margin: 3;
+	padding: 2;
+	padding-left: 9;
+	padding-right: 9;
+	background-color: #656565;
+	font {
+		style: bold;
+		size: small;
+		color: #eee;
+	}
+	layout: expand | left;
+}
+
+.place:hover {
+	margin: 0;
+	background-color: white;
+	/*background-color: brightBgColor;*/
+	font-color: black;
+	border {
+		type: drop-shadow;
+		inner-color: #CC8D8D67;
+		outer-color: #AA2D2D25;
+		width: 3;
+		orientation: all-sides;
+	}
+}
+.placeDetail {
+	padding: 2;
+	background: blue;
+	font {
+		style: plain;
+		size: small;
+		color: fontColor;
+	}
+
+}
+
+
+.btnFocus{
+	padding: 2;
+	min-width:80;
+	max-height: 25;
+	font {
+		style: bold;
+		size: small;
+		color: white;
+	}
+	
+	
+	background {
+		type: round-rect;
+		arc: 8;
+		color: rgb(132,143,96);
+		border-color: fontColor;
+		border-width: 2;
+	}
+
+	/*label-style: .menuItem;*/
+	layout: expand | center;
+}	
+
+
+
+
+
+
+.placeAddress{
+	padding: 3;
+	padding-left: 9;
+	padding-right: 9;
+	background {
+		type: round-rect;
+		color: #999;
+	}
+	font {
+		style: plain;
+		size: small;
+		color: #000;
+	}
+	
+	
+
+
+	
+	
+
+
+}

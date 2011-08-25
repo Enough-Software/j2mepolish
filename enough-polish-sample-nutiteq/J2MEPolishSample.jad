@@ -1,0 +1,6 @@
+MIDlet-Jar-URL: J2MEPolishSample.jar
+MIDlet-Name: J2MEPolishSample Midlet Suite
+MIDlet-Vendor: Midlet Suite Vendor
+MIDlet-Version: 1.0.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.1
