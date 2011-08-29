@@ -235,14 +235,12 @@
 				<div id="currentSecondLevelLink"><a href="<%= basedir %>docs/platform.html">Platforms</a></div>
 				<div id="thirdLevel">
 				<p class="thirdLevel">
-				<a href="<%= basedir %>docs/platform-midp.html">MIDP</a>
-				<a href="<%= basedir %>docs/platform-windowsmobile.html">Windows Mobile</a>
-				<a href="<%= basedir %>docs/platform-iphone.html">iPhone</a>
 				<a href="<%= basedir %>docs/platform-android.html">Android</a>
 				<a href="<%= basedir %>docs/platform-blackberry.html">BlackBerry</a>
-				<a href="<%= basedir %>docs/platform-doja.html">DoJa</a>
+				<a href="<%= basedir %>docs/platform-midp.html">MIDP</a>
 				<a href="<%= basedir %>docs/platform-javase.html">Java SE</a>
-				<a href="<%= basedir %>docs/platform-palm.html">Palm</a>
+				<a href="<%= basedir %>docs/platform-windowsphone.html">Windows Phone</a>
+				<a href="<%= basedir %>docs/platform-ios.html">iOS</a>
 				</p>
 				</div>
 			<%else %>

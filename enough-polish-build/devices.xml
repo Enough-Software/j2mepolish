@@ -479,6 +479,38 @@ These namespaces/schemas will be used soon.
     <capability name="JavaConfiguration" value="Android/1.5" />
   </device>
   
+   <device supportsPolishGui="true">
+    <identifier>Generic/android1.5_HVGA</identifier>
+    <parent>Generic/android1.5</parent>
+    <description>An Android compatible device with the 1.5 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.5_QVGA</identifier>
+    <parent>Generic/android1.5</parent>
+    <description>An Android compatible device with the 1.5 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.5_WVGA800</identifier>
+    <parent>Generic/android1.5</parent>
+    <description>An Android compatible device with the 1.5 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.5_WVGA854</identifier>
+    <parent>Generic/android1.5</parent>
+    <description>An Android compatible device with the 1.5 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
   <device supportsPolishGui="true">
     <identifier>Generic/android1.6</identifier>
     <features>isVirtual</features>
@@ -487,6 +519,39 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="Android/1.6" />
     <capability name="JavaConfiguration" value="Android/1.6" />
   </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.6_HVGA</identifier>
+    <parent>Generic/android1.6</parent>
+    <description>An Android compatible device with the 1.6 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.6_QVGA</identifier>
+    <parent>Generic/android1.6</parent>
+    <description>An Android compatible device with the 1.6 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.6_WVGA800</identifier>
+    <parent>Generic/android1.6</parent>
+    <description>An Android compatible device with the 1.6 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android1.6_WVGA854</identifier>
+    <parent>Generic/android1.6</parent>
+    <description>An Android compatible device with the 1.6 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
 
   <device supportsPolishGui="true">
     <identifier>Generic/android2.0</identifier>
@@ -496,6 +561,55 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="Android/2.0" />
     <capability name="JavaConfiguration" value="Android/2.0" />
   </device>
+   
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_HVGA</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_QVGA</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_WQVGA400</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a WQVGA400 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA400" />
+    <capability name="ScreenSize" value="240x400" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_WQVGA432</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a WQVGA432 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA432" />
+    <capability name="ScreenSize" value="240x432" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_WVGA800</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0_WVGA854</identifier>
+    <parent>Generic/android2.0</parent>
+    <description>An Android compatible device with the 2.0 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
 
   <device supportsPolishGui="true">
     <identifier>Generic/android2.0.1</identifier>
@@ -504,6 +618,54 @@ These namespaces/schemas will be used soon.
     <groups>android</groups>
     <capability name="JavaPlatform" value="Android/2.0.1" />
     <capability name="JavaConfiguration" value="Android/2.0.1" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_HVGA</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_QVGA</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_WQVGA400</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a WQVGA400 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA400" />
+    <capability name="ScreenSize" value="240x400" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_WQVGA432</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a WQVGA432 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA432" />
+    <capability name="ScreenSize" value="240x432" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_WVGA800</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.0.1_WVGA854</identifier>
+    <parent>Generic/android2.0.1</parent>
+    <description>An Android compatible device with the 2.0.1 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
   </device>
 
   <device supportsPolishGui="true">
@@ -516,6 +678,55 @@ These namespaces/schemas will be used soon.
   </device>
   
   <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_HVGA</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_QVGA</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_WQVGA400</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a WQVGA400 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA400" />
+    <capability name="ScreenSize" value="240x400" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_WQVGA432</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a WQVGA432 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA432" />
+    <capability name="ScreenSize" value="240x432" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_WVGA800</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.1_WVGA854</identifier>
+    <parent>Generic/android2.1</parent>
+    <description>An Android compatible device with the 2.1 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
+  
+  <device supportsPolishGui="true">
     <identifier>Generic/android2.2</identifier>
     <features>isVirtual</features>
     <description>An Android compatible device with the 2.2 firmware.</description>
@@ -523,6 +734,55 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="Android/2.2" />
     <capability name="JavaConfiguration" value="Android/2.2" />
   </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_HVGA</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_QVGA</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_WQVGA400</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a WQVGA400 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA400" />
+    <capability name="ScreenSize" value="240x400" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_WQVGA432</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a WQVGA432 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA432" />
+    <capability name="ScreenSize" value="240x432" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_WVGA800</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android2.2_WVGA854</identifier>
+    <parent>Generic/android2.2</parent>
+    <description>An Android compatible device with the 2.2 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
   
   <device supportsPolishGui="true">
     <identifier>Generic/android2.3</identifier>
@@ -774,6 +1034,7 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="LGE:Real3D Add-On:8" />
     <capability name="build.Android.Platform.Api" value="8" />
     <capability name="JavaPackage" value="android-lge-real3d-api8" />
+    <capability name="ScreenSize" value="480x800" />
   </device>
 
   <device supportsPolishGui="true">
@@ -793,6 +1054,7 @@ These namespaces/schemas will be used soon.
     <description>An Android compatible Xperia device with the 2.3.3 firmware, EDK 1.1 and the Google Maps and Google USB API (API Level 10).</description>
 	<capability name="Emulator.Class" value="AndroidEmulator" />
     <capability name="polish.Emulator.Skin" value="WVGA_XPERIA" />
+    <capability name="ScreenSize" value="480x854" />
   </device>
   
   <device supportsPolishGui="true">
@@ -801,6 +1063,7 @@ These namespaces/schemas will be used soon.
     <description>An Android compatible Xperia device with the 2.3.3 firmware, EDK 1.1 and the Google Maps and Google USB API (API Level 10).</description>
 	<capability name="Emulator.Class" value="AndroidEmulator" />
     <capability name="polish.Emulator.Skin" value="HVGA_XPERIA" />
+    <capability name="ScreenSize" value="320x480" />
   </device>
   
   <device supportsPolishGui="true">
@@ -821,6 +1084,7 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="KYOCERA Corporation:DTS Add-On:8" />
     <capability name="build.Android.Platform.Api" value="8" />
     <capability name="JavaPackage" value="android-kyocera-dualscreen-api8" />
+    <capability name="ScreenSize" value="480x400" />
   </device>
   
   <device supportsPolishGui="true">
@@ -831,6 +1095,7 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="KYOCERA Corporation:DTS Add-On:8" />
     <capability name="build.Android.Platform.Api" value="8" />
     <capability name="JavaPackage" value="android-kyocera-dualscreen-api8" />
+    <capability name="ScreenSize" value="960x800" />
   </device>
   
   <device supportsPolishGui="true">
@@ -843,6 +1108,7 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:PHOTON:10" />
     <capability name="build.Android.Platform.Api" value="10" />
     <capability name="JavaPackage" value="android-motorola-storage-api10, android-motorola-hdmi-api10, android-motorola-edm-api10" />
+    <capability name="ScreenSize" value="540x960" />
   </device>
   
   <device supportsPolishGui="true">
@@ -855,6 +1121,7 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:DroidX2:10" />
     <capability name="build.Android.Platform.Api" value="10" />
     <capability name="JavaPackage" value="android-motorola-hdmi-api10, android-motorola-edm-api10" />
+    <capability name="ScreenSize" value="480x854" />
   </device>
   
   <device supportsPolishGui="true">
@@ -877,7 +1144,8 @@ These namespaces/schemas will be used soon.
 	<capability name="Emulator.Class" value="AndroidEmulator" />
     <capability name="build.Android.Platform.Target" value="Motorola Mobility, Inc.:Motorola Titanium APIs:7" />
     <capability name="build.Android.Platform.Api" value="7" />
-    <capability name="JavaPackage" value="android-motorola-iexchange-api8, android-motorola-provider-api7" />
+    <capability name="JavaPackage" value="android-motorola-iexchange-api7, android-motorola-provider-api7" />
+    <capability name="ScreenSize" value="320x480" />
   </device>
   
   <device supportsPolishGui="true">

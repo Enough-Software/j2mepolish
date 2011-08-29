@@ -7,20 +7,24 @@
 
 
 <h1 id="top">Developing for Android Devices</h1>
+<table>
+<tr><td>
 <%index %>
+</td><td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<%= basedir%>images/j2mepolish-android.png" width="258" height="400" alt="Commands rendered by Android." /> 
+</td>
+</table>
 <p>
 <br />
 The Android platform is an operating system and application environment for mobile devices developed by Google.
 J2ME Polish will convert your MIDlet applications to this platform without further work on your site.
 </p>
 <h2 id="android-preparation">Preparations</h2>
-<p>To create and deploy an application for Android you need the Android SDK with a version of 1.0 or higher. Please visit the <a
-	href="http://code.google.com/android/download.html">Android
-Download Site</a> to download the SDK for your operation system and install
-it.</p>
+<p>To create and deploy an application for Android you need the Android SDK with a version of 1.0 or higher. Please visit the 
+<a href="http://developer.android.com">Android Developer Site</a> to download the SDK for your operation system and install it.</p>
 <p>Optionally, you can install the Android ADT Plugins for eclipse.
 For further information how to install the plugins, go to the <a
-	href="http://code.google.com/android/intro/installing.html">Android
+	href="http://developer.android.com/sdk/installing.html">Android
 Installation Guide</a>.</p>
 <p>After the installation of the Android SDK you should define the <code>android.home</code> property
 in either <i>${polish.home}/global.properties</i>,
@@ -29,31 +33,182 @@ script. In your <i>build.xml</i> script the definition could look like
 this:
 <pre>
 &lt;property 
-	name=&quot;android.home&quot; 
-	location=&quot;C:/Program Files/android-sdk-windows-1.5_r1&quot; 
+	name=&quot;android.home&quot;
+	location=&quot;C:/Program Files/android-sdk&quot; 
 /&gt;
 </pre>
 </p>
-<h2 id="android-building">Building Android Application</h2>
-<p>To compile, convert and package your source code for the Android
-platform, you build your application for the device <code>Generic/android</code>. To depend on a specific SDK version use <code>Generic/android1.1</code> for Android 1.1 phones and
-<code>Generic/android1.5</code> for Android 1.5 phones. You can also target a specific phone like <code>HTC/G1</code>.
+<h2 id="android-building">Building Android Apps</h2>
+<p>J2ME Polish ports your application to Android automatically. 
+All you need to do is to target an Android device (using the <a href="build-deviceRequirements.html"><code>&lt;deviceRequirements&gt;</code></a> section).
 </p>
-<p>The building of the application is done in these steps (fully automatically):
+<h3 id="android-syntax">Java 1.5 Syntax</h3>
+<p>
+The Android platform is based on Java 1.5 and your application can use the full range of features of this Java version like generics.
 </p>
-<ol>
-	<li>An activity is created in <code>/activity</code> of the
-	Android build folder. </li>
-	<li>The <i>R.java</i> / <i>Manifest.java</i> files are created from the resources and
-	sources via <code>aapt</code> of the Android SDK</li>
-	<li>The code is compiled with <code>target</code> and <code>source</code> set to <code>Java 1.5</code></li>
-	<li>A file named <i>classes.dex</i> is created from the source code using the <code>dx</code> utility 
-	of the Android SDK</li>
-	<li>The resources are packed to a <i>.ap_</i> file with <code>aapt</code></li>
-	<li>The application is packaged to a <i>.apk</i> file with the SDK's <code>apkbuilder</code> command</li>
-</ol>
-The Android platform is based on Java 1.5 and your application can use the full range of features of this Java version.
-<h2 id="android-testing">Testing Android application</h2>
+
+<h3 id="android-devices">Android Target Devices</h3>
+<p>
+To compile, convert and package your source code for the Android
+platform, you build your application for the device <code>Generic/android</code>. To depend on a specific SDK version use <code>Generic/android2.3</code> for Android 2.3 phones and
+<code>Generic/android3.2</code> for Android 3.2 tablets. You can also target a specific phone like <code>Motorola/Photon</code>.
+<br/>
+Here are some useful generic target devices that are plain-vanilla Android devices:
+</p>
+<table>
+	<tr><th>Device</th><th>Android Version</th><th>Android API Level</th><th>Display Resolution</th><th>Additional APIs</th></tr>
+	<tr><td>Generic/android3.2</td><td>3.2</td><td>13</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android3.2_WXGA</td><td>3.2</td><td>13</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android3.1</td><td>3.1</td><td>12</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android3.1_WXGA</td><td>3.1</td><td>12</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android3.0</td><td>3.0</td><td>11</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android3.0_WXGA</td><td>3.0</td><td>11</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3</td><td>2.3.3</td><td>10</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_WVGA800</td><td>2.3.3</td><td>10</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_WVGA854</td><td>2.3.3</td><td>10</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_WQVGA432</td><td>2.3.3</td><td>10</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_WQVGA400</td><td>2.3.3</td><td>10</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_QVGA</td><td>2.3.3</td><td>10</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.3.3_HVGA</td><td>2.3.3</td><td>10</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android2.3</td><td>2.3</td><td>9</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_WVGA800</td><td>2.3</td><td>9</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_WVGA854</td><td>2.3</td><td>9</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_WQVGA432</td><td>2.3</td><td>9</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_WQVGA400</td><td>2.3</td><td>9</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_QVGA</td><td>2.3</td><td>9</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.3_HVGA</td><td>2.3</td><td>9</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android2.2</td><td>2.2</td><td>8</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_WVGA800</td><td>2.2</td><td>8</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_WVGA854</td><td>2.2</td><td>8</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_WQVGA432</td><td>2.2</td><td>8</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_WQVGA400</td><td>2.2</td><td>8</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_QVGA</td><td>2.2</td><td>8</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.2_HVGA</td><td>2.2</td><td>8</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android2.1</td><td>2.1</td><td>7</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_WVGA800</td><td>2.1</td><td>7</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_WVGA854</td><td>2.1</td><td>7</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_WQVGA432</td><td>2.1</td><td>7</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_WQVGA400</td><td>2.1</td><td>7</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_QVGA</td><td>2.1</td><td>7</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.1_HVGA</td><td>2.1</td><td>7</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1</td><td>2.0.1</td><td>6</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_WVGA800</td><td>2.0.1</td><td>6</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_WVGA854</td><td>2.0.1</td><td>6</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_WQVGA432</td><td>2.0.1</td><td>6</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_WQVGA400</td><td>2.0.1</td><td>6</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_QVGA</td><td>2.0.1</td><td>6</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.0.1_HVGA</td><td>2.0.1</td><td>6</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android2.0</td><td>2.0</td><td>5</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_WVGA800</td><td>2.0</td><td>5</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_WVGA854</td><td>2.0</td><td>5</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_WQVGA432</td><td>2.0</td><td>5</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_WQVGA400</td><td>2.0</td><td>5</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_QVGA</td><td>2.0</td><td>5</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android2.0_HVGA</td><td>2.0</td><td>5</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android1.6</td><td>1.6</td><td>4</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android1.6_WVGA800</td><td>1.6</td><td>4</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android1.6_WVGA854</td><td>1.6</td><td>4</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android1.6_QVGA</td><td>1.6</td><td>4</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android1.6_HVGA</td><td>1.6</td><td>4</td><td>HVGA: 320x480</td><td>-</td></tr>
+	<tr><td>Generic/android1.5</td><td>1.5</td><td>3</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android1.5_WVGA800</td><td>1.5</td><td>3</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android1.5_WVGA854</td><td>1.5</td><td>3</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android1.5_QVGA</td><td>1.5</td><td>3</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android1.5_HVGA</td><td>1.5</td><td>3</td><td>HVGA: 320x480</td><td>-</td></tr>
+</table>
+<p>
+Many Android devices contain a set of additional Google APIs:. You will find corresponding JAR files in <i>${polish.home}/import</i>, 
+for example <i>${polish.home}/import/android-google-maps10.jar</i>.
+</p>
+<table>
+	<tr><th>Device</th><th>Android Version</th><th>Android API Level</th><th>Display Resolution</th><th>Additional APIs</th></tr>
+	<tr><td>Google/android3.2</td><td>3.2</td><td>13</td><td>-</td><td>android-google-maps-api13, android-google-usb-api13</td></tr>
+	<tr><td>Google/android3.1</td><td>3.1</td><td>12</td><td>-</td><td>android-google-maps-api12, android-google-usb-api12</td></tr>
+	<tr><td>Google/android3.0</td><td>3.0</td><td>11</td><td>-</td><td>android-google-maps-api11</td></tr>
+	<tr><td>Google/android2.3.3</td><td>2.3.3</td><td>10</td><td>-</td><td>android-google-maps-api10, android-google-usb-api10</td></tr>
+	<tr><td>Google/android2.3</td><td>2.3</td><td>9</td><td>-</td><td>android-google-maps-api9</td></tr>
+	<tr><td>Google/android2.2</td><td>2.2</td><td>8</td><td>-</td><td>android-google-maps-api8</td></tr>
+</table>
+<p>
+Manufacturer devices may also contain vendor specific APIs, e.g.:
+</p>
+<table>
+	<tr><th>Device</th><th>Android Version</th><th>Android API Level</th><th>Display Resolution</th><th>Additional APIs</th></tr>
+	<tr><td>LG/Optimus3D</td><td>2.2</td><td>8</td><td>480x800</td><td>android-lge-real3d-api8</td></tr>
+	<tr><td>Sony-Ericsson/AndroidXperia</td><td>2.3.3</td><td>10</td><td>(various)</td><td>android-google-maps-api10, android-google-usb-api10, android-sony-ericsson-eventstream-api10, android-sony-ericsson-infinite-api10</td></tr>
+	<tr><td>Sony-Ericsson/AndroidXperia_WVGA</td><td>2.3.3</td><td>10</td><td>480x854</td><td>android-google-maps-api10, android-google-usb-api10, android-sony-ericsson-eventstream-api10, android-sony-ericsson-infinite-api10</td></tr>
+	<tr><td>Sony-Ericsson/AndroidXperia_HVGA</td><td>2.3.3</td><td>10</td><td>320x480</td><td>android-google-maps-api10, android-google-usb-api10, android-sony-ericsson-eventstream-api10, android-sony-ericsson-infinite-api10</td></tr>
+	<tr><td>Samsung/GalaxyTab</td><td>2.2</td><td>8</td><td>-</td><td>android-google-maps-api8</td></tr>
+	<tr><td>Kyocera/DTS400</td><td>2.2</td><td>8</td><td>480x400</td><td>android-kyocera-dualscreen-api8</td></tr>
+	<tr><td>Kyocera/DTS800</td><td>2.2</td><td>8</td><td>960x800</td><td>android-kyocera-dualscreen-api8</td></tr>
+	<tr><td>Motorola/Photon</td><td>2.3.3</td><td>10</td><td>540x960</td><td>android-motorola-storage-api10, android-motorola-hdmi-api10, android-motorola-edm-api10</td></tr>
+	<tr><td>Motorola/DroidX2</td><td>2.3.3</td><td>10</td><td>480x854</td><td>android-motorola-hdmi-api10, android-motorola-edm-api10</td></tr>
+	<tr><td>Motorola/Titanium</td><td>2.1</td><td>7</td><td>320x480</td><td>android-motorola-iexchange-api7, android-motorola-provider-api7</td></tr>
+</table>
+<h3 id="emulator">Manually Selecting an Emulator Target and Skin</h3>
+<p>
+The J2ME Polish Android devices have an associated emulator target and skin, but you can override both values.
+ To find out available skins you should call the <i>${android.home}/tools/android</i> tool on the command line,
+e.g. on a Mac:
+</p>
+<pre>
+/Applications/android-sdk-mac_x86/tools/android list targets
+</pre>
+<p>
+This will give you a list of targets and their respective skins like this:
+</p>
+<pre>
+Available Android targets:
+id: 1 or "android-3"
+     Name: Android 1.5
+     Type: Platform
+     API level: 3
+     Revision: 4
+     Skins: HVGA (default), HVGA-L, HVGA-P, QVGA-L, QVGA-P
+id: 2 or "android-4"
+     Name: Android 1.6
+     Type: Platform
+     API level: 4
+     Revision: 3
+     Skins: HVGA, QVGA, WVGA800 (default), WVGA854
+id: 3 or "android-7"
+     Name: Android 2.1-update1
+     Type: Platform
+     API level: 7
+     Revision: 3
+     Skins: HVGA, QVGA, WQVGA400, WQVGA432, WVGA800 (default), WVGA854
+id: 4 or "Motorola Mobility, Inc.:Motorola Titanium APIs:7"
+     Name: Motorola Titanium APIs
+     Type: Add-On
+     Vendor: Motorola Mobility, Inc.
+     Revision: 1
+     Description: Motorola Titanium Device.
+     Based on Android 2.1-update1 (API level 7)
+     Libraries:
+      * motorola.provider (motorola.provider.jar)
+          APIs for Motorola iDEN contacts provider
+      * com.motorola.android.ptx (iexchangelib.jar)
+          APIs for Motorola iExchange service
+     Skins: WVGA854, WQVGA400, HVGA, TITANIUM (default), WQVGA432, WVGA800, QVGA
+</pre>
+<p>
+You can set the emulator skin by specifying the <code>polish.Emulator.Skin</code> variable either as an Ant property or 
+in the <code>&lt;variables&gt;</code> section of your <i>build.xml</i> script, e.g. on the command line:
+</p>
+<pre>
+ant emulator <b>-Dpolish.Emulator.Skin=WVGA800</b> -Ddevice=Generic/android2.1
+</pre>
+<p>
+You can override the target emulator with the <code>polish.build.Android.Platform.Target</code> variable, e.g.:
+</p>
+<pre>
+ant emulator -Dpolish.Emulator.Skin=WVGA800 <b>-Dpolish.build.Android.Platform.Target=&quot;Motorola Mobility, Inc.:Motorola Titanium APIs:7&quot;</b> -Ddevice=Generic/android2.1
+</pre>
+
+<h2 id="android-testing">Testing Android Apps</h2>
+<p>The building of the application is done and a complete project will be generated within the temporary build folder, e.g. <i>${project.home}/build/Generic/android2.3/en/activity</i>.
+This can be useful for debugging purposes.
+</p>
 <p>
 There are two possibilities to test Android applications which are build with J2ME Polish:
 </p>
@@ -66,7 +221,7 @@ to output <i>Successfully installed</i>. To rebuild the application and test it,
 the running <i>build.xml</i> and leave the emulator running, the build process will automatically detect 
 if there's an emulator running and install the application to the running emulator. 
 If you application is running at deployment time, it will be shut down beforehand. You can also 
-start the emulator before the build process is started.
+start the emulator before the build process is started. The launch parameters are printed during the build process.
 </li>
 <li>
 The created activity in the <code>build</code> folder can be imported to Eclipse and used to 
@@ -77,17 +232,17 @@ Tools / Fix Project Properties</i>.
 </ul>
 <p>
 To view output send to <code>System.out</code> or <code>System.err</code> you can either use the Eclipse plugin 
-or start the Android tool <code>ddms</code>, which you can find in <i>${android.home}/tools</i>.
+or start the Android tool <a href="android-ddms">ddms</a>, which you can find in <i>${android.home}/tools</i>.
 </p>
 
-<h2 id="android-configuring">Configure your Manifest.xml file</h2>
+<h2 id="android-configuring">Configure your AndroidManifest.xml</h2>
 <p>
 You can customize the generated <i>AndroidManifest.xml</i> file by defining variables in the build.xml file.
 </p>
 <pre>
 	&lt;j2mepolish&gt;
 	&lt;build&gt;
-		&lt;variable name="android.targetSdkVersion" value="4" /&gt;
+		&lt;variable name=&quot;android.targetSdkVersion&quot; value=&quot;4&quot; /&gt;
 	&lt;/build&gt;
 	&lt;/j2mepolish>
 </pre>
@@ -163,17 +318,19 @@ that you should not deploy an application with a development signature to your c
 
 <h2 id="android-market">Publish your Application on Android Market</h2>
 <p>The Android Market is the One-Stop-Shop for applications on any Android handset. A published application can be downloaded by every Android user and you need not provide hosting and delivery methods.</p>
-<p>To publish your application you need an Android Market account. Please see <a href="http://www.android.com/market">the offical Android Market site</a> for details.</p>
+<p>To publish your application you need an Android Market account. Please see <a href="http://www.android.com/market">the official Android Market site</a> for details.</p>
 
-<h2 id="android-configuring">Configure Commands</h2>
+<h2 id="android-configuring">Configure Commands and Alerts</h2>
+<p>You can and should configure so that it uses native commands and alerts for your android ports. This improves the native integration of your app considerably.
+</p>
+<h3 id="android-configuration-commands">Configure Commands</h3>
 <p>
-The rendering of commands can be done by J2ME Polish or by the Android system. A command rendered by J2ME Polish will be stylable by you where a system rendered command will look nativly.</p>
+The rendering of commands can be done by J2ME Polish or by the Android system. A command rendered by J2ME Polish will be stylable by you where a system rendered command will look natively.</p>
 <p>This is being configured with the fullscreen mode of J2ME Polish
  - set it to <code>false</code> for using native Android commands and to <code>menu</code> for using J2ME Polish rendered commands. 
- Note that at the moment you need to use J2ME Polish rendering when using subcommands.
 </p>
 <pre>
-&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;polish.android&quot; /&gt;
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
 </pre>
 <p>
 This setting needs to be applied to the <code>&lt;variables&gt;</code> section of the <code>&lt;j2mepolish&gt;</code> task in your
@@ -190,7 +347,7 @@ Commands rendered by J2ME Polish.
 <td>
 <img src="<%= basedir%>images/gui-android-commands-native.png" width="319" height="479" alt="Commands rendered by Android." /> 
 <br />
-Native Android commands.
+Native Android commands (=recommended).
 </td>
 </tr>
 </table>
@@ -209,33 +366,59 @@ Command cmdNext = new Command( "Next", Command.SCREEN, 2 );
 	icon-image: url( cmd_next.png ); 
 }
 </pre>
-
+<h3 id="android-configuration-alerts">Configure Alerts</h3>
+<p>
+Use the <code>polish.useNativeAlerts</code> preprocessing variable for enabling native alerts:
+</p>
+<pre>
+&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;false&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
+</pre>
+<p>
+<img src="<%= basedir%>images/gui-android-alert-native.png" width="480" height="799" alt="Native Android Alert" />
+</p>
 <h2 id="android-APIs">Supported APIs</h2>
 <p>
 The following J2ME APIs are supported by J2ME Polish:
 </p>
 <ul>
 	<li><b>JSR 139 CLDC 1.1</b>: The basic Java technologies are provided by the Android stack itself</li>
-	<li><b>JSR 118 MIDP 2.0</b>: The basic mobile information device profile APIs are supported, including RMS, low level LCDUI functionalities, HTTP connections, and <code>http:</code> and <code>tel:</code> platform requests</li>
+	<li><b>JSR 118 MIDP 2.0</b>: The basic mobile information device profile APIs are supported, including RMS, low level LCDUI functionalities, HTTP connections, <code>http:</code> and <code>tel:</code> platform requests, PushRegistry alarms and audio playback.</li>
 	<li><b>JSR 075 FileConnection</b>: Access the filesystem on the device.</li>
 	<li><b>JSR 075 PIM</b>: Read information from the native address book.</li>
 	<li><b>JSR 179 Location</b>: Access GPS information.</li>
 </ul>
+
+<h2 id="android-nativeui">Using Native Android Views in your App</h2>
 <p>
-For playing back audio please use the <code>de.enough.polish.multimedia.AudiPlayer</code> for now. Direct usage of the MMAPI is not yet supported.
+You can use native Android views in your application as well using the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/android/lcdui/ViewItem.html">de.enough.polish.android.lcdui.ViewItem</a> item.
+This item embeds any <a href="http://developer.android.com/reference/android/view/View.html">android.view.View</a>:
 </p>
+<pre>
+//#if polish.android
+	import de.enough.polish.android.lcdui.ViewItem;
+	import de.enough.polish.android.midlet.MidletBridge;
+	import android.widget.AnalogClock;
+//#endif
+[...]
 
-
-<h2 id="android-roadmap">Roadmap</h2>
+public Form createForm() {
+	//#style screenClock
+	Form form = new Form("Hello Clock");
+	//#style info
+	form.append("An the time is...");
+	<b>//#if polish.android
+		AnalogClock clock = new AnalogClock(MidletBrige.getInstance());
+		//#style itemClock
+		ViewItem nativeItem = new ViewItem(clock);
+		form.append(nativeItem);
+	//#else</b>
+		[...]
+	//#endif
+}
+</pre>
 <p>
-Future versions of the Android conversion will support the conversion of the following Java Packages: 
+<img src="<%= basedir%>images/gui-android-alert-ViewItem.png" width="480" height="705" alt="Combining native views with a J2ME Polish application" />
 </p>
-<ul>
-	<li>MMAPI (use  <code>de.enough.polish.multimedia.AudiPlayer</code> for now) </li>
-	<li>Bluetooth API</li>
-</ul>
-
-
 
 <h2 id="android-troubleshooting">Troubleshooting</h2>
 <p>You might encounter some issues when building Android applications:</p>
@@ -312,6 +495,70 @@ The problem: Your application is running on a device with a WVGA screen but the 
 </p>
 <p>
 The solution: Make sure you address the right target API. Different screen resolutions support from API version 4 upwards. Use the variables <em>android.targetSdkVersion</em>, <em>android.minSdkVersion</em> and <em>android.maxSdkVersion</em> to adjust the API versions.
+</p>
+
+<h2 id="android-ddms">Using DDMS</h2>
+<p>
+<i>ddms</i> (Dalvik Debug Monitor Server) is a debug and monitoring tool for your Android apps on both emulator and real devices. It is installed in <i>${android.home}/tools/ddms</i>. 
+</p>
+<h3 id="android-ddms-starting">Starting ddms</h3>
+<p>
+Open console and use the cd command to target the console to the tools folder of the Android SDK: <code>cd &quot;C:\Program Files\android-sdk\tools&quot;</code> (by default). Now you can start ddms with the command <code>ddms</code>. After a few seconds the ddms window will open.
+</p>
+<h3 id="android-ddms-functionalities">ddms Functionalities</h3>
+<p>
+n the upper left corner of the window you can see the device list. In this table all active devices, emulators and there active processes are listed. By left clicking a device the log screen at the bottom of the window will show the log output of the selected device. By clicking a process, the information screen at the right side will show some information about the selected process.
+Above the device list are some buttons, hover the mouse over and a short description will show up:
+</p>
+<table>
+<tr><td>Show heap updates</td><td>Allows ddms to read the heap updates of the selected device</td></tr>
+<tr><td>Dump HPROF File</td><td>Dumps a HPROF profiling file of the selected process and saves it to the selected location</td></tr>
+<tr><td>Cause an immediate GC</td><td>Causes the Garbage Collector to free unused memory immediately</td></tr>
+<tr><td>Show thread updates</td><td>Allows ddms to read the thread updates of the selected device</td></tr>
+<tr><td>Start Method Profiling / Stop Method Profiling</td><td>Allows ddms to read and profile the used methods in the selected process</td></tr>
+<tr><td>Halt the target VM</td><td>Stops the selected process</td></tr>
+</table>
+<p>
+In the upper right corner of the window is the information screen. It is divided into seven parts:
+</p>
+<table>
+<tr><td>Info</td><td>Shows some basic information about the selected process.</td></tr>
+<tr><td>Threads</td><td>Shows information about the threads of the selected process.</td></tr>
+<tr><td>VM Heap</td><td>Shows information about the heap of the selected, such as size and what it  contains.</td></tr>
+<tr><td>Allocation Tracker</td><td>With Start Tracking, you can start the tracking of the allocations. Get Allocations list the actual allocations in the table below. Be careful, they are added to the table instead of updated.</td></tr>
+<tr><td>Sysinfo</td><td>Shows the usage of the CPU and memory of the selected device</td></tr>
+<tr><td>Emulator Control</td><td>Allows you to simulate certain situations like incoming calls, position changes and so on.</td></tr>
+<tr><td>Event Log</td><td>Here you can configure your own event log (i.e. your are interested in only one kind of events).</td></tr>
+</table>
+<h3 id="android-ddms-realdevices">Use ddms on Real Devices</h3>
+<p>
+For using <i>ddms</i> on real devices, you need to install the corresponding USB driver first. Normally this is done automatically when you connect your device via a USB cable.
+On the Android device itself you need to allow the USB debugging mode: 
+</p>
+<p>
+<i>Settings--&gt;Applications--&gt;Development--&gt;USB Debugging</i>
+</p>
+<h2 id="android-adb-installation">Install Apps over USB with adb</h2>
+<p>
+You can install your apps using the <i>adb</i> tool (Android Debug Bridge). For that you need to <a href="android-ddms-realdevices">install the USB driver</a> first. On the device you
+also need to allow the installation of files from unsecure places:
+</p>
+<p>
+<i>Settings--&gt;Applications--&gt;Unknown Sources</i>
+</p>
+<p>
+You can now <code>cd</code> into the <i>${android.home}/tools</i> directory and install your app with this command
+</p>
+<pre>
+adb -d install PATH
+</pre>
+<table>
+<tr><td>-d</td><td>indicates that you want to install the application on the only connected USB device.</td></tr>
+<tr><td>-r</td><td>ndicates that you want to reinstall an existing application</td></tr>
+<tr><td>PATH</td><td>replace PATH with the APK that you want to install, e.g. <i>dist/Google-Android2.2-en_US-rss.apk</i></td></tr>
+</table>
+<p>
+If all worked correctly the console will show a 'Success!' Message.
 </p>
 
 <%include end.txt %>

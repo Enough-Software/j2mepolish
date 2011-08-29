@@ -63,6 +63,7 @@ blackberry/BlackBerry JDE Component Package 4.6.0 (for 4.6 devices)
 blackberry/BlackBerry JDE Component Package 4.7.0 (for 4.7 devices)
 blackberry/BlackBerry JDE Component Package 5.0.0 (for 5.0 devices)
 blackberry/BlackBerry JDE Component Package 6.0.0 (for 6.0 devices)
+blackberry/BlackBerry JDE Component Package 7.0.0 (for 7.0 devices)
 </pre>
 <p>
 In project's we then use following property definitions in the <i>build.xml</i> scripts for BlackBerry support:
@@ -96,9 +97,7 @@ blackberry.emulator.home=E:\\dev\\Research in Motion
 <p>
 When you target BlackBerry devices like the BlackBerry/8100 device and have set the <code>blackberry.home</code> property, 
 J2ME Polish will automatically invoke the rapc compiler for converting the JAR file into a COD file in the finalize step 
-of the build process.
-Remember that resources should be less than 64 kb in size for older BlackBerry platforms, otherwise the rapc process will
- abort the processing. 
+of the build process. 
 </p>
 <p>If rapc fails because there is not enough heapspace, you can specify the preprocessing variable or Ant property 
 <code>blackberry.rapc.opts</code>, e.g.:<br />
@@ -182,7 +181,7 @@ It may happen that a blackberry build can't be executed due to a verification er
 Error starting appname: Module 'appname' has verification error XXXX at offset XXXX
 </pre>
 <p>
-There are numerous reasons for this behaviour:
+There are numerous reasons for this behavior:
 </p>
 <ul>
   <li>The signing went wrong. Please check the signing of the application.</li>
@@ -274,15 +273,12 @@ BlackBerry platform and is a recommended setting in your <i>build.xml</i> script
 
 <h2 id="blackberry-gui-platform">Platform Requests in J2ME Polish Applications</h2>
 <p>
-For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to specify the
+For enabling platform requests just sign your application. In the emulator you can also use the <code>MIDlet.platformRequest(String url)</code> call when you specify the
 preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
 </p>
 <pre>
 &lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
 </pre>
-<p>
-Note that this functionality requires a signed application.
-</p>
 
 <h2 id="blackberry-native">Developing Native BlackBerry Applications</h2>
 <p>
@@ -291,9 +287,6 @@ You can also develop native BlackBerry applications by defining the blackberry.m
 <pre>
 &lt;variable name=&quot;blackberry.main&quot; value=&quot;com.company.product.ProductApplication&quot; /&gt;
 </pre>
-<p>
-Please note that the currently provided BlackBerry library does not contain all available classes, compare the following Troubleshooting section.
-</p>
 
 <h2 id="blackberry-ota">Deploying a BlackBerry Application Over The Air</h2>
 <p>
@@ -334,15 +327,16 @@ screen resolution, you should target real devices instead.
 Following virtual devices are available:
 </p>
 <ul>
-	<li><b>BlackBerry/4.1</b>: for devices like the 8700, 7290 etc</li>
-	<li><b>BlackBerry/4.2</b>: for 4.2 devices without trackball</li>
-	<li><b>BlackBerry/4.2TrackBall</b>: for 4.2 devices with trackball like the 8100, 8800 etc</li>
-	<li><b>BlackBerry/4.3</b>: for devices like the 8120, 8130 etc</li>
-	<li><b>BlackBerry/4.5</b>: for OS 4.5 devices like the BlackBerry Curve</li>
-	<li><b>BlackBerry/4.6</b>: for OS 4.6 devices like the BlackBerry Bold</li>
-	<li><b>BlackBerry/4.7</b>: for OS 4.7 devices (like the BlackBerry/Storm)</li>
-	<li><b>BlackBerry/5.0</b>: for OS 5.0 devices</li>
+	<li><b>BlackBerry/7.0</b>: for OS 7.0 devices</li>
 	<li><b>BlackBerry/6.0</b>: for OS 6.0 devices</li>
+	<li><b>BlackBerry/5.0</b>: for OS 5.0 devices</li>
+	<li><b>BlackBerry/4.7</b>: for OS 4.7 devices (like the BlackBerry/Storm)</li>
+	<li><b>BlackBerry/4.6</b>: for OS 4.6 devices like the BlackBerry Bold</li>
+	<li><b>BlackBerry/4.5</b>: for OS 4.5 devices like the BlackBerry Curve</li>
+	<li><b>BlackBerry/4.3</b>: for devices like the 8120, 8130 etc</li>
+	<li><b>BlackBerry/4.2TrackBall</b>: for 4.2 devices with trackball like the 8100, 8800 etc</li>
+	<li><b>BlackBerry/4.2</b>: for 4.2 devices without trackball</li>
+	<li><b>BlackBerry/4.1</b>: for devices like the 8700, 7290 etc</li>
 </ul>
 
 
@@ -375,25 +369,15 @@ backslash or a 'p':
 
 <h3 id="blackberry-platformrequests">Platform Requests</h3>
 <p>
-For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to specify the
+For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to sign your app or specify the
 preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
 </p>
 <pre>
 &lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
 </pre>
 <p>
-Note that this functionality requires a signed application.
+Note that this functionality requires a signed application on real devices.
 </p>
-
-<h3 id="blackberry-spacekey">0/Space Is Mapped To Fire</h3>
-<p>
-By default the '0' and 'space' key will be mapped to a 'FIRE' game action on BlackBerry devices. This will allow your users
-to select entries and trigger OK commands with 0/space. You can deactivate this behavior by specifying the preprocessing 
-<a href="build-build.html#variables">variable</a> <code>polish.BlackBerry.mapSpaceToFire</code>:
-</p>
-<pre>
-&lt;variable name=&quot;polish.BlackBerry.mapSpaceToFire&quot; value=&quot;false&quot; /&gt;
-</pre>
 
 <h3 id="blackberry-usinglcduiandpolish">Using Native High Level LCDUI Components</h3>
 <p>

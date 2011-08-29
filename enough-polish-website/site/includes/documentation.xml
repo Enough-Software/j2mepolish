@@ -67,14 +67,12 @@
 		<page file="programming-porting.html" title="Porting" />
 	</page>
 	<page file="platform.html" title="Platforms" >
-		<page file="platform-midp.html" title="MIDP" />
-		<page file="platform-windowsmobile" title="Windows Mobile" />
-		<page file="platform-iphone.html" title="iPhone" />
 		<page file="platform-android.html" title="Android" />
 		<page file="platform-blackberry.html" title="BlackBerry" />
-		<page file="platform-doja.html" title="DoJa" />
+		<page file="platform-midp.html" title="MIDP" />
 		<page file="platform-javase.html" title="Java SE" />
-		<page file="platform-palm.html" title="Palm" />
+		<page file="platform-windowsphone.html" title="Windows Phone" />
+		<page file="platform-ios.html" title="iOS" />
 	</page>
 	<page file="javadoc.html" title="JavaDoc" />
 </documentation>

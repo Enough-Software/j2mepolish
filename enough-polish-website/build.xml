@@ -1,6 +1,6 @@
 <project 
 	name="enough-webprocessor" 
-	default="website">
+	default="webprocessor">
 <property name="polish.home" value="../enough-polish-build" />
 <taskdef name="webprocessor" classname="de.enough.webprocessor.WebProcessorTask" classpath="../enough-webprocessor/bin/classes:${polish.home}/bin/website:${polish.home}/bin/classes:${polish.home}/lib/jdom.jar:${polish.home}/dist/enough-j2mepolish-client.jar:${polish.home}/import/enough-j2mepolish-client.jar:${polish.home}/import/cldc-1.1.jar:${polish.home}/import/midp-2.0.jar:${polish.home}/import/mmapi.jar" />
 <taskdef name="deviceExport" classname="de.enough.polish.ant.HtmlExporterTask" classpath="../enough-polish-build/bin/classes:../enough-polish-build/lib/jdom.jar"/>
