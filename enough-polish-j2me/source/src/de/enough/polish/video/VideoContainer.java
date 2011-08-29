@@ -748,12 +748,16 @@ public class VideoContainer extends Container implements Runnable, PlayerListene
 		{
 			try {
 				this.source.getVideoControl().setVisible(false);
+			} catch (Exception e) {
+				onVideoError(e);	
+			}
+			try {
 				this.source.getPlayer().stop();
 				seek(0);
 				setState(STATE_STOPPED);
 				
 				onVideoStop();
-			} catch (MediaException e) {
+			} catch (Exception e) {
 				onVideoError(e);
 			}
 		}

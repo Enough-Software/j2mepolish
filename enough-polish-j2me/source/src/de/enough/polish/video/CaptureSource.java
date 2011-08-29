@@ -91,7 +91,6 @@ public class CaptureSource extends VideoSource {
 	public byte[] capture(String encoding)
 	throws MediaException
 	{
-		encoding = null;
 		if (this.isSnapshotInProgress) {
 			throw new MediaException("Snapshot in progress");
 		}
@@ -142,7 +141,6 @@ public class CaptureSource extends VideoSource {
             	if (encoding == null) {
             		throw e;
             	}
-            	message = e.getMessage();
             }
             if (data == null && encoding != null) {
             	try {
@@ -183,8 +181,33 @@ public class CaptureSource extends VideoSource {
 
 
 	private void stopSnapshot() {
-		// TODO Besitzer implement stopSnapshot
-		
+		// not needed, see VideoContainer.stop();
+//		VideoControl vControl = this.videoControl;
+//		if (vControl != null) {
+//			try {
+//				vControl.setVisible(false);
+//			} catch (Exception e) {
+//				//#debug error
+//				System.out.println("Unable to close VideoControl" + e);
+//			}
+//		}
+//		Player pl = this.player;
+//		if ( pl != null && pl.getState() != Player.CLOSED) {
+//			try {
+//				pl.stop();
+//				try {
+//					Thread.sleep(200);
+//				} catch (Exception e2) {
+//					// ignore thread interrupt
+//				}
+//				pl.close();
+//			} catch (Exception e) {
+//				//#debug error
+//				System.out.println("Unable to close player" + e);
+//			}
+//		}
+//		this.videoControl = null;
+//		this.player = null;
 	}
 //
 //
