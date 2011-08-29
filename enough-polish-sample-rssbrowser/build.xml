@@ -133,6 +133,8 @@
 					//#= private static final String UPDATE_URL = "${ update-url }";
 					You can change the title of the sample application with the "title"-var.
 					-->
+					<variable name="polish.FullScreen" value="false" if="polish.android || polish.blackberry" />
+					<variable name="polish.useNativeAlerts" value="true" if="polish.android || polish.blackberry" />
 					<variable name="update-url" value="http://www.enough.de/update" />
 					<variable name="title" value="J2ME Polish" />
 					<variable name="polish.css.view-type" value="true" />

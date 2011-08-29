@@ -20,7 +20,6 @@ import javax.microedition.lcdui.TextField;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 
-import de.enough.polish.browser.html.FormListener;
 import de.enough.polish.browser.rss.RssBrowser;
 import de.enough.polish.browser.rss.RssItem;
 import de.enough.polish.browser.rss.RssTagHandler;
@@ -37,7 +36,7 @@ import de.enough.polish.util.Locale;
 /**
  * <p>Shows RSS news feeds</p>
  *
- * <p>Copyright Enough Software 2007 - 2008</p>
+ * <p>Copyright Enough Software 2007 - 2011</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class RssMidlet 
