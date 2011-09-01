@@ -484,6 +484,18 @@ item.setDefaultCommand( this.cmdStart);
 &lt;variable name=&quot;polish.Item.suppressDefaultCommand&quot; value=&quot;true&quot; /&gt;
 </pre>	
 
+	<h3 id="commandasynchrone">Execute Commands Asycnhronously</h3>
+	<p>
+		J2ME Polish executes commands asynchronously for you when you specify the <code>polish.executeCommandsAsynchrone</code> preprcessing variable:
+	</p>
+<pre>
+&lt;variable name=&quot;polish.executeCommandsAsynchrone&quot; value=&quot;true&quot; /&gt;
+</pre>	
+	<p>
+	In this case all <code>CommandListener.commandAction(Command, Displayable)</code> and <code>ItemCommandListener.commandAction(Command, Item)</code> will
+	be executed in a different thread. This means that you can have long running code in your command handling code without blocking the user interface. 
+	</p>
+
 	<h2 id="JavaDoc">JavaDoc</h2>
 	<ul>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
