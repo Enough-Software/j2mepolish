@@ -1,4 +1,4 @@
-//#condition polish.optional-api.samsung
+//#condition polish.optional-api.nokia-ui
 /**
  * 
  */

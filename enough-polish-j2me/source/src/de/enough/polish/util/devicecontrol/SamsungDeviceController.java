@@ -7,7 +7,7 @@ package de.enough.polish.util.devicecontrol;
 import com.samsung.util.LCDLight;
 
 /**
- * Controls a device that supports the Nokia-UI API
+ * Controls a device that supports the Samsung Supplements API
  * 
  * @author Robert Virkus
  */
