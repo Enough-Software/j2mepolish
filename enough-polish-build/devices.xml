@@ -479,14 +479,6 @@ These namespaces/schemas will be used soon.
     <capability name="JavaConfiguration" value="Android/1.5" />
   </device>
   
-   <device supportsPolishGui="true">
-    <identifier>Generic/android1.5_HVGA</identifier>
-    <parent>Generic/android1.5</parent>
-    <description>An Android compatible device with the 1.5 firmware and a HVGA screen/skin.</description>
-    <capability name="polish.Emulator.Skin" value="HVGA" />
-    <capability name="ScreenSize" value="320x480" />
-  </device>
-
   <device supportsPolishGui="true">
     <identifier>Generic/android1.5_QVGA</identifier>
     <parent>Generic/android1.5</parent>
@@ -979,7 +971,7 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Google/Android2.3.3</identifier>
-    <parent>Generic/android2.2.3</parent>
+    <parent>Generic/android2.3.3</parent>
     <description>An Android compatible device with the 2.3.3 firmware and the Google Maps and Google USB API (API Level 10).</description>
     <capability name="polish.Emulator.Skin" value="WVGA800" />
     <capability name="build.Android.Platform.Target" value="Google Inc.:Google APIs:10" />
@@ -4894,6 +4886,7 @@ These namespaces/schemas will be used soon.
     <features>hasPointerEvents, doubleBuffering</features>
     <capability name="OS" value="Linux" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="240x320" />
     <capability name="CanvasSize" value="240x244" />
     <capability name="BitsPerPixel" value="16" />
@@ -4915,14 +4908,14 @@ These namespaces/schemas will be used soon.
     <features>hasCamera</features>
     <capability name="JavaPlatform" value="MIDP/2.0" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="HardwarePlatform.ScreenSize" value="130x130" />
-    <capability name="HardwarePlatform.BitsPerPixel" value="16" />
-    <capability name="HardwarePlatform.CameraResolution" value="300x200" />
+    <capability name="ScreenSize" value="130x130" />
+    <capability name="BitsPerPixel" value="16" />
+    <capability name="CameraResolution" value="300x200" />
     <capability name="JavaProtocol" value="UDP, TCP, SSL, HTTP, HTTPS, Serial" />
     <capability name="JavaPackage" value="wmapi, mmapi, motorola-lwt, motorola-lwt, Polyphonic-MIDI, WAV, AU, Vibrator, Lighting, Location API, Phonebook, Datebook, External display, Call Initiation, Recent calls, File I/O, Serial, Crypto, Digital Camera, RF enabling, Alpha blending, Secure file connection, Voicenote, 3D" />
     <capability name="HeapSize" value="1.15 MB" />
     <capability name="StorageSize" value="2 MB" />
-    <capability name="SoftwarePlatform.MaxJarSize" value="500 kb" />
+    <capability name="MaxJarSize" value="500 kb" />
     <capability name="MaxSockets.tcp" value="16" />
     <capability name="MaxSockets.http" value="8" />
     <capability name="MaxSockets.udp" value="24" />
@@ -4935,12 +4928,13 @@ These namespaces/schemas will be used soon.
     <identifier>Motorola/i50sx, Motorola/i55sr, Motorola/i85s</identifier>
     <user-agent>MOTi50sx</user-agent>
     <features>hasCamera</features>
-    <capability name="SoftwarePlatform.JavaPlatform" value="MIDP/1.0" />
-    <capability name="HardwarePlatform.ScreenSize" value="111x100" />
-    <capability name="HardwarePlatform.BitsPerPixel" value="2" />
-    <capability name="HardwarePlatform.CameraResolution" value="300x200" />
-    <capability name="SoftwarePlatform.JavaProtocol" value="comm, socket, https, ssl, datagram" />
-    <capability name="SoftwarePlatform.JavaPackage" value="serial" />
+    <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
+    <capability name="ScreenSize" value="111x100" />
+    <capability name="BitsPerPixel" value="2" />
+    <capability name="CameraResolution" value="300x200" />
+    <capability name="JavaProtocol" value="comm, socket, https, ssl, datagram" />
+    <capability name="JavaPackage" value="serial" />
     <capability name="MaxSockets.tcp" value="2" />
     <capability name="MaxSockets.http" value="2" />
     <capability name="MaxSockets.udp" value="3" />
@@ -4953,6 +4947,7 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>Motorola/i80s</identifier>
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="119x64" />
     <capability name="BitsPerPixel" value="1" />
     <capability name="HeapSize" value="256 kb" />
@@ -4974,6 +4969,7 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>Motorola/i88s</identifier>
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="111x100" />
     <capability name="BitsPerPixel" value="2" />
     <capability name="HeapSize" value="256 kb" />
@@ -5001,6 +4997,7 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>Motorola/i90c</identifier>
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="111x100" />
     <capability name="BitsPerPixel" value="2" />
     <capability name="HeapSize" value="256 kb" />
@@ -5029,6 +5026,7 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>Motorola/i95cl</identifier>
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="120x160" />
     <capability name="BitsPerPixel" value="8" />
     <capability name="HeapSize" value="640 kb" />
@@ -6277,6 +6275,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="128x128" />
     <capability name="FullCanvasSize" value="128x116" />
     <capability name="CanvasSize" value="128x99" />
@@ -6327,6 +6326,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="128x128" />
     <capability name="FullCanvasSize" value="128x116" />
     <capability name="CanvasSize" value="128x99" />
@@ -6377,6 +6377,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="FullCanvasSize" value="176x204" />
     <capability name="CanvasSize" value="176x187" />
@@ -6417,6 +6418,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="96x65" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="1 mb" />
@@ -6444,6 +6446,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="96x65" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="1 mb" />
@@ -6519,6 +6522,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="120x160" />
     <capability name="FullCanvasSize" value="120x148" />
     <capability name="CanvasSize" value="120x131" />
@@ -6544,6 +6548,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="FullCanvasSize" value="176x204" />
     <capability name="CanvasSize" value="176x182" />
@@ -6612,6 +6617,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="FullCanvasSize" value="176x204" />
     <capability name="CanvasSize" value="176x182" />
@@ -6667,6 +6673,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="FullCanvasSize" value="176x204" />
     <capability name="CanvasSize" value="176x182" />
@@ -6706,6 +6713,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="FullCanvasSize" value="176x204" />
     <capability name="CanvasSize" value="176x182" />
@@ -6811,6 +6819,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="PPSM 3.2" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="240x320" />
     <capability name="BitsPerPixel" value="2" />
     <capability name="HeapSize" value="646 kb" />
@@ -6830,6 +6839,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Synergy" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="176x220" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="512 kb" />
@@ -6853,6 +6863,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Synergy" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="128x100" />
     <capability name="BitsPerPixel" value="2" />
     <capability name="HeapSize" value="350 kb" />
@@ -6895,6 +6906,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Synergy" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="120x160" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="512 kb" />
@@ -6916,6 +6928,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering</features>
     <capability name="OS" value="Motorola" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="120x160" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="1 mb" />
@@ -6938,6 +6951,7 @@ These namespaces/schemas will be used soon.
     <features>doubleBuffering, hasCamera</features>
     <capability name="OS" value="Synergy" />
     <capability name="JavaPlatform" value="MIDP/1.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="ScreenSize" value="120x160" />
     <capability name="BitsPerPixel" value="12" />
     <capability name="HeapSize" value="512 kb" />
@@ -21875,11 +21889,13 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>Motorola/i415</identifier>
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="wap.userAgent" value="MOT-i415" />
   </device>
   <device>
     <identifier>Motorola/i450</identifier>
     <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="wap.userAgent" value="MOT-i450" />
   </device>
   <device>
