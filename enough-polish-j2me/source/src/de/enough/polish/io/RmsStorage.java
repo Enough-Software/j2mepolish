@@ -507,7 +507,8 @@ public class RmsStorage
 	
 	/**
 	 * Retrieves the used size of the underlying record store
-	 * @return the used size (in bytes), -1 when an error occurred
+	 * @return the used size (in bytes), -1 when an error occurred or when not using a master recordstore
+	 * @see #getSize(String)
 	 */
 	public int getSize(){
 		if (this.masterRecordStore == null) {
@@ -523,8 +524,31 @@ public class RmsStorage
 	}
 	
 	/**
-	 * Retrieves the available size of the underlying record store
-	 * @return the available size (in bytes), -1 when an error occurred
+	 * Retrieves the used size of the underlying record store
+	 * @return the used size (in bytes), -1 when an error occurred
+	 */
+	public int getSize(String name){
+		if (this.masterRecordStore != null) {
+			return getSize();
+		}
+		try {
+			RecordStore store = RecordStore.openRecordStore(name, false);
+			int size = store.getSize();
+			store.closeRecordStore();
+			return size;
+		} catch (RecordStoreException e) {
+			//#debug warn
+			System.out.println("Unable to retrieve size of recordstore " + name + e );
+		}
+		return -1;
+	}
+
+	
+	/**
+	 * Retrieves the available size of the underlying record store.
+	 * When not using a master record store, please use getSizeAvailable(String name).
+	 * @return the available size (in bytes), -1 when an error occurred or when no master recordstore is being used
+	 * @see #getSizeAvailable(String)
 	 */
 	public int getSizeAvailable(){
 		if (this.masterRecordStore == null) {
@@ -538,7 +562,27 @@ public class RmsStorage
 		}
 		return -1;
 	}
-	
+
+	/**
+	 * Retrieves the available size of the underlying record store.
+	 * @return the available size (in bytes), -1 when an error occurred
+	 */
+	public int getSizeAvailable(String name){
+		if (this.masterRecordStore != null) {
+			return getSizeAvailable();
+		}
+		try {
+			RecordStore store = RecordStore.openRecordStore(name, false);
+			int sizeAvailable = store.getSizeAvailable();
+			store.closeRecordStore();
+			return sizeAvailable;
+		} catch (RecordStoreException e) {
+			//#debug warn
+			System.out.println("Unable to retrieve available recordstore size of " + name + e );
+		}
+		return -1;
+	}
+
 	private void ensureOpen() throws IOException {
 		if (this.isClosed && this.masterRecordStore != null) {
 			try {
