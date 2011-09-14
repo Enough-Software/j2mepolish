@@ -44,11 +44,7 @@ import de.enough.polish.util.StringUtil;
  * <p>Creates the stub directories for the activity and
  * copies the source files to the stubs</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008 - 2011</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ActivityPreCompiler extends PreCompiler
@@ -72,7 +68,7 @@ implements OutputFilter
 	public void preCompile(File classesDir, Device device)
 			throws BuildException {
 		Environment env = device.getEnvironment();
-		ArrayList arguments;
+		ArrayList<String> arguments;
 		String name;
 		String android = ArgumentHelper.android(env);
 		if (android != null) {
@@ -104,7 +100,7 @@ implements OutputFilter
 					message += " and error message " + this.errorMessage;
 					if (this.errorMessage.indexOf(" id ") != -1) {
 						message += " Used ID was [" + ArgumentHelper.getTargetId(env) + "].";
-						String[] args = new String[]{ (String)arguments.get(0), "list", "targets" };
+						String[] args = new String[]{ arguments.get(0), "list", "targets" };
 						try {
 							ProcessUtil.exec( args, name + ": ", true, null, directory );
 						} catch (Throwable t) {
@@ -149,7 +145,7 @@ implements OutputFilter
 		FileUtil.writeTextFile( new File(src + File.separator + midlet + ".java"), code);
 	}
 
-	private ArrayList getAndroidArguments(String executable, Environment env) {
+	private ArrayList<String> getAndroidArguments(String executable, Environment env) {
 		String[] midlets = env.getBuildSetting().getMidletClassNames(env);
 		String midlet = midlets[0];
 		String packageName = "";
@@ -160,7 +156,7 @@ implements OutputFilter
 		}
 
 		String base = ArgumentHelper.getActivity(env);
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		if ("android".equals(executable)) {
 			arguments.add("update");
@@ -186,12 +182,12 @@ implements OutputFilter
 	 * @param env the environment
 	 * @return the ArrayList
 	 */
-	static ArrayList getActivityCreatorArguments(String executable, Environment env)
+	static ArrayList<String> getActivityCreatorArguments(String executable, Environment env)
 	{
 		String[] midlets = env.getBuildSetting().getMidletClassNames(env);
 		String midlet = midlets[0] + "Activity";
 		String base = ArgumentHelper.getActivity(env);
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		arguments.add("--out");
 		arguments.add(base);

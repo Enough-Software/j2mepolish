@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ import de.enough.polish.util.ProcessUtil;
 /**
  * <p>Creates the R.java and Manifest.java</p>
  *
- * <p>Copyright Enough Software 2008-2011</p>
+ * <p>Copyright Enough Software 2008 - 2011</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ResourcesPreCompiler extends PreCompiler {
@@ -206,7 +205,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 				applicationElement.setAttribute("icon","@raw"+cleanedIconUrl, namespace);
 				activityElement.setAttribute("icon","@raw"+cleanedIconUrl, namespace);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.err.println("Unable to copy MIDlet-Icon \"" + iconUrl + "\": " + e);
 				e.printStackTrace();
 			}
 		} else {
@@ -229,16 +228,18 @@ public class ResourcesPreCompiler extends PreCompiler {
 
 		
 		// add default supports-screens element:
-		Element supportsScreensElement = new Element("supports-screens");
-		supportsScreensElement.setAttribute("anyDensity", "true", namespace);
-		supportsScreensElement.setAttribute("resizeable", "true", namespace);
-		supportsScreensElement.setAttribute("smallScreens", "true", namespace);
-		supportsScreensElement.setAttribute("normalScreens", "true", namespace);
-		supportsScreensElement.setAttribute("largeScreens", "true", namespace);
-		if (env.isConditionFulfilled("polish.JavaPackage >= Android/2.3")) {
-			supportsScreensElement.setAttribute("xlargeScreens", "true", namespace);
+		if (!env.hasSymbol("android.skipSupportsScreens")) {
+			Element supportsScreensElement = new Element("supports-screens");
+			supportsScreensElement.setAttribute("anyDensity", "true", namespace);
+			supportsScreensElement.setAttribute("resizeable", "true", namespace);
+			supportsScreensElement.setAttribute("smallScreens", "true", namespace);
+			supportsScreensElement.setAttribute("normalScreens", "true", namespace);
+			supportsScreensElement.setAttribute("largeScreens", "true", namespace);
+			if (env.isConditionFulfilled("polish.JavaPackage >= Android/2.3")) {
+				supportsScreensElement.setAttribute("xlargeScreens", "true", namespace);
+			}
+			rootElement.addContent(supportsScreensElement);
 		}
-		rootElement.addContent(supportsScreensElement);
 		
 		// check if further elements should be added:
 		String furtherManifestPath = env.getVariable("android.manifest");

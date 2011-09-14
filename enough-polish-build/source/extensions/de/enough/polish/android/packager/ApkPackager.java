@@ -41,11 +41,7 @@ import de.enough.polish.util.ProcessUtil;
 /**
  * <p>Creates an .apk package</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008 - 2011</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ApkPackager extends Packager{
@@ -63,7 +59,7 @@ public class ApkPackager extends Packager{
 		if (pathToApkbuilder != null) {
 			SignSetting signSetting = env.getBuildSetting().getSignSetting();
 			boolean signApplication = signSetting != null && signSetting.isActive(env);
-			ArrayList arguments = getDefaultArguments(pathToApkbuilder,env,signApplication);
+			ArrayList<String> arguments = getDefaultArguments(pathToApkbuilder,env,signApplication);
 			String tools = ArgumentHelper.getPlatformTools(env);
 			File directory = new File(tools);
 
@@ -100,9 +96,9 @@ public class ApkPackager extends Packager{
 	 * @param signApplication true if the application should be signed with a real signature. The application will not be signed with the default debug signature.
 	 * @return the ArrayList
 	 */
-	static ArrayList getDefaultArguments(String executable, Environment env, boolean signApplication)
+	static ArrayList<String> getDefaultArguments(String executable, Environment env, boolean signApplication)
 	{
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		arguments.add(ArgumentHelper.getPackage(extension,env));
 		if(signApplication) {
