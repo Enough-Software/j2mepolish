@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
@@ -51,8 +53,17 @@ import javax.microedition.io.HttpConnection;
  * redirects can be tuned by setting the preprocessing variable
  * <code>polish.Browser.MaxRedirects</code> to some integer value.
  * </p>
- * 
+ * <p>
+ * You can specify a timeout with the  <code>RedirectHttpConnection( String url, int timeout)</code> or <code>RedirectHttpConnection( String url, Hashmap requestProperties, int timeout)</code> constructor. On
+ * MIDP and BlackBerry devices this will result in an additional thread being launched that waits for the specific time and then closes the connection
+ * in case it has so far not succeeded.
+ * </p>
+ * <p>
+ * In case you want to do POST requests, you can also use the PostRedirectHttpConnection!
+ * </p>
+ *  
  * @see HttpConnection
+ * @see PostRedirectHttpConnection
  */
 public class RedirectHttpConnection implements HttpConnection
 {
@@ -71,6 +82,8 @@ public class RedirectHttpConnection implements HttpConnection
 	private InputStream inputStream;
 	private HttpConnection currentHttpConnection;
 	private boolean limitContentLengthParams;
+	private int timeout;
+	private boolean isConnectionEstablished;
 
 	/**
 	 * Creates a new http connection that understands redirects.
@@ -80,7 +93,19 @@ public class RedirectHttpConnection implements HttpConnection
 	 */
 	public RedirectHttpConnection(String url) throws IOException
 	{
-		this(url, null);
+		this(url, null, 0);
+	}
+
+	/**
+	 * Creates a new http connection that understands redirects.
+	 * 
+	 * @param url  the url to connect to
+	 * @param timeout the timeout for the HTTP connection (both read timeout and connect timeout), use 0 for not specifying a timeout.
+	 * @throws IOException when Connector.open() fails
+	 */
+	public RedirectHttpConnection(String url, int timeout) throws IOException
+	{
+		this(url, null, timeout);
 	}
 
 	/**
@@ -93,9 +118,24 @@ public class RedirectHttpConnection implements HttpConnection
 	public RedirectHttpConnection(String url, HashMap requestProperties)
 	throws IOException
 	{
+		this(url, requestProperties, 0);
+	}
+	
+	/**
+	 * Creates a new http connection that understands redirects.
+	 * 
+	 * @param url  the url to connect to
+	 * @param requestProperties the request properties to be set for each http request
+	 * @param timeout the timeout for the HTTP connection (both read timeout and connect timeout), use 0 for not specifying a timeout.
+	 * @throws IOException when Connector.open() fails
+	 */
+	public RedirectHttpConnection(String url, HashMap requestProperties, int timeout)
+	throws IOException
+	{
 		this.originalUrl = url;
 		this.requestProperties = new HashMap();
-
+		this.timeout = timeout;
+		
 		if (requestProperties != null) {
 			Object[] keys = requestProperties.keys();
 			for (int i = 0; i < keys.length; i++)
@@ -105,7 +145,14 @@ public class RedirectHttpConnection implements HttpConnection
 				setRequestProperty(key, value);
 			}
 		}
+		
 		this.currentHttpConnection = (HttpConnection) Connector.open(url, Connector.READ_WRITE, true);
+		//#if polish.android
+			if (timeout > 0) {
+				//# ((de.enough.polish.android.io.HttpConnectionImpl) this.currentHttpConnection).setTimeout( timeout );
+			}
+		//#endif
+		
 	}
 
 	/**
@@ -127,11 +174,22 @@ public class RedirectHttpConnection implements HttpConnection
 
 		int redirects = 0;
 		String url = this.originalUrl;
+		//#if !polish.android
+			if (this.timeout != 0) {
+				TimeoutTask task = new TimeoutTask(this.timeout);
+				task.start();
+			}
+		//#endif
 
 		while (true)
 		{
 			if (tmpHttpConnection == null) {
 				tmpHttpConnection = (HttpConnection) Connector.open(url, Connector.READ_WRITE, true);
+				//#if polish.android
+					if (this.timeout > 0) {
+						//# ((de.enough.polish.android.io.HttpConnectionImpl) this.currentHttpConnection).setTimeout( timeout );
+					}
+				//#endif
 			}
 			tmpHttpConnection.setRequestMethod(this.requestMethod);
 			if (this.requestProperties != null)
@@ -203,6 +261,11 @@ public class RedirectHttpConnection implements HttpConnection
 
 		this.httpConnection = tmpHttpConnection;
 		this.currentHttpConnection = tmpHttpConnection;
+		//#if !polish.android
+			if (this.timeout > 0) {
+				tmpIn = new WrappedInputStream(tmpIn);
+			}
+		//#endif
 		this.inputStream = tmpIn;
 	}
 	
@@ -403,7 +466,9 @@ public class RedirectHttpConnection implements HttpConnection
 	public int getResponseCode() throws IOException
 	{
 		ensureConnectionCreated();
-		return this.httpConnection.getResponseCode();
+		int responseCode = this.httpConnection.getResponseCode();
+		this.isConnectionEstablished = true;
+		return responseCode;
 	}
 
 	/*
@@ -414,7 +479,9 @@ public class RedirectHttpConnection implements HttpConnection
 	public String getResponseMessage() throws IOException
 	{
 		ensureConnectionCreated();
-		return this.httpConnection.getResponseMessage();
+		String responseMessage = this.httpConnection.getResponseMessage();
+		this.isConnectionEstablished = true;
+		return responseMessage;
 	}
 
 	/*
@@ -603,4 +670,77 @@ public class RedirectHttpConnection implements HttpConnection
 
 		return this.byteArrayOutputStream;
 	}
+	
+	private class WrappedInputStream extends InputStream {
+
+		private final InputStream sourceStream;
+		public WrappedInputStream( InputStream sourceStream ) {
+			this.sourceStream = sourceStream;
+		}
+
+		public int available() throws IOException {
+			return this.sourceStream.available();
+		}
+
+		public void close() throws IOException {
+			this.sourceStream.close();
+		}
+
+		public void mark(int pos) {
+			this.sourceStream.mark(pos);
+		}
+
+		public boolean markSupported() {
+			return this.sourceStream.markSupported();
+		}
+		
+		public int read() throws IOException {
+			int result = this.sourceStream.read();
+			RedirectHttpConnection.this.isConnectionEstablished = true;
+			return result;
+		}
+
+		public int read(byte[] buffer) throws IOException {
+			int len = this.sourceStream.read(buffer);
+			RedirectHttpConnection.this.isConnectionEstablished = true;
+			return len;
+		}
+
+		public int read(byte[] buffer, int start, int end) throws IOException {
+			int len = this.sourceStream.read(buffer, start, end);
+			RedirectHttpConnection.this.isConnectionEstablished = true;
+			return len;
+		}
+
+		public void reset() throws IOException {
+			this.sourceStream.reset();
+		}
+
+		public long skip(long len) throws IOException {
+			return this.sourceStream.skip(len);
+		}
+		
+	}
+	
+	private class TimeoutTask extends Thread {
+		private final int timeout;
+		public TimeoutTask(int timeout) {
+			this.timeout = timeout;
+		}
+		public void run() {
+			try {
+				Thread.sleep(this.timeout);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+			if 	(!RedirectHttpConnection.this.isConnectionEstablished) {
+				try {
+					close();
+				} catch (Exception e) {
+					//#debug error
+					System.out.println("TimeoutTask: unable to close connection: " + e);
+				}
+			}
+		}
+	};
 }

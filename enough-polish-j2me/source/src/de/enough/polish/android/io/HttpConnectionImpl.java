@@ -10,8 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
-class HttpConnectionImpl implements HttpConnection {
+/**
+ * Implements a HttpConnection, not for usage outside of this package unless you want to specify a timeout.
+ * 
+ * Copyright Enough Software 2008 - 2011 
+ * @author Richard Nkrumah
+ */
+public class HttpConnectionImpl implements HttpConnection {
 	
 	private static final int STATE_SETUP = 0;
 	
@@ -26,6 +31,8 @@ class HttpConnectionImpl implements HttpConnection {
 	private HttpURLConnection connection = null;
 	private InputStream input = null;
 	private OutputStream output = null;
+
+	private int timeout;
 
 		
 	protected HttpConnectionImpl(String url) {
@@ -54,12 +61,45 @@ class HttpConnectionImpl implements HttpConnection {
 		}
 	}
 	
+	public void setTimeout( int timeout ) {
+		this.timeout = timeout;
+	}
+	
 	public void close() throws IOException {
+		Exception exception = null;
+		if (this.connection != null) {
+			try {
+				this.connection.disconnect();
+			} catch (Exception e) {
+				exception = e;
+				//#debug error
+				exception.printStackTrace();
+			}
+		}
 		if(this.input != null) {
-			this.input.close();
+			try {
+				this.input.close();
+			} catch (Exception e) {
+				exception = e;
+				//#debug error
+				exception.printStackTrace();
+			}
 		}
 		if(this.output != null) {
-			this.output.close();
+			try {
+				this.output.close();
+			} catch (Exception e) {
+				exception = e;
+				//#debug error
+				exception.printStackTrace();
+			}
+		}
+		if (exception instanceof IOException) {
+			throw (IOException) exception;
+		} else if (exception != null) {
+			//#debug error
+			exception.printStackTrace();
+			throw new IOException(exception.toString());
 		}
 	}
 
@@ -190,7 +230,8 @@ class HttpConnectionImpl implements HttpConnection {
 	
 	public int getResponseCode()  throws IOException {
 		connect();
-		return this.connection.getResponseCode();
+		int responseCode = this.connection.getResponseCode();
+		return responseCode;
 	}
 	
 	public String getResponseMessage() throws IOException {
@@ -237,7 +278,14 @@ class HttpConnectionImpl implements HttpConnection {
 		} else {
 			this.state = STATE_CONNECTED;
 		}
+	//	//#if polish.android.http.keepAlive != true
+	//		//#= System.setProperty("http.keepAlive", "false");
+	//	//#endif
 		this.connection = (HttpURLConnection)this.url.openConnection();
+		if (this.timeout > 0) {
+			this.connection.setConnectTimeout(this.timeout);
+			this.connection.setReadTimeout(this.timeout);
+		}
 		this.connection.setRequestMethod(this.requestMethod);
 	}
 	

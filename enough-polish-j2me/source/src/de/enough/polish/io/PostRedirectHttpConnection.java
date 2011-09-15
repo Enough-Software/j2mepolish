@@ -45,8 +45,13 @@ import de.enough.polish.util.TextUtil;
  * redirects can be tuned by setting the preprocessing variable
  * <code>polish.Browser.MaxRedirects</code> to some integer value.
  * </p>
+ * <p>
+ * You can specify a timeout with the  <code>PostRedirectHttpConnection( String url, int timeout)</code> or <code>PostRedirectHttpConnection( String url, Hashmap requestProperties, int timeout)</code> constructor. On
+ * MIDP and BlackBerry devices this will result in an additional thread being launched that waits for the specific time and then closes the connection
+ * in case it has so far not succeeded.
+ * </p>
  * 
- * @see HttpConnection
+ * @see HttpRedirectConnection
  */
 public class PostRedirectHttpConnection extends RedirectHttpConnection
 {
@@ -61,7 +66,18 @@ public class PostRedirectHttpConnection extends RedirectHttpConnection
 	 */
 	public PostRedirectHttpConnection(String url) throws IOException
 	{
-		this(url, null);
+		this(url, null, 0);
+	}
+
+	/**
+	 * Creates a new http connection that understands redirects.
+	 * 
+	 * @param url  the url to connect to
+	 * @throws IOException when Connector.open() fails
+	 */
+	public PostRedirectHttpConnection(String url, int timeout) throws IOException
+	{
+		this(url, null, timeout);
 	}
 
 	/**
@@ -74,7 +90,20 @@ public class PostRedirectHttpConnection extends RedirectHttpConnection
 	public PostRedirectHttpConnection(String url, HashMap requestProperties)
 	throws IOException
 	{
-		super( url, requestProperties );
+		this( url, requestProperties, 0 );
+	}
+	
+	/**
+	 * Creates a new http connection that understands redirects.
+	 * 
+	 * @param url  the url to connect to
+	 * @param requestProperties the request properties to be set for each http request
+	 * @throws IOException when Connector.open() fails
+	 */
+	public PostRedirectHttpConnection(String url, HashMap requestProperties, int timeout)
+	throws IOException
+	{
+		super( url, requestProperties, timeout );
 		setRequestMethod( HttpConnection.POST );
 		setRequestProperty("Content-type", "application/x-www-form-urlencoded");
 		this.body = new StringBuffer();
