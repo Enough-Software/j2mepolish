@@ -6334,6 +6334,9 @@ public abstract class Item implements UiElement, Animatable
 								originalBlue = (255 * blueBlack) / (blueBlack - blueWhite + 255);
 								originalAlpha = blueBlack - blueWhite + 255;
 							}
+							if ( originalAlpha > 255 ) {
+								originalAlpha = 255;
+							}
 							lastPixelWhite = pixelWhite;
 							lastPixelBlack = pixelBlack;
 							lastPixelResult = ((originalAlpha << 24) | (originalRed << 16) | (originalGreen << 8) | originalBlue) & rgbOpacity; 
