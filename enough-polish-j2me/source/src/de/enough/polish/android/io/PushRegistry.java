@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 
 /**
  * The <code>PushRegistry</code> maintains a list of inbound
@@ -663,7 +664,10 @@ public class PushRegistry extends BroadcastReceiver
 		intent.putExtra( EXTRA_MIDLET_NAME, midlet);
 		PendingIntent sender = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(MidletBridge.ALARM_SERVICE);
+		//context.setSuicideOnExit(false);
 		if (time != 0) {
+			//#debug info
+			System.out.println("Registering alarm for pid: " + Process.myPid() + ", time=" + time);
 			alarmManager.set(AlarmManager.RTC_WAKEUP, time, sender);
 		} else {
 			alarmManager.cancel(sender);
@@ -680,7 +684,7 @@ public class PushRegistry extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent) {
 		try {
 			//#debug info
-			System.out.println("Received intent " + intent);
+			System.out.println("PushRegistry.onReceive(): Received intent " + intent);
 			Bundle bundle = intent.getExtras();
 			String midletClassName = bundle.getString(EXTRA_MIDLET_NAME);
 			Class activityClass;
@@ -692,7 +696,7 @@ public class PushRegistry extends BroadcastReceiver
 			//#debug
 			System.out.println("loaded activity class " + activityClass.getName());
 			Intent newIntent = new Intent(context, activityClass);
-			newIntent.putExtra(EXTRA_MIDLET_NAME, midletClassName);
+			//newIntent.putExtra(EXTRA_MIDLET_NAME, midletClassName);
 			newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(newIntent);
 		} catch (Exception e) {

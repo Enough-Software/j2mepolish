@@ -135,13 +135,14 @@ public class MidletBridge extends Activity {
 	 * Creates a new MIDlet Bridge
 	 */
 	public MidletBridge() {
-		instance = this;
+		if (instance == null) {
+			instance = this;
+		}
 		this.appProperties = new HashMap<String,String>();
 		//#= this.appProperties.put("MIDlet-Name", "${MIDlet-Name}");
 		//#= this.appProperties.put("MIDlet-Vendor", "${MIDlet-Vendor}");
 		//#= this.appProperties.put("MIDlet-Version", "${MIDlet-Version}");
 		//#= this.appProperties.put("microedition.pim.version", "1.0");
-		
 	}
 	
 	public void openOptionsMenu() {
@@ -158,7 +159,12 @@ public class MidletBridge extends Activity {
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	protected void onCreate(Bundle icicle) {
+		//#debug
+		System.out.println("MidletBridge.onCreate(...) for " + this +  ", Process.pid: " + Process.myPid() + ", isTaskRoot=" + isTaskRoot());
 		super.onCreate(icicle);
+		if (!isTaskRoot()) {
+			return;
+		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//#if polish.android.hideStatusBar
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -311,7 +317,7 @@ public class MidletBridge extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// #debug
+		//#debug
 		System.out.println("Config changed:"+newConfig);
 		
 		Locale locale = newConfig.locale;
@@ -345,16 +351,19 @@ public class MidletBridge extends Activity {
 	
 	protected void onPause() {
 		//#debug
-		System.out.println("onPause().");
+		System.out.println("MidletBridge.onPause() for " + this);
+		super.onPause();
+		if (!isTaskRoot()) {
+			return;
+		}
 		try {
 			hideSoftKeyboard();
 			midlet.pauseApp();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		super.onPause();
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -364,7 +373,7 @@ public class MidletBridge extends Activity {
 	
 	protected void onRestart() {
 		//#debug
-		System.out.println("onRestart().");
+		System.out.println("MidletBridge.onRestart() for " + this);
 		super.onRestart();
 	}
 
@@ -376,12 +385,16 @@ public class MidletBridge extends Activity {
 	
 	protected void onResume() {
 		//#debug
-		System.out.println("onResume().");
+		System.out.println("MidletBridge.onResume() for " + this);
 		super.onResume();
+		if (!isTaskRoot()) {
+			finish();
+			return;
+		}
 		
 		AndroidDisplay display = AndroidDisplay.getDisplay(midlet);
 		if(display.getParent() == null) {
-		setContentView(display);
+			setContentView(display);
 		}
 		// This should allow to control the audio volume with the volume keys on the handset when the application has focus.
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -392,14 +405,14 @@ public class MidletBridge extends Activity {
 			midlet.startApp();
 		} catch (Exception e) {
 			//#debug fatal
-			System.out.println("starApp() failed: " + e);
+			System.out.println("startApp() failed: " + e);
 			//TODO: add fatal error handling here, e.g. by displaying system error message
 		}
 	}
 
 	protected void onStart() {
 		//#debug
-		System.out.println("onStart().");
+		System.out.println("MidletBridge.onStart() for " + this);
 		super.onStart();
 		//Debug.startMethodTracing("skobbler");
 		// on resume will be called directly afterwards...
@@ -420,7 +433,11 @@ public class MidletBridge extends Activity {
 	
 	protected void onStop() {
 		//#debug
-		System.out.println("onStop().");
+		System.out.println("MidletBridge.onStop() for " + this);
+		super.onStop();
+		if (!isTaskRoot()) {
+			return;
+		}
 		//#if polish.javaplatform >= Android/1.5
 			hideSoftKeyboard();
 		//#endif
@@ -428,7 +445,6 @@ public class MidletBridge extends Activity {
 		midlet.pauseApp();
 		// Release the wake lock if it was acquired.
 		backlightRelease();
-		super.onStop();
 	}
 
 	/*
@@ -439,12 +455,15 @@ public class MidletBridge extends Activity {
 	
 	protected void onDestroy() {
 		//#debug
-		System.out.println("onDestroy().");
+		System.out.println("onDestroy() for " + this);
+		//Debug.stopMethodTracing();
+		super.onDestroy();
+		if (!isTaskRoot()) {
+			return;
+		}
 		//#if polish.javaplatform >= Android/1.5
 			hideSoftKeyboard();
 		//#endif
-		//Debug.stopMethodTracing();
-		super.onDestroy();
 		//TODO: Use listener pattern to register and unregister Lifecycle listeners.
 //		deregisterSqlDao();
 		AndroidDisplay display = AndroidDisplay.getDisplay(midlet);
