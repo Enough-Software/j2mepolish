@@ -299,6 +299,46 @@ implements CommandListener
 	{
 		this( title, null, null, (AlertType) null, style );
 	}
+	
+	/**
+	 * Constructs a new, empty <code>Alert</code> object with the given title. 
+	 * If <code>null</code> is
+	 * passed, the <code>Alert</code> will have no title.  Calling
+	 * this constructor is
+	 * equivalent to calling
+	 * 
+	 * <pre>
+	 * <code>Alert(title, null, null, null)</code>
+	 * </pre>
+	 * 
+	 * @param title the title string, or null
+	 * @see #Alert(String, String, Image, AlertType)
+	 */
+	public Alert( String title, String text)
+	{
+		//#style alert, default
+		this( title, text, null, (AlertType) null );
+	}
+
+	/**
+	 * Constructs a new, empty <code>Alert</code> object with the given title. 
+	 * If <code>null</code> is
+	 * passed, the <code>Alert</code> will have no title.  Calling
+	 * this constructor is
+	 * equivalent to calling
+	 * 
+	 * <pre>
+	 * <code>Alert(title, null, null, null)</code>
+	 * </pre>
+	 * 
+	 * @param title the title string, or null
+	 * @param style the style of this Alert
+	 * @see #Alert(String, String, Image, AlertType)
+	 */
+	public Alert( String title, String text, Style style )
+	{
+		this( title, text, null, (AlertType) null, style );
+	}
 
 	//#if polish.LibraryBuild
 	/**
