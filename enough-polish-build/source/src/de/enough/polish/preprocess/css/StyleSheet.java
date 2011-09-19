@@ -48,7 +48,7 @@ import java.util.Set;
  */
 public class StyleSheet {
 	
-	private static final HashMap KEYWORDS = new HashMap();
+	private static final HashMap<String,Boolean> KEYWORDS = new HashMap<String,Boolean>();
 	static {
 		KEYWORDS.put("font", Boolean.TRUE );
 		KEYWORDS.put("background", Boolean.TRUE );
@@ -67,7 +67,7 @@ public class StyleSheet {
 		KEYWORDS.put("transient", Boolean.TRUE );
 	}
 	// some CSS classes which are NOT dynamic classes (like p, a, or form) 
-	private static final HashMap PSEUDO_CLASSES = new HashMap();
+	private static final HashMap<String,Boolean> PSEUDO_CLASSES = new HashMap<String,Boolean>();
 	static {
 		PSEUDO_CLASSES.put("focused", Boolean.TRUE );
 		PSEUDO_CLASSES.put("title", Boolean.TRUE );
@@ -110,34 +110,34 @@ public class StyleSheet {
 			+ "}"
 			);
 
-	private HashMap stylesByName;
-	private ArrayList styles;
+	private HashMap<String, Style> stylesByName;
+	private ArrayList<Style> styles;
 	private Map<String, AttributesGroup> backgrounds;
 	private Map<String, AttributesGroup> borders;
 	private Map<String, AttributesGroup> fonts;
 	private Map<String, AttributesGroup> colors;
-	private HashMap usedStyles;
+	private HashMap<String, Boolean> usedStyles;
 	
 	private boolean isInitialised;
 	private long lastModified;
 
 	private boolean containsDynamicStyles;
 
-	private HashMap cssPreprocessingSymbols;
-	private HashMap cssAttributes;
-	private Map attributesIds;
+	private HashMap<String,Boolean> cssPreprocessingSymbols;
+	private HashMap<String,Boolean> cssAttributes;
+	private Map<String,Integer> attributesIds;
 
 	private String mediaQueryCondition;
 
-	private ArrayList mediaQueries;
+	private ArrayList<StyleSheet> mediaQueries;
 	
 	/**
 	 * Creates a new empty style sheet
 	 */
 	public StyleSheet() {
-		this.stylesByName = new HashMap();
-		this.usedStyles = new HashMap();
-		this.styles = new ArrayList();
+		this.stylesByName = new HashMap<String, Style>();
+		this.usedStyles = new HashMap<String, Boolean>();
+		this.styles = new ArrayList<Style>();
 		this.backgrounds = new HashMap<String, AttributesGroup>();
 		this.borders = new HashMap<String, AttributesGroup>();
 		this.fonts = new HashMap<String, AttributesGroup>();
@@ -162,13 +162,13 @@ public class StyleSheet {
 	 * @param parent the parent style sheet
 	 */
 	private void copyStyles( StyleSheet parent ) {
-		HashMap source = parent.stylesByName;
-		HashMap target = this.stylesByName;
-		Set keys = source.keySet();
-		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			Object key = iter.next();
-			Style original = (Style) source.get( key );
-			Style existing = (Style) target.get( key );
+		HashMap<String,Style> source = parent.stylesByName;
+		HashMap<String,Style> target = this.stylesByName;
+		Set<String> keys = source.keySet();
+		for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+			String key = iter.next();
+			Style original = source.get( key );
+			Style existing = target.get( key );
 			if (existing == null) {
 				Style copy = new Style( original );
 				target.put(key, copy );
@@ -268,9 +268,9 @@ public class StyleSheet {
 	 * @return an array of styles, can be empty but not null 
 	 */
 	public Style[] getUsedAndReferencedStyles(final String[] defaultStyleNames, CssAttributesManager attributesManager ) {
-		final ArrayList stylesList = new ArrayList();
-		final ArrayList finalStylesList = new ArrayList();
-		final HashMap referencedStylesByName = new HashMap();
+		final ArrayList<Style> stylesList = new ArrayList<Style>();
+		final ArrayList<Style> finalStylesList = new ArrayList<Style>();
+		final HashMap<String,Style> referencedStylesByName = new HashMap<String,Style>();
 		
 		// fill internal style list:
 		// used styles:
@@ -315,8 +315,8 @@ public class StyleSheet {
 		}
 		
 		// add all referenced styles to stylesList:
-		Collection referencedStyles = referencedStylesByName.values();
-		for (Iterator iter = referencedStyles.iterator(); iter.hasNext();) {
+		Collection<Style> referencedStyles = referencedStylesByName.values();
+		for (Iterator<Style> iter = referencedStyles.iterator(); iter.hasNext();) {
 			Style style = (Style) iter.next();
 			if (!stylesList.contains(style)) {
 				stylesList.add( style );
@@ -349,7 +349,7 @@ public class StyleSheet {
 		//System.out.println("3. Batch");
 		// third batch: add styles which are referenced and do have references themselves:
 		tmpStyles = (Style[]) stylesList.toArray( new Style[ stylesList.size() ]);
-		ArrayList sortedList = new ArrayList();
+		ArrayList<Style> sortedList = new ArrayList<Style>();
 		for (int i = 0; i < tmpStyles.length; i++) {
 			Style style = tmpStyles[i];
 			if (style.isReferenced()) {
@@ -384,7 +384,7 @@ public class StyleSheet {
 	 * @param storedStyles list of already stored styles
 	 * @param unsortedStyles list with unsorted styles which have references to other styles.
 	 */
-	private void sortReferencedStyles(ArrayList storedStyles, ArrayList unsortedStyles) {
+	private void sortReferencedStyles(ArrayList<Style> storedStyles, ArrayList<Style> unsortedStyles) {
 		// try to sort for max. unsortedStyles.size() times: 
 		for (int i = unsortedStyles.size() - 1; i >= 0; i-- ) {
 			Style[] unsortStyles = (Style[]) unsortedStyles.toArray( new Style[unsortedStyles.size()] );
@@ -431,7 +431,7 @@ public class StyleSheet {
 	 * @param style the parent style
 	 * @param referencedStylesByName a map in which referenced styles are marked
 	 */
-	private void markReferences(Style style, HashMap referencedStylesByName, CssAttributesManager attributesManager) {
+	private void markReferences(Style style, HashMap<String,Style> referencedStylesByName, CssAttributesManager attributesManager) {
 		String[] references = style.getReferencedStyleNames(attributesManager);
 		for (int i = 0; i < references.length; i++) {
 			String referencedStyleName = references[i].toLowerCase();
@@ -635,11 +635,9 @@ public class StyleSheet {
 		String[] groups = cssBlock.getGroupNames();
 		for (int i = 0; i < groups.length; i++) {
 			String group = groups[i];
-			HashMap map = cssBlock.getGroupDeclarations(group);
+			AttributesGroup map = cssBlock.getGroupDeclarations(group);
 			System.out.println("style " + group + " has " + map.size() + " attributes ");
 		}
-		// TODO Besitzer implement addMediaQuery
-		
 	}
 
 	/**
@@ -712,7 +710,7 @@ public class StyleSheet {
 		{
 			addCssBlock(DEFAULT_STYLE);
 		}
-		HashSet set = new HashSet( 5 );
+		HashSet<String> set = new HashSet<String>( 5 );
 		Style[] allStyles = getAllStyles();
 		for (int i = 0; i < allStyles.length; i++)
 		{
@@ -723,7 +721,7 @@ public class StyleSheet {
 	}
 
 
-	private void inheritDo( Style style, HashSet set)
+	private void inheritDo( Style style, HashSet<String> set)
 		{
 		String parentName = style.getParentName();
 		String currentName = style.getSelector();
@@ -778,7 +776,7 @@ public class StyleSheet {
 	 * @throws BuildException when a circle definition is found.
 	 */
 	private void checkInheritanceHierarchy(Style style) {
-		HashMap parentNames = new HashMap( 5 );
+		HashMap<String,Boolean> parentNames = new HashMap<String,Boolean>( 5 );
 		//System.out.println("checking inheritance of style " + style.getSelector());
 		String originalSelector = style.getSelector();
 		String parentName = style.getParentName(); 
@@ -900,7 +898,7 @@ public class StyleSheet {
 	 * @return all dynamic styles.
 	 */
 	public Style[] getDynamicStyles() {
-		ArrayList dynamicStyles = new ArrayList();
+		ArrayList<Style> dynamicStyles = new ArrayList<Style>();
 		Style[] allStyles = getAllStyles();
 		for (int i = 0; i < allStyles.length; i++) {
 			Style style = allStyles[i];
@@ -920,11 +918,11 @@ public class StyleSheet {
 	 * @return a map containing all defined symbols as keys with each
 	 *        having a Boolean.TRUE as value.
 	 */
-	public HashMap getCssPreprocessingSymbols( Device device ) {
+	public HashMap<String,Boolean> getCssPreprocessingSymbols( Device device ) {
 		CssAttributesManager cssAttributesManager = CssAttributesManager.getInstance();
 		if (this.cssPreprocessingSymbols == null) {
-			HashMap symbols = new HashMap();
-			HashMap attributesByName = new HashMap();
+			HashMap<String,Boolean> symbols = new HashMap<String,Boolean>();
+			HashMap<String,Boolean> attributesByName = new HashMap<String,Boolean>();
 			if (this.mediaQueries != null) {
 				symbols.put("polish.css.mediaquery", Boolean.TRUE);
 			}
@@ -980,9 +978,9 @@ public class StyleSheet {
 	 * Retrieves all defined css attributes in a map.
 	 * 
 	 * @param device the current device
-	 * @return all defined css attributes in a map.
+	 * @return all defined css attributes in a <String,Boolean> map.
 	 */
-	public HashMap getCssAttributes( Device device ) {
+	public HashMap<String,Boolean> getCssAttributes( Device device ) {
 		if (this.cssAttributes == null) {
 			getCssPreprocessingSymbols( device );
 		}
@@ -1009,7 +1007,7 @@ public class StyleSheet {
 	 * 
 	 * @param idsByAttribute a HashMap containing all IDs
 	 */
-	public void setAttributesIds(Map idsByAttribute) {
+	public void setAttributesIds(Map<String,Integer> idsByAttribute) {
 		this.attributesIds = idsByAttribute;
 	}
 	
@@ -1029,7 +1027,7 @@ public class StyleSheet {
 			System.out.println("[" + key + "]=" + this.attributesIds.get( key ));
 		}
 		*/
-		Integer id = (Integer) this.attributesIds.get( name );
+		Integer id = this.attributesIds.get( name );
 		if (id == null) {
 			return -1;
 		} else {
@@ -1059,7 +1057,7 @@ public class StyleSheet {
 	 */
 	public void addMediaQuery(StyleSheet mediaQuery) {
 		if (this.mediaQueries == null) {
-			this.mediaQueries = new ArrayList();
+			this.mediaQueries = new ArrayList<StyleSheet>();
 		}
 		this.mediaQueries.add(mediaQuery);
 	}
