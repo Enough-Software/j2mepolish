@@ -138,7 +138,7 @@ public class Style implements Externalizable
 		for (int i = 0; i < keys.length; i++) {
 			this.attributeKeys[i] = (short)keys[i];
 			this.attributeValues[i] = values[i];
-			System.out.println(values[i]);
+			//System.out.println(values[i]);
 		}
 	}
 
