@@ -1147,21 +1147,26 @@ public class Display
 						//#endif
 						this.currentDisplayable = nextDisplayable;
 						screenAnimation.onShow( screenTransitionStyle, this, width, height, lastDisplayable, nextDisplayable, isTransitionForward );
-						
-						this.currentCanvas = screenAnimation;
-						this.currentDisplayable = screenAnimation;
-						
-						if (nextScreen != null) {
-							nextScreen._showNotify();
-							//#if !tmp.fullScreen
-								screenAnimation.setTitle( nextScreen.getTitle() );
-							//#endif
+						if (screenAnimation.abort) {
+							this.currentCanvas = screenAnimation;
+							this.currentDisplayable = screenAnimation;
+							setCurrent(nextDisplayable, false, null);
+						} else {
+							this.currentCanvas = screenAnimation;
+							this.currentDisplayable = screenAnimation;
+							
+							if (nextScreen != null) {
+								nextScreen._showNotify();
+								//#if !tmp.fullScreen
+									screenAnimation.setTitle( nextScreen.getTitle() );
+								//#endif
+							}
+							
+							if (lastDisplayable instanceof Canvas) {
+								((Canvas)lastDisplayable)._hideNotify();
+							}
+							screenAnimation._showNotify();
 						}
-						
-						if (lastDisplayable instanceof Canvas) {
-							((Canvas)lastDisplayable)._hideNotify();
-						}
-						screenAnimation._showNotify();
 						if ( !isShown() ) {
 							this.nativeDisplay.setCurrent( this );
 						} else {
