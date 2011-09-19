@@ -197,11 +197,13 @@ implements View.OnTouchListener
 	}
 
 	public void setCursorPosition(int pos) {
-		try {
-			setSelection(pos);
-		} catch (IndexOutOfBoundsException e) {
-			//#debug warn
-			System.out.println("unable to set cursor position" + e);
+		if (pos <= getText().length()) {
+			try {
+				setSelection(pos);
+			} catch (IndexOutOfBoundsException e) {
+				//#debug warn
+				System.out.println("unable to set cursor position" + e);
+			}
 		}
 	}
 	
