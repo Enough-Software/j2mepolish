@@ -150,6 +150,23 @@ media_feature
 	 </td>
 	</tr>
 	</table>
+	
+	<h2 id="replaceattributes">Replace specific attributes in all styles</h2>
+	<p>
+		You can exchange all attributes in one go by specifying the <code>_allOld</code> and <code>_allNew</code> styles.
+		Any attributes that are listed in the <code>_allOld</code> style will be searched for in all existing styles and then replaced
+		with the ones defined in <code>_allNew</code>. You can use this feature to globally decrease the font-size, for example:
+	</p>
+<pre>
+@media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {
+	_allOld {
+		font-size: large;
+	}
+	_allNew {
+		font-size: medium;
+	}
+} 
+</pre>
 
 	<h2 id="Samples">Media Query Examples</h2>
 	<p>
@@ -183,6 +200,16 @@ media_feature
 		}
 	}
 }
+/* HVGA resolution (portrait, landscape) */
+<b>@media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {</b>
+	.mainScreen {
+		background {
+			image: url( bg-hvga.png );
+			anchor: bottom | right;
+		}
+	}
+}
+
 </pre>
 	<h3 id="Samples-increase">Increase Button Size for Touchscreen Devices</h3>
 <pre>
@@ -264,5 +291,15 @@ import de.enough.polish.ui.*;
 //#endif
 </pre>
 	
-
+	<h2 id="troubleshooting">Troubleshooting Tips</h2>
+	<p>
+	When you deal with media queries some things can be unexpected, so remember these tips:
+	</p>
+	<ul>
+	<li><b>backgrounds and borders</b> need to be defined fully, only changing one background CSS attributes like background-image might yield unexpected results.</li>
+	<li><b>orientation switches</b> are not picked up by media queries, use the <code>:landscape</code> and <code>:portrait</code> <a href="gui-css-basics.html#style-pseudo">pseudo styles</a> instead.</li>
+	<!-- 
+	<li><b></b>: </li>
+	 -->
+	</ul>
 <%include end.txt %>
