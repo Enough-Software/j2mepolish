@@ -455,7 +455,7 @@ public class MidletBridge extends Activity {
 	
 	protected void onDestroy() {
 		//#debug
-		System.out.println("onDestroy() for " + this);
+		System.out.println("onDestroy() for " + this + ", isTaskRoot=" + isTaskRoot());
 		//Debug.stopMethodTracing();
 		super.onDestroy();
 		if (!isTaskRoot()) {
@@ -722,12 +722,15 @@ public class MidletBridge extends Activity {
 		//#debug
 		System.out.println("MidletBridge.hideSoftKeyboard");
 		//#if polish.javaplatform >= Android/1.5
-			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
-			View focusedView = AndroidDisplay.getInstance().findFocus();
-			if (focusedView != null) {
-				//System.out.println("focused view=" + focusedView + ", softkeyboard.active=" + inputMethodManager.isActive());
-				IBinder windowToken = focusedView.getWindowToken();
-				inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+			AndroidDisplay display = AndroidDisplay.getInstance();
+			if (display != null) {
+				InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
+				View focusedView = display.findFocus();
+				if (focusedView != null && inputMethodManager != null) {
+					//System.out.println("focused view=" + focusedView + ", softkeyboard.active=" + inputMethodManager.isActive());
+					IBinder windowToken = focusedView.getWindowToken();
+					inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+				}
 			}
 		//#endif
 	}
@@ -742,7 +745,7 @@ public class MidletBridge extends Activity {
 		//#if polish.javaplatform >= Android/1.5
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService( Context.INPUT_METHOD_SERVICE);
 			View focusedView = AndroidDisplay.getInstance().findFocus();
-			if (focusedView != null) {
+			if (focusedView != null && inputMethodManager != null) {
 				IBinder windowToken = focusedView.getWindowToken();
 				inputMethodManager.toggleSoftInputFromWindow(windowToken,  InputMethodManager.SHOW_FORCED, 0);
 			}
