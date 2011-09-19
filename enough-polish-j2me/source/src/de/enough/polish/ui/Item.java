@@ -5259,9 +5259,13 @@ public abstract class Item implements UiElement, Animatable
 			System.out.println("Unable to show this item, since the screen is not known.");
 			return;
 		}
-		
-		myScreen.focus( this );
+		//#if !polish.android
+			myScreen.focus( this );
+		//#endif
 		display.setCurrent( myScreen );
+		//#if polish.android
+			myScreen.focus( this );
+		//#endif
 	}
 	
 	/**
