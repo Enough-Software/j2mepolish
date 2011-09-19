@@ -551,7 +551,9 @@ public class Form extends Screen
 		item.screen = this;
 		this.container.add( item );
 		if (itemStyle != null) {
-			item.setStyle( itemStyle );
+			// by setting the style field instead of calling setStyle(itemStyle), the style will not be resolved immediately but only when needed
+			item.style = itemStyle;
+			item.isStyleInitialised = false;
 		}
 		if (this.isShown() ) {
 			repaint();
