@@ -31,6 +31,10 @@ import javax.microedition.lcdui.Graphics;
 
 import de.enough.polish.util.ArrayList;
 
+//#if polish.blackberry
+//# import de.enough.polish.blackberry.ui.BaseScreen;
+//#endif
+
 /**
  * <p>Contains a number of items.</p>
  * <p>Main purpose is to manage all items of a Form or similar canvases.</p>
@@ -2404,6 +2408,93 @@ public class Container extends Item {
 		// So now events are ignored by containers when they are ignored by their currently focused item...
 		//return super.handleKeyRepeated(keyCode, gameAction);
 	}
+	
+	//#if polish.Container.useTouchFocusHandling
+	/**
+	 * Focuses the first visible item in the given vertical minimum and maximum offsets.
+	 * 
+	 * @param container 
+	 * 		the container
+	 * @param verticalMin 
+	 * 		the vertical minimum offset
+	 * @param verticalMax 
+	 * 		the vertical maximum offset
+	 * @return 
+	 * 		the newly focused item
+	 */
+	Item focusVisible(Container container, int verticalMin, int verticalMax) {
+		Item[] items = container.getItems();
+		Item focusedItem = null;
+		for (int index = 0; index < items.length; index++) {
+			Item item = items[index];
+			
+			int itemTop= item.getAbsoluteY();
+			int itemBottom = itemTop + item.itemHeight;
+			
+			int itemAppearanceMode = item.getAppearanceMode(); 
+			// if item is interactive ...
+			if(itemAppearanceMode == Item.INTERACTIVE || itemAppearanceMode == Item.HYPERLINK || itemAppearanceMode == Item.BUTTON) {
+				// ... and is a container and not fully visible ...
+				if(item instanceof Container && !isItemVisible(verticalMin, verticalMax, itemTop, itemBottom, true)) {
+					// ... but partially visible ...
+					if(isItemVisible(verticalMin, verticalMax, itemTop, itemBottom, false)) {
+						focusedItem = focusVisible((Container)item, verticalMin, verticalMax);
+						
+						// if a child item was focused ...
+						if(focusedItem != null) {
+							focusIndex(index);
+							return item;
+						}
+					}
+				} else if(isItemVisible(verticalMin, verticalMax, itemTop, itemBottom, true)) {
+					return focusIndex(index);
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Returns true if the given item top and bottom offset is inside the given vertical minimum and maximum offset.
+	 * 
+	 * @param verticalMin 
+	 * 		the vertical minimum offset
+	 * @param verticalMax 
+	 * 		the vertical maximum offset
+	 * @param itemTop 
+	 * 		the item top offset
+	 * @param itemBottom 
+	 * 		the item bottom offset
+	 * @param full 
+	 * 		true if the item must fit completly into the given vertical offsets otherwise false
+	 * @return true 
+	 * 		if the item fits into the given vertical offsets otherwise false
+	 */
+	protected boolean isItemVisible(int verticalMin, int verticalMax, int itemTop, int itemBottom, boolean full) {
+		if(full) {
+			return itemTop >= verticalMin && itemBottom <= verticalMax;
+		} else {
+			return !(itemBottom <= verticalMin || itemTop >= verticalMax);
+		}
+	}
+	
+	/**
+	 * Focuses the child at the given index while preserving the scroll offset.
+	 *  
+	 * @param index 
+	 * 		the index 
+	 * @return the focused item
+	 */
+	Item focusIndex(int index) {
+		int scrollOffset = getScrollYOffset();
+		setInitialized(false);
+		focusChild(index);
+		setInitialized(true);
+		setScrollYOffset(scrollOffset);
+		return getFocusedChild();
+	}
+	//#endif
 
 	/**
 	 * Shifts the focus to the next or the previous item.
@@ -2421,6 +2512,18 @@ public class Container extends Item {
 			System.out.println("shiftFocus fails: this.items==null or items.length <= 0");
 			return false;
 		}
+		
+		//#if polish.Container.useTouchFocusHandling
+		if(this.focusedIndex == -1) {
+			int verticalMin = getAbsoluteY();
+			int verticalMax = verticalMin + getScrollHeight();
+			Item newFocusedItem = focusVisible(this, verticalMin, verticalMax);
+			if(newFocusedItem != null) {
+				return true;
+			}
+		}
+		//#endif
+		
 		//System.out.println("|");
 		Item focItem = this.focusedItem;
 		//#if polish.css.colspan
@@ -3779,6 +3882,17 @@ public class Container extends Item {
 		if (item != null && item.handlePointerDragged( relX - this.contentX - item.relativeX, relY - this.yOffset - this.contentY - item.relativeY, repaintRegion)) {
 			return true;
 		}
+		
+		//#if polish.Container.useTouchFocusHandling
+		if(item != null) {
+	   		 focusChild(-1);
+	   		 //#if polish.blackberry
+	   		 //# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
+	   		 //#endif
+	   		 UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+   	  	}
+		//#endif
+		
 		//#ifdef tmp.supportViewType
 			if (this.containerView != null) {
 				if ( this.containerView.handlePointerDragged(relX, relY, repaintRegion) ) {
