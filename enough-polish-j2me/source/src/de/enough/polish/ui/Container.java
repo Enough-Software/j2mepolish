@@ -67,6 +67,10 @@ public class Container extends Item {
 		//#define tmp.useTable
 	//#endif
 	
+	//#ifndef polish.Container.selectEntriesWhileTouchScrolling
+		//#define polish.Container.selectEntriesWhileTouchScrolling = true
+	//#endif
+	
 	/** constant for normal scrolling (0) */
 	public static final int SCROLL_DEFAULT = 0;
 	/** constant for smooth scrolling (1) */
@@ -2409,7 +2413,7 @@ public class Container extends Item {
 		//return super.handleKeyRepeated(keyCode, gameAction);
 	}
 	
-	//#if polish.Container.useTouchFocusHandling
+	//#if !polish.Container.selectEntriesWhileTouchScrolling
 	/**
 	 * Focuses the first visible item in the given vertical minimum and maximum offsets.
 	 * 
@@ -2513,7 +2517,7 @@ public class Container extends Item {
 			return false;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(this.focusedIndex == -1) {
 			int verticalMin = getAbsoluteY();
 			int verticalMax = verticalMin + getScrollHeight();
@@ -3883,7 +3887,7 @@ public class Container extends Item {
 			return true;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(item != null) {
 	   		 focusChild(-1);
 	   		 //#if polish.blackberry
