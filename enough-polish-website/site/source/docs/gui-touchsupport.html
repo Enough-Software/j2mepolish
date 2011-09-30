@@ -163,14 +163,14 @@ public class GlobalEventHandler implements EventListener {
 	
 	<h2 id="virtualkeyboard">Touch Support and Focus</h2>
 	<p>
-	By default, J2ME Polish focuses items while dragging a scrollable area (e.g. a screen) and keeps the focus while scrolling. 
+	By default, J2ME Polish clears the focus while dragging a scrollable area (e.g. a screen).
+	When the up/down key is pressed on a touch device with directional keys / trackpad (e.g. the BlackBerry Torch) 
+	the focus is restored to the first visible item.   
 	To disable this feature you can set the following preprocessing variable :
 	<pre>
-	<variable name="polish.Container.selectEntriesWhileTouchScrolling" value="false" />
+	<variable name="polish.Container.selectEntriesWhileTouchScrolling" value="true" />
 	</pre>
-	With this preprocessing variable set to false, the focus is released when a scrollable area is dragged or scrolled.
-	When the up/down key is pressed on a touch device with directional keys / trackpad (e.g. the BlackBerry Torch) the focus is restored to the first
-	visible item.  
+	With this preprocessing variable set to true, the focus remains on the last selected item when a scrollable area is dragged or scrolled.
 	</p>
 	
 	<h2 id="virtualkeyboard">Virtual keyboard</h2>
@@ -188,7 +188,7 @@ public class GlobalEventHandler implements EventListener {
 	
 	<h2 id="JavaDoc">JavaDoc</h2>
 	<ul>
-		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
+		"build/Generic/AnyPhone/de/source/de/enough/polish/test/Test.java"<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a></li>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEventListener.html">UiEventListener</a></li>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/EventListener.html">EventListener</a></li>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/EventManager.html">EventManager</a></li>

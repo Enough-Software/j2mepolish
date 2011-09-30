@@ -67,10 +67,6 @@ public class Container extends Item {
 		//#define tmp.useTable
 	//#endif
 	
-	//#ifndef polish.Container.selectEntriesWhileTouchScrolling
-		//#define polish.Container.selectEntriesWhileTouchScrolling = true
-	//#endif
-	
 	/** constant for normal scrolling (0) */
 	public static final int SCROLL_DEFAULT = 0;
 	/** constant for smooth scrolling (1) */
