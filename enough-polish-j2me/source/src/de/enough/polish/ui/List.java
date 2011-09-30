@@ -407,7 +407,9 @@ public class List extends Screen implements Choice
 		//#endif
 
 		this.choiceGroup = new ChoiceGroup( null, this.listType, items, style, true  );
-		this.choiceGroup.autoFocusEnabled = true;
+		//#if !(polish.hasVirtualKeyboard || (polish.android && !polish.android.autoFocus))
+			this.choiceGroup.setAutoFocusEnabled( true );
+		//#endif
 		this.choiceGroup.screen = this;
 		this.choiceGroup.isFocused = true;
 		this.container = this.choiceGroup;

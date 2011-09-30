@@ -445,7 +445,9 @@ implements Choice
 		//#endif
 		} else if (choiceType == Choice.IMPLICIT && allowImplicit ) {
 			this.isImplicit = true;
-			this.autoFocusEnabled = true;
+			//#if !(polish.hasVirtualKeyboard || (polish.android && !polish.android.autoFocus))
+				setAutoFocusEnabled( true );
+			//#endif
 		} else {
 			throw new IllegalArgumentException(
 			//#ifdef polish.verboseDebug
@@ -620,7 +622,9 @@ implements Choice
 	public int append( ChoiceItem item, Style elementStyle ) {
 		add( item );
 		if ( elementStyle != null ) {
-			item.setStyle( elementStyle );
+			// set the field directly instead of calling setStyle() so that the style is applied later when it's needed
+			item.style = elementStyle;
+			item.isStyleInitialised = false;
 		}
 		int itemIndex = this.itemsList.size() - 1;
 		if (this.choiceType == Choice.EXCLUSIVE && item.isSelected) {
@@ -1000,7 +1004,7 @@ implements Choice
 					if ( isInitialized()) {
 						focusChild( elementNum, newSelected, 0, true );
 					} else {
-						this.autoFocusEnabled = true;
+						setAutoFocusEnabled( true );
 						this.autoFocusIndex = elementNum;
 					}
 				}

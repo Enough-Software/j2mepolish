@@ -564,26 +564,38 @@ public class Command
 	 * @return true when this command was forwarded
 	 */
 	public boolean commandAction( Item item, Displayable displayable ) {
-		if (item != null && this.itemCommandListener != null) {
-			while (item instanceof Container && (item.commands == null || !item.commands.contains(this)) ) {
-				item = ((Container)item).getFocusedItem();
+		if (item != null) { 
+			ItemCommandListener listener = this.itemCommandListener;
+			if (listener == null) {
+				listener = item.getItemCommandListener();
 			}
-			if (item != null && ((item.commands != null && item.commands.contains(this)) || (item.getDefaultCommand() == this))) {
+			if (listener != null) {
+				while (item instanceof Container && (item.commands == null || !item.commands.contains(this)) ) {
+					item = ((Container)item).getFocusedItem();
+				}
+				if (item != null && ((item.commands != null && item.commands.contains(this)) || (item.getDefaultCommand() == this))) {
+					//#if polish.executeCommandsAsynchrone
+						AsynchronousMultipleCommandListener.getInstance().commandAction(listener, this, item);
+					//#else
+						listener.commandAction(this, item);
+					//#endif
+					return true;
+				}
+			}
+		}
+		if (displayable != null) {
+			CommandListener listener = this.commandListener;
+			if ((listener == null) && (displayable instanceof Screen)) {
+				listener = ((Screen)displayable).getCommandListener();
+			}
+			if (listener != null) {
 				//#if polish.executeCommandsAsynchrone
-					AsynchronousMultipleCommandListener.getInstance().commandAction(this.itemCommandListener, this, item);
+					AsynchronousMultipleCommandListener.getInstance().commandAction(listener, this, displayable);
 				//#else
-					this.itemCommandListener.commandAction(this, item);
+					listener.commandAction(this, displayable);
 				//#endif
 				return true;
 			}
-		}
-		if (displayable != null && this.commandListener != null) {
-			//#if polish.executeCommandsAsynchrone
-				AsynchronousMultipleCommandListener.getInstance().commandAction(this.commandListener, this, displayable);
-			//#else
-				this.commandListener.commandAction(this, displayable);
-			//#endif
-			return true;
 		}
 		return false;
 	}

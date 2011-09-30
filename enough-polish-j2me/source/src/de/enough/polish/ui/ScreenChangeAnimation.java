@@ -164,6 +164,10 @@ implements Runnable
 		
 		Image lastScreenImage = toImage( lstDisplayable, nextScreen, lastScreen, width, height);
 		Image nextScreenImage = toImage( nxtDisplayable, nextScreen, lastScreen, width, height);
+		if (lastScreenImage == null || nextScreenImage == null) {
+			this.abort = true;
+			return;
+		}
 		//#if polish.css.repaint-previous-screen
 			if (this.supportsDifferentScreenSizes) {
 				if (lastScreen != null && nextScreen != null && nextScreen.container != null && nextScreen.style != null) {
@@ -224,96 +228,101 @@ implements Runnable
 	}
 	
 	protected Image toImage(Displayable displayable, Screen nextScreen, Screen lastScreen, int width, int height) {
-		boolean isLastScreen = (displayable == lastScreen);
-		Screen screen = isLastScreen ? lastScreen : nextScreen;
-		Image screenImage = null;
-		if (!isLastScreen && displayable instanceof Canvas) {
-			((Canvas)displayable).showNotify();
-		}
-		//#if polish.css.repaint-previous-screen
-			boolean limitToContent = false;
-			int contentX = 0;
-			int contentY = 0;
-			if (this.supportsDifferentScreenSizes && screen != null && screen.container != null && screen.style != null) {
-				Boolean limitToContentBool = screen.style.getBooleanProperty("repaint-previous-screen");
-				if (limitToContentBool != null) {
-					limitToContent = limitToContentBool.booleanValue();
-					if (limitToContent) {
-						width = screen.container.itemWidth;
-						height = Math.min( screen.contentHeight, screen.container.itemHeight );
-						Border border = screen.border;
-						if (border != null) {
-							width += border.borderWidthLeft + border.borderWidthRight;
-							height += border.borderWidthTop + border.borderWidthBottom;
-							contentX = border.borderWidthLeft;
-							contentY = border.borderWidthTop;
-						}
-						Item title = screen.getTitleItem();
-						if (title != null) {
-							height += title.itemHeight;
-							contentY += title.itemHeight;
-							if (title.itemWidth > width) {
- 								width = title.itemWidth;
-							}
-						}
-						// this creates an unmutable image and cannot be used:
-//						//#if polish.midp2
-//							int[] rgb = new int[ screenWidth * screenHeight ];
-//							screenImage = Image.createRGBImage(rgb, screenWidth, screenHeight, true );
-//						//#endif
-					}
-				}
+		try {
+			boolean isLastScreen = (displayable == lastScreen);
+			Screen screen = isLastScreen ? lastScreen : nextScreen;
+			Image screenImage = null;
+			if (!isLastScreen && displayable instanceof Canvas) {
+				((Canvas)displayable).showNotify();
 			}
-		//#endif
-		screenImage = Image.createImage(width, height);
-		Graphics g = screenImage.getGraphics(); 
-		g.setClip(0, 0, width, height);
-		if ( displayable instanceof Canvas) {
-			//#debug
-			System.out.println("StyleSheet: last screen is painted");
 			//#if polish.css.repaint-previous-screen
-				if (limitToContent) {
-					g.translate( -(screen.container.relativeX - contentX), -(screen.container.relativeY - contentY) );
-					screen.paintBackgroundAndBorder(g);
-					screen.paintTitleAndSubtitle(g);
-					if (isLastScreen) {
-						this.lastContentX = -g.getTranslateX();
-						this.lastContentY = -g.getTranslateY();
-					} else {
-						this.nextContentX = -g.getTranslateX();
-						this.nextContentY = -g.getTranslateY();
-					}
-					g.translate( -g.getTranslateX(), -g.getTranslateY() );
-					screen.container.paint(contentX, contentY, contentX,  width, g);
-				} else {
-			//#endif
-					if (isLastScreen) {	
-						this.lastContentX = 0;
-						this.lastContentY = 0;
-					} else {
-						this.nextContentX = 0;
-						this.nextContentY = 0;						
-					}
-					//#if polish.blackberry && polish.hasPointerEvents
-						if (screen != null && screen.getScreenFullHeight() < height) {
-							if (screen.background != null) {
-								screen.background.paint(0, 0, width, height, g );
-							} else {
-								g.fillRect( 0, 0, width, height );
+				boolean limitToContent = false;
+				int contentX = 0;
+				int contentY = 0;
+				if (this.supportsDifferentScreenSizes && screen != null && screen.container != null && screen.style != null) {
+					Boolean limitToContentBool = screen.style.getBooleanProperty("repaint-previous-screen");
+					if (limitToContentBool != null) {
+						limitToContent = limitToContentBool.booleanValue();
+						if (limitToContent) {
+							width = screen.container.itemWidth;
+							height = Math.min( screen.contentHeight, screen.container.itemHeight );
+							Border border = screen.border;
+							if (border != null) {
+								width += border.borderWidthLeft + border.borderWidthRight;
+								height += border.borderWidthTop + border.borderWidthBottom;
+								contentX = border.borderWidthLeft;
+								contentY = border.borderWidthTop;
 							}
+							Item title = screen.getTitleItem();
+							if (title != null) {
+								height += title.itemHeight;
+								contentY += title.itemHeight;
+								if (title.itemWidth > width) {
+	 								width = title.itemWidth;
+								}
+							}
+							// this creates an unmutable image and cannot be used:
+	//						//#if polish.midp2
+	//							int[] rgb = new int[ screenWidth * screenHeight ];
+	//							screenImage = Image.createRGBImage(rgb, screenWidth, screenHeight, true );
+	//						//#endif
 						}
-					//#endif
-					((Canvas)displayable).paint( g );				
-			//#if polish.css.repaint-previous-screen
+					}
 				}
 			//#endif
-	//#if polish.ScreenChangeAnimation.blankColor:defined
-		} else {
-			//#= g.setColor( ${polish.ScreenChangeAnimation.blankColor} );
-			g.fillRect( 0, 0, width, height );
-	//#endif
+			screenImage = Image.createImage(width, height);
+			Graphics g = screenImage.getGraphics(); 
+			g.setClip(0, 0, width, height);
+			if ( displayable instanceof Canvas) {
+				//#debug
+				System.out.println("StyleSheet: last screen is painted");
+				//#if polish.css.repaint-previous-screen
+					if (limitToContent) {
+						g.translate( -(screen.container.relativeX - contentX), -(screen.container.relativeY - contentY) );
+						screen.paintBackgroundAndBorder(g);
+						screen.paintTitleAndSubtitle(g);
+						if (isLastScreen) {
+							this.lastContentX = -g.getTranslateX();
+							this.lastContentY = -g.getTranslateY();
+						} else {
+							this.nextContentX = -g.getTranslateX();
+							this.nextContentY = -g.getTranslateY();
+						}
+						g.translate( -g.getTranslateX(), -g.getTranslateY() );
+						screen.container.paint(contentX, contentY, contentX,  width, g);
+					} else {
+				//#endif
+						if (isLastScreen) {	
+							this.lastContentX = 0;
+							this.lastContentY = 0;
+						} else {
+							this.nextContentX = 0;
+							this.nextContentY = 0;						
+						}
+						//#if polish.blackberry && polish.hasPointerEvents
+							if (screen != null && screen.getScreenFullHeight() < height) {
+								if (screen.background != null) {
+									screen.background.paint(0, 0, width, height, g );
+								} else {
+									g.fillRect( 0, 0, width, height );
+								}
+							}
+						//#endif
+						((Canvas)displayable).paint( g );				
+				//#if polish.css.repaint-previous-screen
+					}
+				//#endif
+		//#if polish.ScreenChangeAnimation.blankColor:defined
+			} else {
+				//#= g.setColor( ${polish.ScreenChangeAnimation.blankColor} );
+				g.fillRect( 0, 0, width, height );
+		//#endif
+			}
+			return screenImage;
+		} catch (OutOfMemoryError error) {
+			// try to fail gracefully:
+			return null;
 		}
-		return screenImage;
 	}
 
 	/**

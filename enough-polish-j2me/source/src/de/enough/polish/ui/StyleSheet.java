@@ -243,7 +243,7 @@ public final class StyleSheet {
 	/**
 	 * Retrieves all registered styles in a Hashtable.
 	 * 
-	 * @return all registered styles in a Hashtable.
+	 * @return all registered styles in a <String,Style> Hashtable.
 	 */
 	public static Hashtable getStyles()
 	{
@@ -402,12 +402,21 @@ public final class StyleSheet {
 		 */
 		public static void addMediaQuery( String condition, Style[] styles ) {
 			if (isMediaQueryFulfilled(condition)) {
+				Style oldStyle = null;
+				Style newStyle = null;
 				for (int i = 0; i < styles.length; i++) {
 					Style style = styles[i];
 					Style parent = getStyle( style.name );
 					if (parent != null) {
 						copyStyleSettings(style.name, 1, style, parent, null);
+					} else if ("_allold".equals(style.name)) {
+						oldStyle = style;
+					} else if ("_allnew".equals(style.name)) {
+						newStyle = style;
 					}
+				}
+				if (oldStyle != null && newStyle != null) {
+					replaceStyleAttributes(oldStyle, newStyle, null);
 				}
 			}
 		}
@@ -625,6 +634,72 @@ public final class StyleSheet {
 			return result;
 		}
 	//#endif
+	
+	/**
+	 * Replaces any old attributes in all matching styles with the given new attributes.
+	 * This can be useful for example for implementing a day and night theme of your app.
+	 * @param oldAttributesStyle the old attributes that should be replaced
+	 * @param newAttributesStyle the new attributes that should be used
+	 * @param styleNameMatch a string like "feature" (matching all styles with names that contain "feature"), "feature*" (names start with "feature") or "*feature" (names end with "feature"). Use null to match _all_ styles. 
+	 */
+	public static void replaceStyleAttributes(Style oldAttributesStyle, Style newAttributesStyle, String styleNameMatch) {
+		//#debug
+		System.out.println("replace style attributes of " + oldAttributesStyle + " with attributes from " + newAttributesStyle);
+		boolean allMatch = (styleNameMatch == null) || (styleNameMatch.equals(""));
+		boolean onlyStartingMatch = (!allMatch && styleNameMatch.charAt(styleNameMatch.length()-1) == '*');
+		boolean onlyEndingMatch = (!allMatch && styleNameMatch.charAt(0) == '*');
+		boolean anywhereMatch = (!allMatch && !(onlyStartingMatch || onlyEndingMatch));
+		if (onlyStartingMatch && onlyEndingMatch) {
+			onlyStartingMatch = false;
+			onlyEndingMatch = false;
+			anywhereMatch = true;
+			styleNameMatch = styleNameMatch.substring(1, styleNameMatch.length()-1);
+		} else if (onlyStartingMatch) {
+			styleNameMatch = styleNameMatch.substring(1);
+		} else if (onlyEndingMatch) {
+			styleNameMatch = styleNameMatch.substring(0, styleNameMatch.length()-1);
+		}
+		short[] oldAttributeKeys = oldAttributesStyle.getRawAttributeKeys();
+		Object[] oldAttributeValues = oldAttributesStyle.getRawAttributeValues();
+		
+		Background oldBg = oldAttributesStyle.background;
+		Border oldBorder = oldAttributesStyle.border;
+		Background newBg = newAttributesStyle.background;
+		Border newBorder = newAttributesStyle.border;
+		
+		boolean checkBackground = (oldBg != null) && (newBg != null);
+		boolean checkBorder = (oldBorder != null) && (newBorder != null);
+		
+		Enumeration stylesEnumeration = stylesByName.elements();
+		while (stylesEnumeration.hasMoreElements()) {
+			Style style = (Style) stylesEnumeration.nextElement();
+			if (allMatch 
+					|| (anywhereMatch && style.name.indexOf(styleNameMatch) != -1) 
+					|| (onlyStartingMatch && style.name.startsWith(styleNameMatch)) 
+					|| (onlyEndingMatch && style.name.endsWith(styleNameMatch))
+			) {
+				for (int i = 0; i < oldAttributeKeys.length; i++) {
+					short requiredKey = oldAttributeKeys[i];
+					Object existingValue = style.getObjectProperty(requiredKey);
+					if (existingValue != null) {
+						Object requiredValue = oldAttributeValues[i];
+						if (existingValue.equals(requiredValue)) {
+							//#debug
+							System.out.println("replaceStyleAttributes: values match: " + existingValue + ", replacement=" + newAttributesStyle.getObjectProperty(requiredKey) + " for style " + style.name);
+							style.addAttribute(requiredKey, newAttributesStyle.getObjectProperty(requiredKey));
+						}
+					}
+				}
+				if (checkBackground && (style.background == oldBg)) {
+					style.background = newBg;
+				}
+				if (checkBorder && (style.border == oldBorder)) {
+					style.border = newBorder;
+				}
+			}
+		}
+		
+	}
 	
 	/**
 	 * Releases all (memory intensive) resources such as images or RGB arrays of this style sheet.
