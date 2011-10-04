@@ -63,7 +63,7 @@ extends Emulator
 	public static final String WVGA800 = "WVGA800";
 		
 	String[] stateArguments;
-	ArrayList emulatorArguments;
+	ArrayList<String> emulatorArguments;
 	String[] waitArguments;
 	String[] installArguments;
 
@@ -74,12 +74,12 @@ extends Emulator
 	 */
 	public boolean init(Device dev, EmulatorSetting setting, Environment env) {
 		
-		ArrayList conditionList = new ArrayList();
+		ArrayList<String> conditionList = new ArrayList<String>();
 		conditionList.add(ArgumentHelper.adb(env) );
 		conditionList.add("get-state");
 		this.stateArguments = toArray(conditionList);
 		
-		ArrayList emulatorList = new ArrayList();
+		ArrayList<String> emulatorList = new ArrayList<String>();
 		emulatorList.add(ArgumentHelper.emulator(env));
 		emulatorList.add("-skin");
 		String skin = getSkin(dev);
@@ -87,7 +87,7 @@ extends Emulator
 		emulatorList.add(skin);
 		this.emulatorArguments = emulatorList;
 		 
-		ArrayList waitList = new ArrayList();
+		ArrayList<String> waitList = new ArrayList<String>();
 		waitList.add(ArgumentHelper.adb(env));
 		waitList.add("wait-for-device");
 		waitList.add("logcat");
@@ -95,7 +95,7 @@ extends Emulator
 		waitList.add("*:S");
 		this.waitArguments = toArray(waitList);
 		
-		ArrayList installList = new ArrayList();
+		ArrayList<String> installList = new ArrayList<String>();
 		installList.add(ArgumentHelper.adb(env));
 		installList.add("wait-for-device");
 		installList.add("install");
@@ -125,7 +125,7 @@ extends Emulator
 				boolean avdExists = false;
 				for (int i = 0; i < output.length; i++) {
 					String line = output[i];
-					if (line.indexOf("Name:") != -1 && line.indexOf(avd) != -1) {
+					if (line.indexOf("Name:") != -1 && line.endsWith(avd)) {
 						avdExists = true;
 						break;
 					}
@@ -173,7 +173,7 @@ extends Emulator
 					this.emulatorArguments.add(2, avd);
 				}
 				System.out.println(this.device.getIdentifier() + ": launching emulator:");
-				print(this.emulatorArguments);
+				System.out.println( ProcessUtil.toString(this.emulatorArguments) );
 				ProcessUtil.exec( this.emulatorArguments, this.device.getIdentifier() + ": ", false);
 				
 				System.out.println(this.device.getIdentifier() + ": Waiting for emulator to start up...");
@@ -217,19 +217,6 @@ extends Emulator
 		}
 	}
 
-	private void print(ArrayList args) {
-		for (int i=0; i<args.size(); i++) {
-			String arg = (String) args.get(i);
-			if (arg.indexOf(' ') != -1) {
-				arg = '"' + arg + "\" ";
-			} else {
-				arg += ' ';
-			}
-			System.out.print(arg);
-		}
-		System.out.println();
-	}
-
 	private String getAVDforIdentifier(String identifier) {
 		identifier = identifier.replace('/', '_');
 		identifier = identifier.replace(' ', '_');
@@ -249,7 +236,7 @@ extends Emulator
 	 * @param list the ArrayList
 	 * @return the String[]
 	 */
-	String[] toArray(ArrayList list)
+	String[] toArray(ArrayList<String> list)
 	{
 		return (String[]) list.toArray( new String[ list.size() ] );
 	}
