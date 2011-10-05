@@ -37,33 +37,29 @@ import java.util.Map;
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        15-Feb-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public abstract class RequirementContainer
 implements DeviceFilter
 {
 	
-	private ArrayList filters;
-	protected List requiredIdentifiers;
+	private ArrayList<DeviceFilter> filters;
+	protected List<String> requiredIdentifiers;
 	private Map buildProperties;
 	/**
-	 * Cerates a new device requirements list.
+	 * Creates a new device requirements list.
 	 * @param buildProperties the build properties
 	 */
 	public RequirementContainer(Map buildProperties) {
 		this.buildProperties = buildProperties;
-		this.filters = new ArrayList();
+		this.filters = new ArrayList<DeviceFilter>();
 	}
 
 	/**
 	 * Creates a new empty container
 	 */
 	public RequirementContainer() {
-		this.filters = new ArrayList();
+		this.filters = new ArrayList<DeviceFilter>();
 	}
 	
 	protected void add( DeviceFilter filter ) {
@@ -71,7 +67,7 @@ implements DeviceFilter
 			((Requirement)filter).setBuildProperties( this.buildProperties );
 		}
 		this.filters.add( filter );
-		// check if this is a <identfier> requirement of if this container/relation only includes <identifier> requirements.
+		// check if this is a <identifier> requirement of if this container/relation only includes <identifier> requirements.
 		// when a non-<identifier> requirement has been added before, the requiredIdentifiers field is set to null.
 		if (this.requiredIdentifiers != null || this.filters.size() == 1 ) {
 			addIdentifiers( filter );
@@ -88,7 +84,7 @@ implements DeviceFilter
 	private void addIdentifiers(DeviceFilter filter) {
     	if (filter instanceof IdentifierRequirement) {
     		if (this.requiredIdentifiers == null) {
-    			this.requiredIdentifiers = new LinkedList();
+    			this.requiredIdentifiers = new LinkedList<String>();
     		}
     		String[] identifiers = ((IdentifierRequirement) filter).getIdentifers();
     		for (int i = 0; i < identifiers.length; i++) {
@@ -153,7 +149,7 @@ implements DeviceFilter
 	 * 
 	 * @return a list of the required identifiers when only &lt;identifier&gt; requirements are used, otherwise null.
 	 */
-	public List getRequiredIdentifiers() {
+	public List<String> getRequiredIdentifiers() {
 		return this.requiredIdentifiers;
 	}
 	

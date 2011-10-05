@@ -187,7 +187,8 @@ extends Emulator
 				System.out.println(this.device.getIdentifier() + ": Emulator has been launched already.");
 			}
 
-			System.out.println(this.device.getIdentifier() + ": Installing application...");
+			System.out.println(this.device.getIdentifier() + ": Installing application:");
+			System.out.println(ProcessUtil.toString(this.installArguments));
 			
 			// Install the application
 			this.errorMessage = null;

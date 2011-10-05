@@ -172,14 +172,13 @@ implements Runnable, OutputFilter
 					}
 				}
 				System.out.println("Emulator returned [" + res + "], arguments were:");
-				for (int i = 0; i < arguments.length; i++) {
-					String argument = arguments[i];
-					System.out.println( argument );
-				}				
+				System.out.println(ProcessUtil.toString(arguments));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Unable to start or run emulator: " + e.toString() );
+			System.out.println("Arguments were:");
+			System.out.println(ProcessUtil.toString(arguments));
 		} finally {
 			this.isFinished = true;
 		}
@@ -391,8 +390,17 @@ implements Runnable, OutputFilter
 		//System.out.println( "emulator.environment == null: " + (emulator.environment == null) );
 		boolean okToStart = emulator.init(device, setting, environment);
 		if (!okToStart) {
+			// use Java ME SDK emulator as a backup:
+			if ( environment.getVariable("javamesdk.home") != null) {
+				emulator = new JavaMeSdkEmulator();
+				emulator.init(null, null, setting, null, extensionManager, environment); // extension call
+				// for some reason the environment is not set correctly in the init() method... weird.
+				emulator.environment = environment;
+				//System.out.println( "emulator.environment == null: " + (emulator.environment == null) );
+				okToStart = emulator.init(device, setting, environment);
+			}
 			// use MPP / Mobile Power Player as a backup:
-			if ( environment.getVariable("mpp.home") != null) {
+			if ( !okToStart && environment.getVariable("mpp.home") != null) {
 				emulator = new MppEmulator();
 				emulator.init(null, null, setting, null, extensionManager, environment); // extension call
 				// for some reason the environment is not set correctly in the init() method... weird.

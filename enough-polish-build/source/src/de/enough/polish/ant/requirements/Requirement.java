@@ -38,10 +38,6 @@ import java.util.Map;
  *
  * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        24-Jan-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public abstract class Requirement

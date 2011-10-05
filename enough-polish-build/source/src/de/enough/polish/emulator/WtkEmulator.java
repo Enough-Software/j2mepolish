@@ -51,22 +51,17 @@ import de.enough.polish.util.StringUtil;
 
 /**
  * <p>
- * Is responsible for configuring and starting any WTK-based emulator.
+ * Is responsible for configuring and starting any WTK-based emulator. 
  * </p>
  * 
  * Notice:
  * If you get the error "There is insufficient storage to install this suite" when you using the WTK version
- * 3.0 or higer. You have to set in install folder of the WTK in the file "/runtimes/cldc-hi-javafx/bin/jwc_properties.ini" the
+ * 3.0 or higher. You have to set in install folder of the WTK in the file "/runtimes/cldc-hi-javafx/bin/jwc_properties.ini" the
  * "system.jam_space" property to a higher value.
  * 
  * <p>
- * Copyright Enough Software 2004, 2005
+ * Copyright Enough Software 2004 - 2011
  * </p>
- * 
- * <pre>
- * history
- *        05-Sep-2004 - rob creation
- * </pre>
  * 
  * @author Robert Virkus, j2mepolish@enough.de
  */
@@ -163,7 +158,7 @@ public class WtkEmulator extends Emulator {
 			for (int i = 0; i < fileList.length; i++) {
 				File file = new File(fileList[i], "properties.xml");
 				if (file.exists()) {
-					if (parsePropertiesXML(file, xDevice)) {
+					if (parsePropertiesXml(file, xDevice)) {
 						return file;
 					}
 				} else {
@@ -185,7 +180,7 @@ public class WtkEmulator extends Emulator {
 	 * @param xDevice the device you search for
 	 * @return true if the given device was found; false if the device was not in the properties.xml file or the xml file was not valid
 	 */
-	private boolean parsePropertiesXML(File propertiesFile, String xDevice) {
+	private boolean parsePropertiesXml(File propertiesFile, String xDevice) {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
 		DocumentBuilder docBuilder;
@@ -233,7 +228,7 @@ public class WtkEmulator extends Emulator {
 	 * @param dev
 	 *            the device
 	 * @param env
-	 *            TODO
+	 *            environment
 	 * @return the file which points to the emulator-application
 	 */
 	protected File getEmulatorExcecutable(String wtkHome, String xDevice,
@@ -254,7 +249,7 @@ public class WtkEmulator extends Emulator {
 	 * @param dev
 	 *            the device
 	 * @param env
-	 *            TODO
+	 *            environment
 	 * @return the file which points to the emulator-application
 	 */
 	protected File getEmulatorExcecutable(File wtkHome, String xDevice, Device dev, Environment env) 
@@ -301,7 +296,7 @@ public class WtkEmulator extends Emulator {
 	 */
 	public boolean init(Device dev, EmulatorSetting setting, Environment env) {
 		// okay, now create the arguments:
-		ArrayList argumentsList = new ArrayList();
+		ArrayList<String> argumentsList = new ArrayList<String>();
 
 		Variable[] parameters = getParameters(setting, env);
 
@@ -344,7 +339,7 @@ public class WtkEmulator extends Emulator {
 							skinFile = getEmulatorSkin(wtkHome, xDevice);
 						}
 					}
-					if (skinFile != null&&skinFile.exists()) {
+					if (skinFile != null && skinFile.exists()) {
 						break;
 					}
 				
@@ -363,8 +358,7 @@ public class WtkEmulator extends Emulator {
 					}
 				} else {
 					if (skinNames.length > 0) {
-						System.out
-								.print("Warning: Unable to find emulator for ");
+						System.out.print("Warning: Unable to find emulator for ");
 						for (int i = 0; i < skinNames.length; i++) {
 							System.out.print(skinNames[i]);
 							if (i < skinNames.length - 1) {
