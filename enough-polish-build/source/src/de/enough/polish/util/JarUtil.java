@@ -340,9 +340,11 @@ public final class JarUtil {
 			String name = entry.getName();
 			if (name.endsWith(".class")) {
 				int endPos = name.lastIndexOf(File.separatorChar);
-				name = name.substring( 0, endPos );
-				name = name.replace(File.separatorChar, '.');
-				packageNames.put( name, name );
+				if(endPos >= 0) {
+					name = name.substring( 0, endPos );
+					name = name.replace(File.separatorChar, '.');
+					packageNames.put( name, name );
+				}
 			}
 		}
 		return (String[]) packageNames.values().toArray( new String[ packageNames.size() ] );
