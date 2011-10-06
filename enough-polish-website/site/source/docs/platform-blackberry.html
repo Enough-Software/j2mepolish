@@ -173,45 +173,7 @@ When you are using the <a href="serialization.html">serialization</a> or <a href
 <code>de.enough.polish.io.Serializable</code> but instead implement <code>de.enough.polish.io.Externalizable</code> when using running projects from
 within the JDE. This is required since Serializable classes are processed within the class files in byte code, but in the JDE only the source code is used.
 </p>
-<h2 id="blackberry-verification-erros">Verification error</h2>
-<p>
-It may happen that a blackberry build can't be executed due to a verification error. The device will respond to the execution of the application with something like this :
-</p>
-<pre>
-Error starting appname: Module 'appname' has verification error XXXX at offset XXXX
-</pre>
-<p>
-There are numerous reasons for this behavior:
-</p>
-<ul>
-  <li>The signing went wrong. Please check the signing of the application.</li>
-  <li>A derived or subclass of another class tries to access a static variable directly.
-  Create a get() method for this variable to access it.</li>
-  <li>Remove unused imports</li>
-  <li>Remove System.out.println() calls</li>
-  <li>Make sure every method has a valid qualifier like private/public/protected
-</ul>
-<p>
-To identify the class and method which causes the error, you can do the following :
-</p>
-<ol>
-<li>Open the emulator of the BlackBerry JDE</li>
-<li>Load the application</li>
-<li>Open the application</li>
-<li>An error screen should appear stating something like this : <pre>jvm error 104 uncaught runtime exception</pre></li>
-<li>Choose from the underlying menu (using the arrow keys) the option "catfail"</li>
-<li>Now choose the right most point to save a file named "failure.zip" to your disk</li>
-<li>Extract the files within failure.zip to your disk and open the .bug file</li>
-</ol>
-<p>
-There are three interesting values in the .bug file:
-</p>
-<pre>VM:VECPs</pre>
-<p>(the package)</p>
-<pre>VM:VECCs</pre>
-<p>(the class)</p>
-<pre>VM:VECMm</pre>
-<p>(and the method which causes the error)</p>
+
 <h2 id="blackberry-gui">Using the J2ME Polish UI on BlackBerry Devices</h2>
 <p>
 The J2ME Polish UI can be used normally on BlackBerry devices as well. In order to make most of the system, 
@@ -270,6 +232,33 @@ BlackBerry platform and is a recommended setting in your <i>build.xml</i> script
   name=&quot;polish.useNativeAlerts&quot;
   value=&quot;true&quot; if=&quot;polish.blackberry || polish.android&quot; /&gt;
 </pre>
+
+<h3 id="blackberry-native-ui-fields">Using Native BlackBerry Fields in a J2ME Polish App</h3>
+<p>
+You can also include any native Blackberry fields directly in J2ME Polish screens by using the 
+<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/blackberry/ui/FieldItem.html">de.enough.polish.blackberry.ui.FieldItem</a>. This item accepts any 
+<code>net.rim.device.api.ui.Field</code> in it's constructor:
+</p>
+<pre>
+//#if polish.blackberry
+	import net.rim.device.api.ui.component.CheckboxField;
+	import de.enough.polish.blackberry.ui.FieldItem;
+//#endif
+
+[...]
+
+//#style screenWithNativeFields
+Form form = new Form("Native Fields");
+//#style text
+form.append("Here is a native CheckBoxField:");
+<b>CheckBoxField checkField = new CheckBoxField("Show again", true);</b>
+//#style nativeField
+<b>FieldItem fieldItem = new FieldItem( checkField );</b>
+form.append( fieldItem );
+</pre>
+<p>
+<img src="<%= basedir%>images/gui-blackberry-native-FieldItem.png" alt="Native CheckBoxField" width="472" height="744" />
+</p>
 
 <h2 id="blackberry-gui-platform">Platform Requests in J2ME Polish Applications</h2>
 <p>
@@ -395,5 +384,44 @@ is no benefit in using a native <code>TextBox</code> anyhow.
 &lt;variable name=&quot;polish.BlackBerry.mapSpaceToFire&quot; value=&quot;false&quot; /&gt;
 </pre>
 
+<h3 id="blackberry-verification-erros">Verification error</h3>
+<p>
+It may happen that a blackberry build can't be executed due to a verification error. The device will respond to the execution of the application with something like this :
+</p>
+<pre>
+Error starting appname: Module 'appname' has verification error XXXX at offset XXXX
+</pre>
+<p>
+There are numerous reasons for this behavior:
+</p>
+<ul>
+  <li>The signing went wrong. Please check the signing of the application.</li>
+  <li>A derived or subclass of another class tries to access a static variable directly.
+  Create a get() method for this variable to access it.</li>
+  <li>Remove unused imports</li>
+  <li>Remove System.out.println() calls</li>
+  <li>Make sure every method has a valid qualifier like private/public/protected
+</ul>
+<p>
+To identify the class and method which causes the error, you can do the following :
+</p>
+<ol>
+<li>Open the emulator of the BlackBerry JDE</li>
+<li>Load the application</li>
+<li>Open the application</li>
+<li>An error screen should appear stating something like this : <pre>jvm error 104 uncaught runtime exception</pre></li>
+<li>Choose from the underlying menu (using the arrow keys) the option "catfail"</li>
+<li>Now choose the right most point to save a file named "failure.zip" to your disk</li>
+<li>Extract the files within failure.zip to your disk and open the .bug file</li>
+</ol>
+<p>
+There are three interesting values in the .bug file:
+</p>
+<pre>VM:VECPs</pre>
+<p>(the package)</p>
+<pre>VM:VECCs</pre>
+<p>(the class)</p>
+<pre>VM:VECMm</pre>
+<p>(and the method which causes the error)</p>
 
 <%include end.txt %>

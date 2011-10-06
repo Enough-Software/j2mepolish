@@ -2267,37 +2267,30 @@ public class TextField extends StringItem
 //		}
 	}
 	
-	//#if polish.blackberry
 	/**
-	 * Sets a blackberry field to selectable. Used to prevent
-	 * fields to be selectable if they should not be shown.
+	 * Sets a blackberry field to selectable. 
+	 * Used to prevent fields to be selectable if they should not be shown.
+	 * You should check for the 'polish.blackberry' preprocessing symbol when using this method:
+	 * <pre>
+	 * //#if polish.blackberry
+	 * </pre>
 	 * 
 	 * @param editable true, if the textfield should be selectable, otherwise false
 	 */
 	public void activate(boolean editable)
 	{
-		Object bbLock = Application.getEventLock();
-		synchronized (bbLock) 
-		{
-			if(editable)
-			{
-				if(this._bbField == null)
-				{
-					setConstraints(this.constraints);
-				}
-				if (this.isFocused) {
-					if(getScreen() != null) {
-					getScreen().notifyFocusSet(this);
-				} else {
-					Display.getInstance().notifyFocusSet(this);
-				}
-				}
-			}
-			else
-			{	
-				if(this._bbField != null)
-				{
-					
+		//#if polish.blackberry
+			Object bbLock = Application.getEventLock();
+			synchronized (bbLock) {
+				if (editable) {
+					if(this._bbField == null) {
+						setConstraints(this.constraints);
+					}
+					if (this.isFocused) {
+						Display.getInstance().notifyFocusSet(this);
+					}
+				} else {	
+					if (this._bbField != null) {
 						Manager manager = this._bbField.getManager();
 						manager.delete(this._bbField);
 						
@@ -2306,15 +2299,24 @@ public class TextField extends StringItem
 					}
 				}
 			}
-		}
-	//#endif
+		//#endif
+	}
 	
-	//#if polish.blackberry
+	/**
+	 * Allows to set a BlackBerry textfield to be editable
+	 * You should check for the 'polish.blackberry' preprocessing symbol when using this method:
+	 * <pre>
+	 * //#if polish.blackberry
+	 * </pre>
+	 * 
+	 * @param editable true when this field should be editable (the default behavior).
+	 */
 	public void setEditable(boolean editable)
 	{
-		this._bbField.setEditable(editable);
+		//#if polish.blackberry
+			this._bbField.setEditable(editable);
+		//#endif
 	}
-	//#endif
 
 	/**
 	 * Gets the current input constraints of the <code>TextField</code>.

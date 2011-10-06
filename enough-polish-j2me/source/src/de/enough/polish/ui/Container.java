@@ -54,12 +54,8 @@ import de.enough.polish.util.ArrayList;
  * 		<li><b>scroll-mode</b>: Either "smooth" (=default) or "normal".</li>
  * 		<li><b>and many more...</b>: compare the visual guide to J2ME Polish</li>
  * </ul>
- * <p>Copyright Enough Software 2004 - 2007 - 2009</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        01-Mar-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class Container extends Item {
@@ -1032,9 +1028,7 @@ public class Container extends Item {
 		}
 		
 		//#if polish.blackberry
-			if(getScreen() != null) {
-				getScreen().notifyFocusSet(item);
-			} else {
+			if (this.isShown) {
 				Display.getInstance().notifyFocusSet(item);
 			}
 		//#endif
