@@ -114,7 +114,7 @@ public interface Storage
 	 *  
 	 * @return an array of names of stored objects.
 	 * @throws IOException when the names could not be read
-	 * @throws IllegalStateException whent the storage implementation or configuration does not support a listing of names.
+	 * @throws IllegalStateException when the storage implementation or configuration does not support a listing of names.
 	 */
 	String[] list()
 	  throws IOException;
