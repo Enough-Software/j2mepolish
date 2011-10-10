@@ -2409,7 +2409,7 @@ public class Container extends Item {
 		//return super.handleKeyRepeated(keyCode, gameAction);
 	}
 	
-	//#if polish.Container.useTouchFocusHandling
+	//#if !polish.Container.selectEntriesWhileTouchScrolling
 	/**
 	 * Focuses the first visible item in the given vertical minimum and maximum offsets.
 	 * 
@@ -2513,7 +2513,7 @@ public class Container extends Item {
 			return false;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(this.focusedIndex == -1) {
 			int verticalMin = getAbsoluteY();
 			int verticalMax = verticalMin + getScrollHeight();
@@ -3883,7 +3883,7 @@ public class Container extends Item {
 			return true;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(item != null) {
 	   		 focusChild(-1);
 	   		 //#if polish.blackberry
