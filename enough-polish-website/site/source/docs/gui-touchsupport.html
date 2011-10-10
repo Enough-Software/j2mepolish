@@ -161,6 +161,18 @@ public class GlobalEventHandler implements EventListener {
 }
 </pre>
 	
+	<h2 id="virtualkeyboard">Touch Support and Focus</h2>
+	<p>
+	By default, J2ME Polish clears the focus while dragging a scrollable area (e.g. a screen).
+	When the up/down key is pressed on a touch device with directional keys / trackpad (e.g. the BlackBerry Torch) 
+	the focus is restored to the first visible item.   
+	To disable this feature you can set the following preprocessing variable :
+	<pre>
+	<variable name="polish.Container.selectEntriesWhileTouchScrolling" value="true" />
+	</pre>
+	With this preprocessing variable set to true, the focus remains on the last selected item when a scrollable area is dragged or scrolled.
+	</p>
+	
 	<h2 id="virtualkeyboard">Virtual keyboard</h2>
 	<p>
 	When using TextFields in your Screens you can also use an <a href="gui-item-textfield.html#textfield-virtualkeyboard">virtual keyboard</a> to enter text. 
