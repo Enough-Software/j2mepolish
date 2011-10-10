@@ -229,6 +229,8 @@ public class HorizontalContainerView extends ContainerView {
 	 * @see de.enough.polish.ui.ContainerView#focusItem(int, de.enough.polish.ui.Item, int, de.enough.polish.ui.Style)
 	 */
 	public Style focusItem(int focIndex, Item item, int direction, Style focStyle) {
+		//#debug
+		System.out.println("Horizontal: focusing " + focIndex + ", clippingRequired=" + this.isClippingRequired);
 		//#if polish.css.show-text-in-title
 		if (this.isShowTextInTitle) {
 			Screen scr = getScreen();
@@ -248,10 +250,42 @@ public class HorizontalContainerView extends ContainerView {
 		    		leftStart = left.getWidth() + this.paddingHorizontal;
 		    		availWidth -= right.getWidth() + this.paddingHorizontal;
 		    	}
-				if (getScrollTargetXOffset() + item.relativeX < leftStart) {
-					setScrollXOffset( leftStart - item.relativeX, true );
-				} else if (getScrollTargetXOffset() + item.relativeX + item.itemWidth > availWidth) {
-					setScrollXOffset( availWidth - item.relativeX - item.itemWidth, true );
+				int scrollXOffset = getScrollTargetXOffset();
+				int targetScrollXOffset = -1;
+				if ((scrollXOffset + item.relativeX < leftStart) 
+//					//#ifdef polish.css.scroll-continuous
+//						&& (!this.scrollContinuous || (scrollXOffset + item.relativeX + item.itemWidth + this.contentWidth <= availWidth))
+//					//#endif
+				) {
+					targetScrollXOffset = leftStart - item.relativeX;
+				} else if ((scrollXOffset + item.relativeX + item.itemWidth > availWidth) 
+//					//#ifdef polish.css.scroll-continuous
+//						&& (!this.scrollContinuous || (scrollXOffset + item.relativeX - this.contentWidth >= leftStart))
+//					//#endif
+				) {
+					targetScrollXOffset = availWidth - item.relativeX - item.itemWidth;
+				}
+//				//#ifdef polish.css.scroll-continuous
+//					if ((targetScrollXOffset != -1) && this.scrollContinuous) {
+//						
+//						// check if item is possibly in the visible area already (the virtual copy, to be precise):
+//						if (targetScrollXOffset < scrollXOffset) {
+//							// moving to the left:
+//							if (scrollXOffset + this.contentWidth + item.relativeX > leftStart) {
+//								targetScrollXOffset = -1;
+//							}
+//						} else {
+//							// moving to the right:
+//						}
+//						// also check if we really need to scroll that far, e.g. when moving to the first or last item:
+//						
+//						setScrollXOffset( scrollXOffset - this.contentWidth, false);
+//						targetScrollXOffset = -scrollXOffset - item.relativeX;
+//					}
+//				//#endif
+				
+				if (targetScrollXOffset != -1) {
+					setScrollXOffset( targetScrollXOffset, true );
 				}
 			}			
 			//#if polish.css.horizontalview-align-heights
