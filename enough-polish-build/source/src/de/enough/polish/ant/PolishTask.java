@@ -980,7 +980,7 @@ public class PolishTask extends ConditionalTask {
 		}
 
 		// create device database:
-		if (this.deviceRequirements != null) {
+		if (getDeviceRequirements() != null) {
 			// special case for the usage of <identifier> requirements:
 			// in that case not all devices need to be loaded, just the ones which have the correct identifiers.
 			// This allows a faster start up time for around 80% of all cases.
