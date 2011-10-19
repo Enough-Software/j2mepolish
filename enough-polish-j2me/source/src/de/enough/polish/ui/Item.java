@@ -5251,8 +5251,19 @@ public abstract class Item implements UiElement, Animatable
 	 * This method is the equivalent to display.setCurrentItem( item ).
 	 * 
 	 * @param display the display of the MIDlet.
+	 * @since J2ME Polish 2.3
 	 */
 	public void show( Display display ) {
+		show( display, null);
+	}
+	
+	/**
+	 * Shows the screen to which item belongs to and focusses this item.
+	 * This method is the equivalent to display.setCurrentItem( item ).
+	 * 
+	 * @param display the display of the MIDlet.
+	 */
+	public void show( Display display, Style screenTransitionStyle ) {
 		Screen myScreen = getScreen();
 		if ( myScreen == null ) {
 			//#debug warn
@@ -5262,7 +5273,11 @@ public abstract class Item implements UiElement, Animatable
 		//#if !polish.android
 			myScreen.focus( this );
 		//#endif
-		display.setCurrent( myScreen );
+		if (screenTransitionStyle != null) {
+			display.setCurrent(myScreen, screenTransitionStyle);
+		} else {
+			display.setCurrent( myScreen );
+		}
 		//#if polish.android
 			myScreen.focus( this );
 		//#endif
