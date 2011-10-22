@@ -47,68 +47,24 @@ public class PolishPreprocessorTest extends TestCase {
 		super(name);
 	}
 		
-	public void testSetCurrentItem() {
-		
-		String input = "		display.setCurrentItem( item );";
-		Matcher matcher = PolishPreprocessor.SET_CURRENT_ITEM_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		//System.out.println( matcher.pattern().pattern() );
-		assertEquals( "display.setCurrentItem( item )", matcher.group() );
-
-		input = "Display.getDisplay(midlet).setCurrentItem(m_txtMessage);";
-		matcher = PolishPreprocessor.SET_CURRENT_ITEM_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "Display.getDisplay(midlet).setCurrentItem(m_txtMessage)", matcher.group() );
-
-		input = "		this.display.setCurrentItem( this.item );";
-		matcher = PolishPreprocessor.SET_CURRENT_ITEM_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "this.display.setCurrentItem( this.item )", matcher.group() );
-
-		input = "		display . setCurrentItem( this.item );";
-		matcher = PolishPreprocessor.SET_CURRENT_ITEM_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "display . setCurrentItem( this.item )", matcher.group() );
-	
-		PolishPreprocessor preprocessor = new PolishPreprocessor();
-		preprocessor.isUsingPolishGui = true;
-		String[] lines = new String[] {
-				"	public void testMethod() {",
-				"		this.display.setCurrentItem( this.item );",
-				"		display.setCurrentItem( item );",
-				"		display.setCurrentItem( getMyItem() );",
-				"        Display.getDisplay(midlet).setCurrentItem(m_txtMessage)",
-				"	}"
-		};
-		StringList list = new StringList( lines );
-		
-		preprocessor.processClass(list, "TestClass");
-		
-		lines = list.getArray();
-		
-		assertEquals(  "		this.item.show( this.display );", lines[1] );
-		assertEquals(  "		item.show( display );", lines[2] );
-		assertEquals(  "		getMyItem().show( display );", lines[3] );
-		assertEquals( "        m_txtMessage.show( Display.getDisplay(midlet) )", lines[4] );
-	}
 	
 	
 	public void testSetCurrentAlertDisplayable() {
 		
-		String input = "		display.setCurrent( alert, screen );";
-		Matcher matcher = PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "display.setCurrent( alert, screen )", matcher.group() );
+		String input = null; // "		display.setCurrent( alert, screen );";
+		Matcher matcher = null; ///PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
+//		assertTrue( matcher.find() );
+//		assertEquals( "display.setCurrent( alert, screen )", matcher.group() );
 		
-		input = "		this.display.setCurrent( this.alert, this.screen );";
-		matcher = PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "this.display.setCurrent( this.alert, this.screen )", matcher.group() );
-
-		input = "		display . setCurrent ( this.alert , this.screen );";
-		matcher = PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
-		assertTrue( matcher.find() );
-		assertEquals( "display . setCurrent ( this.alert , this.screen )", matcher.group() );
+//		input = "		this.display.setCurrent( this.alert, this.screen );";
+//		matcher = PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
+//		assertTrue( matcher.find() );
+//		assertEquals( "this.display.setCurrent( this.alert, this.screen )", matcher.group() );
+//
+//		input = "		display . setCurrent ( this.alert , this.screen );";
+//		matcher = PolishPreprocessor.SET_CURRENT_ALERT_DISPLAYABLE_PATTERN.matcher( input ); 
+//		assertTrue( matcher.find() );
+//		assertEquals( "display . setCurrent ( this.alert , this.screen )", matcher.group() );
 	
 		PolishPreprocessor preprocessor = new PolishPreprocessor();
 		preprocessor.isUsingPolishGui = true;
