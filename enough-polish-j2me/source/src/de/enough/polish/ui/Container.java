@@ -3618,7 +3618,14 @@ public class Container extends Item {
 //			}
 //			return true;			
 //		}
-		return ((this.defaultCommand != null) && super.handlePointerPressed(origRelX, origRelY)) || eventHandled;
+		boolean handledBySuperImplementation = ((this.defaultCommand != null) && super.handlePointerPressed(origRelX, origRelY)) || eventHandled;
+		//#if polish.android
+			if (!handledBySuperImplementation && (item != null) && (item._androidView != null) && (!item._androidView.isFocused())) {
+				item.defocus(this.itemStyle);
+				handledBySuperImplementation = true;
+			}
+		//#endif
+		return handledBySuperImplementation;
 	}
 	//#endif
 	

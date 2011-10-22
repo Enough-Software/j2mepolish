@@ -4574,7 +4574,12 @@ public class TextField extends StringItem
 	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
 	protected Style focus(Style focStyle, int direction) {
 		//#if polish.android
-			DeviceControl.showSoftKeyboard();
+			if (this.isShown) {
+				DeviceControl.showSoftKeyboard();
+			}
+			//#if !polish.TextField.keepCaretPosition
+				setCaretPosition( getString().length() );
+			//#endif
 		//#elif tmp.directInput || polish.blackberry
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {

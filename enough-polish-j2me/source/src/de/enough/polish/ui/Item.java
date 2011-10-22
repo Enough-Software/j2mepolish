@@ -4985,7 +4985,7 @@ public abstract class Item implements UiElement, Animatable
 				oldStyle = StyleSheet.defaultStyle;
 			}
 			//#if polish.android
-			if (this._androidView != null) {
+			if (this._androidView != null && this.isShown) {
 				this._androidView.requestFocus();
 			}
 			//#endif
