@@ -2385,9 +2385,6 @@ public class TextField extends StringItem
 				} 
 			//#endif
 			super.paintContent(x, y, leftBorder, rightBorder, g);
-			if (true) {
-				return;
-			}
 		//#else
         
 		if (this.isUneditable || !this.isFocused) {
