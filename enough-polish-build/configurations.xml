@@ -157,5 +157,13 @@
 		<capability name="build.BootClassPath" value="android-3.2.jar" />
 		<capability name="SupportFloatingPoint" value="true" />
 	</configuration>
+
+	<configuration>
+		<identifier>Android/4.0</identifier>
+		<features>android, cldc, cldc11, cldc1.1, hasFloatingPoint</features>
+		<description>android</description>
+		<capability name="build.BootClassPath" value="android-4.0.jar" />
+		<capability name="SupportFloatingPoint" value="true" />
+	</configuration>
 	
 </configurations>

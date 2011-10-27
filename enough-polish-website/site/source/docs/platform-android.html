@@ -51,18 +51,28 @@ The Android platform is based on Java 1.5 and your application can use the full 
 <p>
 To compile, convert and package your source code for the Android
 platform, you build your application for the device <code>Generic/android</code>. To depend on a specific SDK version use <code>Generic/android2.3</code> for Android 2.3 phones and
-<code>Generic/android3.2</code> for Android 3.2 tablets. You can also target a specific phone like <code>Motorola/Photon</code>.
+<code>Generic/android4.0</code> for Android 4.0 tablets or phones. You can also target a specific phone like <code>Motorola/Photon</code>.
 <br/>
 Here are some useful generic target devices that are plain-vanilla Android devices:
 </p>
 <table>
 	<tr><th>Device</th><th>Android Version</th><th>Android API Level</th><th>Display Resolution</th><th>Additional APIs</th></tr>
+	<tr><td>Generic/android4.0</td><td>4.0</td><td>14</td><td>-</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WXGA800</td><td>4.0</td><td>14</td><td>WXGA: 1280x800</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WXGA720</td><td>4.0</td><td>14</td><td>WXGA: 1280x720</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WSVGA</td><td>4.0</td><td>14</td><td>WSVGA: 1024x600</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WVGA800</td><td>4.0</td><td>14</td><td>WVGA800: 480x800</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WVGA854</td><td>4.0</td><td>14</td><td>WVGA854: 480x854</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WQVGA432</td><td>4.0</td><td>14</td><td>WQVGA432: 240x432</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_WQVGA400</td><td>4.0</td><td>14</td><td>WQVGA400: 240x400</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_QVGA</td><td>4.0</td><td>14</td><td>QVGA: 240x320</td><td>-</td></tr>
+	<tr><td>Generic/android4.0_HVGA</td><td>4.0</td><td>14</td><td>HVGA: 320x480</td><td>-</td></tr>
 	<tr><td>Generic/android3.2</td><td>3.2</td><td>13</td><td>-</td><td>-</td></tr>
-	<tr><td>Generic/android3.2_WXGA</td><td>3.2</td><td>13</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android3.2_WXGA</td><td>3.2</td><td>13</td><td>WXGA: 1280x800</td><td>-</td></tr>
 	<tr><td>Generic/android3.1</td><td>3.1</td><td>12</td><td>-</td><td>-</td></tr>
-	<tr><td>Generic/android3.1_WXGA</td><td>3.1</td><td>12</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android3.1_WXGA</td><td>3.1</td><td>12</td><td>WXGA: 1280x800</td><td>-</td></tr>
 	<tr><td>Generic/android3.0</td><td>3.0</td><td>11</td><td>-</td><td>-</td></tr>
-	<tr><td>Generic/android3.0_WXGA</td><td>3.0</td><td>11</td><td>WXGA: 1280x768</td><td>-</td></tr>
+	<tr><td>Generic/android3.0_WXGA</td><td>3.0</td><td>11</td><td>WXGA: 1280x800</td><td>-</td></tr>
 	<tr><td>Generic/android2.3.3</td><td>2.3.3</td><td>10</td><td>-</td><td>-</td></tr>
 	<tr><td>Generic/android2.3.3_WVGA800</td><td>2.3.3</td><td>10</td><td>WVGA800: 480x800</td><td>-</td></tr>
 	<tr><td>Generic/android2.3.3_WVGA854</td><td>2.3.3</td><td>10</td><td>WVGA854: 480x854</td><td>-</td></tr>
@@ -122,6 +132,7 @@ for example <i>${polish.home}/import/android-google-maps10.jar</i>.
 </p>
 <table>
 	<tr><th>Device</th><th>Android Version</th><th>Android API Level</th><th>Display Resolution</th><th>Additional APIs</th></tr>
+	<tr><td>Google/android4.0</td><td>4.0</td><td>14</td><td>-</td><td>android-google-maps-api14, android-google-usb-api14</td></tr>
 	<tr><td>Google/android3.2</td><td>3.2</td><td>13</td><td>-</td><td>android-google-maps-api13, android-google-usb-api13</td></tr>
 	<tr><td>Google/android3.1</td><td>3.1</td><td>12</td><td>-</td><td>android-google-maps-api12, android-google-usb-api12</td></tr>
 	<tr><td>Google/android3.0</td><td>3.0</td><td>11</td><td>-</td><td>android-google-maps-api11</td></tr>

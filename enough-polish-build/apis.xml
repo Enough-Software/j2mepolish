@@ -645,6 +645,17 @@
 	</api>
 	
 	<api>
+		<name>android-google-maps-api14</name>
+		<description>
+		Google Maps API for Android with API Level 14 (Android 4.0).
+		</description>
+		<names>android-google-maps-api14</names>
+		<symbol>android-google-maps-api14</symbol>
+		<files>android-google-maps-api14.jar</files>
+		<path>import/android-google-maps-api14.jar</path>
+	</api>
+	
+	<api>
 		<name>android-google-usb-api10</name>
 		<description>
 		Google USB accessory API for Android with API Level 10 (Android 2.3.3).
@@ -675,6 +686,17 @@
 		<symbol>android-google-usb-api13</symbol>
 		<files>android-google-usb-api13.jar</files>
 		<path>import/android-google-usb-api13.jar</path>
+	</api>
+	
+	<api>
+		<name>android-google-usb-api14</name>
+		<description>
+		Google USB accessory API for Android with API Level 14 (Android 4.0).
+		</description>
+		<names>android-google-usb-api14</names>
+		<symbol>android-google-usb-api14</symbol>
+		<files>android-google-usb-api14.jar</files>
+		<path>import/android-google-usb-api14.jar</path>
 	</api>
 	
 	<api>
