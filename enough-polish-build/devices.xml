@@ -1109,7 +1109,7 @@ These namespaces/schemas will be used soon.
     <identifier>Google/Android4.0</identifier>
     <parent>Generic/android4.0</parent>
     <description>An Android compatible device with the 4.0 firmware and the Google Maps and Google USB API (API Level 14).</description>
-    <capability name="polish.Emulator.Skin" value="WXGA" />
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
     <capability name="build.Android.Platform.Target" value="Google Inc.:Google APIs:14" />
     <capability name="build.Android.Platform.Api" value="14" />
     <capability name="JavaPackage" value="android-google-maps-api14, android-google-usb-api14" />
