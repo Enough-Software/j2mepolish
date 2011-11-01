@@ -52,7 +52,7 @@ implements CommandListener, ApplicationInitializer
 	private Form browserScreen;
 	private RssBrowser rssBrowser;
 	private List mainMenu;
-	private String defaultRssUrl = "http://www.digg.com/rss/containerscience.xml";
+	private String defaultRssUrl = "http://feeds.bbci.co.uk/news/technology/rss.xml";
 	private Form settingsForm;
 	private StylingRssHandler rssTagHandler;
 	private boolean hasPointerEvents;
