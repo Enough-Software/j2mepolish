@@ -156,7 +156,6 @@ public class AtomFeedTest extends TestCase {
 	}
 	
 	public void testSerialization() throws IOException {
-		AtomFeed feed = new AtomFeed();
 		String document = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 			+ "<?xml-stylesheet href=\"http://feeds.thumbtribe.co.za/static/c3po.static/style/thumbtribe.css\" type=\"text/css\" title=\"Thumbtribe ATOM XML\"?><!--Computer generated XML . DO NOT EDIT !!--><!--(c) Thumbtribe . C3PO--><!--Version : 1.00--><!--System Properties:"
 			+ "* Operating System : Linux (amd64)"
@@ -231,6 +230,7 @@ public class AtomFeedTest extends TestCase {
 			+ "</entry>"
 			+ "</feed>";
 		
+		AtomFeed feed = new AtomFeed();
 		feed.parse(document);
 		
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -292,5 +292,101 @@ public class AtomFeedTest extends TestCase {
 		feed = new AtomFeed();
 		feed.read(in);
 		assertEquals( 2, feed.size() );
+	}
+	
+	public void testDiggParse() throws IOException {
+		String document = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<feed xml:lang=\"en-US\" xmlns=\"http://www.w3.org/2005/Atom\" xmlns:digg=\"http://digg.com/docs/diggrss/\" xmlns:media=\"http://search.yahoo.com/mrss/\">"
+				+ "<title>Top News</title>"
+					+ "<subtitle>Top News</subtitle>"
+					+ "<updated>2011-11-01T13:41:34Z</updated>"
+					+ "<link href=\"http://services.digg.com/2.0/story.getTopNews?type=rss&amp;topic=science\" rel=\"self\"/>"
+					+ "<id>http://services.digg.com/2.0/story.getTopNews?type=rss&amp;topic=science</id>"
+					+ "<link href=\"http://pubsubhubbub.appspot.com/\" rel=\"hub\"/>"
+					+ "<author>"
+						+ "<name>Digg</name>"
+					+ "</author>"
+					+ "<entry>"
+						+ "<title>How Python Hearts Double in Size</title>"
+						+ "<link href=\"http://digg.com/news/science/how_python_hearts_double_in_size?utm_campaign=Feed%3A+http%3A%2F%2Fservices.digg.com%2F2.0%2Fstory.getTopNews%3Ftype%3Drss%26topic%3Dscience&amp;utm_medium=feed&amp;utm_source=diggapi\"/>"
+						+ "<content type=\"html\">Fat does a heart good—at least if you're a python, a new study says.</content>"
+						+ "<updated>2011-11-01T00:30:55Z</updated>"
+						+ "<digg:diggCount>"
+							+ "122"
+						+ "</digg:diggCount>"
+						+ "<digg:category>"
+							+ "Science"
+						+ "</digg:category>"
+						+ "<digg:commentCount>"
+							+ "1"
+						+ "</digg:commentCount>"
+						+ "<media:thumbnail height=\"62\" url=\"http://cdn1.diggstatic.com/story/how_python_hearts_double_in_size/t.png\" width=\"62\"/>"
+						+ "<media:group>"
+							+ "<media:content height=\"160\" url=\"http://cdn3.diggstatic.com/story/how_python_hearts_double_in_size/l.png\" width=\"160\"/>"
+							+ "<media:content height=\"48\" url=\"http://cdn3.diggstatic.com/story/how_python_hearts_double_in_size/s.png\" width=\"48\"/>"
+							+ "<media:content height=\"120\" url=\"http://cdn3.diggstatic.com/story/how_python_hearts_double_in_size/m.png\" width=\"120\"/>"
+							+ "<media:content height=\"62\" url=\"http://cdn1.diggstatic.com/story/how_python_hearts_double_in_size/t.png\" width=\"62\"/>"
+						+ "</media:group>"
+						+ "<id>http://digg.com/news/science/how_python_hearts_double_in_size</id>"
+					+ "</entry>"
+					+ "<entry>"
+						+ "<title>5 Women Fueling the Clean Tech Industry</title>"
+						+ "<link href=\"http://digg.com/news/science/5_women_fueling_the_clean_tech_industry?utm_campaign=Feed%3A+http%3A%2F%2Fservices.digg.com%2F2.0%2Fstory.getTopNews%3Ftype%3Drss%26topic%3Dscience&amp;utm_medium=feed&amp;utm_source=diggapi\"/>"
+						+ "<content type=\"html\">Women hold 39% of leadership positions in the sustainability sector. Ecomagination is celebrating some of the women of the clean tech industry by highlighting their efforts. From biofuels to efficiently storing energy, these women are leading the way for the industry as a whole.</content>"
+						+ "<updated>2011-10-31T19:52:18Z</updated>"
+						+ "<digg:diggCount>"
+							+ "94"
+						+ "</digg:diggCount>"
+						+ "<digg:category>"
+							+ "Science"
+						+ "</digg:category>"
+						+ "<digg:commentCount>"
+							+ "7"
+						+ "</digg:commentCount>"
+						+ "<media:thumbnail height=\"62\" url=\"http://cdn1.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/t.png\" width=\"62\"/>"
+						+ "<media:group>"
+							+ "<media:content height=\"160\" url=\"http://cdn1.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/l.png\" width=\"160\"/>"
+							+ "<media:content height=\"48\" url=\"http://cdn3.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/s.png\" width=\"48\"/>"
+							+ "<media:content height=\"120\" url=\"http://cdn1.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/m.png\" width=\"120\"/>"
+							+ "<media:content height=\"62\" url=\"http://cdn1.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/t.png\" width=\"62\"/>"
+						+ "</media:group>"
+						+ "<id>http://digg.com/news/science/5_women_fueling_the_clean_tech_industry</id>"
+					+ "</entry>";
+		AtomFeed feed = new AtomFeed();
+		feed.parse(document);
+		
+		
+		assertEquals( "http://services.digg.com/2.0/story.getTopNews?type=rss&topic=science", feed.getId() );
+		assertEquals( "Top News", feed.getTitle() );
+		assertEquals( "Top News", feed.getSubtitle() );
+		assertNotNull( feed.getUpdated() );
+		// 2011-11-01T13:41:34Z
+		assertEquals( 2011, feed.getUpdated().getYear() );
+		assertEquals( Calendar.NOVEMBER, feed.getUpdated().getMonth() );
+		assertEquals( 1, feed.getUpdated().getDay() );
+		assertEquals( 13, feed.getUpdated().getHour() );
+		assertEquals( 41, feed.getUpdated().getMinute() );
+		assertEquals( 34, feed.getUpdated().getSecond() );
+		assertNotNull( feed.getUpdated().getTimeZone() );
+		assertEquals( 0, feed.getUpdated().getTimeZone().getRawOffset() );
+		assertNotNull( feed.getAuthor() );
+		assertEquals( "Digg", feed.getAuthor().getName() );
+		
+		assertEquals( 2, feed.size() );
+		assertEquals( 2, feed.getEntries().length );
+		for (int i=0; i<feed.size(); i++) {
+			AtomEntry entry = feed.getEntry(i);
+			assertNotNull( entry );
+		}
+		
+		assertEquals( "How Python Hearts Double in Size", feed.getEntry(0).getTitle() );
+		assertEquals( "5 Women Fueling the Clean Tech Industry", feed.getEntry(1).getTitle() );
+		
+		AtomEntry entry = feed.getEntries()[1];
+		String content = "Women hold 39% of leadership positions in the sustainability sector. Ecomagination is celebrating some of the women of the clean tech industry by highlighting their efforts. From biofuels to efficiently storing energy, these women are leading the way for the industry as a whole.";
+		assertEquals( content, entry.getContent() );
+		assertEquals( 1, entry.getImages().length );
+		assertEquals("http://cdn1.diggstatic.com/story/5_women_fueling_the_clean_tech_industry/t.png", entry.getImages()[0].getUrl() );
+
 	}
 }
