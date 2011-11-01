@@ -150,7 +150,7 @@ public class PolishTask extends ConditionalTask {
 		}
 		catch (MissingResourceException e)
 		{
-			tmp = "<Unknown CVS version>";
+			tmp = "<Unknown https://github.com/Enough-Software/j2mepolish version>";
 		}
 
 		VERSION = tmp;
