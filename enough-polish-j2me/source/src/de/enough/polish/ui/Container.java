@@ -159,6 +159,14 @@ public class Container extends Item {
 	private int scrollStartYOffset;
 	private long scrollDuration = 300; // ms
 	
+	
+	//#if !polish.Container.selectEntriesWhileTouchScrolling
+	/**
+	 * the minimum drag distance before the focus is cleared while dragging  
+	 */
+	private static final int minimumDragDistance = Math.min(Display.getScreenWidth(),Display.getScreenHeight())/10;
+	//#endif
+	
 	/**
 	 * Creates a new empty container.
 	 */
@@ -3886,11 +3894,14 @@ public class Container extends Item {
 		
 		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(item != null) {
-	   		 focusChild(-1);
-	   		 //#if polish.blackberry
-	   		 //# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
-	   		 //#endif
-	   		 UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+			int dragDistance = Math.abs(relY - this.lastPointerPressY);
+			if(dragDistance > minimumDragDistance) {
+				focusChild(-1);
+		   		//#if polish.blackberry
+		   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
+		   		//#endif
+		   		UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+			}
    	  	}
 		//#endif
 		
