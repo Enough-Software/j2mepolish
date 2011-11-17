@@ -807,6 +807,9 @@ public class TextField extends StringItem
 
 	// this is outside of the tmp.directInput block, so that it can be referenced from the UiAccess class
 	protected int inputMode; // the current input mode		
+	//#if tmp.directInput || polish.android
+		private int caretPosition; // the position of the caret in the text
+	//#endif
 	//#if tmp.directInput
 		//#if tmp.supportsSymbolEntry
 			protected static List symbolsList;
@@ -868,7 +871,6 @@ public class TextField extends StringItem
 		
 		private String[] realTextLines; // the textLines with spaces and line breaks at the end
 		private String originalRowText; // current line including spaces and line breaks at the end
-		private int caretPosition; // the position of the caret in the text
 		private int caretColumn; // the current column of the caret, 0 is the first column
 		private int caretRow; // the current row of the caret, 0 is the first row
 		private int caretRowWidth; // the width of the current row
@@ -1953,7 +1955,14 @@ public class TextField extends StringItem
 	public void setCaretPosition(int position) {
 		//#if polish.android
 			try {
-				this._androidTextField.setSelection(position);
+				
+				AndroidTextField nativeField = this._androidTextField;
+				if (nativeField == null) {
+					this.caretPosition = position;
+				} else {
+					this.caretPosition = -1; 
+					nativeField.setCursorPosition(position);
+				}
 			} catch (IndexOutOfBoundsException e) {
 				// ignore
 			}
@@ -2041,6 +2050,11 @@ public class TextField extends StringItem
 					TextField.this._androidView = TextField.this._androidTextField;
 					if (TextField.this.isShown) {
 						AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
+					}
+					int caretPos = TextField.this.caretPosition;
+					if (caretPos != -1) {
+						TextField.this._androidTextField.setCursorPosition(caretPos);
+						TextField.this.caretPosition = -1;
 					}
 				}
 			});
