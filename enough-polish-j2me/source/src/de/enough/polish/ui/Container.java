@@ -164,7 +164,7 @@ public class Container extends Item {
 	/**
 	 * the minimum drag distance before the focus is cleared while dragging  
 	 */
-	private static final int minimumDragDistance = Math.min(Display.getScreenWidth(),Display.getScreenHeight())/10;
+	private static int minimumDragDistance;
 	//#endif
 	
 	/**
@@ -3470,6 +3470,11 @@ public class Container extends Item {
 		//#if polish.css.show-delay
 			this.showDelayIndex = (myItems.length > 1 ? 1 : 0);
 			this.showNotifyTime = System.currentTimeMillis();
+		//#endif
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
+			if (minimumDragDistance == 0) {
+				minimumDragDistance = Math.min(Display.getScreenWidth(),Display.getScreenHeight())/10;
+			}
 		//#endif
 	}
 
