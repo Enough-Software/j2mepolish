@@ -683,6 +683,9 @@ public class StringItem extends Item
 						lineY += startIndex * lineHeight;
 						if (startIndex > 0) {
 							lineX = leftBorder;
+							if ( this.useSingleRow && this.label != null) {
+								lineX -= this.label.itemWidth;
+							}
 						}
 					}
 					//#if polish.Bugs.needsBottomOrientiationForStringDrawing
@@ -707,9 +710,14 @@ public class StringItem extends Item
 					}
 					drawString( line, lineX, lineY, orientation, g );
 					lineY += lineHeight;
-					if (i == 0 && x > leftBorder) {
+					if (i == 0) {
+						if (x > leftBorder) {
+							lineX = leftBorder;
+						}
 						//System.out.println("changing lineX from " + lineX + " to " + leftBorder);
-						lineX = leftBorder;
+						if ( this.useSingleRow && this.label != null) {
+							lineX -= this.label.itemWidth;
+						}
 					}
 				}
 		//#if tmp.useTextEffect

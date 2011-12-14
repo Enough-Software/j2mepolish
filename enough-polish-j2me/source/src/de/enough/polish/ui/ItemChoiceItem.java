@@ -69,9 +69,9 @@ public class ItemChoiceItem extends ChoiceItem {
 	 * @see de.enough.polish.ui.ChoiceItem#initContentImpl(int, int, int)
 	 */
 	protected void initContentImpl(int firstLineWidth, int availWidth, int availHeight) {
-		if (!this.item.isStyleInitialised && this.item.style != null) {
+		if (!this.item.isStyleInitialized && this.item.style != null) {
 			this.item.setStyle( this.item.style );
-			this.item.isStyleInitialised = true;
+			this.item.isStyleInitialized = true;
 		}
 		this.item.initContent(firstLineWidth, availWidth, availHeight);
 		this.contentWidth = this.item.getContentWidth();

@@ -789,7 +789,7 @@ implements ImageConsumer
 		super.releaseResources();
 		//#if polish.midp2 && polish.css.scale-factor
 			this.scaleData = null;
-			this.isStyleInitialised = false;
+			this.isStyleInitialized = false;
 			setInitialized(false);
 		//#endif
 			//#if polish.css.icon-filter && polish.midp2

@@ -982,7 +982,7 @@ public class TextField extends StringItem
 		//#endif
 		private int bbLastCursorPosition;
 	//#endif
-	//#if polish.midp && !polish.blackberry && !polish.api.windows && !polish.TextField.useVirtualKeyboard
+	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
 		//#define tmp.useNativeTextBox
 		private de.enough.polish.midp.ui.TextBox midpTextBox;
 		//#if polish.TextField.passCharacterToNativeEditor

@@ -3232,7 +3232,7 @@ public class FakeContainerCustomItem extends FakeCustomItem
 		Item[] myItems = getItems();
 		for (int i = 0; i < myItems.length; i++) {
 			Item item = myItems[i];
-			if (item.style != null && !item.isStyleInitialised) {
+			if (item.style != null && !item.isStyleInitialized) {
 				item.setStyle( item.style );
 			}
 			//#ifdef polish.useDynamicStyles
@@ -3240,7 +3240,7 @@ public class FakeContainerCustomItem extends FakeCustomItem
 					initStyle();
 				}
 			//#else
-				else if (item.style == null && !item.isStyleInitialised) {
+				else if (item.style == null && !item.isStyleInitialized) {
 					//#debug
 					System.out.println("Setting default style for item " + item );
 					item.setStyle( StyleSheet.defaultStyle );

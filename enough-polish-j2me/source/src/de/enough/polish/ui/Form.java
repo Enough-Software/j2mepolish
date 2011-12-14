@@ -553,7 +553,7 @@ public class Form extends Screen
 		if (itemStyle != null) {
 			// by setting the style field instead of calling setStyle(itemStyle), the style will not be resolved immediately but only when needed
 			item.style = itemStyle;
-			item.isStyleInitialised = false;
+			item.isStyleInitialized = false;
 		}
 		if (this.isShown() ) {
 			repaint();

@@ -624,7 +624,7 @@ implements Choice
 		if ( elementStyle != null ) {
 			// set the field directly instead of calling setStyle() so that the style is applied later when it's needed
 			item.style = elementStyle;
-			item.isStyleInitialised = false;
+			item.isStyleInitialized = false;
 		}
 		int itemIndex = this.itemsList.size() - 1;
 		if (this.choiceType == Choice.EXCLUSIVE && item.isSelected) {

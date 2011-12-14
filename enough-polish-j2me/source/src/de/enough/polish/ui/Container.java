@@ -356,7 +356,7 @@ public class Container extends Item {
 		if (itemAddStyle != null) {
 			// by setting the style field instead of calling setStyle(itemStyle), the style will not be resolved immediately but only when needed
 			item.style = itemAddStyle;
-			item.isStyleInitialised = false;
+			item.isStyleInitialized = false;
 		}
 		//#if polish.css.child-style
 			else if (item.style == null && this.childStyle != null) {
@@ -1101,9 +1101,9 @@ public class Container extends Item {
 				System.out.println("Container: Unable to retrieve style of item " + item.getClass().getName() );
 			}
 		//#endif
-		//System.out.println("focus - still initialzed=" + this.isInitialized + " for " + this);
+		//System.out.println("focus - still initialized=" + this.isInitialized + " for " + this);
 		if  (isInitialized()) {
-			// this container has been initialised already,
+			// this container has been initialized already,
 			// so the dimensions are known.
 			//System.out.println("focus: contentWidth=" + this.contentWidth + ", of container " + this);
 			//int wAfter = item.getItemWidth( this.availableContentWidth, this.availableContentWidth, this.availableHeight );
@@ -3000,7 +3000,7 @@ public class Container extends Item {
 				this.plainStyle = result;
 			}
 			
-			if (!this.isStyleInitialised && result != null) {
+			if (!this.isStyleInitialized && result != null) {
 				//#debug
 				System.out.println("setting original style for container " + this + " with style " + result.name);
 				setStyle( result );
@@ -3423,7 +3423,7 @@ public class Container extends Item {
 	protected void showNotify()
 	{
 		super.showNotify();
-		if (this.style != null && !this.isStyleInitialised) {
+		if (this.style != null && !this.isStyleInitialized) {
 			setStyle( this.style );
 		}
 		//#ifdef polish.useDynamicStyles
@@ -3431,7 +3431,7 @@ public class Container extends Item {
 				initStyle();
 			}
 		//#else
-			else if (this.style == null && !this.isStyleInitialised) {
+			else if (this.style == null && !this.isStyleInitialized) {
 				//#debug
 				System.out.println("Setting default style for container " + this  );
 				setStyle( StyleSheet.defaultStyle );
@@ -3445,7 +3445,7 @@ public class Container extends Item {
 		Item[] myItems = getItems();
 		for (int i = 0; i < myItems.length; i++) {
 			Item item = myItems[i];
-			if (item.style != null && !item.isStyleInitialised) {
+			if (item.style != null && !item.isStyleInitialized) {
 				item.setStyle( item.style );
 			}
 			//#ifdef polish.useDynamicStyles
@@ -3453,7 +3453,7 @@ public class Container extends Item {
 					initStyle();
 				}
 			//#else
-				else if (item.style == null && !item.isStyleInitialised) {
+				else if (item.style == null && !item.isStyleInitialized) {
 					//#debug
 					System.out.println("Setting default style for item " + item );
 					item.setStyle( StyleSheet.defaultStyle );
@@ -4551,7 +4551,7 @@ public class Container extends Item {
 			super.setView( view );
 			return;
 		}
-		if (!this.isStyleInitialised && this.style != null) {
+		if (!this.isStyleInitialized && this.style != null) {
 			setStyle( this.style );
 		}
 		if (view == null) {

@@ -719,7 +719,7 @@ public abstract class Item implements UiElement, Animatable
 	/**
 	 * Determines whether the style has be dynamically assigned already.
 	 */
-	protected boolean isStyleInitialised;
+	protected boolean isStyleInitialized;
 	/**
 	 * The parent of this item.
 	 */
@@ -780,6 +780,7 @@ public abstract class Item implements UiElement, Animatable
 	protected StringItem label;
 	/** indicates that label and content are positioned on the same row if true */
 	protected boolean useSingleRow;
+	private boolean useSingleRowEnforced;
 	//#if polish.blackberry
 		/** a blackberry specific internal field */
 		public Field _bbField;
@@ -958,7 +959,7 @@ public abstract class Item implements UiElement, Animatable
 			this.layout = layout;
 		} else {
 			this.style = style;
-			this.isStyleInitialised = false;
+			this.isStyleInitialized = false;
 		}
 
                 //#if polish.css.filter
@@ -1072,7 +1073,7 @@ public abstract class Item implements UiElement, Animatable
 			if (isInitialized()) {
 				setInitialized(false);
 				repaint();
-			} else if (!this.isStyleInitialised && this.style != null) {
+			} else if (!this.isStyleInitialized && this.style != null) {
 				setStyle( this.style );
 				this.layout = layout;
 			}
@@ -1109,7 +1110,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @param view the new view, use null to remove the current view
 	 */
 	public void setView( ItemView view ) {
-		if (!this.isStyleInitialised && this.style != null) {
+		if (!this.isStyleInitialized && this.style != null) {
 			setStyle( this.style );
 		}
 		this.view = view;
@@ -1179,7 +1180,7 @@ public abstract class Item implements UiElement, Animatable
 	public void setStyle( Style style ) {
 		//#debug
 		System.out.println("setting style " + style.name + " for " + this + ", prevStyle=" + (this.style == null ? "<null>" : this.style.name) );
-		this.isStyleInitialised = true;
+		this.isStyleInitialized = true;
 		this.style = style;
 		
 		if (style != StyleSheet.defaultStyle) {
@@ -2635,7 +2636,11 @@ public abstract class Item implements UiElement, Animatable
 			int previousItemWidth = this.itemWidth;
 			int previousItemHeight = this.itemHeight;
 			
-			init(this.availableWidth, this.availableWidth, this.availableHeight);
+			if (this.parent instanceof Container) {
+				((Container)this.parent).getChildWidth(this);
+			} else {
+				init(this.availableWidth, this.availableWidth, this.availableHeight);
+			}
 			
             if (this.itemHeight < previousItemHeight && this.isLayoutVerticalExpand()) {
                 setItemHeight( previousItemHeight );
@@ -3214,7 +3219,7 @@ public abstract class Item implements UiElement, Animatable
 	}
 
 	/**
-	 * Initialises this item.
+	 * Initializes this item.
 	 * You should always call super.init( firstLineWidth, lineWidth) when overriding this method.
 	 * This method call either ItemView.initContent() or Item.initContent() to initialize the actual content.
 	 * A valid case for overriding would be if additional initialization needs to be done even when an
@@ -3228,7 +3233,8 @@ public abstract class Item implements UiElement, Animatable
 	 */
 	protected void init( int firstLineWidth, int availWidth, int availHeight ) {
 		//#debug
-		System.out.println("initialising item " + this + " with availWidth " + firstLineWidth + "/" + availWidth + ", height " + availHeight + " (was: " + this.availableWidth + ", " + this.availableHeight + ")" );
+		System.out.println("initializing item " + this + " with availWidth " + firstLineWidth + "/" + availWidth + ", height " + availHeight + " (was: " + this.availableWidth + ", " + this.availableHeight + ")" );
+		setInitialized(false);
 		this.availableWidth = availWidth;
 		this.availableHeight = availHeight;
 		//#if tmp.invisible
@@ -3241,7 +3247,7 @@ public abstract class Item implements UiElement, Animatable
 			}
  		//#endif
 			
-		if (this.style != null && !this.isStyleInitialised) {
+		if (this.style != null && !this.isStyleInitialized) {
 			setStyle( this.style );
 		}
 		//#ifdef polish.useDynamicStyles
@@ -3249,7 +3255,7 @@ public abstract class Item implements UiElement, Animatable
 				initStyle();
 			}
 		//#else
-			else if (this.style == null && !this.isStyleInitialised) {
+			else if (this.style == null && !this.isStyleInitialized) {
 				//#debug
 				System.out.println("Setting default style for item " + getClass().getName() );
 				setStyle( StyleSheet.defaultStyle );
@@ -3287,6 +3293,16 @@ public abstract class Item implements UiElement, Animatable
 		
 		int firstLineContentWidth = firstLineWidth - noneContentWidth;
 		int availableContentWidth = availWidth - noneContentWidth;
+		if (this.useSingleRowEnforced) {
+			if (firstLineContentWidth - labelWidth > 5 * availableContentWidth / 100) { // at least 5% of the available width should remain for the first line
+				firstLineContentWidth -= labelWidth;
+			} else {
+				firstLineContentWidth = availableContentWidth;
+			}
+			//#if polish.css.inline-label
+				this.isInlineLabel = false;
+			//#endif
+		}
 		
 		//#ifdef polish.css.max-width
 			if (this.maximumWidth != null ) {
@@ -3482,7 +3498,7 @@ public abstract class Item implements UiElement, Animatable
 		} else if (this.itemWidth > availWidth) {
 			setItemWidth( availWidth );
 		}
-		if (this.itemWidth + labelWidth <= availWidth) {
+		if ((this.itemWidth + labelWidth <= availWidth) || this.useSingleRowEnforced){
 			// label and content fit on one row:
 			this.useSingleRow = true;
 			if (this.label != null) {
@@ -3678,9 +3694,7 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 		setInitialized(true);
 		//#debug
-		System.out.println("Item.init(): contentHeight=" + this.contentHeight + ", itemHeight=" + this.itemHeight + " for " + this);
-		//#debug
-		System.out.println("Item.init(): contentWidth=" + this.contentWidth + ", itemWidth=" + this.itemWidth + ", backgroundWidth=" + this.backgroundWidth);
+		System.out.println("Item.init(): contentWidth=" + this.contentWidth + ", itemWidth=" + this.itemWidth + ", backgroundWidth=" + this.backgroundWidth + " for " + this);
 	}
 	
 	//#if polish.css.before
@@ -3934,7 +3948,7 @@ public abstract class Item implements UiElement, Animatable
 			//System.out.println("item has already style [" + this.style.name + "].");
 			this.cssSelector = this.style.name;
 		}
-		this.isStyleInitialised = true;
+		this.isStyleInitialized = true;
 	}
 	//#endif
 	
@@ -4260,7 +4274,7 @@ public abstract class Item implements UiElement, Animatable
 		this.isPressed = false;
 		//#if polish.css.pressed-style
 			Style previousStyle = this.normalStyle;
-			if (previousStyle != null && this.style != previousStyle) {
+			if (previousStyle != null && this.style == this.pressedStyle) {
 				//#ifdef polish.css.view-type
 					boolean removeViewType = ( this.style.getObjectProperty("view-type") != null  && previousStyle.getObjectProperty( "view-type") == null); 
 				//#endif
@@ -4896,7 +4910,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @return the style used for focussing this item.
 	 */
 	public Style getFocusedStyle() {
-		if (!this.isStyleInitialised) {
+		if (!this.isStyleInitialized) {
 			if (this.style != null) {
 				setStyle( this.style );
 			}
@@ -4955,7 +4969,7 @@ public abstract class Item implements UiElement, Animatable
 		Style oldStyle = this.style;
 		
 		if ((!this.isFocused) || (newStyle != this.style && newStyle != null)) {
-			if (!this.isStyleInitialised && oldStyle != null) {
+			if (!this.isStyleInitialized && oldStyle != null) {
 				setStyle( oldStyle );
 			}
 			if (newStyle == null) {
@@ -5150,7 +5164,7 @@ public abstract class Item implements UiElement, Animatable
 	 */
 	protected void showNotify()
 	{
-		if (!this.isStyleInitialised && this.style != null) {
+		if (!this.isStyleInitialized && this.style != null) {
 			setStyle( this.style );
 		}
 		this.isShown = true;
@@ -6153,7 +6167,7 @@ public abstract class Item implements UiElement, Animatable
 		}
 		//#endif
 		//#if polish.css.portrait-style || polish.css.landscape-style
-			if (!this.isStyleInitialised && this.style != null) {
+			if (!this.isStyleInitialized && this.style != null) {
 				setStyle( this.style );
 			}
 			Style newStyle = null;
@@ -6457,6 +6471,24 @@ public abstract class Item implements UiElement, Animatable
 	//#endif
 
 
+	/**
+	 * Checks if the content and label of this item are placed in the same row/line.
+	 * @return true when content and label are placed within a single line
+	 */
+	public boolean isSameRowForContentAndLabel() {
+		return this.useSingleRow;
+	}
+	
+	/**
+	 * Forces this item to use the same row/line for the content and label
+	 * @see #isSameRowForContentAndLabel()
+	 */
+	public void setSameRowForContentAndLabel(boolean forceSameRow) {
+		this.useSingleRowEnforced = forceSameRow;
+		if (forceSameRow && !this.useSingleRow && isInitialized()) {
+			requestInit();
+		}
+	}
 
 //#ifdef polish.Item.additionalMethods:defined
 	//#include ${polish.Item.additionalMethods}
