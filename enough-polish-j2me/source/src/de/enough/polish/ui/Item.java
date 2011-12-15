@@ -1148,7 +1148,9 @@ public abstract class Item implements UiElement, Animatable
 	public void setBackground( Background background ) {
 		this.preserveBackground = true;
 		this.background = background;
+		if ( this.background != null ) {
                 this.background.setParentItem(this);
+		}
 	}
 	
 	/**
