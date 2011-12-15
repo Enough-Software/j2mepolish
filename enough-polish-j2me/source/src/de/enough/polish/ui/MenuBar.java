@@ -862,7 +862,9 @@ public class MenuBar extends Item {
 					if (this.singleRightCommand != null) {
 						// this allows to change the text using UiAccess.setCommandLabel():
 						CommandItem item = (CommandItem) this.allCommands.get( this.singleRightCommand );
-						this.singleRightCommandItem.setText( item.getText() );
+						if ( item != null ) {
+							this.singleRightCommandItem.setText( item.getText() );
+						}
 					} else {
 						this.singleRightCommandItem.setText( null );
 					}
