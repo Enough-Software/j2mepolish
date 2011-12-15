@@ -126,6 +126,7 @@ extends ItemView
 	private long scrollStartTime;
 	private int scrollStartXOffset;
 	private long scrollDuration = 300; // ms
+	protected boolean scrollContinuous;
 
 	/**
 	 * Creates a new view
@@ -145,7 +146,8 @@ extends ItemView
 		int current = this.xOffset;
 		if (target != current) {
 			long passedTime = (currentTime - this.scrollStartTime);
-			int nextOffset = CssAnimation.calculatePointInRange(this.scrollStartXOffset, target, passedTime, this.scrollDuration , CssAnimation.FUNCTION_EXPONENTIAL_OUT );
+			int startX = this.scrollStartXOffset;
+			int nextOffset = CssAnimation.calculatePointInRange(startX, target, passedTime, this.scrollDuration , CssAnimation.FUNCTION_EXPONENTIAL_OUT );
 			this.xOffset = nextOffset;
 			
 			// add repaint region:
@@ -234,7 +236,8 @@ extends ItemView
 		//#debug
 		System.out.println("Setting scrollXOffset from " + this.xOffset + "/" + this.targetXOffset + " to " + offset + ", smooth=" + smooth +  " for " + this);
 		//try { throw new RuntimeException("for xOffset=" + offset); } catch (Exception e) { e.printStackTrace(); }
-		this.scrollStartXOffset = this.xOffset;
+		int startX = this.xOffset;
+		this.scrollStartXOffset = startX;
 		this.scrollStartTime = System.currentTimeMillis();
 		if (!smooth  
 		//#ifdef polish.css.scroll-mode
@@ -243,6 +246,23 @@ extends ItemView
 		) {
 			this.xOffset = offset;			
 		}
+		//#ifdef polish.css.scroll-continuous
+			else if (this.scrollContinuous){
+				int normalDistance = Math.abs(offset - startX);
+				int continuousDistance = this.contentWidth - this.parentContainer.availContentWidth - normalDistance;
+				if (continuousDistance < normalDistance) {
+					// enable continuous scrolling:
+					if (offset > startX) { // moving from the right to the left:
+						startX = this.contentWidth + startX - offset;
+					} else { // moving from left to right
+						startX = startX - this.contentWidth;
+					}
+					this.scrollStartXOffset = startX;
+					this.xOffset = startX;
+				}
+			}
+		//#endif
+
 		this.targetXOffset = offset;
 		this.scrollSpeed = 0;
 	}
@@ -996,7 +1016,8 @@ extends ItemView
 	 * @param g the Graphics on which this item should be painted.
 	 */
 	protected void paintContent(Container container, Item[] myItems, int x, int y, int leftBorder, int rightBorder, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
-		x += this.xOffset;
+		int currentXOffset = this.xOffset;
+		x += currentXOffset;
 		for (int i = 0; i < myItems.length; i++) {
 			if (i != this.focusedIndex) {
 				Item item = myItems[i];
@@ -1008,6 +1029,32 @@ extends ItemView
 				paintItem(item, i, itemX, itemY, itemX, itemX + item.itemWidth, clipX, clipY, clipWidth, clipHeight, g);
 			}
 		}
+		//#ifdef polish.css.scroll-continuous
+			if (this.scrollContinuous) {
+				if (currentXOffset > 0) {
+					int adjustedX = x - this.contentWidth;
+					for (int i = 0; i < myItems.length; i++) {
+						if (i != this.focusedIndex) {
+							Item item = myItems[i];
+							int itemX = adjustedX + item.relativeX;
+							int itemY = y + item.relativeY;
+							paintItem(item, i, itemX, itemY, itemX, itemX + item.itemWidth, clipX, clipY, clipWidth, clipHeight, g);
+						}
+					}				
+				} else if (currentXOffset + this.contentWidth < this.parentContainer.availContentWidth) {
+					int adjustedX = x + this.contentWidth;
+					for (int i = 0; i < myItems.length; i++) {
+						if (i != this.focusedIndex) {
+							Item item = myItems[i];
+							int itemX = adjustedX + item.relativeX;
+							int itemY = y + item.relativeY;
+							paintItem(item, i, itemX, itemY, itemX, itemX + item.itemWidth, clipX, clipY, clipWidth, clipHeight, g);
+						}
+					}				
+					
+				}
+			}
+		//#endif
 		
 		// paint focused item last:
 		Item focItem = this.focusedItem;
@@ -1451,6 +1498,12 @@ extends ItemView
 			Integer scrollDurationInt = style.getIntProperty("scroll-duration");
 			if (scrollDurationInt != null) {
 				this.scrollDuration = scrollDurationInt.intValue();
+			}
+		//#endif
+		//#ifdef polish.css.scroll-continuous
+			Boolean scrollContinuousBool = style.getBooleanProperty("scroll-continuous");
+			if (scrollContinuousBool != null) {
+				this.scrollContinuous = scrollContinuousBool.booleanValue();
 			}
 		//#endif
 		//#ifdef polish.css.columns

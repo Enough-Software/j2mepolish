@@ -948,6 +948,100 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="1280x800" />
   </device>
   
+   <device supportsPolishGui="true">
+    <identifier>Generic/android4.0</identifier>
+    <features>isVirtual</features>
+    <description>An Android compatible device with OS 4.0 (API level 14).</description>
+    <groups>android</groups>
+    <capability name="JavaPlatform" value="Android/4.0" />
+    <capability name="JavaConfiguration" value="Android/4.0" />
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_HVGA</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a HVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="HVGA" />
+    <capability name="ScreenSize" value="320x480" />
+  </device>
+
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_QVGA</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a QVGA screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="QVGA" />
+    <capability name="ScreenSize" value="240x320" />
+  </device>
+
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WQVGA400</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a WQVGA400 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA400" />
+    <capability name="ScreenSize" value="240x400" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WQVGA432</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a WQVGA432 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WQVGA432" />
+    <capability name="ScreenSize" value="240x432" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WSVGA</identifier>
+    <features>isVirtual</features>
+    <description>An Android compatible device with OS 4.0 (API level 14) and a WSVGA screen/skin.</description>
+    <groups>android</groups>
+    <capability name="JavaPlatform" value="Android/4.0" />
+    <capability name="JavaConfiguration" value="Android/4.0" />
+    <capability name="polish.Emulator.Skin" value="WSVGA" />
+    <capability name="ScreenSize" value="1024x600" />
+  </device>
+  
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WVGA800</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a WVGA800 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="ScreenSize" value="480x800" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WVGA854</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and a WVGA854 screen/skin.</description>
+    <capability name="polish.Emulator.Skin" value="WVGA854" />
+    <capability name="ScreenSize" value="480x854" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WXGA720</identifier>
+    <features>isVirtual</features>
+    <description>An Android compatible device with OS 4.0 (API level 14) and a WXGA720 screen/skin.</description>
+    <groups>android</groups>
+    <capability name="JavaPlatform" value="Android/4.0" />
+    <capability name="JavaConfiguration" value="Android/4.0" />
+    <capability name="polish.Emulator.Skin" value="WXGA720" />
+    <capability name="ScreenSize" value="1280x720" />
+  </device>
+  
+  <device supportsPolishGui="true">
+    <identifier>Generic/android4.0_WXGA800</identifier>
+    <features>isVirtual</features>
+    <description>An Android compatible device with OS 4.0 (API level 14) and a WXGA800 screen/skin.</description>
+    <groups>android</groups>
+    <capability name="JavaPlatform" value="Android/4.0" />
+    <capability name="JavaConfiguration" value="Android/4.0" />
+    <capability name="polish.Emulator.Skin" value="WXGA800" />
+    <capability name="ScreenSize" value="1280x800" />
+  </device>
+  
   
   <device supportsPolishGui="true">
     <identifier>Google/Android2.2</identifier>
@@ -1009,6 +1103,16 @@ These namespaces/schemas will be used soon.
     <capability name="build.Android.Platform.Target" value="Google Inc.:Google APIs:13" />
     <capability name="build.Android.Platform.Api" value="13" />
     <capability name="JavaPackage" value="android-google-maps-api13, android-google-usb-api13" />
+  </device>
+
+  <device supportsPolishGui="true">
+    <identifier>Google/Android4.0</identifier>
+    <parent>Generic/android4.0</parent>
+    <description>An Android compatible device with the 4.0 firmware and the Google Maps and Google USB API (API Level 14).</description>
+    <capability name="polish.Emulator.Skin" value="WVGA800" />
+    <capability name="build.Android.Platform.Target" value="Google Inc.:Google APIs:14" />
+    <capability name="build.Android.Platform.Api" value="14" />
+    <capability name="JavaPackage" value="android-google-maps-api14, android-google-usb-api14" />
   </device>
   
   <device supportsPolishGui="true">

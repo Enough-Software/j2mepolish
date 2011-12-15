@@ -1290,8 +1290,7 @@ public class Display
 	
 
 	/**
-	 * Requests that the <code>Displayable</code> that contains this
-	 * <code>Item</code> be made current,
+	 * Requests that the <code>Displayable</code> that contains this <code>Item</code> be made current,
 	 * scrolls the <code>Displayable</code> so that this
 	 * <code>Item</code> is visible, and possibly
 	 * assigns the focus to this <code>Item</code>.  The containing
@@ -1316,18 +1315,36 @@ public class Display
 	 * It is also an error if the <code>Item</code> is contained
 	 * within an <code>Alert</code>.</p>
 	 * 
-	 * @param item - the item that should be made visible
-	 * @throws IllegalStateException - if the item is not owned by a container
-	 * @throws IllegalStateException - if the item is owned by an  Alert
-	 * @throws NullPointerException - if item is null
+	 * @param item the item that should be made visible
+	 * @throws IllegalStateException if the item is not owned by a container
+	 * @throws IllegalStateException if the item is owned by an  Alert
+	 * @throws NullPointerException if item is null
 	 * @since  MIDP 2.0
 	 */
 	public void setCurrentItem( Item item)
 	{
+		setCurrentItem( item, null);
+	}
+	
+	/**
+	 * Requests that the <code>Displayable</code> that contains this <code>Item</code> be made current.
+	 * A screen transition style specifies the used screen-change-animation.
+	 * 
+	 * @param item the item that should be made visible
+	 * @parem screenTransitionStyle the style that contains a screen-change-animation
+	 * @throws IllegalStateException if the item is not owned by a container
+	 * @throws IllegalStateException if the item is owned by an  Alert
+	 * @throws NullPointerException if item is null
+	 * @since  J2ME Polish 2.3
+	 */
+	public void setCurrentItem( Item item, Style screenTransitionStyle )
+	{
 		//#if !polish.LibraryBuild
-			item.show(this);
+			//try { throw new RuntimeException("for " + item); } catch (Exception e) { e.printStackTrace(); }
+			item.show(this, screenTransitionStyle);
 		//#endif
 	}
+
 
 	/**
 	 * Causes the <code>Runnable</code> object <code>r</code> to have

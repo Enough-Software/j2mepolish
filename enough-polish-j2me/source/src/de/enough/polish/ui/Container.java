@@ -54,12 +54,8 @@ import de.enough.polish.util.ArrayList;
  * 		<li><b>scroll-mode</b>: Either "smooth" (=default) or "normal".</li>
  * 		<li><b>and many more...</b>: compare the visual guide to J2ME Polish</li>
  * </ul>
- * <p>Copyright Enough Software 2004 - 2007 - 2009</p>
+ * <p>Copyright Enough Software 2004 - 2011</p>
 
- * <pre>
- * history
- *        01-Mar-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class Container extends Item {
@@ -162,6 +158,14 @@ public class Container extends Item {
 	private long scrollStartTime;
 	private int scrollStartYOffset;
 	private long scrollDuration = 300; // ms
+	
+	
+	//#if !polish.Container.selectEntriesWhileTouchScrolling
+	/**
+	 * the minimum drag distance before the focus is cleared while dragging  
+	 */
+	private static int minimumDragDistance;
+	//#endif
 	
 	/**
 	 * Creates a new empty container.
@@ -352,7 +356,7 @@ public class Container extends Item {
 		if (itemAddStyle != null) {
 			// by setting the style field instead of calling setStyle(itemStyle), the style will not be resolved immediately but only when needed
 			item.style = itemAddStyle;
-			item.isStyleInitialised = false;
+			item.isStyleInitialized = false;
 		}
 		//#if polish.css.child-style
 			else if (item.style == null && this.childStyle != null) {
@@ -1032,9 +1036,7 @@ public class Container extends Item {
 		}
 		
 		//#if polish.blackberry
-			if(getScreen() != null) {
-				getScreen().notifyFocusSet(item);
-			} else {
+			if (this.isShown) {
 				Display.getInstance().notifyFocusSet(item);
 			}
 		//#endif
@@ -1099,9 +1101,9 @@ public class Container extends Item {
 				System.out.println("Container: Unable to retrieve style of item " + item.getClass().getName() );
 			}
 		//#endif
-		//System.out.println("focus - still initialzed=" + this.isInitialized + " for " + this);
+		//System.out.println("focus - still initialized=" + this.isInitialized + " for " + this);
 		if  (isInitialized()) {
-			// this container has been initialised already,
+			// this container has been initialized already,
 			// so the dimensions are known.
 			//System.out.println("focus: contentWidth=" + this.contentWidth + ", of container " + this);
 			//int wAfter = item.getItemWidth( this.availableContentWidth, this.availableContentWidth, this.availableHeight );
@@ -2409,7 +2411,7 @@ public class Container extends Item {
 		//return super.handleKeyRepeated(keyCode, gameAction);
 	}
 	
-	//#if polish.Container.useTouchFocusHandling
+	//#if !polish.Container.selectEntriesWhileTouchScrolling
 	/**
 	 * Focuses the first visible item in the given vertical minimum and maximum offsets.
 	 * 
@@ -2513,7 +2515,7 @@ public class Container extends Item {
 			return false;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(this.focusedIndex == -1) {
 			int verticalMin = getAbsoluteY();
 			int verticalMax = verticalMin + getScrollHeight();
@@ -2998,7 +3000,7 @@ public class Container extends Item {
 				this.plainStyle = result;
 			}
 			
-			if (!this.isStyleInitialised && result != null) {
+			if (!this.isStyleInitialized && result != null) {
 				//#debug
 				System.out.println("setting original style for container " + this + " with style " + result.name);
 				setStyle( result );
@@ -3421,7 +3423,7 @@ public class Container extends Item {
 	protected void showNotify()
 	{
 		super.showNotify();
-		if (this.style != null && !this.isStyleInitialised) {
+		if (this.style != null && !this.isStyleInitialized) {
 			setStyle( this.style );
 		}
 		//#ifdef polish.useDynamicStyles
@@ -3429,7 +3431,7 @@ public class Container extends Item {
 				initStyle();
 			}
 		//#else
-			else if (this.style == null && !this.isStyleInitialised) {
+			else if (this.style == null && !this.isStyleInitialized) {
 				//#debug
 				System.out.println("Setting default style for container " + this  );
 				setStyle( StyleSheet.defaultStyle );
@@ -3443,7 +3445,7 @@ public class Container extends Item {
 		Item[] myItems = getItems();
 		for (int i = 0; i < myItems.length; i++) {
 			Item item = myItems[i];
-			if (item.style != null && !item.isStyleInitialised) {
+			if (item.style != null && !item.isStyleInitialized) {
 				item.setStyle( item.style );
 			}
 			//#ifdef polish.useDynamicStyles
@@ -3451,7 +3453,7 @@ public class Container extends Item {
 					initStyle();
 				}
 			//#else
-				else if (item.style == null && !item.isStyleInitialised) {
+				else if (item.style == null && !item.isStyleInitialized) {
 					//#debug
 					System.out.println("Setting default style for item " + item );
 					item.setStyle( StyleSheet.defaultStyle );
@@ -3468,6 +3470,11 @@ public class Container extends Item {
 		//#if polish.css.show-delay
 			this.showDelayIndex = (myItems.length > 1 ? 1 : 0);
 			this.showNotifyTime = System.currentTimeMillis();
+		//#endif
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
+			if (minimumDragDistance == 0) {
+				minimumDragDistance = Math.min(Display.getScreenWidth(),Display.getScreenHeight())/10;
+			}
 		//#endif
 	}
 
@@ -3624,7 +3631,14 @@ public class Container extends Item {
 //			}
 //			return true;			
 //		}
-		return ((this.defaultCommand != null) && super.handlePointerPressed(origRelX, origRelY)) || eventHandled;
+		boolean handledBySuperImplementation = ((this.defaultCommand != null) && super.handlePointerPressed(origRelX, origRelY)) || eventHandled;
+		//#if polish.android
+			if (!handledBySuperImplementation && (item != null) && (item._androidView != null) && (!item._androidView.isFocused())) {
+				item.defocus(this.itemStyle);
+				handledBySuperImplementation = true;
+			}
+		//#endif
+		return handledBySuperImplementation;
 	}
 	//#endif
 	
@@ -3883,13 +3897,16 @@ public class Container extends Item {
 			return true;
 		}
 		
-		//#if polish.Container.useTouchFocusHandling
+		//#if !polish.Container.selectEntriesWhileTouchScrolling
 		if(item != null) {
-	   		 focusChild(-1);
-	   		 //#if polish.blackberry
-	   		 //# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
-	   		 //#endif
-	   		 UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+			int dragDistance = Math.abs(relY - this.lastPointerPressY);
+			if(dragDistance > minimumDragDistance) {
+				focusChild(-1);
+		   		//#if polish.blackberry
+		   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
+		   		//#endif
+		   		UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+			}
    	  	}
 		//#endif
 		
@@ -4534,7 +4551,7 @@ public class Container extends Item {
 			super.setView( view );
 			return;
 		}
-		if (!this.isStyleInitialised && this.style != null) {
+		if (!this.isStyleInitialized && this.style != null) {
 			setStyle( this.style );
 		}
 		if (view == null) {

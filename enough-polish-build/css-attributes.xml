@@ -5626,6 +5626,16 @@
 		since="J2ME Polish 2.3"
 	/>
 	
+	<attribute
+		name="scroll-continuous"
+		type="boolean"
+		appliesTo="HorizontalContainerView"
+		description="Allows to scroll continuously without visible jumps when moving from the first to the last item or the other way round."
+		default="false"
+		id="490"
+		since="J2ME Polish 2.3"
+	/>
+	
 	
 <!--
 	<attribute

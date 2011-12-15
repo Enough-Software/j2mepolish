@@ -187,7 +187,11 @@ public class HttpConnectionImpl implements HttpConnection {
 
 	public InputStream openInputStream() throws IOException {
 		connect();
-		this.input = this.connection.getInputStream();
+		if (this.connection.getResponseCode() >= 400) {
+			this.input = this.connection.getErrorStream();
+		} else {
+			this.input = this.connection.getInputStream();
+		}
 		return this.input;
 	}
 	

@@ -150,7 +150,7 @@ public class PolishTask extends ConditionalTask {
 		}
 		catch (MissingResourceException e)
 		{
-			tmp = "<Unknown CVS version>";
+			tmp = "<Unknown https://github.com/Enough-Software/j2mepolish version>";
 		}
 
 		VERSION = tmp;
@@ -160,8 +160,8 @@ public class PolishTask extends ConditionalTask {
 
 	protected BuildSetting buildSetting;
 	private InfoSetting infoSetting;
-	protected List deviceRequirements;
-	protected List emulatorSettings;
+	protected List<Requirements> deviceRequirements;
+	protected List<EmulatorSetting> emulatorSettings;
 
 	/** the project settings */ 
 	protected PolishProject polishProject;
@@ -185,7 +185,7 @@ public class PolishTask extends ConditionalTask {
 	protected TextFile styleCacheSourceFile;
 	protected ResourceUtil resourceUtil;
 	protected String wtkHome;
-	protected HashMap midletClassesByName;
+	protected HashMap<String,Boolean> midletClassesByName;
 	protected static final Pattern START_APP_PATTERN = 
 		Pattern.compile("\\s*void\\s+startApp\\s*\\(\\s*\\)");
 	protected static final Pattern DESTROY_APP_PATTERN = 
@@ -209,7 +209,7 @@ public class PolishTask extends ConditionalTask {
 	protected CssAttributesManager cssAttributesManager;
 
 	protected PolishLogger polishLogger;
-	protected ArrayList runningEmulators;
+	protected ArrayList<Emulator> runningEmulators;
 
 	protected ResourceManager resourceManager;
 
@@ -227,7 +227,7 @@ public class PolishTask extends ConditionalTask {
 
 	protected File polishHomeDir;
 
-	protected ArrayList customPreprocessors;
+	protected ArrayList<CustomPreprocessor> customPreprocessors;
 
 	protected boolean doPostCompile;
 
@@ -245,7 +245,7 @@ public class PolishTask extends ConditionalTask {
 
 	protected BooleanEvaluator antPropertiesEvaluator;
 
-	protected ArrayList polishBuildListenerSettingsList;
+	protected ArrayList<BuildListenerExtensionSetting> polishBuildListenerSettingsList;
 	protected PolishBuildListener[] polishBuildListeners;
 
 	protected LocaleSetting currentLocaleSetting;
@@ -257,7 +257,7 @@ public class PolishTask extends ConditionalTask {
 
 	protected String[] keepClasses;
 
-	private ArrayList lifeCycleManagers;
+	private ArrayList<ExtensionSetting> lifeCycleManagers;
 
 	private ErrorHandler errorHandler;
 
@@ -273,14 +273,14 @@ public class PolishTask extends ConditionalTask {
 
 	public void addConfiguredBuildlistener( BuildListenerExtensionSetting setting ) {
 		if (this.polishBuildListenerSettingsList == null) {
-			this.polishBuildListenerSettingsList = new ArrayList();
+			this.polishBuildListenerSettingsList = new ArrayList<BuildListenerExtensionSetting>();
 		}
 		this.polishBuildListenerSettingsList.add( setting );
 	}
 
 	public void addConfiguredLifeCycleManager(ExtensionSetting setting) {
 		if (this.lifeCycleManagers == null) {
-			this.lifeCycleManagers = new ArrayList();
+			this.lifeCycleManagers = new ArrayList<ExtensionSetting>();
 		}
 		this.lifeCycleManagers.add( setting );
 	}
@@ -301,7 +301,7 @@ public class PolishTask extends ConditionalTask {
 
 	public Requirements createDeviceRequirements() {
 		if (this.deviceRequirements == null) {
-			this.deviceRequirements = new ArrayList();
+			this.deviceRequirements = new ArrayList<Requirements>();
 		}
 		Requirements requirements = new Requirements( getProject().getProperties() );
 		this.deviceRequirements.add( requirements );
@@ -322,7 +322,7 @@ public class PolishTask extends ConditionalTask {
 			return requirements;
 		}
 
-		for (Iterator iter = this.deviceRequirements.iterator(); iter.hasNext();) {
+		for (Iterator<Requirements> iter = this.deviceRequirements.iterator(); iter.hasNext();) {
 			Requirements requirements = (Requirements) iter.next();
 			if (requirements.isActive( this.antPropertiesEvaluator )) {
 				return requirements;
@@ -351,7 +351,7 @@ public class PolishTask extends ConditionalTask {
 	 */
 	public EmulatorSetting createEmulator() {
 		if (this.emulatorSettings == null) {
-			this.emulatorSettings =  new ArrayList();
+			this.emulatorSettings =  new ArrayList<EmulatorSetting>();
 		}
 		EmulatorSetting emulatorSetting = new EmulatorSetting( getProject() );
 		this.emulatorSettings.add( emulatorSetting );
@@ -416,7 +416,7 @@ public class PolishTask extends ConditionalTask {
 			boolean hasExtensions = this.javaExtensions.length > 0;
 
 			int successCount = 0;
-			ArrayList failures = new ArrayList();
+			ArrayList<FailureInfo> failures = new ArrayList<FailureInfo>();
 			boolean abortOnError = this.buildSetting.abortOnError();
 			boolean enableCompilerMode = this.buildSetting.isInCompilerMode();
 			for ( int i=0; i < numberOfDevices; i++) {
@@ -729,7 +729,7 @@ public class PolishTask extends ConditionalTask {
 	public void init() {
 		super.init();
 		if (this.environment == null) {
-			Map antSymbols = new HashMap();
+			Map<String,Boolean> antSymbols = new HashMap<String,Boolean>();
 			Hashtable properties = getProject().getProperties();
 			Object[] keys = properties.keySet().toArray();
 			for (int i = 0; i < keys.length; i++) {
@@ -742,7 +742,7 @@ public class PolishTask extends ConditionalTask {
 	}
 
 	/**
-	 * Initialises this project and instantiates several helper classes.
+	 * Initializes this project and instantiates several helper classes.
 	 */
 	public void initProject() {
 		// find out where J2ME Polish has been installed to:
@@ -783,8 +783,8 @@ public class PolishTask extends ConditionalTask {
 		try {
 			//          now load life cycle extensions:
 			if (this.lifeCycleManagers != null) {
-				ArrayList extensions = new ArrayList( this.lifeCycleManagers.size() );
-				for (Iterator iterator = this.lifeCycleManagers.iterator(); iterator.hasNext(); ) {
+				ArrayList<Extension> extensions = new ArrayList<Extension>( this.lifeCycleManagers.size() );
+				for (Iterator<ExtensionSetting> iterator = this.lifeCycleManagers.iterator(); iterator.hasNext(); ) {
 					ExtensionSetting setting = (ExtensionSetting) iterator.next();
 					if (setting.isActive( this.environment )) {
 						extensions.add( this.extensionManager.getTemporaryExtension(ExtensionManager.TYPE_FINALIZER, setting,this.environment ) );
@@ -980,11 +980,11 @@ public class PolishTask extends ConditionalTask {
 		}
 
 		// create device database:
-		if (this.deviceRequirements != null) {
+		if (getDeviceRequirements() != null) {
 			// special case for the usage of <identifier> requirements:
 			// in that case not all devices need to be loaded, just the ones which have the correct identifiers.
 			// This allows a faster start up time for around 80% of all cases.
-			List identifiersList = getDeviceRequirements().getRequiredIdentifiers();
+			List<String> identifiersList = getDeviceRequirements().getRequiredIdentifiers();
 			if (identifiersList != null) {
 				// use a different map, so that no non-string attributes "pollute" the Ant properties:
 				Map newBuildProperties = new HashMap();
@@ -1012,7 +1012,7 @@ public class PolishTask extends ConditionalTask {
 		this.preprocessor.setCssAttributesManager( this.cssAttributesManager );
 		this.environment.set( Preprocessor.ENVIRONMENT_KEY, this.preprocessor );
 		// init custom preprocessors:
-		this.customPreprocessors = new ArrayList();
+		this.customPreprocessors = new ArrayList<CustomPreprocessor>();
 		PreprocessorSetting[] settings = this.buildSetting.getPreprocessors();
 
 		//CustomPreprocessor[] processors = new CustomPreprocessor[ settings.length + 1];
@@ -1138,7 +1138,7 @@ public class PolishTask extends ConditionalTask {
 		// init obfuscators:
 		if (this.buildSetting.doObfuscate()) {
 			ObfuscatorSetting[] obfuscatorSettings = this.buildSetting.getObfuscatorSettings();
-			ArrayList obfuscatorsList = new ArrayList();
+			ArrayList<Obfuscator> obfuscatorsList = new ArrayList<Obfuscator>();
 			for (int i = 0; i < obfuscatorSettings.length; i++) {
 				ObfuscatorSetting obfuscatorSetting = obfuscatorSettings[i];
 				if (this.keepClasses == null && 
@@ -1186,7 +1186,7 @@ public class PolishTask extends ConditionalTask {
 		//		}
 
 		// set the names of the midlets:
-		this.midletClassesByName = new HashMap();
+		this.midletClassesByName = new HashMap<String,Boolean>();
 		String[] midletClassNames = this.buildSetting.getMidletClassNames( this.environment );
 		for (int i = 0; i < midletClassNames.length; i++) {
 			String midletClassName = midletClassNames[i];
@@ -1240,9 +1240,9 @@ public class PolishTask extends ConditionalTask {
 		// set J2ME Polish specific logger,
 		// this logger will show the original source-code positions
 		// and remove some verbose logging from ProGuard etc:
-		Vector buildListeners = getProject().getBuildListeners();
+		Vector<BuildListener> buildListeners = getProject().getBuildListeners();
 		BuildListener logger = null;
-		for (Iterator iter = buildListeners.iterator(); iter.hasNext();) {
+		for (Iterator<BuildListener> iter = buildListeners.iterator(); iter.hasNext();) {
 			BuildListener listener = (BuildListener) iter.next();
 			if (listener instanceof BuildLogger || listener.getClass().getName().indexOf("NbBuildLogger") != -1) {
 				logger = listener;
@@ -1253,7 +1253,7 @@ public class PolishTask extends ConditionalTask {
 		}
 		if (logger != null) {
 			// prepare the classPathTranslations-Map:
-			HashMap classPathTranslationsMap = new HashMap(); 
+			HashMap<String,String> classPathTranslationsMap = new HashMap<String,String>(); 
 			for (int i=0; i < this.sourceFiles.length; i++) {
 				TextFile[] files = this.sourceFiles[i];
 				for (int j = 0; j < files.length; j++) {
@@ -1282,7 +1282,7 @@ public class PolishTask extends ConditionalTask {
 		}
 
 		// initialize polish build listeners:
-		ArrayList polishBuildListenersList = new ArrayList();
+		ArrayList<PolishBuildListener> polishBuildListenersList = new ArrayList<PolishBuildListener>();
 		String classDefs = getProject().getProperty( PolishBuildListener.ANT_PROPERTY_NAME );
 		if (classDefs != null ) {
 			String[] classNames = StringUtil.splitAndTrim(classDefs, ',');
@@ -2493,7 +2493,7 @@ public class PolishTask extends ConditionalTask {
 		if (this.preCompilers == null || this.preCompilers.length == 0) {
 			return new PreCompiler[ 0 ];
 		}
-		ArrayList list = new ArrayList();
+		ArrayList<PreCompiler> list = new ArrayList<PreCompiler>();
 		BooleanEvaluator evaluator = this.environment.getBooleanEvaluator();
 		Project antProject = getProject();
 		for (int i = 0; i < this.preCompilers.length; i++) {
@@ -2540,7 +2540,7 @@ public class PolishTask extends ConditionalTask {
 		if (this.postCompilers == null || this.postCompilers.length == 0) {
 			return new PostCompiler[ 0 ];
 		}
-		ArrayList list = new ArrayList();
+		ArrayList<PostCompiler> list = new ArrayList<PostCompiler>();
 		BooleanEvaluator evaluator = this.environment.getBooleanEvaluator();
 		Project antProject = getProject();
 		for (int i = 0; i < this.postCompilers.length; i++) {
@@ -2689,7 +2689,7 @@ public class PolishTask extends ConditionalTask {
 		if (this.postObfuscators == null || this.postObfuscators.length == 0) {
 			return new PostObfuscator[ 0 ];
 		}
-		ArrayList list = new ArrayList();
+		ArrayList<PostObfuscator> list = new ArrayList<PostObfuscator>();
 		BooleanEvaluator evaluator = this.environment.getBooleanEvaluator();
 		Project antProject = getProject();
 		for (int i = 0; i < this.postObfuscators.length; i++) {
@@ -2745,7 +2745,7 @@ public class PolishTask extends ConditionalTask {
 		if (this.obfuscators == null) {
 			return new Obfuscator[0];
 		}
-		ArrayList obfuscatorsList = new ArrayList( this.obfuscators.length );
+		ArrayList<Obfuscator> obfuscatorsList = new ArrayList<Obfuscator>( this.obfuscators.length );
 		BooleanEvaluator evaluator = this.environment.getBooleanEvaluator();
 		Project antProject = getProject();
 		for (int i=0; i<this.obfuscators.length; i++) {
@@ -2764,7 +2764,7 @@ public class PolishTask extends ConditionalTask {
 	 */
 	protected String[] getObfuscationPreserveClassNames()
 	{
-		ArrayList preserveList = new ArrayList();
+		ArrayList<String> preserveList = new ArrayList<String>();
 		String[] midletClasses = this.buildSetting.getMidletClassNames( this.environment );
 		addObfuscationPreserveClassNames( midletClasses, preserveList );
 		if (this.keepClasses != null) {
@@ -2794,7 +2794,7 @@ public class PolishTask extends ConditionalTask {
 	 * @param classNames the names of classes
 	 * @param preserveList the list
 	 */
-	private void addObfuscationPreserveClassNames(String[] classNames, ArrayList preserveList)
+	private void addObfuscationPreserveClassNames(String[] classNames, ArrayList<String> preserveList)
 	{
 		for (int i = 0; i < classNames.length; i++)
 		{
@@ -2808,7 +2808,7 @@ public class PolishTask extends ConditionalTask {
 	 * @param className the name of the class
 	 * @param preserveList the list of names that should be preserved
 	 */
-	private void addObfuscationPreserveClassName(String className, ArrayList preserveList)
+	private void addObfuscationPreserveClassName(String className, ArrayList<String> preserveList)
 	{
 		preserveList.add( className );
 	}
@@ -2969,7 +2969,7 @@ public class PolishTask extends ConditionalTask {
 	 * @param device
 	 */
 	private void prepareManifestProperties(Device device) {
-		HashMap attributesByName = new HashMap();
+		HashMap<String,Attribute> attributesByName = new HashMap<String,Attribute>();
 		attributesByName.put( "Manifest-Version", new Attribute( "Manifest-Version", "1.0" ) ); 
 		// set MicroEdition-Profile:
 		String profile = this.infoSetting.getProfile();
@@ -3083,7 +3083,7 @@ public class PolishTask extends ConditionalTask {
 	 * @param device
 	 */
 	private void prepareJadAttributes(Device device) {
-		HashMap attributesByName = new HashMap();
+		HashMap<String,Attribute> attributesByName = new HashMap<String,Attribute>();
 		// add info attributes:
 		Attribute[] jadAttributes = this.infoSetting.getJadAttributes( this.environment );
 		for (int i = 0; i < jadAttributes.length; i++) {
@@ -3195,7 +3195,7 @@ public class PolishTask extends ConditionalTask {
 			if ( emulatorSetting.isActive( evaluator ) ) {
 				Project antProject = getProject();
 				// get currently active source directories:
-				ArrayList sourceDirsList = new ArrayList();
+				ArrayList<File> sourceDirsList = new ArrayList<File>();
 				for (int j = 0; j < this.sourceSettings.length; j++) {
 					SourceSetting setting = this.sourceSettings[j];
 					if (setting.isActive(evaluator, antProject)) {
@@ -3207,7 +3207,7 @@ public class PolishTask extends ConditionalTask {
 				if (emulator != null) {
 					emulator.execute( device, locale, this.environment );
 					if (this.runningEmulators == null) {
-						this.runningEmulators = new ArrayList();
+						this.runningEmulators = new ArrayList<Emulator>();
 					}
 					this.runningEmulators.add( emulator );
 				}

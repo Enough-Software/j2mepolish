@@ -32,9 +32,13 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 //#if polish.doja
-import com.nttdocomo.ui.Frame;
+	import com.nttdocomo.ui.Frame;
 //#endif
 
+//#if polish.blackberry
+	import de.enough.polish.blackberry.ui.BaseScreenManager;
+//#endif
+	
 import de.enough.polish.event.AsynchronousMultipleCommandListener;
 import de.enough.polish.event.EventManager;
 import de.enough.polish.event.UiEventListener;
@@ -6271,7 +6275,7 @@ implements UiElement, Animatable
 	 */
 	public void addPermanentNativeItem( Item item ) {
 		//#if polish.blackberry
-			((de.enough.polish.blackberry.ui.BaseScreen)(Object)Display.getInstance()).addPermanentNativeItem(item);
+			BaseScreenManager.getInstance().addPermanentNativeItem(item);
 		//#endif
 	}
 	
@@ -6284,7 +6288,7 @@ implements UiElement, Animatable
 	 */
 	public void removePermanentNativeItem(Item item) {
 		//#if polish.blackberry
-			((de.enough.polish.blackberry.ui.BaseScreen)(Object)Display.getInstance()).removePermanentNativeItem(item);
+			BaseScreenManager.getInstance().removePermanentNativeItem(item);
 		//#endif
 	}
 

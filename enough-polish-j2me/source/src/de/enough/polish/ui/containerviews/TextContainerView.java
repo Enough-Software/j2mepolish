@@ -34,7 +34,6 @@ import de.enough.polish.ui.Container;
 import de.enough.polish.ui.ContainerView;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.StringItem;
-import de.enough.polish.ui.Style;
 import de.enough.polish.util.WrappedText;
 
 /**
@@ -106,6 +105,7 @@ public class TextContainerView extends ContainerView {
 			isInteractive = isInteractive || item.isInteractive();
 			if (item instanceof StringItem) {
 				StringItem stringItem = (StringItem) item;
+				stringItem.setSameRowForContentAndLabel(true);
 				//System.out.println(i + ": currentX=" + currentX + ", firstLineWidth=" + (availWidth - currentX ) + ", text=" + stringItem.getText());
 				stringItem.relativeY = currentY;
 				stringItem.relativeX = 0;
@@ -308,6 +308,21 @@ public class TextContainerView extends ContainerView {
 		int index = this.parentContainer.indexOf(item);
 		int availWidth = item.getAvailableWidth();
 		int w = item.getItemWidth( availWidth - this.textXOffsets[index] - item.relativeX, availWidth, item.getAvailableHeight() );
+		if (item instanceof StringItem) {
+			int labelWidth = 0;
+			Item labelItem = item.getLabelItem();
+			if (labelItem != null) {
+				labelWidth = labelItem.itemWidth;
+			}
+			WrappedText text = ((StringItem)item).getWrappedText();
+			if (text.size() > 0) {
+				int firstLineWidth = text.getLineWidth(0) + labelWidth + this.textXOffsets[index];
+				if (w < firstLineWidth) {
+					w = firstLineWidth;
+				}
+			}
+		}
+		
 		return w;
 	}
 	

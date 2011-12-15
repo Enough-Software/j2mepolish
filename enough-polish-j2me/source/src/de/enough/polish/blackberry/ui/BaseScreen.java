@@ -75,7 +75,6 @@ public abstract class BaseScreen
     final ArrayList addedItems;
     private Field menuField;
 
-    private boolean dummyFieldHasFocus = true;
 	private boolean isObscured;
 	public Item currentItem;
 	private int lastWidth;
@@ -1039,7 +1038,13 @@ public abstract class BaseScreen
      * @return true when the event should be forwarded
      */
     public boolean forwardEventToNativeField(Screen screen, int keyCode) {
-    	boolean forwardEvent = !( keyCode == MENU_KEY || this.dummyFieldHasFocus || screen.isMenuOpened());
+    	boolean forwardEvent = !( 
+    			(keyCode == MENU_KEY) 
+    			|| (BaseScreenManager.getInstance().getFieldWithFocus() == this.dummyField)
+    			//#if !tmp.fullscreen
+    			|| screen.isMenuOpened()
+    			//#endif
+    	);
 		return forwardEvent; 
 	}
 
@@ -1243,13 +1248,11 @@ public abstract class BaseScreen
 	            	}
 	            }
 	            //System.out.println("Canvas.focus(): focusing field " + item._bbField );
-	            this.dummyFieldHasFocus = false;
 	            //#if polish.hasPointerEvents
 	            	//getVirtualKeyboard().setVisibility( VirtualKeyboard.SHOW );
 	            //#endif
-	        } else if (!this.dummyFieldHasFocus) {
+	        } else if (BaseScreenManager.getInstance().getFieldWithFocus() != this.dummyField) {
 	        	this.currentItem = null;
-	            this.dummyFieldHasFocus = true;
 	            setFocus( this.dummyField, 0, 0, 0, 0 );
 	            //System.out.println("Canvas.focus(): focusing dummy");
 	        }
@@ -1347,7 +1350,9 @@ public abstract class BaseScreen
     		if (screen != screenBefore) {
     			processed = true;
 			//#if !tmp.fullscreen
-    			} else if (!processed && this.addedMenuItems.size() == 1) {
+    			} else if (!processed && (this.currentItem._bbField != null) && (this.addedMenuItems.size() == 1)) {
+    				// native fields get this event afterwards but not from the super implementation,
+    				// so we only process the single screen command only when no native field is focused:
     				CommandMenuItem item = (CommandMenuItem) this.addedMenuItems.get(0);
     				item.run();
     				processed = true;
@@ -1384,7 +1389,7 @@ public abstract class BaseScreen
         	   try {
         		   if (this.currentItem._bbField instanceof AccessibleField) {
         			   processed = ((AccessibleField)this.currentItem._bbField).navigationMovement(dx, dy, status, time);                     
-        		   } else {
+        		   } else if ((status & KeypadListener.STATUS_ALT) == KeypadListener.STATUS_ALT) {
         			   processed = super.navigationMovement(dx, dy, status, time);                     
         		   }
                    if (processed) {
@@ -1610,176 +1615,4 @@ final class MenuItemComparator implements Comparator{
 		Command c2 = ((CommandMenuItem)o2).cmd;
 		return c1.getPriority() - c2.getPriority();
 	}
-}
-
-final class BaseScreenManager extends Manager {
-	
-	private static BaseScreenManager instance;
-	public static BaseScreenManager getInstance() {
-		if (instance == null) {
-			instance = new BaseScreenManager();
-		}
-		return instance;
-	}
-
-
-	private BaseScreen screen;
-	private ArrayList permanentItems;
-
-	private BaseScreenManager() {
-		super(Manager.NO_HORIZONTAL_SCROLL | Manager.NO_VERTICAL_SCROLL);
-	}
-	
-	public void setBaseScreen( BaseScreen screen ) {
-		this.screen = screen;
-	}
-	
-	public void addPermanentNativeItem( Item item ) {
-		if (item._bbField == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.permanentItems == null) {
-			this.permanentItems = new ArrayList();
-		} else if (this.permanentItems.contains(item)) {
-			// has been added already:
-			return;
-		}
-		this.permanentItems.add(item);
-        Object lock = MIDlet.getEventLock();
-        synchronized (lock) {
-            add(item._bbField);
-        }
-	}
-	
-	public void removePermanentNativeItem(Item item) {
-		if (this.permanentItems != null) {
-			this.permanentItems.remove(item);
-			Field field = item._bbField;
-			if (field != null && field.getManager() != null) {
-				try {
-			        Object lock = MIDlet.getEventLock();
-			        synchronized (lock) {
-			            delete(field);
-			        }
-				} catch (Exception e) {
-					//#debug error
-					System.out.println("Warning: unable to delete native field" + e);
-				}
-			}
-	
-		}
-		
-	}
-
-	
-	public void clearPermanentNativeItems() {
-		if (this.permanentItems != null) {
-			Object[] objects = this.permanentItems.getInternalArray();
-			for (int i = 0; i < objects.length; i++) {
-				Item item = (Item) objects[i];
-				if (item == null) {
-					break;
-				}
-				removePermanentNativeItem(item);
-			}
-		}
-	}
-	
-	protected void sublayout(int w, int h) {
-		Item currentItem =  this.screen.currentItem;
-		for (int i=0; i<getFieldCount(); i++) {
-			Field field = getField(i);
-			if (currentItem != null && field == currentItem._bbField) {
-				int itemW = currentItem.getContentWidth();
-				if (itemW == 0) {
-					itemW = currentItem.itemWidth;
-				}
-				itemW += 2;
-				layoutChild( field, itemW, currentItem.itemHeight);
-				setPositionChild( field, currentItem.getAbsoluteX() + currentItem.getContentX(), currentItem.getAbsoluteY() + currentItem.getContentY() );
-			} else {
-				Item item = getItem( field );
-				if (item != null) {
-					int itemW = item.getContentWidth();
-					if (itemW == 0) {
-						itemW = item.itemWidth;
-					}
-					itemW += 2;
-					layoutChild( field, itemW, item.itemHeight);
-					//layoutChild( field, w, h);
-					setPositionChild( field, item.getAbsoluteX() + item.getContentX(), item.getAbsoluteY() + item.getContentY() );
-				} else {
-					layoutChild( field, w, h );
-				}
-			}
-		}
-		setExtent( w, h );
-	}
-
-	private Item getItem(Field field) {
-		if (this.permanentItems == null) {
-			return null;
-		}
-		Object[] objects = this.permanentItems.getInternalArray();
-		for (int i = 0; i < objects.length; i++) {
-			Item item = (Item) objects[i];
-			if (item == null) {
-				break;
-			}
-			if (item._bbField == field) {
-				return item;
-			}
-		}
-		return null;
-	}
-
-	
-	//#if !polish.useFullScreen
-    protected void paint( net.rim.device.api.ui.Graphics g ) {
-	    // when extending the BB MainScreen, super.paint(g) will
-    	// clear the paint area, subpaint(g) will only render the fields.
-	    subpaint(g);
-    }
-    //#endif
-	
-	protected void subpaint(net.rim.device.api.ui.Graphics g) {
-		BaseScreen baseScreen = this.screen;
-		Screen polishScreen = baseScreen.getPolishScreen();
-		if (polishScreen == null || !polishScreen.isMenuOpened()) {
-			Item currentItem = baseScreen.currentItem;
-			if (currentItem != null) {
-				Item parent = currentItem;
-				if (polishScreen != null) {
-					while (parent.getParent() != null) {
-						parent = parent.getParent();
-					}
-					if (parent == polishScreen.getRootContainer()) {
-						int x = polishScreen.getScreenContentX();
-						int y = polishScreen.getScreenContentY();
-						int width = polishScreen.getScreenContentWidth();
-						int height = polishScreen.getScreenContentHeight();
-						g.pushContext(x - g.getTranslateX(), y - g.getTranslateY(), width, height, 0, 0 );
-					} else {
-						polishScreen = null; 
-					}
-				}
-				Field field = currentItem._bbField;
-				paintChild( g, field );
-				if (polishScreen != null) {
-					g.popContext();
-				}
-			}
-			if (this.permanentItems != null) {
-				Object[] objects = this.permanentItems.getInternalArray();
-				for (int i = 0; i < objects.length; i++) {
-					Item item = (Item) objects[i];
-					if (item == null) {
-						break;
-					}
-					paintChild( g, item._bbField);
-				}			
-			}
-		}
-	}
-	
 }

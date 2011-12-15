@@ -399,7 +399,6 @@ public final class TextUtil {
 			WrappedText list,
 			int maxLines, int maxLinesAppendixPosition ) 
 	{
-		
 		//TODO extend wrapping : bottom line - based wrapping 
 		if(maxLinesAppendixPosition == MAXLINES_APPENDIX_POSITION_BEFORE && maxLines == 1) {
 			list.addLine(value, 0);

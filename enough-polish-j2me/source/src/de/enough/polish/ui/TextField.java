@@ -807,6 +807,9 @@ public class TextField extends StringItem
 
 	// this is outside of the tmp.directInput block, so that it can be referenced from the UiAccess class
 	protected int inputMode; // the current input mode		
+	//#if tmp.directInput || polish.android
+		private int caretPosition; // the position of the caret in the text
+	//#endif
 	//#if tmp.directInput
 		//#if tmp.supportsSymbolEntry
 			protected static List symbolsList;
@@ -868,7 +871,6 @@ public class TextField extends StringItem
 		
 		private String[] realTextLines; // the textLines with spaces and line breaks at the end
 		private String originalRowText; // current line including spaces and line breaks at the end
-		private int caretPosition; // the position of the caret in the text
 		private int caretColumn; // the current column of the caret, 0 is the first column
 		private int caretRow; // the current row of the caret, 0 is the first row
 		private int caretRowWidth; // the width of the current row
@@ -980,7 +982,7 @@ public class TextField extends StringItem
 		//#endif
 		private int bbLastCursorPosition;
 	//#endif
-	//#if polish.midp && !polish.blackberry && !polish.api.windows && !polish.TextField.useVirtualKeyboard
+	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
 		//#define tmp.useNativeTextBox
 		private de.enough.polish.midp.ui.TextBox midpTextBox;
 		//#if polish.TextField.passCharacterToNativeEditor
@@ -1953,7 +1955,14 @@ public class TextField extends StringItem
 	public void setCaretPosition(int position) {
 		//#if polish.android
 			try {
-				this._androidTextField.setSelection(position);
+				
+				AndroidTextField nativeField = this._androidTextField;
+				if (nativeField == null) {
+					this.caretPosition = position;
+				} else {
+					this.caretPosition = -1; 
+					nativeField.setCursorPosition(position);
+				}
 			} catch (IndexOutOfBoundsException e) {
 				// ignore
 			}
@@ -2041,6 +2050,11 @@ public class TextField extends StringItem
 					TextField.this._androidView = TextField.this._androidTextField;
 					if (TextField.this.isShown) {
 						AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
+					}
+					int caretPos = TextField.this.caretPosition;
+					if (caretPos != -1) {
+						TextField.this._androidTextField.setCursorPosition(caretPos);
+						TextField.this.caretPosition = -1;
 					}
 				}
 			});
@@ -2267,37 +2281,30 @@ public class TextField extends StringItem
 //		}
 	}
 	
-	//#if polish.blackberry
 	/**
-	 * Sets a blackberry field to selectable. Used to prevent
-	 * fields to be selectable if they should not be shown.
+	 * Sets a blackberry field to selectable. 
+	 * Used to prevent fields to be selectable if they should not be shown.
+	 * You should check for the 'polish.blackberry' preprocessing symbol when using this method:
+	 * <pre>
+	 * //#if polish.blackberry
+	 * </pre>
 	 * 
 	 * @param editable true, if the textfield should be selectable, otherwise false
 	 */
 	public void activate(boolean editable)
 	{
-		Object bbLock = Application.getEventLock();
-		synchronized (bbLock) 
-		{
-			if(editable)
-			{
-				if(this._bbField == null)
-				{
-					setConstraints(this.constraints);
-				}
-				if (this.isFocused) {
-					if(getScreen() != null) {
-					getScreen().notifyFocusSet(this);
-				} else {
-					Display.getInstance().notifyFocusSet(this);
-				}
-				}
-			}
-			else
-			{	
-				if(this._bbField != null)
-				{
-					
+		//#if polish.blackberry
+			Object bbLock = Application.getEventLock();
+			synchronized (bbLock) {
+				if (editable) {
+					if(this._bbField == null) {
+						setConstraints(this.constraints);
+					}
+					if (this.isFocused) {
+						Display.getInstance().notifyFocusSet(this);
+					}
+				} else {	
+					if (this._bbField != null) {
 						Manager manager = this._bbField.getManager();
 						manager.delete(this._bbField);
 						
@@ -2306,15 +2313,24 @@ public class TextField extends StringItem
 					}
 				}
 			}
-		}
-	//#endif
+		//#endif
+	}
 	
-	//#if polish.blackberry
+	/**
+	 * Allows to set a BlackBerry textfield to be editable
+	 * You should check for the 'polish.blackberry' preprocessing symbol when using this method:
+	 * <pre>
+	 * //#if polish.blackberry
+	 * </pre>
+	 * 
+	 * @param editable true when this field should be editable (the default behavior).
+	 */
 	public void setEditable(boolean editable)
 	{
-		this._bbField.setEditable(editable);
+		//#if polish.blackberry
+			this._bbField.setEditable(editable);
+		//#endif
 	}
-	//#endif
 
 	/**
 	 * Gets the current input constraints of the <code>TextField</code>.
@@ -2383,9 +2399,6 @@ public class TextField extends StringItem
 				} 
 			//#endif
 			super.paintContent(x, y, leftBorder, rightBorder, g);
-			if (true) {
-				return;
-			}
 		//#else
         
 		if (this.isUneditable || !this.isFocused) {
@@ -4572,7 +4585,12 @@ public class TextField extends StringItem
 	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
 	protected Style focus(Style focStyle, int direction) {
 		//#if polish.android
-			DeviceControl.showSoftKeyboard();
+			if (this.isShown) {
+				DeviceControl.showSoftKeyboard();
+			}
+			//#if !polish.TextField.keepCaretPosition
+				setCaretPosition( getString().length() );
+			//#endif
 		//#elif tmp.directInput || polish.blackberry
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {

@@ -4,7 +4,7 @@
 
 	<!-- global properties -->
 	<property file="${user.name}.properties" />
-	<property name="device" value="Generic/JtwiCldc11" />
+	<property name="device" value="Generic/AnyPhone" />
 	<property file="version.properties" />
 	
 	<property name="all.jars" value="wmapi.jar,nokia-ui.jar,mmapi.jar,siemens-color-game-api.jar,siemens-extension-api.jar,btapi.jar,m3g.jar,fileconnection.jar,pim.jar,pdaapi.jar,m2g.jar,cldc-1.0.jar,cldc-1.0-java5.0.jar,cldc-1.1.jar,cldc-1.1-java5.0.jar,midp-1.0.jar,midp-2.0.jar,blackberry-4.0.jar,blackberry-4.1.0.jar,blackberry-4.2.0.jar,blackberry-4.3.0.jar,doja-1.5.jar,doja-2.5.jar,location.jar,javase-1.0.jar" />
@@ -248,6 +248,7 @@
 					<variable name="polish.LibraryBuild" value="true" />
 		            <variable name="polish.css.allowAllAttributes" value="true"/>
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					<variable name="polish.TextField.showHelpText" value="true" />
 				</variables>
 				<resources
 					dir="build/clientresources" 
@@ -306,7 +307,7 @@
 		<j2mepolish>
 		    <!-- general settings -->
 			<info 
-				copyright="Copyright 2008 Enough Software. All rights reserved." 
+				copyright="Copyright 2011 Enough Software. All rights reserved." 
 				description="Used for building versions for Java 5 syntax support." 
 				infoUrl="http://www.j2mepolish.org" 
 				jarName="${ nospace(polish.vendor) }-${ nospace(polish.name) }-${polish.locale}-j2mepolish.jar" 
@@ -338,6 +339,7 @@
 					<variable name="polish.LibraryBuild" value="true" />
 		            <variable name="polish.css.allowAllAttributes" value="true"/>
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
+					<variable name="polish.TextField.showHelpText" value="true" />
 				</variables>
 				<resources
 					dir="build/java5resources" 
@@ -1014,7 +1016,7 @@
 	</target>
 
 	<target name="installer"
-			 depends="bin-dist, copyfiles, convertWindowsLineEndings"
+			 depends="clean, bin-dist, copyfiles, convertWindowsLineEndings"
 			 description="creates the j2mepolish-installer." 
 		>
 		<taskdef name="izpack" 

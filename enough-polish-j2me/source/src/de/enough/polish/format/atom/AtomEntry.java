@@ -35,6 +35,7 @@ import de.enough.polish.io.RedirectHttpConnection;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.IdentityArrayList;
 import de.enough.polish.util.StreamUtil;
+import de.enough.polish.util.TextUtil;
 import de.enough.polish.util.TimePoint;
 import de.enough.polish.xml.XmlDomNode;
 
@@ -90,9 +91,10 @@ implements Externalizable
 			this.contentType = contNode.getAttribute("type");
 		}
 		int childCount = node.getChildCount();
-		for (int i=0; i<childCount; i++) {
-			XmlDomNode linkNode = node.getChild(i);
-			if ("link".equals(linkNode.getName())) {
+		for (int contentChildIndex=0; contentChildIndex<childCount; contentChildIndex++) {
+			XmlDomNode linkNode = node.getChild(contentChildIndex);
+			String linkNodeName = linkNode.getName();
+			if ("link".equals(linkNodeName)) {
 				if (this.linksList == null) {
 					this.linksList = new IdentityArrayList();
 				}
@@ -108,6 +110,27 @@ implements Externalizable
 						}
 						this.images.add( new AtomImage(href) );
 					}
+				}
+				// not checking this as these are typically just the same image in different resolutions... should be better integrated later onwards.
+//			} else if ("media:group".equals(linkNodeName)) {
+//				int mediaGroupChildCount = linkNode.getChildCount();
+//				for (int mediaChildIndex=0; mediaChildIndex<mediaGroupChildCount; mediaChildIndex++) {
+//					XmlDomNode mediaGroupChildNode = linkNode.getChild(mediaChildIndex);
+//					String url = mediaGroupChildNode.getAttribute("url");
+//					if (url != null && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".gif")) ) {
+//						if (this.images == null) {
+//							this.images = new IdentityArrayList();
+//						}
+//						this.images.add( new AtomImage(url) );						
+//					}
+//				}
+			} else if ("media:thumbnail".equals(linkNodeName)) {
+				String href = linkNode.getAttribute("url");
+				if (href != null) {
+					if (this.images == null) {
+						this.images = new IdentityArrayList();
+					}
+					this.images.add( new AtomImage(href) );
 				}
 			}
 		}
