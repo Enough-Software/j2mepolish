@@ -148,9 +148,7 @@ menu {
 	padding: 2px;
 	background {
 		type: round-rect;
-		color: focusedBgColor;
-		border-width: 2;
-		border-color: bgColor;
+		color: bgColor;
 	}
 }
 
@@ -175,7 +173,7 @@ menuItem {
 	padding: 2px;
 	padding-left: 5px;
 	font {
-		color: fontColor;
+		color: focusedBgColor;
 		size: medium;
 		style: bold;
 	}
@@ -198,7 +196,7 @@ menuItem {
 }
 
 .menuItem:hover {
-	background-color: bgColor;
+	background-color: focusedBgColor;
 	font-color: focusedFontColor;
 	layout: left | horizontal-expand;
 }

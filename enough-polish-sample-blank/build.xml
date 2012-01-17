@@ -37,7 +37,7 @@
 	<j2mepolish>
 	    <!-- general settings -->
 		<info 
-			copyright="Copyright 2011 Enough Software. All rights reserved." 
+			copyright="Copyright 2012 Enough Software. All rights reserved." 
 			description="An application stub." 
 			infoUrl="http://www.enough.de" 
 			jarName="${polish.vendor}-${polish.name}-${polish.locale}-app.jar" 
@@ -65,6 +65,7 @@
 				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
 				<!--
 				<variable name="polish.Container.allowCycling" value="false" />
+				<variable name="polish.MenuBar.OptionsPosition" value="right" />
 				-->
 				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 				<variable name="polish.useScrollBar" value="true" />

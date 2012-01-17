@@ -163,16 +163,16 @@ implements CommandListener, ItemStateListener
 	}
 
 	private void addMessage(TreeItem tree, Item node, String from, String subject, String text ) {
-		Item subjectItem;
+		Item fromItem;
 		Item detailItem;
 		//#style mailSummary
-		subjectItem = tree.appendToNode(node, from, null );
+		fromItem = tree.appendToNode(node, from, null );
 		//#style mailDetail
 		detailItem = new StringItem( "Subject: ", subject);
-		tree.appendToNode( subjectItem, detailItem );
+		tree.appendToNode( fromItem, detailItem );
 		//#style mailDetail
 		detailItem = new StringItem( "Text: ", text);
-		tree.appendToNode( subjectItem, detailItem );
+		tree.appendToNode( fromItem, detailItem );
 	}
 
 	private void setStatus( int status ) {
