@@ -784,6 +784,7 @@ public class MenuBar extends Item {
 	protected void initContent(int firstLineWidth, int availWidth, int availHeight) {
 		//#debug
 		System.out.println("Init content of MenuBar - isOpened=" + this.isOpened + ", firstLineWidth=" + firstLineWidth + ", lineWidth=" + availWidth + ", screen=" + this.screen );
+		Container commandsCont = this.commandsContainer;
 		if (this.isOpened) {
 			int titleHeight = this.screen.getTitleHeight(); // + this.screen.subTitleHeight + this.screen.infoHeight;
 			this.topY = titleHeight;
@@ -791,18 +792,18 @@ public class MenuBar extends Item {
 			//int containerHeight = this.commandsContainer.getItemHeight( firstLineWidth, firstLineWidth, availHeight);
 			//int commandsContainerY = this.screenHeight - containerHeight - 1;
 			//System.out.println("screenHeight=" + this.screenHeight + ", containerHeight=" + containerHeight + ", containerY=" + commandsContainerY);
-			this.commandsContainer.relativeX = 0;
+			commandsCont.relativeX = 0;
 			//#if tmp.RightOptions || (tmp.useInvisibleMenuBar && !polish.hasTrackballEvents)
 				// move menu to the right of the screen:
-				this.commandsContainer.relativeX = availWidth - this.commandsContainer.itemWidth;
+				commandsCont.relativeX = availWidth - commandsCont.getItemWidth(firstLineWidth, availWidth, availHeight);
 			//#endif
 			/*
 			int focusedIndex = this.commandsContainer.focusedIndex;
 			this.canScrollUpwards = (focusedIndex != 0); 
 			this.canScrollDownwards = (focusedIndex != this.commandsList.size() - 1 );
 			*/
-			this.canScrollUpwards = (this.commandsContainer.yOffset != 0)
-				&& (this.commandsContainer.focusedIndex != 0);
+			this.canScrollUpwards = (commandsCont.yOffset != 0)
+				&& (commandsCont.focusedIndex != 0);
 			//#if !tmp.useInvisibleMenuBar && !polish.MenuBar.overwriteHandling
 				IconItem item; 
 				//#if tmp.OkCommandOnLeft
@@ -813,11 +814,13 @@ public class MenuBar extends Item {
 					item = this.singleLeftCommandItem;
 				//#endif
 				setupCommandMenuItem(item, getMenuSelectText(), this.selectImage);
-				//#if tmp.OkCommandOnLeft
+				//#if tmp.OkCommandOnLeft && !tmp.RightOptions
 					this.singleRightCommandItem.setText(null);
 					this.singleRightCommandItem.setImage( (Image)null );
 				//#else
-					//#if tmp.RightOptions
+					//#if tmp.OkCommandOnLeft && tmp.RightOptions
+						item = this.singleRightCommandItem;
+					//#elif tmp.RightOptions
 						item = this.singleLeftCommandItem;
 					//#else
 						item = this.singleRightCommandItem;
@@ -875,7 +878,7 @@ public class MenuBar extends Item {
 					//#else
 						item = this.singleLeftCommandItem;
 					//#endif
-					setupCommandMenuItem(item, getMenuOptionsText(), optionsImage);
+					setupCommandMenuItem(item, getMenuOptionsText(), this.optionsImage);
 				}
 			//#endif
 		}
@@ -936,7 +939,7 @@ public class MenuBar extends Item {
 					this.singleRightCommandItem.relativeX = this.contentWidth - this.singleRightCommandItem.itemWidth;
 					this.singleRightCommandItem.relativeY = this.contentHeight - this.screenHeight;
 					if (this.isOpened) {
-						this.commandsContainer.relativeX = this.contentWidth - this.commandsContainer.itemWidth;
+						commandsCont.relativeX = this.contentWidth - commandsCont.itemWidth;
 					}
 				}
 			//#endif
@@ -970,8 +973,8 @@ public class MenuBar extends Item {
 					this.singleRightCommandItem.relativeY = this.contentHeight - this.singleRightCommandItem.itemHeight - this.paddingBottom - getBorderWidthBottom() - this.marginBottom;
 				//#endif
 				if (this.isOpened) {
-					this.commandsContainer.relativeY = this.screen.titleHeight;
-					this.commandsContainer.relativeX =  - this.commandsContainer.itemWidth;
+					commandsCont.relativeY = this.screen.titleHeight;
+					commandsCont.relativeX =  - commandsCont.itemWidth;
 				}
 			//#endif
 		//#endif
