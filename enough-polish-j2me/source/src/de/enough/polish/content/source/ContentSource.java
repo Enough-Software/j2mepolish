@@ -239,7 +239,7 @@ public abstract class ContentSource {
 					data = transformer.transformContent(data);
 				} catch (IOException e) {
 					//#debug error
-					System.out.println("error transforming " + descriptor + ":"
+					info("error transforming " + descriptor + ":"
 							+ e);
 				}
 
@@ -345,7 +345,7 @@ public abstract class ContentSource {
 	 * @param data the data that needs to be stored
 	 * @return an Object [], the first element is an Integer object containing the stored object's data size, the second element is a reference to the stored object
 	 */
-	protected abstract Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException ;
+	protected abstract Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException, ContentException ;
 
 	protected void storeContent(ContentDescriptor descriptor, Object data)
 			throws ContentException {
@@ -374,12 +374,17 @@ public abstract class ContentSource {
 					reference = store(descriptor, data);
 				}
 
-				// add the reference to the StorageIndex
-				this.storageIndex.addReference(new StorageReference(descriptor,
-						size, reference));
+				// add the reference to the StorageIndex, if storage was successful
+				if ( reference != null ) {
+					this.storageIndex.addReference(new StorageReference(descriptor,
+							size, reference));
 
-				//#debug debug
-				info("content stored with reference : " + reference);
+					//#debug debug
+					info("content stored with reference : " + reference);
+				} else {
+					//#debug debug
+					info("content deliberately not stored");
+				}
 			}
 		} catch (IOException e) {
 			String message = "error storing content : " + e;
@@ -425,15 +430,25 @@ public abstract class ContentSource {
 			info("content destroyed : " + descriptor);
 		}
 	}
-
+	
 	/**
 	 * If a clean is needed on the storage, the clean order is applied to the
 	 * StorageIndex and contents are deleted until the cache size is below the
 	 * thresholds
 	 */
 	public void clean() throws ContentException {
+		clean(0);
+	}
+
+	/**
+	 * If a clean is needed on the storage in order to store an additional extraBytes number of bytes, the clean order is applied to the
+	 * StorageIndex and contents are deleted until the cache size is below the
+	 * thresholds
+	 * @param extraBytes
+	 */
+	public void clean(int extraBytes) throws ContentException {				
 		if (hasStorage()) {
-			if (!this.storageIndex.isCleanNeeded()) {
+			if (!this.storageIndex.isCleanNeeded(extraBytes)) {
 				return;
 			}
 			
@@ -447,15 +462,24 @@ public abstract class ContentSource {
 			// apply the clean order
 			this.storageIndex.applyOrder();
 
+			boolean canDeleteFurther = true;
 			do {
+				// Assume that you cannot delete anything else
+				canDeleteFurther = false;
+				
 				// get the index of the first disposable content
 				int index = this.storageIndex.getDisposableIndex();
 				// get the reference
 				StorageReference reference = this.storageIndex
 						.getReference(index);
-				// destroy the content
-				destroyContent(reference);
-			} while ((this.storageIndex.isCleanNeeded()));
+				// destroy the content, if not critical
+				if ( reference.getPriority() != ContentDescriptor.PRIORITY_CRITICAL ) {
+					destroyContent(reference);
+					
+					// Maybe we can delete other content too
+					canDeleteFurther = true;
+				}
+			} while ((this.storageIndex.isCleanNeeded(extraBytes)) && canDeleteFurther);
 		}
 	}
 
