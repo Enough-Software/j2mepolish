@@ -15,13 +15,36 @@ import de.enough.polish.content.storage.StorageIndex;
 import de.enough.polish.io.Serializer;
 import de.enough.polish.util.ArrayList;
 
+/**
+ * Defines a storage index using the Persistent Record Storage on Blackberry
+ * @author Ovidiu Iliescu
+ * 
+ */
 public class PersistentStorageIndex extends StorageIndex {
+	/**
+	 * The record store index
+	 */
 	static final String STORAGE = "RMSStorageIndex";
+	
+	/**
+	 * Indicates that the actaul record index is not known
+	 */
 	static final int RECORD_UNKNOWN = Integer.MIN_VALUE;
 
+	/**
+	 * The actual record store to use
+	 */
 	PersistentRecordStore store;
+	
+	/**
+	 * The record ID
+	 */
 	int recordId = RECORD_UNKNOWN;
 
+	/**
+	 * Creates a new index, with the specified maximum size
+	 * @param maxCacheSize the size of the index
+	 */
 	public PersistentStorageIndex(int maxCacheSize) {
 		super(maxCacheSize);
 
@@ -109,6 +132,9 @@ public class PersistentStorageIndex extends StorageIndex {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.storage.StorageIndex#shutdown()
+	 */
 	public void shutdown() {
 		super.shutdown();
 

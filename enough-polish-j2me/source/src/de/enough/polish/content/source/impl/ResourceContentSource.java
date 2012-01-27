@@ -16,8 +16,15 @@ import de.enough.polish.util.StreamUtil;
  */
 public class ResourceContentSource extends ContentSource{
 	
+	/**
+	 * The prefix for this kind of source
+	 */
 	public final static String PREFIX = "resource://";
 
+	/**
+	 * Creates a new resource content source
+	 * @param id the unique ID of this source
+	 */
 	public ResourceContentSource(String id) {
 		super(id);
 	}
@@ -63,6 +70,9 @@ public class ResourceContentSource extends ContentSource{
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#storeContentAndGetDataSize(de.enough.polish.content.ContentDescriptor, java.lang.Object)
+	 */
 	protected Object[] storeContentAndGetDataSize(ContentDescriptor descriptor,
 			Object data) throws IOException {
 		// Do nothing, this is a source
