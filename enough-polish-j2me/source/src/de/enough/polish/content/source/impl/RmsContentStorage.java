@@ -8,35 +8,94 @@ import java.io.IOException;
 
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
+import javax.microedition.rms.RecordStoreNotOpenException;
 
 import de.enough.polish.content.ContentDescriptor;
+import de.enough.polish.content.ContentException;
 import de.enough.polish.content.source.ContentSource;
 import de.enough.polish.content.storage.StorageIndex;
 import de.enough.polish.content.storage.StorageReference;
 import de.enough.polish.io.Serializer;
 
 /**
+ * Defines a content storage using the RMS
  * @author Andre Schmidt
  * 
  */
 public class RmsContentStorage extends ContentSource {
 	
-	static final String STORAGE = "RMSContentStorage";
+	/**
+	 * The default RMS store name
+	 */
+	public static final String STORAGE = "RMSContentStorage";
 	
+	/**
+	 * The RecordStore instance to use
+	 */
 	protected RecordStore store;
-
+	
+	/**
+	 * Returns the maximum total size of the store
+	 * @return the maximum total size of the store
+	 */
+	public static int getMaximumTotalSize() {
+		int maxSize = 0;
+		int currentSize = 0;
+		RecordStore rs = null;
+		try {
+			rs = RecordStore.openRecordStore(STORAGE, true);
+			currentSize = rs.getSize();
+			maxSize = currentSize + rs.getSizeAvailable();			
+		} catch (Exception ex) {
+			// Do nothing
+		} finally {
+			try {
+				// Close record store
+				if (rs != null) {
+					rs.closeRecordStore();
+				}
+				
+				// If the store is empty, delete it as well
+				if ( currentSize == 0 ) {
+					RecordStore.deleteRecordStore(STORAGE);
+				}
+			} catch (Exception ex) {
+				// Do nothing
+			}
+		}
+		return maxSize;		
+	}
+	
+	/**
+	 * Creates a new RmsContentStor
+	 * @param id
+	 * @param index
+	 */
 	public RmsContentStorage(String id, StorageIndex index) {
+		this(id, STORAGE, index);
+	}
+
+	/**
+	 * Creates a new RmsContentStorage instance
+	 * @param id the unique ID of this instance
+	 * @param recordStoreName the name of the record store to use
+	 * @param index the index to use with this content storage
+	 */
+	public RmsContentStorage(String id, String recordStoreName, StorageIndex index) {
 		super(id, index);
 		
 		// open the record store
 		try {
-			store = RecordStore.openRecordStore(STORAGE, true);
+			store = RecordStore.openRecordStore(recordStoreName, true);
 		} catch (RecordStoreException e) {
 			//#debug error
 			System.out.println("unable to open record store " + e);
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#shutdown()
+	 */
 	public synchronized void shutdown() {
 		// close the record store
 		try
@@ -51,12 +110,15 @@ public class RmsContentStorage extends ContentSource {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#destroy(de.enough.polish.content.storage.StorageReference)
+	 */
 	protected synchronized  void destroy(final StorageReference reference) throws IOException {
 		try {
 			// get the record id
 			int recordId = ((Integer)reference.getReference()).intValue();
 			
-			// add the record
+			// delete the record
 			store.deleteRecord(recordId);
 			
 		} catch (RecordStoreException e) {
@@ -67,35 +129,62 @@ public class RmsContentStorage extends ContentSource {
 	/* (non-Javadoc)
 	 * @see de.enough.polish.content.source.ContentSource#storeContentAndGetDataSize(de.enough.polish.content.ContentDescriptor, java.lang.Object)
 	 */
-	protected Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException {
+	protected Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException, ContentException {
+		
+		// serialize the data and convert it to a byte array 
+		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+		Serializer.serialize(data, new DataOutputStream(byteStream));
+		
+		// get the bytes
+		byte[] bytes = byteStream.toByteArray();		 		
+
+		// If the data we are trying to store is bigger than the cache itself, don't even bother
+		if ( bytes.length > getStorageIndex().getAvailableCacheSize() ) {
+			return new Object[] { new Integer(bytes.length), null };
+		}
+		
+		// Try to do a clean first, in case it is needed.
+		clean(bytes.length);
+		
+		// add the record, if possible
+		Integer recordId = null;
 		try {
-			// serialize the data and convert it to a byte array 
-			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-			Serializer.serialize(data, new DataOutputStream(byteStream));
-			
-			// get the bytes
-			byte[] bytes = byteStream.toByteArray();
-			
-			// add the record
-			int recordId = store.addRecord(bytes, 0, bytes.length);
-			
-			return new Object[] { new Integer(bytes.length), new Integer(recordId)};
-		} catch (RecordStoreException e) {
-			throw new IOException("unable to store data " + e);
-		}				
+				if ( !this.getStorageIndex().isCleanNeeded(bytes.length) ) {
+					recordId = new Integer(store.addRecord(bytes, 0, bytes.length));
+					//#debug debug
+					System.out.println("added record for " + descriptor.getUrl());
+				} else {
+					//#debug debug
+					System.out.println("not enough space to add record for " + descriptor.getUrl());
+				}
+		} catch (Exception e) {
+			//#debug debug
+			System.out.println("exception while storing " + descriptor.getUrl() + " : " + e.getClass().getName() + " " + e.getMessage());
+		}
+		
+		return new Object[] { new Integer(bytes.length), recordId};			
 	}
 
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#store(de.enough.polish.content.ContentDescriptor, java.lang.Object)
+	 */
 	protected synchronized Object store(ContentDescriptor descriptor, Object data) throws IOException {
 		// Do nothing here as the #storeContentAndGetDataSize method will be used. instead
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#load(de.enough.polish.content.ContentDescriptor)
+	 */
 	protected synchronized Object load(ContentDescriptor descriptor)
 			throws IOException {
 		// do nothing here as it is a storage
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#load(de.enough.polish.content.storage.StorageReference)
+	 */
 	protected synchronized Object load(StorageReference reference) throws IOException {
 		try {
 			// get the record id

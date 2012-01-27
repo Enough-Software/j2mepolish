@@ -17,15 +17,27 @@ import de.enough.polish.content.storage.StorageReference;
 import de.enough.polish.io.Serializer;
 
 /**
+ * Defines a content storage using the Persistent Record Store mechanism on Blackberry
  * @author Andre Schmidt
  * 
  */
 public class PersistentContentStorage extends ContentSource {
 	
+	/**
+	 * The record store ID for the persistent storage
+	 */
 	static final String STORAGE = "RMSContentStorage";
 	
+	/**
+	 * The record store instance
+	 */
 	PersistentRecordStore store;
 
+	/**
+	 * Creates a new PersistentContentStorage instance
+	 * @param id the ID for the storage
+	 * @param index the storageindex to use
+	 */
 	public PersistentContentStorage(String id, StorageIndex index) {
 		super(id, index);
 		
@@ -38,6 +50,9 @@ public class PersistentContentStorage extends ContentSource {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#shutdown()
+	 */
 	public synchronized void shutdown() {
 		// close the record store
 		try

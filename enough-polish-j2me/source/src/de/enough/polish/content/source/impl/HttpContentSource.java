@@ -16,8 +16,15 @@ import de.enough.polish.util.StreamUtil;
  */
 public class HttpContentSource extends ContentSource{
 	
+	/**
+	 * The HTTP prefix
+	 */
 	public final static String PREFIX = "http://";
 
+	/**
+	 * Creates a new HttpContentSource
+	 * @param id
+	 */
 	public HttpContentSource(String id) {
 		super(id);
 	}
@@ -62,6 +69,9 @@ public class HttpContentSource extends ContentSource{
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.content.source.ContentSource#storeContentAndGetDataSize(de.enough.polish.content.ContentDescriptor, java.lang.Object)
+	 */
 	protected Object[] storeContentAndGetDataSize(ContentDescriptor descriptor,
 			Object data) throws IOException {
 		// Do nothing, this is a source

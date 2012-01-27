@@ -27,7 +27,7 @@ public class StorageIndex implements Comparator {
 	/**
 	 * the maximum cache size
 	 */
-	final long maxCacheSize;
+	protected final long maxCacheSize;
 
 	/**
 	 * is the StorageIndex prepared ?
@@ -167,6 +167,15 @@ public class StorageIndex implements Comparator {
 	public long getCacheSize() {
 		return this.cacheSize;
 	}
+	
+	/**
+	 * Returns the maximum possible number of bytes that can be stored. This takes into consideration both user-specified limitations
+	 * (e.g. maximum cache size) and platform-specific limitations (e.g. storage space).
+	 * @return the maximum possible number of bytes that can be stored in the cache.
+	 */
+	public long getAvailableCacheSize() {
+		return maxCacheSize - cacheSize;
+	}
 
 	/**
 	 * Loads the ArrayList representing the index. It is encouraged to overwrite
@@ -207,7 +216,7 @@ public class StorageIndex implements Comparator {
 
 		return null;
 	}
-
+	
 	/**
 	 * Returns true, if the current cache size is greater than the threshold,
 	 * otherwise false
@@ -216,7 +225,21 @@ public class StorageIndex implements Comparator {
 	 *         otherwise false
 	 */
 	public boolean isCleanNeeded() {
-		return getCacheSize() > this.maxCacheSize;
+		return isCleanNeeded(0);
+	}
+
+	/**
+	 * Returns true, if the current cache size is not enough to store an additional extraBytes bytes,
+	 * otherwise false
+	 * 
+	 * @param extraBytes the number of extra bytes to store
+	 * @return true, if the current cache size is greater than the threshold,
+	 *         otherwise false
+	 */
+	public boolean isCleanNeeded(int extraBytes) {
+		int OVERHEAD = 256;
+		long finalSize = extraBytes + OVERHEAD;
+		return finalSize > getAvailableCacheSize();
 	}
 
 	/*
@@ -252,7 +275,7 @@ public class StorageIndex implements Comparator {
 	 */
 	public boolean isDisposableTo(StorageReference reference,
 			StorageReference master) {
-		return reference.getPriority() <= master.getPriority() && reference.getCreationTime() < master.getCreationTime();
+		return reference.getPriority() <= master.getPriority() && reference.getLastActivityTime() < master.getLastActivityTime();
 	}
 
 	/**

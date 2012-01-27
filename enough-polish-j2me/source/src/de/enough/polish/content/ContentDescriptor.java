@@ -16,6 +16,9 @@ import de.enough.polish.util.ToStringHelper;
  * 
  */
 public class ContentDescriptor implements Externalizable {
+	
+	public static int PRIORITY_CRITICAL = Integer.MAX_VALUE;
+	
 	/**
 	 * the default version
 	 */
