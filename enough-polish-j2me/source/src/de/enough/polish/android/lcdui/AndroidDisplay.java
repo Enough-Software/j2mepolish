@@ -1282,6 +1282,11 @@ implements NativeDisplay //, OnTouchListener
         for (int i = 1; i < count; i++) {
             View view = getChildAt(i);
             Item item = this.itemsByViewMap.get(view);
+            if (item == null) {
+            	//#debug warn
+            	System.err.println("AndroidDisplay: Unable to find item for view " + i + ": " + view);
+            	continue;
+            }
             int x = item.getAbsoluteX() + item.getContentX();
             int y = item.getAbsoluteY() + item.getContentY();
             if (y != view.getTop()) {
