@@ -862,7 +862,7 @@ implements UiElement, Animatable
 //		int containerHeight = 0; 
 		int originalWidth = width;
 		if (cont != null && this.isLayoutHorizontalShrink) {
-			width = cont.getItemWidth(width, width, height) + cont.paddingLeft + cont.paddingRight;
+			width = cont.getItemWidth(width, width, height);
 //			containerHeight = cont.itemHeight;
 //			width = containerWidth;
 		}
@@ -3077,19 +3077,6 @@ implements UiElement, Animatable
 							this.title.setStyle( tStyle );
 						}
 					}
-				// the Nokia 6600 has an amazing bug - when trying to refer the
-				// field screenWidth, it returns 0 in setTitle(). Obviously this works
-				// in other phones and in the simulator, but not on the Nokia 6600.
-				// That's why hardcoded values are used here. 
-				// The name of the field does not matter by the way. This is 
-				// a very interesting behaviour and should be analysed
-				// at some point...
-	//			//#ifdef polish.ScreenWidth:defined
-	//				//#= int width = ${polish.ScreenWidth}  - (this.marginLeft + this.marginRight);
-	//			//#else
-	//				int width = this.screenWidth - (this.marginLeft + this.marginRight);
-	//			//#endif
-	//			this.titleHeight = this.title.getItemHeight( width, width );			
 			} else {
 				//#if tmp.useTitleMenu
 				if(!this.hasTitleMenu)
