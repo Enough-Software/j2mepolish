@@ -898,7 +898,7 @@ public class Graphics
 		y2 += this.translateY;
 		float strokeWidth = this.paint.getStrokeWidth();
 		this.paint.setStrokeWidth(2);
-		this.canvas.drawLine(x1, y1, x2, y2, this.paint);
+		this.canvas.drawLine(x1, y1, x2 + 1, y2, this.paint);
 		this.paint.setStrokeWidth(strokeWidth);
 	}
 
