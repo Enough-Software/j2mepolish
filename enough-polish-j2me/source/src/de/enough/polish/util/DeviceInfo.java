@@ -165,8 +165,11 @@ public class DeviceInfo
 	 * @return the name of this device model or null when it cannot be determined
 	 */
 	public static String getDeviceName() {
+		String deviceName = null;
 		//#if polish.blackberry
-			//# return net.rim.device.api.system.DeviceInfo.getDeviceName();
+			deviceName = net.rim.device.api.system.DeviceInfo.getDeviceName();
+		//#elif polish.android
+			deviceName = android.os.Build.MODEL;
 		//#else
 			String platform = System.getProperty( "microedition.platform" );
 			if (platform == null || "j2me".equals(platform)) {
@@ -191,11 +194,25 @@ public class DeviceInfo
 					if (index != -1) {
 						platform = platform.substring(0, index );
 					}
-					return platform;
+					deviceName = platform;
 				}
 			}
-			return null;
 		//#endif
+		return deviceName;
+	}
+	
+	public static String getPlatformName() {
+		String platformName = null;
+		//#if polish.blackberry
+			platformName = net.rim.device.api.system.DeviceInfo.getPlatformVersion() + "/" + net.rim.device.api.system.DeviceInfo.getSoftwareVersion();
+		//#elif polish.android
+			platformName = System.getProperty("os.version") 
+					+ "(" + android.os.Build.VERSION.INCREMENTAL + ")" 
+					+ " Level: " + android.os.Build.VERSION.SDK;;
+		//#else
+			platformName = 	System.getProperty( "microedition.platform" );
+		//#endif
+		return platformName;
 	}
 	
 	/**
