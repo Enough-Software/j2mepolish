@@ -54,6 +54,8 @@ import de.enough.polish.util.DrawUtil;
 import de.enough.polish.util.IntHashMap;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.Properties;
+import de.enough.polish.util.TextUtil;
+import de.enough.polish.util.WrappedText;
 
 //#if polish.blackberry
 	import de.enough.polish.blackberry.ui.FixedPointDecimalTextFilter;
@@ -1451,8 +1453,7 @@ public class TextField extends StringItem
 	public void setString( String text)
 	{
 		//#debug
-		System.out.println("setString [" + text + "]"); // for textfield [" + (this.label != null ? this.label.getText() : "no label") + "].");
-		
+		System.out.println("setString [" + text + "] for " + this);
 		//#if polish.android
 			int cursorAdjustment = 0;
 		//#endif
@@ -1789,7 +1790,10 @@ public class TextField extends StringItem
 			if (position == this.caretPosition) {
 				this.caretPosition += src.length();
 			}
+		//#else
+			setCaretPosition( getCaretPosition() + src.length() );
 		//#endif
+			
 		//#if tmp.usePredictiveInput
 			if(this.predictiveInput)
 				this.predictiveAccess.synchronize();
@@ -2373,14 +2377,15 @@ public class TextField extends StringItem
 	 * @see de.enough.polish.ui.Item#paintContent(int, int, int, int, javax.microedition.lcdui.Graphics)
 	 */
 	public void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
+    	String myText = this.text;
 		//#if polish.blackberry
-        	if (this.isFocused && getScreen().isNativeUiShownFor(this)) {
+			if (this.isFocused && getScreen().isNativeUiShownFor(this)) {
         		x--; // blackberry paints a border around the text that is one pixel wide
 				this.editField.setPaintPosition( x + g.getTranslateX(), y + g.getTranslateY() );
 			} else {
 				if (this.isUneditable || !this.isFocused) {
 					//#if polish.TextField.showHelpText
-						if(this.text == null || this.text.length() == 0)
+						if(myText == null || myText.length() == 0)
 						{
 							this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 						} else
@@ -2393,17 +2398,28 @@ public class TextField extends StringItem
 			}
         //#elif polish.android
 			//#if polish.TextField.showHelpText
-				if(this.text == null || this.text.length() == 0)
+				if(myText == null || myText.length() == 0)
 				{
 					this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 				} 
 			//#endif
-			super.paintContent(x, y, leftBorder, rightBorder, g);
+			//#if polish.css.repaint-previous-screen
+				// native views are not painted in screens that lie underneath a popup screen:
+				Screen scr = getScreen();
+				if (scr != null && !scr.isShown()) {
+					WrappedText wrappedText = getWrappedText();
+					if (myText != null && wrappedText.size() == 0) {
+						int cw = this.contentWidth;
+						TextUtil.wrap(myText, this.font, cw, cw, 0, null, 0, wrappedText );
+					}
+					super.paintContent(x, y, leftBorder, rightBorder, g);
+				}
+			//#endif
 		//#else
         
 		if (this.isUneditable || !this.isFocused) {
 			//#if polish.TextField.showHelpText
-				if(this.text == null || this.text.length() == 0)
+				if(myText == null || myText.length() == 0)
 				{
 					this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 				} else
@@ -2435,7 +2451,7 @@ public class TextField extends StringItem
 					}
 				//#endif
 				//#if polish.TextField.showHelpText
-					if(this.text == null || this.text.length() == 0)
+					if(myText == null || myText.length() == 0)
 					{
 						this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 					} else
@@ -2576,7 +2592,7 @@ public class TextField extends StringItem
 				g.drawLine( x, y, x, y + getFontHeight() );
 			}
 		//#endif	
-		// end of non-blackberry block
+		// end of non-blackberry/android block
 		//#endif
 	}
 
