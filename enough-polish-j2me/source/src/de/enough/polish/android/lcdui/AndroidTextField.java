@@ -152,7 +152,8 @@ implements View.OnTouchListener
 	 */
 	protected void onTextChanged(CharSequence text, int start, int before, int after) {
 		//#debug
-		System.out.println("onTextChanged: text=[" + text + "]");
+		System.out.println("onTextChanged: text=[" + text + "], start=" + start + ", before=" + before + ", after=" + after);
+		this.cursorPosition = start + after;
 		if (this.isNumericPassword && text != null) {
 			StringBuffer buffer = new StringBuffer(text.length());
 			boolean foundInvalidCharacter = false;
