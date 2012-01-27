@@ -57,7 +57,7 @@ public class DexPostCompiler extends PostCompiler{
 	
 		String dx = ArgumentHelper.dx(env);
 		if (dx != null) {
-			ArrayList arguments = getDefaultArguments(dx,env);
+			ArrayList<String> arguments = getDefaultArguments(dx,env);
 			File directory = new File(ArgumentHelper.getPlatformTools(env));
 	
 			System.out.println("dx: Converting compiled files and external libraries...");
@@ -87,9 +87,9 @@ public class DexPostCompiler extends PostCompiler{
 	 * @param env the environment
 	 * @return the ArrayList
 	 */
-	static ArrayList getDefaultArguments(String executable, Environment env)
+	static ArrayList<String> getDefaultArguments(String executable, Environment env)
 	{
-		ArrayList arguments = new ArrayList();
+		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
 		if (File.separatorChar != '\\') {
 			// this doesn't work on Windows Systems:

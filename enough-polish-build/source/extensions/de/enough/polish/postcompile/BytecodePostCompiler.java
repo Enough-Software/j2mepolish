@@ -25,7 +25,7 @@ public abstract class BytecodePostCompiler extends PostCompiler
     throws BuildException
   {
     // Find all classes and put their class names into the classes list.
-    ArrayList classes = new ArrayList();
+    ArrayList<String> classes = new ArrayList<String>();
     String[] fileNames = FileUtil.filterDirectory( classesDir, ".class", true );
     
     for (int i = 0; i < fileNames.length; i++)
@@ -54,7 +54,7 @@ public abstract class BytecodePostCompiler extends PostCompiler
    * @throws BuildException
    */
   public abstract void postCompile(File classesDir, Device device,
-                                   DirClassLoader loader, List classes)
+                                   DirClassLoader loader, List<String> classes)
     throws BuildException;
   
   /**
@@ -68,7 +68,7 @@ public abstract class BytecodePostCompiler extends PostCompiler
    * 
    * @return The list of classes to post compile
    */
-  public List filterClassList(DirClassLoader classLoader, List classes)
+  public List<String> filterClassList(DirClassLoader classLoader, List<String> classes)
   {
     return classes;
   }

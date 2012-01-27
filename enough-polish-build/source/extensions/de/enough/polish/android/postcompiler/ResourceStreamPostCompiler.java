@@ -58,7 +58,7 @@ public class ResourceStreamPostCompiler extends BytecodePostCompiler
 	 * @see de.enough.polish.postcompile.BytecodePostCompiler#postCompile(java.io.File, de.enough.polish.Device, de.enough.bytecode.DirClassLoader, java.util.List)
 	 */
 	public void postCompile(File classesDir, Device device,
-			DirClassLoader loader, List classes) throws BuildException
+			DirClassLoader loader, List<String> classes) throws BuildException
 	{
 
         MethodMapper mapper = new MethodMapper();
