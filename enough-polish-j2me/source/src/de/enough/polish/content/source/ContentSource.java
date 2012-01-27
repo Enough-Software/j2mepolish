@@ -112,7 +112,7 @@ public abstract class ContentSource {
 		this.sources.add(source);
 
 		//#debug debug
-		info("attached source : " + source);
+		System.out.println(this.id + " : " + "attached source : " + source);
 	}
 
 	/**
@@ -139,42 +139,64 @@ public abstract class ContentSource {
 		this.sources.remove(source);
 
 		//#debug debug
-		info("detached source : " + source);
+		System.out.println(this.id + " : " + "detached source : " + source);
 	}
 
+	/**
+	 * Sets the content filter
+	 * @param filter the filter to set
+	 */
 	public void setContentFilter(ContentFilter filter) {
 		this.filter = filter;
 
 		//#debug debug
-		info("set filter : " + filter);
+		System.out.println(this.id + " : " + "set filter : " + filter);
 	}
 
+	/**
+	 * Returns the content filter
+	 * @return the filter
+	 */
 	public ContentFilter getFilter() {
 		return this.filter;
 	}
 
+	/**
+	 * Adds a content transformation
+	 * @param transformer the transformation
+	 */
 	public void addContentTransform(ContentTransform transformer) {
 		String id = transformer.getTransformId();
 		if (!id.equals(ContentDescriptor.TRANSFORM_NONE)
 				&& this.transformers.containsKey(id)) {
 			//#debug info
-			info("overwriting transformer with id \"" + id + "\"");
+			System.out.println(this.id + " : " + "overwriting transformer with id \"" + id + "\"");
 		}
 
 		this.transformers.put(id, transformer);
 
 		//#debug debug
-		info("added transform : " + transformer);
+		System.out.println(this.id + " : " + "added transform : " + transformer);
 	}
 
+	/**
+	 * Removes a content transformation
+	 * @param transformer the transformation
+	 */
 	public void removeContentTransform(ContentTransform transformer) {
 		String id = transformer.getTransformId();
 		this.transformers.remove(id);
 
 		//#debug debug
-		info("removed transform : " + transformers);
+		System.out.println(this.id + " : " + "removed transform : " + transformers);
 	}
 
+	/**
+	 * Loads content from all underlying sources
+	 * @param descriptor the content descriptor to load
+	 * @return the content Object
+	 * @throws ContentException
+	 */
 	public Object loadContent(ContentDescriptor descriptor)
 			throws ContentException {
 		Object data = loadContentData(descriptor);
@@ -188,25 +210,25 @@ public abstract class ContentSource {
 					ContentFilter filter = source.getFilter();
 					if (filter != null && !filter.filter(descriptor)) {
 						//#debug debug
-						info("filtered source : " + source);
+						System.out.println(this.id + " : " + "filtered source : " + source);
 						continue;
 					}
 
 					//#debug debug
-					info("load content : " + descriptor + " : with source : "
+					System.out.println(this.id + " : " + "load content : " + descriptor + " : with source : "
 							+ source);
 
 					data = source.loadContent(descriptor);
 					if (data != null) {
 						data = transformContent(descriptor, data);
 						//#debug debug
-						info("transformed content : " + data);
+						System.out.println(this.id + " : " + "transformed content : " + data);
 
 						if(descriptor.getCachingPolicy() == ContentDescriptor.CACHING_READ_WRITE) { 
 							storeContent(descriptor, data);
 						} else {
 							//#debug debug
-							info("no storage due to caching policy");
+							System.out.println(this.id + " : " + "no storage due to caching policy");
 						}
 						return data;
 					}
@@ -225,6 +247,12 @@ public abstract class ContentSource {
 		return data;
 	}
 
+	/**
+	 * Transforms content with a transformation
+	 * @param descriptor the content descriptor containing the transformation
+	 * @param data the data to transform
+	 * @return
+	 */
 	protected Object transformContent(ContentDescriptor descriptor, Object data) {
 		if (this.transformers.size() > 0
 				&& descriptor.getTransformID() != ContentDescriptor.TRANSFORM_NONE
@@ -234,12 +262,12 @@ public abstract class ContentSource {
 			if (transformer != null) {
 				try {
 					//#debug debug
-					info("using transform : " + transformer
+					System.out.println(this.id + " : " + "using transform : " + transformer
 							+ " : for descriptor : " + descriptor);
 					data = transformer.transformContent(data);
 				} catch (IOException e) {
 					//#debug error
-					System.out.println("error transforming " + descriptor + ":"
+					System.out.println(this.id + " : " + "error transforming " + descriptor + ":"
 							+ e);
 				}
 
@@ -250,19 +278,25 @@ public abstract class ContentSource {
 		return data;
 	}
 
+	/**
+	 * Loads content data from this content source or from storage
+	 * @param descriptor the descriptor to load the content data for
+	 * @return the content data
+	 * @throws ContentException
+	 */
 	protected Object loadContentData(ContentDescriptor descriptor)
 			throws ContentException {
 		// if this source has a storage ...
 		if (hasStorage()) {
 			//#debug debug
-			info("has storage");
+			System.out.println(this.id + " : " + "has storage");
 
 			// prepare the storage if it isn't
 			if (!this.storageIndex.isPrepared()) {
 				this.storageIndex.prepare();
 
 				//#debug debug
-				info("storage index prepared");
+				System.out.println(this.id + " : " + "storage index prepared");
 			}
 
 			// get the StorageReference to a potentially stored content
@@ -272,7 +306,7 @@ public abstract class ContentSource {
 			// if the content is stored ...
 			if (reference != null) {
 				//#debug debug
-				info("found reference : " + reference);
+				System.out.println(this.id + " : " + "found reference : " + reference);
 
 				// update its activity
 				reference.updateActivity();
@@ -324,12 +358,12 @@ public abstract class ContentSource {
 		try {
 			if (reference != null) {
 				//#debug debug
-				info("loading content from storage : " + reference);
+				System.out.println(this.id + " : " + "loading content from storage : " + reference);
 
 				return load(reference);
 			} else {
 				//#debug debug
-				info("loading content from source : " + descriptor);
+				System.out.println(this.id + " : " + "loading content from source : " + descriptor);
 				return load(descriptor);
 			}
 		} catch (IOException e) {
@@ -345,7 +379,7 @@ public abstract class ContentSource {
 	 * @param data the data that needs to be stored
 	 * @return an Object [], the first element is an Integer object containing the stored object's data size, the second element is a reference to the stored object
 	 */
-	protected abstract Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException ;
+	protected abstract Object[] storeContentAndGetDataSize(ContentDescriptor descriptor, Object data) throws IOException, ContentException ;
 
 	protected void storeContent(ContentDescriptor descriptor, Object data)
 			throws ContentException {
@@ -354,7 +388,7 @@ public abstract class ContentSource {
 			// if this ContentSource has a storage ...
 			if (hasStorage()) {
 				//#debug debug
-				info("storing content : " + data + " : for :" + descriptor);
+				System.out.println(this.id + " : " + "storing content : " + data + " : for :" + descriptor);
 
 				int size;
 				Object reference;
@@ -368,18 +402,23 @@ public abstract class ContentSource {
 					size = getSize(descriptor, data);
 	
 					//#debug debug
-					info("data size for : " + data + " : " + size);
+					System.out.println(this.id + " : " + "data size for : " + data + " : " + size);
 	
 					// store the content
 					reference = store(descriptor, data);
 				}
 
-				// add the reference to the StorageIndex
-				this.storageIndex.addReference(new StorageReference(descriptor,
-						size, reference));
+				// add the reference to the StorageIndex, if storage was successful
+				if ( reference != null ) {
+					this.storageIndex.addReference(new StorageReference(descriptor,
+							size, reference));
 
-				//#debug debug
-				info("content stored with reference : " + reference);
+					//#debug debug
+					System.out.println(this.id + " : " + "content stored with reference : " + reference);
+				} else {
+					//#debug debug
+					System.out.println(this.id + " : " + "content deliberately not stored");
+				}
 			}
 		} catch (IOException e) {
 			String message = "error storing content : " + e;
@@ -402,7 +441,7 @@ public abstract class ContentSource {
 		// if this ContentSource has a storage ...
 		if (hasStorage()) {
 			//#debug debug
-			info("destroying content : " + descriptor);
+			System.out.println(this.id + " : " + "destroying content : " + descriptor);
 
 			// get the reference to the content
 			StorageReference reference = this.storageIndex
@@ -422,18 +461,28 @@ public abstract class ContentSource {
 			}
 
 			//#debug debug
-			info("content destroyed : " + descriptor);
+			System.out.println(this.id + " : " + "content destroyed : " + descriptor);
 		}
 	}
-
+	
 	/**
 	 * If a clean is needed on the storage, the clean order is applied to the
 	 * StorageIndex and contents are deleted until the cache size is below the
 	 * thresholds
 	 */
 	public void clean() throws ContentException {
+		clean(0);
+	}
+
+	/**
+	 * If a clean is needed on the storage in order to store an additional extraBytes number of bytes, the clean order is applied to the
+	 * StorageIndex and contents are deleted until the cache size is below the
+	 * thresholds
+	 * @param extraBytes
+	 */
+	public void clean(int extraBytes) throws ContentException {				
 		if (hasStorage()) {
-			if (!this.storageIndex.isCleanNeeded()) {
+			if (!this.storageIndex.isCleanNeeded(extraBytes)) {
 				return;
 			}
 			
@@ -442,20 +491,29 @@ public abstract class ContentSource {
 			}
 
 			//#debug debug
-			info("clean : " + this.storageIndex);
+			System.out.println(this.id + " : " + "clean : " + this.storageIndex);
 
 			// apply the clean order
 			this.storageIndex.applyOrder();
 
+			boolean canDeleteFurther = true;
 			do {
+				// Assume that you cannot delete anything else
+				canDeleteFurther = false;
+				
 				// get the index of the first disposable content
 				int index = this.storageIndex.getDisposableIndex();
 				// get the reference
 				StorageReference reference = this.storageIndex
 						.getReference(index);
-				// destroy the content
-				destroyContent(reference);
-			} while ((this.storageIndex.isCleanNeeded()));
+				// destroy the content, if not critical
+				if ( reference.getPriority() != ContentDescriptor.PRIORITY_CRITICAL ) {
+					destroyContent(reference);
+					
+					// Maybe we can delete other content too
+					canDeleteFurther = true;
+				}
+			} while ((this.storageIndex.isCleanNeeded(extraBytes)) && canDeleteFurther);
 		}
 	}
 
@@ -593,14 +651,5 @@ public abstract class ContentSource {
 		return ToStringHelper.createInstance("ContentSource").set("id", this.id).set(
 				"sources", this.sources).set("transformers", this.transformers)
 				.set("filter", this.filter).toString();
-	}
-
-	/**
-	 * Prints an info
-	 * 
-	 * @param info
-	 */
-	public void info(String info) {
-		System.out.println(this.id + " : " + info);
 	}
 }
