@@ -36,6 +36,7 @@ import javax.microedition.lcdui.Graphics;
 import de.enough.polish.io.Externalizable;
 import de.enough.polish.io.Serializer;
 import de.enough.polish.util.IntHashMap;
+import de.enough.polish.util.ShortHashMap;
 
 /**
  * <p>Style defines the design of any widget.</p>
@@ -124,15 +125,19 @@ public class Style implements Externalizable
 		this.layout = style.layout;
 		this.background = style.background;
 		this.border = style.border;
-		
-		IntHashMap map = new IntHashMap();
-		
-		//TODO make more performant
-		addAttributesToMap(map, style);
-		addAttributesToMap(map, this);
-		
-		int[] keys = map.keys();
-		Object[] values = map.values();
+		short[] keys;
+		Object[] values;
+		if (this.attributeKeys == null || this.attributeKeys.length == 0) {
+			keys = style.attributeKeys;
+			values = style.attributeValues;
+		} else {		
+			ShortHashMap map = new ShortHashMap();
+			addAttributesToMap(map, style);
+			addAttributesToMap(map, this);
+			
+			keys = map.keys();
+			values = map.values();
+		}
 		this.attributeKeys = new short[keys.length];
 		this.attributeValues = new Object[keys.length];
 		for (int i = 0; i < keys.length; i++) {
@@ -142,13 +147,18 @@ public class Style implements Externalizable
 		}
 	}
 
-	void addAttributesToMap(IntHashMap map, Style style) {
+	void addAttributesToMap(ShortHashMap map, Style style) {
 		short[] keys = style.attributeKeys;
 		Object[] values = style.attributeValues;
 		
 		if(keys != null && values != null) {
 			for (int i = 0; i < keys.length; i++) {
+				try {
 				map.put(keys[i], values[i]);
+				} catch (Exception e) {
+					//#debug error
+					System.out.println("Unable to copy style " + style.name + ": attribute " + keys[i] + " has invalid value " + values[i]);
+				}
 			}
 		}
 	}
