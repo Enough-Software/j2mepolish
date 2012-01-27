@@ -1212,7 +1212,10 @@ extends ItemView
 		System.out.println("ContainerView.shiftFocus( forward=" + forwardFocus + ", steps=" + steps + ", focusedIndex=" + this.focusedIndex + " [container:" + this.parentContainer.focusedIndex + "]), direction=" + direction );
 //		System.out.println("parent.focusedIndex=" + this.parentContainer.getFocusedIndex() );
 		//boolean allowCycle = this.allowCycling;
-		if (!allowCycle && forwardFocus && steps != 0 && isInBottomRow(this.focusedIndex) ) {
+		if (
+			(!allowCycle && forwardFocus && steps != 0 && isInBottomRow(this.focusedIndex) )
+			|| (items.length == 0)
+		){
 			return null;
 		}
 		int i;
