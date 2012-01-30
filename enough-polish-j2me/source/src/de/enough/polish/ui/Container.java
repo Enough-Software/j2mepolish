@@ -1542,7 +1542,7 @@ public class Container extends Item {
 						this.appearanceMode = this.containerView.appearanceMode;
 					}
 					if (this.isFocused && this.autoFocusEnabled) {
-						// #debug
+						//#debug
 						System.out.println("Container/View: autofocusing element starting at " + this.autoFocusIndex);
 						if (this.autoFocusIndex >= 0 && this.appearanceMode != Item.PLAIN) {
 							for (int i = this.autoFocusIndex; i < myItems.length; i++) {
