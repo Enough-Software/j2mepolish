@@ -1,10 +1,12 @@
 //#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
+import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Dimension;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Typeface;
+import android.widget.TextView;
 
 /**
  * The <code>Font</code> class represents fonts and font
@@ -170,6 +172,8 @@ public final class Font extends Object
 
 	private int descent;
 	
+	private float androidDefaultTextSize = 0;
+	
 	private Font( int face, int style ) { 
 		this.face = face;
 		this.style = style;
@@ -198,29 +202,35 @@ public final class Font extends Object
 		this( face, style );
 		this.size = size; 
 
-		double factor;
+		float factor;
 		if (size == SIZE_MEDIUM) {
 			//#if polish.android.font.MediumFactor:defined
-				//#= factor = ${polish.android.font.MediumFactor};
+				//#= factor = ${polish.android.font.MediumFactor}F;
 			//#else
-				factor = 1.85;
+				factor = 1.0F;
 			//#endif
 		} else if (size == SIZE_SMALL) {
 			//#if polish.android.font.SmallFactor:defined
-				//#= factor = ${polish.android.font.SmallFactor};
+				//#= factor = ${polish.android.font.SmallFactor}F;
 			//#else
-				factor = 1.5;
+				factor = 0.8F;
 			//#endif
 		} else {
 			//#if polish.android.font.LargeFactor:defined
-				//#= factor = ${polish.android.font.LargeFactor};
+				//#= factor = ${polish.android.font.LargeFactor}F;
 			//#else
-				factor = 2.35;
+				factor = 1.7F;
 			//#endif
 		}
 		
 		this.paint = new Paint();
-		float androidSize = (float) (this.paint.getTextSize() * factor);
+		//float androidSize = (float) (this.paint.getTextSize() * factor);
+		float androidSizeTextView = this.androidDefaultTextSize;
+		if (androidSizeTextView < 1) {
+			androidSizeTextView = new TextView(MidletBridge.getInstance()).getTextSize();
+			this.androidDefaultTextSize = androidSizeTextView;
+		}
+		float androidSize = androidSizeTextView * factor;
 
 		this.height = (int)androidSize;
 		initPaint( this.paint );
