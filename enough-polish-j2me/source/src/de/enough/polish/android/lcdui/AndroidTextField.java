@@ -37,6 +37,7 @@ implements View.OnTouchListener
 		setCompoundDrawables(null, null, null, null); // remove borders
 		applyTextField();
 		setOnTouchListener(this);
+		setLineSpacing( 0F, 1F);
 	}
 	
 	
@@ -87,7 +88,6 @@ implements View.OnTouchListener
 		setTextSize( TypedValue.COMPLEX_UNIT_PX, font.getTextSize() - 0.352F ); 
 		setTextColor( 0xff000000 | style.getFontColor() );
 		//setLineSpacing( (float)style.getPaddingVertical(100), 1F);
-		setLineSpacing( 0F, 1F);
 	}
 
 	@Override
