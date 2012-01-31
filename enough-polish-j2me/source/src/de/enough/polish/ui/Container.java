@@ -1139,7 +1139,12 @@ public class Container extends Item {
 					nextItem = item;
 				}
 				if (getScrollYOffset() == scrollOffsetBeforeScroll) {
-					if ( this.enableScrolling && ((isDownwards && (index < previousIndex) || (previousIndex == -1))) ) {
+					if ( this.enableScrolling 
+						&& (isDownwards && (index < previousIndex)
+						//#if polish.Container.selectEntriesWhileTouchScrolling
+							|| (previousIndex == -1)
+						//#endif
+					) ) {
 						// either the first item or the first selectable item has been focused, so scroll to the very top:
 						//#if tmp.supportViewType
 						if (this.containerView == null || !this.containerView.isVirtualContainer()) 
@@ -3898,16 +3903,16 @@ public class Container extends Item {
 		}
 		
 		//#if !polish.Container.selectEntriesWhileTouchScrolling
-		if(item != null) {
-			int dragDistance = Math.abs(relY - this.lastPointerPressY);
-			if(dragDistance > minimumDragDistance) {
-				focusChild(-1);
-		   		//#if polish.blackberry
-		   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
-		   		//#endif
-		   		UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
-			}
-   	  	}
+			if (item != null) {
+				int dragDistance = Math.abs(relY - this.lastPointerPressY);
+				if(dragDistance > minimumDragDistance) {
+					focusChild(-1);
+			   		//#if polish.blackberry
+			   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
+			   		//#endif
+			   		UiAccess.init(item, item.getAvailableWidth(), item.getAvailableWidth(), item.getAvailableHeight());
+				}
+	   	  	}
 		//#endif
 		
 		//#ifdef tmp.supportViewType
