@@ -110,6 +110,14 @@ public class AudioRecordingPlayer extends AbstractPlayer implements RecordContro
 	public Control[] getControls() {
 		return new Control[] {this};
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.android.media.Player#setLoopCount(int)
+	 */
+	public void setLoopCount(int loops) {
+		// ignore
+	}
 
 	/**
 	 * When this method is called, all recorded data is written in one bulk to a given OutputStream.

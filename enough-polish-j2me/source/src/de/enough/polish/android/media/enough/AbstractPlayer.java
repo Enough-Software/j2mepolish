@@ -115,22 +115,18 @@ public abstract class AbstractPlayer implements Player {
 		this.listeners.remove(playerListener);
 	}
 
-	public void setLoopCount(int arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	public long setMediaTime(long arg0) throws MediaException {
+	public long setMediaTime(long time) throws MediaException {
 		if(this.meState == CLOSED) {
 			throw new IllegalStateException("The method 'setMediaTime' must not be called in state 'CLOSED'.");
 		}
 		if(this.meState == UNREALIZED) {
 			throw new IllegalStateException("The method 'setMediaTime' must not be called in state 'UNREALIZED'.");
 		}
-		return doSetMediaTime(arg0);
+		return doSetMediaTime(time);
 	}
 
-	protected abstract long doSetMediaTime(long arg0);
+	protected abstract long doSetMediaTime(long time)  throws MediaException ;
 
 	public final void start() throws MediaException {
 		switch(this.meState) {

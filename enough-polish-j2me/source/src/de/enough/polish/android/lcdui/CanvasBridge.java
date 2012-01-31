@@ -125,6 +125,10 @@ implements OnTouchListener //, OnKeyListener
 		return (Screen) disp;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View#onKeyDown(int, android.view.KeyEvent)
+	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		//#debug
 		System.out.println("CanvasBridge.onKeyDown: keyCode=" + keyCode + ", flags=" + event.getFlags() + ", action=" + event.getAction() + ", isFromSoftKeyBoard=" + ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == KeyEvent.FLAG_SOFT_KEYBOARD));
@@ -155,9 +159,16 @@ implements OnTouchListener //, OnKeyListener
 				}
 			}
 		//#endif
+		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+			return super.onKeyDown(keyCode, event);
+		}
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View#onKeyUp(int, android.view.KeyEvent)
+	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(this.lcduiCanvas == null) {
 			return false;
@@ -181,6 +192,10 @@ implements OnTouchListener //, OnKeyListener
 				}
 			}
 		//#endif
+			
+		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+			return super.onKeyUp(keyCode, event);
+		}
 		
 		return true;
 	}
@@ -214,6 +229,9 @@ implements OnTouchListener //, OnKeyListener
 			}
 			this.lcduiCanvas.keyPressed(key);
 			this.lcduiCanvas.keyReleased(key);
+		}
+		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+			return super.onKeyMultiple(keyCode, repeatCount, event);
 		}
 		return true;
 		//return super.onKeyMultiple(keyCode, repeatCount, event);

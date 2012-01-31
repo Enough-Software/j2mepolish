@@ -149,39 +149,48 @@ public class AudioPlayer implements PlayerListener
 		this.defaultContentType = contentType;
 		
 		//#if polish.android
-		this.androidPlayer = new MediaPlayer();
-		this.androidPlayer.setOnCompletionListener(this);
-		this.androidPlayer.setOnPreparedListener(this);
-		this.volumeControlStream = MidletBridge.instance.getVolumeControlStream();
-		AudioManager audioManager = (AudioManager) MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);			
-		this.androidMaxVolume = audioManager.getStreamMaxVolume(this.volumeControlStream);
-		//#debug
-		System.out.println("The maximum volume is '"+this.androidMaxVolume+"'");
-		//#debug
-		System.out.println("The maximum volume for music is "+audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-		int currentAndroidVolume = audioManager.getStreamVolume(this.volumeControlStream);
-		//#debug
-		System.out.println("The current volume is '"+currentAndroidVolume+"'");
-		this.userJ2MeLevel = (int) (100f / this.androidMaxVolume * currentAndroidVolume);
-		//#debug
-		System.out.println("The current J2Me volume is '"+this.userJ2MeLevel+"'");
-		
-		StreamingMp3Server server = new StreamingMp3Server();
-		try {
-			server.start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			this.androidPlayer = new MediaPlayer();
+			this.androidPlayer.setOnCompletionListener(this);
+			this.androidPlayer.setOnPreparedListener(this);
+			this.volumeControlStream = MidletBridge.instance.getVolumeControlStream();
+			AudioManager audioManager = (AudioManager) MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);			
+			this.androidMaxVolume = audioManager.getStreamMaxVolume(this.volumeControlStream);
+			//#debug
+			System.out.println("The maximum volume is '"+this.androidMaxVolume+"'");
+			//#debug
+			System.out.println("The maximum volume for music is "+audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+			int currentAndroidVolume = audioManager.getStreamVolume(this.volumeControlStream);
+			//#debug
+			System.out.println("The current volume is '"+currentAndroidVolume+"'");
+			this.userJ2MeLevel = (int) (100f / this.androidMaxVolume * currentAndroidVolume);
+			//#debug
+			System.out.println("The current J2Me volume is '"+this.userJ2MeLevel+"'");
+			
+			StreamingMp3Server server = new StreamingMp3Server();
+			try {
+				server.start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		//#endif
 	}
 	
 	public void stop() {
 		//#if polish.android
-		// TODO: This call could crash if it happens while the asynchonous prepare takes place.
-		if(this.androidPlayer.isPlaying()) {
-			this.androidPlayer.stop();
-		}
+			// TODO: This call could crash if it happens while the asynchonous prepare takes place.
+			if(this.androidPlayer.isPlaying()) {
+				this.androidPlayer.stop();
+			}
+		//#else
+			if (this.player != null) {
+				try {
+					this.player.stop();
+				} catch (MediaException e) {
+					//#debug error
+					System.out.println("Unable to stop player" + e);
+				}
+			}
 		//#endif
 	}
 	
@@ -270,34 +279,35 @@ public class AudioPlayer implements PlayerListener
 	public void play(String url, String type) throws MediaException, IOException
 	{
 		//#if polish.android
-		this.androidPlayer.reset();
-		if(url.startsWith("file://")) {
-			String path = url.substring("file://".length());
-			File file = new File(path);
-			if(!file.exists()) {
-				throw new IOException("Could not find file at url '"+url+"'");
+			this.androidPlayer.reset();
+			if(url.startsWith("file://")) {
+				String path = url.substring("file://".length());
+				File file = new File(path);
+				if(!file.exists()) {
+					throw new IOException("Could not find file at url '"+url+"'");
+				}
+				//#debug
+				System.out.println("The file is "+file.getAbsolutePath());
+				FileInputStream fileInputStream = new FileInputStream(file);
+				FileDescriptor fileDescriptor;
+				fileDescriptor = fileInputStream.getFD();
+				// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
+				this.androidPlayer.setDataSource(fileDescriptor);
+				fileInputStream.close();
+			} else {
+				int resourceID = ResourcesHelper.getResourceID(url);
+				AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
+				if(assetFileDescriptor == null) {
+					throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
+				}
+				FileDescriptor fileDescriptor;
+				fileDescriptor = assetFileDescriptor.getFileDescriptor();
+				this.androidPlayer.setDataSource(fileDescriptor);
+				assetFileDescriptor.close();
 			}
-			System.out.println("The file is "+file.getAbsolutePath());
-			FileInputStream fileInputStream = new FileInputStream(file);
-			FileDescriptor fileDescriptor;
-			fileDescriptor = fileInputStream.getFD();
-			// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
-			this.androidPlayer.setDataSource(fileDescriptor);
-			fileInputStream.close();
-		} else {
-			int resourceID = ResourcesHelper.getResourceID(url);
-			AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
-			if(assetFileDescriptor == null) {
-				throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
-			}
-			FileDescriptor fileDescriptor;
-			fileDescriptor = assetFileDescriptor.getFileDescriptor();
-			this.androidPlayer.setDataSource(fileDescriptor);
-			assetFileDescriptor.close();
-		}
-		this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		this.androidPlayer.prepare();
-		this.androidPlayer.start();
+			this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			this.androidPlayer.prepare();
+			this.androidPlayer.start();
 		//#else
 			InputStream in = getClass().getResourceAsStream(url);
 			if (in == null) {
@@ -363,37 +373,38 @@ public class AudioPlayer implements PlayerListener
 	public void play(String url) throws MediaException, IOException 
 	{
 		//#if polish.android
-		this.androidPlayer.reset();
-		if(url.startsWith("file://")) {
-			String path = url.substring("file://".length());
-			File file = new File(path);
-			if(!file.exists()) {
-				throw new IOException("Could not find file at url '"+url+"'");
+			this.androidPlayer.reset();
+			if(url.startsWith("file://")) {
+				String path = url.substring("file://".length());
+				File file = new File(path);
+				if(!file.exists()) {
+					throw new IOException("Could not find file at url '"+url+"'");
+				}
+				//#debug
+				System.out.println("The file is "+file.getAbsolutePath());
+				FileInputStream fileInputStream = new FileInputStream(file);
+				FileDescriptor fileDescriptor;
+				fileDescriptor = fileInputStream.getFD();
+				// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
+				this.androidPlayer.setDataSource(fileDescriptor);
+				fileInputStream.close();
+			} else if(url.startsWith("http://")) {
+					this.androidPlayer.setDataSource(url);
+			} else {
+				int resourceID = ResourcesHelper.getResourceID(url);
+				AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
+				if(assetFileDescriptor == null) {
+					throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
+				}
+				FileDescriptor fileDescriptor;
+				fileDescriptor = assetFileDescriptor.getFileDescriptor();
+				this.androidPlayer.setDataSource(fileDescriptor);
+				assetFileDescriptor.close();
 			}
-			System.out.println("The file is "+file.getAbsolutePath());
-			FileInputStream fileInputStream = new FileInputStream(file);
-			FileDescriptor fileDescriptor;
-			fileDescriptor = fileInputStream.getFD();
-			// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
-			this.androidPlayer.setDataSource(fileDescriptor);
-			fileInputStream.close();
-		} else if(url.startsWith("http://")) {
-				this.androidPlayer.setDataSource(url);
-		} else {
-			int resourceID = ResourcesHelper.getResourceID(url);
-			AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
-			if(assetFileDescriptor == null) {
-				throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
-			}
-			FileDescriptor fileDescriptor;
-			fileDescriptor = assetFileDescriptor.getFileDescriptor();
-			this.androidPlayer.setDataSource(fileDescriptor);
-			assetFileDescriptor.close();
-		}
-		
-		this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		this.androidPlayer.prepare();
-		this.androidPlayer.start();
+			
+			this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			this.androidPlayer.prepare();
+			this.androidPlayer.start();
 		//#else
 			InputStream in = getClass().getResourceAsStream(url);
 			if (in == null) {
@@ -719,33 +730,33 @@ public class AudioPlayer implements PlayerListener
 	 */
 	public void prepare(String url) throws IOException {
 		//#if polish.android
-		this.androidPlayer.reset();
-		if(url.startsWith("file://")) {
-			String path = url.substring("file://".length());
-			File file = new File(path);
-			if(!file.exists()) {
-				throw new IOException("Could not find file at url '"+url+"'");
+			this.androidPlayer.reset();
+			if(url.startsWith("file://")) {
+				String path = url.substring("file://".length());
+				File file = new File(path);
+				if(!file.exists()) {
+					throw new IOException("Could not find file at url '"+url+"'");
+				}
+				System.out.println("The file is "+file.getAbsolutePath());
+				FileInputStream fileInputStream = new FileInputStream(file);
+				FileDescriptor fileDescriptor;
+				fileDescriptor = fileInputStream.getFD();
+				// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
+				this.androidPlayer.setDataSource(fileDescriptor);
+				fileInputStream.close();
+			} else {
+				int resourceID = ResourcesHelper.getResourceID(url);
+				AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
+				if(assetFileDescriptor == null) {
+					throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
+				}
+				FileDescriptor fileDescriptor;
+				fileDescriptor = assetFileDescriptor.getFileDescriptor();
+				this.androidPlayer.setDataSource(fileDescriptor);
+				assetFileDescriptor.close();
 			}
-			System.out.println("The file is "+file.getAbsolutePath());
-			FileInputStream fileInputStream = new FileInputStream(file);
-			FileDescriptor fileDescriptor;
-			fileDescriptor = fileInputStream.getFD();
-			// rickyn: Do not use setDataSource(String) as it does not work. Use setDataSource(FileDescriptor) instead.
-			this.androidPlayer.setDataSource(fileDescriptor);
-			fileInputStream.close();
-		} else {
-			int resourceID = ResourcesHelper.getResourceID(url);
-			AssetFileDescriptor assetFileDescriptor = MidletBridge.instance.getResources().openRawResourceFd(resourceID);
-			if(assetFileDescriptor == null) {
-				throw new IOException("Could not retrieve AssetFileDescriptor for resource id '"+resourceID+"'");
-			}
-			FileDescriptor fileDescriptor;
-			fileDescriptor = assetFileDescriptor.getFileDescriptor();
-			this.androidPlayer.setDataSource(fileDescriptor);
-			assetFileDescriptor.close();
-		}
-		this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		this.androidPlayer.prepare();
+			this.androidPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			this.androidPlayer.prepare();
 		//#endif
 	}
 

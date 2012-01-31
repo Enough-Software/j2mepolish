@@ -333,20 +333,23 @@ public class MidletBridge extends Activity {
 	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
 	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return AndroidDisplay.getDisplay(midlet).onKeyDown(keyCode, event);
+		boolean handled = AndroidDisplay.getDisplay(midlet).onKeyDown(keyCode, event);
+		return handled || super.onKeyDown(keyCode, event);
 	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onKeyUp(int, android.view.KeyEvent)
 	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		return AndroidDisplay.getDisplay(midlet).onKeyUp(keyCode, event);
+		boolean handled = AndroidDisplay.getDisplay(midlet).onKeyUp(keyCode, event);
+		return handled || super.onKeyUp(keyCode, event);
 	}
 	
 	@Override
 	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event)
 	{
-		return AndroidDisplay.getDisplay(midlet).onKeyMultiple(keyCode, repeatCount, event);
+		boolean handled = AndroidDisplay.getDisplay(midlet).onKeyMultiple(keyCode, repeatCount, event);
+		return handled || super.onKeyMultiple(keyCode, repeatCount, event);
 	}
 	
 	protected void onPause() {

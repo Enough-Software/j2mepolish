@@ -10,34 +10,46 @@ import android.media.MediaPlayer;
 import de.enough.polish.android.helper.ResourceInputStream;
 import de.enough.polish.android.media.Control;
 import de.enough.polish.android.media.MediaException;
+import de.enough.polish.android.media.PlayerListener;
 import de.enough.polish.android.media.control.VolumeControl;
 import de.enough.polish.android.midlet.MidletBridge;
 
-public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl {
+public class AudioPlaybackPlayer 
+extends AbstractPlayer 
+implements VolumeControl, MediaPlayer.OnCompletionListener 
+{
 
 	private final MediaPlayer mediaPlayer;
 	private final AudioManager androidAudioManager;
 	private String locator;
 	private ResourceInputStream locatorStream;
+	private int loopCount = 1;
+	private int currentLoop;
+	
+	private AudioPlaybackPlayer() throws MediaException {
+		MidletBridge.instance.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		this.mediaPlayer = new MediaPlayer();
+		this.mediaPlayer.setOnCompletionListener(this);
+		this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		
+		//this.mediaPlayer.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		this.androidAudioManager = (AudioManager)MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);
+	}
 	
 	public AudioPlaybackPlayer(String locator) throws MediaException {
-		this.mediaPlayer = new MediaPlayer();
-		this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		this();
 		this.locator = locator; 
-		if(locator != null){
-			try {
-				this.mediaPlayer.setDataSource(locator);
-			} catch (Exception e) {
-				//#debug error
-				System.out.println("Unable to start audio player for " + locator + e);
-				throw new MediaException(e.toString());
-			}
+		try {
+			this.mediaPlayer.setDataSource(locator);
+		} catch (Exception e) {
+			//#debug error
+			System.out.println("Unable to start audio player for " + locator + e);
+			throw new MediaException(e.toString());
 		}
-		this.androidAudioManager = (AudioManager)MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);
 	}
 
 	public AudioPlaybackPlayer(ResourceInputStream stream) throws MediaException {
-		this((String)null);
+		this();
 		this.locatorStream = stream;
 		try {
 			AssetFileDescriptor descriptor = MidletBridge.getInstance().getAssets().openFd( stream.getCleanedResourceUrl() );
@@ -71,6 +83,10 @@ public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl
 			System.out.println("Unable to deallocate/init player" + e);
 		}
 	}
+	
+	public void setLoopCount(int count) {
+		this.loopCount = count;
+	}
 
 	protected String doGetContentType() {
 		throw new RuntimeException("Not supported.");
@@ -94,11 +110,12 @@ public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl
 		// not needed. Done with setDataSource.
 	}
 
-	protected long doSetMediaTime(long arg0) {
-		throw new RuntimeException("Not supported.");
+	protected long doSetMediaTime(long time) throws MediaException {
+		throw new MediaException("Not supported.");
 	}
 
 	protected void doStart() {
+		this.currentLoop = this.loopCount;
 		this.mediaPlayer.start();
 	}
 
@@ -148,6 +165,23 @@ public class AudioPlaybackPlayer extends AbstractPlayer implements VolumeControl
 
 	protected void doStarted() {
 		// not required
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see android.media.MediaPlayer.OnCompletionListener#onCompletion(android.media.MediaPlayer)
+	 */
+	public void onCompletion(MediaPlayer mp) {
+		int loop = this.currentLoop;
+		if (loop == -1) {
+			// just start again:
+			mp.start();
+		} else if (loop > 0){
+			this.currentLoop--;
+			mp.start();
+		} else {
+			fireEvent(PlayerListener.END_OF_MEDIA, this);
+		}
 	}
 
 }

@@ -41,6 +41,7 @@ public class AndroidPlayer implements Player,VolumeControl, RecordControl, Runna
 	private boolean startRecording = false;
 	
 	public AndroidPlayer() {
+		MidletBridge.instance.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		this.mediaPlayer = new MediaPlayer();
 		this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		this.androidAudioManager = (AudioManager)MidletBridge.instance.getSystemService(Context.AUDIO_SERVICE);
