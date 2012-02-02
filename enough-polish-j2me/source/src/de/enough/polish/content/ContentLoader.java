@@ -1,10 +1,13 @@
 package de.enough.polish.content;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import de.enough.polish.content.source.ContentSource;
 import de.enough.polish.content.storage.StorageIndex;
 import de.enough.polish.content.storage.StorageReference;
+import de.enough.polish.io.Serializer;
 import de.enough.polish.util.IntHashMap;
 
 /**
@@ -340,7 +343,7 @@ public class ContentLoader extends ContentSource implements Runnable {
 	 * com.zyb.nowplus.business.content.StorageReference)
 	 */
 	protected Object load(StorageReference reference) {
-		return this.cache.get(reference.getHash());
+		return this.cache.get(reference.getHash());		
 	}
 
 	/*
@@ -363,14 +366,34 @@ public class ContentLoader extends ContentSource implements Runnable {
 	 * business.content.ContentDescriptor, java.lang.Object)
 	 */
 	protected Object store(ContentDescriptor descriptor, Object data) {
-		this.cache.put(descriptor.getHash(), data);
 		return null;
 	}
 	
 	protected Object[] storeContentAndGetDataSize(ContentDescriptor descriptor,
-			Object data) throws IOException {
-		// Do nothing, this is a source
-		return null;
+			Object data) throws IOException, ContentException {
+		// serialize the data and convert it to a byte array 
+		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+		Serializer.serialize(data, new DataOutputStream(byteStream));
+		
+		// Get the size in bytes
+		// Add a 50% overhead, for safety, since objects take up more space when deserialized 
+		int length = (int) (byteStream.size() * 1.5); 
+		byteStream.close();
+		byteStream = null;
+		
+		// Try to do a clean first, in case it is needed.
+		clean(length);		
+
+		// If the data we are trying to store is bigger than the cache itself, don't even bother
+		if ( length> getStorageIndex().getAvailableCacheSize() ) {
+			return new Object[] { new Integer(length), null };
+		}
+		
+		int hash = descriptor.getHash();
+		
+		this.cache.put(descriptor.getHash(), data);
+		
+		return new Object[] { new Integer(length), new Integer(hash)};	
 	}
 
 	/*
