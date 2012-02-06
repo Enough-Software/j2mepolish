@@ -41,6 +41,7 @@ import javax.microedition.io.StreamConnection;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import de.enough.polish.browser.css.CssInterpreter;
 import de.enough.polish.browser.protocols.HttpProtocolHandler;
 import de.enough.polish.browser.protocols.ResourceProtocolHandler;
 import de.enough.polish.io.RedirectHttpConnection;
@@ -60,6 +61,7 @@ import de.enough.polish.ui.AnimationThread;
 import de.enough.polish.ui.ClippingRegion;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Container;
+import de.enough.polish.ui.Dimension;
 import de.enough.polish.ui.Gauge;
 import de.enough.polish.ui.ImageItem;
 import de.enough.polish.ui.Item;
@@ -546,11 +548,11 @@ implements Runnable, ResourceLoader
 				{
 					// #debug
 					//System.out.println("Calling handler: " + parser.getName() + " " + attributeMap);
-					Style tagStyle = getStyle( attributeMap );
 					Container container =  this.currentContainer;
 					if (container == null) {
 						container = (Container) ((Object)this);
 					}
+					Style tagStyle = getStyle( attributeMap, container.getStyle() );
 					handler.handleTag(container, parser, parser.getName(), openingTag, attributeMap, tagStyle);
 				}
 				else
@@ -575,11 +577,25 @@ implements Runnable, ResourceLoader
 	}
 
 	/**
-	 * Retrieves a style from the specfied attributes
+	 * Retrieves a style from the specified attributes
 	 * @param attributeMap the attribute map
 	 * @return the specified style, if any
 	 */
-	protected Style getStyle( HashMap attributeMap ) {
+	protected Style getStyle( HashMap attributeMap, Style parentStyle ) {
+		String inlineStyleAttribute = (String) attributeMap.get("style");
+		if (inlineStyleAttribute != null) {
+			try {
+				Style style = CssInterpreter.parseStyle(inlineStyleAttribute);
+				if (parentStyle != null) {
+					style.extendStyle(parentStyle);
+					//style.addAttribute("padding", new Dimension(0));
+				}
+				return style;
+			} catch (IOException e) {
+				//#debug error
+				System.out.println("Unable to parse inline style " + inlineStyleAttribute + e);
+			}
+		}
 		Style tagStyle = null;
 		String styleName = (String) attributeMap.get("class");
 		if (styleName != null) {

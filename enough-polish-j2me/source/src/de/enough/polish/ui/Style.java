@@ -120,11 +120,25 @@ public class Style implements Externalizable
 		}
 	}
 	
+	/**
+	 * Inherits attributes from the given style.
+	 * Only attributes that are not set are inherited.
+	 * Often you can inherit the other way round - first create a new style based on the parent style (new Style(Style)), then add any different settings. 
+	 * @param style the style that this style should inherit from
+	 */
 	public void extendStyle(Style style) {
-		this.name = style.name;
-		this.layout = style.layout;
-		this.background = style.background;
-		this.border = style.border;
+		if (this.name == null) {
+			this.name = style.name;
+		}
+		if (this.layout == (Graphics.TOP | Graphics.LEFT)) {
+			this.layout = style.layout;
+		}
+		if (this.background == null) {
+			this.background = style.background;
+		}
+		if (this.border == null) {
+			this.border = style.border;
+		}
 		short[] keys;
 		Object[] values;
 		if (this.attributeKeys == null || this.attributeKeys.length == 0) {

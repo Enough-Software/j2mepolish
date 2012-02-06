@@ -4746,6 +4746,28 @@ public class Container extends Item {
 		//#endif
 	}
 	
+	public void scrollToTop() {
+		setScrollYOffset(0, true);
+	}
+
+	public void scrollToBottom() {
+		if (this.enableScrolling) {
+			if (!isInitialized()) {
+				if (this.availableWidth != 0) {
+					init(this.availableWidth, this.availableWidth, this.availableHeight );
+				} // else we're out of luck for now..
+			}
+			int offset = getScrollHeight() - getItemAreaHeight();
+			if (offset > 0) {
+				offset = 0;
+			}
+			setScrollYOffset(offset, true);
+		} else if (this.parent instanceof Container) {
+			((Container)this.parent).scrollToBottom();
+		}
+		
+	}
+	
 
 
 

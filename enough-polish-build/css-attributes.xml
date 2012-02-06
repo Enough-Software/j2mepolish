@@ -1864,6 +1864,7 @@
 		<mapping from="vertical-gradient" to="new de.enough.polish.ui.texteffects.VerticalGradientTextEffect()" />
 		<mapping from="vertical-scroll" to="new de.enough.polish.ui.texteffects.VerticalScrollTextEffect()" />
 		<mapping from="html" to="new de.enough.polish.ui.texteffects.HtmlTextEffect()" />
+		<mapping from="message" to="new de.enough.polish.ui.texteffects.MessageTextEffect()" />
 		<mapping from="mirror-shadow" to="new de.enough.polish.ui.texteffects.VerticalMirrorTextEffect()" >
 			<condition>polish.midp2</condition>
 		</mapping>

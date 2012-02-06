@@ -187,6 +187,15 @@ When the plugin is not installed correctly, please start eclipse with "-clean" c
             <parsable targetfile="$INSTALL_PATH/samples/processing-tree/.classpath" type="shell" /> 
             <parsable targetfile="$INSTALL_PATH/samples/processing-tree/nbproject/project.properties" type="shell" /> 
         </pack>
+
+        <pack name="Messaging Sample Application" required="no" preselected="yes">
+            <description>The message text-effect allows you to use markup such as *bold*, _underlined_, /italic/ as well as smileys, email-addresses, websites and twitter handles.</description>
+            <file src="samples/messaging" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/messaging/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/messaging/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/messaging/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/messaging/nbproject/project.properties" type="shell" /> 
+        </pack>
         
         <pack name="Fisheye Sample Application" required="no" preselected="yes">
             <description>A simple application demonstrating the fisheye view-type.</description>

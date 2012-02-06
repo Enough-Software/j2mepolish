@@ -2511,6 +2511,29 @@ public final class UiAccess {
 		screen.setScrollYOffset(offset, false);
     }
     //#endif
+    
+    //#if polish.midp
+    /**
+     * Scrolls the screen so that the last item is in the visible area.
+     *  
+     * @param screen the screen
+     */
+    public static void scrollToBottom( javax.microedition.lcdui.Screen screen ) {
+    	// ignore
+    }
+    //#endif
+
+
+    //#if polish.usePolishGui
+    /**
+     * Scrolls the screen so that the last item is in the visible area.
+     *  
+     * @param screen the screen
+     */
+    public static void scrollToBottom( Screen screen ) {
+    	screen.scrollToBottom();
+    }
+    //#endif
 
     //#if polish.usePolishGui
     /**

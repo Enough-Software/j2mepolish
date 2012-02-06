@@ -36,6 +36,7 @@ import de.enough.polish.io.ResourceLoader;
 import de.enough.polish.io.StringReader;
 import de.enough.polish.ui.Color;
 import de.enough.polish.ui.Dimension;
+import de.enough.polish.ui.Font;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.StyleSheet;
 import de.enough.polish.ui.backgrounds.ImageBackground;
@@ -236,6 +237,24 @@ public class CssInterpreter {
 			 style = new Style();
 		}
 		style.name = styleName;
+		parseStyle(strBuffer, style);
+		return style;
+	}
+	
+	/**
+	 * Allows to parse inline styles
+	 * @param definition the style definition, e.g. "font-style: bold; color: red;"
+	 * @return the parsed style
+	 * @throws IOException when the parsing fails
+	 */
+	public static Style parseStyle( String definition ) throws IOException {
+		CssInterpreter interpreter = new CssInterpreter("inline{" + definition + "}");
+		return interpreter.nextStyle();
+	}
+
+	private void parseStyle(StringBuffer strBuffer, Style style)
+	throws IOException 
+	{
 		String blockName = null;
 		HashMap backgroundAttributes = null;
 		HashMap borderAttributes = null;
@@ -293,7 +312,6 @@ public class CssInterpreter {
 		if (borderAttributes != null) {
 			addBorder( borderAttributes, style );
 		}
-		return style;
 	}
 
 	private void addBorder(HashMap borderAttributes, Style style) {
@@ -430,14 +448,12 @@ public class CssInterpreter {
 //			System.out.println("imageUrl=" + imageUrl);
 //			return;
 //		}
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
-	 * Retriees a locally registered style
+	 * Retrieves a locally registered style
 	 * @param styleName the style name in lower case
-	 * @return the correpsonding locally defined style
+	 * @return the corresponding locally defined style
 	 */
 	protected Style getStyle(String styleName) {
 		Style style = null;
@@ -465,6 +481,31 @@ public class CssInterpreter {
 				style.addAttribute( "font-color", parseColor( value ) );
 				return;
 			}
+		//#endif
+		//#if polish.css.font-style
+			if ("font-style".equals(name)) {
+				int fontStyle = 0;
+				String[] values = TextUtil.splitAndTrim(value, '|');
+				if (values.length == 1) {
+					values = TextUtil.splitAndTrim(values[0], '&');
+				}
+				for (int i=0; i<values.length; i++) {
+					value = values[i];
+					if ("bold".equals(value)) {
+						fontStyle |= Font.STYLE_BOLD;
+					} else if ("italic".equals(value) || "cursive".equals(value)) {
+						fontStyle |= Font.STYLE_ITALIC;
+					} else if ("underlined".equals(value)) {
+						fontStyle |= Font.STYLE_UNDERLINED;
+					} else {
+						//#debug warn
+						System.out.println("Unable to parse font-style value [" + value + "] in style [" + style.name + "]");
+					}
+				}
+				style.addAttribute( "font-style", new Integer(fontStyle) );
+				return;
+			}
+			
 		//#endif
 		//#if polish.css.margin
 			if ("margin".equals(name)) {
@@ -698,4 +739,5 @@ public class CssInterpreter {
 		}
 		return this.styles;
 	}
+	
 }

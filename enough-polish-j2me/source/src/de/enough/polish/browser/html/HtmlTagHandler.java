@@ -265,6 +265,8 @@ public class HtmlTagHandler
 				Style itemStyle = (itemStyleName == null ? null : StyleSheet.getStyle(itemStyleName));
 				if (itemStyle != null) {
 					this.textStyle = itemStyle;
+				} else if ((style != null) && ("inline".equals(style.name))) {
+					this.textStyle = style;
 				}
 				if (this.isDivOrSpanOpened == null) {
 					this.isDivOrSpanOpened = new BooleanStack();

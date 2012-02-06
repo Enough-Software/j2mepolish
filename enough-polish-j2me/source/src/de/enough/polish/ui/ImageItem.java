@@ -25,6 +25,8 @@
  */
 package de.enough.polish.ui;
 
+import java.io.IOException;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -81,6 +83,7 @@ import de.enough.polish.util.ImageUtil;
  */
 public class ImageItem extends Item
 {
+	protected String imageSource;
 	protected Image image;
 	protected String altText;
 	protected int textColor;
@@ -102,6 +105,26 @@ public class ImageItem extends Item
 		private Dimension maxImageWidth;
 	//#endif
 
+	/**
+	 * Creates a new ImageItem with an image that will be loaded later
+	 * @param label the label
+	 * @param imageSource the image source, e.g. "/myimage.png"
+	 */
+	public ImageItem( String label, String imageSource) {
+		this(label, imageSource, null);
+	}
+
+	/**
+	 * Creates a new ImageItem with an image that will be loaded later
+	 * @param label the label
+	 * @param imageSource the image source, e.g. "/myimage.png"
+	 */
+	public ImageItem( String label, String imageSource, Style style) {
+		this(label, null, 0, null, 0, style);
+		this.imageSource = imageSource;
+	}
+
+	
 	/**
 	 * Creates a new <code>ImageItem</code> with the given label, image, layout
 	 * directive, and alternate text string.  Calling this constructor is
@@ -388,6 +411,16 @@ public class ImageItem extends Item
 	protected void initContent(int firstLineWidth, int availWidth, int availHeight) {
 		this.xOverlap = 0;
 		Image img = this.image;
+		if ((img == null) && (this.imageSource != null)) {
+			try {
+				img = StyleSheet.getImage(this.imageSource, this, false);
+				//img = Image.createImage(this.imageSource);
+				this.image = img;
+			} catch (IOException e) {
+				//#debug error
+				System.out.println("Unable to load image " + this.imageSource + e);
+			}
+		}
 		if (img != null) {
 			int imgWidth = img.getWidth();
 			int imgHeight = img.getHeight();

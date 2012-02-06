@@ -5737,6 +5737,19 @@ implements UiElement, Animatable
 		}
 	}
 	
+	/**
+	 * Scrolls this screen so that the last item is in the visible space
+	 */
+	public void scrollToBottom() {
+		if (this.container != null) {
+			if (this.isInitRequested || !this.isInitialized) {
+				calculateContentArea( 0, 0, this.screenWidth, this.screenHeight );
+			}
+			this.container.scrollToBottom();
+		}
+	}
+
+	
 
 	/**
 	 * Attaches data to this screen.
@@ -6570,6 +6583,7 @@ implements UiElement, Animatable
 		buffer.append(super.toString());
 		return buffer.toString();
 	}
+
 
 
 //#ifdef polish.Screen.additionalMethods:defined

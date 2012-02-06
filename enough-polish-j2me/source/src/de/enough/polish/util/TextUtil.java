@@ -34,7 +34,7 @@ import javax.microedition.lcdui.Font;
 /**
  * <p>Provides some useful String methods.</p>
  *
- * <p>Copyright Enough Software 2004 - 2011</p>
+ * <p>Copyright Enough Software 2004 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public final class TextUtil {

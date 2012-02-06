@@ -27,12 +27,18 @@ package de.enough.polish.ui.texteffects;
 
 import java.io.IOException;
 
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.midlet.MIDlet;
 
+import de.enough.polish.browser.css.CssInterpreter;
 import de.enough.polish.io.StringReader;
+import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Dimension;
+import de.enough.polish.ui.ImageItem;
 import de.enough.polish.ui.Item;
+import de.enough.polish.ui.ItemCommandListener;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.StyleSheet;
@@ -63,19 +69,59 @@ import de.enough.polish.xml.XmlPullParser;
  * @author Robert Virkus
  *
  */
-public class HtmlTextEffect extends TextEffect {
+public class HtmlTextEffect 
+extends TextEffect
+implements ItemCommandListener
+{
 
+	private static final String ATTRIBUTE_HREF = "href";
+	private static HtmlTextParser globalParser;
+	private static MIDlet midlet;
+	private static Command cmdOpenWebsite;
+	private static Command cmdOpenMailto;
+	
+	private HtmlTextParser parser;
 	private HtmlTextContainerView containerView;
 	private transient Item[] textItems;
 	private WrappedText storedWrappedText;
+	private StringItem parentStringItem;
 
 
+	/**
+	 * Sets the parser for all instances of the HtmlTextEffect
+	 * @param parser the parser
+	 */
+	public static void setGlobalParser( HtmlTextParser parser ) {
+		HtmlTextEffect.globalParser = parser;
+	}
+	
+	/**
+	 * Sets a midlet, so that email and web addresses can be resolved by opening them in the native browser
+	 * @param midlet the midlet
+	 * @param cmdOpenWebsite the command for opening websites
+	 * @param cmdOpenMailto the command for opening mailto/email addresses
+	 */
+	public static void setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto) {
+		HtmlTextEffect.midlet = midlet;
+		HtmlTextEffect.cmdOpenWebsite = cmdOpenWebsite;
+		HtmlTextEffect.cmdOpenMailto = cmdOpenMailto;
+	}
+
+	
 	/**
 	 * Creates a new HTML text effect
 	 */
 	public HtmlTextEffect() {
 		// use style for further initialization, if required.
 		this.isTextSensitive = true;
+	}
+	
+	/**
+	 * Sets the parser for this instance of the HtmlTextEffect
+	 * @param parser the parser
+	 */
+	public void setParser( HtmlTextParser parser) {
+		this.parser = parser;
 	}
 	
 	/* (non-Javadoc)
@@ -113,6 +159,7 @@ public class HtmlTextEffect extends TextEffect {
 			String maxLinesAppendix, int maxLinesAppendixPosition,
 			WrappedText wrappedText) 
 	{
+		this.parentStringItem = parent;
 		this.storedWrappedText = wrappedText;
 		ArrayList childList = new ArrayList();
 		Style baseStyle = this.style.clone(true);
@@ -182,12 +229,51 @@ public class HtmlTextEffect extends TextEffect {
 			if (type == SimplePullParser.START_TAG)
 			{
 				String name = parser.getName().toLowerCase();
+				boolean isNameResolved = false;
 				
+				if (this.parser != null) {
+					isNameResolved = this.parser.parseTag(name, parser, nodeStyle, childList);
+				}
+				if (!isNameResolved && globalParser != null) {
+					isNameResolved = globalParser.parseTag(name, parser, nodeStyle, childList);
+				}
 				int addedFontStyle = -1;
-				if ("b".equals(name)) {
-					addedFontStyle = Font.STYLE_BOLD;
-				} else if ("i".equals(name)) {
-					addedFontStyle = Font.STYLE_ITALIC;
+				if (!isNameResolved) {
+					if ("b".equals(name)) {
+						addedFontStyle = Font.STYLE_BOLD;
+						isNameResolved = true;
+					} else if ("i".equals(name)) {
+						addedFontStyle = Font.STYLE_ITALIC;
+						isNameResolved = true;
+					} else if (midlet != null) {
+						if ("a".equals(name)) {
+							addedFontStyle = Font.STYLE_UNDERLINED;
+							String href = parser.getAttributeValue(ATTRIBUTE_HREF);
+							if (href != null) {
+								Command cmd;
+								if (href.startsWith("mailto:")) {
+									cmd = cmdOpenMailto;
+								} else {
+									cmd = cmdOpenWebsite;
+								}
+								parser.next();
+								String text = parser.getText();
+								Style nextNodeStyle = nodeStyle.clone(true);
+								Integer fontStyle = nextNodeStyle.getIntProperty("font-style");
+								nextNodeStyle.addAttribute("font-style", addToFontStyle( addedFontStyle, fontStyle ) );
+								StringItem item = new StringItem(null, text, nextNodeStyle);
+								childList.add(item);
+								if (this.parentStringItem != null) {
+									item = this.parentStringItem;
+								}
+								item.setAttribute(ATTRIBUTE_HREF, href);
+								item.setDefaultCommand(cmd);
+								item.setItemCommandListener(this);
+								addedFontStyle = -1;
+							}
+						}
+					}
+					
 				}
 				String styleName = parser.getAttributeValue("class");
 				if (styleName == null) {
@@ -201,8 +287,23 @@ public class HtmlTextEffect extends TextEffect {
 						nextNodeStyle.removeAttribute("padding-right");
 						nextNodeStyle.removeAttribute("padding-bottom");
 						nextNodeStyle.removeAttribute("padding-top");
-						nextNodeStyle.addAttribute("padding", new Dimension(0));
 					}
+				} else {
+					String styleDefinition = parser.getAttributeValue("style");
+					if (styleDefinition != null) {
+						try {
+							nextNodeStyle = CssInterpreter.parseStyle(styleDefinition);
+							if (nextNodeStyle != null) {
+								nextNodeStyle.extendStyle(nodeStyle);
+							}
+						} catch (IOException e) {
+							//#debug error
+							System.out.println("Unable to parse CSS style definition \"" + styleDefinition + "\"" + e );
+						}
+					}
+				}
+				if (nextNodeStyle != null) {
+					nextNodeStyle.addAttribute("padding", new Dimension(0));
 				}
 				if (nextNodeStyle == null) {
 					nextNodeStyle = nodeStyle;
@@ -211,6 +312,12 @@ public class HtmlTextEffect extends TextEffect {
 					nextNodeStyle = nextNodeStyle.clone(true);
 					Integer fontStyle = nextNodeStyle.getIntProperty("font-style");
 					nextNodeStyle.addAttribute("font-style", addToFontStyle( addedFontStyle, fontStyle ) );
+				}
+				if ((!isNameResolved) && ("img".equals(name))) {
+					String src = parser.getAttributeValue("src");
+					if (src != null) {
+						childList.add( new ImageItem(null, src, nodeStyle) );
+					}
 				}
 				parse(parser, nextNodeStyle, childList);
 			} else if (type == SimplePullParser.TEXT) {
@@ -289,6 +396,23 @@ public class HtmlTextEffect extends TextEffect {
 		return this.containerView.getContentWidth();
 	}
 	
+
+	public void commandAction(Command cmd, Item item) {
+		String href = (String) item.getAttribute(ATTRIBUTE_HREF);
+		if ((href != null) && (midlet != null) && (cmd == cmdOpenWebsite || cmd == cmdOpenMailto)) {
+			boolean shouldExit = false;
+			try {
+				shouldExit = midlet.platformRequest(href);
+			} catch (ConnectionNotFoundException e) {
+				//#debug error
+				System.out.println("unable to do a platformRequest for " + href + e);
+			}
+			if (shouldExit) {
+				midlet.notifyDestroyed();
+			}
+		}
+	}
+	
 	private static class HtmlTextContainerView extends Midp2ContainerView {
 		private final WrappedText wrappedText;
 		private int widthDifference;
@@ -345,11 +469,13 @@ public class HtmlTextEffect extends TextEffect {
 			this.wrappedText.addLine("", currentRowWidth);
 			if (currentRowStartIndex == currentRowEndIndex) {
 				// this is only one time, check if it contains line breaks:
-				StringItem stringItem = (StringItem) items[currentRowStartIndex];
-				int numberOfLines = stringItem.getNumberOfLines();
-				if (numberOfLines > 1) {
-					for (int i=1; i<numberOfLines; i++) {
-						this.wrappedText.addLine("", 0);
+				Item item = (Item) items[currentRowStartIndex];
+				if (item instanceof StringItem) {
+					int numberOfLines = ((StringItem)item).getNumberOfLines();
+					if (numberOfLines > 1) {
+						for (int i=1; i<numberOfLines; i++) {
+							this.wrappedText.addLine("", 0);
+						}
 					}
 				}
 			}
@@ -372,5 +498,19 @@ public class HtmlTextEffect extends TextEffect {
 		
 	}
 	
+	/**
+	 * Allows to add your own parsing to the HtmlTextEffect
+	 */
+	public static interface HtmlTextParser {
+		/**
+		 * Parses the given tag
+		 * @param tagName the lowercase tag name, e.g. img for &lt;img&gt;
+		 * @param parser the pull parser
+		 * @param nodeStyle the current style
+		 * @param childList the list of items to which the parser can add item
+		 * @return true when the parser handled the tag, false when the default implementation should continue the parsing.
+		 */
+		boolean parseTag( String tagName, XmlPullParser parser, Style nodeStyle, ArrayList childList);
+	}
 
 }

@@ -870,12 +870,12 @@ public class TextField extends StringItem
 		   private static final int KEY_SHIFT = -50;
 		//#endif
 		private boolean nextCharUppercase; // is needed for the FIRST_UPPERCASE-mode
+		private boolean prepareNextCharUppercase;
 		
 		private String[] realTextLines; // the textLines with spaces and line breaks at the end
 		private String originalRowText; // current line including spaces and line breaks at the end
 		private int caretColumn; // the current column of the caret, 0 is the first column
 		private int caretRow; // the current row of the caret, 0 is the first row
-		private int caretRowWidth; // the width of the current row
 		private int caretX;
 		private int caretY;
 		private int caretWidth;
@@ -977,7 +977,6 @@ public class TextField extends StringItem
 		private AndroidTextField _androidTextField;
 	//#endif
 	//#if polish.blackberry
-		private int originalContentWidth;
 		private PolishTextField editField;
 		//#if polish.Bugs.ItemStateListenerCalledTooEarly
 			private long lastFieldChangedEvent;
@@ -2651,11 +2650,8 @@ public class TextField extends StringItem
 			}
 		//#else	
 			super.initContent(firstLineWidth, availWidth, availHeight);
-			//#if polish.blackberry
-				this.originalContentWidth = this.contentWidth;
-			//#endif
 			//#if polish.TextField.showHelpText
-			UiAccess.init(this.helpItem, firstLineWidth, availWidth, availHeight);
+				UiAccess.init(this.helpItem, firstLineWidth, availWidth, availHeight);
 			//#endif
 			
 			//#if tmp.includeInputInfo
@@ -2800,14 +2796,12 @@ public class TextField extends StringItem
 		this.caretColumn = column;
 		boolean endsInLineBreak = (length >= 1) && (line.charAt(length-1) == '\n'); 
 		String caretRowFirstPart;
-		boolean firstPartIsFullRow = false;
 		if (column == length || ( endsInLineBreak && column == length -1 )) {
 			if ( endsInLineBreak ) {
 				caretRowFirstPart = line.substring( 0, length - 1);								
 			} else {
 				caretRowFirstPart = line;				
 			}
-			firstPartIsFullRow = true;
 		} else {
 			caretRowFirstPart = line.substring( 0, column );
 			//this.caretRowLastPartWidth = this.font.stringWidth(this.caretRowLastPart);;
@@ -2816,13 +2810,6 @@ public class TextField extends StringItem
 			this.caretX = stringWidth( "*" ) * caretRowFirstPart.length();
 		} else {
 			this.caretX = stringWidth(caretRowFirstPart);
-		}
-		if (this.isLayoutCenter || this.isLayoutRight) {
-			if (firstPartIsFullRow) {
-				this.caretRowWidth = this.caretX;
-			} else {
-				this.caretRowWidth = stringWidth( line );
-			}
 		}
 		//System.out.println("caretRowWidth=" + this.caretRowWidth + " for line=" + line);
 		//#if polish.css.text-wrap
@@ -3005,11 +2992,14 @@ public class TextField extends StringItem
 			}
 		//#else
 			nextCharInputHasChanged = this.nextCharUppercase;
-			if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
+			if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase || this.prepareNextCharUppercase) 
 					&& insertChar == ' ') 
-				|| ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER))) 
-			{
+				//|| ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER))) 
+			){
 				this.nextCharUppercase = true;
+				this.prepareNextCharUppercase = false;
+			} else if ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER)) {
+				this.prepareNextCharUppercase = true;
 			} else {
 				this.nextCharUppercase = false;
 			}
@@ -3018,7 +3008,7 @@ public class TextField extends StringItem
 				this.inputMode = MODE_LOWERCASE;
 			}
 		//#endif
-			//#if polish.css.textfield-show-length  && tmp.useInputInfo
+		//#if polish.css.textfield-show-length  && tmp.useInputInfo
 			if (this.showLength || nextCharInputHasChanged) {
 				updateInfo();
 			}
@@ -3076,21 +3066,26 @@ public class TextField extends StringItem
 			this.caretColumn++;
 			//#if polish.TextField.suppressAutoInputModeChange
 				if ( this.inputMode == MODE_FIRST_UPPERCASE  
-					&& (insertChar == ' ' ||  ( insertChar == '.' && !(this.isEmail || this.isUrl)) )) 
+					&& (insertChar == ' ' )) 
 				{
 					this.nextCharUppercase = true;
+				} else if ( insertChar == '.' && !(this.isEmail || this.isUrl)) {
+					this.prepareNextCharUppercase = true;
 				} else {
 					this.nextCharUppercase = false;
 				}
 			//#else
 				nextCharInputHasChanged = this.nextCharUppercase;
-				if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
+				if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase || this.prepareNextCharUppercase) 
 						&& insertChar == ' ') 
-					|| ( insertChar == '.' && !(this.isEmail || this.isUrl))) 
-				{
+				){
 					this.nextCharUppercase = true;
+					this.prepareNextCharUppercase = false;
+				} else if ( insertChar == '.' && !(this.isEmail || this.isUrl)) {
+					this.prepareNextCharUppercase = true;
 				} else {
 					this.nextCharUppercase = false;
+					this.prepareNextCharUppercase = false;
 				}
 				nextCharInputHasChanged = (this.nextCharUppercase != nextCharInputHasChanged);
 				if ( this.inputMode == MODE_FIRST_UPPERCASE ) {
@@ -3376,7 +3371,8 @@ public class TextField extends StringItem
 		//#endif
 				//#ifdef tmp.directInput
 					//#if !polish.blackberry
-						if (this.inputMode == MODE_NATIVE && keyCode != KEY_CHANGE_MODE
+						if ((this.inputMode == MODE_NATIVE) 
+								&& (keyCode != KEY_CHANGE_MODE)
 						//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 								//#= && keyCode != ${polish.key.ChangeNumericalAlphaInputModeKey}  
 						//#endif
@@ -3428,7 +3424,7 @@ public class TextField extends StringItem
 						boolean handled = false;
 						
 						//#if tmp.usePredictiveInput && !polish.key.ChangeNumericalAlphaInputModeKey:defined
-                        if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable)
+                        if ( (keyCode == KEY_CHANGE_MODE) && (!this.isNumeric) && (!this.isUneditable))
                         {
                                 if(this.lastTimePressed == -1)
                                 {
@@ -3472,23 +3468,28 @@ public class TextField extends StringItem
 						//#if polish.key.Menu:defined
 							int menuKey = 0;
 							//#= menuKey = ${polish.key.Menu};
-							if(keyCode == menuKey) {
+							if (keyCode == menuKey) {
 								return false;
 							}
 						//#endif
 							
-							
 						//#ifdef polish.key.ChangeNumericalAlphaInputModeKey:defined
-                        //#= if(!handled &&
-                        //#=     !(keyCode == KEY_CHANGE_MODE && !this.isNumeric &&
-                        //#=       !(KEY_CHANGE_MODE == Canvas.KEY_NUM0 &&
-                        //#=         this.inputMode == MODE_NUMBERS)) &&
-                        //#=     !(keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey} &&
-                        //#=       !this.isNumeric))
-                        //#else
-                        if(!handled && keyCode != KEY_CHANGE_MODE)
+							int changeNumericalAlphaInputModeKey = 0;
+							//#= changeNumericalAlphaInputModeKey = ${polish.key.ChangeNumericalAlphaInputModeKey};
+						//#endif
+							
+                        if (!handled 
+                        		&& ((keyCode != KEY_CHANGE_MODE)
+            				//#if polish.key.maybeSupportsAsciiKeyMap
+                        			|| useAsciiKeyMap
+                    		//#endif
+                        		)
+						//#ifdef polish.key.ChangeNumericalAlphaInputModeKey:defined
+	                        && !(keyCode == KEY_CHANGE_MODE && !this.isNumeric 
+	                        && !(KEY_CHANGE_MODE == Canvas.KEY_NUM0 && this.inputMode == MODE_NUMBERS)) 
+	                        && !(keyCode == changeNumericalAlphaInputModeKey && !this.isNumeric)
                         //#endif
-                        {
+                        ){
                                 handled = handleKeyInsert(keyCode, gameAction);
                         }
 	                        
@@ -4211,7 +4212,7 @@ public class TextField extends StringItem
 			return super.handleKeyReleased(keyCode, gameAction);
 		}
 		//#if tmp.useNativeTextBox && !(polish.Vendor == Samsung)
-			if(this.skipKeyReleasedEvent) {
+			if (this.skipKeyReleasedEvent) {
 				this.skipKeyReleasedEvent = false;
 				return true;
 			}
@@ -4232,15 +4233,19 @@ public class TextField extends StringItem
 				-8;
 			//#endif
 		boolean clearKeyPressed = (keyCode == clearKey);
-		 
 		//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
-			//#= if ((keyCode == KEY_CHANGE_MODE || keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey}) && 
-			//#= !this.isNumeric && !this.isUneditable && 
-			//#= (!(KEY_CHANGE_MODE == Canvas.KEY_NUM0 && this.inputMode == MODE_NUMBERS) || keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey}) )
-		//#else
-		if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable )
+			int changeNumericalAlphaInputModeKey = 0;
+			//#= changeNumericalAlphaInputModeKey = polish.key.ChangeNumericalAlphaInputModeKey;
 		//#endif
-		{
+		if ( (keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable)
+			//#if polish.key.maybeSupportsAsciiKeyMap
+					&& (!useAsciiKeyMap)
+			//#endif
+			//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
+				|| (keyCode == changeNumericalAlphaInputModeKey && !this.isNumeric && !this.isUneditable) 
+				&& (!(KEY_CHANGE_MODE == Canvas.KEY_NUM0 && this.inputMode == MODE_NUMBERS) || keyCode == changeNumericalAlphaInputModeKey)
+			//#endif
+		){
 			//#if tmp.usePredictiveInput && !polish.key.ChangeNumericalAlphaInputModeKey:defined
 			if((System.currentTimeMillis() - this.lastTimePressed) > SWITCH_DELAY && TrieProvider.isPredictiveInstalled())
 			{

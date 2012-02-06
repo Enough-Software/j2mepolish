@@ -1,0 +1,2 @@
+Provides a simplistic chat application that supports markup such as *bold*, _underlined_, /italic/ as well as smileys, email-addresses, websites and twitter @ & # handles.
+This is done by using the message text-effect.

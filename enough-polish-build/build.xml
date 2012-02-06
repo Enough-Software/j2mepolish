@@ -734,6 +734,16 @@
 			<fileset dir="setup/samples/blank" excludes="**/macosx/**,**/CVS" />
 			<fileset dir="../enough-polish-sample-blank" includes="resources/**/*.*" excludes="**/CVS"/>
 		</copy>
+		<!-- copy messaging application -->
+		<mkdir dir="tmp/samples/messaging/source/src" />
+		<copy todir="tmp/samples/messaging/source/src">
+			<fileset dir="../enough-polish-sample-messaging/source/src" includes="**/*.java, **/*.txt" />
+		</copy>
+		<copy todir="tmp/samples/messaging/" 
+			>
+			<fileset dir="setup/samples/messaging" excludes="**/macosx/**,**/CVS" />
+			<fileset dir="../enough-polish-sample-messaging" includes="resources/**/*.*" excludes="**/CVS"/>
+		</copy>
 		<!-- copy menu application -->
 		<mkdir dir="tmp/samples/menu/source/src" />
 		<copy todir="tmp/samples/menu/source/src">
