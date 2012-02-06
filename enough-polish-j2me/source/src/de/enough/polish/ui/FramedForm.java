@@ -785,6 +785,10 @@ implements CycleListener
 					setActiveFrame(nextFrame, false, gameAction);
 					handled = true;
 				} else {
+					if ((this.currentlyActiveContainer != this.container) && (!this.container.isInteractive())) {
+						// this allows to scroll the content container even when it is not interactive:
+						return this.container.handleKeyPressed(keyCode, gameAction);
+					}
 					return false;
 				}
 			}
@@ -1140,10 +1144,14 @@ implements CycleListener
 	 */
 	protected boolean handlePointerDragged(int x, int y, ClippingRegion repaintRegion ) {
 		Container activeFrame = this.currentlyActiveContainer;
+		boolean handled = false;
 		if ( activeFrame != null ) {
-			return activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
+			handled = activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
+		} 
+		if (!handled && activeFrame != this.container) {
+			handled = this.container.handlePointerDragged(x - this.container.relativeX, y - this.container.relativeY, repaintRegion);
 		}
-		return false;
+		return handled;
 	}
 	//#endif
 	
