@@ -85,6 +85,7 @@ implements ItemCommandListener
 	private transient Item[] textItems;
 	private WrappedText storedWrappedText;
 	private StringItem parentStringItem;
+	private static Command cmdCall;
 
 
 	/**
@@ -95,16 +96,31 @@ implements ItemCommandListener
 		HtmlTextEffect.globalParser = parser;
 	}
 	
+	//#if polish.LibraryBuild
 	/**
 	 * Sets a midlet, so that email and web addresses can be resolved by opening them in the native browser
 	 * @param midlet the midlet
 	 * @param cmdOpenWebsite the command for opening websites
 	 * @param cmdOpenMailto the command for opening mailto/email addresses
+	 * @param cmdCall the command for opening tel: numbers
 	 */
-	public static void setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto) {
+	public static void setMidlet(MIDlet midlet, javax.microedition.lcdui.Command cmdOpenWebsite, javax.microedition.lcdui.Command cmdOpenMailto, javax.microedition.lcdui.Command cmdCall) {
+		// no implementation
+	}
+	//#endif
+	
+	/**
+	 * Sets a midlet, so that email and web addresses can be resolved by opening them in the native browser
+	 * @param midlet the midlet
+	 * @param cmdOpenWebsite the command for opening websites
+	 * @param cmdOpenMailto the command for opening mailto/email addresses
+	 * @param cmdCall the command for opening tel: numbers
+	 */
+	public static void setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto, Command cmdCall) {
 		HtmlTextEffect.midlet = midlet;
 		HtmlTextEffect.cmdOpenWebsite = cmdOpenWebsite;
 		HtmlTextEffect.cmdOpenMailto = cmdOpenMailto;
+		HtmlTextEffect.cmdCall = cmdCall;
 	}
 
 	
@@ -253,6 +269,8 @@ implements ItemCommandListener
 								Command cmd;
 								if (href.startsWith("mailto:")) {
 									cmd = cmdOpenMailto;
+								} else if (href.startsWith("tel:")) {
+										cmd = cmdCall;
 								} else {
 									cmd = cmdOpenWebsite;
 								}
@@ -399,7 +417,7 @@ implements ItemCommandListener
 
 	public void commandAction(Command cmd, Item item) {
 		String href = (String) item.getAttribute(ATTRIBUTE_HREF);
-		if ((href != null) && (midlet != null) && (cmd == cmdOpenWebsite || cmd == cmdOpenMailto)) {
+		if ((href != null) && (midlet != null) && (cmd == cmdOpenWebsite || cmd == cmdOpenMailto || cmd == cmdCall)) {
 			boolean shouldExit = false;
 			try {
 				shouldExit = midlet.platformRequest(href);

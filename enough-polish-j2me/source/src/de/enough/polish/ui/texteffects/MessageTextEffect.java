@@ -61,10 +61,21 @@ public class MessageTextEffect extends HtmlTextEffect {
 		addMarkup(new SurroundMarkup("*", "<b>", "</b>"));
 		addMarkup(new SurroundMarkup("/", "<i>", "</i>"));
 		addMarkup(new SurroundMarkup("_", "<div style=\"font-style: underlined;\">", "</div>"));
+		//#if ${exists(emoticon_smile.png)}
 		addMarkup(new ReplacementMarkup(":-)", "<img src=\"/emoticon_smile.png\"/>"));
+		//#endif
+		//#if ${exists(emoticon_cry.png)}
 		addMarkup(new ReplacementMarkup(":-(", "<img src=\"/emoticon_cry.png\"/>"));
+		//#endif
+		//#if ${exists(emoticon_frown.png)}
 		addMarkup(new ReplacementMarkup(":-/", "<img src=\"/emoticon_frown.png\"/>"));
+		//#endif
+		//#if ${exists(emoticon_wink.png)}
+		addMarkup(new ReplacementMarkup(";-/", "<img src=\"/emoticon_wink.png\"/>"));
+		//#endif
+		//#if ${exists(emoticon_laugh.png)}
 		addMarkup(new ReplacementMarkup(":-D", "<img src=\"/emoticon_laugh.png\"/>"));
+		//#endif
 	}
 	
 	/**
@@ -82,19 +93,34 @@ public class MessageTextEffect extends HtmlTextEffect {
 		MessageTextEffect.MARKUP_LIST.add( markup );
 	}
 	
+	//#if polish.LibraryBuild
 	/**
 	 * Sets a midlet, so that email and web addresses can be resolved by opening them in the native browser
 	 * @param midlet the midlet
 	 * @param cmdOpenWebsite the command for opening websites
 	 * @param cmdOpenMailto the command for opening mailto/email addresses
+	 * @param cmdCall the command for opening tel: numbers
 	 */
-	public static void setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto) {
-		HtmlTextEffect.setMidlet(midlet, cmdOpenWebsite, cmdOpenMailto);
+	public static void setMidlet(MIDlet midlet, javax.microedition.lcdui.Command cmdOpenWebsite, javax.microedition.lcdui.Command cmdOpenMailto, javax.microedition.lcdui.Command cmdCall) {
+		// no implementation
+	}
+	//#endif
+	
+	/**
+	 * Sets a midlet, so that email and web addresses can be resolved by opening them in the native browser
+	 * @param midlet the midlet
+	 * @param cmdOpenWebsite the command for opening websites
+	 * @param cmdOpenMailto the command for opening mailto/email addresses
+	 * @param cmdCall the command for opening tel: numbers
+	 */
+	public static void setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto, Command cmdCall) {
+		HtmlTextEffect.setMidlet(midlet, cmdOpenWebsite, cmdOpenMailto, cmdCall);
 		addMarkup( new PatternStartMarkup("www.", "<a href=\"http://@0\">", "</a>"));
 		//addMarkup( new PatternMiddleMarkup("@", "<a href=\"mailto:@0\">", "</a>"));
 		addMarkup( new EmailMarkup("<a href=\"mailto:@0\">", "</a>"));
 		addMarkup( new PatternStartMarkup("#", "<a href=\"http://twitter.com/#!/search?q=%23@0\">", "</a>", false));
 		addMarkup( new PatternStartMarkup("@", "<a href=\"http://twitter.com/#!/@0\">", "</a>", false));
+		addMarkup( new MsisdnMarkup("<a href=\"tel:@0\">", "</a>"));
 	}
 
 	/**
@@ -414,6 +440,58 @@ public class MessageTextEffect extends HtmlTextEffect {
 					}
 				}
 				atIndex = inputText.indexOf('@', endIndex);
+			}
+			return inputText;
+		}
+	}
+	
+	/**
+	 * A markup that surrounds a matching email address with a tag.
+	 * \@0 will be replaced with the surrounded email address  
+	 * Example:
+	 * <pre>
+	 * addMarkup( new EmailMarkup("&lt;a href=\"mailto:@0\"&gt;", "&lt;/a&gt;"))
+	 * </pre>
+	 */
+	public static class MsisdnMarkup implements Markup {
+		
+		private String openingTag;
+		private String closingTag;
+		
+		public MsisdnMarkup( String openingTag, String closingTag) {
+			this.openingTag = openingTag;
+			this.closingTag = closingTag;
+		}
+
+		public String convertMarkup(String inputText) {
+			int inputTextLength = inputText.length();
+			int startIndex = -1;
+			for (int charIndex = 0; charIndex < inputTextLength; charIndex++) {
+				char c = inputText.charAt(charIndex);
+				if ((startIndex == -1) && (c == '+') && (charIndex < inputTextLength-1) && (Character.isDigit(inputText.charAt(charIndex+1)))) {
+					startIndex = charIndex;
+					charIndex++;
+				} else if (Character.isDigit(c)) {
+					if (startIndex == -1) {
+						startIndex = charIndex;
+					}
+				} else if (startIndex != -1) {
+					if (charIndex - startIndex > 5) {
+						String msisdn = inputText.substring(startIndex, charIndex);
+						String open = TextUtil.replaceFirst(this.openingTag, "@0", msisdn);
+						inputText = inputText.substring(0, startIndex) + open + msisdn + this.closingTag + inputText.substring(charIndex);
+						int add = open.length() + this.closingTag.length();
+						charIndex += add;
+						inputTextLength += add;
+
+					}
+					startIndex = -1;
+				}
+			}
+			if ((startIndex != -1) && (inputTextLength - startIndex > 5)) {
+				String msisdn = inputText.substring(startIndex);
+				String open = TextUtil.replaceFirst(this.openingTag, "@0", msisdn);
+				inputText = inputText.substring(0, startIndex) + open + msisdn + this.closingTag;
 			}
 			return inputText;
 		}

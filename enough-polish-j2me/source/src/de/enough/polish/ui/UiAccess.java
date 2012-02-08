@@ -40,11 +40,7 @@ import de.enough.polish.util.HashMap;
  *    the screen changes its focus or another internal state (like changing a tab in the TabbedForm).
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2009</p>
- * <pre>
- * history
- *        31-Jan-2006 - rob creation
- * </pre>
+ * <p>Copyright (c) Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public final class UiAccess {

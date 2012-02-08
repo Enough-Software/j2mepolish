@@ -7,6 +7,7 @@
 	<h1 id="top">html Text-Effect</h1>
 	<ul class="relatedtechnologies">
 		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-texteffect-message.html">message Text Effect</a></li>
 		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
 		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
 		<li><a href="gui-item-stringitem.html">StringItem</a></li>
@@ -52,17 +53,36 @@ form.append(&quot;&lt;span class=\&quot;aboutHeader\&quot;&gt;FileExplorer&lt;/s
 }
 </pre>
 	<p>
-	The HTML support within this text effect is very, very basic:
+	Following HTML constructs are supported in this <code>text-effect</code>:
 	</p>
 	<ul>
 		<li><code>&lt;b&gt;</code>: makes your text <b>bold</b>.</li>
 		<li><code>&lt;i&gt;</code>: makes your text <i>italic</i>.</li>
+		<li><code>&lt;style&gt;</code>: allows you to specify inline styles that automatically inherit from the outside style, for example:
+			<code>
+			&lt;div style=&quot;color: red; font-style: underlined; background-color: silver;&quot;&gt;Hello World&lt;/div&gt;
+			</code>
+		</li>
+		<li><code>&lt;img&gt;</code>: adds a local image:
+		<code>
+		&lt;img src=&quot;/smile.png&quot;/&gt;
+		</code>
+		</li>
+		<li><code>&lt;a&gt;</code>: adds an external link, for that to work you need to programmatically set your <code>MIDlet</code>:
+		<code>
+		de.enough.polish.ui.texteffects.HtmlTextEffect.setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto, Command cmdCall);
+		</code>
+		</li>
 		<li><code>&lt;any class=&quot;styleName&quot;&gt;</code>: uses the specified style for the text. Note that you need to define
 		the <code>always-include: true;</code> within the referenced style, otherwise the style will be optimized away.</li>
 	</ul>
 	<p>
 	If you are using <code>class</code> styles within your text you can use any design settings in those style, including
 	other text effects.  See <a href="gui-item-stringitem.html">StringItems</a> for more details.
+	</p>
+	<p>
+	You can add your own tag parsing library by implementing <code>HtmlTextEffect.HtmlTextParser</code> and calling 
+	<code>HtmlTextEffect.setGlobalParser(HtmlTextParser parser)</code>.
 	</p>
 <!-- 
 <p>

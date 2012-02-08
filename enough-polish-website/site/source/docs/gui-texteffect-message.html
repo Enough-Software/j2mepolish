@@ -1,0 +1,116 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: message Text-Effect %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+	<h1 id="top">message Text-Effect</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-texteffect-html.html">html Text Effect</a></li>
+		<li><a href="gui-visualguide-texteffects.html">Other Text Effects</a></li>
+		<li><a href="extending-texteffect.html">Create Your Own Text-Effect</a></li>
+		<li><a href="gui-item-stringitem.html">StringItem</a></li>
+		<li><a href="gui-concepts.html">GUI Concepts</a></li>
+		<li><a href="gui-css-basics.html">CSS Basics</a></li>
+	</ul>
+	<%index %>
+	<p>
+	The message text-effect extends the <a href="gui-texteffect-html.html">html text-effect</a> and is optimized for messaging scenarios.
+	</p>
+	<h2 id="Message-Text-Effect-Design">Usage</h2>
+	<p>
+	<img src="<%= basedir%>images/gui-texteffect-message.png"  width="240" height="320" alt="the message text-effect" />
+	<img src="<%= basedir%>images/gui-texteffect-message-source.png"  width="240" height="320" alt="the message text-effect input" />
+	<br/>
+	The above screenshot can be done with following Java code:
+	</p>
+<pre>
+//#style messageOutput
+form.append( (&quot;&lt;div class=\&quot;messageFromMe\&quot;&gt;me:&lt;/div&gt; Hi J2ME Polish, what's up...?&quot;);
+//#style messageOutput
+form.append( (&quot;&lt;div class=\&quot;messageFromUser\&quot;&gt;j2mepolish:&lt;/div&gt; Hey, this is the new *message* text effect in &lt;div style=\&quot;color: red;\&quot;&gt;action&lt;/div&gt;.&quot;);
+//#style messageOutput
+form.append( &quot;&lt;div class=\&quot;messageFromMe\&quot;&gt;me:&lt;/div&gt; Cool! When will it be out?&quot;);
+//#style messageOutput
+form.append( (&quot;&lt;div class=\&quot;messageFromUser\&quot;&gt;j2mepolish:&lt;/div&gt; That's the /good part/, it's available now: www.j2mepolish.org.&quot;);
+//#style messageOutput
+form.append( &quot;&lt;div class=\&quot;messageFromMe\&quot;&gt;me:&lt;/div&gt; fan-tas-tic :-)&quot;);
+</pre>
+<p>Following CSS is used for styling the output:</p>
+<pre>
+.messageOutput {
+	<b>text-effect: message;</b>
+	font-color: fontColor; 
+	layout: vertical-center;
+}
+
+.messageFromMe {
+	always-include: true;
+	background-color: black;
+	font-color: white;
+	font-style: bold;
+	layout: vertical-center;
+}
+
+.messageFromUser extends messageFromMe {
+	background-color: red;
+}
+</pre>	
+	<h2 id="Message-Text-Effect-Syntax">Supported Syntax</h2>
+	<p>
+	Next to the html support of the underlying <a href="gui-texteffect-html.html">html text-effect</a>, the <code>message</code> effect supports following markups:
+	</p>
+	<ul>
+		<li><b>*bold*</b></li>
+		<li><i>/italic/</i></li>
+		<li><span style="text-decoration: underline;">_underlined_</span></li>
+		<li>:-), :-D, ;-), :-/ and :-( are translated into images with the names <i>emoticon_smile.png</i>, <i>emoticon_laugh.png</i>, <i>emoticon_wink.png</i>, <i>emoticon_frown.png</i>, <i>emoticon_cry.png</i> if they exist.</li>
+	</ul>
+	<p>
+	When you specify your <code>MIDlet</code> using <code>de.enough.polish.ui.texteffects.MessageTextEffect.setMidlet(MIDlet midlet, Command cmdOpenWebsite, Command cmdOpenMailto, Command cmdCall);</code>,
+	additionally following links will be automatically resolved:
+	</p>
+	<ul>
+		<li><b>www.*</b> web addresses, e.g. <code>www.enough.de</code></li>
+		<li><b>mail</b> email addresses, e.g. <code>j2mepolish@enough.de</code></li>
+		<li><b>phone</b> phone numbers, e.g. <code>+494219889131</code> or <code>04219889131</code></li>
+		<li><b>#keyword</b> twitter keywords, e.g. <code>#keyword</code></li>
+		<li><b>@user</b> twitter users, e.g. <code>@enoughsoftware</code></li>
+	</ul>
+	<h2 id="Message-Text-Effect-Programming">Programming</h2>
+	<p>
+	You can add any <code>MessageTextEffect.Markup</code> subclasses to extend the effect yourself. You can even remove the default markups by calling 
+	<code>MessageTextEffect.clearDefaultMarkups()</code> first.
+	</p>
+	<p>Some example code:</p>
+<pre>
+MessageTextEffect.addMarkup( new MessageTextEffect.SurroundMarkup(&quot;*&quot;, &quot;&lt;b&gt;&quot;, &quot;&lt;/b&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.SurroundMarkup(&quot;/&quot;, &quot;&lt;i&gt;&quot;, &quot;&lt;/i&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.SurroundMarkup(&quot;_&quot;, &quot;&lt;div style=\&quot;font-style: underlined;\&quot;&gt;&quot;, &quot;&lt;/div&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.ReplacementMarkup(&quot;:-)&quot;, &quot;&lt;img src=\&quot;/emoticon_smile.png\&quot;/&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.PatternStartMarkup(&quot;www.&quot;, &quot;&lt;a href=\&quot;http://@0\&quot;&gt;&quot;, &quot;&lt;/a&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.EmailMarkup(&quot;&lt;a href=\&quot;mailto:@0\&quot;&gt;&quot;, &quot;&lt;/a&gt;&quot;));
+MessageTextEffect.addMarkup( new MessageTextEffect.PatternStartMarkup(&quot;#&quot;, &quot;&lt;a href=\&quot;http://twitter.com/#!/search?q=%23@0\&quot;&gt;&quot;, &quot;&lt;/a&gt;&quot;, false));
+MessageTextEffect.addMarkup( new MessageTextEffect.PatternStartMarkup(&quot;@&quot;, &quot;&lt;a href=\&quot;http://twitter.com/#!/@0\&quot;&gt;&quot;, &quot;&lt;/a&gt;&quot;, false));
+MessageTextEffect.addMarkup( new MessageTextEffect.MsisdnMarkup(&quot;&lt;a href=\&quot;tel:@0\&quot;&gt;&quot;, &quot;&lt;/a&gt;&quot;));
+</pre>
+<!-- 
+<p>
+	Specific design attributes of the html text-effect:
+	</p>
+	<%cssattributes de.enough.polish.ui.texteffects.HtmlTextEffect %>
+ -->
+	
+		
+	<h2 id="Message-Text-Effect-JavaDoc">JavaDoc</h2>
+	<p>
+		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/texteffects/MessageTextEffect.html">MessageTextEffect</a>.
+	</p>
+
+	<h2 id="Message-Text-Effect-SampleApp">Sample App</h2>
+	<p>
+		You will find a sample application that uses the <code>message</code> text-effect in <i>${polish.home}/samples/messaging</i>.
+	</p>
+
+<%include end.txt %>

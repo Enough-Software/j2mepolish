@@ -1,0 +1,36 @@
+########################################################################################################
+#                                                                                                      #
+#  This file contains translations, use messages_de.txt, messages_en.txt etc to add further languages. #
+#  You can also use this to customize strings like the MIDlet-Name or MIDlet-Description for           #
+#  different apps.                                                                                     #
+#  Lines starting with a '#' are comments and will not be processed.                                   #
+#                                                                                                      #
+########################################################################################################
+
+# common commands:
+cmd.exit=Exit
+cmd.back=Back
+
+##############################
+# main menu list screen:
+##############################
+main.title=J2ME Polish
+
+##############################
+# about screen:
+##############################
+cmd.about=About
+about.title=About
+about.text=Copyright 2012 Enough Software\nIcons by http://www.tonygines.com.
+
+##############################
+# message screen:
+##############################
+message.title=Message Form
+cmd.message.send=Send
+cmd.message.showSource=Show source
+cmd.message.showParsed=Show message
+
+cmd.message.openWebsite=Go
+cmd.message.openMailto=Mail
+cmd.message.openCall=Call

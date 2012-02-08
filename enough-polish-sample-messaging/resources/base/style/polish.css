@@ -1,0 +1,308 @@
+/** 
+  * This polish.css file contains all
+  * design information about this project.
+  * It can be customized for specific devices
+  * or device groups by putting it in the 
+  * appropriate sub-folder or by using preprocessing.
+  *
+  * If you want to adjust a design for all
+  * Nokia devices, define it in "resources/Nokia/polish.css"
+  * and so on. Only new and different settings
+  * need to be specified in such polish.css files, this means that
+  * styles inherit all attributes of their "parent" style.
+  *
+  * For customizations of the base style, use 
+  * resources/customization1/polish.css, for example.
+  */
+
+/**
+  * the colors which are defined in
+  * the colors section can later be referenced.
+  * This makes changes easy, since the color
+  * just needs to be changed in one position.
+  * Even default colors (like blue, green, lime, etc)
+  * can be changed here. 
+  *
+  * Tip: use names that describe their meaning, not names that describe the color:
+  * Good name: backgroundColor
+  * Bad name:  lightGreen
+  * This allows you to change the design later onwards without ending up with
+  * color definitions like "lightGreen: red;".
+  */
+colors {
+	fontColor: #ccc;
+	focusedFontColor: #000;
+	bgColor:  #222;
+	focusedBgColor:  #ee4;
+	borderColor: fontColor;
+	focusedBorderColor: focusedFontColor;
+	
+	screenBackgroundColor: #333;	
+}
+
+/** 
+  * When you use the same background several times,
+  * you can design it in the backgrounds section.
+  * In this case only one instance of the background
+  * is used, which reduces the memory footprint.
+  */
+backgrounds {
+	/* sample:
+	screenBackground {
+		color: bgColor;
+		image: url( bg.png );
+		anchor: top | left;
+		top: menu;
+	}
+	*/
+}
+
+/** 
+  * When you use the same border several times,
+  * you can design it in the borders section.
+  * In this case only one instance of the border
+  * is used, which reduces the memory footprint.
+  */
+borders {
+	/* sample:
+	focusedBorder {
+		type: round-rect;
+		color: focusedBorderColor;
+	}
+	*/
+}
+
+
+
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles unless you specify a 'title-style' attribute within a screen style.
+  */
+title {
+	padding: 2px;
+	font-size: large;
+	font-style: bold;
+	font-color: fontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	layout: center | vertical-center | expand;
+	min-height: imageheight( busy01.png );
+}
+
+/*********************   MAIN MENU   ******************************************************************************************************/
+.screenMainMenu {
+	background-color: screenBackgroundColor;
+	layout: vertical-center;
+}
+
+.itemMainMenuEntry {
+	margin-left: 5%;
+	margin-right: 5%;
+	font-color: fontColor;
+	layout: expand | center;
+}
+
+.itemMainMenuEntry:hover {
+	background-color: focusedBgColor;
+	font-color: focusedFontColor;	
+}
+
+/*********************   MESSAGE FORM   ******************************************************************************************************/
+
+
+.screenMessage extends screenMainMenu {
+	title-style: screenMessageTitle;
+	menubar-style: screenMessageMenuBar;
+	layout: top | expand;
+}
+
+.screenMessageTitle {
+	layout: center | vertical-center | expand;
+	font-color: fontColor;
+	font-style: bold;
+	border {
+		type: bottom;
+		color: green;
+	}
+}
+
+.screenMessageMenuBar extends menubar {
+	border {
+		type: top;
+		color: green;
+	}
+}
+
+.messageOutput {
+	text-effect: message;
+	font-color: fontColor; 
+	layout: vertical-center;
+}
+
+.messageOutput:hover {
+	
+}
+
+.messageOutput:pressed {
+	background-color: #666;
+}
+
+.messageSource extends messageOutput {
+	text-effect: none; 
+}
+
+
+.messageInput {
+	font-color: bgColor;
+	background-color: fontColor;
+	padding: 2px;
+	layout: expand;
+}
+
+info {
+	layout: right;
+	font-color: fontColor;
+	background-color: bgColor;
+}
+
+.messageInput:hover {
+	background-color: white;
+}
+
+.messageFromMe {
+	always-include: true;
+	background-color: black;
+	font-color: white;
+	font-style: bold;
+	layout: vertical-center;
+}
+
+.messageFromUser extends messageFromMe {
+	background-color: red;
+}
+
+
+/*********************   ABOUT FORM   ******************************************************************************************************/
+
+.screenAbout extends screenMainMenu {
+	
+}
+
+.aboutText {
+	font-color: fontColor;
+	font-style: italic;
+}
+
+
+/*********************   SCROLL BAR   ******************************************************************************************************/
+/* You need to activate the scrollbar by setting the "polish.useScrollBar" variable to "true" in your build.xml script. */
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 3;
+	/*
+	when the scrollbar should be faded out when not used:
+	scrollbar-fadeout: true;
+	opacity: 80%;
+	*/
+}
+
+/*********************   BUSY INDICATOR   ******************************************************************************************************/
+.busyGauge {
+	padding-top: 9px;
+	padding-left: 1px;
+	view-type: gauge-images;
+	gauge-images-sources: busy01.png,busy02.png,busy03.png,busy04.png,busy05.png,busy06.png,busy07.png,busy08.png,busy09.png,busy10.png,busy11.png,busy12.png;
+	gauge-images-interval: 100;
+}
+
+
+/*********************   MENU BAR     *******************************************************************************************************/
+/* You need to activate the extended menubar that allows this finetuned design by setting the 
+   "polish.MenuBar.useExtendedMenuBar" variable to "true" in your build.xml script. */
+
+menubar
+{
+	padding-top: 3px;
+	padding: 2px;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2px;
+	margin-right: 2px;
+	min-width: 60%;
+	padding: 2px;
+	background {
+		type: round-rect;
+		color: bgColor;
+	}
+}
+
+/** Style for the first layer of subcommands: **/
+menu1 extends menu {
+	background-color: argb(150, 255, 255, 0 );
+	background-type: simple;
+      layout: right;
+      margin-bottom: 4px;
+      margin-right: 4px;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2px;
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: focusedBgColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+.menuItem:hover {
+	background-color: focusedBgColor;
+	font-color: focusedFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0px; /* default */
+	padding-top: 3px;
+	padding-bottom: 0px;
+	font-color: fontColor;
+	font-style: bold;
+	layout: left;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+
+
+
