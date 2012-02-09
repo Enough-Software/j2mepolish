@@ -36,7 +36,7 @@ import de.enough.polish.util.Locale;
 /**
  * <p>Shows RSS news feeds</p>
  *
- * <p>Copyright Enough Software 2007 - 2011</p>
+ * <p>Copyright Enough Software 2007 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class RssMidlet 
@@ -52,7 +52,7 @@ implements CommandListener, ApplicationInitializer
 	private Form browserScreen;
 	private RssBrowser rssBrowser;
 	private List mainMenu;
-	private String defaultRssUrl = "http://feeds.bbci.co.uk/news/technology/rss.xml";
+	private String defaultRssUrl = "http://feeds.bbc.co.uk/news/technology/rss.xml";
 	private Form settingsForm;
 	private StylingRssHandler rssTagHandler;
 	private boolean hasPointerEvents;
