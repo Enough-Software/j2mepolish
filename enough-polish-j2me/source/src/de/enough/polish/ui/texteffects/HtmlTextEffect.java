@@ -80,11 +80,11 @@ implements ItemCommandListener
 	private static Command cmdOpenWebsite;
 	private static Command cmdOpenMailto;
 	
-	private HtmlTextParser parser;
+	private transient HtmlTextParser parser;
 	private HtmlTextContainerView containerView;
 	private transient Item[] textItems;
 	private WrappedText storedWrappedText;
-	private StringItem parentStringItem;
+	private transient StringItem parentStringItem;
 	private static Command cmdCall;
 
 
