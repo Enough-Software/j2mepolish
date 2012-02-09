@@ -354,7 +354,7 @@ public class MidletBridge extends Activity {
 	
 	protected void onPause() {
 		//#debug
-		System.out.println("MidletBridge.onPause() for " + this);
+		System.out.println("MidletBridge.onPause() for " + this + ", isTaskRoot=" + isTaskRoot());
 		super.onPause();
 		if (!isTaskRoot()) {
 			return;

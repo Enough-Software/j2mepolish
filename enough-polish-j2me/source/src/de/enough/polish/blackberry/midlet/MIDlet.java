@@ -191,7 +191,7 @@ public abstract class MIDlet extends UiApplication
 	 */
 	public final void notifyPaused()
 	{
-		//TODO implement notifyPaused
+		UiApplication.getUiApplication().requestBackground();
 	}
 
 	/**

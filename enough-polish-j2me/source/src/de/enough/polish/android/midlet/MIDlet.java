@@ -212,9 +212,7 @@ public abstract class MIDlet
 	 * 
 	 */
 	public final void notifyPaused() {
-		//TODO: Trigger the lifecycle but do not call the lifecycle notification methods directly.
-		//TODO: hide this app, return to desktop
-//		onPause();
+		this._bridge.moveTaskToBack(true);
 	}
 
 	/**
