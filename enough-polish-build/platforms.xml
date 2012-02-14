@@ -220,6 +220,17 @@
 	</platform>
 
 	<platform>
+		<identifier>BlackBerry/7.1</identifier>
+		<parent>BlackBerry</parent>
+		<capability name="build.Obfuscator" value="" />
+		<capability name="build.BootClassPath" value="blackberry-7.1.0.jar" />
+		<capability name="build.BlackBerry.JDE-Version" value="7.1" />
+		<!-- key for opening/closing the menu -->
+		<capability name="key.Menu" value="268566528" />
+		<capability name="JavaPackage" value="location,wmapi,pdaapi,mmapi,jsr172, btapi,jsr234,jsr211,jsr238,jsr239,svg" />	
+	</platform>
+
+	<platform>
 		<identifier>DotNetCF/1.1</identifier>
 		<features>dotNetCF1.1</features>
 		<capability name="build.Finalizer" value="jar2dotnet" />

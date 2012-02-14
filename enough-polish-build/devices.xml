@@ -14482,7 +14482,17 @@ These namespaces/schemas will be used soon.
     <capability name="Bugs" value="ReservedKeywordSerializable" />
     <capability name="Bugs" value="ItemStateListenerCalledTooEarly" />
   </device>
- <device>
+  <device>
+    <identifier>BlackBerry/7.1</identifier>
+    <features>hasTrackballEvents, hasPointerEvents, hasTouchEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/7.1" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
+    <capability name="SoundFormat" value="amr, nb-amr" />
+    <capability name="Emulator.Skin" value="9900" />
+    <capability name="Bugs" value="ReservedKeywordSerializable" />
+    <capability name="Bugs" value="ItemStateListenerCalledTooEarly" />
+  </device>
+  <device>
     <identifier>BlackBerry/9780</identifier>
     <features>hasTrackballEvents</features>
     <capability name="ScreenSize" value="480x360" />

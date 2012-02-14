@@ -23,6 +23,6 @@
 	<classpathentry kind="lib" path="/enough-polish-build/import/nokia-ui.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/siemens-extension-api.jar"/>
 	<classpathentry kind="lib" path="/enough-polish-build/import/android-2.1.jar"/>
-	<classpathentry kind="lib" path="/enough-polish-build/import/blackberry-7.0.0.jar"/>
+	<classpathentry kind="lib" path="/enough-polish-build/import/blackberry-7.1.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
