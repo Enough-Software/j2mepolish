@@ -39,6 +39,7 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
 //#if polish.android
+import android.view.View;
 	import android.view.View.MeasureSpec;
 //#endif
 
@@ -80,6 +81,7 @@ import net.rim.device.api.ui.text.TextFilter;
 //#if polish.android
 import de.enough.polish.android.lcdui.AndroidDisplay;
 import de.enough.polish.android.lcdui.AndroidTextField;
+import de.enough.polish.android.lcdui.AndroidTextFieldImpl;
 import de.enough.polish.android.midlet.MidletBridge;
 //#endif
 
@@ -2016,6 +2018,16 @@ public class TextField extends StringItem
 		//#endif
 	}
 
+	//#if polish.android
+	/**
+	 * Creates the native Android implementation for the text input.
+	 * Subclasses may override this is to use custom classes. Note that the <code>polish.android</code> preprocessing symbol needs to be checked: <code>//#if polish.android</code>.
+	 * @return new AndroidTextFieldImpl(TextField.this) by default.
+	 */
+	protected AndroidTextField createNativeAndroidTextField() {
+		return new AndroidTextFieldImpl(TextField.this);
+	}
+	//#endif
 
 
 	/**
@@ -2049,8 +2061,9 @@ public class TextField extends StringItem
 						// remove existing view first:
 						AndroidDisplay.getInstance().onHide(TextField.this._androidView, TextField.this);
 					}
-					TextField.this._androidTextField = new AndroidTextField(TextField.this); 
-					TextField.this._androidView = TextField.this._androidTextField;
+					AndroidTextField nativeField = createNativeAndroidTextField();
+					TextField.this._androidTextField = nativeField; 
+					TextField.this._androidView = (View) nativeField;
 					if (TextField.this.isShown) {
 						AndroidDisplay.getInstance().onShow(TextField.this._androidView, TextField.this);
 					}
@@ -2635,7 +2648,7 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if polish.android
-			AndroidTextField nativeView = this._androidTextField;
+			View nativeView = this._androidView;
 			if (nativeView == null) {
 				this.contentWidth = availWidth;
 				this.contentHeight = getFontHeight();

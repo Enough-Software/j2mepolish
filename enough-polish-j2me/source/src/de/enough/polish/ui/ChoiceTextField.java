@@ -29,24 +29,21 @@ package de.enough.polish.ui;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
+
+//#if polish.android
+	import de.enough.polish.android.lcdui.AndroidAutoCompleteTextFieldImpl;
+	import de.enough.polish.android.lcdui.AndroidTextField;
+//#endif
 import de.enough.polish.util.TextUtil;
 
 /**
  * <p>Provides a TextField that provides the user with possible matches for the current input.</p>
  *
- * <p>Copyright Enough Software 2006 - 2009</p>
- * <pre>
- * history
- *        27-Feb-2006 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2006 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ChoiceTextField 
-//#if polish.LibraryBuild
-	extends FakeTextFieldCustomItem
-//#else
-	//# extends TextField 
-//#endif
+extends TextField 
 {
 
 	/** 
@@ -141,6 +138,12 @@ public class ChoiceTextField
 	public ChoiceTextField(String label, String text, int maxSize, int constraints, String[] availableChoices, boolean allowFreeTextEntry, boolean appendChoice, String appendChoiceDelimiter, Style style) {
 		super(label, text, maxSize, constraints, style);
 		this.choices = availableChoices;
+		//#if polish.android
+			if (availableChoices != null ) {
+				AndroidAutoCompleteTextFieldImpl autoCompleteView = (AndroidAutoCompleteTextFieldImpl)this._androidView;
+				autoCompleteView.setChoices(availableChoices);
+			}
+		//#endif
 		if (availableChoices != null) {
 			this.lowerCaseChoices = new String[ availableChoices.length ];
 			for (int i = 0; i < availableChoices.length; i++) {
@@ -163,6 +166,18 @@ public class ChoiceTextField
 			this.emailSeparatorChar = appendChoiceDelimiter.charAt(0);
 		}
 	}
+	
+	//#if polish.android
+	/**
+	 * Creates the native Android implementation for the text input.
+	 * Subclasses may override this is to use custom classes. Note that the <code>polish.android</code> preprocessing symbol needs to be checked: <code>//#if polish.android</code>.
+	 * @return new AndroidTextFieldImpl(TextField.this) by default.
+	 */
+	protected AndroidTextField createNativeAndroidTextField() {
+		return new AndroidAutoCompleteTextFieldImpl(this);
+	}
+	//#endif
+
 	
 	
 	
@@ -545,6 +560,7 @@ public class ChoiceTextField
 	}
 	
 	private void openChoices( boolean open ) {
+		//#if !polish.android
 		//#debug
 		System.out.println("open choices: " + open + ", have been opened already:" + this.isOpen);
 		this.choicesContainer.focusChild( -1 );
@@ -592,8 +608,10 @@ public class ChoiceTextField
 			}
 		}
 		this.isOpen = open;
+		//#endif
 	}
 
+	//#if !polish.android
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.TextField#paintContent(int, int, int, int, javax.microedition.lcdui.Graphics)
 	 */
@@ -605,6 +623,7 @@ public class ChoiceTextField
 			this.choicesContainer.paint(x, y, leftBorder, rightBorder, g);			
 		}
 	}
+	//#endif
 	
 
 	/* (non-Javadoc)
