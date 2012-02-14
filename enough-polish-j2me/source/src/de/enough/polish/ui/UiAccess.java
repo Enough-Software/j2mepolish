@@ -4310,6 +4310,7 @@ public final class UiAccess {
 		return null;
 	}
 	//#endif
+	
 	//#if polish.usePolishGui
 	/**
 	 * Casts the given J2ME Polish Displayable into a MIDP Displayable
@@ -4323,6 +4324,40 @@ public final class UiAccess {
 		//# Displayable
 	//#endif
 	cast(Displayable disp)
+	{
+		//#if polish.LibraryBuild
+			return null;
+		//#else
+			//# return disp;
+		//#endif
+	}
+	//#endif
+	
+	//#if polish.usePolishGui && polish.midp
+	/**
+	 * Casts the given MIDP Displayable into a J2ME Polish Displayable
+	 * @param disp the displayable
+	 * @return the casted displayable
+	 */
+	public static Displayable castDisplayable(javax.microedition.lcdui.Displayable disp)
+	{
+		return null;
+	}
+	//#endif
+	
+	//#if polish.usePolishGui
+	/**
+	 * Casts the given J2ME Polish Displayable into a MIDP Displayable
+	 * @param disp the displayable
+	 * @return the casted displayable
+	 */
+	public static 
+	//#if polish.LibraryBuild
+		javax.microedition.lcdui.Displayable
+	//#else
+		//# Displayable
+	//#endif
+	castDisplayable(Displayable disp)
 	{
 		//#if polish.LibraryBuild
 			return null;
@@ -4390,6 +4425,38 @@ public final class UiAccess {
 		//# Item 
 	//#endif
 	cast(Item item ) {
+		//#if polish.LibraryBuild
+			return null;
+		//#else
+			//# return item;
+		//#endif
+	}
+	//#endif
+	
+	//#if polish.usePolishGui && polish.midp
+	/**
+	 * Casts the given LCDUI item into a J2ME Polish item
+	 * @param item the LCDUI item
+	 * @return the corresponding J2ME Polish item, null when no cast is possible
+	 */
+	public static Item castItem( javax.microedition.lcdui.Item item ) {
+		return null;
+	}
+	//#endif
+
+	//#if polish.usePolishGui
+	/**
+	 * Casts the given J2ME Polish item into a LCDUI item
+	 * @param item the J2ME Polish item
+	 * @return the corresponding LCDUI item, null when no cast is possible
+	 */
+	public static
+	//#if polish.LibraryBuild
+		javax.microedition.lcdui.Item
+	//#else
+		//# Item 
+	//#endif
+	castItem(Item item ) {
 		//#if polish.LibraryBuild
 			return null;
 		//#else

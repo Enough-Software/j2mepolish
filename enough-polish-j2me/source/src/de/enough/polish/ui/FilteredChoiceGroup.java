@@ -32,22 +32,13 @@ import javax.microedition.lcdui.Image;
 /**
  * <p>Displays the currently selected item(s) and opens up a new FilteredList for selecting an element.</p>
  *
- * <p>Copyright Enough Software 2007 - 2010</p>
- * <pre>
- * history
- *        Jun 26, 2007 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  * @see FilteredList
  */
 public class FilteredChoiceGroup
-//#if polish.LibraryBuild
-	extends FakeStringCustomItem
-	implements javax.microedition.lcdui.Choice, CommandListener
-//#else
-	//# extends StringItem
-	//# implements Choice, CommandListener
-//#endif
+extends StringItem
+implements Choice, CommandListener
 {
 	/** Only a single option can be selected */
 	public final static int EXCLUSIVE = Choice.EXCLUSIVE;
