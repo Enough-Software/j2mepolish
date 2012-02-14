@@ -4601,6 +4601,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @param x the horizontal pixel position of the touch event relative to this item's left position
 	 * @param y  the vertical pixel position of the touch event relative to this item's top position
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchDown( int x, int y ) {
 		//#if polish.hasTouchEvents && polish.css.view-type
@@ -4620,6 +4621,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @param x the horizontal pixel position of the touch event relative to this item's left position
 	 * @param y  the vertical pixel position of the touch event relative to this item's top position
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchUp( int x, int y ) {
 		//#if polish.hasTouchEvents && polish.css.view-type

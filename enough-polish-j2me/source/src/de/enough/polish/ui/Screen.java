@@ -4981,7 +4981,7 @@ implements UiElement, Animatable
 	
 	//#ifdef polish.hasPointerEvents
 	/* (non-Javadoc)
-	 * @see javax.microedition.lcdui.Canvas#_pointerReleased(int, int)
+	 * @see javax.microedition.lcdui.Canvas#pointerReleased(int, int)
 	 */
 	public boolean _pointerReleased(int x, int y)
 	{
@@ -5226,6 +5226,7 @@ implements UiElement, Animatable
 	 * @param x the absolute horizontal pixel position of the touch event 
 	 * @param y  the absolute vertical pixel position of the touch event
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchDown( int x, int y ) {
 		boolean handled = false;
@@ -5266,6 +5267,7 @@ implements UiElement, Animatable
 	 * @param x the absolute horizontal pixel position of the touch event 
 	 * @param y  the absolute vertical pixel position of the touch event
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchUp( int x, int y ) {
 		boolean handled = false;

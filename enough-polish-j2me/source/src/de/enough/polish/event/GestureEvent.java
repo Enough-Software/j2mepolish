@@ -28,7 +28,7 @@ package de.enough.polish.event;
 /**
  * <p>Represents an recognized gesture.</p>
  *
- * <p>Copyright Enough Software 2009</p>
+ * <p>Copyright Enough Software 2009-2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class GestureEvent extends PointerEvent {

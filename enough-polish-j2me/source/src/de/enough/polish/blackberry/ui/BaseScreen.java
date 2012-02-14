@@ -447,6 +447,7 @@ public abstract class BaseScreen
 	 * @param x the absolute horizontal pixel position of the touch event 
 	 * @param y  the absolute vertical pixel position of the touch event
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchDown( int x, int y ) {
 		return false;
@@ -461,6 +462,7 @@ public abstract class BaseScreen
 	 * @param x the absolute horizontal pixel position of the touch event 
 	 * @param y  the absolute vertical pixel position of the touch event
 	 * @return true when the event was handled
+	 * @deprecated as BlackBerry used to differentiate between click and touch only on its first Storm model
 	 */
 	public boolean handlePointerTouchUp( int x, int y ) {
 		return false;
@@ -1158,25 +1160,29 @@ public abstract class BaseScreen
     	} else 
     	//#if polish.hasPointerEvents && polish.hasTouchEvents
     	if (event == TouchEvent.CLICK) {
-			pointerPressed( x, y );
+			//pointerPressed( x, y );
     		return true;
 		} else if (event == TouchEvent.UNCLICK) {
-			pointerReleased( x, y );
+			//pointerReleased( x, y );
     		return true;
-		} else if (event == TouchEvent.UP) {
-			if (handlePointerTouchUp(x, y)) {
-					invalidate();
-					return true;
-			} else {
-				return false;
-			}
 		} else if (event == TouchEvent.DOWN) {
-			if (handlePointerTouchDown(x, y)) {
-				invalidate();
-				return true;
-			} else {
-				return false;
-			}
+			pointerPressed( x, y );
+    		return true;
+//			if (handlePointerTouchDown(x, y)) {
+//				invalidate();
+//				return true;
+//			} else {
+//				return false;
+//			}
+		} else if (event == TouchEvent.UP) {
+			pointerReleased( x, y );
+			return true;
+//			if (handlePointerTouchUp(x, y)) {
+//					invalidate();
+//					return true;
+//			} else {
+//				return false;
+//			}
 		}
     	//#elif polish.hasPointerEvents && !polish.hasTouchEvents
     	if (event == TouchEvent.DOWN) {
