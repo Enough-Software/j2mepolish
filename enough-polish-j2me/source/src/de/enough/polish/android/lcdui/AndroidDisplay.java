@@ -861,6 +861,7 @@ implements NativeDisplay //, OnTouchListener
 	 */
 	public void callSerially(Runnable r) {
 		this.seriallyRunnables.add(r);
+		postInvalidate();
 	}
 	
 
