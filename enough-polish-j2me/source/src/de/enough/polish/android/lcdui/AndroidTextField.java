@@ -1,3 +1,4 @@
+//#condition polish.usePolishGui && polish.android
 package de.enough.polish.android.lcdui;
 
 import de.enough.polish.ui.Item;
