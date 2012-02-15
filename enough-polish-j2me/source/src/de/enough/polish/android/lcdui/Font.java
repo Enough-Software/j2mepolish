@@ -207,19 +207,19 @@ public final class Font extends Object
 			//#if polish.android.font.MediumFactor:defined
 				//#= factor = ${polish.android.font.MediumFactor}F;
 			//#else
-				factor = 1.0F;
+				factor = 1.2F;
 			//#endif
 		} else if (size == SIZE_SMALL) {
 			//#if polish.android.font.SmallFactor:defined
 				//#= factor = ${polish.android.font.SmallFactor}F;
 			//#else
-				factor = 0.8F;
+				factor = 0.9F;
 			//#endif
 		} else {
 			//#if polish.android.font.LargeFactor:defined
 				//#= factor = ${polish.android.font.LargeFactor}F;
 			//#else
-				factor = 1.7F;
+				factor = 1.8F;
 			//#endif
 		}
 		

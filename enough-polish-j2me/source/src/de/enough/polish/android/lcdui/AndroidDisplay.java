@@ -212,8 +212,8 @@ implements NativeDisplay //, OnTouchListener
 		//#define tmp.fullScreen
 	//#endif
 
-	private static final KeyEvent delKeyDownEvent = new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_DEL);
-	private static final KeyEvent delKeyUpEvent = new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_DEL);
+//	private static final KeyEvent delKeyDownEvent = new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_DEL);
+//	private static final KeyEvent delKeyUpEvent = new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_DEL);
 	
 	private static AndroidDisplay instance;
 
