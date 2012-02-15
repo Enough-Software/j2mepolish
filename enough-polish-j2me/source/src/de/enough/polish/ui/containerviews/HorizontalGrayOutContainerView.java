@@ -214,6 +214,12 @@ public class HorizontalGrayOutContainerView extends ContainerView {
 		//#endif
 	}	
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 }
 

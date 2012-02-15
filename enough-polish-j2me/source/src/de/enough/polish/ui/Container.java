@@ -4746,10 +4746,16 @@ public class Container extends Item {
 		//#endif
 	}
 	
+	/**
+	 * Scrolls this container so that its first item is visible.
+	 */
 	public void scrollToTop() {
 		setScrollYOffset(0, true);
 	}
 
+	/**
+	 * Scrolls this container so that its last item is visible.
+	 */
 	public void scrollToBottom() {
 		if (this.enableScrolling) {
 			if (!isInitialized()) {
@@ -4766,6 +4772,19 @@ public class Container extends Item {
 			((Container)this.parent).scrollToBottom();
 		}
 		
+	}
+
+	/**
+	 * Checks if this container arranges its child items vertically.
+	 * @return true when the layout is vertical, false when it is horizontal or complex
+	 */
+	public boolean isVerticalLayout() {
+		//#if tmp.supportViewType
+			if (this.containerView != null) {
+				return this.containerView.isVerticalLayout();
+			}
+		//#endif		
+		return true;
 	}
 	
 

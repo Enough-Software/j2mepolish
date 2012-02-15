@@ -227,7 +227,13 @@ public class CarouselContainerView extends FishEyeContainerView {
 	
 	
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 	
 	
 

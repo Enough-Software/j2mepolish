@@ -168,4 +168,12 @@ public class LeftHorizontalContainerView extends HorizontalContainerView {
 		return false;
 	}
 	//#endif
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 }

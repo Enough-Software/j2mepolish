@@ -2006,5 +2006,13 @@ extends ItemView
 		}
 		return h;
 	}
+	
+	/**
+	 * Checks if this ContainerView arranges its child items vertically.
+	 * @return true when the layout is vertical, false when it is horizontal or complex
+	 */
+	public boolean isVerticalLayout() {
+		return true;
+	}
 
 }

@@ -1112,6 +1112,12 @@ public class FishEyeContainerView extends ContainerView {
 	}
 	//#endif
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 	
 }

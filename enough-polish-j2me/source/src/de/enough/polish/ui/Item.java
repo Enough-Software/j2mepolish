@@ -821,7 +821,7 @@ public abstract class Item implements UiElement, Animatable
 		protected boolean preserveViewType;
 		protected boolean setView;
 	//#endif
-	//#if polish.supportInvisibleItems || polish.css.visible
+	//#if polish.supportInvisibleItems || polish.supportVisibility || polish.css.visible
 		//#define tmp.invisible
 		protected boolean isInvisible;
 		private int invisibleAppearanceModeCache;
@@ -5665,7 +5665,7 @@ public abstract class Item implements UiElement, Animatable
 	/**
 	 * Sets the visible status of this item.
 	 * Invisible items occupy no space on the UI screen and cannot be focused/traversed. 
-	 * Note that you can call this method ONLY when the preprocessing variable polish.supportInvisibleItems is true or when you use the CSS attribute 'visible' in your polish.css file.
+	 * Note that you can call this method ONLY when the preprocessing variable <code>polish.supportInvisibleItems</code> or <code>polish.supportVisibility</code> is true or when you use the CSS attribute '<code>visible</code>' in your polish.css file.
 	 * @param visible true when this item should become visible.
 	 */
 	public void setVisible( boolean visible ) {
@@ -5674,78 +5674,75 @@ public abstract class Item implements UiElement, Animatable
 		if (invisible == this.isInvisible) {
 			return;
 		}
-//		if (visible) {
-//			System.out.println("+++ SETTING VISIBLE: " + this );
-//		} else {
-//			System.out.println("--- SETTING INVISIBLE: " + this );
-//		}
 		if (this.parent instanceof Container) {
 			Container parentContainer = (Container) this.parent;
-			if (invisible && this.isFocused) {
-				//System.out.println("making focused item invisible: " + this);
-				// remove any item commands:
-				Screen scr = getScreen();
-				if (scr != null) {
-					scr.removeItemCommands(this);
-				}
-				int itemIndex = parentContainer.indexOf( this );
-				boolean isFocusSet = parentContainer.focusClosestItemAbove( itemIndex );
-				this.isFocused = false;
-				//System.out.println("new focus set: " + isFocusSet + ", new index=" + parentContainer.focusedIndex + ", this.index=" + itemIndex );
-				if (isFocusSet) {
-					if (parentContainer.focusedIndex > itemIndex ) {
-						// focused has moved downwards, since the above item is now invisible,
-						// adjust the scrolling accordingly:
-						int offset = parentContainer.yOffset + this.itemHeight + parentContainer.paddingVertical;
-						if (offset > 0) {
-							offset = 0;
+			if (parentContainer.isVerticalLayout()) {
+				if (invisible && this.isFocused) {
+					//System.out.println("making focused item invisible: " + this);
+					// remove any item commands:
+					Screen scr = getScreen();
+					if (scr != null) {
+						scr.removeItemCommands(this);
+					}
+					int itemIndex = parentContainer.indexOf( this );
+					boolean isFocusSet = parentContainer.focusClosestItemAbove( itemIndex );
+					this.isFocused = false;
+					//System.out.println("new focus set: " + isFocusSet + ", new index=" + parentContainer.focusedIndex + ", this.index=" + itemIndex );
+					if (isFocusSet) {
+						if (parentContainer.focusedIndex > itemIndex ) {
+							// focused has moved downwards, since the above item is now invisible,
+							// adjust the scrolling accordingly:
+							int offset = parentContainer.yOffset + this.itemHeight + parentContainer.paddingVertical;
+							if (offset > 0) {
+								offset = 0;
+							}
+							//System.out.println("setting parent scroll offset to " + offset );
+							parentContainer.setScrollYOffset( offset, false );
+						} else {
+							parentContainer.scroll( 0, parentContainer.focusedItem, true);
 						}
-						//System.out.println("setting parent scroll offset to " + offset );
+					} else {
+						parentContainer.focusChild(-1);
+					}
+					if (this instanceof Container) {
+						((Container)this).focusChild(-1);
+					}
+				} else if (!this.isFocused && parentContainer.focusedIndex > parentContainer.indexOf(this)) {
+					// adjust scrolling so that the focused element of the parent container stays in the current position:
+					int offset;
+					if (invisible) {
+						 offset = parentContainer.getScrollYOffset() + this.itemHeight;
+						 if (offset > 0) {
+							 offset = 0;
+						 }
+						//System.out.println("invisible: adjusting yScrollOffset with itemHeight=" + this.itemHeight + " to " + (offset > 0 ? 0 : offset) );
 						parentContainer.setScrollYOffset( offset, false );
 					} else {
-						parentContainer.scroll( 0, parentContainer.focusedItem, true);
-					}
-				} else {
-					parentContainer.focusChild(-1);
-				}
-				if (this instanceof Container) {
-					((Container)this).focusChild(-1);
-				}
-			} else if (!this.isFocused && parentContainer.focusedIndex > parentContainer.indexOf(this)) {
-				// adjust scrolling so that the focused element of the parent container stays in the current position:
-				int offset;
-				if (invisible) {
-					 offset = parentContainer.getScrollYOffset() + this.itemHeight;
-					 if (offset > 0) {
-						 offset = 0;
-					 }
-					//System.out.println("invisible: adjusting yScrollOffset with itemHeight=" + this.itemHeight + " to " + (offset > 0 ? 0 : offset) );
-					parentContainer.setScrollYOffset( offset, false );
-				} else {
-					int height = this.invisibleItemHeight;
-					if (height == 0 && this.parent != null) {
-						//System.out.println("visible getting height for available width of " + this.parent.contentWidth );
-						this.isInvisible = false;
-						setInitialized(false);
-						height = getItemHeight( this.parent.contentWidth, this.parent.contentWidth, this.parent.contentHeight );
-					} else {
-						this.itemHeight = height;
-					}
-					offset = parentContainer.getScrollYOffset() - height;
-					//System.out.println("visible: adjusting yScrollOffset with height=" + height + " to " + offset );					
-					parentContainer.setScrollYOffset( offset, false );						
-				}
-				// adjust the internal Y position:
-				Item parentItem = this;
-				while (parentItem != null) {
-					if (parentItem.internalX != NO_POSITION_SET) {
-						if (invisible) {
-							parentItem.internalY -= this.itemHeight;
+						int height = this.invisibleItemHeight;
+						if (height == 0 && this.parent != null) {
+							//System.out.println("visible getting height for available width of " + this.parent.contentWidth );
+							this.isInvisible = false;
+							setInitialized(false);
+							height = getItemHeight( this.parent.contentWidth, this.parent.contentWidth, this.parent.contentHeight );
 						} else {
-							parentItem.internalY += this.itemHeight;
+							this.itemHeight = height;
 						}
+						offset = parentContainer.getScrollYOffset() - height;
+						//System.out.println("visible: adjusting yScrollOffset with height=" + height + " to " + offset );					
+						parentContainer.setScrollYOffset( offset, false );						
 					}
-					parentItem = parentItem.parent;
+					// adjust the internal Y position:
+					Item parentItem = this;
+					while (parentItem != null) {
+						if (parentItem.internalX != NO_POSITION_SET) {
+							if (invisible) {
+								parentItem.internalY -= this.itemHeight;
+							} else {
+								parentItem.internalY += this.itemHeight;
+							}
+						}
+						parentItem = parentItem.parent;
+					}
 				}
 			} else if (parentContainer.focusedIndex == -1)
 			{
@@ -5753,7 +5750,7 @@ public abstract class Item implements UiElement, Animatable
 				{
 					//No other container is set to focused
 					//so it is ASSUMED that this is the only
-					//visisble item
+					//visible item
 					this.relativeY = 0;
 					parentContainer.setScrollYOffset(0);
 					parentContainer.focusChild(parentContainer.indexOf(this));

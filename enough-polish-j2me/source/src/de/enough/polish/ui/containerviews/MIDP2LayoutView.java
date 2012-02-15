@@ -541,4 +541,12 @@ extends ContainerView
 //                }
 //                return item;
     }
+    
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 }

@@ -723,6 +723,12 @@ public class ExclusiveSingleLineView extends ContainerView {
 		return (parent instanceof ChoiceGroup);
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 
 }

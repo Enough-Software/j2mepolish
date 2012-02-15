@@ -204,5 +204,13 @@ public class Midp2ContainerView extends ContainerView
 	public int getContentWidth() {
 		return this.contentWidth;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}
 
 }

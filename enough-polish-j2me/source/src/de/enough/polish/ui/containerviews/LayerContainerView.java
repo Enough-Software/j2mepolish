@@ -78,6 +78,12 @@ public class LayerContainerView extends ContainerView {
 		this.contentHeight = maxHeight;
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.ContainerView#isVerticalLayout()
+	 */
+	public boolean isVerticalLayout() {
+		return false;
+	}	
 
 }
