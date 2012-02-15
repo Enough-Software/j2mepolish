@@ -120,21 +120,23 @@ public class FileSystemRegistry extends java.lang.Object
         File[] files;
         try
         {
-            files=File.listRoots();
+            files = File.listRoots();
         }
-        catch(SecurityException e)
+        catch (SecurityException e)
         {
             throw e;                
         }
-        if(files==null)
+        if(files==null) {
             return null;
+        }
         
         Vector v=new Vector();
-        for(int i=0;i<files.length;i++)
+        for (int i=0; i<files.length; i++)
         {
             String name=files[i].getPath();
-            if(name!=null){                
-                v.addElement(name.trim());
+            if (name != null) {
+            	name = name.trim();
+                v.addElement(name);
             }   
         }                 
         return v.elements();

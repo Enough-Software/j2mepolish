@@ -22,7 +22,7 @@ import android.os.StatFs;
 public class FileConnectionImpl 
 implements FileConnection
 {
-    File file;  
+    File connectionFile;  
     String url;
 
     DataInputStream dis;
@@ -32,11 +32,15 @@ implements FileConnection
     OutputStream os;
 
     
-    public FileConnectionImpl(String url, int mode) // TODO wird mode gebraucht ?
+    public FileConnectionImpl(String url, int mode) 
     {
-        this.url=url;
-        String filename = url.substring("file://".length());
-        this.file = new File(filename);        
+        this.url = url;
+        String fileName = url.substring("file://".length());
+        System.out.println("opening file " + fileName);
+        if ("//".equals(fileName)) {
+        	fileName = "/";
+        }
+        this.connectionFile = new File(fileName);        
     }
 
     public long availableSize()
@@ -47,57 +51,81 @@ implements FileConnection
 
     public boolean canRead()
     {                
-        return this.file.canRead();
+        return this.connectionFile.canRead();
     }
 
     public boolean canWrite()
     {        
-        return this.file.canWrite();
+        return this.connectionFile.canWrite();
     }
 
     public void create() throws IOException
     {
-    	this.file.createNewFile();        
+    	this.connectionFile.createNewFile();        
     }
 
     public void delete() throws IOException
     {
-    	this.file.delete();        
+    	this.connectionFile.delete();        
     }
 
     public long directorySize(boolean includeSubDirs) throws IOException
     {
-        // TODO Auto-generated method stub
-        return 0;
+    	if (!this.connectionFile.isDirectory()) {
+    		throw new IOException(this.connectionFile.getAbsolutePath() + " is not a directory");
+    	}
+    	return directorySizeImpl(this.connectionFile, includeSubDirs);
     }
+    
+    private long directorySizeImpl(File rootDir, boolean includeSubDirs) throws IOException
+    {
+    	long size = 0;
+        File[] files = rootDir.listFiles();
+        if (files != null) {
+        	for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				if (file.isDirectory()) {
+					if (includeSubDirs) {
+						size += directorySizeImpl(file, includeSubDirs);
+					}
+				} else {
+					size += file.length();
+				}
+			}
+        }
+        return size;
+    }
+
 
     public boolean exists()
     {
-        return this.file.exists();
+        return this.connectionFile.exists();
     }
 
     public long fileSize() throws IOException
     {        
-        return this.file.length();
+        return this.connectionFile.length();
     }
 
     public String getName()
     {
-        String name=this.file.getName();
-        int l=name.lastIndexOf('/');
-        if(l==-1)
+        String name = this.connectionFile.getName();
+        int lastSlashIndex = name.lastIndexOf('/');
+        if(lastSlashIndex == -1) {
             return name;
-        name=name.substring(l);
+        }
+        name = name.substring(lastSlashIndex);
         return name;
     }
 
     public String getPath()
     {   
-        String path=this.file.getPath();
-        int i=path.lastIndexOf('/');
-        if(i==-1)
+        String path = this.connectionFile.getPath();
+        int lastSlashIndex = path.lastIndexOf('/');
+        if (lastSlashIndex == -1) {
             return path;
-        path=path.substring(0,i);
+        }
+        path = path.substring( 0, lastSlashIndex );
         return path;
     }
 
@@ -108,12 +136,12 @@ implements FileConnection
 
     public boolean isDirectory()
     {     
-        return this.file.isDirectory();
+        return this.connectionFile.isDirectory();
     }
 
     public boolean isHidden()
     {
-        return isHidden();
+        return this.connectionFile.isHidden();
     }
 
     public boolean isOpen()
@@ -126,28 +154,59 @@ implements FileConnection
 
     public long lastModified()
     {
-        return this.file.lastModified();
+        return this.connectionFile.lastModified();
     }
 
     public Enumeration list() throws IOException
     {
-        String[] files = this.file.list();        
-        Vector v=new Vector(files.length);
+    	File[] files = this.connectionFile.listFiles();
+    	if (files == null) {
+    		// file does not exist or is not a directory:
+    		throw new IOException( connectionFile.getAbsolutePath() + " does not exist or is not a directory.");
+    	}
+        Vector<String> vector = new Vector<String>(files.length);
         for (int i = 0; i < files.length; i++) {
-			v.addElement(files[i]);
+        	File childFile = files[i];
+        	if (childFile.isDirectory() || childFile.isHidden()) {
+        		continue;
+        	}
+			vector.addElement(childFile.getName());
 		}
-        return v.elements();
+        return vector.elements();
     }
 
-    public Enumeration list(String filter, boolean includeHidden) throws IOException
+    public Enumeration list(String filterString, boolean includeHidden) throws IOException
     {
-     // TODO Auto-generated method stub
-        return null;
+    	SimpleFileNameFilter filter = null;
+    	if ((filterString != null) && !("*".equals(filterString)) && !("".equals(filterString))) {
+    		filter = new SimpleFileNameFilter(filterString);
+    	}
+    	
+    	File[] files = this.connectionFile.listFiles();
+    	if (files == null) {
+    		// file does not exist or is not a directory:
+    		throw new IOException( connectionFile.getAbsolutePath() + " does not exist or is not a directory.");
+    	}
+        Vector<String> vector = new Vector<String>(files.length);
+        for (int i = 0; i < files.length; i++) {
+        	File childFile = files[i];
+        	if (!includeHidden && childFile.isHidden()) {
+        		continue;
+        	}
+        	if ((filter == null) || (filter.matches(childFile))) {
+    			String fileName = childFile.getName();
+    			if (childFile.isDirectory()) {
+    				fileName += "/";
+    			}
+				vector.addElement(fileName);
+        	}
+		}
+        return vector.elements();
     }
 
     public void mkdir() throws IOException
     {
-    	this.file.mkdir();        
+    	this.connectionFile.mkdir();        
     }
 
     public DataInputStream openDataInputStream() throws IOException
@@ -164,19 +223,19 @@ implements FileConnection
 
     public InputStream openInputStream() throws IOException
     {
-        this.is=new FileInputStream(this.file);
+        this.is=new FileInputStream(this.connectionFile);
         return this.is;
     }
 
     public OutputStream openOutputStream() throws IOException
     {
-        this.os=new FileOutputStream(this.file);
+        this.os=new FileOutputStream(this.connectionFile);
         return this.os;
     }
 
     public OutputStream openOutputStream(long byteOffset) throws IOException
     {
-    	RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
+    	RandomAccessFile raf = new RandomAccessFile(this.connectionFile, "rw");
     	raf.seek(byteOffset);
     	this.os = new RandomAccessFileOutputStream(raf);
         return this.os;
@@ -185,74 +244,141 @@ implements FileConnection
     public void rename(String newName) throws IOException
     {
         File newFile=new File(getPath(), newName);        
-        this.file.renameTo(newFile);                
+        this.connectionFile.renameTo(newFile);                
     }
 
     public void setFileConnection(String fileName) throws IOException
     {
-        // TODO Auto-generated method stub
+    	if (!this.connectionFile.isDirectory()) {
+			throw new IOException("not a directory: " + this.connectionFile.getAbsolutePath());    		
+    	}
+    	if ("..".equals(fileName)) {
+    		File parentFile = this.connectionFile.getParentFile();
+    		if (parentFile == null) {
+    			throw new IOException("cannot enter parent directory of " + this.connectionFile.getAbsolutePath());
+    		}
+    		this.connectionFile = parentFile;
+    	} else {
+    		File nextFile = new File( this.connectionFile, fileName);
+    		if (!nextFile.exists()) {
+    			throw new IllegalArgumentException(nextFile.getAbsolutePath() + " does not exist");
+    		}
+    		this.connectionFile = nextFile;
+    	}
         
     }
 
     public void setHidden(boolean hidden) throws IOException
     {
-        // TODO Auto-generated method stub
+        // can be ignored on Unix systems, instead a rename operation should be used
         
     }
 
     public void setReadable(boolean readable) throws IOException
     {
-        // TODO Auto-generated method stub
-        
+    	this.connectionFile.setReadable(readable);        
     }
 
     public void setWritable(boolean writable) throws IOException
     {
-        // TODO Auto-generated method stub
-        
+    	this.connectionFile.setWritable(writable);
     }
 
     public long totalSize()
     {
-        // TODO Auto-generated method stub
-        return 0;
+    	return this.connectionFile.getTotalSpace();
     }
 
     public void truncate(long byteOffset) throws IOException
     {
+//    	// flush any streams:
+//    	try {
+//	    	if (this.dos != null) {
+//	    		this.dos.flush();
+//	    	}
+//	    	if (this.os != null) {
+//	    		this.os.flush();
+//	    	}
+//    	} catch (Exception e) {
+//    		//#debug error
+//    		System.out.println("Unable to flush in FileConnection.truncate()" + e);
+//    	}
+//    	if (byteOffset >= this.connectionFile.length()) {
+//    		// cannot truncate after the file's end:
+//    		return;
+//    	}
+//    	if (byteOffset <= 0) {
+//    		throw new IllegalArgumentException("for byteOffset " + byteOffset );
+//    	}
+    	// Problem here is that we probably should conserve any streams, which in turn requires that we wrap our streams used here
+    	// This makes it somewhat more difficult to implement. As this method is deemed to be used only seldomly, we ignore it for now. 
+    	throw new IllegalStateException("not implemented");        
         // TODO Auto-generated method stub
         
     }
 
     public long usedSize()
     {
-        // TODO Auto-generated method stub
-        return 0;
+    	return this.connectionFile.getTotalSpace() - this.connectionFile.getFreeSpace();
     }
 
     public void close() throws IOException
     {
-        if(this.dos!=null)
+        if (this.dos!=null)
         {    
             this.dos.close();
-            this.dos=null;
+            this.dos = null;
         }
-        if(this.dis!=null)
+        if (this.dis!=null)
         {    
             this.dis.close();
             this.dis=null;
         }
-        if(this.os!=null)
+        if (this.os!=null)
         {    
             this.os.close();           
             this.os=null;
         }
-        if(this.is!=null)
+        if (this.is!=null)
         {    
             this.is.close();           
             this.is=null;
         }
     }
 
+    private static class SimpleFileNameFilter {
+    	private boolean hasAsteriskAtStart;
+    	private boolean hasAsteriskAtEnd;
+    	private String matchString;
+    	public SimpleFileNameFilter(String filterString) {
+    		// filter - String against which all files and directories are matched for retrieval. An asterisk ("*") can be used as a wildcard to represent 0 or more occurrences of any character.
+    		this.hasAsteriskAtStart = (	filterString.charAt(0) == '*'); 
+    		if (this.hasAsteriskAtStart) {
+    			filterString = filterString.substring(1);
+    		}
+    		this.hasAsteriskAtEnd = (filterString.charAt(filterString.length()-1) == '*');
+    		if (this.hasAsteriskAtEnd) {
+    			filterString = filterString.substring(0, filterString.length()-1);
+    		}
+    		this.matchString = filterString;
+    	}
+		public boolean matches(File file) {
+			String fileName = file.getName();
+			int pos = fileName.indexOf(this.matchString);
+			if (pos == -1) {
+				return false;
+			}
+			if (this.hasAsteriskAtStart && this.hasAsteriskAtEnd) {
+				return true;
+			}
+			if (this.hasAsteriskAtEnd && (pos == 0)) {
+				return true;
+			}
+			if (this.hasAsteriskAtStart && (pos == (fileName.length() - this.matchString.length()))) {
+				return true;
+			}
+			return false;
+		}
+    }
 
 }
