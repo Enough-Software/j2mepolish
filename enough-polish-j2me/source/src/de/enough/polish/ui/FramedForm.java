@@ -571,6 +571,9 @@ implements CycleListener
 		}
 		frame.screen = this;
 		frame.add( item );
+		if (isShown() && !frame.isShown) {
+			frame.showNotify();
+		}
 		if (isShown()) {
 			requestInit();
 		}
