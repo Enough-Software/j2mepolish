@@ -96,7 +96,11 @@ public class FieldItem extends Item {
 	 */
 	protected Style focus(Style newStyle, int direction) {
 		Style plainStyle = super.focus(newStyle, direction);
-		BaseScreenManager.getInstance().setFieldWithFocus(this._bbField);
+		//#if polish.JavaPlatform < BlackBerry/5.0
+			this._bbField.setFocus();
+		//#else
+			BaseScreenManager.getInstance().setFieldWithFocus(this._bbField);
+		//#endif
 		return plainStyle;
 	}
 
