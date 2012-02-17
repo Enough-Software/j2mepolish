@@ -25,7 +25,8 @@
 	</p>
 	<h3 id="gesture-click">Click Gesture</h3>
 	<p>
-		When tapping an item quickly, the default action for that item is triggered.
+		When tapping an item quickly, the default action for that item is triggered, on an <code>Item</code> that's typically the default command that you can specify with 
+		<code>item.setDefaultCommand(Command)</code>. 
 	</p>
 	<h3 id="gesture-hold">Hold Gesture</h3>
 	<p>
@@ -37,6 +38,9 @@
 <pre>
 &lt;variable name=&quot;polish.Item.ShowCommandsOnHold&quot; value=&quot;true&quot; /&gt;
 </pre>
+	<p>
+	Add item commands by calling <code>item.addCommand(Command)</code> on the corresponding items.
+	</p>
 	<h3 id="gesture-swipe">Swipe Right/Left Gesture</h3>
 	<p>
 		J2ME Polish also recognizes swipe left and swipe right touch gestures that you can use within your application easily. 
