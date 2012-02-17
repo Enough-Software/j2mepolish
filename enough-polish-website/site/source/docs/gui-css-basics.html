@@ -92,10 +92,11 @@ Pseudo styles are used to design UI elements in different states, e.g. when they
 and the pseudo style, for example <code>.myItem:hover</code> or <code>.myItem:pressed</code>. Pseudo styles inherit all settings of the basic element 
 There are a couple of pseudo styles available:
 </p>
-<ul>
-	<li><code>:hover</code> designs the focused state of the UI element. You should strive to keep the <code>:hover</code> state of a UI element the same
+<h4 id="hover">:hover</h4>
+<p><code>:hover</code> designs the focused state of the UI element. You should strive to keep the <code>:hover</code> state of a UI element the same
 	size as in the normal style, otherwise UI elements will seem to 'jump' around when moving the focus. Here's an example in which
 	we use a margin in the unfocused state to compensate for a border in the focused state: 
+</p>
 <pre>
 .mainMenuItem {
 	margin: 2px;
@@ -110,12 +111,13 @@ There are a couple of pseudo styles available:
 	border-width: 2px;
 }
 </pre>
-	</li>
-	<li><code>:pressed</code> defines the design for an element when it is pressed, meaning the user selects it by holding down a pointer or a key.
+<h4 id="pressed">:pressed</h4>
+<p><code>:pressed</code> defines the design for an element when it is pressed, meaning the user selects it by holding down a pointer or a key.
 	 Typically the <code>:pressed</code> style is applied when the element is already focused, so you either need to make sure that
 	 you copy the <code>:hover</code> settings manually or nest styles, like <code>.mainMenuItem:hover:pressed</code>. 
 	 This is not true for all cases, e.g. <a href="gui-screenelement-menubar.html">leftcommand</a> etc are never focused, but they have a 
 	 pressed style: <code>leftcommand:pressed</code>:
+</p>
 <pre>
 leftcommand {
 	font-style: bold;
@@ -137,9 +139,10 @@ middlecommand:pressed {
 	font-color: #fff;
 }
 </pre>
-	</li>
-	<li><code>:visited</code>. Use the <code>:visited</code> style for changing the design of a UI item after its default command has been
+<h4 id="visited">:visited</h4>
+<p><code>:visited</code>. Use the <code>:visited</code> style for changing the design of a UI item after its default command has been
 	triggered. Here's an example for links within the <a href="gui-item-browseritem.html">browser</a>:
+</p>
 <pre>
 .browserlink {
 	padding-left: 4%;
@@ -165,10 +168,11 @@ middlecommand:pressed {
 	font-color: #999;
 }
 </pre>
-	</li>
-	<li><code>:landscape</code> allows you to change the design for landscape screen orientations. 
+<h4 id="landscapeAndPortrait">:landscape and :portrait</h4>
+<p><code>:landscape</code> allows you to change the design for landscape screen orientations. 
 	This is useful for differentiating your design between portrait and landscape modes, e.g. displaying icon texts in landscape mode but
 	not in portrait mode:
+</p>
 <pre>
 .tabIcon {
 	margin: 1px;
@@ -214,9 +218,8 @@ middlecommand:pressed {
 	icon-image: url( TabFoc%INDEX%.png );
 }
 </pre>
-	</li>
-	<li><code>:portrait</code> works the same as <code>:landscape</code> pseudo styles, but only for portrait resolutions.</li>
-</ul>
+<p><code>:portrait</code> works the same as <code>:landscape</code> pseudo styles, but only for portrait resolutions.
+</p>
 <p>
 You can also nest pseudo styles, e.g. for designing the <code>:visited</code> style of <code>.myItem:hover</code> just define the style
 <code>.myItem:hover:visited</code>.
@@ -225,11 +228,22 @@ You can also nest pseudo styles, e.g. for designing the <code>:visited</code> st
 <br />
 <object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/pLrRMh2od94&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/pLrRMh2od94&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
 </p>
-<p>See the <code>:visisted</code> pseudo style here:
+<p>See the <code>:visited</code> pseudo style here:
 <br />
 <object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/II-ksR06jmc&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/II-ksR06jmc&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
 </p>
-
+<h3 id="locking-screen-orientation">Locking the Screen Orientation</h3>
+<p>
+This is a bit off-topic here, but it relates to landscape and portrait modes: <br/>
+You can lock the screen orientation on some devices using vendor specific JAD attributes. Define these attributes within the <code>&lt;jad&gt;</code> section in your <i>build.xml</i> script:
+</p>
+<pre>
+&lt;jad&gt;
+    &lt;attribute name=&quot;Nokia-MIDlet-App-Orientation&quot; value=&quot;portrait&quot; /&gt;   &lt;!-- Nokia --&gt;
+    &lt;attribute name=&quot;LGE-MIDlet-Display-Mode&quot; value=&quot;portrait&quot; /&gt;  &lt;!-- LG --&gt;
+    &lt;attribute name=&quot;MIDlet-ScreenMode&quot; value=&quot;Portrait&quot; /&gt; &lt;!-- Samsung --&gt;
+&lt;/jad&gt;
+</pre>
 
 <h2 id ="css-grouping">Grouping of Attributes</h2>
 <p>Attributes can be grouped for easier handling:
