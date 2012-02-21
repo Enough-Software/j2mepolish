@@ -331,7 +331,7 @@
 		<capability name="build.Android.Platform.Target" value="android-2" />
 		<capability name="build.Android.Platform.Api" value="2" />
 	    <capability name="IconSize" value="48x48" />
-	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE" />
 	</platform>
 	
 	<platform>
