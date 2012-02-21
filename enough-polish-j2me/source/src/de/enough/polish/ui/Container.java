@@ -3595,7 +3595,7 @@ public class Container extends Item {
 		if (nextItem != null && nextItem != item) {
 			int index = this.itemsList.indexOf(nextItem);
 			//#debug
-			System.out.println("Container.handlePointerPressed(" + relX + "," + relY + "): found item " + index + "=" + item + " at relative " + relX + "," + relY + ", itemHeight=" + item.itemHeight);
+			System.out.println("Container.handlePointerPressed(" + relX + "," + relY + "): found item " + index + "=" + nextItem + " at relative " + relX + "," + relY + ", itemHeight=" + nextItem.itemHeight);
 			// only focus the item when it has not been focused already:
 			int offset = getScrollYOffset();
 			focusChild(index, nextItem, 0, true);
