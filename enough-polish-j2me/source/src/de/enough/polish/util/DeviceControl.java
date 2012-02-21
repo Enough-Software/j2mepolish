@@ -19,17 +19,8 @@ package de.enough.polish.util;
 	
 /**
  * 
- * <p>Controls backlight and vibration in an device-independent manner</p>
- * <p>In order to use DeviceControl on dynamic devices such as Generic/AnyPhone or Generic/AnyMsaPhone, you need to add following keep elements to 
- *    the obfuscator section in the build.xml script:
- * </p>
- * <pre>
- * 	&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;cfg.debug || test&quot;&gt;
- *		&lt;keep class=&quot;de.enough.polish.util.devicecontrol.NokiaDeviceController&quot; /&gt;
- *		&lt;keep class=&quot;de.enough.polish.util.devicecontrol.SamsungDeviceController&quot; /&gt;
- *	&lt;/obfuscator&gt;
- * </pre> 
- * <p>Copyright Enough Software 2007 - 2011</p>
+ * <p>Controls backlight and vibration in an device-independent manner.</p>
+ * <p>Copyright Enough Software 2007 - 2012</p>
  * 
  * @author Andre Schmidt
  * @author Robert Virkus
@@ -285,7 +276,11 @@ public class DeviceControl
 	{
 		synchronized(vibrateLock) {
 			boolean isSupported = false;
-			//#if polish.api.nokia-ui && !polish.api.midp2
+			//#if polish.android
+				isSupported = true;
+			//#elif polish.blackberry
+				isSupported = net.rim.device.api.system.Alert.isVibrateSupported();
+			//#elif polish.api.nokia-ui && !polish.api.midp2
 				try {
 					com.nokia.mid.ui.DeviceControl.startVibra(0, 1);
 					isSupported = true;

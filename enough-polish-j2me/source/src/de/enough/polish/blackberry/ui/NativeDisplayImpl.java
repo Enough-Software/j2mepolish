@@ -52,7 +52,7 @@ import net.rim.device.api.ui.component.Dialog;
 /**
  * <p>Integrates native blackberry functions.</p>
  *
- * <p>Copyright Enough Software 2008</p>
+ * <p>Copyright Enough Software 2008 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class NativeDisplayImpl implements NativeDisplay
@@ -179,8 +179,11 @@ public class NativeDisplayImpl implements NativeDisplay
 	 */
 	public boolean vibrate(int duration)
 	{
-		// TODO robertvirkus implement vibrate
-		return false;
+		if (!net.rim.device.api.system.Alert.isVibrateSupported()) {
+			return false;
+		}
+		net.rim.device.api.system.Alert.startVibrate(duration);
+		return true;
 	}
 
 	public boolean notifyDisplayableChange(Displayable currentDisplayable, Displayable nextDisplayable) {

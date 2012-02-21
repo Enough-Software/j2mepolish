@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.Region.Op;
+import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -951,8 +952,12 @@ implements NativeDisplay //, OnTouchListener
 	 * @since MIDP 2.0
 	 */
 	public boolean vibrate(int duration) {
-		return false;
-		// TODO implement vibrate
+		Vibrator vibrator = (Vibrator) MidletBridge.getInstance().getSystemService(Context.VIBRATOR_SERVICE);
+		if (vibrator == null) {
+			return false;
+		}
+		vibrator.vibrate(duration);
+		return true;
 	}
 
 	/**
