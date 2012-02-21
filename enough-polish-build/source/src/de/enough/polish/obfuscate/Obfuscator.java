@@ -57,6 +57,11 @@ public abstract class Obfuscator extends Extension {
 	 * @see Environment#hasSymbol(String)
 	 */
 	public static final String SYMBOL_ENVIRONMENT_HAS_BEEN_OBFUSCATED = "polish.build.obfuscated";
+	/**
+	 * The name of the variable that can be accessed in Environment.getVariable().
+	 * It can contain a comma separated list of keep classes that should be preserved.
+	 */
+	public static final String VARIABLE_DYNAMIC_KEEP_CLASSES = "polish.buildcontrol.obfuscation.keep";
 	protected Project project;
 	protected LibraryManager libraryManager;
 	protected File libDir;

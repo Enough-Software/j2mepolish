@@ -1,4 +1,7 @@
 //#condition polish.optional-api.nokia-ui
+
+//#dontobfuscate
+
 /**
  * 
  */

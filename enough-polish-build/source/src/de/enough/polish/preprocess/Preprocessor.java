@@ -43,6 +43,7 @@ import de.enough.polish.BooleanEvaluator;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.PolishProject;
+import de.enough.polish.obfuscate.Obfuscator;
 import de.enough.polish.preprocess.css.AttributesGroup;
 import de.enough.polish.preprocess.css.ColorConverter;
 import de.enough.polish.preprocess.css.CssAttributesManager;
@@ -56,12 +57,8 @@ import de.enough.polish.util.TextFileManager;
 /**
  * <p>Preprocesses source code.</p>
  *
- * <p>Copyright Enough Software 2004 - 2011</p>
-
- * <pre>
- * history
- *        16-Jan-2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2012</p>
+ * 
  * @author Robert Virkus, robert@enough.de
  */
 public class Preprocessor {
@@ -95,7 +92,7 @@ public class Preprocessor {
 	public static final int SKIP_REST = 16;
 
 	public static final Pattern DIRECTIVE_PATTERN = 
-		Pattern.compile("\\s*(//#if\\s+|//#ifdef\\s+|//#ifndef\\s+|//#elif\\s+|//#elifdef\\s+|//#elifndef\\s+|//#else|//#endif|//#include\\s+|//#endinclude|//#style |//#debug|//#mdebug|//#enddebug|//#define\\s+|//#undefine\\s+|//#defineorappend\\s+|//#=\\s+|//#condition\\s+|//#message\\s+|//#todo\\s+|//#foreach\\s+|//#abort|//#skiprest)");
+		Pattern.compile("\\s*(//#if\\s+|//#ifdef\\s+|//#ifndef\\s+|//#elif\\s+|//#elifdef\\s+|//#elifndef\\s+|//#else|//#endif|//#include\\s+|//#endinclude|//#style |//#debug|//#mdebug|//#enddebug|//#define\\s+|//#undefine\\s+|//#defineorappend\\s+|//#=\\s+|//#condition\\s+|//#message\\s+|//#todo\\s+|//#foreach\\s+|//#abort|//#skiprest|//#dontobfuscate)");
 
 	private DebugManager debugManager;
 	private File destinationDir;
@@ -107,9 +104,9 @@ public class Preprocessor {
 	private boolean indent;
 	boolean enableDebug;
 	private String newExtension;
-	private HashMap withinIfDirectives;
-	private HashMap ignoreDirectives;
-	private HashMap supportedDirectives;
+	private HashMap<String,Boolean> withinIfDirectives;
+	private HashMap<String,Boolean> ignoreDirectives;
+	private HashMap<String,Boolean> supportedDirectives;
 	private int ifDirectiveCount;
 	//private BooleanEvaluator booleanEvaluator;
 	private StyleSheet styleSheet;
@@ -119,7 +116,7 @@ public class Preprocessor {
 				"System.(out|err).print(ln)?\\s*\\(" );
 
 	public static final String ENVIRONMENT_KEY = "Key_Preprocessor";
-	private HashMap preprocessQueue;
+	private HashMap<String,Boolean> preprocessQueue;
 	private TextFileManager textFileManager;
 	private CssAttributesManager cssAttributesManager;
 	private final Environment environment;
@@ -157,10 +154,10 @@ public class Preprocessor {
 		this.indent = indent;
 		this.newExtension = newExt;
 		this.destinationDir = destinationDir;
-		this.preprocessQueue = new HashMap();
+		this.preprocessQueue = new HashMap<String,Boolean>();
 		this.environment = environment;
 		
-		this.withinIfDirectives = new HashMap();
+		this.withinIfDirectives = new HashMap<String,Boolean>();
 		this.withinIfDirectives.put( "elifdef", Boolean.TRUE );
 		this.withinIfDirectives.put( "elifndef", Boolean.TRUE );
 		this.withinIfDirectives.put( "else", Boolean.TRUE );
@@ -169,11 +166,11 @@ public class Preprocessor {
 		this.withinIfDirectives.put( "endif", Boolean.TRUE );
 		this.withinIfDirectives.put( "debug", Boolean.TRUE );
 		this.withinIfDirectives.put( "mdebug", Boolean.TRUE );
-		this.ignoreDirectives = new HashMap();
+		this.ignoreDirectives = new HashMap<String,Boolean>();
 		this.ignoreDirectives.put( "endinclude", Boolean.TRUE );
 		this.ignoreDirectives.put( "", Boolean.TRUE );
 		this.ignoreDirectives.put( "=", Boolean.TRUE );
-		this.supportedDirectives = new HashMap();
+		this.supportedDirectives = new HashMap<String,Boolean>();
 		this.supportedDirectives.putAll( this.withinIfDirectives );
 		this.supportedDirectives.putAll( this.ignoreDirectives );
 		this.supportedDirectives.put( "if", Boolean.TRUE );
@@ -297,10 +294,10 @@ public class Preprocessor {
 	 * @throws BuildException when an invalid symbol is defined (currently only "false" is checked);
 	 * @deprecated use Environment for such settings now
 	 */
-	public void setSymbols(HashMap symbols) {
+	public void setSymbols(HashMap<String,Boolean> symbols) {
 		// check symbols:
-		Set keySet = symbols.keySet();
-		for (Iterator iter = keySet.iterator(); iter.hasNext();) {
+		Set<String> keySet = symbols.keySet();
+		for (Iterator<String> iter = keySet.iterator(); iter.hasNext();) {
 			String symbol = (String) iter.next();
 			if ("false".equals(symbol)) {
 				throw new BuildException("The symbol [false] must not be defined. Please check your settings in your build.xml, devices.xml, groups.xml and vendors.xml");
@@ -350,9 +347,9 @@ public class Preprocessor {
 	 * Sets the variables, any old settings will be lost.
 	 * 
 	 * @param variables the variables.
-	 * @deprecated use Evironment for such settings now
+	 * @deprecated use Environment for such settings now
 	 */
-	public void setVariables(HashMap variables) {
+	public void setVariables(HashMap<String,String> variables) {
 		this.environment.setVariables(  variables );
 		//this.booleanEvaluator.setEnvironment(this.symbols, variables);
 	}
@@ -387,7 +384,7 @@ public class Preprocessor {
 	 * @param additionalVars A map of additional variables.
 	 * @deprecated use environment.addVariables() instead
 	 */
-	public void addVariables( Map additionalVars ) {
+	public void addVariables( Map<String,String> additionalVars ) {
 		this.environment.getVariables().putAll(additionalVars);
 	}
 	
@@ -478,7 +475,7 @@ public class Preprocessor {
 			return list.getArray();
 		} else {
 			String[] lines = list.getArray();
-			ArrayList arrayList = new ArrayList( lines.length );
+			ArrayList<String> arrayList = new ArrayList<String>( lines.length );
 			for (int i = 0; i < lines.length; i++) {
 				String line = lines[i];
 				if ( !line.trim().startsWith( "//#" ) ) {
@@ -620,7 +617,7 @@ public class Preprocessor {
 		}
 		
 		if (spacePos == -1) { // directive has no argument
-			// only #debug and #mdebug can have no arguments:
+			// only #debug, #mdebug, #skiprest and #dontobfuscate can have no arguments:
 			if (trimmedLine.equals("//#debug")) {
 				boolean changed = processDebug( null, lines, className );
 				if (changed) {
@@ -635,6 +632,9 @@ public class Preprocessor {
 				} else {
 					return DIRECTIVE_FOUND;
 				}
+			} else if (trimmedLine.equals("//#dontobfuscate")) {
+				this.environment.addToVariable(Obfuscator.VARIABLE_DYNAMIC_KEEP_CLASSES, className);
+				return DIRECTIVE_FOUND;
 			} else if (trimmedLine.equals("//#skiprest")) {
 				return SKIP_REST;
 			}
@@ -1398,7 +1398,7 @@ public class Preprocessor {
 		}
 		
 		// the variable is defined, so the loop can be processed normally:
-		final ArrayList innerLinesList = new ArrayList();
+		final ArrayList<String> innerLinesList = new ArrayList<String>();
 		while (lines.next()) {
 			String line = lines.getCurrent();
 			String trimmedLine = line.trim();
@@ -1765,7 +1765,7 @@ public class Preprocessor {
 	 * @return all defined variables
 	 * @deprecated use environment.getVariable() instead
 	 */
-	public Map getVariables() {
+	public Map<String,String> getVariables() {
 		return this.environment.getVariables();
 	}
 	

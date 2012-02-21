@@ -2778,7 +2778,7 @@ public class PolishTask extends ConditionalTask {
 			String className = this.buildSetting.getMainClassSetting().getClassName(); 
 			addObfuscationPreserveClassName(className, preserveList);
 		}
-		String dynamicKeeps = this.environment.getVariable("polish.buildcontrol.obfuscation.keep");
+		String dynamicKeeps = this.environment.getVariable(Obfuscator.VARIABLE_DYNAMIC_KEEP_CLASSES);
 		if (dynamicKeeps != null) {
 			String[] names = StringUtil.splitAndTrim(dynamicKeeps, ',' );
 			for (int i = 0; i < names.length; i++) {
