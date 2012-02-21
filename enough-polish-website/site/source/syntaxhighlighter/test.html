@@ -1,0 +1,71 @@
+<?xml  version="1.0"  encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<meta name="description" content="J2ME Polish is an advanced build tool and GUI for J2ME applications." />
+	<meta name="author" content="Robert Virkus" />
+	<meta name="keywords" content="midlet, ant, tool, enough, robert, virkus, software, j2me, java, programming, programmierer, freiberufler, Germany, Deutschland, Bremen, Europe" />
+	
+		<title>J2ME Polish</title>
+	<link rel="Shortcut Icon" href="../images/favicon.gif" type="image/ico" />
+	<link href="../enough.css" rel="stylesheet" type="text/css" />
+	<link href="../mainmenu.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript" src="../niftycube/niftycube.js"></script>
+	
+	<!-- Include required JS files -->
+	<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+	 
+	<!--
+	    At least one brush, here we choose JS. You need to include a brush for every
+	    language you want to highlight
+	-->
+	<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushXml.js"></script>
+	 
+	<!-- Include *at least* the core style and default theme -->
+	<link href="../syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+	<link href="../syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+	 	 
+	<!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	
+	<body>
+	<h1>Test</h1>
+<p>	Hello World.</p>
+<pre class="brush: java">
+Result x = HelloThere();
+</pre>
+	
+	<pre class="brush: xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project basedir=&quot;.&quot; default=&quot;j2mepolish&quot; name=&quot;enough-polish-example&quot;&gt;
+
+	&lt;property  name=&quot;device&quot; value=&quot;Generic/AnyPhone&quot; /&gt;
+
+
+	&lt;property name=&quot;polish.home&quot; location=&quot;../enough-polish-build&quot; /&gt;
+
+	&lt;taskdef 
+		name=&quot;j2mepolish&quot;
+		classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+		classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar&quot; 
+	/&gt;
+
+		
+	&lt;target name=&quot;enableEmulator&quot;&gt;
+		&lt;property name=&quot;test&quot; value=&quot;true&quot;/&gt;
+	&lt;/target&gt;
+		
+	&lt;target name=&quot;deploy&quot;&gt;
+		&lt;property name=&quot;deploy-url&quot; value=&quot;http://193.22.164.185:8080/&quot;/&gt;
+	&lt;/target&gt;
+			
+	&lt;target name=&quot;init&quot;&gt;
+	  	&lt;property name=&quot;test&quot; value=&quot;false&quot;/&gt;
+		&lt;property name=&quot;deploy-url&quot; value=&quot;&quot;/&gt;
+	&lt;/target&gt;
+	</pre>
+	
+	</body>
+</html>

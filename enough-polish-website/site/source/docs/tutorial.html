@@ -1,303 +1,960 @@
-<%define inIntroductionSection %>
-<%define inIntroductionSection.tutorial %>
-<%set title = J2ME Polish: Tutorial %>
+<%define inDocumentationSection %>
+<%define inDocumentationSection.tutorial %>
+<%set title = J2ME&nbsp;Polish: Tutorial %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
+
 
 	<h1 id="top">Tutorial</h1>
+
+		
+	<ul class="relatedtechnologies">
+	<li class="relatedtechnologiesheader">Related Topics:</li>
+	<li><a href="../lush/index.html">Lush (UI)</a></li>
+	<li><a href="../janus/index.html">Janus (Porting)</a></li>
+	<li><a href="../touch/index.html">Touch (Client Server)</a></li>
+	<li><a href="../trunk/index.html">Trunk (Persistence)</a></li>
+	<li><a href="../marjory/index.html">Marjory (Device Database)</a></li>
+	<li><a href="gui-visualguide.html">Visual Guide</a></li>
+	</ul>
+
+	<p>	<img alt="Lush" src="../images/lush.png" width="567" height="400" align="right"/>
+	</p>
 	<%index %>
-	<p>This page introduces to some of the possibilities of J2ME Polish.
-	When you want to know specific details, please refer to the 
-	<a href="../documentation.html">documentation</a>.
+	
+	<p>
+	This tutorial creates a simple app for J2ME, BlackBerry and Android devices. It covers the installation, implementation and design of mobile apps with J2ME&nbsp;Polish.
+	For detailed information, please refer to the <a href="../documentation.html">documentation</a> section.
 	</p>
 	<h2 id="install">Installation</h2>
 	<p>
-	J2ME Polish contains a graphical installer which can be started by double-clicking 
-	the downloaded jar-File  or by calling &quot;java -jar j2mepolish-[VERSION].jar&quot;
-	 from the command line, e.g. &quot;java -jar j2mepolish-1.1.jar&quot;.
+	J2ME&nbsp;Polish contains a graphical installer which can be started by double-clicking 
+	the downloaded jar-File  or by calling <code>java -jar j2mepolish-[VERSION].jar</code>
+	 from the command line, e.g. &quot;java -jar j2mepolish-2.3.jar&quot;.
 	</p>
-<p>Find more information about the installation at following location:</p>
-<ul>
- <li><a href="install.html">Installation &amp; IDE Integration of J2ME Polish</a></li>
-</ul>
-	<h2 id="sample">An Example Application</h2>
+	<p>
+	Since J2ME&nbsp;Polish includes the <a href="http://microemu.org" target="_blank">MicroEmulator</a>, you don't need any additional installations for starting with J2ME&nbsp;Polish (apart
+	from a Java SDK and an Ant installation).
+	It is, however, useful to install the Java ME SDK, the BlackBerry JDEs and Android SDK.
+	Find more information in the <a href="install.html">Installation</a> section and the <a href="platform.html">platforms</a> documentation.
+	</p>
+	<h2 id="overview">J2ME&nbsp;Polish from 20,000 miles</h2>
+	<p>
+	J2ME&nbsp;Polish can be a complex beast, but the basics are simple:
+	</p>
+	<ul>
+	<li>J2ME&nbsp;Polish consists of 3 parts:
+		<ol>
+		<li><b>client libraries</b> that contain UI classes, helper classes, serialization &amp; persistence and many more.</li>
+		<li><b>build framework</b> that is based on <a href="http://ant.apache.org" target="_blank">Apache Ant</a> and that compiles sourcecode, includes resources and creates apps.</li>
+		<li><b>device database</b> that is XML based and contains the definition of devices, vendors, APIs and more.</li>
+		</ol>
+	</li>
+	<li>Your app is based on a Java ME / J2ME / MIDP <code>javax.microedition.midlet.MIDlet</code>.</li>
+	<li>You select your target devices in your <i>build.xml</i> script.</li>
+	<li>J2ME&nbsp;Polish will produce a JAR/JAD or COD/JAD or APK for each target device.</li>
+	<li>You can adjust the design of your app using CSS syntax, by default located in the <i>resources/polish.css</i>.</li>
+	<li>You can customize your app for different devices and platforms by using <code>preprocessing code</code>.</li>
+	</ul>
+	
+	<h2 id="sample">A Sample App</h2>
 <p>
-For this introduction we use a simple application as an example. The application just shows a simple menu which is typical for many J2ME applications (see listing 1). This is the sample application which is included into the J2MEPolish distribution. 
-<br/><br/><b>Listing1: MenuMidlet.java</b>
-<pre>
-public class MenuMidlet extends MIDlet {
-
-List menuScreen;
-
-public MenuMidlet() {
- super();
- System.out.println("starting MenuMidlet");
- this.menuScreen = new List("J2ME Polish", List.IMPLICIT);
- this.menuScreen.append("Start game", null);
- this.menuScreen.append("Load game", null);
- this.menuScreen.append("Help", null);
- this.menuScreen.append("Quit", null);
- this.menuScreen.setCommandListener(this);
- System.out.println("intialisation done.");
-}
-
-protected void startApp() throws MIDletStateChangeException {
- System.out.println("setting display.");
- Display.getDisplay(this).setCurrent( this.menuScreen );
-}
-[...]
-</pre>
+Let's create a cool app. By cool app we mean a simplistic menu that also supports the rendering of a busy indicator upon any page.
+For the architecture of the app we use a simple model-view-control pattern in which the view and its control are coupled - 
+meaning that the controller is specialized for the current UI. In a mobile context this is not really a disadvantage as the UI flow is often completely different when switching to another 
+form factor or platform such as tablet computers. So we strife to reuse the model classes but we optimize the view and control for the target devices. 
 </p>
+<p>
+By the way, this is the <code>blank</code> sample app that you can find in <i>${polish.home}/samples/blank</i> after installing J2ME&nbsp;Polish, so there is no need to copy these classes.
+</p>
+<p>
+The <code>MIDlet</code> itself just forwards control to the controller: 
+<br/><br/><b>Listing 1: de.enough.polish.app.App.java</b>
+</p>
+<pre class="brush: java">
+package de.enough.polish.app;
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+import de.enough.polish.app.control.Controller;
+
+/**
+ * A simple MIDlet that can be used as a starting point for your own apps.
+ */
+public class App 
+extends MIDlet
+{
+	
+    private Controller controller;
+	
+    public App() {
+        // nothing to init
+    }
+
+    protected void startApp(){
+    	if (this.controller == null) {
+    		this.controller = new Controller( this );
+    		this.controller.appStart();
+    	} else {
+    		this.controller.appContinue();
+    	}
+    }
+    
+    protected void pauseApp() {
+        this.controller.appPause();
+    }
+
+    protected void destroyApp(boolean unconditional) throws MIDletStateChangeException {
+        this.controller = null;
+    }
+
+    public void exit() {
+        try {
+            destroyApp(true);
+        } catch (MIDletStateChangeException e) {
+            //#debug error
+            System.out.println("Unable to destroyApp" + e);
+        }
+        notifyDestroyed();
+    }
+}
+</pre>
+<p>
+The controller controls the life cycle of the app and is responsible for consuming the events and showing new screens.
+</p>
+<p>
+<div class="note">
+There are different opinions about the correct architecture for mobile MIDlets and they mostly center around the question how events should be consumed.
+<ul>
+<li>If you have a user drive app, you should <b>not</b> create an artificial event mechanism, but instead concentrate on a a <code>javax.microedition.lcdui.Command</code> driven architecture.</li>
+<li>When you have both user driven and background events that yield into the very same operations as UI events, you can consider creating an artificial event layer that abstracts both 
+<code>Commands</code> and <code>background events</code>.</li>
+<li>In most cases you should not create an artificial event layer, but consume events directly. Normally you should consume <code>Command</code> events as quickly as possible, as you will block UI operations otherwise. 
+With J2ME&nbsp;Polish you can set the <code>polish.executeCommandsAsynchrone</code> variable in your <i>build.xml</i> script to true, so that <code>Command</code> events run in a separate thread: 
+<br/>&lt;variable name=&quot;polish.executeCommandsAsynchrone&quot; value=&quot;true&quot; /&gt;
+</li>
+<li class="noteDont">Whatever you do, do not handle low level events such as key or pointer events unless you really need to. Talking about touch events, J2ME&nbsp;Polish also contains support
+for <a href="gui-touchsupport.html">touch gestures</a>.</li>
+</ul>
+</div>
+</p>
+<p>
+<br/><br/><b>Listing 2: de.enough.polish.app.control.Controller.java</b>
+</p>
+<pre class="brush: java">
+package de.enough.polish.app.control;
+
+import java.io.IOException;
+
+import javax.microedition.lcdui.Image;
+
+
+import de.enough.polish.app.App;
+import de.enough.polish.app.model.Configuration;
+import de.enough.polish.app.view.MainMenuList;
+import de.enough.polish.io.RmsStorage;
+import de.enough.polish.ui.Command;
+import de.enough.polish.ui.CommandListener;
+import de.enough.polish.ui.Display;
+import de.enough.polish.ui.Displayable;
+import de.enough.polish.ui.Gauge;
+import de.enough.polish.ui.ScreenInfo;
+import de.enough.polish.ui.SimpleScreenHistory;
+import de.enough.polish.ui.splash2.ApplicationInitializer;
+import de.enough.polish.ui.splash2.InitializerSplashScreen;
+import de.enough.polish.util.Locale;
+
+/**
+ * Controls the UI of the mobile app
+ */
+public class Controller
+implements ApplicationInitializer, CommandListener
+{
+
+	private final App midlet;
+	private Display display;
+	private Configuration configuration;
+	private RmsStorage storage;
+	
+	private Command cmdExit = new Command(Locale.get(&quot;cmd.exit&quot;), Command.EXIT, 10);
+	private Command cmdBack = new Command(Locale.get(&quot;cmd.back&quot;), Command.BACK, 2);
+	
+	private MainMenuList screenMainMenu;
+	private static final int MAIN_ACTION_START = 0;
+	private static final int MAIN_ACTION_STOP = 1;
+	private static final int MAIN_ACTION_ABOUT = 2;
+	private static final int MAIN_ACTION_EXIT = 3;
+	
+	private SimpleScreenHistory screenHistory;
+	private int busyIndicators;
+	
+	
+
+	/**
+	 * Creates a new controller.
+	 * @param midlet the main application
+	 */
+	public Controller(App midlet) {
+		this.midlet = midlet;
+		this.display = Display.getDisplay(midlet);
+		this.screenHistory = new SimpleScreenHistory(this.display);
+	}
+
+	/**
+	 * Lifecycle: starts the application for the first time.
+	 */
+	public void appStart() {
+		String splashUrl = &quot;/Splash.png&quot;;
+		Image splashImage = null;
+		try {
+			splashImage = Image.createImage(splashUrl);
+		} catch (Exception e) {
+			//#debug error
+			System.out.println(&quot;Unable to load splash image &quot; + splashUrl +  e);
+		}
+		int backgroundColor = 0xffffff;
+		InitializerSplashScreen splash = new InitializerSplashScreen(splashImage, backgroundColor,  this);
+		this.display.setCurrent( splash );
+	}
+
+	/**
+	 * Lifecycle: pauses the application, e.g. when there is an incoming call.
+	 */
+	public void appPause() {
+		// TODO implement pauseApp, e.g. stop streaming
+	}
+
+	/**
+	 * Lifecycle: continues the application after it has been paused.
+	 */
+	public void appContinue() {
+		// TODO implement continueApp, e.g. start streaming again
+	}
+
+	/**
+	 * Initializes this application in a background thread that is called from within the splash screen.
+	 */
+	public void initApp() {
+		long initStartTime = System.currentTimeMillis();
+		//#style busyGauge
+		Gauge busyGauge = new Gauge(null, false, Gauge.INDEFINITE, Gauge.CONTINUOUS_RUNNING );
+		ScreenInfo.setItem(busyGauge);
+		ScreenInfo.setVisible(false);
+		
+		this.storage = new RmsStorage();
+		this.configuration = configurationLoad();
+		// create main menu:
+		this.screenMainMenu = createMainMenu();
+		long currentTime = System.currentTimeMillis();
+		long maxTime = 1500;
+		if (currentTime - initStartTime &lt; maxTime) { // show the splash at least for 1500 ms:
+			try {
+				Thread.sleep(maxTime - currentTime + initStartTime);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+		}
+		this.display.setCurrent( this.screenMainMenu );
+	}
+
+	private MainMenuList createMainMenu() {
+		MainMenuList list = new MainMenuList();
+		list.setCommandListener(this);
+		list.addCommand(this.cmdExit);
+		list.addEntry(&quot;Start Busy Indicator&quot;);
+		list.addEntry(&quot;Stop Busy Indicator&quot;);
+		list.addEntry(&quot;entry 3&quot;);
+		list.addEntry(Locale.get(&quot;cmd.exit&quot;));
+		return list;
+	}
+
+	/**
+	 * Loads the configuration of this app.
+	 * @return the loaded configuration or an new one.
+	 */
+	private Configuration configurationLoad() {
+		try {
+			Configuration cfg = (Configuration) this.storage.read(Configuration.KEY);
+			return cfg;
+		} catch (IOException e) {
+			//#debug info
+			System.out.println(&quot;Unable to load configuration&quot; + e);
+		}
+		return new Configuration();
+	}
+
+	/**
+	 * Persists the configuration.
+	 * @return true when saving was successful, otherwise false is returned.
+	 */
+	private boolean configurationSave() {
+		try {
+			this.storage.save(this.configuration, Configuration.KEY);
+			return true;
+		} catch (IOException e) {
+			//#debug error
+			System.out.println(&quot;Unable to store the configuration&quot; + e);
+			return false;
+		}
+	}
+
+	public void commandAction(Command cmd, Displayable disp) {
+		if (cmd == this.cmdExit) {
+			exit();
+		} else if (disp == this.screenMainMenu) {
+			if (handleCommandMainMenu(cmd)) {
+				return;
+			}
+		} else if (cmd == this.cmdBack) {
+			if (this.screenHistory.hasPrevious()) {
+				this.screenHistory.showPrevious();
+			} else {
+				this.screenHistory.clearHistory();
+				this.display.setCurrent(this.screenMainMenu);
+			}
+		}
+		
+	}
+
+	/**
+	 * Handles commands for the main menu
+	 * @param cmd the command of the main menu
+	 * @return true when a command was handled
+	 */
+	private boolean handleCommandMainMenu(Command cmd) {
+		if (cmd == MainMenuList.SELECT_COMMAND) {
+			int index = this.screenMainMenu.getSelectedIndex();
+			switch (index) {
+			case MAIN_ACTION_START:
+				startBusyIndicator();
+				break;
+			case MAIN_ACTION_STOP:
+				stopBusyIndicator();
+				break;
+			case MAIN_ACTION_ABOUT:
+				break;
+			case MAIN_ACTION_EXIT:
+				exit();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Exits this app
+	 */
+	private void exit() {
+		if (this.configuration.isDirty()) {
+			configurationSave();
+		}
+		this.midlet.exit();
+	}
+	
+	/**
+	 * Stops the busy indicator.
+	 * When no busy indicators are left, the busy indicator won't be shown any more.
+	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
+	 * &lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
+	 * in your build.xml script.
+	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
+	 * @see #startBusyIndicator()
+	 */
+	private synchronized void stopBusyIndicator() {
+		if (this.busyIndicators &gt; 0) {
+			this.busyIndicators--;
+			if (this.busyIndicators == 0) {
+				ScreenInfo.setVisible(false);
+			}
+		}
+		//#debug
+		System.out.println(&quot;stop busy indicator: Number of busy indicators: &quot; + this.busyIndicators);
+	}
+
+	/**
+	 * Starts the busy indicator.
+	 * When this is the first indicator, the busy indicator will be made visible.
+	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
+	 * &lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
+	 * in your build.xml script.
+	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
+	 * @see #stopBusyIndicator()
+	 * @see #initApp() for initialization of the gauge
+	 */
+	private synchronized void startBusyIndicator() {
+		if (this.busyIndicators == 0) {
+			ScreenInfo.setVisible(true);
+		}
+		this.busyIndicators++;
+		//#debug
+		System.out.println(&quot;start busy indicator: Number of busy indicators: &quot; + this.busyIndicators);
+	}
+}
+</pre>
+<p>
+In the above code we use some more features of J2ME&nbsp;Polish: 
+</p>
+<ol>
+<li><a href="localization.html">Localization</a> allows you both to customize and internationalize your app quickly with <code>Locale.get("key")</code> calls.</li>
+<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/splash2/ApplicationInitializer.html">ApplicationInitializer</a> allows you to quickly show a splash screen
+    before doing the real initialization of your app in a background thread.</li>
+<li><a href="gui-screenelement-screeninfo.html">ScreenInfo</a> allows you to overlay any shown screen with some additional information. In the above code we show a busy indicator.</li>
+<li><a href="persistence.html">Persistence support</a> eases the storage and reading of local data with the <code>RmsStorage</code> and similar classes.</li>
+<li><a href="logging.html">Logging</a> allows you to quickly turn on and off logging levels for specific classes and that can be removed completely from the app. Log anything using the <code>#debug</code> preprocessing directive.</li>
+</ol>
+<p>
+This UI class is very simple, it just displays a number of choices that can be selected. The code binds UI elements to CSS styles with the <code>#style</code> preprocessing directive. 
+Behold of the mighty <code>List</code>:
+<br/><img src="<%= basedir%>images/gui-samples-blank.png" width="176" height="208" />
+<br/><br/><b>Listing 3: MainMenuList.java</b></p>
+<pre class="brush: java">
+package de.enough.polish.app.view;
+
+import de.enough.polish.ui.List;
+import de.enough.polish.util.Locale;
+
+public class MainMenuList extends List {
+
+	/**
+	 * Creates a new main menu screen.
+	 */
+	public MainMenuList() {
+		//#style screenMainMenu
+		super( Locale.get(&quot;main.title&quot;), List.IMPLICIT);
+	}
+	
+	/**
+	 * Adds a main menu entry to this screen.
+	 * @param name the name of the entry
+	 */
+	public void addEntry( String name ) {
+		//#style itemMainMenuEntry
+		append(name, null);
+	}
+}
+</pre>
+<p>
+The configuration uses the J2ME&nbsp;Polish <a href="serialization.html">serialization API</a> to <a href="persistence.html">store and retrieve data</a>. Using J2ME&nbsp;Polish this tedious task becomes quite simple really.
+<br/>The configuration class specifies a version, so that later iterations can easily load previous versions. The dirty flag is used for determining when the configuration 
+has changed and should be persisted again.
+<br/><br/><b>Listing 4: Configuration.java</b>
+</p>
+<pre class="brush: java">
+package de.enough.polish.app.model;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import de.enough.polish.io.Externalizable;
+
+public class Configuration implements Externalizable {
+
+	/**
+	 * The key under which a configuration is typically stored.
+	 */
+	public final static String KEY = &quot;_cfg&quot;;
+	/**
+	 * Version for serialization.
+	 */
+	private final static int VERSION = 100;
+	
+	/**
+	 * Dirty flag, indicates if the configuration has been changed since the last reset or load.
+	 */
+	private boolean isDirty;
+	
+	/**
+	 * Just an example for a field.
+	 */
+	private String userName;
+	
+	/**
+	 * Creates a new standard configuration.
+	 */
+	public Configuration() {
+		//TODO specify default values
+	}
+	
+	/**
+	 * Checks if the configuration has been changed since the creation or the last reset.
+	 * @return true when the configuration has been changed.
+	 * @see #resetDirtyFlag()
+	 */
+	public boolean isDirty() {
+		return this.isDirty;
+	}
+	
+	/**
+	 * Resets the dirty flag.
+	 * @see #isDirty()
+	 */
+	public void resetDirtyFlag() {
+		this.isDirty = false;
+	}
+	
+	/**
+	 * Retrieves the user name
+	 * @return the user name
+	 */
+	public String getUserName() {
+		return this.userName;
+	}
+	
+	/**
+	 * Sets the user name
+	 * @param name the user name
+	 */
+	public void setUserName( String name ) {
+		this.isDirty = true;
+		this.userName = name;
+	}
+
+	public void write(DataOutputStream out) throws IOException {
+		out.writeInt( VERSION );
+		boolean notNull = (this.userName != null);
+		out.writeBoolean( notNull );
+		if (notNull) {
+			out.writeUTF(this.userName);
+		}
+	}
+	
+	public void read(DataInputStream in) throws IOException {
+		int version = in.readInt();
+		if (version &gt; VERSION) {
+			throw new IOException(&quot;for invalid version &quot; + version);
+		}
+		boolean notNull = in.readBoolean();
+		if (notNull) {
+			this.userName = in.readUTF();
+		}
+	}
+}
+</pre>
 <h2 id="building">Building the Application</h2>
 <p>
-To build the application with J2MEPolish we need to create a file called &quot;build.xml&quot; 
+To build the app with J2ME&nbsp;Polish we need to create the <i>${project.home}/build.xml</i> script 
 which controls the build process.  This is a standard Ant file, so most IDEs support 
 the editing of this file with syntax highlighting, auto completion etc. 
 Don't worry if you have never worked with Ant before - although it can look quite 
-scary at the beginning it is easy to master after a while. The build.xml file 
-is also included in the J2MEPolish distribution, the main parts of it are shown in listing 2. 
-To build the sample application, we need to right-click the build.xml within the IDE 
+scary at the beginning it is easy to master. The <i>build.xml</i> file 
+is also included in the J2ME&nbsp;Polish sample apps, the main parts of it are shown in the next listing. 
+To build the sample application, we need to right-click the <i>build.xml</i> within the IDE 
 and select &quot;Execute&quot;, &quot;Run Ant...&quot; or &quot;make&quot; depending 
 on the IDE. The build process can also be started from the command-line: enter the 
-installation directory and type the &quot;ant&quot; command.
-<br/><br/><b>Listing2: build.xml</b>
-<pre>
-&lt;project name=&quot;example&quot; default=&quot;j2mepolish&quot;&gt;
+project directory and type the <code>ant</code> command.
+</p>
+<p>
+The <i>build.xml</i> script contains various targets, by default the <code>j2mepolish</code> target is invoked. You can select the targets in your IDE or
+on the command line by calling <code>ant ${target.name}</code>, e.g. <code>ant emulator</code>.
+</p> 
+<p>Each target can have dependencies, <code>j2mepolish</code> 
+ depends on the <code>init</code> target, for example:
+</p>
+<pre class="brush: xml">
+&lt;target name=&quot;j2mepolish&quot; depends=&quot;init&quot; &gt;
+</pre>
+<p>
+Each dependency is called first when Ant executes the <i>build.xml</i> script. With targets, dependencies and properties you can master complex build scenarios. 
+The important aspect about properties is that they can only be written once, subsequent changes are ignored. One example is the <code>init</code> target
+that sets the <code>test</code> property to false in the below code. The setting is ignored when calling the <code>emulator</code> target. This target depends on the 
+<code>enableEmulator</code> and the <code>j2mepolish</code> targets. Due to the dependency of the <code>j2mepolish</code> target on the <code>init</code> target, following
+targets are called in this order:
+</p>
+<ol>
+<li>enableEmulator</li>
+<li>init</li>
+<li>j2mepolish</li>
+</ol>
+<p>
+So the <code>test</code> property will be set in the <code>enableEmulator</code> target first to <code>true</code> and this value won't be changed by calling the <code>init</code> target
+later.
+</p>
+<p>
+Learn more about Ant with one of these tutorials:
+</p>
+<ul>
+	<li><a href="http://www.vogella.de/articles/ApacheAnt/article.html" target="_blank">http://www.vogella.de/articles/ApacheAnt/article.html</a></li>
+	<li><a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html" target="_blank">http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html</a></li>
+</ul>
+<p>
+<div class="note">
+If there is one golden role in J2ME&nbsp;Polish, it surely is <code>&lt;property file=&quot;${user.name}.properties&quot; /&gt;</code>. With that simple line of code you can 
+easily adjust the build process for local settings in a properties file called <i>${user.name}.properties</i>, e.g. <i>linust.properties</i>. This properties file can contain
+several Ant properties each on a single line with the name and value separated by an equal sign: <code>device=Generic/AnyMsaPhone</code>.
+</div>
+<br/><br/><b>Listing 5: build.xml</b>
+<pre class="brush: xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project basedir=&quot;.&quot; default=&quot;j2mepolish&quot; name=&quot;enough-polish-example&quot;&gt;
 
-&lt;property name=&quot;wtk.home&quot; value=&quot;C:\wtk2.1&quot;&gt;
+	&lt;property  name=&quot;device&quot; value=&quot;Generic/AnyPhone&quot; /&gt;
+	&lt;property  name=&quot;devices&quot; value=&quot;${device},Generic/AnyMsaPhone,BlackBerry/7.1,Android/4.0&quot; /&gt;
 
-&lt;taskdef name=&quot;j2mepolish&quot;
- classname=&quot;de.enough.polish.ant.PolishTask&quot;
- classpath=&quot;import/enough-j2mepolish-build.jar:import/jdom.jar:import/proguard.jar&quot;/&gt;
 
-&lt;target name=&quot;j2mepolish&quot;&gt;
-&lt;j2mepolish&gt;
- &lt;info
-   name=&quot;SimpleMenu&quot;
-   version=&quot;1.0.0&quot;
-   description=&quot;A test project&quot;
-   jarName=&quot;${polish.vendor}-${polish.name}-example.jar&quot; 
-   jarUrl=&quot;${polish.jarName}&quot;
- &lt;/info&gt;
- &lt;deviceRequirements&gt;
-  &lt;requirement name=&quot;JavaPackage&quot;
-               value=&quot;nokia-ui&quot; /&gt;
- &lt;/deviceRequirements&gt;
- &lt;build
-   fullscreen=&quot;menu&quot;
-   usePolishGui=&quot;true&quot;
-  &lt;midlet class=&quot;MenuMidlet&quot; name=&quot;Example&quot;/&gt;
- &lt;/build&gt;
-&lt;/j2mepolish&gt;
-&lt;/target&gt;
+	&lt;property name=&quot;polish.home&quot; location=&quot;C:\\Program Files\\J2ME-Polish2.3&quot; /&gt;
+
+	&lt;taskdef 
+		name=&quot;j2mepolish&quot;
+		classname=&quot;de.enough.polish.ant.PolishTask&quot; 
+		classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar&quot; 
+	/&gt;
+
+		
+	&lt;target name=&quot;enableEmulator&quot;&gt;
+		&lt;property name=&quot;test&quot; value=&quot;true&quot;/&gt;
+	&lt;/target&gt;
+		
+	&lt;target name=&quot;deploy&quot;&gt;
+		&lt;property name=&quot;deploy-url&quot; value=&quot;http://193.22.164.185:8080/&quot;/&gt;
+	&lt;/target&gt;
+			
+	&lt;target name=&quot;init&quot;&gt;
+	  	&lt;property name=&quot;test&quot; value=&quot;false&quot;/&gt;
+		&lt;property name=&quot;deploy-url&quot; value=&quot;&quot;/&gt;
+	&lt;/target&gt;
+	    
+	&lt;target name=&quot;j2mepolish&quot; depends=&quot;init&quot; &gt;
+		&lt;j2mepolish&gt;
+		    &lt;!-- general settings --&gt;
+			&lt;info 
+				copyright=&quot;Copyright 2012 Enough Software. All rights reserved.&quot; 
+				description=&quot;An application stub.&quot; 
+				infoUrl=&quot;http://www.enough.de&quot; 
+				jarName=&quot;${polish.vendor}-${polish.name}-${polish.locale}-app.jar&quot; 
+				jarUrl=&quot;${deploy-url}${polish.jarName}&quot; 
+				name=&quot;App&quot; 
+				vendorName=&quot;Enough Software&quot; 
+				version=&quot;1.0.4&quot;
+		    /&gt;
+			&lt;!-- selection of supported devices --&gt;
+			&lt;deviceRequirements if=&quot;test&quot;&gt;
+				&lt;requirement name=&quot;Identifier&quot; value=&quot;${device}&quot;/&gt;
+			&lt;/deviceRequirements&gt;
+			&lt;deviceRequirements unless=&quot;test&quot;&gt;
+				&lt;requirement name=&quot;Identifier&quot; value=&quot;${devices}&quot;/&gt;
+			&lt;/deviceRequirements&gt;
+		    &lt;!-- build settings --&gt;
+			&lt;build usePolishGui=&quot;true&quot;
+				&gt;
+				&lt;!-- midlets definition --&gt;
+				&lt;midlet class=&quot;de.enough.polish.app.App&quot; name=&quot;BlankApp&quot; /&gt;
+				&lt;!-- project-wide variables - used for preprocessing  --&gt;
+				&lt;variables&gt;
+					&lt;variable
+						name=&quot;polish.FullScreen&quot;
+						value=&quot;menu&quot; 
+						unless=&quot;polish.blackberry || polish.android&quot; 
+					/&gt;
+					&lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.TextField.supportSymbolsEntry&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.MenuBar.useExtendedMenuBar&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.useScrollBar&quot; value=&quot;true&quot; /&gt;
+					&lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
+				&lt;/variables&gt;
+				&lt;!-- obfuscator settings: do not obfuscate when the test-property is true --&gt;
+				&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test&quot;&gt;
+					&lt;keep class=&quot;de.enough.polish.example.Dummy&quot; /&gt;
+				&lt;/obfuscator&gt;
+				&lt;!-- debug settings: only include debug setting when the test-property is true --&gt;
+				&lt;debug if=&quot;test&quot; level=&quot;error&quot; verbose=&quot;true&quot;&gt;
+					&lt;filter level=&quot;debug&quot; package=&quot;de.enough.polish.sample.app&quot;/&gt;
+					&lt;filter level=&quot;info&quot; pattern=&quot;de.enough.polish.ui.*&quot;/&gt;
+					&lt;filter level=&quot;debug&quot; class=&quot;de.enough.polish.ui.Container&quot; /&gt;
+				&lt;/debug&gt;
+				&lt;resources
+					dir=&quot;resources/base&quot;
+					defaultexcludes=&quot;yes&quot;
+					excludes=&quot;readme.txt&quot;
+				&gt;
+					&lt;root dir=&quot;resources/base&quot; /&gt;
+					&lt;root dir=&quot;resources/base/images&quot; /&gt;
+					&lt;root dir=&quot;resources/base/i18n&quot; /&gt;
+					&lt;root dir=&quot;resources/base/style&quot; /&gt;
+					&lt;localization&gt;
+						&lt;locale name=&quot;de&quot; encoding=&quot;UTF8&quot;/&gt;
+					&lt;/localization&gt;
+				&lt;/resources&gt;
+			&lt;/build&gt;
+			&lt;emulator if=&quot;test&quot; /&gt;
+		&lt;/j2mepolish&gt;
+	&lt;/target&gt;
+
+
+	&lt;target name=&quot;clean&quot;&gt;
+		&lt;delete dir=&quot;build&quot;/&gt;
+		&lt;delete dir=&quot;dist&quot;/&gt;
+	&lt;/target&gt;
+	
+	&lt;target name=&quot;emulator&quot; depends=&quot;enableEmulator,j2mepolish&quot; /&gt;
+
+	&lt;target name=&quot;cleanbuild&quot; depends=&quot;clean,j2mepolish&quot; /&gt;
+
 &lt;/project&gt;
 </pre>
-</p><p>
-J2MEPolish now preprocesses, compiles, preverifies obfuscates and packages the code automatically for a number of devices. The resulting application bundles can be found in the &quot;dist&quot; folder after J2MEPolish finished the build.
-</p><p>
-To understand and control the build process, we need to have a closer look at the build.xml (listing 2):
-</p><p>
-At first the J2MEPolish Ant-task needs to be defined with the &lt;taskdef&gt; construct. The Ant-property &quot;wtk.home&quot; points to the installation directory of the Wireless Toolkit. 
-</p><p>
-The J2MEPolish task has the three main-sections &quot;&lt;info&gt;&quot;, &quot;&lt;deviceRequirements&gt;&quot; and &quot;&lt;build&gt;&quot;. The &lt;info&gt; element specifies some general information about the project like the name and the version. The &lt;deviceRequirements&gt; element is used to select the devices for which the application should be built. The &lt;build&gt; element is the central controller of the actual build process. This element controls whether the J2MEPolish GUI should be used, what MIDlets are used, which obfuscators should be used, and so on. Here you can also define additional variables and symbols which can be used in the preprocessing step.
-You can also use the additional &lt;emulator&gt; section for launching any WTK-based emulators from within J2ME Polish.
+<p>
+The J2ME&nbsp;Polish <a href="build-taskdef.html">task</a> itself contains 4 sections:
 </p>
-<p>Find more information about the build.xml at following locations:</p>
 <ul>
- <li><a href="build.html">The J2ME Polish Task</a></li>
- <li><a href="install.html">Integration of J2ME Polish into IDEs</a></li>
+<li><a href="build-info.html">&lt;info&gt;</a>: The <code>&lt;info&gt;</code> section contains information that's eventually written to the JAD and Manifest files.</li>
+<li><a href="build-deviceRequirements.html">&lt;deviceRequirements&gt;</a> control the target devices. Depending on the target devices you can use different APIs in your project, for example. J2ME&nbsp;Polish creates optimized app version for each target device.</li>
+<li><a href="build-build.html">build</a> controls the build process.</li>
+<li><a href="build-emulator.html">emulator</a> launches the emulator after a successful build.</li>
 </ul>
+<p>
+J2ME&nbsp;Polish now preprocesses, compiles, preverifies, obfuscates and packages the code automatically for a number of devices. The resulting app bundles can be found in the <i>dist</i> folder after J2ME&nbsp;Polish finished the build.
+</p>
+<p>Some of the above configured J2ME&nbsp;Polish features include:</p>
+<ol>
+<li><a href="logging.html">Logging</a> that allows you to quickly turn on and off logging levels for specific classes and that can be removed completely from the app. This is configured in the <code>&lt;debug&gt;</code> section.</li>
+<li><a href="resource-assembling.html">Resource assembling</a> that allows you to choose platform and device specific resources. It also allows you to <a href="customization.html">customize</a> your app easily.</li>
+<li><a href="localization.html">Localization</a> allows you to translate your app and customize the used texts.</li>
+<!-- <li><a href=""></a></li> -->
+</ol>
 
 
 <h2 id="design">Designing the Application with CSS</h2>
 <p>
-Even though the application just uses plain MIDP code, we can use the J2MEPolish GUI by setting the &quot;usePolishGui&quot;-attribute of the <build>-element to true (listing 2). J2MEPolish then &quot;weaves&quot; the necessary code and APIs into the application automatically. For specifying or changing the design, the file &quot;polish.css&quot; in the folder &quot;resources&quot; needs to be created or changed (listing 3). As you might have guessed, this file is included in the J2MEPolish distribution as well. 
-<br/><br/><b>Listing 3: polish.css</b>
-<pre>
+Design your apps outside of your source code using CSS code that is similar to web CSS. Using CSS has some advantages over code based design:
+</p>
+<ul>
+<li>It's <b>flexible</b>: you can start with a simple design and then improve iteratively independent of your source code and without needing to change your source code.</li>
+<li>It's <b>simpler</b>: instead of creating complex code constructs to animate something, you just use some CSS text.</li> 
+</ul>
+<p>
+Having said that you can still use code based design with J2ME&nbsp;Polish by creating and registering instances of <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/ui/Style.html">de.enough.polish.ui.Style</a>
+classes - however usage is much simpler on the CSS level.
+</p>
+<p>
+J2ME&nbsp;Polish parses the CSS files during build time and creates source code from it, since this is the most efficient way to access design information.
+You can also consume simple CSS during runtime using <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/browser/css/CssInterpreter.html">de.enough.polish.browser.css.CssInterpreter</a>,
+<a href="gui-item-htmlbrowser.html">HtmlBrowser</a> or the <a href="gui-texteffect-html.html">html text-effect</a>.
+</p>
+<p>
+You bind UI elements to CSS styles with the <code>#style</code> preprocessing directive in your Java code.
+</p>
+<p>
+By default the <i>polish.css</i> file is located in the <i>resources</i> folder of your project. You can configure other resource folder using the <code>&lt;resources&gt;</code> section
+within the <code>&lt;j2mpepolish&gt;</code> task.
+<br/><br/><b>Listing 6: polish.css</b>
+</p>
+<pre class="brush: css">
 colors {
- bgColor:  rgb(132,143,96);
- brightBgColor:  rgb(238,241,229);
- brightFontColor: rgb(238,241,229);
- fontColor: rgb( 30, 85, 86 );
+	fontColor: #ccc;
+	focusedFontColor: #000;
+	pressedFontColor: #666;
+	bgColor:  #222;
+	focusedBgColor:  #ee4;
+	borderColor: fontColor;
+	focusedBorderColor: focusedFontColor;
+	screenBackgroundColor: #333;	
 }
 
+/**
+  * The title style is a predefined style which is used
+  * for all screen-titles unless you specify a 'title-style' attribute within a screen style.
+  */
 title {
- padding: 2;margin-bottom: 5; 
- font-face: proportional; font-size:
- large; font-style: bold; font-color:
- brightFontColor;
- background: none; border: none;
- layout: center | expand;
+	padding: 2px;
+	font-size: large;
+	font-style: bold;
+	font-color: fontColor;
+	background-color: bgColor;
+	border: none;
+	layout: horizontal-center | horizontal-expand;
+	layout: center | vertical-center | expand;
+	min-height: imageheight( busy01.png );
 }
 
-focused {
- padding: 5;
- background {
-  type: round-rect; arc: 8; color:
-  brightBgColor; border-color:
-  fontColor; border-width: 2;
- }
- font {
-  style: bold; color: fontColor;
-  size: small;
- }
- layout: expand | center;
+/*********************   MAIN MENU   ******************************************************************************************************/
+.screenMainMenu {
+	background-color: screenBackgroundColor;
+	layout: vertical-center;
 }
 
-list {
- padding: 5; padding-left: 15; padding-
- right: 15;
- background {
-  color: transparent;
-  image: url( bg.png );
- }
- layout: expand | center | vertical-center;
- columns: 2;
+.itemMainMenuEntry {
+	margin-left: 5%;
+	margin-right: 5%;
+	font-color: fontColor;
+	layout: expand | center;
 }
 
-listitem {
- margin: 2; padding: 5; background:
- none; font-color: fontColor; font-
- style: bold; font-size: small;
- layout: center;
- icon-image: url( icon%INDEX%.png );
- icon-image-align: top;
+.itemMainMenuEntry:hover {
+	background-color: focusedBgColor;
+	font-color: focusedFontColor;	
+}
+
+.itemMainMenuEntry:pressed {
+	background-color: focusedBgColor;
+	font-color: pressedFontColor;	
+}
+
+
+/*********************   SCROLL BAR   ******************************************************************************************************/
+/* You need to activate the scrollbar by setting the "polish.useScrollBar" variable to "true" in your build.xml script. */
+scrollbar {
+	scrollbar-slider-color: #333;
+	scrollbar-slider-width: 3;
+	/* the scrollbar should be faded out when not used: */
+	scrollbar-fadeout: true;
+	opacity: 80%;
+}
+
+/*********************   BUSY INDICATOR   ******************************************************************************************************/
+.busyGauge {
+	padding-top: 9px;
+	padding-left: 1px;
+	view-type: gauge-images;
+	gauge-images-sources: busy01.png,busy02.png,busy03.png,busy04.png,busy05.png,busy06.png,busy07.png,busy08.png,busy09.png,busy10.png,busy11.png,busy12.png;
+	gauge-images-interval: 100;
+}
+
+
+/*********************   MENU BAR     *******************************************************************************************************/
+/* You need to activate the extended menubar that allows this finetuned design by setting the 
+   "polish.MenuBar.useExtendedMenuBar" variable to "true" in your build.xml script. */
+
+menubar
+{
+	padding-top: 3px;
+	padding: 2px;
+	background-color: bgColor;
+}
+
+menu {
+	margin-left: 2px;
+	margin-right: 2px;
+	min-width: 60%;
+	padding: 2px;
+	background {
+		type: round-rect;
+		color: bgColor;
+	}
+}
+
+/** Style for the first layer of subcommands: **/
+menu1 extends menu {
+	background-color: argb(150, 255, 255, 0 );
+	background-type: simple;
+      layout: right;
+      margin-bottom: 4px;
+      margin-right: 4px;
+}
+
+
+/**
+  * The menuItem style is a predefined style
+  * for the actual commands in a fullscreen-menu.
+  * When the menuItem style is not defined,
+  * the menu style will be used instead. 
+  */
+menuItem {
+	margin-top: 2px;
+	padding: 2px;
+	padding-left: 5px;
+	font {
+		color: focusedBgColor;
+		size: medium;
+		style: bold;
+	}
+	layout: left;
+	/**
+	 * Yes, it's possible to use preprocessing within CSS files. Use any preprocessing
+	 * variables like polish.midp2 or polish.api.nokia-ui. You can also access resource
+	 * information using these property functions:
+	 * - exists( resourcename ): checks whether a resource is defined for the current target device
+	 * - imagewidth( imagename ): retrieves the width of the given image
+	 * - imageheight( imagename ): retrieves the height of the given image
+	 */
+	//#if ${ exists( arrowRight.png ) }
+		command-child-indicator: url(arrowRight.png);
+	//#else
+		command-child-indicator-color: blue;
+		command-child-indicator-width: 8;
+		command-child-indicator-height: 10;
+	//#endif
+}
+
+.menuItem:hover {
+	background-color: focusedBgColor;
+	font-color: focusedFontColor;
+	layout: left | horizontal-expand;
+}
+
+.menuItem:pressed {
+	background-color: focusedBgColor;
+	font-color: pressedFontColor;
+	layout: left | horizontal-expand;
+}
+
+leftcommand
+{
+	margin: 0px; /* default */
+	padding-top: 3px;
+	padding-bottom: 0px;
+	font-color: fontColor;
+	font-style: bold;
+	layout: left;
+}
+
+leftcommand:pressed {
+	font-color: focusedBgColor;
+}
+
+rightcommand extends leftcommand
+{
+	layout: right;
+}
+
+rightcommand:pressed {
+	font-color: focusedBgColor;
 }
 </pre>
-</p><p>
-The &quot;polish.css&quot; file contains the style definitions for all items and screens of the application. First we define the used colors in the &quot;colors&quot; section.  By doing so we can later change the colors of the complete application in one place.
-</p><p>
-The &quot;title&quot;-style is used for designing the screen-titles. The &quot;focused&quot;- style is used for designing the currently focused item, e.g. of a form or a list.
-</p><p>
-As we have not used any #style preprocessing directives in the code, we need to use &quot;dynamic&quot; style-selectors like &quot;list&quot; and &quot;listitem&quot; for designing the application. All settings specified in the &quot;list&quot;-style are used for designing screens of the type &quot;list&quot;. And all settings specified in the &quot;listitem&quot;- style are used for items which are embedded in a list. 
-</p><p>
-All styles support the common attributes margin, padding, layout, font, background and border as well as the special attributes before and after. Most items do also support specific attributes.
-</p><p>
-The &quot;list&quot;-style in the example utilizes the specific attribute &quot;columns&quot; for specifying that a table with two columns should be used for the list (see screenshot).  
-<br/>
-<img src="../images/screenshot-example-enough.png" alt="design example 1"  width="205" height="277"/>
-</p><p>
-Designs and resources like images and so on can be adjusted to different devices by placing them into the appropriate subfolder of the &quot;resources&quot; folder. For using a different design for Nokia phones you can add the file &quot;resources/ Nokia/polish.css&quot; and for using a special design for the Nokia/N95  phone you can add the file &quot;resources/Nokia/N95 &quot;, etc. The same is true for other resources like images or sound-files. The resource-assembling does work independently of the usage of the J2MEPolish GUI by the way.
-</p><p>
-When an application has more than one screen and the screens should have different designs, one need to use &quot;static&quot; styles. In contrast to dynamic styles, static styles are added during the compilation phase and are, therefore, faster and more memory-efficient. Static styles, however, need changes in the application-code:
-</p><p>
-For using a static style, the #style-preprocessing-directive is used. This directive can be placed before any constructor of a screen or an item (and some more places like  the List-append()-methods) within the code.
-</p><p>
-<pre>
-public MenuMidlet() {
- super();
- System.out.println("starting MenuMidlet");
- //#style mainScreen 
- this.menuScreen = new List("J2ME Polish", List.IMPLICIT);
- //#style mainCommand
- this.menuScreen.append("Start game", null);
- //#style mainCommand
- this.menuScreen.append("Load game", null);
- //#style mainCommand
- this.menuScreen.append("Help", null);
- //#style mainCommand
- this.menuScreen.append("Quit", null);
- //#style mainCommand
- this.menuScreen.setCommandListener(this);
- System.out.println("intialisation done.");
-}
-</pre>
-</p>
 <p>
-Instead of using the &quot;list&quot; and the &quot;listitem&quot;-styles in the polish.css, you now need to use the styles &quot;mainCommand&quot; and &quot;mainScreen&quot;. Since these are static styles, they need to start with a dot in the polish.css file:
-<pre>
-.mainScreen {
- padding: 5; padding-left: 15; padding-
- [...]
-}
-</pre>
-</p><p>
-
-With using the #style-preprocessing directive the code still remains 100% compatible to the MIDP standard, so one use the native/standard GUI for very old devices while using the J2MEPolish GUI for modern devices at the same time.
-</p><p>
-You can specify in the build.xml file what &quot;resources&quot; folder should be used. This mechanism can be used to create different designs of one application. The screenshot shows the sample application with a different design. This design is also included in the J2MEPolish distribution and can be used when the &quot;resDir&quot;-Attribute is set to &quot;resources2&quot; in the build.xml.
-<br/><img src="../images/screenshot-example-pink.png" alt="design example 2"  width="202" height="271"/>
+Learn more CSS here:
 </p>
-
-<p>Find more information about the J2ME Polish GUI at following locations:</p>
 <ul>
- <li><a href="css.html">The J2ME Polish GUI</a></li>
- <li><a href="preprocessing-directives.html#preprocessing-styles">The #style preprocessing directive</a></li>
- <li><a href="resource-assembling.html">Resource Assembling</a></li>
+	<li>Learn more about CSS styling options with J2ME&nbsp;Polish in the <a href="gui-css-basics.html">CSS Basics</a> section.</li> 
+	<li>The <a href="gui-visualguide.html">Visual Guides</a> provide additional information about screen-, item- or effect-specific CSS attributes.</li>
+	<li>Use <a href="gui-css-mediaqueries.html">CSS media queries</a> to adapt your design dynamically during runtime.</li>
+	<li><a href="gui-css-animations.html">Animate CSS</a> to create great &amp; simple effects.</li> 
 </ul>
 
 
-<h2 id="logging">Debugging and Logging</h2>
+<h2 id="optimize">Optimize for Different Devices and Platforms</h2>
 <p>
-Logging and debugging is complex and difficult task under J2ME. On one hand logging messages need memory as well as computing time and on the other hand there are no logging frameworks like log4j available for J2ME. This is why J2ME Polish includes such a framework with these features:
+You can adapt your app for different platforms or device features in J2ME&nbsp;Polish with following methods:
 </p>
 <ul>
-  <li>Logging-levels like debug, info, warn, error etc. can be defined for single classes or packages. </li>
-  <li>User-defined levels can be used, too.</li>
-  <li>Logging-messages can be viewed on real devices as well.</li>
-  <li>Logging-messages which are not active, will not be compiled and use, therefore, no resources at all.</li>
-  <li>The complete logging can be deactivated.</li>
-  <li>Simple System.out.println()-calls are used for logging.</li>
+	<li><a href="#preprocess">Preprocess</a> your source code before it gets compiled.</li>
+	<li>Use <a href="#sources">different source folders</a> for each target platform.</li>
+	<li><a href="#dynamic">Load classes dynamically</a> during the runtime of your project.</li>
+	<li>Use <a href="#mediaqueries">CSS media queries</a> for adapting the design during runtime.</li>
 </ul>
+<h3 id="process">Preprocess your Source Code</h3>
 <p>
-The logging is controlled with the &lt;debug&gt; element in the &quot;build.xml&quot; file:
-<pre>
-&lt;debug enable=&quot;true&quot; showLogOnError=&quot;true&quot; verbose=&quot;false&quot; level=&quot;error&quot;&gt;
-    &lt;filter pattern=&quot;com.company.package.*&quot; level=&quot;info&quot; /&gt;
-    &lt;filter pattern=&quot;com.company.package.MyClass&quot; level=&quot;debug&quot; /&gt;
-&lt;/debug&gt;
-</pre>
-</p><p>
-The &quot;enable&quot;-attribute defines whether logging should be activated at all. The &quot;showLogOnError&quot;-attribute can be used for showing the log automatically, whenever an error has been logged. This only works when the GUI of J2MEPolish is used, though. An error can be logged just by appending the error object to a System.out.println()-call:
-<pre>
-try {
-  callComplexMethod();
-  //#debug info
-  System.out.println( "complex method succeeded." );
-} catch (MyException e) {
-  //#debug error
-  System.out.println( "complex method failed" + e ); // when showLogOnError is true
-}                                                    // this will trigger the log
-</pre>
-</p><p>
-When the &quot;verbose&quot;-attribute is true, after each logging message the current time and the source-code file as well line of the message will be added. This eases the location of errors especially when obfuscation is used. The J2ME APIs of J2MEPolish will also specify details of errors whenever they throw an exception, when the &quot;verbose&quot;-attribute is true. The &quot;level&quot;-attribute controls the general logging-level which is used when no specific level has been assigned for a class. The logging-levels are hierarchically ordered:
-</p><p>
-debug &lt; info &lt; warn &lt; error &lt; fatal &lt; user-defined
-</p><p>
-When a class has the logging-level &quot;info&quot; assigned, messages with a level of &quot;warn&quot;, &quot;error&quot; and so on will also be logged, but no &quot;debug&quot; messages.
-</p><p>
-In the source code logging messages will be introduced with the #debug-preprocessing-directive, which can specify the logging-level, e.g. &quot;//#debug info&quot;. When no level is specified the &quot;debug&quot; level is assumed.
+Preprocessing changes your Java and CSS source code before it gets compiled. You can adapt your code depending on the platform, the resolution (if known at compile time), the 
+APIs that are supported by the device and more. 
 </p>
 <p>
-<p>Find more information about the logging framework at following documentations:</p>
-<ul>
- <li><a href="build-build.html#debug">&lt;debug&gt; element in the build.xml</a></li>
- <li><a href="preprocessing-directives.html#preprocessing-debug">The #debug and #mdebug preprocessing directives</a></li>
- <li><a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/util/Debug.html" target="_blank">JavaDoc-documentation of the Debug class</a></li>
-</ul>
-
-
-<h2 id="preprocessing">Easy Device-Optimizations with Preprocessing and the Device-Database</h2>
-<p>
-Device optimizations are mostly needed for the user interface of an application. The UI of J2MEPolish adapts automatically to devices and can - thanks to the resource assembling - be easily adjusted to different devices and device-groups.
+Some examples: 
 </p><p>
-There are however, other situations in which device optimizations are useful. With the help of the preprocessing capabilities and device database of J2MEPolish, these optimizations are done easily without risking the portability of the application. 
-</p><p>
-Often the preprocessing directives &quot;#ifdef&quot;, &quot;#if&quot; and &quot;#=&quot; are used for optimizations:
-</p><p>
-When an API is required for a specific functionality, just use the &quot;polish.api.[api-name]&quot; symbol, which is defined for each supported API:
-<pre>
+When an API is required for a specific functionality, just use the <code>polish.api.[api-name]</code> symbol, which is defined for each supported API:
+</p>
+<pre class="brush: java">
 //#if polish.api.mmapi
    // this device supports the Mobile Media API
    [...]
 //#else
-   // this support does not support the mmapi
+   // this device does not support the mmapi
    [...]
 //#endif
 </pre>
-</p><p>
-One can differentiate between MIDP-versions with the &quot;polish.midp1&quot; and the &quot;polish.midp2&quot; symbol:
-<pre>
+<p>
+You can differentiate between MIDP-versions with the &quot;polish.midp1&quot; and the &quot;polish.midp2&quot; symbol:
+</p>
+<pre class="brush: java">
 //#if polish.midp2
    // this device supports MIDP/2.0 standard
    [...]
@@ -306,91 +963,309 @@ One can differentiate between MIDP-versions with the &quot;polish.midp1&quot; an
    [...]
 //#endif
 </pre>
-</p><p>
-To distinguish between the CLDC/1.0 and the CLDC/1.1 standard, the &quot;polish.cldc1.0&quot; and &quot;polish.cldc1.1&quot; symbols can be used:
-<pre>
-//#if polish.cldc1.1
-   float f = 1.2f;
-   [...]
+<p>
+Check specific plaforms by using the <code>polish.JavaPlatform</code> preprocessing variable: 
+</p>
+<pre class="brush: java">
+//#if polish.blackberry
+	// we run on a BlackBerry Java platform
+	//#if polish.JavaPlatform &gt;= BlackBerry/6.0
+	   // we run on BlackBerry 6.0 or higher
+	   [...]
+	//#endif
 //#endif
 </pre>
-</p><p>
-Several requirements can be combined, too:
-<pre>
+<p>
+You can combine several requirements as well:
+</p>
+<pre class="brush: java">
 //#if polish.api.mmapi || polish.midp2
    // this device supports at least the basic Mobile Media API
    [...]
 //#endif
 </pre>
-</p><p>
-One can compare variables as well:
-<pre>
-//#if polish.BitsPerPixel >= 12
-   // this device uses at least 12 bits per pixel.
-//#endif
-//#if polish.Vendor == Nokia
-   // this is a Nokia device
-//#endif
-</pre></p><p>
-Variables can be defined as well and be used within the source code. An URL could be defined in the build.xml like this:
-<pre>
+<p>
+Use the <code>#condition</code> preprocessing variable to exclude or include a complete Java source file. This is useful to use platform or API specific code
+without needing to resort to preprocessing within the file. By convention the <code>#condition</code> statement should be placed at the beginning of the file.
+</p> 
+<pre class="brush: java">
+//#condition polish.android
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
+
+public class MyActivity extends Activity {
+	[...]
+}
+</pre>
+<p>
+Preprocessing variables typically derrive from the Device Database, but you can define them in the <i>build.xml</i> script or in property files as well:
+</p>
+<pre class="brush: java">
 &lt;variables&gt;
    &lt;variable name=&quot;update-url&quot; value=&quot;http://www.enough.de/update&quot; /&gt;
 &lt;/variables&gt;
-</pre></p><p>
+</pre>
+<p>
 The defined variable can be used in the source code with the &quot;#=&quot;-directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef update-url:defined
    //#= public static final String UPDATE_URL = "${ update-url }";
 //#else
    // no variable definition was found, use a default-value:
    public static final String UPDATE_URL = "http://default.com/update";
 //#endif
-</pre></p>
+</pre>
+<p>
+Preprocessing variables are also used to configure the J2ME&nbsp;Polish Lush&nbsp;UI. You can find configuration options in the <a href="gui-visualguide.html">Visual Guide</a>.
+</p>
 <p>Find more information about preprocessing:</p>
 <ul>
- <li><a href="preprocessing.html">Preprocessing</a></li>
  <li><a href="preprocessing-directives.html">Preprocessing Directives</a></li>
  <li><a href="preprocessing-variables.html">Preprocessing Variables</a></li>
- <li><a href="build-build.html#variables">Variables Definition</a></li>
- <li><a href="../devices-overview.html">The Device Database</a></li>
-</ul>
-
-
-
-<h2 id="gameengine">Fun Fun Fun: the Game-Engine</h2>
-<p>
-The game-engine of J2MEPolish lets you use the Game-API of the MIDP/2.0 standard for MIDP/1.0 devices as well. No changes in the source-code are necessary, since the necessary API is weaved into the application automatically for MIDP/1.0 devices. 
-</p><p>
-The complete API can be used: Sprite, GameCanvas, TiledLayer, LayerManager and Layer. The current limitations are that no pixel-level collision-detections and no sprite-transformations for non-Nokia devices are supported (for Nokia devices sprite transformations are supported).
-</p><p>
-The game-engine can be optimized for several usage scenarios, you can specify that the backbuffer-optimization should be used for the TiledLayer implementation, for example.
+ </ul>
+ 
+<h3 id="sources">Use Platform Specific Source Folders</h3>
+<p>Similar to the <code>#condition</code> preprocessing variable you can configure J2ME&nbsp;Polish to use different source folders depending on your chosen conditions. 
+This allows you to have clean source code free of processing statements that still can contain platform or API specific code.
 </p>
-<p>Find more information about the game-engine:</p>
-<ul>
- <li><a href="game-engine.html">The MIDP/2.0 compatible Game-Engine</a></li>
-</ul>
-
-
-
-<h2 id="extending">Extending J2ME Polish</h2>
+<pre class="brush: xml">
+&lt;sources&gt;
+	&lt;source dir=&quot;source/src&quot; /&gt;
+	&lt;source dir=&quot;source/android&quot; if=&quot;polish.android&quot; /&gt;
+	&lt;source dir=&quot;source/midp&quot; unless=&quot;polish.android&quot; /&gt;
+&lt;/sources&gt;
+</pre>
 <p>
-J2MEPolish can be extended in several ways:
+The <code>&lt;sources&gt;</code> section is part of the <a href="build-build.html#sources">&lt;build&gt;</a> section in your <i>build.xml</i> script.
+</p>
+
+<h3 id="dynamic">Load Classes Dynamically</h3>
+<p>
+Loading classes dynamically is the &quot;traditional&quot; way for adapting Java code to different situations. It typically works like this: 
 </p>
 <ul>
-	<li><b>Build-Tools:</b>
-	<ul>
-		<li><b><a href="custom-obfuscator.html">Obfuscator</a></b>: integrate a third party or custom obfuscator</li>
-		<li><b><a href="custom-preprocessor.html">Preprocessing</a></b>: add custom preprocessing directives</li>
-		<li><b><a href="build-build.html#java">&lt;java&gt;</a></b>: use the &lt;java&gt; element for signing
-		MIDlets and more.</li>
-	</ul>
-	</li>
-	<li><b>GUI:</b>
-	<ul>
-		<li><b><a href="custom-background.html">Backgrounds</a> and <a href="custom-border.html">Borders</a></b>: use custom backgrounds and borders in your application.</li>
-		<li><b><a href="custom-item.html">Items</a></b>: extend and the standard CustomItem and design it using CSS.</li>
-	</ul>
-	</li>
+<li>Define an <code>interface</code> to access functionality in a defined way.</li>
+<li>Implement that <code>interface</code> in a number of specific subclasses.</li>
+<li>Detect during runtime what class you would like to load.</li>
+<li>Load and use the class.</li>
 </ul>
+<p>
+There are also two additional steps for J2ME Polish apps:
+</p>
+<ul>
+<li>Make sure to target devices that correspond to your used APIs or exclude classes during build time using the <code>#condition</code> preprocessing directive.</li>
+<li>Exclude the classes from obfuscation by using the <code>#dontobfuscate</code> proprocessing directive.</li>
+</ul>
+<p>
+Let's look at a specific example - we try to use some vendor specific APIs for dynamically switching on the screen's background light. Note that this functionality is actually part
+of the J2ME&nbsp;Polish UI - the <code>DeviceControl</code> class uses class loading when targeting a generic device such as <code>Generic/AnyPhone</code> or 
+<code>Generic/AnyMsaPhone</code> (or uses vendor specific APIs directly when targeting a more specific phone). 
+</p>
+<p>
+First let's define an interface to enable or disable the background light:
+</p>
+<pre class="brush:java">
+//#condition polish.HasOptionalApis
+package de.enough.polish.util.devicecontrol;
+
+/**
+ * Controls a device
+ */
+public interface DeviceController {
+	
+	/**
+	 * Turns the backlight on on a device until lightOff() is called
+	 * 
+	 * @return true when backlight is supported on this device.
+	 * @see #lightOff()
+	 */
+	boolean lightOn();
+	
+	/**
+	 * Turns the backlight off
+	 * @see #lightOn()
+	 */
+	void lightOff();
+	
+	/**
+	 * Checks if backlight can be controlled by the application
+	 * 
+	 * @return true when the backlight can be controlled by the application
+	 */
+	boolean isLightSupported();
+}
+</pre>
+<p>
+Note that in the interface we already use the <code>polish.HasOptionalApis</code> preprocessing condition. We use this to exclude this file when targeting more specific devices - 
+or to use dynamic class loading only when required. This preprocessing symbol is set automatically when the device has the <code>OptionalPackage</code> capability defined (e.g. in 
+<i>custom-devices.xml</i>):
+</p>
+<pre class="brush: xml">
+&lt;capability name=&quot;OptionalPackage&quot; value=&quot;nokia-ui,samsung&quot; /&gt;
+</pre>
+<p>
+The <code>NokiaDeviceController</code> is an implementation of the <code>DeviceController</code> that uses the Nokia-UI API:
+</p>
+<pre class="brush: java">
+//#condition polish.optional-api.nokia-ui
+
+//#dontobfuscate
+
+package de.enough.polish.util.devicecontrol;
+
+import com.nokia.mid.ui.DeviceControl;
+
+public class NokiaDeviceController 
+implements DeviceController, Runnable 
+{
+
+	Object lightsLock = new Object();
+	private boolean isLightOn = false;
+	
+	public boolean lightOn() {
+		synchronized (this.lightsLock) {
+			if (isLightSupported()) {
+				if (!this.isLightOn) { 
+					this.isLightOn = true;
+					Thread t = new Thread(this);
+					t.start();
+				}
+				return true;
+			}  else {
+				return false;
+			}
+		}
+	}
+
+	public void lightOff() {
+		synchronized(this.lightsLock ) {
+			this.isLightOn = false;
+			DeviceControl.setLights(0,0);
+		}
+	}
+
+	public boolean isLightSupported() {
+		return true;
+	}
+
+	/**
+	 * Keeps the backlight on until lightOff() is being called.
+	 */
+	public void run() {
+		int displaytime = 10000;
+		long sleeptime = (displaytime * 90) / 100;
+		boolean increaseAfterFirstLoop = true;
+		while(this.isLightOn)
+		{
+			DeviceControl.setLights(0,0);
+			DeviceControl.setLights(0,100);
+			try {
+				Thread.sleep(sleeptime);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+			if (increaseAfterFirstLoop) {
+				increaseAfterFirstLoop = false;
+				displaytime = 20000;
+				sleeptime = 18000;
+			}
+		}
+	}
+
+}
+</pre>
+<p>
+In the code above we use the <code>#condition</code> preprocessing directive to ensure that this file is only added to the compilation when the device <i>could</i> support
+the Nokia UI API:
+</p>
+<pre class="brush: java">
+//#condition polish.optional-api.nokia-ui
+</pre>
+<p>
+<i>When</i> the file is included into compilation, we use the <b><code>#dontobfuscate</code></b> directive to ensure that the <code>NokiaDeviceController</code> is excluded from
+obfuscation.   
+</p>
+<p>
+Now let's load the class dynamically:
+</p>
+<pre class="brush: java">
+String[] classNames = new String[] {
+	"de.enough.polish.util.devicecontrol.NokiaDeviceController",
+	"de.enough.polish.util.devicecontrol.SamsungDeviceController",
+	"de.enough.polish.util.devicecontrol.LgDeviceController"
+};
+for (int i = 0; i &lt; classNames.length; i++) {
+	String className = classNames[i];
+	try {
+		DeviceController control = (DeviceController) Class.forName(className).newInstance();
+		// okay, this class could be loaded
+		this.controller = control;
+		break;
+	} catch (Exception e) {
+		// ignore, try next class
+	}
+}
+</pre>
+<p>
+In the above code we use the class loading mechanism itself to detect if the current device supports a specific API. Another way would be to probe for
+System properties or use the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/DeviceInfo.html">de.enough.polish.util.DeviceInfo</a> helper class.
+</p>
+
+<h3 id="mediaqueries">CSS media queries</h3>
+<p>
+You can use <a href="gui-css-mediaqueries.html">CSS media queries</a> to adapt the design of your application during runtime.
+A common use case is to structure the design of your app into 3 dimensions: 
+</p>
+<ol>
+<li>low res,</li>
+<li>medium res,</li>
+<li>high res</li>
+</ol>
+<p>
+and to load the corresponding images with CSS media queries, like this:
+</p>
+<pre class="brush: css">
+/** default style: **/
+.mainScreen {
+	background {
+		image: url( bg-default.png );
+		anchor: bottom | right;
+	}
+}
+
+/** adapt styles for specific resolutions: */
+@media (min-device-width: 240px) and (min-device-height: 320px) {
+	.mainScreen {
+		background {
+			image: url( bg-large.png );
+			anchor: bottom | right;
+		}
+	}
+}
+@media (max-device-width: 176px) and (max-device-height: 208px) {	
+	.mainScreen {
+		background {
+			image: url( bg-small.png );
+			anchor: bottom | right;
+		}
+	}
+}
+/* HVGA resolution (portrait, landscape) */
+@media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {
+	.mainScreen {
+		background {
+			image: url( bg-hvga.png );
+			anchor: bottom | right;
+		}
+	}
+}
+</pre>
+
 <%include end.txt %>

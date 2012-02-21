@@ -905,7 +905,7 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	The optional &lt;obfuscator&gt; element controls the obfuscating of the application bundle, which decreases the jar-size and makes it difficult to reverse engineer the application.
 	</p>
 	<pre>
-&lt;obfuscator name=&quot;ProGuard&quot; useDefaultPackage=&quot;true&quot; unless=&quot;test&quot; /&gt;
+&lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test&quot; /&gt;
 </pre>
 	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>obfuscator Attribute&nbsp;&nbsp;</th><th>Required&nbsp;&nbsp;</th><th>Explanation</th></tr>
@@ -918,10 +918,6 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	 <a href="http://www.yworks.de" target="_blank">&quot;YGuard&quot;</a>
 	  or <a href="http://www.retrologic.com" target="_blank">&quot;RetroGuard&quot;</a>.
 	 </td>
-	</tr>
-	<tr><td>useDefaultPackage</td>
- 	 <td>No</td>
-	 <td>J2ME Polish can move all classes to the default package for you. This includes the MIDlet-classes as well and can result in a smaller jar-size. Please note that you are responsible for preventing name-clashes of classes. You do not need to adjust your &lt;midlet&gt; settings, this is done automatically by J2ME Polish. This defaults to &quot;false&quot;.</td>
 	</tr>
 	<tr><td>if</td>
  	 <td>No</td>
@@ -949,15 +945,18 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	</p>
 	<h4 id="obfuscator-keep">The &lt;keep&gt; Subelement</h4>
 	<p>
-	The &lt;keep&gt; element is used to define classes which are loaded dynamically (e.g. with Class.forName(...) ) and should not be obfuscated:
+	The &lt;keep&gt; element is used to define classes which are <a href="tutorial.html#dynamic">loaded dynamically</a> (e.g. with Class.forName(...) ) and should not be obfuscated:
 	</p>
 <pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;ProGuard&quot; &gt;
+&lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; &gt;
 	&lt;keep class=&quot;com.company.dynamic.SomeDynamicClass&quot; /&gt;
 	&lt;keep class=&quot;com.company.dynamic.AnotherDynamicClass&quot; /&gt;
 &lt;/obfuscator&gt;
 </pre>
 	<p>The used MIDlet classes do not need to be set with the &lt;keep&gt; element, since they are saved from obfuscation automatically.</p>
+	<p>A similar approach is to use the <a href="preprocessing-directives.html#preprocessing-dontobfuscate">#dontobfuscate</a> preprocesing directive in
+	the corresponding Java source file of the class.
+	</p>
 	
 	<h4 id="obfuscator-parameter">The &lt;parameter&gt; Subelement</h4>
 	<p>

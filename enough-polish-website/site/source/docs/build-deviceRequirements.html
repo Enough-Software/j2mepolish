@@ -13,12 +13,25 @@
 	
 	
 	<p>
-	Select the devices that you want to target in the &lt;deviceRequirements&gt; section. You can use any device capabilities 
-	for choosing your target devices:
+	Select the devices that you want to target in the &lt;deviceRequirements&gt; section. You will typically target one generic device
+	such as the <code>Generic/AnyPhone</code> or <code>Generic/AnyMsaPhone</code> along with some platform specific target phones like
+	<code>BlackBerry/7.1</code> or <code>Generic/android2.3</code>.
 	</p>
 <pre>
 &lt;deviceRequirements if=&quot;test&quot;&gt;
-	&lt;requirement name=&quot;Identifier&quot; value=&quot;Nokia/N95, Sony-Ericsson/K850i&quot; /&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyMsaPhone&quot; /&gt;
+&lt;/deviceRequirements&gt;
+&lt;deviceRequirements unless=&quot;test&quot;&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyMsaPhone,Nokia/Series60E3,BlackBerry/7.1,Generic/android2.3,Generic/android4.0&quot; /&gt;
+&lt;/deviceRequirements&gt;
+</pre>
+	<p>
+	 
+	You can use any device capabilities for choosing your target devices:
+	</p>
+<pre>
+&lt;deviceRequirements if=&quot;test&quot;&gt;
+	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyMsaPhone&quot; /&gt;
 &lt;/deviceRequirements&gt;
 &lt;deviceRequirements unless=&quot;test&quot;&gt;
 	&lt;requirement name=&quot;Term&quot; value=&quot;polish.api.mmapi and (polish.midp2 or polish.midp3)&quot; /&gt;
@@ -26,7 +39,7 @@
 </pre>
 <p>
 In this example two alternative device-selections are defined - when the test-property is 
-set to true (by defining it with <code>&lt;property name=&quot;test&quot; value="true" /&gt;</code>), 
+set to true (by defining it with <code>&lt;property name=&quot;test&quot; value=&quot;true&quot; /&gt;</code>), 
 only the upper <code>&lt;deviceRequirements&gt;</code> element is used and the second 
 <code>&lt;deviceRequirements&gt;</code> element is ignored. The actual requirements are defined 
 with the sub elements <code>&lt;requirement&gt;</code>. Without any clarification, all listed 

@@ -424,7 +424,17 @@ a {
 * { }
 
 
+.note {
+	padding: 10px;
+	color: #333;
+	background-color: #99dd99;
+}
 
+.noteDont {
+	padding: 10px;
+	color: #333;
+	background-color: #dd8888;
+}
 
 /* pre is used for code samples */
 pre {

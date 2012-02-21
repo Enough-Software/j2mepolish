@@ -30,7 +30,7 @@
 	<property name="clean" value="false" />
 </target>
 
-<target name="javadoc" >
+<target name="javadoc" description="builds the javadoc directory">
 	<mkdir dir="dist/javadoc/j2me" />
 	<mkdir dir="dist/javadoc/build" />
 	<javadoc 

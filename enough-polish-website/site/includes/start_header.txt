@@ -4,7 +4,7 @@
 <head>
 	<meta name="description" content="J2ME Polish is an advanced build tool and GUI for J2ME applications." />
 	<meta name="author" content="Robert Virkus" />
-	<meta name="keywords" content="midlet, ant, tool, enough, robert, virkus, software, j2me, java, programming, programmierer, freiberufler, Germany, Deutschland, Bremen, Europe" />
+	<meta name="keywords" content="midlet, ant, tool, enough, robert, virkus, software, j2me, java me, java, programming, programmierer, Germany, Deutschland, Bremen, Europe, ios, iphone, ipad, android, blackberry, windows phone, windows 8, webos" />
 	<%ifdef title:defined %>
 		<title><%= title %></title>
 	<%else %>

@@ -2,12 +2,12 @@
 <%define inDocumentationSection.logging %>
 <%set title = J2ME Polish: Documentation %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
 
 <h1 id="top">Debug/Logging</h1>
 	<ul class="relatedtechnologies">
 		<li class="relatedtechnologiesheader">Related Topics:</li>
-		<li><a href="preprocessing.html">Preprocessing</a></li>
+		<li><a href="preprocessing-directives.html">Preprocessing</a></li>
 		<li><a href="build.html">build.xml</a></li>
 	</ul>
 	<%index %>
@@ -27,9 +27,9 @@ The goals for the framework are:</p>
 
 <h2 id="programming">Programming</h2>
 <p>To create a log entry in your, a simple
-<code>System.out.println()<code> is used combined with the <code>#debug</code> preprocessing directive:
+<code>System.out.println()</code> is used combined with the <code>#debug</code> preprocessing directive:
 </p>
-<pre>
+<pre class="brush: java">
 try {
 	doSomething();
 	//#debug
@@ -42,9 +42,9 @@ try {
 <p>
 If the last logged parameter is an exception, the logging framework will automatically print its stacktrace:
 </p>
-<pre>
+<pre class="brush: java">
 //#debug error
-System.err.println("doSomething() failed" <b>+ e</b>);
+System.err.println("doSomething() failed" + e);
 </pre>
 <p>
 You can also tag a debug message with a log level as shown above. There are 5 predefined log levels,
@@ -58,7 +58,7 @@ but you can also create your own log levels:
 As you will see below you can activate specific log levels for a class or a package. You can also check for a specific 
 log level in your code using the <code>#if</code> directive: 
 </p>
-<pre>
+<pre class="brush: java">
 //#if polish.debug.info
    int startTime = System.currentTimeMillis();
 //#endif
@@ -86,7 +86,7 @@ measure and log the duration of the call. You can check for any log level by que
 <h2 id="configuration">Configuration</h2>
 <p>To activate the logging for your application, edit the &lt;debug&gt; section in your <i>build.xml</i>.</p>
 <h3 id="logfilter">Log Filters and Levels</h3>
-<pre>
+<pre class="brush: java">
 &lt;debug 
 	verbose=&quot;false&quot;
 	level=&quot;error&quot;
@@ -108,11 +108,11 @@ attribute: <code>&lt;debug if=&quot;test&quot; ...</code>. Alternatively you mig
 <p>
 You can define and activate your own log levels using the <code>levels</code> attribute of the <code>&lt;debug&gt;</code> element: 
 </p>
-<pre>
+<pre class="brush: java">
 &lt;debug 
 	verbose=&quot;false&quot;
 	level=&quot;error&quot;
-	<b>levels=&quot;memory,performance&quot;</b>
+	levels=&quot;memory,performance&quot;
 	if=&quot;test&quot; &gt;
 	&lt;filter package=&quot;com.company.mail&quot; level=&quot;info&quot; /&gt;
 	&lt;filter class=&quot;com.company.mail.IMapServer&quot; level=&quot;debug&quot; /&gt;
@@ -121,11 +121,11 @@ You can define and activate your own log levels using the <code>levels</code> at
 <p>
 You can now use such log levels like the predefined ones in your application:
 </p>
-<pre>
-<b>//#debug memory</b>
+<pre class="brush: java">
+//#debug memory
 System.out.println("Free memory: " + Runtime.getRuntime().freeMemory() );
 
-<b>//#if polish.debug.performance</b>
+//#if polish.debug.performance
 	long startTime = System.currentTimeMilis();
 //#endif
 ...
@@ -146,7 +146,7 @@ The <code>display</code> log handler shows logged entries on top of the screen. 
 <p>After some time without new log entries, the log will be hidden. Even when the log is shown, you can work normally with the application.
 You can influence the appearance and behavior with some optional parameters:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
   &lt;handler name=&quot;display&quot;&gt;
      &lt;!-- hide entries after 10 seconds: --&gt;
@@ -169,7 +169,7 @@ For receiving the log entries you can use <i>${polish.home}/bin/enough-j2mepolis
 Note that you need to have support for L2CAP connectivity, which is not supported on Windows when using the Microsoft Bluetooth stack. 
 If that's the case for please deactivate that stack and use Widcomm or similar instead. On Linux and Mac OS X L2CAP is always supported (when Bluetooth is active). 
 </p>
-<pre>
+<pre class="brush: java">
 &lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
   &lt;handler name=&quot;bluetooth&quot; /&gt;
 &lt;/debug&gt;
@@ -178,7 +178,7 @@ If that's the case for please deactivate that stack and use Widcomm or similar i
 <p>
 You can also send log entries to a remote server using HTTP GET requests thanks to Vera Wahler's contribution:
 </p>
-<pre>
+<pre class="brush: java">
 &lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test or log&quot; &gt; 
   &lt;handler name=&quot;http&quot;&gt;
        &lt;-- optional parameters --&gt;
@@ -190,7 +190,7 @@ You can also send log entries to a remote server using HTTP GET requests thanks 
 This log handler will create a GET request for each log entry. The following example is a simple Ruby script that 
 reads received log entries:
 </p>
-<pre>
+<pre class="brush: java">
 #!/usr/bin/ruby
 require 'webrick'
 include WEBrick
@@ -220,23 +220,23 @@ s.start
 <p>
 Emulator stacktraces usually only give the bytecode offset of an exception:
 </p>
-<pre>
+<pre class="brush: java">
 at com.company.product.ClassName.method(+20);
 </pre>
 <p>J2ME Polish can resolve such offsets automatically:</p>
-<pre>
+<pre class="brush: java">
 at com.company.product.ClassName.java:200
 </pre>
 <p>
 For making this possible, please install the <i>jad</i> decompiler from <a href="http://www.kpdus.com/jad.html" target="_blank">http://www.kpdus.com/jad.html</a> to <i>${polish.home}/bin</i>.
 </p>
 <p>
-Last but not least don't forget to add a catched exception as the last parameter to a log entry in this way:
+Last but not least don't forget to add a caught exception as the last parameter to a log entry in this way:
 </p>
-<pre>
+<pre class="brush: java">
 } catch (Exception e) {
 	//#debug error
-	System.err.println("doSomething() failed" <b>+ e</b>);
+	System.err.println("doSomething() failed" + e);
 }
 </pre>
 

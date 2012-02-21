@@ -2,7 +2,7 @@
 <%define inDocumentationSection.build %>
 <%set title = J2ME Polish: Documentation %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
 
 	<h1 id="top">Preprocessing Directives</h1>
 	<%index %>
@@ -16,7 +16,8 @@ by the way. So if you migrate from antenna, you can keep your preprocessing dire
 <h2 id="preprocessing-ifdef">Checking a Single Symbol with #ifdef, #ifndef, #else, #elifdef, #elifndef and #endif</h2>
 <p>
 Single symbols can be checked easily with the #ifdef directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef polish.images.directLoad
 	Image image = Image.createImage( name );
 	//# return image;
@@ -25,10 +26,11 @@ Single symbols can be checked easily with the #ifdef directive:
 	return null;
 //#endif
 </pre>
-</p><p>
+<p>
 When the symbol &quot;polish.images.directLoad&quot; is defined, the code will be transformed 
 to the following:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef polish.images.directLoad
 	Image image = Image.createImage( name );
 	return image;
@@ -37,10 +39,11 @@ to the following:
 	//# return null;
 //#endif
 </pre>
-</p><p>
+<p>
 If, however, the symbol &quot;polish.images.directLoad&quot; is not defined, the transformation 
 will be:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef polish.images.directLoad
 	//# Image image = Image.createImage( name );
 	//# return image;
@@ -49,13 +52,13 @@ will be:
 	return null;
 //#endif
 </pre>
-</p><p>
+<p>
 Each #ifdef and #ifndef directive needs to be closed by the #endif directive.
 If a variable is defined, it can be checked via <code>//#ifdef [variable]:defined</code>:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef polish.ScreenSize:defined
 </pre>
-</p>
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>Directive&nbsp;&nbsp;</th><th>Meaning&nbsp;&nbsp;</th><th>Explanation</th></tr>
 	<tr><td>//#ifdef [symbol]</td>
@@ -86,7 +89,8 @@ If a variable is defined, it can be checked via <code>//#ifdef [variable]:define
 <p>
 The #ifdef directives can be nested, of course. Other preprocessing directives can be 
 included into the sub-sections as well:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef mySymbol
 	//#ifndef myOtherSymbol
 		//#debug
@@ -98,7 +102,8 @@ included into the sub-sections as well:
 		doSomethingElse();
 	//#endif
 //#endif
-</pre><p>
+</pre>
+<p>
 The #ifdef directive and its related directives are faster to process than the more complex 
 #if directives.
 </p>
@@ -107,14 +112,17 @@ The #ifdef directive and its related directives are faster to process than the m
 <p>
 With each #ifdef directive only a single symbol can be checked. With the #if and #elif 
 directives, however, complex terms containing several symbols and variables can be evaluated:
-<pre>
+</p>
+<pre class="brush: java">
 //#if useEnhancedInput && (polish.hasPointerEvents || polish.mouseSupported)
 	doSomething();
 //#endif
-</pre><p>
+</pre>
+<p>
 #if directives can also be nested and contain other preprocessing directives like the #ifdef directives.
 #if and #ifdef directives can also be mixed:
-<pre>
+</p>
+<pre class="brush: java">
 //#if !basicInput && (polish.hasPointerEvents || polish.mouseSupported)
 	doSomething();
 	//#if polish.BitsPerPixel >= 8
@@ -146,11 +154,13 @@ directives, however, complex terms containing several symbols and variables can 
 	</tr>
 </table>
 <p>
-In the terms the boolean operators &amp;&amp;, ||, ^ and ! can be used. Complex terms can be seperated using normal parenthesisses &quot;(&quot; and &quot;)&quot;. The term arguments for boolean operators are symbols, which are true when they are defined and false otherwise. 
-</p><p>
+In the terms the boolean operators &amp;&amp;, ||, ^ and ! can be used. Complex terms can be separated using normal parentheses &quot;(&quot; and &quot;)&quot;. The term arguments for boolean operators are symbols, which are true when they are defined and false otherwise. 
+</p>
+<p>
 Variables can be checked with the comparator ==, &gt;, &lt;, &lt;= and &gt;=.  Arguments for the comparators are variables or constants.
-</p><p>
-A term can include comparators and boolean operators, when the sections are seperated by parenthesisses. 
+</p>
+<p>
+A term can include comparators and boolean operators, when the sections are separated by parentheses. 
 </p>
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>Boolean Operator&nbsp;&nbsp;</th><th>Meaning&nbsp;&nbsp;</th><th>Explanation</th></tr>
@@ -186,7 +196,7 @@ true ^ true = false ^ false = false</td>
 	 <td>The left and the right argument must be equal, integers and strings can be compared:<br/>
 8 == 8 = true<br/>
 Nokia == Nokia = true<br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel == 8
 //#if polish.vendor == Nokia
 </pre></td>
@@ -196,75 +206,96 @@ Nokia == Nokia = true<br/>
 	 <td>The left and the right argument must not be equal, integers and strings can be compared:<br/>
 8 != 8 = false<br/>
 Nokia != Sony-Ericsson = true<br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel != 8
 //#if polish.vendor != Nokia
 </pre></td>
 	</tr>
 	<tr><td>&gt;</td>
 	 <td>greater</td>
-	 <td>The left argument must be greater than the right one. Only integers can be compared:<br/>
+	 <td>The left argument must be greater than the right one. Only integers and versions can be compared:<br/>
 8 &gt; 8 = false<br/>
 16 &gt; 8 = true <br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel &gt; 8
+</pre>
+<pre class="brush: java">
+//#if polish.JavaPlatform &gt; BlackBerry/6.0
 </pre>
 </td>
 	</tr>
 	<tr><td>&lt;</td>
 	 <td>smaller</td>
-	 <td>The left argument must be smaller than the right one. Only integers can be compared:<br/>
+	 <td>The left argument must be smaller than the right one. Only integers and versions can be compared:<br/>
 8 &lt; 8 = false<br/>
 8 &lt; 16 = true <br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel &lt; 8
-</pre></td>
+</pre>
+<pre class="brush: java">
+//#if polish.JavaPlatform &lt; BlackBerry/6.0
+</pre>
+</td>
 	</tr>
 	
 	</tr>
 	<tr><td>&gt;=</td>
 	 <td>greater or equals</td>
-	 <td>The left argument must be greater than or equals the right one. Only integers can be compared:<br/>
+	 <td>The left argument must be greater than or equals the right one. Only integers and versions can be compared:<br/>
 8 &gt;= 8 = true<br/>
 16 &gt;= 8 = true <br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel &gt;= 8
 </pre>
+<pre class="brush: java">
+//#if polish.JavaPlatform &gt;= BlackBerry/6.0
+</pre>
+
 </td>
 	</tr>
 	<tr><td>&lt;=</td>
 	 <td>smaller or equals</td>
-	 <td>The left argument must be smaller than or equals the right one. Only integers can be compared:<br/>
+	 <td>The left argument must be smaller than or equals the right one. Only integers and versions can be compared:<br/>
 8 &lt;= 8 = true<br/>
 8 &lt;= 16 = true <br/>
-<pre>
+<pre class="brush: java">
 //#if polish.BitsPerPixel &lt;= 8
-</pre></td>
+</pre>
+<pre class="brush: java">
+//#if polish.JavaPlatform &lt;= BlackBerry/6.0
+</pre>
+
+</td>
 	</tr>
 </table>
 <h3 id="comparing-variable-functions">Using Variable-Functions for Comparing Values</h3>
 <p>
 Some variables have not only different values but also store them in different ways. An example are memory values like the HeapSize which is sometimes defined in kilobytes and sometimes in megabytes. In such situation functions can be used:
-<pre>
+</p>
+<pre class="brush: java">
 //#if ${ bytes( polish.HeapSize ) } &gt; 102400
-</pre></p><p>
-In the above example the heapsize is compared using the <code>bytes</code>-function. When a function should be used, a dollar-sign and curly parenthesizes needs to embrace the call. 
+</pre>
+<p>
+In the above example the heapsize is compared using the <code>bytes</code>-function. When a function should be used, a dollar-sign and curly parentheses needs to embrace the call. 
 The <code>bytes</code>-function will return -1 when the given memory-value is &quot;dynamic&quot;, so it might be necessary to test for both values:
-<pre>
+</p>
+<pre class="brush: java">
 //#if ( ${ bytes( polish.HeapSize ) } &gt; 102400 ) or (polish.HeapSize == dynamic)
 </pre>
-</p><p>
+<p>
 Functions can also be used for fixed values:
-<pre>
+<pre class="brush: java">
 //#if ${ bytes( polish.HeapSize ) } &gt; ${ bytes( 100 kb ) }
-</pre></p><p>
+</pre>
+<p>
 You will find more information about using functions at the <a href="#variablefunctions">&quot;Using Variables&quot; section</a>.
 </p>
 
 <h2 id="preprocessing-hiding">Hiding Code</h2>
 <p>
 Code sections can be temporarily commented out, to avoid problems in the IDE. A typical problem are several return statements:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef polish.images.directLoad
 	Image image = Image.createImage( name );
 	//# return image;
@@ -272,7 +303,8 @@ Code sections can be temporarily commented out, to avoid problems in the IDE. A 
 	scheduleImage( name );
 	return null;
 //#endif
-</pre></p><p>
+</pre>
+<p>
 In this example the first return statement is hidden with a &quot;//# &quot; directive. When the first #ifdef directive is true, the corresponding code will be made visible again. The space after the # sign is important for the correct handling of such comments.
 </p>
 
@@ -280,22 +312,27 @@ In this example the first return statement is hidden with a &quot;//# &quot; dir
 <p>
 To include debugging information in a J2ME application is not without problems. The main problem is that any debugging slows down an application unnecessarily. Another problem is that nobody wants the debugging information in an application which should be deployed &quot;in the wild&quot;. With J2ME&nbsp;Polish debugging statements can be included into the applications without having the above disadvantages. 
 The #debug directive is used to include a single line of debugging information:
-<pre>
+</p>
+<pre class="brush: java">
 //#debug
 System.out.println("debugging is enabled for this class.");
-</pre></p><p>
+</pre>
+<p>
 You can define what debugging level is used by adding the debugging-level to  the #debug directive. When no level is specified the &quot;debug&quot; level is assumed.
-<pre>
+</p>
+<pre class="brush: java">
 //#debug info
 System.out.println("the info debugging level is enabled for this class.");
-</pre></p><p>
+</pre>
+<p>
 The #mdebug (multi-line debug) directive can be used to use multiple lines of debugging information. It must be finished with the #enddebug directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#mdebug error
 e.printStackTrace();
 System.out.println("unable to load something: " + e.getMessage() );
 //#enddebug
-</pre></p>
+</pre>
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>Directive&nbsp;&nbsp;</th><th>Explanation</th></tr>
 	<tr><td>//#debug [level]</td>
@@ -308,148 +345,30 @@ System.out.println("unable to load something: " + e.getMessage() );
 	 <td>Marks the end of the #mdebug section.</td>
 </table>
 
-<h3 id="levels">Debug Levels</h3>
 <p>
-Following debug levels are predefined:
-&quot;debug&quot;, &quot;info&quot;, &quot;warn&quot;, &quot;error&quot; and &quot;fatal&quot;. The specific level for a class can be defined with the <debug> element of the J2ME&nbsp;Polish-task:
-<pre>
-&lt;debug showLogOnError=&quot;true&quot; verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test&quot;  &gt;
-	&lt;filter pattern=&quot;com.company.package.*&quot; level=&quot;info&quot; /&gt;
-	&lt;filter pattern=&quot;com.company.package.MyClass&quot; level=&quot;debug&quot; /&gt;
-&lt;/debug&gt;
-</pre></p><p>
-Please see the section <a href="build-build.html#debug">&lt;debug&gt;</a> for further information. The levels are weighted, meaning that the debug level is lower than the info level, which is in turn lower than the error level and so forth:
-<pre>
-debug &lt; info &lt; warn &lt; error &lt; fatal &lt; user-defined
-</pre></p><p>
-Thus when the info level is activated for a class, all debugging information with the level &quot;warn&quot;, &quot;error&quot;, &quot;fatal&quot; and with a user-defined level will also be compiled. 
-User specific debugging levels can be useful for accomplishing specific tasks. For example a level &quot;benchmark&quot; could be defined to allow the measurement of the performance:
-<pre>
-//#debug benchmark
-long startTime = System.currentTimeMilis();
-callComplexMethod();
-//#debug benchmark
-System.out.println("complex method took [" + (System.currentTimeMilis() - startTime) + "] ms.");
-</pre></p>
-
-<h3 id="debug-class">The Debug Utility Class</h3>
-<p>
-The utility class <code>de.enough.polish.util.Debug</code> can be used for debugging. 
-Especially its <code>showLog()</code>-method can be useful in some circumstances when the &quot;showLogOnError&quot;-attribute is not sufficient. 
-<pre>
-&lt;debug enable=&quot;true&quot; showLogOnError=&quot;true&quot; verbose=&quot;false&quot; level=&quot;error&quot;&gt;
-	&lt;filter pattern=&quot;com.company.package.*&quot; level=&quot;info&quot; /&gt;
-	&lt;filter pattern=&quot;com.company.package.MyClass&quot; level=&quot;debug&quot; /&gt;
-
-</pre></p><p>
-Its debug-methods are used to either print out the debug messages to the standard output, or to store the messages in a form, which can be shown on a real device. This is especially useful for tracking errors on a real handset:
-<pre>
-import de.enough.polish.util.Debug;
-[...]
-try {
-	callComplexMethod();
-	//#debug info
-	Debug.debug( "complex method succeeded." );
-} catch (MyException e) {
-	//#debug error
-	Debug.debug( "complex method failed: " + e.getMessage(), e );
-}
-</pre></p><p>
-Both debug-methods are used in the example. 
-The second method debug(String, Throwable) also prints out the stack trace of the exception, but note that the stacktrace is only available in emulators.
-</p><p>
-In general is is more flexible to use simple System.out.println()-statements instead of
-using the Debug-methods directly:
-<pre>
-try {
-	callComplexMethod();
-	//#debug info
-	System.out.println( "complex method succeeded." );
-} catch (MyException e) {
-	//#debug error
-	System.out.println( "complex method failed" + e );
-}
-</pre>
-</p><p>
-You can view the log in your MIDlet class with the following code:
-<pre>
-import de.enough.polish.util.Debug;
-public class MyMIDlet extends MIDlet {
-//#ifdef polish.debugEnabled
-	private Command logCmd = new Command( "Show log", Command.SCREEN, 10 );
-//#endif
-private Screen mainScreen;
-private Screen display;
-[...]
-public MyMIDlet() {
-	[...]
-	//#ifdef polish.debugEnabled
-		this.mainScreen.addCommand( this.logCmd );
-	//#endif
-}
-public void commandAction(Command cmd, Displayable screen ) {
-	[...]
-	//#ifdef polish.debugEnabled
-		if (cmd == this.logCmd) {
-			Debug.showLog( this.display );
-		}
-	//#endif
-}
-</pre></p><p>
-In the above example the MIDlet <code>MyMIDlet</code> adds a command to its main screen 
-when the debugging mode is enabled. When this is the case, the preprocessing symbol 
-<code>polish.debugEnabled</code> will be defined. The user can then select the 
-&quot;Show log&quot; command to see view all logging messages. 
-When the user selects the &quot;return&quot; command from the log-screen, he will 
-return to the screen that has been shown before.
-</p><p>
-Please make sure, that you have added the &quot;import/enough-j2mepolish-util.jar&quot; to the classpath of your project, when using the Debug-class. 
+Please read the <a href="logging.html">logging documentation</a> for further information.
 </p>
 
-<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
-	<tr><th>Debug Method&nbsp;&nbsp;</th><th>Explanation</th></tr>
-	<tr><td>Debug.debug( String message )</td>
-	 <td>Same as
-<pre>
-//#debug
-System.out.println( message );
-</pre>
-only that the message will always be logged.
-	 </td>
-	</tr>
-	<tr><td>Debug.debug( String message, Throwable exception)</td>
-	 <td>
-Same as 
-<pre>
-//#debug
-System.out.println( message + exception );
-</pre>
-only that the message will always be logged.
-	 </td>
-	</tr>
-	<tr><td>Debug.showLog( Display display )</td>
-	 <td>Shows the log containing all messages. When another message is added while the log is shown, the log will be updated.
-	 </td>
-	</tr>
-</table>
 
 <h2 id="preprocessing-variables">Using Variables with #=</h2>
 <p>
 You can add the contents of variables with the #= directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#= private String url = &quot;${ start-url }&quot;;
-</pre></p><p>
+</pre><p>
 When the variable is not defined, the above example would throw an exception during the preprocessing step of the build process. You can use the &quot;[variable]:defined&quot; symbol, which is set for every known variable:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef start-url:defined
 	//#= private String url = &quot;${ start-url }&quot;;
 //#else
 	private String url = "http://192.168.101.101";
 //#endif
-</pre></p><p>
+</pre><p>
 This is especially useful for setting configuration values, which can change easily, like Web-URLs and so on.
 </p><p>
-The name of the variable needs to be surrounded by a Dollar-Sign followed by curly parenthesizes
+The name of the variable needs to be surrounded by a Dollar-Sign followed by curly parentheses
 <code>(${ variable-name })</code>, just like referring to Ant-properties in the build.xml.
 </p><p>
 Variables can be defined in the &lt;variables&gt; element in the build.xml. 
@@ -458,20 +377,22 @@ These files are located in the installation directory of J2ME Polish.
 </p>
 <h3 id="variablefunctions">Variable-Function</h3>
 <p>
-You can use functions like &quot;uppercase&quot; to change the values. A function is used within the curly  parenthesizes and surrounds the variable-name by normal parenthesizes:
-<pre>
+You can use functions like &quot;uppercase&quot; to change the values. A function is used within the curly  parentheses and surrounds the variable-name by normal parentheses:
+</p>
+<pre class="brush: java">
 //#ifdef start-url:defined
 	//#= private String url = "${ lowercase(start-url) }";
 //#else
 	private String url = "http://192.168.101.101";
 //#endif
 </pre>
-</p><p>
+<p>
 When using function you do not necessarily need a variable - you can also use a direct value. This can be handy when handling with memory values for example:
-<pre>
+</p>
+<pre class="brush: java">
 //#if ${ bytes( polish.HeapSize ) } &gt; ${ bytes(100 kb) }
 </pre>
-</p><p>
+<p>
 Following functions can be used:
 </p>
 <ul>
@@ -486,16 +407,20 @@ Following functions can be used:
 <h2 id="preprocessing-styles">Setting CSS Styles with #style</h2>
 <p>
 CSS styles are used for the design of the application. The styles are defined in the file polish.css in the resources folder of the project. The developer can control which styles are used for specific Items by using the #style directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#style cool, frosty, default
 StringItem url = new StringItem( null, "http://192.168.101.101" );
-</pre></p><p>
+</pre>
+<p>
 In the above example one of the styles &quot;cool&quot;, &quot;frosty&quot; or &quot;default&quot; is used for the new item. The style &quot;frosty&quot; is only used when the style &quot;cool&quot; is not defined. The style &quot;default&quot; is only used, when neither the style &quot;cool&quot; nor the style &quot;frosty&quot; is defined. The style &quot;default&quot; is special, since it is always defined, even when the designer does not define it explicitly. The #style directive needs at least one style name as argument. The style is deemed optional when the style ends with a question mark. In that case it will
 only be used when it is defined:
-<pre>
+</p>
+<pre class="brush: java">
 //#style cool?
 StringItem url = new StringItem( null, "http://192.168.101.101" );
-</pre></p><p>
+</pre>
+<p>
 The styles mentioned here can be defined in the &quot;resources/polish.css&quot; file. In that file names of custom styles need to start with a dot. In the above example you can define the styles &quot;.cool&quot;, &quot;.frosty&quot; or &quot;default&quot;. The &quot;default&quot; style is a predefined style and its name must not, therefore, start with a dot.
 </p><p>
 Styles are only used, when the J2ME&nbsp;Polish GUI is used. This can be triggered with the &quot;usePolishGui&quot; attribute of the &lt;build&gt; element in the build.xml. 
@@ -593,26 +518,55 @@ super( "Menu" );
 <h2 id="preprocessing-condition">Exclude or Include Complete Files with #condition</h2>
 <p>
 The #condition directive can be used to prevent the usage of complete files, when a condition is not met:
-<pre>
+</p>
+<pre class="brush: java">
 //#condition polish.usePolishGui
-</pre></p><p>
+</pre>
+<p>
 When in the above example the J2ME&nbsp;Polish GUI is not used (and thus the symbol polish.usePolishGui is not defined), the file will not be included into the application bundle for the current device. Conditions can use the same operators and comparators like the #if directive. 
+</p>
+
+<h2 id="preprocessing-dontobfuscate">Excempt a Class from Obfusction with #dontobfucate</h2>
+<p>
+You can exclude a class from obfuscation with the <code>#dontobfuscate</code> directive. This is especially useful 
+if you resort to <a href="tutorial.html#dynamic">dynamic class loading</a> for generic devices that may or may not support specific APIs:
+</p>
+<pre class="brush: java">
+//#condition polish.optional-api.nokia-ui
+
+//#dontobfuscate
+
+package de.enough.polish.util.devicecontrol;
+
+import com.nokia.mid.ui.DeviceControl;
+
+public class NokiaDeviceController 
+implements DeviceController, Runnable 
+{
+	[...]
+}
+</pre>
+<p>
+Another option to exclude classes from obfuscation is to define them in the <a href="build-build.html#obfuscator">&lt;keep&gt;</a> elements of the 
+<a href="build-build.html#obfuscator">&lt;obfuscator&gt;</a> configuration in your <i>build.xml</i> script.
 </p>
 
 <h2 id="define">Defining Temporary Symbols and Variables with #define, #defineorappend and #undefine</h2>
 <p>
 You can temporarily define and undefine symbols with the #define directive. This can be used to evaluate a complex if-term only once and then referring a simple symbol instead of using the complex term again:
-<pre>
+</p>
+<pre class="brush: java">
 //#if !basicInput && (polish.hasPointerEvents || polish.mouseSupported)
 	//#define tmp.complexInput
 //#endif
-</pre></p><p>
+</pre><p>
 You can later just check the temporary defined symbol:
-<pre>
+</p>
+<pre class="brush: java">
 //#ifdef tmp.complexInput
 	doSomethingComplex();
 //#endif
-</pre></p>
+</pre>
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>Directive&nbsp;&nbsp;</th><th>Explanation</th></tr>
 	<tr><td>//#define [symbol]</td>
@@ -626,42 +580,45 @@ You can later just check the temporary defined symbol:
 Symbols defined in this way are only available in the same source-file where you defined that symbol.  It is advised that you start the names of defined symbols with &quot;tmp.&quot;, so that you always know that this is a temporary symbol.
 </p>
 <p>You can temporarily define and undefine variables with the #define as well. When the expression after the #define directive contains the equals-sign, the left part will be taken as the variable name, and the right part as the variable value:
-<pre>
+</p>
+<pre class="brush: java">
 //#if !message:defined
 	//#define message = Hello world
 //#endif
-</pre></p>
+</pre>
 <p>
 You can later just use the defined variable normally:
-<pre>
-//#= String message = &quot;${ message }&quot;;</p>
-</pre></p>
+</p>
+<pre class="brush: java">
+//#= String message = &quot;${ message }&quot;
+</pre>
 <p>
 When you have complex rules for implementing interfaces, you might want to use the #defineorappend directive. This allows you to add values
 to a single variable step by step. The following example is taken from J2ME Polish's TextField implementation that 
-<pre>
+</p>
+<pre class="brush: java">
 //#if !(tmp.forceDirectInput || polish.blackberry || polish.doja) || tmp.supportsSymbolEntry
-	<b>//#defineorappend tmp.implements=CommandListener</b>
+	//#defineorappend tmp.implements=CommandListener
 	//#define tmp.implementsCommandListener
 //#endif
 //#if polish.TextField.suppressCommands == true
 	//#define tmp.suppressCommands
 //#else
- 	<b>//#defineorappend tmp.implements=ItemCommandListener</b>
+ 	//#defineorappend tmp.implements=ItemCommandListener
 	//#define tmp.implementsItemCommandListener
 //#endif
 //#if polish.blackberry
-	<b>//#defineorappend tmp.implements=FieldChangeListener</b>
+	//#defineorappend tmp.implements=FieldChangeListener
 //#endif
 //#if false
 	//#define tmp.implementsCommandListener
 	//#define tmp.implementsItemCommandListener
 	implements CommandListener, ItemCommandListener, FieldChangeListener
 //#else
-	<b>//#= implements ${tmp.implements}</b>
+	//#= implements ${tmp.implements}
 //#endif
 </pre>
-</p>
+
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
 	<tr><th>Directive&nbsp;&nbsp;</th><th>Explanation</th></tr>
 	<tr><td>//#define [name]=[value]</td>
@@ -678,27 +635,30 @@ to a single variable step by step. The following example is taken from J2ME Poli
 <h2 id="preprocessing-include">Inserting Code Fragments with #include</h2>
 <p>
 You can insert complete code fragments with the #include directive:
-<pre>
+<pre class="brush: java">
 //#include ${polish.source}/includes/myinclude.java
-</pre></p><p>
+</pre>
+<p>
 Within the file-name you can use all defined variables. A useful variable is especially &quot;polish.source&quot;, which points the base directory of the file, which is currently preprocessed. I you use only relative names, please bear in mind, that the base directory is the root of your project (or to be more precise: the directory which contains the build.xml file).
 </p>
 
 <h2 id="preprocessing-message">Analyzing the Preprocessing-Phase with #message and #todo</h2>
 <p>
 Sometimes the preprocessing itself is rather complex. The #message directive can help to understand the process by printing out messages during the build-process:
-<pre>
-//#if !basicInput && (polish.hasPointerEvents || polish.mouseSupported)
+</p>
+<pre class="brush: java">
+//#if !basicInput &amp;&amp; (polish.hasPointerEvents || polish.mouseSupported)
 	//#define tmp.complexInput
 	//#message complex input is enabled
 //#else
 	//#message complex input is disabled
 //#endif
-</pre></p><p>
+</pre><p>
 Within each message any variables can be used. If a variable is not defined, the variable-definition will be included in the message.
-<pre>
+</p>
+<pre class="brush: java">
 //#message using the update-url ${update-url}.
-</pre></p><p>
+</pre><p>
 The above example results in the message 
 &quot;MESSAGE: using the update-url http://update.company.com.&quot; being given out, when the variable 
 &quot;update-url&quot; has the value &quot;http://update.company.com&quot;. When this variable is not defined, 
@@ -714,21 +674,23 @@ The #todo directive works very similar like the #message directive, but it adds 
 The #foreach directive can be used for processing a variable which has several values separated by comma. An example is the &quot;polish.SoundFormat&quot;-variable which lists all supported audio-formats of a device, e.g. &quot;midi, amr, mp3&quot;. 
 </p><p>
 The #foreach directive defines a temporary loop-variable and ends with the &quot;#next [loop-var-name]&quot; directive:
-<pre>
+</p>
+<pre class="brush: java">
 //#foreach [loop-var-name] in [variable-name]
 ...[any directives and code]...
 //#next [loop-var-name]
 </pre>
-</p><p>
+<p>
 The following example illustrates this:
-<pre>
+</p>
+<pre class="brush: java">
 String format;
 //#foreach format in polish.SoundFormat
 	format = &quot;${ lowercase( format ) }&quot;;
 	System.out.println( &quot;The audio-format &quot; + format + &quot; is supported by this device.&quot; );
 //#next format
 </pre>
-</p><p>
+<p>
 You can use any number and any kind of code and preprocessing directives within the #foreach-loop itself. So you can even use nested #foreach loops, for example. The code-fragment within the #foreach-loop will be copied into the preprocessed source-code as many time as there are values. In the above example it would be copied three times, since in the example three formats are supported. This copying process has two implications: 
 </p>
 <ol>

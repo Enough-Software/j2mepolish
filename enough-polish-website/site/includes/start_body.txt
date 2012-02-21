@@ -98,6 +98,11 @@
 		
 		
 			<div class="currentLink"><a href="<%= basedir %>documentation.html">Documentation</a></div>
+			<%ifdef inDocumentationSection.tutorial %>
+				<div id="currentSecondLevelLink"><a href="<%= basedir %>docs/tutorial.html">Tutorial</a></div>
+			<%else %>
+				<div class="secondLevelLink"><a href="<%= basedir %>docs/tutorial.html">Tutorial</a></div>
+			<%endif %>				
 			<%ifdef inDocumentationSection.install %>
 				<%ifdef inDocumentationSection.installcore %>
 					<div id="currentSecondLevelLink"><a href="<%= basedir %>docs/install.html">Installation</a></div>

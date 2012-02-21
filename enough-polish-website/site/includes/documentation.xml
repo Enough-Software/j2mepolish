@@ -1,4 +1,5 @@
 <documentation>
+	<page file="tutorial.html" title="Tutorial"/>
 	<page file="install.html" title="Installation">
 		<page file="migration.html" title="Migration" />
 		<page file="integration.html" title="Ide Integration">
