@@ -48,7 +48,7 @@ import de.enough.polish.util.Locale;
 /**
  * <p>Controls the UI of the mobile app</p>
  *
- * <p>Copyright Enough Software 2010</p>
+ * <p>Copyright Enough Software 2010 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class Controller
@@ -243,7 +243,7 @@ implements ApplicationInitializer, CommandListener
 	 * Stops the busy indicator.
 	 * When no busy indicators are left, the busy indicator won't be shown any more.
 	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
-	 * <variable name="polish.ScreenInfo.enable" value="true" />
+	 * &lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
 	 * in your build.xml script.
 	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
 	 * @see #startBusyIndicator()
@@ -263,7 +263,7 @@ implements ApplicationInitializer, CommandListener
 	 * Starts the busy indicator.
 	 * When this is the first indicator, the busy indicator will be made visible.
 	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
-	 * <variable name="polish.ScreenInfo.enable" value="true" />
+	 * &lt;variable name=&quot;polish.ScreenInfo.enable&quot; value=&quot;true&quot; /&gt;
 	 * in your build.xml script.
 	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
 	 * @see #stopBusyIndicator()

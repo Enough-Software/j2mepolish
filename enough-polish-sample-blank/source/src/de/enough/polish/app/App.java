@@ -25,32 +25,15 @@
  */
 package de.enough.polish.app;
 
-import java.io.IOException;
-
-import javax.microedition.lcdui.Alert;
-import javax.microedition.lcdui.ChoiceGroup;
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.ImageItem;
-import javax.microedition.lcdui.StringItem;
-import javax.microedition.lcdui.TextField;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 
 import de.enough.polish.app.control.Controller;
 
 /**
- * A blank MIDlet that can be used as a starting point for your own apps.
- * <br>Copyright Enough Software 2005-2010
- * <pre>
- * history
- *        Mar 13, 2008 - rickyn creation
- * </pre>
- * @author Richard Nkrumah
+ * A simple MIDlet that can be used as a starting point for your own apps.
+ * <br>Copyright Enough Software 2005 - 2012
+ * @author Richard Nkrumah, Robert Virkus
  */
 public class App 
 extends MIDlet

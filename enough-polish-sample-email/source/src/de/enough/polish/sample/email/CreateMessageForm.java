@@ -26,17 +26,18 @@
  */
 package de.enough.polish.sample.email;
 
-import javax.microedition.lcdui.Choice;
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.Item;
-import javax.microedition.lcdui.ItemCommandListener;
-import javax.microedition.lcdui.TextField;
 
+import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceTextField;
+import de.enough.polish.ui.Command;
 import de.enough.polish.ui.FilteredChoiceGroup;
+import de.enough.polish.ui.Form;
+import de.enough.polish.ui.Item;
+import de.enough.polish.ui.ItemCommandListener;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.StyleSheet;
+import de.enough.polish.ui.TextField;
+import de.enough.polish.ui.UiAccess;
 
 /**
  * <p>Provides a form for creating a new mail.</p>
@@ -54,7 +55,8 @@ implements ItemCommandListener
 {
 		
 	private final static String[] RECEIVERS = new String[] {
-		"google.com", "yahoo.com", "msn.com", "somewhere.com"
+		//"robert@enough.de", "robert.virkus@enough.de", "roody@enough.de", "michael@enough.de",  "michael.koch@enough.de", "marco@enough.de"
+		"google.com", "hotmail.com", "yahoo.com", "msn.com", "somewhere.com"
 		//, "a.com", "b.com", "c.com", "d.com", "e.com", "f.com", "g.com", "h.com", "i.com", "j.com", "k.com", "l.com", "m.com", "n.com", "o.com", "p.com", "q.com", "r.com", "s.com", "t.com", "u.com", "v.com", "w.com", "x.com"  
 //		"aaron@somewhere.com", "ajax@hype.com", "asynchron@performance.com", "best@j2mepolish.org",
 //		"beta@j2mepolish.org", "circus@ms.com", "doing@going.com", "info@enough.de", "j2mepolish@enough.de"		
