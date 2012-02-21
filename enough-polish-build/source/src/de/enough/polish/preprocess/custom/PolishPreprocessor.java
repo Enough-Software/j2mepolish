@@ -53,12 +53,8 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Makes some standard preprocessing like the determination whether the Ticker-class is used etc.</p>
  *
- * <p>Copyright Enough Software 2004 - 2008</p>
+ * <p>Copyright Enough Software 2004 - 2012</p>
 
- * <pre>
- * history
- *        21-Jun-2004 - rob creation
- * </pre>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class PolishPreprocessor extends CustomPreprocessor {
@@ -81,7 +77,7 @@ public class PolishPreprocessor extends CustomPreprocessor {
 //	protected static final String SET_CURRENT_ALERT_DISPLAYABLE_STR = "[\\w|\\.]+\\s*\\.\\s*setCurrent\\s*\\(\\s*[\\w*|\\.|\\_|\\(|\\)]+\\s*,\\s*[\\w*|\\.|\\_|\\(|\\)]+\\s*\\)";
 //	protected static final Pattern SET_CURRENT_ALERT_DISPLAYABLE_PATTERN = Pattern.compile( SET_CURRENT_ALERT_DISPLAYABLE_STR );
 	
-	private static final Map PRIMITIVES_BY_NAME = new HashMap();
+	private static final Map<String,String> PRIMITIVES_BY_NAME = new HashMap<String,String>();
 	static {
 		PRIMITIVES_BY_NAME.put( "byte", "Byte" );
 		PRIMITIVES_BY_NAME.put( "short", "Short" );
@@ -177,7 +173,7 @@ public class PolishPreprocessor extends CustomPreprocessor {
 			if (this.stylePropertyIdsFile.exists()) {
 				//System.out.println("reading css attributes from " + this.stylePropertyIdsFile.getAbsolutePath() );
 				try {
-					HashMap idsByAttribute = FileUtil.readPropertiesFile( this.stylePropertyIdsFile );
+					HashMap<String,String> idsByAttribute = FileUtil.readPropertiesFile( this.stylePropertyIdsFile );
 					this.idGenerator.setIdsMap(idsByAttribute);
 				} catch (IOException e) {
 					e.printStackTrace();

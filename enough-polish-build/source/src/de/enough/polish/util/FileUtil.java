@@ -86,7 +86,7 @@ public final class FileUtil {
 	public static String[] readTextFile( File file ) 
 	throws FileNotFoundException, IOException 
 	{
-		ArrayList lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		BufferedReader in = new BufferedReader(new FileReader(file));
 		String line;
 		while ((line = in.readLine()) != null) {
@@ -135,7 +135,7 @@ public final class FileUtil {
 	public static String[] readTextFile(InputStream in, String encoding) 
 	throws IOException
 	{
-		ArrayList lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		BufferedReader bufferedIn;
 		if (encoding != null) {
 			bufferedIn = new BufferedReader( new InputStreamReader( in, encoding ) );
@@ -160,7 +160,7 @@ public final class FileUtil {
 	 * @param lines the text lines of the file in a collection with String-values
 	 * @throws IOException when there is an input/output error during the saving
 	 */
-	public static void writeTextFile(File file, Collection lines) 
+	public static void writeTextFile(File file, Collection<String> lines) 
 	throws IOException 
 	{
 		writeTextFile( file, (String[]) lines.toArray( new String[ lines.size() ]));
@@ -287,7 +287,7 @@ public final class FileUtil {
 	 * @param properties the properties which should be written. 
 	 * @throws IOException when there is an input/output error during the saving
 	 */
-	public static void writePropertiesFile( File file, Map properties ) 
+	public static void writePropertiesFile( File file, Map<String,String> properties ) 
 	throws IOException 
 	{
 		writePropertiesFile(file, '=', properties);
@@ -302,7 +302,7 @@ public final class FileUtil {
 	 * @param properties the properties which should be written. 
 	 * @throws IOException when there is an input/output error during the saving
 	 */
-	public static void writePropertiesFile( File file, char delimiter, Map properties ) 
+	public static void writePropertiesFile( File file, char delimiter, Map<String,String> properties ) 
 	throws IOException 
 	{
 		Object[] keys = properties.keySet().toArray();
@@ -329,7 +329,7 @@ public final class FileUtil {
 	 * @throws IOException when file could not be read.
 	 * @throws IllegalArgumentException when the line does not contain a property
 	 */
-	public static HashMap readPropertiesFile( File file ) 
+	public static HashMap<String,String> readPropertiesFile( File file ) 
 	throws FileNotFoundException, IOException 
 	{
 		return readPropertiesFile(file, '=');
@@ -348,11 +348,11 @@ public final class FileUtil {
 	 * @throws IOException when file could not be read.
 	 * @throws IllegalArgumentException when the line does not contain a property
 	 */
-	public static HashMap readPropertiesFile( File file, char delimiter ) 
+	public static HashMap<String,String> readPropertiesFile( File file, char delimiter ) 
 	throws FileNotFoundException, IOException 
 	{
 		
-		HashMap map = new HashMap();
+		HashMap<String,String> map = new HashMap<String,String>();
 		readPropertiesFile( file, delimiter, map );
 		return map;
 	}
@@ -370,7 +370,7 @@ public final class FileUtil {
 	 * @throws IOException when file could not be read.
 	 * @throws IllegalArgumentException when the line does not contain a property
 	 */
-	public static void readPropertiesFile( File file, char delimiter, Map map ) 
+	public static void readPropertiesFile( File file, char delimiter, Map<String,String> map ) 
 	throws FileNotFoundException, IOException 
 	{
 		readPropertiesFile( file, delimiter, '#', map, false );
@@ -409,7 +409,7 @@ public final class FileUtil {
 	 * @throws IOException when file could not be read.
 	 * @throws IllegalArgumentException when the line does not contain a property
 	 */
-	public static void readPropertiesFile( File file, char delimiter, char comment, Map map, boolean ignoreInvalidProperties ) 
+	public static void readPropertiesFile( File file, char delimiter, char comment, Map<String,String> map, boolean ignoreInvalidProperties ) 
 	throws FileNotFoundException, IOException 
 	{
 		try {
@@ -511,8 +511,8 @@ public final class FileUtil {
 	 * @return a map containing all properties that could be read from the input stream
 	 * @throws IOException when reading from the input stream fails
 	 */
-	public static Map readProperties(InputStream in) throws IOException {
-		Map map = new HashMap();
+	public static Map<String,String> readProperties(InputStream in) throws IOException {
+		Map<String,String> map = new HashMap<String,String>();
 		readProperties(in, '=', '#', map, false );
 		return map;
 	}
@@ -525,7 +525,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the file fails
 	 * @throws FileNotFoundException when the file does not exist
 	 */
-	public static Map readProperties(File file) throws IOException {
+	public static Map<String,String> readProperties(File file) throws IOException {
 		return readProperties( new FileInputStream( file ) );
 	}
 
@@ -536,10 +536,10 @@ public final class FileUtil {
 	 * @return a map containing all properties that could be read from the reader
 	 * @throws IOException when reading fails
 	 */
-	public static Map readProperties(Reader reader)
+	public static Map<String,String> readProperties(Reader reader)
 	throws IOException
 	{
-		Map map = new HashMap();
+		Map<String,String> map = new HashMap<String,String>();
 		readProperties(reader, '=', '#', map, false );
 		return map;
 	}
@@ -553,7 +553,7 @@ public final class FileUtil {
 	 * @param properties a map containing properties
 	 * @throws IOException when reading from the input stream fails
 	 */
-	public static void readProperties(InputStream in, char delimiter, Map properties ) 
+	public static void readProperties(InputStream in, char delimiter, Map<String,String> properties ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, '#', properties, false, null );
@@ -569,7 +569,7 @@ public final class FileUtil {
 	 * @param encoding the encoding of the file
 	 * @throws IOException when reading from the input stream fails
 	 */
-	public static void readProperties(InputStream in, char delimiter, Map properties, String encoding ) 
+	public static void readProperties(InputStream in, char delimiter, Map<String,String> properties, String encoding ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, '#', properties, false, encoding );
@@ -586,7 +586,7 @@ public final class FileUtil {
 	 * @param translateToNative true when escape sequences like \t or \n should be converted to native characters
 	 * @throws IOException when reading from the input stream fails
 	 */
-	public static void readProperties(InputStream in, char delimiter, Map properties, String encoding, boolean translateToAscii, boolean translateToNative ) 
+	public static void readProperties(InputStream in, char delimiter, Map<String,String> properties, String encoding, boolean translateToAscii, boolean translateToNative ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, '#', properties, false, encoding, translateToAscii, translateToNative );
@@ -601,7 +601,7 @@ public final class FileUtil {
 	 * @param properties a map containing properties
 	 * @throws IOException when reading from the input stream fails
 	 */
-	public static void readProperties(InputStream in, char delimiter, char comment, Map properties ) 
+	public static void readProperties(InputStream in, char delimiter, char comment, Map<String,String> properties ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, comment, properties, false );
@@ -618,7 +618,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the input stream fails
 	 * @throws IllegalArgumentException when an invalid property definition is encountered and ignoreInvalidProperties is false
 	 */
-	public static void readProperties(InputStream in, char delimiter, char comment, Map properties, boolean ignoreInvalidProperties ) 
+	public static void readProperties(InputStream in, char delimiter, char comment, Map<String,String> properties, boolean ignoreInvalidProperties ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, comment, properties, ignoreInvalidProperties, null );
@@ -635,7 +635,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the input stream fails
 	 * @throws IllegalArgumentException when an invalid property definition is encountered and ignoreInvalidProperties is false
 	 */
-	public static void readProperties(InputStream in, char delimiter, char comment, Map properties, boolean ignoreInvalidProperties, String encoding ) 
+	public static void readProperties(InputStream in, char delimiter, char comment, Map<String,String> properties, boolean ignoreInvalidProperties, String encoding ) 
 	throws IOException 
 	{
 		readProperties( in, delimiter, comment, properties, ignoreInvalidProperties, encoding, false, false );
@@ -652,7 +652,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the input stream fails
 	 * @throws IllegalArgumentException when an invalid property definition is encountered and ignoreInvalidProperties is false
 	 */
-	public static void readProperties(Reader reader, char delimiter, char comment, Map properties, boolean ignoreInvalidProperties ) 
+	public static void readProperties(Reader reader, char delimiter, char comment, Map<String,String> properties, boolean ignoreInvalidProperties ) 
 	throws IOException 
 	{
 		readProperties( reader, delimiter, comment, properties, ignoreInvalidProperties, false, false );
@@ -673,7 +673,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the input stream fails
 	 * @throws IllegalArgumentException when an invalid property definition is encountered and ignoreInvalidProperties is false
 	 */
-	public static void readProperties(InputStream in, char delimiter, char comment, Map properties, boolean ignoreInvalidProperties, String encoding, boolean translateToAscii, boolean translateToNative ) 
+	public static void readProperties(InputStream in, char delimiter, char comment, Map<String,String> properties, boolean ignoreInvalidProperties, String encoding, boolean translateToAscii, boolean translateToNative ) 
 	throws IOException 
 	{
 		Reader reader;
@@ -699,7 +699,7 @@ public final class FileUtil {
 	 * @throws IOException when reading from the input stream fails
 	 * @throws IllegalArgumentException when an invalid property definition is encountered and ignoreInvalidProperties is false
 	 */
-	public static void readProperties(Reader reader, char delimiter, char comment, Map properties, boolean ignoreInvalidProperties, boolean translateToAscii, boolean translateToNative ) 
+	public static void readProperties(Reader reader, char delimiter, char comment, Map<String,String> properties, boolean ignoreInvalidProperties, boolean translateToAscii, boolean translateToNative ) 
 	throws IOException 
 	{
 		BufferedReader bufferedReader = new BufferedReader( reader );
@@ -823,7 +823,7 @@ public final class FileUtil {
 		if (dir == null || !dir.exists()) {
 			return new String[0];
 		}
-		ArrayList fileNamesList = new ArrayList();
+		ArrayList<String> fileNamesList = new ArrayList<String>();
 		filterDirectory( "", dir, extension, recursive, filenameFilter, fileNamesList );
 		return (String[]) fileNamesList.toArray( new String[ fileNamesList.size() ] );
 	}
@@ -836,7 +836,7 @@ public final class FileUtil {
 	 * @param extension the file extension
 	 * @param recursive true when subdirectories should also be read.
 	 */
-	private static void filterDirectory( String path, File dir, String extension, boolean recursive, FilenameFilter fileNameFilter, List fileNamesList ) {
+	private static void filterDirectory( String path, File dir, String extension, boolean recursive, FilenameFilter fileNameFilter, List<String> fileNamesList ) {
 		String[] names = dir.list(fileNameFilter);
 		for (int i = 0; i < names.length; i++) {
 			String name = names[i];

@@ -43,11 +43,7 @@ import de.enough.polish.PolishProject;
 /**
  * <p>Manages the complete device database.</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        23-May-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class DeviceDatabase {
@@ -108,7 +104,7 @@ public class DeviceDatabase {
 	}
 	
 	/**
-	 * Initialises a new Device Database.
+	 * Initializes a new Device Database.
 	 * 
 	 * @param polishHomeDir the polish.home setting
 	 */
@@ -584,5 +580,12 @@ public class DeviceDatabase {
 	public Device[] getDevices(Configuration configuration) {
 		return this.deviceManager.getDevices(configuration);
 	}
-        
+       
+	
+	public static void main(String[] args) {
+		System.out.println("Initializing device database...");
+		DeviceDatabase db = DeviceDatabase.getInstance(new File("."));
+		Device[] devices = db.getDevices();
+		System.out.println("Loaded " + devices.length + " devices");
+	}
 }

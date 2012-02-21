@@ -53,15 +53,8 @@ import de.enough.polish.util.StringUtil;
  * <p>Represents a J2ME device.</p>
  * 
  * <p>
- * copyright Enough Software 2004, 2005
+ * copyright Enough Software 2004 - 2012
  * </p>
- * 
- * <pre>
- * 
- *  history
- *         15-Jan-2004 - rob creation
- *  
- * </pre>
  * 
  * @author Robert Virkus, robert@enough.de
  */
