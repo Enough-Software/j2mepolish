@@ -488,5 +488,18 @@
         <capability name="android1.1" value="" />
         <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
+    
+    <platform>
+        <identifier>Android/4.0.3</identifier>
+        <features>android, android4.0, android4.0.3, midp2, hasPointerEvents, hasPointerMotionEvents</features>
+        <parent>Android/1.1</parent>
+        <capability name="build.BootClassPath" value="android-4.0.3.jar" />
+        <capability name="build.Android.Platform.Version" value="4.0.3" />
+        <capability name="build.Android.Platform.Target" value="android-15" />
+        <capability name="build.Android.Platform.Api" value="15" />
+        <capability name="android1.1" value="" />
+        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+    </platform>
+    
 				
 </platforms>
