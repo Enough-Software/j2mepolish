@@ -276,17 +276,25 @@ implements FileConnection
 
     public void setReadable(boolean readable) throws IOException
     {
-    	this.connectionFile.setReadable(readable);        
+    	//#if polish.JavaPlatform >= Android/2.3
+    		this.connectionFile.setReadable(readable);
+    	//#endif
     }
 
     public void setWritable(boolean writable) throws IOException
     {
-    	this.connectionFile.setWritable(writable);
+    	//#if polish.JavaPlatform >= Android/2.3
+    		this.connectionFile.setWritable(writable);
+    	//#endif
     }
 
     public long totalSize()
     {
-    	return this.connectionFile.getTotalSpace();
+    	long totalSpace = -1;
+    	//#if polish.JavaPlatform >= Android/2.3
+    		totalSpace = this.connectionFile.getTotalSpace();
+    	//#endif
+    	return totalSpace;
     }
 
     public void truncate(long byteOffset) throws IOException
@@ -319,7 +327,11 @@ implements FileConnection
 
     public long usedSize()
     {
-    	return this.connectionFile.getTotalSpace() - this.connectionFile.getFreeSpace();
+    	long usedSize = -1;
+    	//#if polish.JavaPlatform >= Android/2.3
+    		usedSize = this.connectionFile.getTotalSpace() - this.connectionFile.getFreeSpace();
+    	//#endif
+    	return usedSize;
     }
 
     public void close() throws IOException
