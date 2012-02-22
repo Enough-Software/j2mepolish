@@ -190,6 +190,7 @@ public class RedirectHttpConnection implements HttpConnection
 						//# ((de.enough.polish.android.io.HttpConnectionImpl) this.currentHttpConnection).setTimeout( timeout );
 					}
 				//#endif
+				this.currentHttpConnection = tmpHttpConnection;
 			}
 			tmpHttpConnection.setRequestMethod(this.requestMethod);
 			if (this.requestProperties != null)
@@ -637,6 +638,9 @@ public class RedirectHttpConnection implements HttpConnection
 			}
 			this.httpConnection.close();
 			this.httpConnection = null;
+		}
+		if (this.currentHttpConnection != null) {
+			this.currentHttpConnection.close();
 			this.currentHttpConnection = null;
 		}
 	}
