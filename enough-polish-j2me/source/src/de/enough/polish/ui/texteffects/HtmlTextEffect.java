@@ -417,18 +417,20 @@ implements ItemCommandListener
 
 	public void commandAction(Command cmd, Item item) {
 		String href = (String) item.getAttribute(ATTRIBUTE_HREF);
-		if ((href != null) && (midlet != null) && (cmd == cmdOpenWebsite || cmd == cmdOpenMailto || cmd == cmdCall)) {
-			boolean shouldExit = false;
-			try {
-				shouldExit = midlet.platformRequest(href);
-			} catch (ConnectionNotFoundException e) {
-				//#debug error
-				System.out.println("unable to do a platformRequest for " + href + e);
+		//#if polish.midp2
+			if ((href != null) && (midlet != null) && (cmd == cmdOpenWebsite || cmd == cmdOpenMailto || cmd == cmdCall)) {
+				boolean shouldExit = false;
+				try {
+					shouldExit = midlet.platformRequest(href);
+				} catch (ConnectionNotFoundException e) {
+					//#debug error
+					System.out.println("unable to do a platformRequest for " + href + e);
+				}
+				if (shouldExit) {
+					midlet.notifyDestroyed();
+				}
 			}
-			if (shouldExit) {
-				midlet.notifyDestroyed();
-			}
-		}
+		//#endif
 	}
 	
 	private static class HtmlTextContainerView extends Midp2ContainerView {
