@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This file controls the build process.                    -->
+<!-- The most important target is the "j2mepolish",           -->
+<!-- which controls for what devices the application should   -->
+<!-- be created and so on.                                    -->
+<!--                                                          -->
+<!-- Call the "emulator" target to skip the obfuscation       -->
+<!-- and to build the example for only one handsets.          -->
+<!-- The default target builds and obfuscates the example.    -->
+<!--                                                          -->
+<!-- The full documentation can be found at                   -->
+<!-- http://www.j2mepolish.org                                -->
+<!--                                                          -->
+<!-- Have fun!                                                -->
 <project basedir="." default="j2mepolish" name="enough-polish-roadrunner">
 	
 	<!-- import user specific properties                          -->

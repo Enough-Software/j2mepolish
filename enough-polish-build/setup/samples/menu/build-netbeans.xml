@@ -3,17 +3,12 @@
 <!-- run, debug, build and so forth from within NetBeans.     -->
 
 <!-- This file controls the build process.                    -->
-<!-- The most important target is the j2mepolish-target,      -->
+<!-- The most important target is the "j2mepolish",           -->
 <!-- which controls for what devices the application should   -->
 <!-- be created and so on.                                    -->
 <!--                                                          -->
-<!-- Important: when you have no Wireless Toolkit installed   -->
-<!-- you need to define the "preverify"-attribute             -->
-<!-- of the <build>-element of the J2ME Polish task.          -->
-<!--                                                          -->
-<!-- When you call Ant from the command-line, you can         -->
-<!-- call "ant test j2mepolish" to skip the obfuscation       -->
-<!-- and to build the example for fewer handsets.             -->
+<!-- Call the "emulator" target to skip the obfuscation       -->
+<!-- and to build the example for only one handsets.          -->
 <!-- The default target builds and obfuscates the example.    -->
 <!--                                                          -->
 <!-- The full documentation can be found at                   -->

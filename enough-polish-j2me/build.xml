@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="enough-polish" default="doc">
 
+	<property file="../enough-polish-build/version.properties" />
     <target name="doc">
-        <javadoc 
-        	destdir="doc" 
-        	access="public" 
-        	use="true" 
-        	notree="false" 
-        	nonavbar="false" 
-        	noindex="false" 
-        	splitindex="true" 
-        	author="true" 
-        	version="true" 
-        	nodeprecatedlist="false" 
-        	nodeprecated="false" 
-        	packagenames="de.enough.*" 
-        	sourcepath="source/src" 
-        	classpath="bin/classes:import/midpapi.zip:import/bluetooth.zip:import/mma.zip:import/nokiaui.zip:import/wma.zip:import/junit.jar" 
-        	doctitle="the J2ME Polish framework"/>
+       
+		<javadoc 
+		    	destdir="doc" 
+		    	access="protected" 
+		    	use="true" 
+		    	notree="false" 
+		    	nonavbar="false" 
+		    	noindex="false" 
+		    	splitindex="true" 
+		    	author="true" 
+		    	version="true" 
+		    	nodeprecatedlist="false" 
+		    	nodeprecated="false" 
+		    	packagenames="de.enough.*" 
+		    	sourcepath="../enough-polish-j2me/source/src" 
+			    classpath="bin/classes:../enough-polish-build/import/cldc-1.1.jar:../enough-polish-build/import/midp-2.0.jar:../enough-polish-build/import/windows.jar:../enough-polish-build/import/advancedmultimedia-1.0.jar:../enough-polish-build/import/android-2.1.jar:../enough-polish-build/import/blackberry-6.0.0.jar:../enough-polish-build/import/doja-2.5.jar:../enough-polish-build/import/m3g.jar:../enough-polish-build/import/nokia-ui.jar:../enough-polish-build/import/sensor.jar:../enough-polish-build/import/siemens-extension-api.jar"
+		    	doctitle="The J2ME Polish Client Framework, Version ${Version}"
+		>
+			<link href="http://java.sun.com/javame/reference/apis/jsr118/" />
+		</javadoc>
     </target>
     
+	
 </project>

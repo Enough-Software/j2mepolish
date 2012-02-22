@@ -58,10 +58,12 @@
 	    	nodeprecatedlist="false" 
 	    	nodeprecated="false" 
 	    	packagenames="de.enough.*" 
-	    	sourcepath="source/src:source/extensions" 
-	    	classpath="bin/classes:lib/ant.jar:lib/junit.jar" 
-	    	doctitle="J2ME Polish build framework"
-	    />
+	    	sourcepath="source/src" 
+	    	classpath="bin/classes:../enough-polish-j2me/bin/classes:build/clientdummy:lib/ant.jar:lib/junit.jar:lib/jdom.jar:lib/AppleJavaExtensions.jar:lib/bluecove-2.0.3.jar:lib/javax.servlet.jar:lib/osgi-3.0.1.jar"
+	    	doctitle="The J2ME Polish Build Framework, Version ${Version}"
+		>
+				<link href="http://java.sun.com/javase/6/docs/api/" />
+		</javadoc>	
 	</target>
 	
 	<target name="build-init">

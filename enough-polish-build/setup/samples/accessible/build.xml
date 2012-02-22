@@ -1,15 +1,10 @@
 <!-- This file controls the build process.                    -->
-<!-- The most important target is the j2mepolish-target,      -->
+<!-- The most important target is the "j2mepolish",           -->
 <!-- which controls for what devices the application should   -->
 <!-- be created and so on.                                    -->
 <!--                                                          -->
-<!-- Important: when you have no Wireless Toolkit installed   -->
-<!-- you need to define the "preverify"-attribute             -->
-<!-- of the <build>-element of the J2ME Polish task.          -->
-<!--                                                          -->
-<!-- When you call Ant from the command-line, you can         -->
-<!-- call "ant test j2mepolish" to skip the obfuscation       -->
-<!-- and to build the example for fewer handsets.             -->
+<!-- Call the "emulator" target to skip the obfuscation       -->
+<!-- and to build the example for only one handsets.          -->
 <!-- The default target builds and obfuscates the example.    -->
 <!--                                                          -->
 <!-- The full documentation can be found at                   -->
@@ -33,9 +28,9 @@
 
 		
 	<!-- the device for the test mode - you can define it on the command-line
-	     using the -D switch, e.g. ant -Ddevice=Generic/midp2 emulator -->
+	     using the -D switch, e.g. ant -Ddevice=Generic/AnyMsaPhone emulator -->
 	<property name="device" value="Generic/AnyPhone"/>
-	<property name="devices" value="${device},Generic/jtwi,Generic/Midp2Cldc11,Nokia/Series40E3,Nokia/Series60E2,Nokia/Series60E3,Sony-Ericsson/JavaPlatform7,Sony-Ericsson/JavaPlatform8"/>
+	<property name="devices" value="${device},Generic/AnyMsaPhone,Nokia/Series40E3,Nokia/Series60E3,Sony-Ericsson/JavaPlatform7,Sony-Ericsson/JavaPlatform8"/>
 	
 
 
@@ -46,8 +41,8 @@
 	/>
 	
 		
-	<!-- build targets, each target can be called via "ant [name]", 
-		 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default-target -->
+	<!-- build targets, each target can be called via "ant [name]" on the command line, 
+		 e.g. "ant clean", "ant clean j2mepolish" or just "ant" for calling the default-target -->
 	
 	<target name="setdeploy" 
 		description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
@@ -100,7 +95,7 @@
 				icon="dot.png"
 				jarName="${polish.vendor}-${polish.name}-${polish.locale}-accessible.jar" 
 				jarUrl="${deploy-url}${polish.jarName}"
-				copyright="Copyright 2005 - 2011 Enough Software. All rights reserved."
+				copyright="Copyright 2005 - 2012 Enough Software. All rights reserved."
 			/>
 			<!-- selection of supported devices -->
 			<!-- In the test mode the application is build only for the  -->
