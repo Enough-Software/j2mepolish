@@ -34,11 +34,7 @@ import de.enough.polish.preprocess.css.Style;
 /**
  * <p>An attribute that consists of a mapped value or a combination.</p>
  *
- * <p>Copyright Enough Software 2007</p>
- * <pre>
- * history
- *        Apr 15, 2007 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2007 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class DimensionMapCssAttribute extends MapCssAttribute {

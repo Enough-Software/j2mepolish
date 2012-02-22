@@ -53,12 +53,8 @@ import de.enough.polish.util.StringUtil;
  * <p>Is used to obfuscate code with the ProGuard obfuscator.</p>
  * <p>For details of ProGuard, please refer to http://proguard.sourceforge.net/.</p>
  *
- * <p>Copyright Enough Software 2004, 2005</p>
+ * <p>Copyright Enough Software 2004 - 2012</p>
 
- * <pre>
- * history
- *        2-Sept-2004 - rob creation
- * </pre>
  * @author Robert Virkus, robert@enough.de
  */
 public class ProGuardObfuscator 
@@ -72,7 +68,7 @@ implements OutputFilter
 	private boolean overloadAggressively = true;
 	private String includeFileName;
 	
-	private Map furtherParameters;
+	private Map<String,String> furtherParameters;
 	private boolean isVerbose;
 	private boolean doPreverify = true;
 
@@ -91,6 +87,21 @@ implements OutputFilter
 	public void obfuscate(Device device, File sourceFile, File targetFile, String[] preserve, Path bootClassPath) 
 	throws BuildException 
 	{
+		OrderedMultipleEntriesMap params = new OrderedMultipleEntriesMap();
+		
+		Environment env = Environment.getInstance();
+		boolean isAndroid = env.hasSymbol("polish.android");
+		if (isAndroid) {
+			this.overloadAggressively = false;
+			this.doPreverify = false;
+			params.add("-optimizations", "!code/simplification/arithmetic");
+			params.add("-keepattributes",  "*Annotation*");
+			params.add("-keep", "public class * extends android.app.Activity");
+			params.add("-keep", "public class * extends android.app.Application");
+			params.add("-keep", "public class * extends android.app.Service");
+			params.add("-keep", "public class * extends android.content.BroadcastReceiver");
+			params.add("-keep", "public class * extends android.content.ContentProvider");
+		}
 		if (this.proGuardJarFile == null) {
 			String proguardPath;
 			ExtensionDefinition definition = getExtensionDefinition();
@@ -104,7 +115,6 @@ implements OutputFilter
 				this.proGuardJarFile = new File( getEnvironment().getBaseDir(), proguardPath );
 			}
 		}
-		OrderedMultipleEntriesMap params = new OrderedMultipleEntriesMap();
 		if (this.includeFileName!=null) {
 			params.put("-include", this.includeFileName);
 		}
@@ -130,9 +140,8 @@ implements OutputFilter
 		}
 		params.put( "-libraryjars", buffer.toString() );
 		// add classes that should be kept from obfuscating:
-		Map keepClassesByName = new HashMap();
+		Map<String,Boolean> keepClassesByName = new HashMap<String,Boolean>();
 		addKeepClasses(preserve, params, keepClassesByName);
-		Environment env = device.getEnvironment();
 		if (env != null && env.getVariable("polish.build.Obfuscator.KeepClasses") != null ) {
 			preserve = StringUtil.splitAndTrim(env.getVariable("polish.build.Obfuscator.KeepClasses"), ',');
 			addKeepClasses(preserve, params, keepClassesByName);			
@@ -144,9 +153,9 @@ implements OutputFilter
 		if (this.environment.hasSymbol("polish.build.obfuscator.ignorewarnings")) {
 			params.put( "-ignorewarnings", "" );
 		}
-	    List serializableClassNames = (List) this.environment.get("serializable-classes" );
+	    List<String> serializableClassNames = (List<String>) this.environment.get("serializable-classes" );
 	    if (serializableClassNames != null) {
-	    	Map obfuscationMap = new HashMap();
+	    	Map<String,String> obfuscationMap = new HashMap<String,String>();
 	    	File mapFile = new File( this.environment.getProjectHome(), ".polishSettings/obfuscation-map.txt" );
 	    	int originalObfuscationMapSize = 0;
 	    	if (mapFile.exists()) {
@@ -169,7 +178,7 @@ implements OutputFilter
 	    	}
 	    	AbbreviationsGenerator abbreviationsGenerator = new AbbreviationsGenerator( obfuscationMap, AbbreviationsGenerator.ABBREVIATIONS_ALPHABET_LOWERCASE );
 	    	// add all class names to the map:
-	    	for (Iterator iter = serializableClassNames.iterator(); iter.hasNext();) {
+	    	for (Iterator<String> iter = serializableClassNames.iterator(); iter.hasNext();) {
 				String className = (String) iter.next();
 				if (keepClassesByName.get(className) == null) {
 					abbreviationsGenerator.getAbbreviation(className, true);
@@ -355,7 +364,7 @@ implements OutputFilter
 	 * @param keepClassesByName
 	 */
 	private void addKeepClasses(String[] preserve,
-			OrderedMultipleEntriesMap params, Map keepClassesByName) 
+			OrderedMultipleEntriesMap params, Map<String,Boolean> keepClassesByName) 
 	{
 		for (int i = 0; i < preserve.length; i++) {
 			String className = preserve[i];
@@ -467,7 +476,7 @@ implements OutputFilter
 	 */
 	public void setParameters( Variable[] parameters, File baseDir ) {
 		if (this.furtherParameters == null ) {
-			this.furtherParameters = new HashMap();
+			this.furtherParameters = new HashMap<String,String>();
 		} else {
 			this.furtherParameters.clear();
 		}

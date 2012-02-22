@@ -33,17 +33,14 @@ import de.enough.polish.BuildException;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.android.packager.ApkPackager;
+import de.enough.polish.android.packager.DexConverter;
 import de.enough.polish.android.packager.ResourcesPackager;
 import de.enough.polish.jar.Packager;
 
 /**
  * <p>Calls ResourcesPackager and ApkPackager</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008 - 2012</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class AndroidPackager extends Packager{
@@ -54,7 +51,9 @@ public class AndroidPackager extends Packager{
 	public void createPackage(File sourceDir, File targetFile, Device device, Locale locale, Environment env) 
 	throws IOException, BuildException 
 	{
-	
+		System.out.println("packager: sourceDir=" + sourceDir.getAbsolutePath());
+		new DexConverter().convert(sourceDir, device, locale, env);
+		
 		new ResourcesPackager().createPackage(sourceDir, targetFile, device, locale, env);
 		
 		new ApkPackager().createPackage(sourceDir, targetFile, device, locale, env);

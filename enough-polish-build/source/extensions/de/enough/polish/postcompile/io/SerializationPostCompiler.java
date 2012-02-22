@@ -28,7 +28,7 @@ import de.enough.polish.postcompile.BytecodePostCompiler;
 public class SerializationPostCompiler extends BytecodePostCompiler
 {
 	
-	private List serializableAndExternalizableClassNames;
+	private List<String> serializableAndExternalizableClassNames;
 	
   /**
    * Weaves the serialization framework into classes implementing
@@ -101,7 +101,7 @@ public class SerializationPostCompiler extends BytecodePostCompiler
    */
   public List filterClassList(DirClassLoader classLoader, List classes)
   {
-	this.serializableAndExternalizableClassNames = new ArrayList();
+	this.serializableAndExternalizableClassNames = new ArrayList<String>();
     Iterator it = classes.iterator();
     LinkedList resultList = new LinkedList();
     ASMClassLoader asmClassLoader = new ASMClassLoader(classLoader);

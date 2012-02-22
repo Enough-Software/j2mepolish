@@ -43,11 +43,7 @@ import de.enough.polish.ant.build.PostObfuscatorSetting;
  * application is preverified and packages.
  * </p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        24-Mar-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public abstract class PostObfuscator extends Extension {

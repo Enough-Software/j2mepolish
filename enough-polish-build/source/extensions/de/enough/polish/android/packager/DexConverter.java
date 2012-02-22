@@ -23,47 +23,52 @@
  * refer to the accompanying LICENSE.txt or visit
  * http://www.j2mepolish.org for details.
  */
-package de.enough.polish.android.postcompiler;
+package de.enough.polish.android.packager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.enough.polish.BuildException;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.ant.android.ArgumentHelper;
+import de.enough.polish.finalize.Finalizer;
 import de.enough.polish.postcompile.PostCompiler;
 import de.enough.polish.util.ProcessUtil;
 
 /**
  * <p>Compiles the compiled classes to .dex file</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008 - 2012</p>
+ * 
  * @author Andre Schmidt, j2mepolish@enough.de
+ * @author Robert Virkus, j2mepolish@enough.de
  */
-public class DexPostCompiler extends PostCompiler{
-	
-	/* (non-Javadoc)
-	 * @see de.enough.polish.postcompile.PostCompiler#postCompile(java.io.File, de.enough.polish.Device)
+public class DexConverter {
+
+	/**
+	 * Converts a JAR into a DEX file
+	 * @param classesDir the directory containing the (possibly obfuscated) class files
+	 * @param device
+	 * @param locale
+	 * @param env
+	 * @return the converted JAR File
 	 */
-	public void postCompile(File classesDir, Device device)
-			throws BuildException {
-		Environment env = device.getEnvironment();
-	
+	public File convert( File classesDir, Device device,
+			Locale locale, Environment env) 
+	{
 		String dx = ArgumentHelper.dx(env);
 		if (dx != null) {
-			ArrayList<String> arguments = getDefaultArguments(dx,env);
+			ArrayList<String> arguments = getDefaultArguments(dx, classesDir, env);
 			File directory = new File(ArgumentHelper.getPlatformTools(env));
 	
 			System.out.println("dx: Converting compiled files and external libraries...");
 			
 			int result = 0;
 			try {
+				System.out.println("dx args=" + ProcessUtil.toString(arguments) );
 				result = ProcessUtil.exec( arguments, "dx: ", true, null, directory );
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -79,7 +84,10 @@ public class DexPostCompiler extends PostCompiler{
 				throw new BuildException("Unable to create .dex file for device [" + device.getIdentifier() + "]: Result code was:"+result );
 			}
 		}
+		return new File(ArgumentHelper.getDex(env));
+		
 	}
+
 	
 	/**
 	 * Returns the default arguments for executable
@@ -87,7 +95,7 @@ public class DexPostCompiler extends PostCompiler{
 	 * @param env the environment
 	 * @return the ArrayList
 	 */
-	static ArrayList<String> getDefaultArguments(String executable, Environment env)
+	static ArrayList<String> getDefaultArguments(String executable, File classesDir, Environment env)
 	{
 		ArrayList<String> arguments = new ArrayList<String>();
 		arguments.add(executable);
@@ -97,10 +105,13 @@ public class DexPostCompiler extends PostCompiler{
 		}
 		arguments.add("--dex");
 		//TODO add --debug only for test builds?
-		arguments.add("--debug");
+		if (env.hasSymbol("test") || env.hasSymbol("debug")) {
+			arguments.add("--debug");
+		}
 		arguments.add("--output=" + ArgumentHelper.getDex(env));
-		arguments.add(ArgumentHelper.getClasses(env));
+		arguments.add(classesDir.getAbsolutePath());
 		return arguments;
 	}
+
 
 }

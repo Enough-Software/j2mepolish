@@ -39,11 +39,7 @@ import de.enough.polish.ant.build.FinalizerSetting;
 /**
  * <p>Is used to to work on the final JAR and JAD file and is called after the packaging step.</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        23-Apr-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public abstract class Finalizer extends Extension {

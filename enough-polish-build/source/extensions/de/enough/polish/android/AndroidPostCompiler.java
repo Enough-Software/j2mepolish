@@ -29,18 +29,13 @@ import java.io.File;
 
 import de.enough.polish.BuildException;
 import de.enough.polish.Device;
-import de.enough.polish.android.postcompiler.DexPostCompiler;
 import de.enough.polish.android.postcompiler.ResourceStreamPostCompiler;
 import de.enough.polish.postcompile.PostCompiler;
 
 /**
- * <p>Calls ResourceStreamPostCompiler and DexPostCompiler</p>
+ * <p>Calls ResourceStreamPostCompiler</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        16-Oct-2008 - asc creation
- * </pre>
+ * <p>Copyright Enough Software 2008 - 2012</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class AndroidPostCompiler extends PostCompiler{
@@ -53,9 +48,9 @@ public class AndroidPostCompiler extends PostCompiler{
 		
 		new ResourceStreamPostCompiler().postCompile(classesDir, device);
 		
-		// TODO: Do ProGuard obfuscation here and give dex the obfuscated jar file instead of the class files.
+		// Dex conversion moved to finalizer, so that obfuscation can take place
 		
-		new DexPostCompiler().postCompile(classesDir, device);
+		//new DexPostCompiler().postCompile(classesDir, device);
 	}
 	
 }
