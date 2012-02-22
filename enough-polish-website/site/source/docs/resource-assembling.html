@@ -45,7 +45,7 @@ All resources will be copied to the root of the application and more specific re
 <br/>
 In the application code you can load this image as any other resource from the root: 
 </p>
-<pre>
+<pre class="brush: java">
 Image.createImage( &quot;/hello.png&quot; );
 </pre>
 	<p>In case you want to include subfoldersin your application's JAR file, you need to use a <a href="#root">root directory</a>
@@ -151,7 +151,7 @@ Image.createImage( &quot;/hello.png&quot; );
 	Your can easily achieve this by defining <code>&lt;root&gt;</code> elements in your 
 	<i>build.xml</i> script:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources/base&quot;
 	defaultexcludes=&quot;yes&quot;
@@ -178,7 +178,7 @@ Image.createImage( &quot;/hello.png&quot; );
 	resources, for example, and allow your user to switch the localization dynamically. Image following
 	resource structure with the language dependent <i>flag.png</i> resource:
 	</p>
-<pre>
+<pre class="brush: java">
 resources/base/images/i18n/en/flag.png
 resources/base/images/i18n/de/flag.png
 resources/base/images/i18n/dk/flag.png
@@ -189,7 +189,7 @@ resources/base/images/i18n/cn/flag.png
 	<p>You can include the complete <i>i18n</i> directory with all its subfolders with this
 	<code>&lt;root /&gt;</code> definition with activated <code>includeSubDirs=&quot;true&quot;</code> setting:
 	<p>
-<pre>
+<pre class="brush: xml">
 &lt;root dir=&quot;resources/base/images/i18n&quot; 
 	includeSubDirs=&quot;true&quot; includeBaseDir=&quot;true&quot; excludes=&quot;CVS, readme*&quot; 
 /&gt;
@@ -197,7 +197,7 @@ resources/base/images/i18n/cn/flag.png
 	<p>
 	You can now load the language dependent resource with this code:
 	</p>
-<pre>
+<pre class="brush: java">
 Image flag = Image.createImage( "i18n/" + Locale.LANGUAGE + "/flag.png" );
 </pre>
 
@@ -205,9 +205,9 @@ Image flag = Image.createImage( "i18n/" + Locale.LANGUAGE + "/flag.png" );
 	<p>
 	Sometimes it is necessary to adjust the resource assembling. 
 	<br />
-	The easiest way is to use conditional <code>&lt;root&gt; settings:
+	The easiest way is to use conditional <code>&lt;root&gt; settings:</code>
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;root dir=&quot;resources/base/images/largescreens&quot; 
 	if=&quot;polish.ScreenWidth &amp;gt;= 240 and polish.ScreenHeight &amp;gt;= 300&quot; 
 /&gt;
@@ -240,7 +240,7 @@ Image flag = Image.createImage( "i18n/" + Locale.LANGUAGE + "/flag.png" );
 	Sometimes it's much easier to exclude a resource for one or some devices than to include them for the rest of devices.
 	The easiest way for doing this is to add a resource with the same name but with a size of 0 bytes into the appropriate subfolder:
 	</p>
-<pre>
+<pre class="brush: java">
 ${project.home}/resources/playback.wav
 ${project.home}/resources/Nokia/N95/playback.wav
 </pre>
@@ -249,7 +249,7 @@ ${project.home}/resources/Nokia/N95/playback.wav
 	<br />
 	On Unix based operating systems you can use the <code>touch</code> command line command for creating such a file:
 	</p>
-<pre>
+<pre class="brush: java">
 $ mkdir resources/Nokia/N95/
 $ touch resources/Nokia/N95/playback.wav
 </pre>
@@ -297,13 +297,13 @@ $ touch resources/Nokia/N95/playback.wav
 	this class by defining the <a href="build-build.html#variables">preprocessing variable</a>
 	<code>polish.classes.ImageLoader</code>:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.classes.ImageLoader&quot; value=&quot;com.company.ResourceManager&quot; /&gt;
 </pre>
 	<p>
 	Now you have to provide the method as well:
 	</p>
-<pre>
+<pre class="brush: java">
 package com.company;
 import javax.microedition.lcdui.Image;
 import java.io.IOException;
@@ -338,7 +338,7 @@ public class ResourceManager {
 	J2ME Polish can help you to scale resources using the <code>svgconverter</code> 
 	<a href="build-build.html#copier">Resource Copier</a>:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;resources 
  dir=&quot;resources&quot; excludes=&quot;readme*, *.definition&quot; &gt; 
   <b>&lt;copier name=&quot;svgconverter&quot; /&gt;</b>

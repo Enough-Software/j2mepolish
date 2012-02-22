@@ -12,12 +12,12 @@
 	<li><a href="localization.html">Localization</a></li>
 	<li><a href="preprocessing.html">Preprocessing</a></li>
 	</ul>
-	<%index %>
 	<p class="pullquote">Control your build process with the &lt;build&gt; section!</p>
+	<%index %>
 	<p>
 	The &lt;build&gt; section is the main configuration point of J2ME Polish.
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;build
      fullscreen=&quot;menu&quot;
      usePolishGui=&quot;true&quot;
@@ -84,7 +84,7 @@
 	 <br />
 	 Alternatively the preprocessing-variable <code>polish.FullScreen</code> can be set. This allows a finer grained
 	 control, since variables can have conditions, e.g.:
-<pre>
+<pre class="brush: xml">
 &lt;build
 	usePolishGui=&quot;true&quot;
 	fullscreen=&quot;menu&quot;
@@ -195,10 +195,11 @@
 	<p>
 	The &lt;sources&gt; element can be used for a finer grained control of the source-directories. This can be useful to include test classes, for example:
 	</p>
-	<pre>
+<pre class="brush: xml">
 &lt;sources&gt;
 	&lt;source dir=&quot;source/src&quot; /&gt;
-	&lt;source dir=&quot;source/test&quot; if=&quot;test&quot; /&gt;
+	&lt;source dir=&quot;source/android&quot; if=&quot;polish.android&quot; /&gt;
+	&lt;source dir=&quot;source/midp&quot; unless=&quot;polish.android&quot; /&gt;
 &lt;/sources&gt;
 </pre>
 <table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
@@ -237,7 +238,7 @@
 	<p>
 	Add compiled libraries to your project with the &lt;libraries&gt; element:
 	</p>
-	<pre>
+<pre class="brush: xml">
 &lt;libraries&gt;
 	&lt;library file=&quot;libraries/tinyline.gz&quot; /&gt;
 	&lt;library file=&quot;libraries/svghelper.jar&quot; if=&quot;polish.api.svg&quot; /&gt;
@@ -280,7 +281,7 @@
 	</table>
 	<p>
 	The optional &lt;midlets&gt; element is used as a container for several &lt;midlet&gt; elements and also supports the if/unless attributes:
-<pre>
+<pre class="brush: xml">
 &lt;midlets&gt;
 	&lt;midlet class=&quot;de.enough.polish.example.ExampleMidlet&quot; /&gt;
 	&lt;midlet name=&quot;J2ME Polish Demo&quot; number=&quot;2&quot; icon=&quot;no2.png&quot;
@@ -311,8 +312,7 @@
 	</table>
 
 	<h3 id="resources">&lt;resources&gt;</h3>
-	<p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	excludes=&quot;*.txt&quot;
@@ -335,7 +335,6 @@
 	&lt;localization locales=&quot;en&quot; if=&quot;test&quot; /&gt;
 &lt;/resources&gt;
 </pre>
-	</p>
 	<p>
 	The &lt;resources&gt; element can be used to fine tune the resources assembling as well as the localization of the application. When it is used, the &quot;resDir&quot;-attribute of the &lt;build&gt; section should not be used. The &lt;resources&gt; element supports following attributes:
 	</p>
@@ -387,7 +386,7 @@
 	By default you only have the single root directory <i>resources</i> in your project. You can, however, define as many
 	roots and even conditional roots using the <code>&lt;root&gt;</code> element:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources/base&quot;
 	defaultexcludes=&quot;true&quot;
@@ -415,7 +414,7 @@
 	 <td>Set to true if you want to include all subdirectories instead of using the root directory as a starting point for the 
 	 normal resource assembling. This allows you to include resources with the same name in different folder, which can
 	 be useful for dynamic localizations, for example:
-<pre>
+<pre class="brush: xml">
 resources/base/images/i18n/en/flag.png
 resources/base/images/i18n/de/flag.png
 resources/base/images/i18n/dk/flag.png
@@ -454,7 +453,7 @@ resources/base/images/i18n/cn/flag.png
 	Control the <a href="localization.html">internationalization</a> of your application with the
 	the &lt;localization&gt; element: 
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;localization dynamic=&quot;true&quot; defaultLocale=&quot;en&quot;&gt;
 	&lt;locale name=&quot;en&quot; encoding=&quot;UTF-8&quot; /&gt;
 	&lt;locale name=&quot;de&quot; encoding=&quot;UTF-8&quot; /&gt;
@@ -494,7 +493,7 @@ resources/base/images/i18n/cn/flag.png
 	<h5 id="localization-locale">Use Locale Dependent Encodings with &lt;locale&gt;</h5>
 	<p>Use nested <code>&lt;locale&gt;</code> elements for configuring settings for each locale that you support:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;locale name=&quot;cn&quot; encoding=&quot;GB2312&quot; if=&quot;polish.vendor == Motorola&quot; /&gt;
 </pre>
 	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
@@ -524,7 +523,7 @@ resources/base/images/i18n/cn/flag.png
 	<p>
 	Sometimes it is easier to exclude resources for specific devices rather than to include it for the other devices. You can use any number of &lt;filter&gt; elements for this purpose. The following element removes all *.mid files when the target device supports both MIDI as well as AMR files:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;filter excludes=&quot;*.mid&quot; if=&quot;polish.audio.midi and polish.audio.amr&quot; /&gt;
 </pre>
 	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
@@ -550,7 +549,7 @@ resources/base/images/i18n/cn/flag.png
 	<br />
 	The &lt;fileset&gt; behaves like any <a href="http://ant.apache.org/manual/CoreTypes/fileset.html" target="_blank">Ant fileset</a>, but it offers the additional &quot;if&quot; and &quot;unless&quot;-attributes for allowing a fine grained control. The most important attributes are:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	excludes=&quot;readme*&quot; 
@@ -636,7 +635,7 @@ The &quot;antcall&quot; resource copier executes another target in your build.xm
 </ul>
 <p>
 You can also specify your own properties by using nested &lt;parameter&gt; elements.
-<pre>
+<pre class="brush: xml">
 &lt;copier name=&quot;antcall&quot; target=&quot;copyresources&quot;&gt;
 	&lt;parameter name=&quot;MySettings&quot; value=&quot;${polish.name}.settings&quot; /&gt;
 &lt;/copier&gt;
@@ -645,7 +644,7 @@ You can also specify your own properties by using nested &lt;parameter&gt; eleme
 <h5 id="copier-renamer">The renamer Resource Copier</h5>
 <p>
 Use the &quot;renamer&quot; resource copier for modifying the file-names of the resources before they are packaged in the final JAR. The following renamer removes all characters that are surrounded by curly braces. You can use this for giving your resources meaningful names while using short names in the JAR file. The file i0{ start game icon }.png will be renamed to i0.png, for example. This saves some precious space.
-<pre>
+<pre class="brush: xml">
 &lt;copier name=&quot;renamer&quot;&gt;
 	&lt;!-- use a regular expression for defining
            name parts that should be changed: 
@@ -659,7 +658,7 @@ Use the &quot;renamer&quot; resource copier for modifying the file-names of the 
 <h5 id="copier-svgconverter">The svgconverter Resource Copier</h5>
 <p>
 Use the &quot;svgconverter&quot; for modifying SVG images of the resources before they are packaged in the final JAR. The svgconverter  allows you to provide only one icon or background image for a variety of phones. It scales the SVG  image to the appropriate size of the current target device and converts it into a PNG image.  For an background image you have to start naming your image &quot;bg&quot;(&quot;bg&quot;+whatever+&quot;.svg&quot;), for an icon start with &quot;icon&quot;. The svgconverter then uses the defined ScreenSize and IconSize of the target device for scaling such images. When the target device does not specify these sizes the default size for icons is 15x15 and for backgrounds 128x160 pixels.
-<pre>
+<pre class="brush: xml">
 &lt;copier name=&quot;svgconverter&quot; /&gt;
 </pre>
 </p>
@@ -887,13 +886,13 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	<p>Prime example of the power of postcompiling are the <a href="java5.html">Java 5 Syntax Support</a> and the 
 	<a href="floater.html">Floater Tool</a>, which allows you to use floating point calculations on CLDC 1.0 devices.
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;postcompiler name=&quot;java5&quot; /&gt;
 </pre>
 	<p>
 	You can also call an Ant target in your <i>build.xml</i> script for post-processing class files:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;postcompiler name=&quot;antcall&quot; target=&quot;AntPostcompileTarget&quot; /&gt;
 </pre>
 	<p>Next to all device capabilities you can access the <code>polish.postcompile.dir</code> Ant property
@@ -904,7 +903,7 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	<p>
 	The optional &lt;obfuscator&gt; element controls the obfuscating of the application bundle, which decreases the jar-size and makes it difficult to reverse engineer the application.
 	</p>
-	<pre>
+<pre class="brush: xml">
 &lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test&quot; /&gt;
 </pre>
 	<table class="borderedTable"  cellspacing="0" cellpadding="3" border="1">
@@ -947,7 +946,7 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	<p>
 	The &lt;keep&gt; element is used to define classes which are <a href="tutorial.html#dynamic">loaded dynamically</a> (e.g. with Class.forName(...) ) and should not be obfuscated:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; &gt;
 	&lt;keep class=&quot;com.company.dynamic.SomeDynamicClass&quot; /&gt;
 	&lt;keep class=&quot;com.company.dynamic.AnotherDynamicClass&quot; /&gt;
@@ -962,8 +961,8 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	<p>
 	The &lt;parameter&gt; element is used to specify parameters for the obfuscator. This can be useful for integrating third party obfuscators which require additional settings:
 	</p>
-<pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;ProGuard&quot; &gt;
+<pre class="brush: xml">
+&lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; &gt;
 	&lt;keep class=&quot;com.company.dynamic.SomeDynamicClass&quot; /&gt;
 	&lt;keep class=&quot;com.company.dynamic.AnotherDynamicClass&quot; /&gt;
 	&lt;parameter name=&quot;scriptFile&quot; value=&quot;../scripts/obfuscate.script&quot; /&gt;
@@ -979,23 +978,12 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 	<p>
 ProGuard is an excellent obfuscator, shrinker and optimizer by Eric Lafortune. It is freely availabe under the GNU General Public License and can be downloaded from 
 <a href="http://proguard.sourceforge.net" target="_blank">http://proguard.sourceforge.net</a>. 
-</p><p>
-If you want to use ProGuard as an obfuscator, please make sure that the proguard.jar-file is listed in the classpath of the J2ME Polish task-definition (build.xml):
 </p>
-<pre>
-&lt;taskdef name=&quot;j2mepolish&quot; 
-	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
-	classpath=&quot;${polish.home}/import/enough-j2mepolish-build.jar:
-		${polish.home}/import/jdom.jar:
-		<b>${polish.home}/import/proguard.jar</b>&quot;/&gt;
-</pre>
 <p>
 You can use ProGuard by setting the name-attribute of the &lt;obfuscator&gt; element to &quot;ProGuard&quot;.
-</p><p>
-ProGuard 3.x offers an additional optimization of the bytecode, which is disabled by default. The optimization can be enabled by setting the &quot;optimize&quot;-parameter to &quot;true&quot;:
 </p>
-<pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;ProGuard&quot; &gt;
+<pre class="brush: xml">
+&lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; &gt;
 	&lt;parameter name=&quot;optimize&quot; value=&quot;true&quot; /&gt;
 &lt;/obfuscator&gt;
 </pre>
@@ -1009,16 +997,15 @@ The yGuard obfuscator by the yWorks GmbH is another interesting obfuscator and c
 </p><p>
 If you want to use yGuard as an obfuscator, please make sure that either the yguard-lib.jar or the original yguard.jar is listed in the classpath of the J2ME Polish task-definition (build.xml):
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;taskdef name=&quot;j2mepolish&quot; 
 	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
 	classpath=&quot;${polish.home}/import/enough-j2mepolish-build.jar:
-		${polish.home}/import/jdom.jar:
-		<b>${polish.home}/import/yguard-lib.jar</b>&quot;/&gt;
+		${polish.home}/import/yguard-lib.jar&quot;/&gt;
 </pre>
 <p>
 The yGuard obfuscator can be used by setting the name-attribute of the &lt;obfuscator&gt; element to &quot;YGuard&quot;:
-<pre>
+<pre class="brush: xml">
 &lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;YGuard&quot; /&gt;
 </pre></p>
 <h5 id="obfuscator-retroguard">RetroGuard</h5>
@@ -1028,8 +1015,8 @@ RetroGuard is the basis of both yGuard and ProGuard and was developed by Retrolo
 </p><p>
 You can use RetroGuard just by setting the &quot;name&quot;-attribute to &quot;RetroGuard&quot;:
 </p>
-<pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;RetroGuard&quot; /&gt;
+<pre class="brush: xml">
+&lt;obfuscator unless=&quot;test&quot; name=&quot;RetroGuard&quot; /&gt;
 </pre>
 <h5 id="obfuscator-klassmaster">Zelix KlassMaster</h5>
 <p>
@@ -1039,12 +1026,11 @@ version can be requested at
 </p><p>
 The KlassMaster integration is based on the WTK-mechanism for calling obfuscators, therefore both the ZKM.jar as well as the kenv.zip needs to be on the classpath:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;taskdef name=&quot;j2mepolish&quot; 
 	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
 	classpath=&quot;${polish.home}/import/enough-j2mepolish-build.jar:
-		${polish.home}/import/jdom.jar:
-		<b>${polish.home}/import/ZKM.jar:${wtk.home}/wtklib/kenv.zip</b>&quot;/&gt;
+		${polish.home}/import/ZKM.jar:${wtk.home}/wtklib/kenv.zip&quot;/&gt;
 </pre>
 <p>
 The KlassMaster-integration allows several parameters to be set:
@@ -1057,8 +1043,8 @@ The KlassMaster-integration allows several parameters to be set:
 <p>
 The following example shows a possible invocation of KlassMaster:
 </p>
-<pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;KlassMaster&quot; &gt;
+<pre class="brush: xml">
+&lt;obfuscator unless=&quot;test&quot; name=&quot;KlassMaster&quot; &gt;
 	&lt;parameter name=&quot;ObfuscateFlowLevel&quot; value=&quot;none&quot; /&gt;
 &lt;/obfuscator&gt;
 </pre>
@@ -1086,7 +1072,7 @@ A report about the renamed clases as well as methods will be written to build/[v
 </p><p>
 This example shows the integration of DashO Pro:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;Dasho&quot; &gt;
 	&lt;parameter name=&quot;DashoHome&quot; value=&quot;/home/user/DashOPro_3.1&quot; /&gt;
 	&lt;parameter name=&quot;Version&quot; value=&quot;3.1&quot; /&gt;
@@ -1099,17 +1085,16 @@ JODE is quite a powerful optimizer, shrinker and obfuscator by Jochen Hoenicke. 
 <p>
 If you want to use JODE, please make sure that the jode-jar-file is on the classpath:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;taskdef name=&quot;j2mepolish&quot; 
 	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
 	classpath=&quot;${polish.home}/import/enough-j2mepolish-build.jar:
-		${polish.home}/import/jdom.jar:
-		<b>${polish.home}/import/Jode-1.1.2-pre1.jar</b>&quot;/&gt;
+		${polish.home}/import/Jode-1.1.2-pre1.jar&quot;/&gt;
 </pre>
 <p>
 JODE supports the &quot;ScriptFile&quot;-parameter which can be used to specify the obfuscator-script. Please note that the source-jar-file is always the &quot;build/source.jar&quot; and the target-file is the &quot;build/dest.jar&quot;:
-<pre>
-&lt;obfuscator unless=&quot;test&quot; enable=&quot;true&quot; name=&quot;Jode&quot; &gt;
+<pre class="brush: xml">
+&lt;obfuscator unless=&quot;test&quot; name=&quot;Jode&quot; &gt;
 	&lt;parameter name=&quot;ScriptFile&quot; value=&quot;obfuscate.jos&quot; /&gt;
 &lt;/obfuscator&gt;
 </pre></p><p>
@@ -1123,7 +1108,7 @@ Maybe someone with more experience with JODE can provide help here - please get 
 	<p>
 	The optional &lt;variables&gt; element contains several variable definitions, which can be used for the preprocessing. This mechanism can be used for example to define configuration values:
 	</p>	
-<pre>
+<pre class="brush: xml">
 &lt;variables includeAntProperties=&quot;true&quot;&gt;
 	&lt;variable name=&quot;update-url&quot; value=&quot;http://www.enough.de/update&quot; /&gt;
 	&lt;variable name=&quot;polish.TiledLayer.splitImage&quot;
@@ -1168,7 +1153,7 @@ Maybe someone with more experience with JODE can provide help here - please get 
 	Variables which have been defined in this way can be included into the source code with the 
 	&quot;<code>//#=</code>&quot; preprocessing directive and can be checked with the &quot;<code>[variable-name]:defined</code>&quot; symbol:
 	</p>
-<pre>
+<pre class="brush: xml">
 //#ifdef update-url:defined
 	//#= String url = &quot;${ update-url }&quot;;
 //#else
@@ -1183,16 +1168,16 @@ Maybe someone with more experience with JODE can provide help here - please get 
 	<p>
 	The optional &lt;debug&gt; element controls the inclusion of debugging messages for specific classes or packages. The debugging messages will be activated or deactivated in the source code, so the performance will not be decreased, when the debugging is deactivated. 
 	</p>
-<pre>
-&lt;debug showLogOnError=&quot;true&quot; verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test&quot; &gt;
+<pre class="brush: xml">
+&lt;debug verbose=&quot;false&quot; level=&quot;error&quot; if=&quot;test&quot; &gt;
 	&lt;filter pattern=&quot;com.company.package.*&quot; level=&quot;info&quot; /&gt;
 	&lt;filter pattern=&quot;com.company.package.MyClass&quot; level=&quot;debug&quot; /&gt;
 &lt;/debug&gt;
 </pre>
 	<p>
-	In the source code any debug messages must be accompanied by a //#debug-directive:
+	In the source code any debug messages must be accompanied by a <code>#debug</code> directive:
 	</p>
-<pre>
+<pre class="brush: java">
 //#debug
 System.out.println(&quot;initialization done.&quot;);
 or
@@ -1225,7 +1210,7 @@ possibilities in the <a href="tutorial.html#debug">introduction</a> as well as i
 	 <td>Either <code>true</code> or <code>false</code>. When &quot;true&quot; 
 	 the log containing all logging-messages will be shown when an exception is logged.
 An exception is logged by printing out a message which is followed by a plus and the exception variable:
-<pre>
+<pre class="brush: java">
 //#debug error
 System.out.println(&quot;could not load something: &quot; + e);
 </pre>
@@ -1263,7 +1248,7 @@ Debug.debug( String message, Throwable exception ) method is called.
 	<h3 id="jad">&lt;jad&gt;</h3>
 	<p>With the &lt;jad&gt; element user-defined attributes can be added to the JAD-file (Java Application Descriptor) as well as the MANIFEST-file which is contained in the created JAR-file. The <jad> element contains a number of <attribute>-sub-elements which define the actual attributes:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;jad&gt;
  &lt;attribute 	name=&quot;Nokia-MIDlet-Category&quot; 
  		value=&quot;Game&quot; 
@@ -1302,7 +1287,7 @@ Debug.debug( String message, Throwable exception ) method is called.
 	<p>
 	The JAD-attributes can filtered and sorted using the &lt;jadFilter&gt; subelement:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;jad&gt;
  &lt;attribute 
 	name=&quot;Nokia-MIDlet-Category&quot; 
@@ -1361,7 +1346,7 @@ Inside of the &lt;jadfilter&gt; element you can specify all allowed JAD-attribut
 <h3 id="manifestFilter">&lt;manifestFilter&gt;</h3>
 <p>
 The manifest filter element can be used to sort and filter manifest attributes. Please note that the first included attribute should always be the &quot;Manifest-Version&quot;-attribute. Otherwise the application will most likely not work:
-<pre>
+<pre class="brush: xml">
 &lt;manifestFilter&gt;
 	Manifest-Version, MIDlet-Name, MIDlet-Version, MIDlet-Vendor,
 	MIDlet-1, MIDlet-2?, MIDlet-3?, MIDlet-4?, MIDlet-5?, 
@@ -1417,7 +1402,7 @@ Inside of the &lt;manifestFilter &gt; element you can specify all allowed MANIFE
 The &lt;preprocessor&gt; element can be used to 
 <a href="custom-preprocessor.html">integrate</a> own or third party preprocessors. 
 This can be used for allowing new preprocessing directives for example.
-<pre>
+<pre class="brush: xml">
 &lt;preprocessor
 	class=&quot;com.company.preprocess.MyPreprocessor&quot; 	
 	classPath=&quot;import/preprocessing.jar&quot; 	
@@ -1457,7 +1442,7 @@ This can be used for allowing new preprocessing directives for example.
 <p>
 Usually the efficient internal J2ME Polish packager is used for creating the final application bundles. For using a different packaging-program, the &lt;packager&gt; element can be used:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;packager
 	executable=&quot;jar&quot;
 	arguments=&quot;cvfM;;${polish.jarPath};;-C;;${polish.packageDir};;.&quot;
@@ -1465,7 +1450,7 @@ Usually the efficient internal J2ME Polish packager is used for creating the fin
 </pre>
 <p>
 A much simpler but equally valid call is this:
-<pre>
+<pre class="brush: xml">
 &lt;packager name=&quot;jar&quot; /&gt;
 </pre>
 </p>
@@ -1521,11 +1506,11 @@ java verified program or cooperate with a device vendor or an operator.
 </p>
 <p>In the following example we are using the <code>password</code> ant property for specifying the password. In this way it can be specified on the command line
 without risking the security:
-<pre>
+<pre class="brush: xml">
 ant -Dpassword=secret
 </pre>
 <p>
-<pre>
+<pre class="brush: xml">
 &lt;sign
 	key=&quot;SignMIDlet&quot;
 	keystore=&quot;midlets.ks&quot;
@@ -1570,7 +1555,7 @@ Each defined &lt;java&gt; element is called after the successful creation of an 
  described in the <a href="how-tos.html#howto-signing">signing-how-to</a>.
 </p><p>
 The following example calls the JadUtil.jar of the Wireless Toolkit for signing a JAD file:
-<pre>
+<pre class="brush: xml">
 &lt;java jar=&quot;${wtk.home}/bin/JadTool.jar&quot; 
       	fork=&quot;true&quot; 
       	failonerror=&quot;true&quot; 
@@ -1654,14 +1639,14 @@ The most important attributes of the &lt;java&gt; element are:
 		some marvelous stuff. This is used for converting a JAR into a COD archieve for BlackBerry devices, for example.
 		An easy way to implement your own functionality is to use the <code>antcall</code> finalizer:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;finalizer name=&quot;antcall&quot; target=&quot;MyFinalizerAntTarget&quot; /&gt;
 </pre>
 	<p>
 	Next to all capabilities of the current target device you can then access the Ant properties <code>polish.finalize.jar</code> 
 	and <code>polish.finalize.jad</code> in your <code>MyFinalizerAntTarget</code>:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;target name=&quot;MyFinalizerTarget&quot;&gt;
 	&lt;echo message=&quot;J2ME Polish is now finished with creating ${polish.finalize.jar} and ${polish.finalize.jad} for device ${polish.identifer}&quot; /&gt;
 &lt;/target&gt;

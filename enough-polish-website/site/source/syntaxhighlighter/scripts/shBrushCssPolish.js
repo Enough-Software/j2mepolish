@@ -31,8 +31,8 @@
 			return '\\b' + str.replace(/ /g, '(?!-)(?!:)\\b|\\b()') + '\:\\b';
 		};
 
-		var keywords =	'ascent azimuth background background-attachment background-color background-image background-position ' +
-						'background-repeat background-type baseline bbox border border-collapse border-color border-spacing border-style border-top ' +
+		var keywords =	'ascent azimuth background backgrounds background-attachment background-color background-image background-position ' +
+						'background-repeat background-type baseline bbox border borders border-collapse border-color border-spacing border-style border-top ' +
 						'border-right border-bottom border-left border-top-color border-right-color border-bottom-color border-left-color ' +
 						'border-top-style border-right-style border-bottom-style border-left-style border-top-width border-right-width ' +
 						'border-bottom-width border-left-width border-width border bottom cap-height caption-side centerline clear clip color command-child-indicator command-child-indicator-color command-child-indicator-width command-child-indicator-height' +
@@ -42,15 +42,19 @@
 						'margin-right margin-bottom margin-left margin marker-offset marks mathline max-height max-width min-height min-width orphans ' +
 						'outline-color outline-style outline-width outline overflow padding-top padding-right padding-bottom padding-left padding page ' +
 						'page-break-after page-break-before page-break-inside pause pause-after pause-before pitch pitch-range play-during position ' +
-						'quotes right richness scrollbar-slider-color scrollbar-slider-width size slope src speak-header speak-numeral speak-punctuation speak speech-rate stemh stemv stress style ' +
+						'quotes repaint-previous-screen right richness scrollbar-slider-color scrollbar-slider-width size slope src speak-header speak-numeral speak-punctuation speak speech-rate stemh stemv stress style ' +
 						'table-layout text-align top text-decoration text-indent text-shadow text-transform type unicode-bidi unicode-range units-per-em ' +
-						'vertical-align view-type visibility voice-family volume white-space widows width widths word-spacing x-height z-index';
+						'vertical-align view-type visibility voice-family volume white-space widows width widths word-spacing x-height z-index ' +
+						'first-top-color second-top-color first-bottom-color second-bottom-color face arc-width arc-height inner-color outer-color ' +
+						'text-effect text-shadow-color screen-change-animation screen-change-animation-direction screen-change-animation-duration screen-change-animation-function-forward screen-change-animation-function-backward ' +
+						'icon-image icon-image-align icon-filter filter-blur-grade on range duration repeat delay fire-event font-bitmap arc text-visible font-face padding-vertical x-adjust' 
+						;
 
 		var values =	'above absolute all always aqua argb armenian attr aural auto avoid baseline behind below bidi-override black blink block blue bold bolder '+
 						'both bottom braille capitalize caption center center-left center-right circle close-quote code collapse compact condensed '+
 						'continuous counter counters crop cross crosshair cursive dashed decimal decimal-leading-zero default digits disc dotted double '+
-						'embed embossed e-resize expand expanded extra-condensed extra-expanded fantasy far-left far-right fast faster fixed format fuchsia '+
-						'gray green groove handheld hebrew help hidden hide high higher horizontal-expand icon inline-table inline inset inside invert italic '+
+						'embed embossed e-resize expand expanded extra-condensed extra-expanded false fantasy far-left far-right fast faster fixed format fuchsia '+
+						'gray green groove handheld hebrew help hidden hide high higher horizontal-expand horizontal-stripes icon inline-table inline inset inside invert italic '+
 						'justify landscape large larger left-side left leftwards level lighter lime line-through list-item local loud lower-alpha '+
 						'lowercase lower-greek lower-latin lower-roman lower low ltr marker maroon medium message-box middle mix move narrower '+
 						'navy ne-resize no-close-quote none no-open-quote no-repeat normal nowrap n-resize nw-resize oblique olive once open-quote outset '+
@@ -58,8 +62,10 @@
 						'rightwards rtl run-in screen scroll semi-condensed semi-expanded separate se-resize show silent silver slower slow '+
 						'small small-caps small-caption smaller soft solid speech spell-out square s-resize static status-bar sub super sw-resize '+
 						'table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group teal '+
-						'text-bottom text-top thick thin top transparent tty tv ultra-condensed ultra-expanded underline upper-alpha uppercase upper-latin '+
-						'upper-roman url visible wait white wider w-resize x-fast x-high x-large x-loud x-low x-slow x-small x-soft xx-large xx-small yellow';
+						'text-bottom text-top thick thin top transparent true tty tv ultra-condensed ultra-expanded underline upper-alpha uppercase upper-latin '+
+						'upper-roman url visible wait white wider w-resize x-fast x-high x-large x-loud x-low x-slow x-small x-soft xx-large xx-small yellow ' +
+						'horizontal-shrink vertical-shrink'
+						;
 
 		var fonts =		'[mM]onospace [tT]ahoma [vV]erdana [aA]rial [hH]elvetica [sS]ans-serif [sS]erif [cC]ourier mono sans serif';
 	

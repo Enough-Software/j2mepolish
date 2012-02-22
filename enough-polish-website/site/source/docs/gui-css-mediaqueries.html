@@ -19,7 +19,7 @@
 	generic devices such as <code>Generic/AnyPhone</code> or <code>Generic/AnyMsaPhone</code>.
 	<br />Without further ado let's have a look at a common example that increases the size of the commands for touchscreen devices:
 	</p>
-<pre>
+<pre class="brush: css">
 /** default styles: **/
 menuItem {
 	font-color: #333;
@@ -33,7 +33,7 @@ menuItem:pressed {
 	background-color: #333;
 }
 /** adapt styles for touchscreen devices dynamically: */
-<b>@media touchscreen {</b>
+@media touchscreen {
 	menuItem {
 		padding-top: 4px;
 		padding-bottom: 4px;
@@ -58,7 +58,7 @@ menuItem:pressed {
 	<li><code>@media (min-width: 240px) and (min-height: 320px){ ...}</code></li>
 </ul>
 	<p>Technically this is the complete syntax definition of the media query list:</p>
-<pre>
+<pre class="brush: java">
 media_query_list
  : S* media_query [ ',' S* media_query]*
  ;
@@ -157,7 +157,7 @@ media_feature
 		Any attributes that are listed in the <code>_allOld</code> style will be searched for in all existing styles and then replaced
 		with the ones defined in <code>_allNew</code>. You can use this feature to globally decrease the font-size, for example:
 	</p>
-<pre>
+<pre class="brush: css">
 @media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {
 	_allOld {
 		font-size: large;
@@ -174,7 +174,7 @@ media_feature
 	</p>
 	
 	<h3 id="Samples-resolution">Use Resolution Dependent Images</h3>
-<pre>
+<pre class="brush: css">
 /** default style: **/
 .mainScreen {
 	background {
@@ -184,7 +184,7 @@ media_feature
 }
 
 /** adapt styles for specific resolutions: */
-<b>@media (min-device-width: 240px) and (min-device-height: 320px) {</b>	
+@media (min-device-width: 240px) and (min-device-height: 320px) {
 	.mainScreen {
 		background {
 			image: url( bg-large.png );
@@ -192,7 +192,7 @@ media_feature
 		}
 	}
 }
-<b>@media (max-device-width: 176px) and (max-device-height: 208px) {</b>	
+@media (max-device-width: 176px) and (max-device-height: 208px) {
 	.mainScreen {
 		background {
 			image: url( bg-small.png );
@@ -201,7 +201,7 @@ media_feature
 	}
 }
 /* HVGA resolution (portrait, landscape) */
-<b>@media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {</b>
+@media 	(max-width: 320px) and (max-height: 480px), (max-width: 480px) and (max-height: 320px) {
 	.mainScreen {
 		background {
 			image: url( bg-hvga.png );
@@ -212,7 +212,7 @@ media_feature
 
 </pre>
 	<h3 id="Samples-increase">Increase Button Size for Touchscreen Devices</h3>
-<pre>
+<pre class="brush: css">
 /** default styles: **/
 menuItem {
 	font-color: #333;
@@ -226,7 +226,7 @@ menuItem:pressed {
 	background-color: #333;
 }
 /** adapt styles for touchscreen devices dynamically: */
-<b>@media touchscreen {</b>
+@media touchscreen {
 	menuItem {
 		padding-top: 4px;
 		padding-bottom: 4px;
@@ -248,8 +248,8 @@ menuItem:pressed {
 		for your specific builds when you use media queries. With some simple preprocessing in your <code>polish.css</code> file
 		you can apply media queries only for your generic builds:
 	</p>
-<pre>
-<b>//#if polish.vendor == Generic</b>
+<pre class="brush: css">
+//#if polish.vendor == Generic
 	@media touchscreen {
 		menuItem {
 			padding-top: 4px;
@@ -264,7 +264,7 @@ menuItem:pressed {
 			padding-bottom: 4px;
 		}
 	}
-<b>//#endif</b>
+//#endif
 </pre>
 	
 	
@@ -279,7 +279,7 @@ menuItem:pressed {
 	</p><p>
 		To add conditional styles programmatically just call <code>StyleSheet.addMediaQuery( String condition, Style[] styles ):</code>
 	</p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.ui.*;
 ...
 //#if polish.css.mediaquery

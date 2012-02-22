@@ -54,7 +54,8 @@
 	Every method that you define needs to throw at least the <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/rmi/RemoteException.html">de.enough.polish.rmi.RemoteException</a>.
 	If it doesn't, J2ME Polish will abort the build and notify you. In the following example we are sending a name, 
 	a phone number and a password for registrating a user. When the registration succeeds, the server should return true:
-<pre>
+	</p>
+<pre class="brush: java">
 package com.company.multiplayergame;
 
 import de.enough.polish.rmi.Remote;
@@ -77,7 +78,6 @@ public interface GameServer extends Remote {
 	
 }
 </pre>
-	</p>
 	<p>
 	In the remote interface you can use any <a href="serialization.html">seriablizable</a> parameters and return values. 
 	This includes normal Java classes like Vector, Image or Date and any classes that either implement 
@@ -87,7 +87,8 @@ public interface GameServer extends Remote {
 	Please compare the <a href="serialization.html">serialization documentation</a> for learning more details about serialization.
 	<br />
 	In the following example we add real objects and your own custom exception to the mix:
-<pre>
+	</p>
+<pre class="brush: java">
 package com.company.multiplayergame;
 
 import de.enough.polish.rmi.Remote;
@@ -156,7 +157,6 @@ public class RegistrationException implements Externalizable {
 }
 
 </pre>
-	</p>
 	
 	<h2 id="usingtheinterface">Using the Remote Interface In Your Mobile Application</h2>
 	<p>
@@ -168,14 +168,17 @@ public class RegistrationException implements Externalizable {
 	<br />
 	For clarification, the following code works:
 	</p>
-<pre>// this code works fine:
+<pre class="brush: java">
+// this code works fine:
 this.server = (GameServer) RemoteClient.open(
 	"com.company.multiplayergame.GameServer", 
 	"http://www.myserver.com/gameserver/myservice" );
 </pre>
 	<p>
 	The following code will not work:
-<pre>// this code will not work!!!
+	</p>
+<pre class="brush: java">
+// this code will not work!!!
 String myInterfaceName = "com.company.multiplayergame.GameServer";
 this.server = (GameServer) RemoteClient.open(
 	myInterfaceName, 
@@ -186,7 +189,9 @@ this.server = (GameServer) RemoteClient.open(
 	You can now access the server just by calling the methods of the interface. For avoiding deadlocks you should
 	call remote methods in a separate thread. You can use <code>de.enough.polish.event.ThreadedCommandListener</code> 
 	for doing calls in the <code>commandAction()</code> method itself:
-<pre>// an example for using the instantiated GameServer server within a MIDlet:
+	</p>
+<pre class="brush: java">
+// an example for using the instantiated GameServer server within a MIDlet:
 import de.enough.polish.event.ThreadedCommandListener;
 import javax.microedition.lcdui.*;
 
@@ -216,7 +221,6 @@ implements CommandListener
 	}
 }
 </pre>
-	</p>
 	
 	<h2 id="implementingtheinterface">Implementing the Remote Interface In Your Server Application</h2>
 	<p>
@@ -230,7 +234,8 @@ implements CommandListener
 	in a row, we abort the login process and throw an exception. 
 	By the way, the RMI framework will automatically remember a cookie during the session and will use it for new connections. Cookies are held
 	separately in memory for each server-URL.
-<pre>
+	</p>
+<pre class="brush: java">
 package com.company.multiplayergame;
 
 import de.enough.polish.rmi.RemoteException;
@@ -311,7 +316,6 @@ implements GameServer
 
 }
 </pre>
-	</p>
 	
 	<h2 id="inittheinterface">Initializing Your Server Application</h2>
 	<p>
@@ -319,18 +323,18 @@ implements GameServer
 	method. When you do not extend 
 	<a href="<%= javadocdir %>../javadoc/build/de/enough/polish/rmi/RemoteHttpServlet.html">de.enough.polish.rmi.RemoteHttpServlet</a>,
 	you can implement the method <code>init(java.util.Map)</code> instead.
-<pre>
+	</p>
+<pre class="brush: java">
 public void init(ServletConfig cfg) throws ServletException {
 	super.init(cfg);
 	String myInitValue = cfg.getInitParameter("cfg.gameserver.MyInitParam");
 	// ... process value etc
 }
 </pre>
-	</p>
 	<p>
 	You need to add <code>&lt;init-param&gt;</code> values to
 	the <i>web.xml</i> file for configuring your service in this way.
-<pre>
+<pre class="brush: xml">
 &lt;servlet&gt;
   &lt;servlet-name&gt;RemoteHttpServlet&lt;/servlet-name&gt;
   &lt;servlet-class&gt;de.enough.polish.sample.rmi.GameServerImpl&lt;/servlet-class&gt;
@@ -340,7 +344,6 @@ public void init(ServletConfig cfg) throws ServletException {
   &lt;/init-param&gt;
 &lt;/servlet&gt;
 </pre>
-	</p>
 	
 	
 	<h2 id="packageanddeploy">Packaging and Deploying Your Server Application</h2>
@@ -370,13 +373,13 @@ public void init(ServletConfig cfg) throws ServletException {
 	<h3 id="j2mepolishsetup">Configuring J2ME Polish</h3>
 	<p>Since you are now using two source code folders, you have to tell J2ME Polish about it. You do this by adding a &lt;sources&gt; element to
 	 the &lt;build&gt; section of the J2ME Polish task within your build.xml script (which is situated in your project home folder):
-<pre>
+	 </p>
+<pre class="brush: xml">
 &lt;sources&gt;
    	&lt;source dir=&quot;source/src&quot; /&gt;
    	&lt;source dir=&quot;source/common&quot; /&gt;
 &lt;/sources&gt;
 </pre>
-	</p>
 	<p>Further RMI specific configuration settings are not required.</p>
 	
 	<h3 id="buildingapplication">Building the Client Application</h3>
@@ -388,7 +391,8 @@ public void init(ServletConfig cfg) throws ServletException {
 	<h3 id="buildingserver">Compile Your Server</h3>
 	<p>
 	You are now ready to compile your server code. Within your build.xml script create a new target called &quot;build-server&quot;:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;target name=&quot;build-war&quot; description=&quot;builds the server war file for Tomcat or other J2EE/Servlet Containers.&quot;&gt;
   &lt;taskdef name=&quot;present&quot; 
 	classname=&quot;de.enough.polish.ant.PresentTask&quot; 
@@ -409,7 +413,6 @@ public void init(ServletConfig cfg) throws ServletException {
 	&lt;/war&gt;
 &lt;/target&gt;
 </pre>
-	</p>
 	<p>In the above code we first ensure that the <i>dist/client-rmi-classes.jar</i> really exists. Then we copy the server side JAR 
 	<i>${polish.home}/lib/enough-j2mepolish-rmi.jar</i> into our <i>dist</i> folder before we compile our server side code. Please note
 	that we do not compile the source code in <i>source/common</i>. This is not necessary since J2ME Polish puts all serializable classes 
@@ -421,7 +424,8 @@ public void init(ServletConfig cfg) throws ServletException {
 	<p>
 	You need to define your servlet and map it with the <i>web.xml</i> file. In the above compilation example we store this file in
 	<i>${project.home}/source/server/web.xml</i>:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/j2ee&quot;
     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -433,9 +437,9 @@ public void init(ServletConfig cfg) throws ServletException {
   &lt;description&gt;
      A simple game server application that can be accessed by mobile J2ME applications.
   &lt;/description&gt;
-  <b>&lt;servlet&gt;
+  &lt;servlet&gt;
       &lt;servlet-name&gt;RemoteHttpServlet&lt;/servlet-name&gt;
-      &lt;servlet-class&gt;de.enough.polish.sample.rmi.GameServerImpl&lt;/servlet-class&gt;</b>
+      &lt;servlet-class&gt;de.enough.polish.sample.rmi.GameServerImpl&lt;/servlet-class&gt;
       &lt;!--  use init-params for configuring your service  --&gt;
 	  &lt;init-param&gt;
 	      &lt;param-name&gt;cfg.gameserver.MyInitParam&lt;/param-name&gt;
@@ -443,20 +447,19 @@ public void init(ServletConfig cfg) throws ServletException {
 	  &lt;/init-param&gt;
   &lt;/servlet&gt;
 
-  <b>&lt;servlet-mapping&gt;
+  &lt;servlet-mapping&gt;
       &lt;servlet-name&gt;RemoteHttpServlet&lt;/servlet-name&gt;
       &lt;url-pattern&gt;/myservice&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;</b>
+  &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;
 </pre> 
-	</p>
 	<p>To deploy your server, just copy the <i>dist/gameserver.war</i> file into the folder that contains your web applications. 
 	For Tomcat the default folder is <i>${tomcat.home}/webapps</i>. When your servlet container is already running, you will see a note
 	in the log that your application is now deployed, for example:
-<pre>
+	</p>
+<pre class="brush: java">
 INFO: Deploying web application archive gameserver.war
 </pre>
-	</p>
 	<p>Congratulations, you have now done all steps necessary for creating an application that interacts with your remote server!</p>
 	
 	<h2 id="xmlrpc">Accessing XML-RPC Servers</h2>
@@ -465,7 +468,7 @@ INFO: Deploying web application archive gameserver.war
 	that allows to make procedure calls using a simple XML notation over HTTP/HTTPS. You can activate XML-RPC usage
 	in J2ME&nbsp;Polish by specifying the <code>polish.rmi.xmlrpc</code> variable in your <i>build.xml</i> script:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.xmlrpc&quot; value=&quot;true&quot; /&gt;
 </pre>
 	<p>The rest of the usage is the same as for the default RMI usage - you define an interface and
@@ -474,7 +477,7 @@ INFO: Deploying web application archive gameserver.war
 	<p>If the XML-RPC server uses dots in method names like <code>shop.addToCart</code> you can write 2 underline characters
 	instead of a dot in your interface definition, as Java does not allow dots in method names:
 	</p>
-<pre>
+<pre class="brush: java">
 public interface MyShop {
 	public boolean shop__addToChart( String order, int number )
 	throws RemoteException;
@@ -539,7 +542,7 @@ public interface MyShop {
 	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/rmi/xmlrpc/XmlRpcRemoteException.html">XmlRpcRemoteException</a>
 	that allows you to get more information about server errors:
 	</p>
-<pre>
+<pre class="brush: java">
 public interface TestServer extends Remote {
 	public Hashtable getValues( String userName, String password, int maxNumber )
 	throws RemoteException;
@@ -591,13 +594,13 @@ public class TestClient {
 	 <li>Now add both <i>bluecove.jar</i> and <i>${polish.home}/lib/enough-j2mepolish-build.jar</i>
 	    on your classpath and instantiate <code>de.enough.polish.rmi.bluetooth.L2CapRemoteService</code>;
 	    register your server implementation by calling init( Remote impl, String uuid ):
-<pre>
+<pre class="brush: java">
 BluetoothRemoteService serv = new L2CapRemoteService();
 serv.init( myImplementation, UUID );
 </pre>
 </li>
 	<li>In your client call <code>RemoteClient.open()</code> with the classname and the UUID of the service:
-<pre>
+<pre class="brush: java">
 MoteServer server = (MoteServer) RemoteClient.open("de.enough.mote.MoteServer", MoteServer.UUID );
 </pre>
 </li>
@@ -608,7 +611,7 @@ MoteServer server = (MoteServer) RemoteClient.open("de.enough.mote.MoteServer", 
 	you receive by calling <code>RemoteClient.open()</code> to <code>de.enough.polish.rmi.bluetooth.BluetoothRemoteClient</code>
 	and call <code>connect()</code> on a separate thread:
 	</p>
-<pre>
+<pre class="brush: java">
 MoteServer server = (MoteServer) RemoteClient.open("de.enough.mote.MoteServer", MoteServer.UUID );
 ((BluetoothRemoteClient)server).connect();
 </pre> 
@@ -630,7 +633,7 @@ MoteServer server = (MoteServer) RemoteClient.open("de.enough.mote.MoteServer", 
 	</p>
 	<h4 id="bluetooth-code-interface">Remote Interface</h4>
 	<p>Create the interface like normally in RMI by extending <code>de.enough.polish.rmi.Remote</code>:</p>
-<pre>
+<pre class="brush: java">
 package de.enough.mote;
 
 import de.enough.mote.model.ActionDescription;
@@ -660,7 +663,7 @@ public interface MoteServer extends Remote
 	<p>Implement the server and register it with either <code>de.enough.polish.rmi.bluetooth.L2CapRemoteService</code>
 	or <code>de.enough.polish.rmi.bluetooth.SppRemoteService</code>:
 	</p>
-<pre>
+<pre class="brush: java">
 package de.enough.mote.desktop;
 
 import javax.bluetooth.BluetoothStateException;
@@ -705,9 +708,6 @@ public class MoteDesktopServer implements MoteServer
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see de.enough.mote.MoteServer#getSuites(java.lang.String, java.lang.String)
-	 */
 	public ActionSuiteDescription[] getSuites(String locale, String device)
 			throws RemoteException
 	{
@@ -718,9 +718,6 @@ public class MoteDesktopServer implements MoteServer
 		};
 	}
 
-	/* (non-Javadoc)
-	 * @see de.enough.mote.MoteServer#getActions(java.lang.String, java.lang.String)
-	 */
 	public ActionDescription[] getActions(String locale, String suiteId)
 			throws RemoteException
 	{
@@ -737,9 +734,6 @@ public class MoteDesktopServer implements MoteServer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.enough.mote.MoteServer#executeAction(java.lang.String)
-	 */
 	public void executeAction(String actionId) throws RemoteException
 	{
 		System.out.println("executing action " + actionId);
@@ -769,7 +763,7 @@ public class MoteDesktopServer implements MoteServer
 	The client implementation is the same as with normal RMI - instead of a website URL you specify the UUID
 	of the service in <code>RemoteClient.open()</code>:
 	</p>
-<pre>
+<pre class="brush: java">
 package de.enough.mote;
 
 import java.io.IOException;
@@ -792,9 +786,6 @@ public class MoteMidlet extends MIDlet
 		// startApp is used
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.microedition.midlet.MIDlet#destroyApp(boolean)
-	 */
 	protected void destroyApp(boolean force) throws MIDletStateChangeException
 	{
 		if (this.server instanceof BluetoothRemoteClient) {
@@ -810,18 +801,12 @@ public class MoteMidlet extends MIDlet
 
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.microedition.midlet.MIDlet#pauseApp()
-	 */
 	protected void pauseApp()
 	{
 		// nothing to pause...
 
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.microedition.midlet.MIDlet#startApp()
-	 */
 	protected void startApp() throws MIDletStateChangeException
 	{
 		if (this.uiManager == null) {
@@ -907,7 +892,7 @@ public class ConnectionThread extends Thread
 	<p>The necessary setup in your <i>build.xml</i> only requires setting either <code>polish.rmi.spp</code>
 	or <code>polish.rmi.l2cap</code>:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.spp&quot; value=&quot;true&quot; /&gt;
 </pre>
 
@@ -922,7 +907,7 @@ public class ConnectionThread extends Thread
 	<li><b>Activate mockup:</b> Activate the usage of your mockup by specifying a preprocessing variable in your <i>build.xml</i> that starts
 	with <code>polish.rmi.mockup.</code> and ends with the fully qualified name of your server interface. Set this
 	variable to a call that retrieves your mockup - this can be static call or a constructor like in this example: 
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.mockup.de.enough.polish.sample.rmi.GameServer&quot; 
          value=&quot;new de.enough.polish.sample.rmi.test.MockupGameServer()&quot; /&gt;
 </pre>
@@ -932,7 +917,7 @@ public class ConnectionThread extends Thread
 	That's all. Just deactivate the preprocessing variable when you want to access the server. You could change your <i>build.xml</i>
 	so that you can create mockup versions of your application easily by adding conditions to your variable definition:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;target name=&quot;j2mepolish&quot; 
     ...
     &lt;variable 
@@ -960,38 +945,38 @@ public class ConnectionThread extends Thread
 		<li><b>Redirects</b>: By default the RMI framework is handling redirects automatically by using the
 		<a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/io/RedirectHttpConnection.html">de.enough.polish.io.RedirectHttpConnection</a>.
 		If you server is directly accessible you can save this overhead by setting <code>polish.rmi.redirects</code> to <code>false</code>:
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.redirects&quot; value=&quot;false&quot; /&gt;
 </pre>
 		</li>
 		<li><b>XML-RPC Support</b>: To access XML-RPC servers instead of J2ME&nbsp;Polish RMI servers, you need to set the 
 		<code>polish.rmi.xmlrpc</code> variable to true:
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.xmlrpc&quot; value=&quot;true&quot; /&gt;
 </pre>
 		</li>
 		<li><b>XML-RPC Dot Replacement</b>: In case you don't want to use 2 underline characters for simulating dots in XML-RPC method 
 		names, you can specify your own dot-replacement string using the
 	<code>polish.rmi.xmlrpc.methodname.dot</code> preprocessing variable:
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.xmlrpc.methodname.dot&quot; value=&quot;_dot_&quot; /&gt;
 </pre>
 		</li>
 		<li><b>Bluetooth L2CAP Support</b>: To access a desktop L2CAP based bluetooth server instead of HTTP servers, you need to set the 
 		<code>polish.rmi.l2cap</code> variable to true:
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.l2cap&quot; value=&quot;true&quot; /&gt;
 </pre>
 		</li>
 		<li><b>Bluetooth SPP Support</b>: To access a desktop Serial Port Protocol/RFComm based bluetooth server instead of HTTP servers, you need to set the 
 		<code>polish.rmi.spp</code> variable to true:
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.spp&quot; value=&quot;true&quot; /&gt;
 </pre>
 		</li>
 		<li><b>Mockup Test</b>: To use a mockup server implementation instead of your remote server, you need to define the preprocessing variable
 		<code>polish.rmi.mockup.${fully qualified interface name}</code>, for example like this: 
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.rmi.mockup.de.enough.polish.sample.rmi.GameServer&quot; 
          value=&quot;new de.enough.polish.sample.rmi.test.MockupGameServer()&quot; /&gt;
 </pre>
@@ -1051,7 +1036,7 @@ public class ConnectionThread extends Thread
 	<p>If the XML-RPC server uses dots in method names like <code>shop.addToCart</code> you can write 2 underline characters
 	instead of a dot in your interface definition, as Java does not allow dots in method names:
 	</p>
-<pre>
+<pre class="brush: java">
 public interface MyShop {
 	public boolean shop__addToChart( String order, int number )
 	throws RemoteException;

@@ -31,13 +31,13 @@ in either <i>${polish.home}/global.properties</i>,
 ${project.home}/${user.name}.properties or in your <i>build.xml</i>
 script. In your <i>build.xml</i> script the definition could look like
 this:
-<pre>
+</p>
+<pre class="brush: xml">
 &lt;property 
 	name=&quot;android.home&quot;
 	location=&quot;C:/Program Files/android-sdk&quot; 
 /&gt;
 </pre>
-</p>
 <h2 id="android-building">Building Android Apps</h2>
 <p>J2ME Polish ports your application to Android automatically. 
 All you need to do is to target an Android device (using the <a href="build-deviceRequirements.html"><code>&lt;deviceRequirements&gt;</code></a> section).
@@ -172,13 +172,13 @@ The J2ME Polish Android devices have an associated emulator target and skin, but
  To find out available skins you should call the <i>${android.home}/tools/android</i> tool on the command line,
 e.g. on a Mac:
 </p>
-<pre>
+<pre class="brush: java">
 /Applications/android-sdk-mac_x86/tools/android list targets
 </pre>
 <p>
 This will give you a list of targets and their respective skins like this:
 </p>
-<pre>
+<pre class="brush: java">
 Available Android targets:
 id: 1 or "android-3"
      Name: Android 1.5
@@ -216,13 +216,13 @@ id: 4 or "Motorola Mobility, Inc.:Motorola Titanium APIs:7"
 You can set the emulator skin by specifying the <code>polish.Emulator.Skin</code> variable either as an Ant property or 
 in the <code>&lt;variables&gt;</code> section of your <i>build.xml</i> script, e.g. on the command line:
 </p>
-<pre>
+<pre class="brush: java">
 ant emulator <b>-Dpolish.Emulator.Skin=WVGA800</b> -Ddevice=Generic/android2.1
 </pre>
 <p>
 You can override the target emulator with the <code>polish.build.Android.Platform.Target</code> variable, e.g.:
 </p>
-<pre>
+<pre class="brush: java">
 ant emulator -Dpolish.Emulator.Skin=WVGA800 <b>-Dpolish.build.Android.Platform.Target=&quot;Motorola Mobility, Inc.:Motorola Titanium APIs:7&quot;</b> -Ddevice=Generic/android2.1
 </pre>
 
@@ -260,7 +260,7 @@ or start the Android tool <a href="android-ddms">ddms</a>, which you can find in
 <p>
 You can customize the generated <i>AndroidManifest.xml</i> file by defining variables in the build.xml file.
 </p>
-<pre>
+<pre class="brush: xml">
 	&lt;j2mepolish&gt;
 	&lt;build&gt;
 		&lt;variable name=&quot;android.targetSdkVersion&quot; value=&quot;4&quot; /&gt;
@@ -270,7 +270,7 @@ You can customize the generated <i>AndroidManifest.xml</i> file by defining vari
 <p>
 Alternatively you can specify the path to an existing <i>AndroidManifest.xml</i> file. In that case the element of the specified manifest will be added to the generated manifest:
 </p>
-<pre>
+<pre class="brush: xml">
 	&lt;j2mepolish&gt;
 	&lt;build&gt;
 		&lt;variable name="android.manifest" value="configuration/AndroidManifestStub.xml" /&gt;
@@ -278,7 +278,7 @@ Alternatively you can specify the path to an existing <i>AndroidManifest.xml</i>
 	&lt;/j2mepolish>
 </pre>
 <i>configuration/AndroidManifestStub.xml:</i>
-<pre>
+<pre class="brush: xml">
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
     &lt;supports-screens android:resizeable=&quot;true&quot;
@@ -354,9 +354,14 @@ The rendering of commands can be done by J2ME Polish or by the Android system. A
 <p>This is being configured with the fullscreen mode of J2ME Polish
  - set it to <code>false</code> for using native Android commands and to <code>menu</code> for using J2ME Polish rendered commands. 
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
 </pre>
+<p>or</p>
+<pre class="brush: xml">
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;menu&quot; unless=&quot;polish.android || polish.blackberry&quot; /&gt;
+</pre>
+
 <p>
 This setting needs to be applied to the <code>&lt;variables&gt;</code> section of the <code>&lt;j2mepolish&gt;</code> task in your
 <i>build.xml</i> script.
@@ -381,12 +386,12 @@ Native Android commands (=recommended).
 you can specify command images with <code>icon-image</code> CSS attribute:
 </p>
 <p>In your Java code use a <code>#style</code> preprocessing directive to bind a style to a specific command:</p>
-<pre>
+<pre class="brush: java">
 //#style commandNext
 Command cmdNext = new Command( "Next", Command.SCREEN, 2 );
 </pre>
 <p>Then define this style in your <i>polish.css</i> file accordingly:</p>
-<pre>
+<pre class="brush: css">
 .commandNext {
 	icon-image: url( cmd_next.png ); 
 }
@@ -395,7 +400,7 @@ Command cmdNext = new Command( "Next", Command.SCREEN, 2 );
 <p>
 Use the <code>polish.useNativeAlerts</code> preprocessing variable for enabling native alerts:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;false&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
 </pre>
 <p>
@@ -418,7 +423,7 @@ The following J2ME APIs are supported by J2ME Polish:
 You can use native Android views in your application as well using the <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/android/lcdui/ViewItem.html">de.enough.polish.android.lcdui.ViewItem</a> item.
 This item embeds any <a href="http://developer.android.com/reference/android/view/View.html">android.view.View</a>:
 </p>
-<pre>
+<pre class="brush: java">
 //#if polish.android
 	import de.enough.polish.android.lcdui.ViewItem;
 	import de.enough.polish.android.midlet.MidletBridge;
@@ -431,12 +436,12 @@ public Form createForm() {
 	Form form = new Form("Hello Clock");
 	//#style info
 	form.append("An the time is...");
-	<b>//#if polish.android
+	//#if polish.android
 		AnalogClock clock = new AnalogClock(MidletBrige.getInstance());
 		//#style itemClock
 		ViewItem nativeItem = new ViewItem(clock);
 		form.append(nativeItem);
-	//#else</b>
+	//#else
 		[...]
 	//#endif
 }
@@ -453,7 +458,7 @@ public Form createForm() {
 This error is quite common and due to insufficient memory settings in the dx executable of the android installation.
 Please go to <i>${android.home}/tools</i> and remove the <code>REM</code> from the line
 </p>
-<pre>
+<pre class="brush: java">
 REM set javaOpts=-Xmx256M
 </pre>
 <p>
@@ -463,7 +468,7 @@ and rerun the build process. If the error occurs again, increase the settings fo
 <p>
 	From J2ME Polish 2.1.3 onwards you can use binary libraries normally with Android:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;libraries&gt;
     &lt;library file=&quot;lib/mylib.jar&quot; /&gt;   
 &lt;/libraries&gt;
@@ -478,7 +483,7 @@ and rerun the build process. If the error occurs again, increase the settings fo
 <p>
 The problem:
 </p>
-<pre>
+<pre class="brush: java">
 [j2mepolish] Invoking precompiler [de.enough.polish.android.AndroidPreCompiler]... 
 [j2mepolish] android: Usage: 
 [j2mepolish] android: Error: Missing argument for flag --package. 
@@ -502,7 +507,7 @@ C:\somewhere\build.xml:92: Unable to create activity / project: android returned
 <p>
 The solution: Your MIDlet needs a package hierarchy of at least two. Add a package definition to your MIDlet file like this:
 </p>
-<pre>
+<pre class="brush: java">
 package foo.bar;
 </pre>
 
@@ -574,7 +579,7 @@ also need to allow the installation of files from unsecure places:
 <p>
 You can now <code>cd</code> into the <i>${android.home}/tools</i> directory and install your app with this command
 </p>
-<pre>
+<pre class="brush: java">
 adb -d install PATH
 </pre>
 <table>

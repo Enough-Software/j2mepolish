@@ -934,8 +934,8 @@ You can adapt your app for different platforms or device features in J2ME&nbsp;P
 </ul>
 <h3 id="process">Preprocess your Source Code</h3>
 <p>
-Preprocessing changes your Java and CSS source code before it gets compiled. You can adapt your code depending on the platform, the resolution (if known at compile time), the 
-APIs that are supported by the device and more. 
+Preprocessing changes your Java and CSS source code before it gets compiled. You will typically use preprocessing to either detect and react to device capabilities
+during build time or to detect and react to design settings or resources during build time. 
 </p>
 <p>
 Some examples: 
@@ -952,7 +952,7 @@ When an API is required for a specific functionality, just use the <code>polish.
 //#endif
 </pre>
 <p>
-You can differentiate between MIDP-versions with the &quot;polish.midp1&quot; and the &quot;polish.midp2&quot; symbol:
+You can differentiate between MIDP versions with the &quot;polish.midp1&quot; and the &quot;polish.midp2&quot; symbol:
 </p>
 <pre class="brush: java">
 //#if polish.midp2
@@ -973,6 +973,8 @@ Check specific plaforms by using the <code>polish.JavaPlatform</code> preprocess
 	   // we run on BlackBerry 6.0 or higher
 	   [...]
 	//#endif
+//#elif polish.JavaPlatform &gt;= Android/2.3.3
+	// we run on Android 2.3.3 or higher
 //#endif
 </pre>
 <p>
@@ -983,6 +985,49 @@ You can combine several requirements as well:
    // this device supports at least the basic Mobile Media API
    [...]
 //#endif
+</pre>
+<p>
+You can also check out resources with <a href="preprocessing-propertyfunctions.html">property functions</a> either in your code in the <i>polish.css</i> file.
+</p>
+<p>
+In the following example we just add the smiley markup code when there is actually an image called <i>emoticon_cry.png</i>:
+</p>
+<pre class="brush: java">
+//#if ${exists(emoticon_cry.png)}
+	addMarkup(new ReplacementMarkup(&quot;:-(&quot;, &quot;&lt;img src=\&quot;/emoticon_cry.png\&quot;/&gt;&quot;));
+//#endif
+</pre>
+<p>
+And in this CSS code we adjust the left padding and minimum height of the <code>title</code> style to the width and height of the <i>titleicon.png</i> image.
+This results in the title text being rendered next to the image, not on top of it.
+</p>
+<pre class="brush: css">
+backgrounds {
+	titleBgIcon {
+		type: image;
+		image: url( titleicon.png );
+		anchor: left | vcenter;
+		x-offset: 2px;
+		color: transparent;
+	}
+	titleBgGradient {
+		type: vertical-gradient;
+		top-color: black;
+		bottom-color: #333;
+	}
+}
+
+title {
+	padding-left: ${imagewidth(titleicon.png)} + 4;
+	background {
+		type: combined;
+		foreground: titleBgIcon;
+		background: titleBgGradient;
+	}
+	font-color: #eee;
+	layout: expand | vertical-center | left;
+	min-height: ${imageheight(titleicon.png)} + 4;
+}
 </pre>
 <p>
 Use the <code>#condition</code> preprocessing variable to exclude or include a complete Java source file. This is useful to use platform or API specific code

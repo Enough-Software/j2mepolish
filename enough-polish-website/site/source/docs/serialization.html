@@ -55,7 +55,7 @@
 	</p>
 	<h3 id="serializable-transient">Excluding Fields with transient</h3>
 	<p>Use the <code>transient</code> modifier to mark fields that should not be serialized:
-<pre>
+<pre class="brush: java">
 private transient String password; // do not serialize this field
 </pre>
 	</p>
@@ -116,11 +116,12 @@ private transient String password; // do not serialize this field
 	<h3 id="example-serializable">Serializable</h3>
 	<p>
 	In this example we have a <code>Contact</code> class that implements the <code>Serializable</code> interface.
-<pre>
+	</p>
+<pre class="brush: java">
 import de.enough.polish.io.Serializable;
 
 public class Contact
-<b>implements Serializable</b>
+implements Serializable
 {
 	private final String firstName;
 	private final String lastName;
@@ -140,19 +141,19 @@ public class Contact
 	...
 }
 </pre>
-	</p>
 	<p>
 		Note that J2ME Polish is adding a default constructor to the Contact class and removes the <code>final</code> modifiers to make the class serializable.
 	</p>
 	<h3 id="example-externalizable">Externalizable</h3>
 	<p>
 	In this example we have the same <code>Contact</code> class, in which we now control the serialization manually by  implementing the <code>Externalizable</code> interface.
-<pre>
+	</p>
+<pre class="brush: java">
 import de.enough.polish.io.Externalizable;
 import java.io.*;
 
 public class Contact
-<b>implements Externalizable</b>
+implements Externalizable
 {
 	private String firstName;
 	private String lastName;
@@ -222,11 +223,11 @@ public class Contact
 	}
 }
 </pre>
-	</p>
 	<h3 id="example-serializer">Serializer</h3>
 	<p>
 	In this example we have a list of contacts that we are going to send over a stream, for example the output stream of a HTTP Connection.
-<pre>
+	</p>
+<pre class="brush: java">
 import de.enough.polish.io.Serializer;
 import java.io.*;
 import java.util.Vector;
@@ -258,7 +259,6 @@ public class ContactsManager
 
 }
 </pre>
-	</p>
 
 	<h3 id="example-app">Sample Application</h3>
 	<p>Please refer to the &quot;serialization&quot; sample application in <i>${polish.home}/samples/serialization</i>

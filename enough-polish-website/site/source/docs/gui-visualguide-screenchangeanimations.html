@@ -26,12 +26,12 @@
 	<br />You can apply any effect by setting the <code>screen-change-animation</code> attribute
 	within the screen's CSS style, e.g.:
 	</p>
-<pre>
+<pre class="brush: css">
 .screenAlert {
-	padding: 2;
+	padding: 2px;
 	background-color: #a999;
 	layout: horizontal-shrink | vertical-shrink | center | bottom;
-	<b>screen-change-animation: left;</b>
+	screen-change-animation: left;
 }
 </pre>
 <h2 id="direction">Direction of the Transition</h2>
@@ -53,7 +53,7 @@
 	You can override the automatic direction detection with the <code>screen-change-animation-direction</code> CSS attribute that can have <code>forward</code>
 	or <code>backward</code> as values:
  	</p>
-<pre>
+<pre class="brush: css">
 .myAnimation {
   screen-change-animation: left-shutter;
   screen-change-animation-direction: forward;
@@ -64,7 +64,7 @@
  	<p>
  	Most transitions can be timed using the <code>screen-change-animation-duration</code> CSS attribute. The default duration is 400ms.
  	</p>
-<pre>
+<pre class="brush: css">
 .myAnimation {
   screen-change-animation: left-shutter;
   screen-change-animation-duration: 2s;
@@ -76,7 +76,7 @@
  	The acceleration of the transition is calculated in the same way as for <a href="gui-css-animations.html">CSS animations</a>. You can specify a function for the forward-running 
  	and another one for the backward-running transition: 
  	</p>
-<pre>
+<pre class="brush: css">
 .myAnimation {
   screen-change-animation: left-shutter;
   screen-change-animation-function-forward: linear;
@@ -90,15 +90,15 @@
  	style then needs to contain a <code>screen-change-animation</code> CSS attribute.
  	</p>
 <p><i>polish.css:</i></p>
-<pre>
+<pre class="brush: css">
 .myAnimation {
   screen-change-animation: left-shutter;
-  screen-change-animation-duration: 800mx;
+  screen-change-animation-duration: 800ms;
   screen-change-animation-direction: forward;
 }
 </pre>
 <p><i>Java code:</i></p>
-<pre>
+<pre class="brush: java">
 //#style myAnimation
 display.setCurrent( nextScreen );
 </pre>

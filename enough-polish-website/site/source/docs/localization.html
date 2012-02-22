@@ -44,7 +44,7 @@ which is a subelement of the <a href="build-build.html#resources">&lt;resources&
 <p>
 You can specify the supported localizations in your <a href="build.html">build.xml</a> script:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	excludes=&quot;*.txt&quot;
@@ -94,7 +94,7 @@ retrieval of translations. It offers three distinct translation methods:
 <p>
 The following code illustrates the usage of these methods:
 </p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.util.Locale;
 
 [...]
@@ -115,7 +115,7 @@ of your project to use the Locale-class in your IDE.
 </p><p>
 In the file <i>resources/messages.txt</i> the above localizations need to be defined:
 </p>
-<pre>
+<pre class="brush: java">
 menu.StartGame=Start Tickle Fight
 # the title of the main-screen with the user-name as the only parameter:
 title.Main=Welcome {0}!
@@ -133,7 +133,7 @@ quotation mark.
 The translations are embedded in the actual code during the preprocessing phase, 
 if you have a look at the preprocessed code, you will find the following:
 </p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.util.Locale;
 
 [...]
@@ -204,7 +204,7 @@ In the actual translation files you can insert comments by starting the line
 with a hash-mark (#). Like in normal Java internationalization you can 
 use parameters within the translations, which are denoted by {0}, {1}, {2} and so on:
 </p>
-<pre>
+<pre class="brush: java">
 menu.StartGame=Start Tickle Fight
 # the title of the main-screen with the user-name as the only parameter:
 title.Main=Welcome {0}!
@@ -220,7 +220,7 @@ You can use different encodings of your <i>messages.txt</i> files - all you need
 with the <code>encoding</code> attribute of nested <code>&lt;locale&gt;</code> elements. So instead of specifying all the locales
 within the <code>&lt;localization&gt;</code> element, you specify each supported localization in a single element:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	excludes=&quot;*.txt&quot;
@@ -241,7 +241,7 @@ When you do not specify an encoding, your operating system's default encoding wi
 <p>
 You can also use dynamic translations that can be changed during the runtime of your application. You have to activate dynamic translations by setting the &quot;dynamic&quot;-attribute of the &lt;localization&gt; element to &quot;true&quot; and specifying the &quot;defaultLocale&quot;:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	excludes=&quot;*.txt&quot;
@@ -317,7 +317,7 @@ application start it will load the external translations automatically.
 The following code sample illustrates the download process	
 (in real life you need to add proper exception handling):
 </p>
-<pre>
+<pre class="brush: java">
 HttpConnection connection = (HttpConnection) Connector.open( &quot;http://company.com/locales/en.loc&quot;, Connector.READ_WRITE );
 connection.setRequestMethod( HttpConnection.GET );
 InputStream in = connection.openInputStream();
@@ -338,20 +338,20 @@ However, at the next application start J2ME Polish will load the translations ag
 You can set localized variables just by defining them in the appropriate messages-file. 
 Variable-definitions need to start with either &quot;var:&quot; or &quot;variable:&quot;:
 </p>
-<pre>
+<pre class="brush: java">
 var:VirtualCurrency=Nuggets
 </pre>
 <p>
 Such variables can also be used within the translations (of course normal variables can also be used):
 </p>
-<pre>
+<pre class="brush: java">
 # The player has won some nuggets, {0} specifies the number of won nuggets:
 messages.YouHaveWon=Congrats! You have won {0} ${polish.Vendor}-${VirtualCurrency}!
 </pre><p>
 Naturally the variables can be used during the usual preprocessing in the Java source
 code as well:
 </p>
-<pre>
+<pre class="brush: java">
 //#= String virtualCurrency = &quot;${VirtualCurrency}&quot;;
 </pre>
 <h3 id="attributes">Using Localized JAD and MANIFEST Attributes</h3>
@@ -360,7 +360,7 @@ Some JAR- or MANIFEST-attributes need to be localized as well, e.g. the descript
 of the application. This can be done by defining such 
 MIDlet-attributes in the appropriate <i>messages</i> file:
 </p>
-<pre>
+<pre class="brush: java">
 MIDlet-Description=A game where you need to tickle your enemies!
 MIDlet-Name=Tickle-Fight
 </pre>
@@ -396,7 +396,7 @@ resources with the same name several times.
 <p>
 One way to cope with this is to rename resources and add the name of the corresponding locale or language to:
 </p>
-<pre>
+<pre class="brush: java">
 resources/flag_en.png
 resources/flag_de.png
 resources/flag_cn.png
@@ -406,7 +406,7 @@ Another way is to put locale dependent resources into subfolders include the com
 For realizing this you have to use a <a href="resource-assembling.html#root">&lt;root&gt;</a> element in your
 <i>build.xml</i> script:
 </p>
-<pre>
+<pre class="brush: java">
 resources/i18n/en/flag.png
 resources/i18n/de/flag.png
 resources/i18n/cn/flag.png
@@ -415,7 +415,7 @@ resources/i18n/cn/flag.png
 Within the <a href="resource-assembling.html">&lt;resources&gt;</a> element you have to specify the <i>i18n</i> directory
 as an additional root of which all subfolders should be included:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources&quot;
 	defaultexcludes=&quot;yes&quot;
@@ -429,7 +429,7 @@ as an additional root of which all subfolders should be included:
 <p>
 With the above setup you can now load your locale dependent resources like this for example:
 </p>
-<pre>
+<pre class="brush: java">
 String url = "/" + Locale.LANGUAGE + "/flag.png";
 Image image = Image.createImage( url );
 </pre>
@@ -440,15 +440,15 @@ the root of your JAR file, it tries to load it from the <code>Locale.LANGUAGE</c
 For realizing this you have to specify the <a href="build-build.html#variables">preprocessing variable</a> 
 <code>polish.i18n.loadResources</code> to <code>true</code>:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.i18n.loadResources&quot; value=&quot;true&quot; /&gt;
 </pre>
 <p>
 Now J2ME Polish is able to load locale dependent resources specified in styles automatically:
 </p>
-<pre>
+<pre class="brush: css">
 title {
-	<b>before: url( flag.png );</b>
+	before: url( flag.png );
 	font-color: green;
 }
 </pre>
@@ -510,7 +510,7 @@ The following table lists the most important translations:
 <p>
 In this example we specify some of these translations in <i>resources/messages_de.txt</i> for German users:
 </p>
-<pre>
+<pre class="brush: java">
 polish.command.cancel=Abbruch
 polish.command.delete=L&ouml;schen
 polish.title.input=Eingabe
@@ -518,7 +518,7 @@ polish.title.input=Eingabe
 <p>
 Here is a complete list of all translations with their corresponding default value that are used by J2ME Polish:
 </p>
-<pre>
+<pre class="brush: java">
 polish.command.ok=OK
 polish.command.cancel=Cancel
 polish.command.select=Select
@@ -581,7 +581,7 @@ You need to remember to adjust the JAR-name of the application in the <a href="b
 </p><p>
 An example jarName-attribute is the following:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;info [...]
 	jarName=&quot;${polish.vendor}-${polish.name}-${polish.locale}-example.jar&quot; 
 </pre>
@@ -605,7 +605,7 @@ In the translations all standard Java escape sequences are supported.
 <p>
 Please ensure that the key of the translation is always given directly instead of using a variable, otherwise J2ME Polish will not be able to embed the translation correctly and you end up with compile errors. The following example must not be used:
 </p>
-<pre>
+<pre class="brush: java">
 // never do this:
 String key = &quot;menu.StartGame&quot;;
 this.menuScreen.append( Locale.get( key ), null);
@@ -613,20 +613,20 @@ this.menuScreen.append( Locale.get( key ), null);
 <p>
 Instead use the key directly in the call as in this example:
 </p>
-<pre>
+<pre class="brush: java">
 // this is just fine:
 this.menuScreen.append( Locale.get( &quot;menu.StartGame&quot; ), null);
 </pre><p>
 When you have several parameters, the parameters need to be given in a variable, otherwise J2ME Polish is again unable to process the call correctly:
 </p>
-<pre>
+<pre class="brush: java">
 // never do this:
 this.menuScreen.append( Locale.get( &quot;game.StartMessage&quot; , new String[]{ userName, enemyname } ), null );
 </pre>
 <p>
 Instead define the parameters before the actual call:
 </p>
-<pre>
+<pre class="brush: java">
 // this is just fine:
 String[] parameters = new String[]{ userName, enemyname };
 this.menuScreen.append( Locale.get( &quot;game.StartMessage&quot; , parameters ), null );

@@ -51,7 +51,7 @@
 With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingBackground.hml">ProcessingBackground</a> you can use a <a href="#context">ProcessingContext</a> for backgrounds of screens, items, etc.
 To implement a <code>ProcessingBackground</code> first create a <code>ProcessingContext</code> and register this with the background:
 </p>
-<pre>
+<pre class="brush: java">
 // create a sample ProcessingContext:
 ProcessingContext context = new ProcessingTreeContext();
 // and attach it to a ProcessingBackground:
@@ -68,7 +68,7 @@ UiAccess.setBackground( myForm, background );
 With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingScreen.hml">ProcessingScreen</a> you can use a <a href="#context">ProcessingContext</a> as a standalone screen (or use that screen in a <a href="gui-screen-tabbedpane.html">TabbedPane</a>).
 To implement a <code>ProcessingScreen</code> first create a <code>ProcessingContext</code> and register this with the screen:
 </p>
-<pre>
+<pre class="brush: java">
 // create a sample ProcessingContext:
 ProcessingContext context = new ProcessingTreeContext();
 // and attach it to a ProcessingScreen:
@@ -82,7 +82,7 @@ display.setCurrent( screen );
 With <a href="<%= javadocdir %>../javadoc/j2me/de/enough/polish/processing/ProcessingItem.hml">ProcessingItem</a> you can use a <a href="#context">ProcessingContext</a> within a Form, FramedForm, Alert, etc.
 To implement a <code>ProcessingItem</code> first create a <code>ProcessingContext</code> and register this with the item:
 </p>
-<pre>
+<pre class="brush: java">
 // create a sample ProcessingContext:
 ProcessingContext context = new ProcessingTreeContext();
 // and attach it to a ProcessingItem:

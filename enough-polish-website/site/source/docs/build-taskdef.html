@@ -7,7 +7,8 @@
 	<h1 id="top">Definition of the J2ME Polish Task</h1>
 	<p>
 	The J2ME Polish Task needs to be defined in the build.xml before it can be used:
-	<pre>
+	</p>
+<pre class="brush: xml">
 &lt;property 
 	name=&quot;polish.home&quot; 
 	location=&quot;C:\Program Files\J2ME-Polish&quot; /&gt;
@@ -15,28 +16,7 @@
 &lt;taskdef 
 	name=&quot;j2mepolish&quot; 
 	classname=&quot;de.enough.polish.ant.PolishTask&quot; 
-	classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar
-		:${polish.home}/lib/jdom.jar&quot; /&gt;
-	</pre>
-	</p>
-	<p>
-	When not defined within the <i>${polish.home}/global.properties</i> file, you 
-	should also define the Ant-property &quot;wtk.home&quot; which 
-	points to the directory containing the wireless toolkit:
-	<pre>
-&lt;property 
-	name=&quot;wtk.home&quot; 
-	location=&quot;C:\WTK2.5&quot; /&gt;
-	</pre>
-	</p>
-	<p>
-On a system without the Wireless Toolkit (like Mac OS X) you can still use J2ME Polish by defining the <code>mpp.home</code> property 
-(again, if not already defined in <i>${polish.home}/global.properties</i>):
-	<pre>
-&lt;property 
-	name=&quot;mpp.home&quot; 
-	location=&quot;/Applications/mpp-sdk&quot; /&gt;
-	</pre>
+	classpath=&quot;${polish.home}/lib/enough-j2mepolish-build.jar&quot; /&gt;
+</pre>
 
-	</p>
 <%include end.txt %>

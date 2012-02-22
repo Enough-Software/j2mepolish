@@ -36,7 +36,7 @@ ${project.home}/${user.name}.properties or in your <i>build.xml</i> script.
 <code>blackberry.home</code> should point to the directory that contains all JDEs or Component Packages. By default this points to
 &quot;C:/Program Files/Research In Motion&quot;. In your <i>build.xml</i> script the definitition could look like this:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;property 
 	name=&quot;blackberry.home&quot; 
 	location=&quot;C:/Program Files/Research In Motion&quot; 
@@ -49,7 +49,7 @@ If you work in a team, it is a good idea to install the Component Packages into 
 setup for several projects and teams easily. It also eases the sharing of signing certificates considerably (see below).
 For our projects we do have installed all Component Packages into the "blackberry" project with following directory structure:
 </p>
-<pre>
+<pre class="brush: java">
 blackberry                           (root directory)
 blackberry/blackberry.properties     (signing properties)
 blackberry/certificate               (certificate directory)
@@ -68,7 +68,7 @@ blackberry/BlackBerry JDE Component Package 7.0.0 (for 7.0 devices)
 <p>
 In project's we then use following property definitions in the <i>build.xml</i> scripts for BlackBerry support:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;project basedir=&quot;.&quot; default=&quot;j2mepolish&quot; name=&quot;myproject&quot;&gt;
 	&lt;property file=&quot;${user.name}.properties&quot; /&gt;
 	&lt;property name=&quot;polish.home&quot; location=&quot;C:\Program Files\J2ME-Polish&quot; /&gt;
@@ -82,13 +82,13 @@ easing the life of all team members considerably.
 You can change <code>blackberry.home</code> for example by specifying it in <i>${project.home}/${user.name}/properties</i>, e.g. when
 your login name is "dave", you can define it in <i>${project.home}/dave.properties</i> like this:
 </p>
-<pre>
+<pre class="brush: java">
 blackberry.home=E:\\dev\\Research in Motion
 </pre>
 <p>You can also define the variable <code>blackberry.emulator.home</code> in case you want to use different JDEs for building
 and for simulating. This is handy if you have the certification keys in one place and fullblown JDEs in a different place.
 </p>
-<pre>
+<pre class="brush: java">
 blackberry.emulator.home=E:\\dev\\Research in Motion
 </pre>
 
@@ -131,20 +131,20 @@ instructions - usually double clicking the certificate does the trick. After the
 In your Ant <i>build.xml</i> script, <i>${polish.home}/global.properties</i> or <i>${project.home}/${user.name}.properties</i>
  you then need to define the <code>blackberry.certificate.dir</code> property, e.g.:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;property name=&quot;blackberry.certificate.dir&quot; location=&quot;${blackberry.home}/certificates&quot;/&gt;
 </pre>
 <p>
 In case the sigtool.csk and sigtool.db files are not included in the same location like the certificates, you also need to define the <code>blackberry.sigtool.dir</code> property:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;property name=&quot;blackberry.sigtool.dir&quot; location=&quot;${blackberry.home}/sigtool&quot;/&gt;
 </pre>
 <p>
 When you specify the password as well, J2ME Polish uses this for requesting the signatures without manual intervention. 
 For such cases the password needs to contain only ASCII characters, otherwise J2ME Polish can't include the password automatically.
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;property name=&quot;blackberry.certificate.password&quot; value=&quot;secret&quot;/&gt;
 </pre>
 <p>Note that BlackBerry only provides a GUI based tool for JDEs before 2.0.1.
@@ -205,16 +205,22 @@ J2ME Polish uses the <code>fullscreen</code> attribute of the <code>&lt;build&gt
 whether commands should be rendered by J2ME Polish or natively by BlackBerry. We recommend to use native command rendering on BlackBerry which is achieved 
 with one of the following settings:
 </p>
-<pre>&lt;build fullscreen=&quot;false&quot; ...&gt;</pre>
+<pre class="brush: xml">
+&lt;build fullscreen=&quot;false&quot; ...&gt;</pre>
 <p>or use the <code>&lt;variables&gt;</code> section:</p>
-<pre>&lt;variable
+<pre class="brush: xml">
+&lt;variable
   name=&quot;polish.FullScreen&quot;
   value=&quot;false&quot; if=&quot;polish.blackberry || polish.android&quot; /&gt;
+</pre>
+<p>or</p>
+<pre class="brush: xml">
+&lt;variable name=&quot;polish.FullScreen&quot; value=&quot;menu&quot; unless=&quot;polish.android || polish.blackberry&quot; /&gt;
 </pre>
 <p>
 	You can also add separators to the native menu by adding a <code>Command.SEPARATOR</code> command (the style is only used for other platforms):
 </p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.ui.Command;
 [...]
 	
@@ -228,7 +234,8 @@ import de.enough.polish.ui.Command;
 You can instruct J2ME Polish so that it uses native BlackBerry alerts instead of ones rendered by J2ME Polish. This improves the integration into the 
 BlackBerry platform and is a recommended setting in your <i>build.xml</i> script:
 </p>
-<pre>&lt;variable
+<pre class="brush: xml">
+&lt;variable
   name=&quot;polish.useNativeAlerts&quot;
   value=&quot;true&quot; if=&quot;polish.blackberry || polish.android&quot; /&gt;
 </pre>
@@ -239,7 +246,7 @@ You can also include any native Blackberry fields directly in J2ME Polish screen
 <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/blackberry/ui/FieldItem.html">de.enough.polish.blackberry.ui.FieldItem</a>. This item accepts any 
 <code>net.rim.device.api.ui.Field</code> in it's constructor:
 </p>
-<pre>
+<pre class="brush: java">
 //#if polish.blackberry
 	import net.rim.device.api.ui.component.CheckboxField;
 	import de.enough.polish.blackberry.ui.FieldItem;
@@ -251,7 +258,7 @@ You can also include any native Blackberry fields directly in J2ME Polish screen
 Form form = new Form("Native Fields");
 //#style text
 form.append("Here is a native CheckBoxField:");
-<b>CheckBoxField checkField = new CheckBoxField("Show again", true);</b>
+CheckBoxField checkField = new CheckBoxField("Show again", true);
 //#style nativeField
 <b>FieldItem fieldItem = new FieldItem( checkField );</b>
 form.append( fieldItem );
@@ -265,7 +272,7 @@ form.append( fieldItem );
 For enabling platform requests just sign your application. In the emulator you can also use the <code>MIDlet.platformRequest(String url)</code> call when you specify the
 preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
 </pre>
 
@@ -273,7 +280,7 @@ preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in y
 <p>
 You can also develop native BlackBerry applications by defining the blackberry.main variable that contains the name of the class that extends net.rim.device.api.system.Application.
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;blackberry.main&quot; value=&quot;com.company.product.ProductApplication&quot; /&gt;
 </pre>
 
@@ -336,7 +343,7 @@ You should deactivate <a href="build-build.html#obfuscator">obfuscation</a> for 
 Also you can get verification errors on the BlackBerry devices when you enable the obfuscation. 
 You can skip the obfuscation for test builds as well as for BlackBerry devices with this definition in your <i>build.xml</i> script:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;obfuscator name=&quot;ProGuard&quot; unless=&quot;test || polish.blackberry&quot; /&gt;
 </pre>
 <h3 id="blackberry-jadproperties">Rewriting JAD Properties</h3>
@@ -351,7 +358,7 @@ upon request for personalizing it.
 When using the J2ME Polish UI, you can send DTMF tones after initiating a phonecall by separating the MSISDN and the DTMF part with a 
 backslash or a 'p':
 </p>
-<pre>
+<pre class="brush: java">
 	myMidlet.platform.request(&quot;tel:001232878/88779&quot;);
 	myMidlet.platform.request(&quot;tel:001232878p88779&quot;);
 </pre>
@@ -361,7 +368,7 @@ backslash or a 'p':
 For enabling platform requests using the <code>MIDlet.platformRequest(String url)</code> call, you need to sign your app or specify the
 preprocessing variable <code>polish.BlackBerry.enablePlatformRequest</code> in your <i>build.xml</i> script:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.BlackBerry.enablePlatformRequest&quot; value=&quot;true&quot; /&gt;
 </pre>
 <p>
@@ -380,7 +387,7 @@ Please note: In most cases you use a native <code>TextBox</code> so that the use
 long texts - since J2ME Polish uses native <code>EditFields</code> on BlackBerry when a <code>TextField</code> is focused, there 
 is no benefit in using a native <code>TextBox</code> anyhow.
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.BlackBerry.mapSpaceToFire&quot; value=&quot;false&quot; /&gt;
 </pre>
 
@@ -388,7 +395,7 @@ is no benefit in using a native <code>TextBox</code> anyhow.
 <p>
 It may happen that a blackberry build can't be executed due to a verification error. The device will respond to the execution of the application with something like this :
 </p>
-<pre>
+<pre class="brush: java">
 Error starting appname: Module 'appname' has verification error XXXX at offset XXXX
 </pre>
 <p>
@@ -409,7 +416,7 @@ To identify the class and method which causes the error, you can do the followin
 <li>Open the emulator of the BlackBerry JDE</li>
 <li>Load the application</li>
 <li>Open the application</li>
-<li>An error screen should appear stating something like this : <pre>jvm error 104 uncaught runtime exception</pre></li>
+<li>An error screen should appear stating something like this : <code>jvm error 104 uncaught runtime exception</code></li>
 <li>Choose from the underlying menu (using the arrow keys) the option "catfail"</li>
 <li>Now choose the right most point to save a file named "failure.zip" to your disk</li>
 <li>Extract the files within failure.zip to your disk and open the .bug file</li>
@@ -417,11 +424,12 @@ To identify the class and method which causes the error, you can do the followin
 <p>
 There are three interesting values in the .bug file:
 </p>
-<pre>VM:VECPs</pre>
-<p>(the package)</p>
-<pre>VM:VECCs</pre>
-<p>(the class)</p>
-<pre>VM:VECMm</pre>
+<p>
+<code>VM:VECPs</code>
+(the package)</p>
+<p><code>VM:VECCs</code>
+(the class)</p>
+<p><code>VM:VECMm</code>
 <p>(and the method which causes the error)</p>
 
 <%include end.txt %>

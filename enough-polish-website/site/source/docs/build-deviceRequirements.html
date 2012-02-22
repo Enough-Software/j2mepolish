@@ -17,7 +17,7 @@
 	such as the <code>Generic/AnyPhone</code> or <code>Generic/AnyMsaPhone</code> along with some platform specific target phones like
 	<code>BlackBerry/7.1</code> or <code>Generic/android2.3</code>.
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;deviceRequirements if=&quot;test&quot;&gt;
 	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyMsaPhone&quot; /&gt;
 &lt;/deviceRequirements&gt;
@@ -29,7 +29,7 @@
 	 
 	You can use any device capabilities for choosing your target devices:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;deviceRequirements if=&quot;test&quot;&gt;
 	&lt;requirement name=&quot;Identifier&quot; value=&quot;Generic/AnyMsaPhone&quot; /&gt;
 &lt;/deviceRequirements&gt;
@@ -112,7 +112,7 @@ define the requirements very flexible.
 	</table>
 	<p>
 	The &lt;or&gt;, &lt;and&gt;, &lt;not&gt; and &lt;xor&gt; elements can be nested in any manner:
-<pre>
+<pre class="brush: xml">
 &lt;deviceRequirements&gt;
 	&lt;requirement name=&quot;BitsPerPixel&quot; value=&quot;4+&quot; /&gt;
 	&lt;or&gt;
@@ -129,7 +129,7 @@ In this example each supported device must have a color depth of at least 4 bits
 </p>
 <p>
 Instead of using such nested requirements, you can also use the &quot;Term&quot; requirement that allows you to select devices with the same power like the #if preprocessing directive. The following example includes the very same requirements like the above one - but only one &quot;Term&quot; requirement is used:
-<pre>
+<pre class="brush: xml">
 &lt;deviceRequirements&gt;
 	&lt;requirement name=&quot;Term&quot; 
 	value=&quot;(polish.BitsPerPixel &gt;= 4) and 

@@ -13,12 +13,21 @@
 	<link rel="Shortcut Icon" href="<%= basedir %>images/favicon.gif" type="image/ico" />
 	<link href="<%= basedir %>enough.css" rel="stylesheet" type="text/css" />
 	<link href="<%= basedir %>mainmenu.css" rel="stylesheet" type="text/css" />
-
-	<script type="text/javascript" src="<%= basedir %>niftycube/niftycube.js"></script>
-	<script type="text/javascript">
-	window.onload=function(){
-		Nifty("pre","tl br big");
-		Nifty("ul.relatedtechnologies","tl br big");
-		//Nifty("header-in","tl tr big");
-	}
-	</script>
+	
+	<!-- Include required JS files -->
+	<script type="text/javascript" src="<%= basedir %>syntaxhighlighter/scripts/shCore.js"></script>
+	 
+	<!--
+	    load brushes:
+	-->
+	<script type="text/javascript" src="<%= basedir %>syntaxhighlighter/scripts/shBrushCssPolish.js"></script>
+	<script type="text/javascript" src="<%= basedir %>syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script type="text/javascript" src="<%= basedir %>syntaxhighlighter/scripts/shBrushXml.js"></script>
+	 
+	<!-- Include *at least* the core style and default theme -->
+	<link href="<%= basedir %>syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+	<link href="<%= basedir %>syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+	 	 
+	<!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	

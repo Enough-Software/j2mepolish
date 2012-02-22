@@ -34,7 +34,7 @@
 	<h2 id="syntax">Syntax of CSS Animations</h2>
 	<p>You can animate almost all CSS attributes by adding <code>-animation</code> at the end of the CSS attribute:
 	</p>
-<pre>
+<pre class="brush: css">
 menuitem {
 	background-color: white;
 }
@@ -42,11 +42,11 @@ menuitem {
 menuitem:hover {
 	font-color: white;
 	background-color: black;
-	<b>background-color-animation {
+	background-color-animation {
 		on: focus;
 		range: white..black;
 		duration: 300ms;
-	}</b>
+	}
 }
 </pre>
 	<p>You can animate any color, integer and percentage CSS attributes. Each animations supports following attributes:
@@ -56,7 +56,7 @@ menuitem:hover {
 		<li><b>range</b>: the start and end point of the animation separated by two dots, e.g. <code>blue..red</code> or <code>0%..50%</code>.
 		The allowed values depend on the CSS attribute in question.
 		You can separate several animation phases by using commas, e.g.
-<pre>
+<pre class="brush: css">
 font-color-animation {
    range: red..blue, blue..green;
 }
@@ -100,25 +100,25 @@ font-color-animation {
 		<li><b>show</b>: triggered when a screen or item is shown. Note that the item does not need to be visible necessarily.</li>
 		<li><b>hide</b>: triggered when a screen or item is hidden.</li>
 		<li><b>focus</b>: triggered when an item receives the focus. Use this trigger in the <code>[style-name]:hover</code> style:
-<pre>
+<pre class="brush: css">
 .menuItem {
 	font-color: #222;
 }
 .menuItem:hover {
 	font-color: #eee;
 	background-color: black;
-	<b>font-color-animation {
+	font-color-animation {
 		on: focus;
 		range: #222..#eee;
 		duration: 500ms;
-	}</b>
+	}
 }
 </pre>
 		</li>
 		<li><b>defocus</b>: triggered when an items loses the focus. </li>
 		<li><b>press</b>: triggered when an item is pressed, e.g. by clicking and holding the FIRE button of the phone. 
 		Use such animations in the <code>[style-name]:press</code> style:
-<pre>
+<pre class="brush: css">
 .menuItem {
 	font-color: #222;
 }
@@ -134,11 +134,11 @@ font-color-animation {
 .menuItem:press {
 	font-color: #eee;
 	background-color: black;
-	<b>font-color-animation {
+	font-color-animation {
 		on: press;
 		range: #eee..#f00..#eee;
 		duration: 200ms, 100ms;
-	}</b>
+	}
 }
 </pre>
 		</li>
@@ -153,7 +153,7 @@ font-color-animation {
 	Let's clarify this by an example:
 	</p>
 	<p>In the <i>polish.css</i> file use the custom event name in the <code>on</code> attribute:
-<pre>
+<pre class="brush: css">
 .messageIndicator {
 	background-color-animation {
 		on: message-received;
@@ -167,7 +167,7 @@ font-color-animation {
 	In your application simply notify J2ME Polish about the event when it occurs. Provide the UI element that
 	should consume the event as the source in <code>EventManager.fireEvent()</code>:
 	</p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.event.EventManager;
 
 public class MessageConsumer {
@@ -178,7 +178,7 @@ public class MessageConsumer {
 	}
 	public void onMessageReceived( Message msg ) {
 		this.messageIndicator.setText( "You have " + (++this.unreadMessage) + " messages" );
-		<b>EventManager.fireEvent( "message-received", this.messageIndicator, null );</b>
+		EventManager.fireEvent( "message-received", this.messageIndicator, null );
 	}
 }
 </pre>
@@ -195,7 +195,7 @@ public class MessageConsumer {
 	Let's move out the menubar and the title by firing a custom event. First we define the animations
 	in the screen's title and menubar styles:
 	</p>
-<pre>
+<pre class="brush: css">
 backgrounds {
 	imageTitle {
 		type: mask;
@@ -225,14 +225,14 @@ backgrounds {
 
 .imageTitle extends title{
 	background: imageTitle;
-	<b>y-adjust-animation {
+	y-adjust-animation {
 		on: goFullscreen;
 		range: 0%..-100%;
 	}
 	y-adjust-animation {
 		on: leaveFullscreen;
 		range: -100%..0%;
-	}</b>
+	}
 }
 imageMenubar extends menubar {
 	background {
@@ -240,23 +240,23 @@ imageMenubar extends menubar {
 		top-color:  rgb(98, 120, 139);
 		bottom-color: rgb(53, 75, 92);
 	}
-	<b>y-adjust-animation {
+	y-adjust-animation {
 		on: goFullscreen;
 		range: 0%..100%;
 	}
 	y-adjust-animation {
 		on: leaveFullscreen;
 		range: 100%..0%;
-	}</b>
+	}
 }
 </pre>	
 	<p>Now we can hide the menubar and title by using UiAccess:</p>
-<pre>
+<pre class="brush: java">
 UiAccess.fireEventForTitleAndMenubar( "goFullscreen", myImageScreen, null );
 </pre>
 	<p>Showing the title and menubar again is done by firing the <code>leaveFullscreen</code> event:
 	</p>
-<pre>
+<pre class="brush: java">
 UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 </pre>
 		<div id="id_animations_title">
@@ -281,7 +281,7 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 	start animating the background colors of the screen first - at the end we fire the <code>intro-finish</code> event. This event
 	is then picked up by one of the string items which plays an animation before starting yet another one.
 	</p>
-<pre>
+<pre class="brush: css">
 .introScreen {
 	layout: vertical-center;
 	padding: 2%;
@@ -314,7 +314,7 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 		on: show;
 		range: #eef..#a00..#200..#000;
 		duration: 6s, 4s, 2s;
-		<b>fire-event: intro-finish;</b>
+		fire-event: intro-finish;
 		repeat: once;
 	}
 	background-vertical-gradient-bottom-color-animation {
@@ -335,10 +335,10 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 .introText1 extends introText {
 	x-adjust: -110%;
 	x-adjust-animation {
-		<b>on: intro-finish;</b>
+		on: intro-finish;
 		range: -100%..0%;
 		duration: 3s;
-		<b>fire-event: intro-text1-finish;</b>
+		fire-event: intro-text1-finish;
 	}
 }
 
@@ -346,10 +346,10 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 	layout: right;
 	x-adjust: 110%;
 	x-adjust-animation {
-		<b>on: intro-text1-finish;</b>
+		on: intro-text1-finish;
 		range: 100%..0%;
 		duration: 3s;
-		<b>fire-event: intro-text2-finish;</b>
+		fire-event: intro-text2-finish;
 	}
 }
 
@@ -357,7 +357,7 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 	padding-left: 20%;
 	opacity: 0;
 	opacity-animation {
-		<b>on: intro-text1-finish;</b>
+		on: intro-text1-finish;
 		range: 0..200..0..180..0..255;
 		duration: 100ms,100ms,100ms,100ms, 300ms;
 		delay: 1500ms,0ms, 500ms, 300ms,100ms;
@@ -367,7 +367,7 @@ UiAccess.fireEventForTitleAndMenubar( "leaveFullscreen", myImageScreen, null );
 	<p>Since we fire events by one UI element that should be consumed by other UI elements, we need to remap such events.
 	You can do this by calling <code>EventManager.remapEvent(String eventName, Object remappedSource):</code>:
 	</p>
-<pre>
+<pre class="brush: java">
 private void showIntro() {
        //#style introScreen
        Form form = new Form(null);
@@ -397,13 +397,13 @@ private void showIntro() {
        form.setCommandListener(this);
        
        EventManager manager = EventManager.getInstance(); 
-       <b>manager.remapEvent("intro-finish", introText1);
+       manager.remapEvent("intro-finish", introText1);
        manager.remapEvent("intro-text1-finish", introText2);
        if (imageItem != null) {
        	manager.remapEvent("intro-text1-finish", imageItem);
        }
        manager.remapEvent("intro-text2-finish", introText3);
-       manager.remapEvent("show-press-key", pressKeyText);</b>
+       manager.remapEvent("show-press-key", pressKeyText);
        
        DeviceControl.lightOn();
        this.display.setCurrent(form);
@@ -430,7 +430,7 @@ private void showIntro() {
 	<p>
 Let's have a look at a simple example:
 </p>
-<pre>
+<pre class="brush: css">
 .mainCommand {
 	margin-top: 2px;
 	padding: 5px;
@@ -444,11 +444,11 @@ Let's have a look at a simple example:
 .mainCommand:hover {
 	font-color: #ccc;
 	background-color: #ddd;
-	<b>background-color-animation {
+	background-color-animation {
 		on: focus;
 		range: #ddd..#333;
 		duration: 1s;
-	} </b>
+	}
 }</pre>
 	
 <p>
@@ -462,11 +462,11 @@ You can also also animate normal numerical values, in the following example we a
 the elements are shown for the first time (<code>on: show-first</code>). We delay the 'show' event that is triggered for each element by 200ms by using <code>show-delay: 200ms;</code> in the corresponding screen's style. 
 This delays the start of the animations, so that not all elements are moved at the same time. 
 </p>
-<pre>
+<pre class="brush: css">
 .mainScreen {
 	background-color: #ddd;
 	layout: vertical-center;
-	<b>show-delay: 200ms;</b>
+	show-delay: 200ms;
 }
 
 .mainCommand {
@@ -477,11 +477,11 @@ This delays the start of the animations, so that not all elements are moved at t
 	font-style: bold;
 	font-size: medium;
 	layout: expand;
-	<b>x-adjust: -100%;
+	x-adjust: -100%;
 	x-adjust-animation {
 		on: show-first;
 		range: -100%..0%;
-	}</b>
+	}
 }
 
 .mainCommand:hover {

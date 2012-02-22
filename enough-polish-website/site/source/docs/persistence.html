@@ -24,8 +24,7 @@
 		
 
 		<h2 id="example">Example</h2>
-		<p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.io.RmsStorage;
 import java.io.IOException;
 public class AddressBook {
@@ -33,23 +32,21 @@ public class AddressBook {
 	RmsStorage storage;
 	
 	public AddressBook() {
-		<b>this.storage = new RmsStorage();</b>
+		this.storage = new RmsStorage();
 		try {
-			<b>this.contacts = 
+			this.contacts = 
 				(Vector) this.storage.read( "AddressBook" );
-			</b>
 		} catch (IOException e) {
 			// no address book has been saved before, so create new one:
 			this.contacts = new Vector();
 		}
 		
 		public void save() throws IOException {
-			<b>this.storage.save( this.contacts, "AddressBook" );</b>
+			this.storage.save( this.contacts, "AddressBook" );
 		}
 	}
 }
 </pre>
-		</p>
 		<p>Please refer to the &quot;serialization&quot; sample application in <i>${polish.home}/samples/serialization</i>
 			for the full example how to use these concepts.
 		</p>

@@ -207,7 +207,6 @@
 				<p class="thirdLevel">
 				Resource Handling:<br />
 				<a href="<%= basedir %>docs/resource-assembling.html">Resource Assembling</a>
-				<a href="<%= basedir %>docs/resource-conversions.html">Resource Conversions</a>
 				Preprocessing:<br />
 				<a href="<%= basedir %>docs/preprocessing-directives.html">Directives</a>
 				<a href="<%= basedir %>docs/preprocessing-propertyfunctions.html">Property Functions</a>
@@ -230,7 +229,6 @@
 				<a href="<%= basedir %>docs/programming-utilities.html">Utility Classes</a>
 				<a href="<%= basedir %>docs/serialization.html">Serialization</a>
 				<a href="<%= basedir %>docs/programming-java5.html">Java 5 Syntax</a>
-				<a href="<%= basedir %>docs/programming-porting.html">Porting</a>
 				</p>
 				</div>
 			<%else %>

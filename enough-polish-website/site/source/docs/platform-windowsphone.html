@@ -30,7 +30,7 @@ device features like soft key values. We recommend, therefore, to turn off the r
 of TextFields for Windows Mobile devices by specifying some conditional <a href="build-build.html#variables">variables</a> in your
 <i>build.xml</i> file:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.FullScreen&quot; value=&quot;false&quot; if=&quot;${ isOS( Windows ) }&quot; /&gt;
 &lt;variable name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; unless=&quot;polish.hasPointerEvents or isOS(Windows)&quot;/&gt;
 </pre>

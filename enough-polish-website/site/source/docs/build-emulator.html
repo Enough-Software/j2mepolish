@@ -9,7 +9,7 @@
 	<p>
 	Launch your application in emulators by specifying the &lt;emulator&gt; element:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;emulator
 	wait=&quot;true&quot;
 	trace=&quot;class&quot;
@@ -110,7 +110,7 @@
 <br /><code>${polish.class.midlet-n}</code>: The name of the n<sup>th</sup> MIDlet class, if any.
 <br />
 When only a command-line switch should be defined, just define an empty value, e.g.
-<pre>
+<pre class="brush: xml">
 &lt;parameter name=&quot;-Xsomething&quot; value=&quot;&quot; /&gt;
 </pre>
 	 </td>
@@ -176,7 +176,7 @@ J2ME Polish can resolve stack traces like <code>&quot;Exception at com.company.M
 When jad is installed correctly, J2ME Polish will resolve stack traces automatically. Instead of seeing only the rather obscure stack trace <code>package.class.method(+instructionoffset)</code>,  an additional message giving the source-location as well as the faulty source code is printed out, e.g. <code>&quot;src/com/company/MyClass.java:97: int result = max / 0;&quot;</code>. If you execute J2ME Polish from within an IDE, you can click on such a message and then edit the faulty code directly.
 </p><p>
 In cases when J2ME Polish is not able to locate the position in the source code, an extract of the decompiled class-code will be shown instead. This extract will help you to identify the source of the error. The following fragment gives an example of a decompiled class code:
-<pre>
+<pre class="brush: java">
             world.animate(System.currentTimeMillis() - lastCycleTime);
     //   87  169:aload_0         
     //   88  170:getfield        #13  &lt;Field World world&gt;
@@ -190,10 +190,10 @@ In the first line the actual directive is given and in the following lines the b
 </p><p>
 When the &quot;showDecompiledStackTrace&quot;-attribute of the &lt;emulator&gt; element is set to &quot;true&quot; or &quot;yes&quot;, a decompiled code fragment will be given out for each stack-trace, even when the source-code position could be located.
 </p><p>
-Please note that the source-code position can only be located, when the debugging-mode is activated. This is done by setting the &quot;enable&quot;-attribute of the <a href="build-build.html#debug">&lt;debug&gt; element</a> to &quot;true&quot;. In the default-setup this is done when you call the  &quot;emulator&quot; target of the <i>build.xml is called first: 
-<pre>
-&quot;ant test j2mepolish&quot;.
-</pre>
+Please note that the source-code position can only be located, when the debugging-mode is activated. This is done by setting the &quot;enable&quot;-attribute of the <a href="build-build.html#debug">&lt;debug&gt; element</a> to &quot;true&quot;. In the default-setup this is done when you call the  &quot;emulator&quot; target of the <i>build.xml</i>: 
 </p>
+<pre class="brush: java">
+ant emulator
+</pre>
 
 <%include end.txt %>

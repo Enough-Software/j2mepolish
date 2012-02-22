@@ -36,7 +36,8 @@
 	Modify your <i>build.xml</i> script and add &lt;root&gt; elements to the &lt;resources&gt; element of the &lt;build&gt; section. In the 
 	following example we use the Ant property <code>${customization}</code> to refer to the actual customization name. This allows
 	us to enable a unlimited number of customizations later onwards:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources/base&quot;
 	defaultexcludes=&quot;yes&quot;
@@ -49,26 +50,28 @@
 	&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;
 &lt;/resources&gt;
 </pre>
-</p><p class="caption">Using several conditional root directories in your project</p>
+<p class="caption">Using several conditional root directories in your project</p>
 	
 	<h3 id="configuration">Using Customized Configuration Variables</h3>
 	<p>
 	For using preprocessing and adjusting build settings it is useful to define your own project specific configuration variables.
 	You can easily customize your configuration settings by adding appropriate &lt;variable&gt; definitions to your <i>build.xml</i> file:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;variables&gt;
 	&lt;variable file=&quot;configuration/base/configuration.properties&quot; /&gt;
 	&lt;variable file=&quot;configuration/${customization}/configuration.properties&quot; if=&quot;build.${customization}&quot;/&gt;
 &lt;/variables&gt;
 </pre>
-	</p><p class="caption">Setting up customized configurations and preprocessing variables</p>
+	<p class="caption">Setting up customized configurations and preprocessing variables</p>
 	<p>Within each <i>configuration.properties</i> you can now specify your own variables which you can subsequenly use in 
 	&quot;if&quot; / &quot;unless&quot; attributes and in your preprocessing code:
-<pre>
+	</p>
+<pre class="brush: java">
 cfg.enableSmsSupport=true
 cfg.enableServerBackup=true
 </pre>
-</p><p class="caption">Defining your own preprocessing variables</p>
+<p class="caption">Defining your own preprocessing variables</p>
 
 	<h2 id="resourceassembling">Customizing Resources</h2>
 	<p>
@@ -88,10 +91,11 @@ cfg.enableServerBackup=true
 	the D900 phone and use the &quot;${customization}&quot; root in the above example.
 	</p>
 	<p>When you want  to add all resources and subdirectories of a root, add the &quot;includeSubDirs&quot; attribute:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;root dir=&quot;resources/base/withsubdirs&quot; includeSubDirs=&quot;true&quot; /&gt;
 </pre>
-	</p><p class="caption">Including subdirectories of a root</p> 
+	<p class="caption">Including subdirectories of a root</p> 
 
 	
 	<h2 id="localization">Changing Text Depending on the Customization</h2>
@@ -103,7 +107,8 @@ cfg.enableServerBackup=true
 	you can correct spelling mistakes, grammar and so on for most cases just by editing a single <i>messages.txt</i> file.
 	</p>
 	<p>Define the &lt;localization&gt; element in your <i>build.xml</i> script for enabling the Localization Framework:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;resources
 	dir=&quot;resources/base&quot;
 	defaultexcludes=&quot;yes&quot;
@@ -116,16 +121,17 @@ cfg.enableServerBackup=true
 	&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;
 	&lt;!-- add the localization element for created localized versions 
 	     of your application: 	--&gt;
-	<b>&lt;localization&gt;
+	&lt;localization&gt;
 		&lt;locale name=&quot;en_US&quot; /&gt;
 		&lt;locale name=&quot;de_DE&quot; encoding=&quot;utf-8&quot; unless=&quot;test&quot; /&gt;
-	&lt;/localization&gt;</b>
+	&lt;/localization&gt;
 &lt;/resources&gt;
 </pre>
-</p><p class="caption">Enabling the Localization Framework</p>
+<p class="caption">Enabling the Localization Framework</p>
 	<p>Now you can customize any texts in the above example by adding the definitions to
 	   <i>resources/${customization}/messages.txt</i>:
-<pre>
+	   </p>
+<pre class="brush: java">
 MIDlet-Name=My Customized Name
 title.main=My Customized Title
 </pre><p class="caption">Defining customized texts in <i>messages.txt</i>
@@ -133,14 +139,15 @@ title.main=My Customized Title
 	<p>In your application code you now use 
 	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/util/Locale.html" target="top">Locale</a>
 	for retrieving the correct text:
-<pre>
+	</p>
+<pre class="brush: java">
 this.mainScreen.setTitle( Locale.get("title.main") );
-</pre></p><p class="caption">Using de.enough.polish.util.Locale for getting customized texts</p>
+</pre><p class="caption">Using de.enough.polish.util.Locale for getting customized texts</p>
 
 	<p>You can also &quot;abuse&quot; the <a href="localization.html">Localization Framework</a> for setting customized preprocesing/configuration variables 
 	in your <i>messages.txt</i> files:
 	</p>
-<pre>
+<pre class="brush: java">
 var:cfg.enableSmsSupport=true
 var:cfg.enableServerBackup=true
 </pre>
@@ -155,8 +162,9 @@ var:cfg.enableServerBackup=true
 	<p>
 	In your customized <i>polish.css</i> files you do not need to repeat settings that are already used in the base <i>polish.css</i> file.
 	Instead just define settings that differ from the base design:
-<pre>
-/* just using customized colors here and a specialised title: */
+	</p>
+<pre class="brush: css">
+/* just using customized colors here and a specialized title: */
 colors {
 	textColor: #a00;
 	textColorFocused: #f00;
@@ -177,12 +185,13 @@ title {
 	}
 }
 </pre>
-	</p><p class="caption">Customizing your design, for example in <i>resources/${customization}/polish.css</i></p>
+	<p class="caption">Customizing your design, for example in <i>resources/${customization}/polish.css</i></p>
 	<p>Note: when you are overwriting an existing style, you inherit all settings from the parent style. Sometimes
 	this is annoying. To disable inheritance for a specific style, just set the &quot;inherit&quot; attribute to &quot;false&quot;:
-<pre>
+	</p>
+<pre class="brush: css">
 title {
-	<b>inherit: false;</b>
+	inherit: false;
 	padding-left: ${ imagewidth( logo.png ) };
 	font-style: bold;
 	font-color: white;
@@ -195,11 +204,12 @@ title {
 	}
 }
 </pre>
-	</p><p class="caption">Disabling inheritance of CSS attributes for the title style</p>
+	<p class="caption">Disabling inheritance of CSS attributes for the title style</p>
 	
 	<p>
 	You can also use <a href="preprocessing.html">preprocessing</a> statements to customize your design:
-<pre>
+	</p>
+<pre class="brush: css">
 colors {
 	//#if cfg.${customization}
 		textColor: #a00;
@@ -230,7 +240,7 @@ title {
 	}
 }
 </pre>
-	</p><p class="caption">Customizing your design by using preprocessing in your <i>polish.css</i> file</p>
+	<p class="caption">Customizing your design by using preprocessing in your <i>polish.css</i> file</p>
 
 	<h2 id="functionality">Customizing the Functionality of Your Application</h2>
 	<p>
@@ -242,27 +252,30 @@ title {
 	<p>
 	Using <a href="preprocessing.html">preprocessing</a> in your application's source code gives you unlimited possibilities
 	for customizing your application. Best practice is to <a href="#configuration">define customization specific variables</a> first
-	as desribed above:
-<pre>
+	as described above:
+	</p>
+<pre class="brush: java">
 cfg.enableSmsSupport=true
 var:cfg.enableServerBackup=true
 </pre>
-</p><p class="caption">Defining your own preprocessing variables</p>
+<p class="caption">Defining your own preprocessing variables</p>
 	<p>	
 	 Now you can query those configuration settings in your application code:
-<pre>
+	 </p>
+<pre class="brush: java">
 public void storeSettings() {
-	<b>//#if cfg.enableServerBackup</b>
+	//#if cfg.enableServerBackup
 		storeSetingsOnServer();
-	<b>//#else</b>
+	//#else
 		storeSettingsInRms();
-	<b>//#endif</b>
+	//#endif
 }
-</pre></p><p class="caption">Using preprocessing to adjust the functionality of your application</p>
+</pre><p class="caption">Using preprocessing to adjust the functionality of your application</p>
 	<h3 id="sources">Use Source Folders to Customize Your Application</h3>
 	<p>Another option is to include customization specific source code folders in your application. You can specify source code folders
 	by defining them in your <i>build.xml</i> scripts &lt;build&gt; section:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;sources&gt;
 	&lt;!-- always include the base folder: --&gt;
 	&lt;source dir=&quot;source/src&quot;&gt;
@@ -270,7 +283,7 @@ public void storeSettings() {
 	&lt;source dir=&quot;source/${customization}&quot; if=&quot;build.${customization}&quot;&gt;
 &lt;/sources&gt;
 </pre>
-</p><p class="caption">Setting up conditional source code folders</p>
+<p class="caption">Setting up conditional source code folders</p>
 
 	<h2 id="building">Building the Customized Versions</h2>
 	<p>
@@ -280,7 +293,8 @@ public void storeSettings() {
 	<br />
 	For building all customized versions of your application at once, we need to use some &lt;subant&gt; Ant voodoo, because we cannot
 	overwrite defined Ant properties once they are set. Have a look at this example taken from the &quot;blank&quot; sample application:
-<pre>
+	</p>
+<pre class="brush: xml">
 &lt;project 
 	name=&quot;blank&quot; 
 	default=&quot;j2mepolish&quot;&gt;
@@ -297,7 +311,7 @@ public void storeSettings() {
 
 		
 	&lt;!-- the device for the test mode - you can define it on the command-line
-	     using the -D switch, e.g. ant -Ddevice=Generic/Midp2Cldc11 emulator --&gt;
+	     using the -D switch, e.g. ant -Ddevice=Generic/AnyPhone emulator --&gt;
 	&lt;property name=&quot;device&quot; value=&quot;Nokia/Series60E3&quot; /&gt;
 	
 	
@@ -314,9 +328,9 @@ public void storeSettings() {
 				
 	&lt;target name=&quot;init&quot;&gt;
 	  	&lt;property name=&quot;test&quot; value=&quot;false&quot; /&gt;
-	  	<b>&lt;property name=&quot;customization&quot; value=&quot;&quot; /&gt;</b>
-		<b>&lt;property name=&quot;dir.work&quot; value=&quot;build/real/${customization}&quot; /&gt;</b>
-		<b>&lt;property name=&quot;dir.dist&quot; value=&quot;dist/${customization}&quot; /&gt;</b>
+	  	&lt;property name=&quot;customization&quot; value=&quot;&quot; /&gt;
+		&lt;property name=&quot;dir.work&quot; value=&quot;build/real/${customization}&quot; /&gt;
+		&lt;property name=&quot;dir.dist&quot; value=&quot;dist/${customization}&quot; /&gt;
 		&lt;property name=&quot;deploy-url&quot; value=&quot;&quot; /&gt;
 	&lt;/target&gt;
 	 
@@ -358,8 +372,8 @@ public void storeSettings() {
 			&lt;build
 				fullscreen=&quot;menu&quot;
 				usePolishGui=&quot;true&quot;
-				<b>workDir=&quot;${dir.work}&quot;
-				destDir=&quot;${dir.dist}&quot;</b>
+				workDir=&quot;${dir.work}&quot;
+				destDir=&quot;${dir.dist}&quot;
 			&gt;
 				&lt;!-- midlets definition --&gt;
 				&lt;midlet class=&quot;de.enough.polish.sample.email.EmailMidlet&quot; name=&quot;Email&quot; /&gt;
@@ -381,12 +395,12 @@ public void storeSettings() {
 					defaultexcludes=&quot;yes&quot;
 					excludes=&quot;readme.txt&quot;
 				&gt;
-					<b>&lt;root dir=&quot;resources/base&quot; /&gt;
+					&lt;root dir=&quot;resources/base&quot; /&gt;
 					&lt;root dir=&quot;resources/base/images&quot; /&gt;
 					&lt;root dir=&quot;resources/base/sounds&quot; /&gt;
 					&lt;root dir=&quot;resources/${customization}&quot; if=&quot;build.${customization}&quot; /&gt;
 					&lt;root dir=&quot;resources/${customization}/images&quot; if=&quot;build.${customization}&quot; /&gt;
-					&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;</b>
+					&lt;root dir=&quot;resources/${customization}/sounds&quot; if=&quot;build.${customization}&quot; /&gt;
 					&lt;!-- add the localization element for created localized
 					     versions of your application: 
 					--&gt;
@@ -487,7 +501,7 @@ public void storeSettings() {
 	
     &lt;target name=&quot;debug&quot; description=&quot;debugs the project&quot; depends=&quot;enableDebug, enableEmulator, j2mepolish&quot; /&gt;
 	
-	<b>&lt;target name=&quot;enableCustomization1&quot;&gt;
+	&lt;target name=&quot;enableCustomization1&quot;&gt;
 		&lt;property name=&quot;customization&quot; value=&quot;customization1&quot; /&gt;
 		&lt;property name=&quot;build.customization1&quot; value=&quot;true&quot; /&gt;
 	&lt;/target&gt;
@@ -514,13 +528,12 @@ public void storeSettings() {
 		&lt;subant target=&quot;buildCustomization1&quot; buildpath=&quot;.&quot; genericantfile=&quot;build.xml&quot; inheritall=&quot;false&quot; &gt;&lt;/subant&gt;
 		&lt;subant target=&quot;buildCustomization2&quot; buildpath=&quot;.&quot; genericantfile=&quot;build.xml&quot; inheritall=&quot;false&quot; &gt;&lt;/subant&gt;
 	&lt;/target&gt;
-</b>
 	
 
 &lt;/project&gt;
 
 </pre>
-	</p><p class="caption">Sample build.xml script for customizing your application easily with J2ME Polish</p>	
+	<p class="caption">Sample build.xml script for customizing your application easily with J2ME Polish</p>	
 
 	
 <%include end.txt %>

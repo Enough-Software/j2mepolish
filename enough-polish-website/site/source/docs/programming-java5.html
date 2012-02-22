@@ -19,7 +19,7 @@ Up to now this language improvements were unavailable to J2ME developers, since 
 
 <h2 id="generics">Generics</h2>
 <p>Generics allow you to use collections in a typesafe manner. This means that the compiler ensures that your code only accesses types that you really meant to use in collections. With J2ME Polish you can use generics for both java.util collections like Vector or Hashtable as well as the de.enough.polish.util collections like ArrayList or HashMap:
-<pre>
+<pre class="brush: java">
 this.storage = new RmsStorage&lt;Vector&lt;Note&gt;&gt;();
 Vector&lt;Note&gt; vector = this.storage.read(&quot;notes&quot;);
 </pre>
@@ -39,21 +39,21 @@ You can use generics for any collection:
 </ul>
 <h2 id="enums">Enums</h2>
 <p>Enums are typesafe constants. In Java constants were typically implemented by having <code>int</code> constants like for example in the java.util.Calendar class:
-<pre>
+<pre class="brush: java">
 int dayOfWeek = Calendar.getInstance().get( Calendar.DAY_OF_WEEK ); // Calendar.DAY_OF_WEEK is an int constant
 </pre>
 </p>
 <p>Unfortunately int constants are not typesafe and are hard to understand. In the above example we get an int value for the current weekday, but does 0 mean Monday or Sunday? Or does the first weekday start with 1? Also the get() method accepts any int value and the compiler has no chance to verify that the given value is really supported by the method. If we provide a wrong value, only a runtime exception will occur later onwards.
 </p>
 <p>Enums solve this problem by providing typesafe constants:
-<pre>
+<pre class="brush: java">
 enum Weekday { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY };
 </pre>
 </p>
 <p>Enums are types, so if you can have typesafe methods that really accept only a Weekday and not any other constant. Also return values do have a real meaning - it's for example much easier to understand <code>Weekday.MONDAY</code> than <code>0</code>!</p>
 <h2 id="autoboxing">Autoboxing</h2>
 <p>Autoboxing saves you the trouble of casting when accessing collections or similar classes that you can parameterize with classes of primitives like Integer, Long or Boolean:
-<pre>
+<pre class="brush: java">
 Vector&lt;Integer&gt; vector = new Vector&lt;Integer&gt;();
 vector.add( 42 );
 vector.add( 23 );
@@ -63,7 +63,7 @@ int value = vector.elementAt( 0 ); // = 42
 </p>
 <h2 id="foreach">Foreach Loops</h2>
 <p>Foreach loops allow you to easily traverse through collections and arrays. For iterating over an vector in J2ME, traditionally following code is required:
-<pre>
+<pre class="brush: java">
 int size = vector.size();
 for (int i = 0; i &lt; size; i++) {
 	Note note = (Note) vector.elementAt(i);
@@ -74,7 +74,7 @@ for (int i = 0; i &lt; size; i++) {
 </p>
 <p>
 Compare this with the much shorter and more up to the point Java 5 code:
-<pre>
+<pre class="brush: java">
 for (Note note : vector) {
 	//#style notesItem
 	this.notesList.append(note.getText(), null);				
@@ -84,16 +84,16 @@ for (Note note : vector) {
 <h2 id="activation">How to activate Java 5 syntax support</h2>
 <p>
 Just activate the &quot;java5&quot; postcompiler in your build.xml script for activating the Java 5 syntax support for your J2ME Polish projects, yes, it's that easy!
-<pre>
+</p>
+<pre class="brush: xml">
 &lt;j2mpolish&gt;
 	&lt;deviceRequirements ../&gt;
 	&lt;info ../&gt;
 	&lt;build&gt;
-		<b>&lt;postcompiler name=&quot;java5&quot; /&gt;</b>
+		&lt;postcompiler name=&quot;java5&quot; /&gt;
 	&lt;/build&gt;	
 &lt;/j2mpolish&gt;
 </pre>
-</p>
 <p>
 You should also add the Java 5 syntax versions of our CLDC and J2ME Polish APIs to the classpath of your project. You find these packages in ${polish.home}/import/cldc-1.1-java5.jar and ${polish.home}/import/enough-j2mepolish-client-java5.jar. Don't forget to set the compiler compliance level of your project to Java 5.0 as well. In Eclipse you can do this by right-clicking your project > Properties > Java Build Path and Java Compiler.
 </p>
@@ -102,31 +102,27 @@ You should also add the Java 5 syntax versions of our CLDC and J2ME Polish APIs 
 All Java 5 syntax elements are fully supported from J2ME Polish Beta 2 onwards. There are, however, some limitations in the current implementation:
 </p>
 <table>
-<tr><th>Topic</th><th>Current Limitation</th><th>J2ME Polish 2.0 Final</th></tr>
+<tr><th>Topic</th><th>Current Limitation</th></tr>
 <tr>
 	<td valign="top">Generics</td>
 	<td valign="top">HashMap implementation does not yet support generics.</td>
-	<td valign="top">All collections, including all J2ME Polish collections support generics.</td>
 </tr>
 <tr>
 	<td valign="top">Enums</td>
 	<td valign="top">Enums currently require a base class (de.enough.polish.java5.Enum) as well as a concrete implementation class.</td>
-	<td valign="top">All enum references will be completely replaced with int constants, so that absolutely no overhead is produced.</td>
 </tr>
 <tr>
 	<td valign="top">Autoboxing</td>
 	<td valign="top">Autoboxing currently requires the additional class de.enough.polish.java5.AutoBox.</td>
-	<td>No additional class will be needed in the final release.</td>
 </tr>
 <tr>
 	<td valign="top">Foreach</td>
 	<td valign="top">Foreach loops are currently not supported for de.enough.polish.util.ArrayList. Iterating through collections require the additional class de.enough.polish.util.IteratorUtil.</td>
-	<td valign="top">Support for any list related collection will be implemented.</td>
 </tr>
 </table>
 <h2 id="sample">Java 5 Sample Application</h2>
 <p>
-Please refer to the sample application located in ${polish.home}/samples/java5 for an example how to code with Java 5 syntax within an J2ME environment.
+Please refer to the sample application located in <i>${polish.home}/samples/java5</i> for an example how to code with Java 5 syntax within an J2ME environment.
 </p>
 
 <%include end.txt %>

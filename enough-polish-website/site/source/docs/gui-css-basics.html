@@ -18,7 +18,7 @@
 	
 	<p><br />J2ME Polish uses the same syntax for CSS declarations as web browsers.</p>
 	<h2>Structure of a CSS Declaration</h2>
-<pre>
+<pre class="brush: css">
 .myStyle   {   font-color: black;   }
 
 SELECTOR/      ATTRIBUTE   VALUE
@@ -62,7 +62,7 @@ Some commonly used predefined styles are:
 Static styles are applied with the <code>#style</code> directive in your Java code - note that the the style name needs to start with a dot in the 
 <i>polish.css</i> file, but not necessarily in the #style directive:
 </p>
-<pre>
+<pre class="brush: java">
 //#style mainScreen
 Form form = new Form("Hello World");
 //#style info
@@ -71,7 +71,7 @@ form.append("Welcome to your first app.");
 <p>
 In the <i>polish.css</i> you need to define the corresponding styles:
 </p>
-<pre>
+<pre class="brush: css">
 .mainScreen {
 	background-color: #ddd;
 	padding-left: 10%;
@@ -97,7 +97,7 @@ There are a couple of pseudo styles available:
 	size as in the normal style, otherwise UI elements will seem to 'jump' around when moving the focus. Here's an example in which
 	we use a margin in the unfocused state to compensate for a border in the focused state: 
 </p>
-<pre>
+<pre class="brush: css">
 .mainMenuItem {
 	margin: 2px;
 	font-color: #333;
@@ -118,7 +118,7 @@ There are a couple of pseudo styles available:
 	 This is not true for all cases, e.g. <a href="gui-screenelement-menubar.html">leftcommand</a> etc are never focused, but they have a 
 	 pressed style: <code>leftcommand:pressed</code>:
 </p>
-<pre>
+<pre class="brush: css">
 leftcommand {
 	font-style: bold;
 	font-color: #00aeef;
@@ -143,7 +143,7 @@ middlecommand:pressed {
 <p><code>:visited</code>. Use the <code>:visited</code> style for changing the design of a UI item after its default command has been
 	triggered. Here's an example for links within the <a href="gui-item-browseritem.html">browser</a>:
 </p>
-<pre>
+<pre class="brush: css">
 .browserlink {
 	padding-left: 4%;
 	padding-right: 4%;
@@ -161,10 +161,10 @@ middlecommand:pressed {
 	background-color: #f26522;
 	font-color: #333;
 }
-<b>.browserlink:visited</b> {
+.browserlink:visited {
 	font-color: #999;
 }
-<b>.browserlink:hover:visited</b> {
+.browserlink:hover:visited {
 	font-color: #999;
 }
 </pre>
@@ -173,7 +173,7 @@ middlecommand:pressed {
 	This is useful for differentiating your design between portrait and landscape modes, e.g. displaying icon texts in landscape mode but
 	not in portrait mode:
 </p>
-<pre>
+<pre class="brush: css">
 .tabIcon {
 	margin: 1px;
 	padding: 2px;
@@ -199,11 +199,11 @@ middlecommand:pressed {
 	icon-image: url( TabFoc%INDEX%.png );
 }
 
-<b>.tabIcon:landscape</b> {
+.tabIcon:landscape {
 	text-visible: false;
 }
 
-<b>.tabIcon:landscape:hover</b> {
+.tabIcon:landscape:hover {
 	padding: 1px;
 	background {
 		type: round-rect;
@@ -237,7 +237,7 @@ You can also nest pseudo styles, e.g. for designing the <code>:visited</code> st
 This is a bit off-topic here, but it relates to landscape and portrait modes: <br/>
 You can lock the screen orientation on some devices using vendor specific JAD attributes. Define these attributes within the <code>&lt;jad&gt;</code> section in your <i>build.xml</i> script:
 </p>
-<pre>
+<pre class="brush: xml">
 &lt;jad&gt;
     &lt;attribute name=&quot;Nokia-MIDlet-App-Orientation&quot; value=&quot;portrait&quot; /&gt;   &lt;!-- Nokia --&gt;
     &lt;attribute name=&quot;LGE-MIDlet-Display-Mode&quot; value=&quot;portrait&quot; /&gt;  &lt;!-- LG --&gt;
@@ -248,7 +248,7 @@ You can lock the screen orientation on some devices using vendor specific JAD at
 <h2 id ="css-grouping">Grouping of Attributes</h2>
 <p>Attributes can be grouped for easier handling:
 </p>
-<pre>
+<pre class="brush: css">
 .mainItem {
 	font-color: black;
 	font-size: medium;
@@ -258,7 +258,8 @@ You can lock the screen orientation on some devices using vendor specific JAD at
 </pre>
 <p>
 The above code is equivalent with the following:
-<pre>
+</p>
+<pre class="brush: css">
 .mainItem {
 	font {
 		color: black;
@@ -268,14 +269,14 @@ The above code is equivalent with the following:
 	}
 }
 </pre>
-</p><p>
+<p>
 The grouping makes the declarations better readable for humans.
 </p>
 <h2 id="css-referrals">Referring to Other Styles</h2>
 <p>
 When another style is referred, the dots of static styles do not need to be written. Styles can be referred in attributes or after the <code>extends</code> keyword in the selector of a style.
 </p>
-<pre>
+<pre class="brush: css">
 .mainItem {
 	font-color: black;
 	font-size: medium;
@@ -289,7 +290,7 @@ When another style is referred, the dots of static styles do not need to be writ
 <p>
 Comments can be inserted at any place and start with &quot;/*&quot; and stop with &quot;*/&quot;. Everything between these boundaries is ignored:
 </p>
-<pre>
+<pre class="brush: css">
 /**
   * this style designs the items in the main screen, 
   * use //#style mainItem to bind this style to a UI element in your Java code: 
@@ -319,19 +320,19 @@ These define the gaps between different content sections. The gap between the la
 Another example is an icon (IconCustomItem/IconItem), which consists of an image and a text. Depending on the align of the image, either the vertical or the horizontal padding 
 fills the space between the icon-image and the icon-text.
 In the following example, the top, right and bottom margin is 5&nbsp;pixels, whereas the left margin is 10&nbsp;pixels:
-<pre>
+</p>
+<pre class="brush: css">
 .myStyle {
 	margin: 5px;
 	margin-left: 10px;
 	font-color: black;
 }
 </pre>
-</p>
 <p>
 Percentage values can also be used. Like in the standard CSS 2.1, percentage values are calculated relative to the available width of the corresponding UI element, 
 even for top and bottom values.
 </p>
-<pre>
+<pre class="brush: css">
 .myStyle {
 	padding: 2.8%;
 	padding-left: 2%;
@@ -418,7 +419,7 @@ Possible layout values are for example left, right or center. All layout values 
 <p>
 Layout values can also be combined, using either the &quot;||&quot;, &quot;|&quot;, &quot;or&quot; or &quot;and&quot; operators. All operators result in the same combination. An item can be centered and using the whole available width with following example:
 </p>
-<pre>
+<pre class="brush: css">
 .myStyle {
 	layout: center | expand;
 }
@@ -457,18 +458,19 @@ Another predefined color is <code>transparent</code>, which results in an transp
 <h3>The colors Section</h3>
 <p>
 The colors section of the <i>polish.css</i> file can contain colors, which can be referenced in the styles, fonts, border and background sections. You can even overwrite the predefined colors to confuse other designers!
-<pre>
+</p>
+<pre class="brush: css">
 colors {
 	bgColor: #50C7C7;
 	bgColorFocused: #50D9D9;
 	textColor: #7F7F7F;
 }
 </pre>
-</p>
 <h3>How to Define Colors</h3>
 <p>
 A color can be defined in many different ways:
-<pre>
+</p>
+<pre class="brush: css">
 .myStyle {
 	font-color: white; 	/* the name of the color */
 	border-color: #80FF80; 	/* a rgb hex value */
@@ -478,41 +480,49 @@ A color can be defined in many different ways:
 	fill-color: rgb( 100%, 30%, 50% ); 	    /* a rgb-value with percentage */
 	label-color: argb( 128, 255, 50, 128 ); /* a aaa, rrr, ggg, bbb value */
 }
-</pre></p><p>
+</pre>
+<p>
 Color names refer to one of the predefined colors or a color which has been defined in the colors-section:
-<pre>
+</p>
+<pre class="brush: css">
 color: black; or 
 color: darkBackgroundColor;
 </pre>
-</p><p>
+<p>
 The hex-value defines a color with two hexadecimal digits for each color (RRGGBB). Additionally the alpha blending-component can be added (AARRGGBB).  
-<pre>
+</p>
+<pre class="brush: css">
 color: #FF000;     /*  defines red.                    */
 color: #7FFF0000;  /*  defines a half transparent red. */
-</pre></p>
-</p><p>
-The shortened hex-value defines a color by a RGB-value in hexadecimal. Every digit will be doubled to retrieve the full hex-value: 
-<pre>
+</pre>
+<p>
+The shortened hex-value defines a color by a RGB-value in hexadecimal. Every digit will be doubled to retrieve the full hex-value:
+</p> 
+<pre class="brush: css">
 color: #F00; is equivalent with color: #FF0000; 
 color: #0D2; is equivalent with color: #00DD22;  /* and so on. */
 </pre>
-</p><p>
-A rgb-value starts with &quot;rgb(&quot; and then lists the decimal value of each color from 0 up to 255: 
-<pre>
+<p>
+A rgb-value starts with &quot;rgb(&quot; and then lists the decimal value of each color from 0 up to 255:
+</p> 
+<pre class="brush: css">
 color: rgb( 255, 0, 0 );  /*  defines red.            */
 color: rbg( 0, 0, 255);   /*  defines blue and so on.  */
 </pre>
-</p><p>
+<p>
 Alternatively percentage values can be used for rgb-colors:
-<pre>
+</p>
+<pre class="brush: css">
 color: rgb( 100%, 0%, 0% );         /* defines red as well as */
 color: rgb( 100.00%, 0.00%, 0.00% );
-</pre></p><p>
+</pre>
+<p>
 Alpha-RGB colors can be defined with the argb()-construct:
-<pre>
+</p>
+<pre class="brush: css">
 color: argb( 128, 255, 0, 0 ); 
 </pre>
-</p><p>
+<p>
 defines a half transparent red. For the argb-construct percentage values can be used as well.
 </p>
 
@@ -601,7 +611,7 @@ You can apply and read styles programmatically in several ways:
 <ul>
 	<li><code>#style</code> directive: use the style directive to apply static styles in the constructor of UI elements or in many screen methods or
 	in <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html#setStyle(javax.microedition.lcdui.Item, de.enough.polish.ui.Style)">UiAccess.setStyle(Item, Style)</a>:
-<pre>
+<pre class="brush: java">
 //#style mainMenuItem
 UiAccess.setStyle( myMenuItem );
 </pre>
@@ -610,7 +620,7 @@ UiAccess.setStyle( myMenuItem );
 	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/StyleSheet.html#getStyle(java.lang.String)">StyleSheet.getStyle(String name)</a>
 	to access styles by their name. Please note that J2ME Polish optimizes away styles that are not used within your project directly. To force the 
 	inclusion of a style that is accessed only programmatically, you need to define it's <code>always-include</code> CSS property:
-<pre>
+<pre class="brush: css">
 .menubarFacebook {
 	always-include: true;
 	...
@@ -622,7 +632,7 @@ UiAccess.setStyle( myMenuItem );
 	<code>.addAttribute(String name, Object property)</code> method. Note that the name of your style needs to end
 	on <code>style</code>, since J2ME Polish replaces CSS attribute names with short IDs during the build process using
 	preprocessing.
-<pre>
+<pre class="brush: java">
 Style myStyle = new Style();
 myStyle.addAttribute("padding", new Dimension("20%") );
 myStyle.addAttribute("font-color", new Color(0x333333) );
@@ -635,7 +645,7 @@ myStyle.background = new SimpleBackground( new Color(0xffdddd) );
 <p>
 Let's have a look at a full example:
 </p>
-<pre>
+<pre class="brush: css">
 colors {
 	fontColor: #333;
 	fontColorFocused: #ddd; 

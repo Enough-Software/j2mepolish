@@ -27,7 +27,7 @@
 	<br />
 	<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/kAIA1FHjwOs&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/kAIA1FHjwOs&hl=en&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
 	</p>
-<pre>
+<pre class="brush: css">
 .mainItem {
 	font-style: bold;
 	font-size: medium;
@@ -35,23 +35,23 @@
 	icon-image: url( icon%INDEX%.png );
 	icon-image-align: top;
 	layout: center;
-	<b>icon-filter: blur;
+	icon-filter: blur;
 	filter-blur-grade: 100%;
 	filter-blur-grade-animation {
 		on: defocus;
 		range: 0%..100%;
-	}</b>
+	}
 }
 
 .mainItem:hover {
 	font-color: white;
 	text-effect: shadow;
-	<b>filter-blur-grade-animation {
+	filter-blur-grade-animation {
 		on: focus;
 		range: 100%..0%;
-	}</b>
-}</pre>
-
+	}
+}
+</pre>
 
 <h2 id="filter-blur">blur Filter</h2>
 	<table><tr>

@@ -2,7 +2,7 @@
 <%define inDocumentationSection.build %>
 <%set title = J2ME Polish: Property Functions %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
 	
 
 	<h1 id="top">Property Functions</h1>
@@ -21,10 +21,13 @@ Here are some often used property functions:
 	<li><b>color</b>: the given color value taken from your <i>polish.css</i> settings: <code>//#= int color = ${color(bgFocused)};</code></li>
 	<li><b>contains</b>: checks if the given capability contains a specific word: <code>//#if ${contains(polish.JavaPlatform, BlackBerry)}</code></li>
 	<li><b>containsIgnoreCase</b>: same as contains but is not case sensitive.</li>
-	<li><b>imagewidth</b>: Calculates the width of a resource: <code>min-width: imagewidth( icon.png );</li>
-	<li><b>imageheight</b>: Calculates the height of a resource: <code>min-height: imageheight( icon.png ) + 4;</li>
+	<li><b>exists</b>: checks if the given resource exists: <code>//#if ${exists(smiley.png)</code></li>
+	<li><b>imagewidth</b>: Calculates the width of a resource: <code>min-width: imagewidth( icon.png );</code></li>
+	<li><b>imageheight</b>: Calculates the height of a resource: <code>min-height: imageheight( icon.png ) + 4;</code></li>
 	<li><b>isOS</b>: Checks if the current target device supports the specified operating system: <code>&lt;capability name=&quot;polish.TextField.useDirectInput&quot; value=&quot;true&quot; unless=&quot;isOS(windows)&quot; /&gt;</code></li>
-	<li><b>version</b>: extracts a version number out of a capability or value and makes them comparable: <code>//#if ${ version(polish.JavaPlatform, BlackBerry) } &gt;= ${version(4.3)}</code></li>
+	<li><b>time</b>: Converts the given value into milliseconds: <code>//#= public final static long ANIMATION_INTERVAL = ${time(polish.animationInterval)};</code></li>
+	<li><b>version</b>: extracts a version number out of a capability or value and makes them comparable: <code>//#if ${ version(polish.JavaPlatform, BlackBerry) } &gt;= ${version(7.1)}</code>.
+		<br/>Note that the <code>version</code> function is used automatically when comparing non-integer values, so this code works the same: <code>//#if polish.JavaPlatform &gt;= BlackBerry/7.1</code></li>
 	<!-- 
 	<li><b></b>: </li>
 	<li><b></b>: </li>
@@ -60,7 +63,46 @@ UpperCaseFunction.java
 -->
 </ul>
 
+<p>
+In the following example we just add the smiley markup code when there is actually an image called <i>emoticon_cry.png</i>:
+</p>
+<pre class="brush: java">
+//#if ${exists(emoticon_cry.png)}
+	addMarkup(new ReplacementMarkup(&quot;:-(&quot;, &quot;&lt;img src=\&quot;/emoticon_cry.png\&quot;/&gt;&quot;));
+//#endif
+</pre>
+<p>
+And in this CSS code we adjust the left padding and minimum height of the <code>title</code> style to the width and height of the <i>titleicon.png</i> image.
+This results in the title text being rendered next to the image, not on top of it.
+</p>
+<pre class="brush: css">
+backgrounds {
+	titleBgIcon {
+		type: image;
+		image: url( titleicon.png );
+		anchor: left | vcenter;
+		x-offset: 2px;
+		color: transparent;
+	}
+	titleBgGradient {
+		type: vertical-gradient;
+		top-color: black;
+		bottom-color: #333;
+	}
+}
 
+title {
+	padding-left: ${imagewidth(titleicon.png)} + 4;
+	background {
+		type: combined;
+		foreground: titleBgIcon;
+		background: titleBgGradient;
+	}
+	font-color: #eee;
+	layout: expand | vertical-center | left;
+	min-height: ${imageheight(titleicon.png)} + 4;
+}
+</pre>
 
 	
 <%include end.txt %>

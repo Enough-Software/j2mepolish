@@ -35,7 +35,7 @@
 		You can specify that J2ME Polish handles the hold gesture by displaying all command actions that are associated with an item with 
 		following preprocessing variable:
 	</p>
-<pre>
+<pre class="brush: xml">
 &lt;variable name=&quot;polish.Item.ShowCommandsOnHold&quot; value=&quot;true&quot; /&gt;
 </pre>
 	<p>
@@ -73,7 +73,7 @@
 		When you handle gestures in this way you should return <code>true</code> to mark that the event has been consumed as shown in 
 		the following code example:
 	</p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.ui.StringItem;
 ...
 public class MyStringItem extends StringItem {
@@ -98,7 +98,7 @@ public class MyStringItem extends StringItem {
 	<p>
 		The following sample code demonstrates this option:
 	</p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.ui.UiAccess;
 import de.enough.polish.event.UiEvent;
 import de.enough.polish.event.UiEventListener;
@@ -129,7 +129,7 @@ UiAccess.setUiEventListener(stringItem,
 		Unless an event has been consumed by one of the above methods you will get notified in the <code>handleEvent()</code> method 
 		as shown in this example:
 	</p>
-<pre>
+<pre class="brush: java">
 import de.enough.polish.ui.Item;
 import de.enough.polish.event.EventManager;
 import de.enough.polish.event.EventListener;
@@ -170,10 +170,12 @@ public class GlobalEventHandler implements EventListener {
 	By default, J2ME Polish clears the focus while dragging a scrollable area (e.g. a screen).
 	When the up/down key is pressed on a touch device with directional keys / trackpad (e.g. the BlackBerry Torch) 
 	the focus is restored to the first visible item.   
-	To disable this feature you can set the following preprocessing variable :
-	<pre>
-	&lt;variable name=&quot;polish.Container.selectEntriesWhileTouchScrolling&quot; value=&quot;true&quot; /&gt;
-	</pre>
+	To disable this feature you can set the following preprocessing variable:
+	</p>
+<pre class="brush: xml">
+&lt;variable name=&quot;polish.Container.selectEntriesWhileTouchScrolling&quot; value=&quot;true&quot; /&gt;
+</pre>
+	<p>
 	With this preprocessing variable set to true, the focus remains on the last selected item when a scrollable area is dragged or scrolled.
 	</p>
 	
