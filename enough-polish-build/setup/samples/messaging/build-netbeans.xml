@@ -110,10 +110,9 @@
 					<variable name="polish.ScreenInfo.enable" value="true" />
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 					<variable name="polish.useScrollBar" value="true" />
-					<!-- Sample configuration options for J2ME Polish
 					<variable name="polish.TextField.useDirectInput" value="true" />
+					<variable name="polish.TextField.includeInputInfo" value="true" />
 					<variable name="polish.TextField.supportSymbolsEntry" value="true" />
-					-->
 				</variables>
 				<!-- Configure the customization settings here: -->
 				<resources

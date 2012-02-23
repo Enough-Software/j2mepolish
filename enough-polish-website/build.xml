@@ -1,126 +1,126 @@
 <project 
 	name="enough-webprocessor" 
 	default="webprocessor">
-<property name="polish.home" value="../enough-polish-build" />
-<taskdef name="webprocessor" classname="de.enough.webprocessor.WebProcessorTask" classpath="../enough-webprocessor/bin/classes:${polish.home}/bin/website:${polish.home}/bin/classes:${polish.home}/lib/jdom.jar:${polish.home}/dist/enough-j2mepolish-client.jar:${polish.home}/import/enough-j2mepolish-client.jar:${polish.home}/import/cldc-1.1.jar:${polish.home}/import/midp-2.0.jar:${polish.home}/import/mmapi.jar" />
-<taskdef name="deviceExport" classname="de.enough.polish.ant.HtmlExporterTask" classpath="../enough-polish-build/bin/classes:../enough-polish-build/lib/jdom.jar"/>
-<!-- build targets, each target can be called via "ant [name]", e.g. "ant clean" -->
-
-<property file="../enough-polish-build/version.properties" />
-<property name="Version" value="2.2" />
+	<property name="polish.home" value="../enough-polish-build" />
+	<taskdef name="webprocessor" classname="de.enough.webprocessor.WebProcessorTask" classpath="../enough-webprocessor/bin/classes:${polish.home}/bin/website:${polish.home}/bin/classes:${polish.home}/lib/jdom.jar:${polish.home}/dist/enough-j2mepolish-client.jar:${polish.home}/import/enough-j2mepolish-client.jar:${polish.home}/import/cldc-1.1.jar:${polish.home}/import/midp-2.0.jar:${polish.home}/import/mmapi.jar" />
+	<taskdef name="deviceExport" classname="de.enough.polish.ant.HtmlExporterTask" classpath="../enough-polish-build/bin/classes:../enough-polish-build/lib/jdom.jar"/>
+	<!-- build targets, each target can be called via "ant [name]", e.g. "ant clean" -->
+	
+	<property file="../enough-polish-build/version.properties" />
+	<property name="Version" value="2.2" />
+		<!--
+	-->
+	<property name="JavaDocVersion" value="${Version}" />
+	<property name="symbols" value="" />
 	<!--
--->
-<property name="JavaDocVersion" value="${Version}" />
-<property name="symbols" value="" />
-<!--
-<property name="BetaVersion" value="2.0-beta3" />
-<property name="symbols" value="isBetaAvailable" />
+	<property name="BetaVersion" value="2.0-beta3" />
 	<property name="symbols" value="isBetaAvailable" />
--->
+		<property name="symbols" value="isBetaAvailable" />
+	-->
+		
+	<target name="clean">
+		<property name="clean" value="true" />
+	</target>
+		
+	<target name="init">
+		<!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create distribution dirs -->
+		<mkdir dir="dist" />
+		<property name="clean" value="false" />
+	</target>
 	
-<target name="clean">
-	<property name="clean" value="true" />
-</target>
-	
-<target name="init">
-	<!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create distribution dirs -->
-	<mkdir dir="dist" />
-	<property name="clean" value="false" />
-</target>
-
-<target name="javadoc" description="builds the javadoc directory">
-	<mkdir dir="dist/javadoc/j2me" />
-	<mkdir dir="dist/javadoc/build" />
-	<javadoc 
-	    	destdir="dist/javadoc/j2me" 
-	    	access="protected" 
-	    	use="true" 
-	    	notree="false" 
-	    	nonavbar="false" 
-	    	noindex="false" 
-	    	splitindex="true" 
-	    	author="true" 
-	    	version="true" 
-	    	nodeprecatedlist="false" 
-	    	nodeprecated="false" 
-	    	packagenames="de.enough.*" 
-	    	sourcepath="../enough-polish-j2me/source/src" 
-	    	classpath="../enough-polish-j2me/bin/classes:import/midp2.jar" 
-	    	doctitle="The J2ME Polish Client Framework, Version ${JavaDocVersion}"
-	/>	
-	<javadoc 
-	    	destdir="dist/javadoc/build" 
-	    	access="public" 
-	    	use="true" 
-	    	notree="false" 
-	    	nonavbar="false" 
-	    	noindex="false" 
-	    	splitindex="true" 
-	    	author="true" 
-	    	version="true" 
-	    	nodeprecatedlist="false" 
-	    	nodeprecated="false" 
-	    	packagenames="de.enough.*" 
-	    	sourcepath="../enough-polish-build/source/src" 
-	    	classpath="../enough-polish-build/bin/classes:import/jdom.jar:import/ant.jar" 
-	    	doctitle="The J2ME Polish Build Framework, Version ${JavaDocVersion}"
-	/>	
-</target>
-	
-<target name="device-export" description="exports the device database">
-		<deviceExport />
+	<target name="javadoc" description="builds the javadoc directory">
+		<mkdir dir="dist/javadoc/j2me" />
+		<mkdir dir="dist/javadoc/build" />
+		<javadoc 
+		    	destdir="dist/javadoc/j2me" 
+		    	access="protected" 
+		    	use="true" 
+		    	notree="false" 
+		    	nonavbar="false" 
+		    	noindex="false" 
+		    	splitindex="true" 
+		    	author="true" 
+		    	version="true" 
+		    	nodeprecatedlist="false" 
+		    	nodeprecated="false" 
+		    	packagenames="de.enough.*" 
+		    	sourcepath="../enough-polish-j2me/source/src" 
+		    	classpath="../enough-polish-j2me/bin/classes:import/midp2.jar" 
+		    	doctitle="The J2ME Polish Client Framework, Version ${JavaDocVersion}"
+		/>	
+		<javadoc 
+		    	destdir="dist/javadoc/build" 
+		    	access="public" 
+		    	use="true" 
+		    	notree="false" 
+		    	nonavbar="false" 
+		    	noindex="false" 
+		    	splitindex="true" 
+		    	author="true" 
+		    	version="true" 
+		    	nodeprecatedlist="false" 
+		    	nodeprecated="false" 
+		    	packagenames="de.enough.*" 
+		    	sourcepath="../enough-polish-build/source/src" 
+		    	classpath="../enough-polish-build/bin/classes:import/jdom.jar:import/ant.jar" 
+		    	doctitle="The J2ME Polish Build Framework, Version ${JavaDocVersion}"
+		/>	
+	</target>
+		
+	<target name="device-export" description="exports the device database">
+			<deviceExport />
+			<webprocessor 
+				srcdir="../enough-polish-website/tmp"
+			 	includedir="../enough-polish-website/site/includes"
+				destdir="dist"
+				clean="false"
+				>
+				<variable name="PolishVersion" value="${Version}" />
+				<variable name="LatestDownload" value="j2mepolish_${Version}.html" />
+				<variable name="Author" value="Robert Virkus" />
+				<variable name="basedir" value="" />
+				<variable name="javadocdir" value="" />
+				<variable name="index.h1" value="h1index" />
+				<variable name="index.h2" value="h2index" />
+				<variable name="index.h3" value="h3index" />
+				<variable name="index.h4" value="h4index" />
+			</webprocessor>
+	</target>
+		
+	<target name="webprocessor" description="just builds the website without JavaDoc/devicedb"	>
 		<webprocessor 
-			srcdir="../enough-polish-website/tmp"
-		 	includedir="../enough-polish-website/site/includes"
+			srcdir="site/source"
+		 	includedir="site/includes"
 			destdir="dist"
-			clean="false"
+			clean="${clean}"
+			update="atoz.html, documentation.html, index.html, news.html, download.html, docs/install.html"
+			keywordsFile="keywords.txt"
+			symbols="${symbols}"
 			>
 			<variable name="PolishVersion" value="${Version}" />
-			<variable name="LatestDownload" value="j2mepolish_${Version}.html" />
+			<variable name="BetaVersion" value="${BetaVersion}" />
+			<variable name="LatestDownload" value="j2mepolish-${Version}.html" />
+		 	<variable name="LatestBetaDownload" value="j2mepolish-${BetaVersion}.html" />
 			<variable name="Author" value="Robert Virkus" />
 			<variable name="basedir" value="" />
 			<variable name="javadocdir" value="" />
+			<variable name="newsbasedir" value="" />
 			<variable name="index.h1" value="h1index" />
 			<variable name="index.h2" value="h2index" />
 			<variable name="index.h3" value="h3index" />
 			<variable name="index.h4" value="h4index" />
+			<variable name="index.h5" value="h5index" />
+			<directive name="cssattributes" class="de.enough.polish.website.CssDirectiveHandler" />
+			<directive name="cssmappings" class="de.enough.polish.website.CssMappingsDirectiveHandler" />
 		</webprocessor>
-</target>
+	</target>
 	
-<target name="webprocessor" description="just builds the website without JavaDoc/devicedb"	>
-	<webprocessor 
-		srcdir="site/source"
-	 	includedir="site/includes"
-		destdir="dist"
-		clean="${clean}"
-		update="atoz.html, documentation.html, index.html, news.html, download.html, docs/install.html"
-		keywordsFile="keywords.txt"
-		symbols="${symbols}"
-		>
-		<variable name="PolishVersion" value="${Version}" />
-		<variable name="BetaVersion" value="${BetaVersion}" />
-		<variable name="LatestDownload" value="j2mepolish-${Version}.html" />
-	 	<variable name="LatestBetaDownload" value="j2mepolish-${BetaVersion}.html" />
-		<variable name="Author" value="Robert Virkus" />
-		<variable name="basedir" value="" />
-		<variable name="javadocdir" value="" />
-		<variable name="newsbasedir" value="" />
-		<variable name="index.h1" value="h1index" />
-		<variable name="index.h2" value="h2index" />
-		<variable name="index.h3" value="h3index" />
-		<variable name="index.h4" value="h4index" />
-		<variable name="index.h5" value="h5index" />
-		<directive name="cssattributes" class="de.enough.polish.website.CssDirectiveHandler" />
-		<directive name="cssmappings" class="de.enough.polish.website.CssMappingsDirectiveHandler" />
-	</webprocessor>
-</target>
-
-<target name="website" depends="javadoc, device-export, webprocessor"	>
-		<echo message="www.j2mepolish.org created." />
-</target>
-	
+	<target name="website" depends="javadoc, device-export, webprocessor"	>
+			<echo message="www.j2mepolish.org created." />
+	</target>
+		
 	<target name="cleanbuild" depends="clean, website" description="Builds a clean website.">
 		<copy file="tour-cn.html" todir="dist/docs" overwrite="true" />
 	</target>

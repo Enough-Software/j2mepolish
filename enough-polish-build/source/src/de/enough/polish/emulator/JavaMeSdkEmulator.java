@@ -219,11 +219,11 @@ public class JavaMeSdkEmulator extends Emulator {
 			argumentsList.add("-Xdescriptor:" + env.getVariable("polish.jadPath"));
 		}
 
-		// add the -Xverbose-parameter:
-		String trace = setting.getTrace();
-		if (trace != null) {
-			argumentsList.add("-Xverbose:" + trace);
-		}
+		// add the -Xverbose-parameter: (not supported!)
+//		String trace = setting.getTrace();
+//		if (trace != null) {
+//			argumentsList.add("-Xverbose:" + trace);
+//		}
 
 
 		if (supportsSecurityDomain()) {

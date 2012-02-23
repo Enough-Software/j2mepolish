@@ -469,8 +469,8 @@
 			srcdir="source/src"
 			destdir="build/bootstrapclasses"
 			debug="true"
-			source="1.4"
-			target="1.4">
+			source="1.5"
+			target="1.5">
 			<classpath>
 				<pathelement path="lib/jdom.jar" />
 				<pathelement path="lib/javax.servlet.jar" />
@@ -486,8 +486,8 @@
 			srcdir="source/extensions"
 			destdir="build/bootstrapclasses"
 			debug="true"
-			source="1.4"
-			target="1.4">
+			source="1.5"
+			target="1.5">
 			<classpath>
 				<pathelement path="lib/asm-all.jar" />
 				<pathelement path="lib/enough-bytecode.jar" />
@@ -508,8 +508,8 @@
 			srcdir="source/website"
 			destdir="build/bootstrapwebsite"
 			debug="true"
-			source="1.4"
-			target="1.4">
+			source="1.5"
+			target="1.5">
 			<classpath>
 				<pathelement path="lib/enough-webprocessor.jar" />
 				<pathelement path="build/bootstrapclasses" />
@@ -1341,8 +1341,8 @@
 			srcdir="source/test"
 			destdir="build/testclasses"
 			debug="true"
-			source="1.4"
-			target="1.4">
+			source="1.5"
+			target="1.5">
 			<classpath>
 				<pathelement location="lib/asm-all.jar" />
 				<pathelement location="lib/enough-bytecode.jar" />
