@@ -72,7 +72,7 @@ public class HtmlExporterTask extends Task {
 
 //	private File wtkHome = new File( "/home/enough/dev/WTK2.1" );
 	private String targetDir = "../enough-polish-website/tmp/devices/";
-	private HashMap deviceLinks = new HashMap();
+	private HashMap<String,String> deviceLinks = new HashMap<String,String>();
 	private Comparator caseInsensitiveComparator = new CaseInsensitiveComparator();
 	private File polishHome = new File("../enough-polish-build/" );
 	private LibraryManager libraryManager;
@@ -121,7 +121,7 @@ public class HtmlExporterTask extends Task {
 					null, "vendor");
 			
 			// generate Index of used APIs:
-			HashMap apisByName = new HashMap();
+			HashMap<String,Boolean> apisByName = new HashMap<String,Boolean>();
 			for (int i = 0; i < devices.length; i++) {
 				Device device = devices[i];
 				String[] apis = device.getSupportedApis();
@@ -134,7 +134,7 @@ public class HtmlExporterTask extends Task {
 			}
 			String[] apis = (String[]) apisByName.keySet().toArray( new String[ apisByName.size()] );
 			//Arrays.sort( apis );
-			ArrayList apiLinksList = new ArrayList( apis.length * 2 );
+			ArrayList<String> apiLinksList = new ArrayList<String>( apis.length * 2 );
 			//String[] apiLinks = new String[ apis.length ];
 			
 		 	// get the devices for each api:
@@ -231,7 +231,7 @@ public class HtmlExporterTask extends Task {
 	{
 		String fileName = "issues.html";
 		System.out.println("Creating " + fileName);
-		ArrayList lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		lines.add("<%define inDevicesSection %>");
 		lines.add("<%define inDevicesSection.issues %>");
 		lines.add("<%set title = J2ME Polish: Issues Database %>");
@@ -280,7 +280,7 @@ public class HtmlExporterTask extends Task {
 		String name = issue.getName();
 		String fileName = "issue-" + name + ".html";
 		System.out.println("Creating " + fileName);
-		ArrayList lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		lines.add("<%define inDevicesSection %>");
 		lines.add("<%define inDevicesSection.issues %>");
 		lines.add("<%set title = J2ME Polish: Issues Database %>");
@@ -363,9 +363,9 @@ public class HtmlExporterTask extends Task {
 		this.deviceLinks.put( device.getIdentifier(), fileName);
 		
 		System.out.println("Creating " + fileName);
-		ArrayList lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		lines.add("<%define inDevicesSection %>");
-		lines.add("<%set title = J2ME Polish: " + device.getIdentifier() +" J2ME Specification %>");
+		lines.add("<%set title = J2ME Polish: " + device.getIdentifier() +" Specification %>");
 		lines.add("<%set basedir = ../../ %>");
 		lines.add("<%include start.txt %>" );
 		lines.add("");
@@ -374,7 +374,11 @@ public class HtmlExporterTask extends Task {
 		lines.add("<p>");
 		lines.add("<%index %>");
 		lines.add("<br/></p>");
-		if (device.hasFeature("polish.isVirtual")) {
+		String description = device.getDescription();
+		if (description != null) {
+			lines.add("<p>" + description + "</p>");
+		}
+		else if (device.hasFeature("polish.isVirtual")) {
 			lines.add( "<p>This device is a virtual device which combines several features of real devices. A virtual device represents a group of devices.</p>");
 		}
 		addDisplayCapabilities( lines, device );
@@ -399,7 +403,7 @@ public class HtmlExporterTask extends Task {
 		}
 		
 		// add capabilities:
-		HashMap capabilitiesByName = device.getCapabilities();
+		HashMap<String,String> capabilitiesByName = device.getCapabilities();
 		String[] capabilities = (String[]) capabilitiesByName.keySet().toArray( new String[ capabilitiesByName.size()] );
 		Arrays.sort( capabilities, this.caseInsensitiveComparator );
 		lines.add("<h2 id=\"capabilities\">Preprocessing Capabilities</h2>");
@@ -407,10 +411,10 @@ public class HtmlExporterTask extends Task {
 				"preprocessing directive and can be compared with the &quot;//#if&quot; " +
 				"directive. For each defined capability a preprocessing symbol " +
 				"with the same name will be defined." +
-				"<br/>Have a look at the <a href=\"<%= basedir %>docs/preprocessing.html\">preprocessing documentation</a> " +
+				"<br/>Have a look at the <a href=\"<%= basedir %>docs/preprocessing-directives.html\">preprocessing documentation</a> " +
 				"for more information.</p>");
 		lines.add("<p>Examples:");
-		lines.add("<pre>");
+		lines.add("<pre class=\"brush: java\">");
 		lines.add("//#if polish.Vendor == " + device.getVendorName() );
 		lines.add("	// this is a " + device.getVendorName() + " device");
 		lines.add("//#endif");
@@ -429,16 +433,16 @@ public class HtmlExporterTask extends Task {
 		lines.add("</table>");
 		
 		// add symbols:
-		HashMap symbolsByName = device.getFeatures();
+		HashMap<String,Boolean> symbolsByName = device.getFeatures();
 		String[] symbols = (String[]) symbolsByName.keySet().toArray( new String[ symbolsByName.size()] );
 		Arrays.sort( symbols, this.caseInsensitiveComparator );
 		lines.add("<h2 id=\"symbols\">Preprocessing Symbols</h2>");
 		lines.add("<p>Symbols can be evaluated with the &quot;//#ifdef&quot; " +
 				"and related preprocessing directives." +
-				"<br/>Have a look at the <a href=\"<%= basedir %>docs/preprocessing.html\">preprocessing documentation</a> " +
+				"<br/>Have a look at the <a href=\"<%= basedir %>docs/preprocessing-directives.html\">preprocessing documentation</a> " +
 				"for more information.</p>");
 		lines.add("<p>Example:");
-		lines.add("<pre>");
+		lines.add("<pre class=\"brush: java\">");
 		lines.add("//#if polish.api.mmapi || polish.midp2" );
 		lines.add("	// this device supports the Mobile Media API");
 		lines.add("//#endif");
@@ -458,7 +462,7 @@ public class HtmlExporterTask extends Task {
 		FileUtil.writeTextFile( new File( this.targetDir + fileName), htmlCode );	
 	}
 
-	private void addDisplayCapabilities(ArrayList lines, Device device) {
+	private void addDisplayCapabilities(ArrayList<String> lines, Device device) {
 		String screenSize = device.getCapability("polish.ScreenSize");
 		String canvasSize = device.getCapability("polish.CanvasSize");
 		String fullCanvasSize = device.getCapability("polish.FullCanvasSize");
@@ -496,16 +500,17 @@ public class HtmlExporterTask extends Task {
 		String answer = hasPointerEvents ? "yes" : "no";
 		cssStyle = CSS_TABLE_ROW_CLASSES[ row % 2 ];
 		row++;
-		lines.add( "<tr class=\"" + cssStyle + "\"><td>Has Pointer Events (Stylus)</td><td>" + answer + "</td><td>polish.hasPointerEvents</td></tr>" );
+		lines.add( "<tr class=\"" + cssStyle + "\"><td>Supports Pointer/Touch Events</td><td>" + answer + "</td><td>polish.hasPointerEvents</td></tr>" );
 		
 		lines.add("</table>");
 		
 	}
 
-	private void addPlatformCapabilities(ArrayList lines, Device device) {
+	private void addPlatformCapabilities(ArrayList<String> lines, Device device) {
 		String platform = device.getCapability("polish.JavaPlatform");
 		String configuration = device.getCapability("polish.JavaConfiguration");
 		String apis = device.getSupportedApisAsString();
+		String optionalApis = device.getOptionalApisAsString();
 		String os = device.getCapability("polish.OS");
 		lines.add( "<h2 id=\"platform\">Platform</h2>" );
 		lines.add("<table width=\"100%\" class=\"borderedTable\">");
@@ -523,16 +528,26 @@ public class HtmlExporterTask extends Task {
 		if (platform != null) {
 			cssStyle = CSS_TABLE_ROW_CLASSES[ row % 2 ];
 			row++;
-			String platformRow = "<tr class=\"" + cssStyle + "\"><td>Platform</td><td>"; 
-			if (device.isMidp1()) {
-				platformRow +=  "<a href=\"../midp1.html\">" + platform + "</a>";
-			} else if (device.isMidp2()) {
-				platformRow +=  "<a href=\"../midp2.html\">" + platform + "</a>";
-			} else {
-				platformRow += platform;
-			}
+			String platformRow = "<tr class=\"" + cssStyle + "\"><td>Platform</td><td>";
+			platformRow +=  platform;
+//			if (device.hasFeature("polish.blackberry")) {
+//				platformRow +=  platform;
+//			} else if (device.hasFeature("polish.android")) {
+//					platformRow +=  platform;
+//			}
+//			else if (device.isMidp1()) {
+//				platformRow +=  "<a href=\"../midp1.html\">" + platform + "</a>";
+//			} else if (device.isMidp2()) {
+//				platformRow +=  "<a href=\"../midp2.html\">" + platform + "</a>";
+//			} else {
+//				platformRow += platform;
+//			}
 			platformRow += "</td><td>polish.JavaPlatform";
-			if (device.isMidp1()) {
+			if (device.hasFeature("polish.blackberry")) {
+				platformRow +=  ", polish.blackberry</td></tr>";
+			} else if (device.hasFeature("polish.android")) {
+					platformRow +=  ", polish.android</td></tr>";
+			} else if (device.isMidp1()) {
 				platformRow +=  ", polish.midp1</td></tr>";
 			} else if (device.isMidp2()) {
 				platformRow +=  ", polish.midp2</td></tr>";
@@ -564,7 +579,7 @@ public class HtmlExporterTask extends Task {
 
 		if (apis != null) {
 			String[] apiNames = StringUtil.splitAndTrim( apis, ',');
-			ArrayList apisList = new ArrayList( apiNames.length + 5 );
+			ArrayList<String> apisList = new ArrayList<String>( apiNames.length + 5 );
 			for (int i = 0; i < apiNames.length; i++) {
 				String apiName = apiNames[i];
 				String[] symbols = this.libraryManager.getSymbols(apiName);
@@ -595,6 +610,42 @@ public class HtmlExporterTask extends Task {
 				}
 			}
 			apisRow.append( "</td><td>polish.JavaPackage, " )
+				.append( preprocessingSymbols ).append("</td></tr>" );
+			lines.add( apisRow.toString() );
+		}
+		if (optionalApis != null) {
+			String[] apiNames = StringUtil.splitAndTrim( optionalApis, ',');
+			ArrayList<String> apisList = new ArrayList<String>( apiNames.length + 5 );
+			for (int i = 0; i < apiNames.length; i++) {
+				String apiName = apiNames[i];
+				String[] symbols = this.libraryManager.getSymbols(apiName);
+				if (symbols == null) {
+					apisList.add( apiName );
+				} else {
+					for (int j = 0; j < symbols.length; j++) {
+						String symbol = symbols[j];
+						apisList.add( symbol );
+					}
+				}
+			}
+			apiNames = (String[]) apisList.toArray( new String[ apisList.size() ]);
+			cssStyle = CSS_TABLE_ROW_CLASSES[ row % 2 ];
+			row++;
+			StringBuffer apisRow = new StringBuffer();
+			apisRow.append( "<tr class=\"" ).append( cssStyle )
+				.append("\"><td>Possibly Supported APIs</td><td>" );
+			StringBuffer preprocessingSymbols = new StringBuffer();
+			for (int i = 0; i < apiNames.length; i++) {
+				String apiName = apiNames[i];
+				apisRow.append( "<a href=\"../devices-" ).append( apiName ).append(".html\">")
+				   .append( apiName ).append("</a>");
+				preprocessingSymbols.append("polish.optional-api.").append( apiName );
+				if (i != apiNames.length -1 ) {
+					apisRow.append(", ");
+					preprocessingSymbols.append(", ");
+				}
+			}
+			apisRow.append( "</td><td>polish.OptionalPackage, " )
 				.append( preprocessingSymbols ).append("</td></tr>" );
 			lines.add( apisRow.toString() );
 		}

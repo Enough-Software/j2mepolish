@@ -311,6 +311,11 @@
 			<%endif %>
 			-->
 			
+			<%ifdef inDevicesSection %>
+				<div id="currentSecondLevelLink"><a href="<%= basedir %>devices-overview.html">Device Database</a></div>
+			<%else %>
+				<div class="secondLevelLink"><a href="<%= basedir %>devices-overview.html">Device Database</a></div>
+			<%endif %>
 		
 
 		

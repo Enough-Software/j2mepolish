@@ -411,7 +411,7 @@ This sample application shows how to use the browser technology of J2ME Polish.
             	<os name="Mac OS X" />
             </parsable>
         </pack>
-        <pack name="External Device Database" required="no" preselected="no" >
+        <pack name="External Device Database" required="no" preselected="yes" >
             <description>The files &quot;devices.xml&quot;, &quot;vendors.xml&quot;, &quot;groups.xml&quot; and &quot;apis.xml&quot; etc. 
 Do NOT use these if you want to add your own device-definitions!
 Instead use custom-devices.xml, custom-vendors.xml, custom-groups.xml and custom-apis.xml for your own definitions.

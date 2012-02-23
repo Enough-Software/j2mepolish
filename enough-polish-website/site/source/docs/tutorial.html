@@ -545,6 +545,7 @@ and select &quot;Execute&quot;, &quot;Run Ant...&quot; or &quot;make&quot; depen
 on the IDE. The build process can also be started from the command-line: enter the 
 project directory and type the <code>ant</code> command.
 </p>
+<h3 id="ant">Hello Ant!</h3>
 <p>
 The <i>build.xml</i> script contains various targets, by default the <code>j2mepolish</code> target is invoked. You can select the targets in your IDE or
 on the command line by calling <code>ant ${target.name}</code>, e.g. <code>ant emulator</code>.
@@ -584,7 +585,11 @@ If there is one golden role in J2ME&nbsp;Polish, it surely is <code>&lt;property
 easily adjust the build process for local settings in a properties file called <i>${user.name}.properties</i>, e.g. <i>linust.properties</i>. This properties file can contain
 several Ant properties each on a single line with the name and value separated by an equal sign: <code>device=Generic/AnyMsaPhone</code>.
 </div>
+</p>
+<h3 id="build.xml">build.xml Example</h3>
+<p>
 <br/><br/><b>Listing 5: build.xml</b>
+</p>
 <pre class="brush: xml">
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;project basedir=&quot;.&quot; default=&quot;j2mepolish&quot; name=&quot;enough-polish-example&quot;&gt;
@@ -703,7 +708,7 @@ The J2ME&nbsp;Polish <a href="build-taskdef.html">task</a> itself contains 4 sec
 <li><a href="build-emulator.html">emulator</a> launches the emulator after a successful build.</li>
 </ul>
 <p>
-J2ME&nbsp;Polish now preprocesses, compiles, preverifies, obfuscates and packages the code automatically for a number of devices. The resulting app bundles can be found in the <i>dist</i> folder after J2ME&nbsp;Polish finished the build.
+J2ME&nbsp;Polish now preprocesses, compiles, preverifies, obfuscates and packages the code automatically for your chosen target devices. The resulting app bundles can be found in the <i>dist</i> folder after J2ME&nbsp;Polish finished the build.
 </p>
 <p>Some of the above configured J2ME&nbsp;Polish features include:</p>
 <ol>
@@ -712,6 +717,25 @@ J2ME&nbsp;Polish now preprocesses, compiles, preverifies, obfuscates and package
 <li><a href="localization.html">Localization</a> allows you to translate your app and customize the used texts.</li>
 <!-- <li><a href=""></a></li> -->
 </ol>
+<h3 id="target-devices">Target Devices</h3>
+<p>
+The J2ME Polish device database contains well over a thousand devices nowadays. Typically you will not build your app for for all of them, but instead concentrate on some key devices. 
+</p>
+<ul>
+<li><b>Generic/AnyPhone</b>: A MIDP 2.0 and CLDC 1.1 phone that supports softkeys and the fullscreen mode and the JTWI standard. Use this phone to run a single application on various platforms like Nokia, Motorola, Samsung and so on.</li>
+<li><b>Generic/AnyMsaPhone</b>: Similar to Generic/AnyPhone, but it additionally guarantees to support more MSA APIs like the advancedmultimedia-API.</li>
+<li><b>BlackBerry/7.1</b>: A BlackBerry 7.1 compatible device</li>
+<li><b>BlackBerry/7.0</b>: A BlackBerry 7.0 compatible device</li>
+<li><b>BlackBerry/6.0</b>: A BlackBerry 6.0 compatible device</li>
+<li><b>BlackBerry/5.0</b>: A BlackBerry 5.0 compatible device</li>
+<li><b>Generic/android4.0.3</b>: An Android 4.0.3 / API-Level 15 compatible handset.</li>
+<li><b>Generic/android4.0</b>: An Android 4.0 / API-Level 14 compatible handset.</li>
+<li><b>Generic/android2.3.3</b>: An Android 4.0.3 / API-Level 10 compatible handset.</li>
+<!-- 
+<li><b></b>: </li>
+<li><b></b>: </li>
+ -->
+</ul>
 
 
 <h2 id="design">Designing the Application with CSS</h2>
