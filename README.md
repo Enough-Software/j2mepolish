@@ -1,10 +1,13 @@
 J2ME Polish
 ===========
-***by Enough Software***
+[***by Enough Software***](http://www.enough.de)
 
-**J2ME Polish** is a framework for developers to create applications on **J2ME**, **Blackberry** and **Android** devices from a single source base.
+[**J2ME Polish**](http://j2mepolish.org) is a framework for developers to create applications on **J2ME**, **Blackberry** and **Android** devices from a single source base.
 
 It is dual-licensed under the **GPL** and a **commercial license**.
+
+To kickstart development, read the [tutorial](http://www.enough.de/products/j2me-polish/documentation/tutorial/)
+
 
 Overview
 --------
@@ -40,8 +43,4 @@ Repository Structure
 
 Stay In Touch
 -------------
-* Blog
-* News Letter
-* Git News Feed
-* Facebook
-* Twitter
+* [twitter.com/j2mepolish](http://twitter.com/#!/j2mepolish)
