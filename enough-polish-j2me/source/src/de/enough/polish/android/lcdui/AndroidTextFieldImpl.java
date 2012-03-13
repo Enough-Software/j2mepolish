@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
+import android.widget.TextView;
 import de.enough.polish.android.midlet.MidletBridge;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.Screen;
@@ -18,14 +19,14 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TextField;
 
 public class AndroidTextFieldImpl extends EditText
-implements View.OnTouchListener, AndroidTextField
+implements View.OnTouchListener, AndroidTextField, TextView.OnEditorActionListener
 {
-	
 	private final TextField textField;
 	private int cursorPosition;
 	private boolean isNumericPassword;
 	private float yPosAtPointerPress;
 	private int scrollOffsetAtPointerPress;
+	private boolean isSingleLine;
 
 	public AndroidTextFieldImpl(TextField textField) {
 		super(MidletBridge.getInstance());
@@ -38,6 +39,7 @@ implements View.OnTouchListener, AndroidTextField
 		applyTextField();
 		setOnTouchListener(this);
 		setLineSpacing( 0F, 1F);
+		setOnEditorActionListener(this);
 	}
 	
 	
@@ -53,6 +55,15 @@ implements View.OnTouchListener, AndroidTextField
 			if (field.getHelpText() != null) {
 				setHint(field.getHelpText());
 			}
+		//#endif
+		//#if polish.css.text-wrap
+			if (style != null) {
+				Boolean isWrapBool = style.getBooleanProperty("text-wrap");
+				if ((isWrapBool != null) && (!isWrapBool.booleanValue())) {
+					setSingleLine();
+					this.isSingleLine = true;
+				}
+			} 
 		//#endif
 		this.isNumericPassword = false;
 		int type =  InputType.TYPE_TEXT_FLAG_MULTI_LINE;
@@ -243,6 +254,25 @@ implements View.OnTouchListener, AndroidTextField
 				int newOffset = this.scrollOffsetAtPointerPress - diff;
 				screen.setScrollYOffset(newOffset, false);
 				AndroidDisplay.getInstance().invalidate();
+			}
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.TextView.OnEditorActionListener#onEditorAction(android.widget.TextView, int, android.view.KeyEvent)
+	 */
+	public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+		if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED) || (actionId == EditorInfo.IME_ACTION_NONE)) {
+			if (this.textField.getDefaultCommand() != null) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					this.textField.getDefaultCommand().commandAction(this.textField, this.textField.getScreen());
+				}
+				return true;
+			}
+			if (this.isSingleLine) {
+				return true;
 			}
 		}
 		return false;
