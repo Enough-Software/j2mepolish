@@ -5637,6 +5637,25 @@
 		since="J2ME Polish 2.3"
 	/>
 	
+	<attribute
+		name="before-include-background"
+		type="boolean"
+		appliesTo="Item"
+		description="By default the background of an Item is painted underneath the before element. Use false to exclude the background."
+		default="true"
+		id="491"
+		since="J2ME Polish 2.3.1"
+	/>
+	
+	<attribute
+		name="after-include-background"
+		type="boolean"
+		appliesTo="Item"
+		description="By default the background of an Item is painted underneath the after element. Use false to exclude the background."
+		default="true"
+		id="492"
+		since="J2ME Polish 2.3.1"
+	/>
 	
 <!--
 	<attribute

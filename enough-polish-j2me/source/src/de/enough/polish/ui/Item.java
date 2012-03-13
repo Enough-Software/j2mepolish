@@ -767,6 +767,9 @@ public abstract class Item implements UiElement, Animatable
 		private int beforeWidth;
 		private int beforeHeight;
 		private Image beforeImage;
+		//#ifdef polish.css.before-include-background
+			private boolean beforeIncludeBackground = true;
+		//#endif
 	//#endif
 
 	//#ifdef polish.css.after
@@ -774,6 +777,9 @@ public abstract class Item implements UiElement, Animatable
 		private int afterWidth;
 		private int afterHeight;
 		private Image afterImage;
+		//#ifdef polish.css.after-include-background
+			private boolean afterIncludeBackground = true;
+		//#endif
 	//#endif
 	// label settings:
 	protected Style labelStyle = StyleSheet.labelStyle;
@@ -1520,6 +1526,12 @@ public abstract class Item implements UiElement, Animatable
 					}
 				}
 				this.beforeUrl = beforeUrlStr;
+				//#ifdef polish.css.before-include-background
+					Boolean beforeIncludeBackgroundBool = style.getBooleanProperty("before-include-background");
+					if (beforeIncludeBackgroundBool != null) {
+						this.beforeIncludeBackground = beforeIncludeBackgroundBool.booleanValue();
+					}
+				//#endif
 			} else if (resetStyle) {
 				this.beforeImage = null;
 				this.beforeWidth = 0;
@@ -1543,6 +1555,12 @@ public abstract class Item implements UiElement, Animatable
 					}
 				}
 				this.afterUrl = afterUrlStr;
+				//#ifdef polish.css.after-include-background
+					Boolean afterIncludeBackgroundBool = style.getBooleanProperty("after-include-background");
+					if (afterIncludeBackgroundBool != null) {
+						this.afterIncludeBackground = afterIncludeBackgroundBool.booleanValue();
+					}
+				//#endif
 			} else if (resetStyle) {
 				this.afterWidth = 0;
 				this.afterHeight = 0;
@@ -2836,7 +2854,19 @@ public abstract class Item implements UiElement, Animatable
 				if (labelItem != null && this.useSingleRow) { 
 					backgroundX += labelItem.itemWidth;
 				}
-				paintBackgroundAndBorder(backgroundX, y, this.backgroundWidth, this.backgroundHeight, g);
+				int backgroundW = this.backgroundWidth;
+				//#if polish.css.before && polish.css.before-include-background
+					if (this.beforeImage != null && !this.beforeIncludeBackground) {
+						backgroundX += getBeforeWidthWithPadding();
+						backgroundW -= getBeforeWidthWithPadding();
+					}
+				//#endif
+				//#if polish.css.after && polish.css.after-include-background
+					if (this.afterImage != null && !this.afterIncludeBackground) {
+						backgroundW -= getAfterWidthWithPadding();
+					}
+				//#endif
+				paintBackgroundAndBorder(backgroundX, y, backgroundW, this.backgroundHeight, g);
 		//#if polish.css.include-label
 			}
 		//#endif
@@ -2870,6 +2900,7 @@ public abstract class Item implements UiElement, Animatable
 				if (labelItem != null && this.useSingleRow) {
 					beforeX += labelItem.itemWidth;
 				}
+				
 				int beforeY = y;
 				int yAdjust = this.beforeHeight - this.contentHeight;
 				if ( this.beforeHeight < this.contentHeight) {
@@ -2897,7 +2928,7 @@ public abstract class Item implements UiElement, Animatable
 				}
 				//System.out.println("drawing before at " + beforeX + ", contentX=" + this.contentX + ", this=" + this);
 				g.drawImage(this.beforeImage, beforeX, beforeY, Graphics.TOP | Graphics.LEFT );
-				x += getBeforeWidthWithPadding();
+				//x += getBeforeWidthWithPadding();
 			}
 		//#endif
 		
