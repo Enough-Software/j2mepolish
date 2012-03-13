@@ -1781,7 +1781,7 @@ public class PolishTask extends ConditionalTask {
                         boolean usePolishGui = this.environment.hasSymbol("polish.usePolishGui");
 
 			notifyPolishBuildListeners( PolishBuildListener.EVENT_PREPROCESS_SOURCE_DIR, new File( targetDir ) );
-			// initialise the preprocessor (other initialisation is done in the initialized() method):
+			// initialize the preprocessor (other initialization is done in the initialized() method):
 			this.preprocessor.setTargetDir( targetDir );
 			long lastLocaleModification = 0;
 			TranslationManager translationManager = null;
@@ -1831,7 +1831,7 @@ public class PolishTask extends ConditionalTask {
 				if (cssStyleSheet.lastModified() > lastLocaleModification) {
 					lastCssModification = cssStyleSheet.lastModified();
 				}
-                                this.preprocessor.setSyleSheet( cssStyleSheet, device );
+                this.preprocessor.setSyleSheet( cssStyleSheet, device );
 			}
 			
 			this.preprocessor.notifyDevice(device, usePolishGui);

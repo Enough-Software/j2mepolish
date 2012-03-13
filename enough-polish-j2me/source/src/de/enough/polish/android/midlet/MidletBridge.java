@@ -179,6 +179,10 @@ public class MidletBridge extends Activity {
 		//System.out.println("METRICS: DESIRED=" + desiredWindowWidth + "x" + desiredWindowHeight + ", defaultDisplay=" + CanvasBridge.DISPLAY_WIDTH_PIXEL + "x" + CanvasBridge.DISPLAY_HEIGHT_PIXEL);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
+		setSystemProperty("Cell-Id","-1");
+		setSystemProperty("Cell-lac","-1");
+		setSystemProperty("SignalStrength","0");
+		
 		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		PhoneStateListener listener = new PhoneStateListener() {
 			@Override
@@ -209,9 +213,6 @@ public class MidletBridge extends Activity {
 		};
 		int events = PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTH;
 		telephonyManager.listen(listener, events);
-		setSystemProperty("Cell-Id","-1");
-		setSystemProperty("Cell-lac","-1");
-		setSystemProperty("SignalStrength","0");
 		String subscriberId = telephonyManager.getSubscriberId();
 		if(subscriberId == null) {
 			subscriberId = "";
@@ -263,19 +264,20 @@ public class MidletBridge extends Activity {
 		}
 		
 		//#if polish.android.trapHomeButton
-		PackageManager packageManager = getPackageManager();
-		System.out.println("trap Home");
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.intent.action.MAIN");
-        filter.addCategory("android.intent.category.HOME");
-        filter.addCategory("android.intent.category.DEFAULT");
-
-        ComponentName newHomeComponent = new ComponentName(getPackageName(), MidletBridge.class.getName());
-
-        ComponentName[] systemComponents = new ComponentName[] {new ComponentName("com.android.launcher", "com.android.launcher.Launcher"), newHomeComponent};
-
-        packageManager.clearPackagePreferredActivities("com.android.launcher");
-        packageManager.addPreferredActivity(filter, IntentFilter.MATCH_CATEGORY_EMPTY, systemComponents, newHomeComponent);
+			//#debug
+			System.out.println("trap Home");
+			PackageManager packageManager = getPackageManager();
+	        IntentFilter filter = new IntentFilter();
+	        filter.addAction("android.intent.action.MAIN");
+	        filter.addCategory("android.intent.category.HOME");
+	        filter.addCategory("android.intent.category.DEFAULT");
+	
+	        ComponentName newHomeComponent = new ComponentName(getPackageName(), MidletBridge.class.getName());
+	
+	        ComponentName[] systemComponents = new ComponentName[] {new ComponentName("com.android.launcher", "com.android.launcher.Launcher"), newHomeComponent};
+	
+	        packageManager.clearPackagePreferredActivities("com.android.launcher");
+	        packageManager.addPreferredActivity(filter, IntentFilter.MATCH_CATEGORY_EMPTY, systemComponents, newHomeComponent);
 		
         //#endif
 		
