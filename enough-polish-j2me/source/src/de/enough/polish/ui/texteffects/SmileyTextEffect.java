@@ -392,6 +392,9 @@ public class SmileyTextEffect extends TextEffect {
 		int textStart = 0;
 		int drawStart = 0;
 		
+		int verticalDiff = (smileyHeight - super.getFontHeight()) / 2;
+		
+		
 		for (int index = 0; index < text.length(); index++) {
 			char hash = Character.toLowerCase(text.charAt(index));
 			ArrayList smileys = (ArrayList)smileyHash.get(hash);
@@ -402,7 +405,7 @@ public class SmileyTextEffect extends TextEffect {
 				{
 					Smiley smiley = (Smiley)smileyMap.get(sequence.hashCode());
 					
-					g.drawSubstring(text, textStart, index - textStart, x + drawStart, y, orientation);
+					g.drawSubstring(text, textStart, index - textStart, x + drawStart, y + verticalDiff, orientation);
 					
 					int textWidth = getFont().substringWidth(text, textStart, index - textStart); 
 					
@@ -421,7 +424,7 @@ public class SmileyTextEffect extends TextEffect {
 			}
 		}
 		
-		g.drawSubstring(text, textStart, text.length() - textStart, x + drawStart, y, orientation);
+		g.drawSubstring(text, textStart, text.length() - textStart, x + drawStart, y + verticalDiff, orientation);
 	}
 	
 	/**
