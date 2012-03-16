@@ -120,7 +120,12 @@ implements VolumeControl, MediaPlayer.OnCompletionListener
 	}
 
 	protected void doStop() throws MediaException {
-		this.mediaPlayer.stop();
+		synchronized (this) {
+			this.currentLoop = 0;
+			if (this.mediaPlayer.isPlaying()) {
+				this.mediaPlayer.stop();
+			}
+		}
 	}
 
 	public int getLevel() {
@@ -172,15 +177,17 @@ implements VolumeControl, MediaPlayer.OnCompletionListener
 	 * @see android.media.MediaPlayer.OnCompletionListener#onCompletion(android.media.MediaPlayer)
 	 */
 	public void onCompletion(MediaPlayer mp) {
-		int loop = this.currentLoop;
-		if (loop == -1) {
-			// just start again:
-			mp.start();
-		} else if (loop > 0){
-			this.currentLoop--;
-			mp.start();
-		} else {
-			fireEvent(PlayerListener.END_OF_MEDIA, this);
+		synchronized (this) {
+			int loop = this.currentLoop;
+			if (loop == -1) {
+				// just start again:
+				mp.start();
+			} else if (loop > 0){
+				this.currentLoop--;
+				mp.start();
+			} else {
+				fireEvent(PlayerListener.END_OF_MEDIA, this);
+			}
 		}
 	}
 
