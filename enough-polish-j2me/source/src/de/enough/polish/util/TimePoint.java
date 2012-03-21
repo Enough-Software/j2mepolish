@@ -1225,6 +1225,58 @@ implements Externalizable, Comparator, Comparable
 		}
 		return buffer.toString();
 	}
+	
+	/**
+	 * Parses the given text in cookie format .
+	 * 
+	 * 
+	 * @param dateTimeText the date time text as defined by RFC2616, e.g. "Tue, 20 Mar 2012 08:49:37 GMT"
+	 * @return the parsed TimePoint represented by the given dateTime text
+	 * @see "http://tools.ietf.org/html/rfc2616#page-20" (Section 3.3.1)
+	 * @throws IllegalArgumentException when the text could not be parsed
+	 */
+	public static TimePoint parseCookieExpires(String dateTimeText) {
+		int commaIndex = dateTimeText.indexOf(',');
+		if (commaIndex == -1) {
+			throw new IllegalArgumentException("for " + dateTimeText);
+		}
+		dateTimeText = dateTimeText.substring(commaIndex+1).trim();
+		int day = Integer.parseInt(dateTimeText.substring(0, 2));
+		String monthName = dateTimeText.substring(3,6);
+		int month;
+		if ("Jan".equals(monthName)) {
+			month = Calendar.JANUARY;
+		} else if ("Feb".equals(monthName)) {
+			month = Calendar.FEBRUARY;
+		} else if ("Mar".equals(monthName)) {
+			month = Calendar.MARCH;
+		} else if ("Apr".equals(monthName)) {
+			month = Calendar.APRIL;
+		} else if ("May".equals(monthName)) {
+			month = Calendar.MAY;
+		} else if ("Jun".equals(monthName)) {
+			month = Calendar.JUNE;
+		} else if ("Jul".equals(monthName)) {
+			month = Calendar.JULY;
+		} else if ("Aug".equals(monthName)) {
+			month = Calendar.AUGUST;
+		} else if ("Sep".equals(monthName)) {
+			month = Calendar.SEPTEMBER;
+		} else if ("Oct".equals(monthName)) {
+			month = Calendar.OCTOBER;
+		} else if ("Nov".equals(monthName)) {
+			month = Calendar.NOVEMBER;
+		} else if ("Dec".equals(monthName)) {
+			month = Calendar.DECEMBER;
+		} else {
+			throw new IllegalArgumentException("for month " + monthName + " in " + dateTimeText);
+		}
+		int year = Integer.parseInt( dateTimeText.substring(7, 11));
+		int hour = Integer.parseInt(dateTimeText.substring(12,14));
+		int minute = Integer.parseInt(dateTimeText.substring(15,17));
+		int seconds = Integer.parseInt(dateTimeText.substring(18,20));
+		return new TimePoint(year, month, day, hour, minute, seconds, 0, TimeZone.getTimeZone("GMT"));
+	}
 
 	/**
 	 * Parses the given text in RFC3339 format.

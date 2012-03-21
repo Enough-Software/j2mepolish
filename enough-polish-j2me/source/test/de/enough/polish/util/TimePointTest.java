@@ -614,4 +614,20 @@ public class TimePointTest extends TestCase {
 		assertEquals( 1 * 60 * 60 * 1000, tp.getTimeZone().getRawOffset() );
 
 	}
+	
+	public void testParseCookieExpires() {
+		String date;
+		TimePoint tp;
+		
+		date = "Tue, 20 Mar 2012 08:49:37 GMT";
+		tp = TimePoint.parseCookieExpires(date);
+		assertEquals( 2012, tp.getYear() );
+		assertEquals( Calendar.MARCH, tp.getMonth() );
+		assertEquals( 20, tp.getDay() );
+		assertEquals( 8, tp.getHour() );
+		assertEquals( 49, tp.getMinute() );
+		assertEquals( 37, tp.getSecond() );
+		assertEquals( TimeZone.getTimeZone("GMT"), tp.getTimeZone() );
+
+	}
 }
