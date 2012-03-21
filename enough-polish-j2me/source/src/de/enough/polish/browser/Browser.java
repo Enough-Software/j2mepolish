@@ -26,6 +26,7 @@
  */
 package de.enough.polish.browser;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +50,8 @@ import de.enough.polish.io.ResourceLoader;
 import de.enough.polish.io.StringReader;
 import de.enough.polish.util.ArrayList;
 import de.enough.polish.util.HashMap;
+import de.enough.polish.util.StreamUtil;
+import de.enough.polish.util.TextUtil;
 import de.enough.polish.util.zip.GZipInputStream;
 import de.enough.polish.xml.SimplePullParser;
 import de.enough.polish.xml.XmlPullParser;
@@ -126,7 +129,7 @@ implements Runnable, ResourceLoader
 
 	private HistoryEntry scheduledHistoryEntry;
 
-	protected String cookie;
+	protected CookieManager cookieManager;
 
 	protected boolean allowHtmlEntitiesInAttributes;
 
@@ -350,15 +353,32 @@ implements Runnable, ResourceLoader
 	public void openContainer(Style containerStyle)
 	{
 		Container previousContainer = this.currentContainer;
+		Style previousStyle;
+		if (previousContainer != null) {
+			previousStyle = previousContainer.getStyle();
+			if (previousStyle == null) {
+				Item prevParent = previousContainer.getParent();
+				while (previousStyle == null && prevParent != null) {
+					previousStyle = prevParent.getStyle();
+					prevParent = prevParent.getParent();
+				}
+				if (previousStyle == null) {
+					previousStyle = getStyle();
+				}
+			}
+		} else {
+			previousStyle = getStyle();
+		}
 		if (containerStyle == null) {
-			if (previousContainer != null) {
-				containerStyle = previousContainer.getStyle();
-			} else {
-				containerStyle = getStyle();
+			containerStyle = previousStyle;
+		} else if (containerStyle.getObjectProperty("view-type") == null) {
+			Object viewTypeValue = previousStyle.getObjectProperty("view-type");
+			if (viewTypeValue != null) {
+				containerStyle.addAttribute("view-type", viewTypeValue);
 			}
 		}
 		//#debug
-		System.out.println("Opening nested container with style " + (containerStyle == null ? "<null>" : containerStyle.name));
+		System.out.println("Opening nested container with style " + (containerStyle == null ? "<null>" : containerStyle.name)  );
 		openContainer( new Container( false, containerStyle ) );
 	}
 
@@ -587,7 +607,9 @@ implements Runnable, ResourceLoader
 			try {
 				Style style = CssInterpreter.parseStyle(inlineStyleAttribute);
 				if (parentStyle != null) {
+					int layout = style.layout;
 					style.extendStyle(parentStyle);
+					style.layout = layout | (style.layout & Item.LAYOUT_VCENTER);
 					//style.addAttribute("padding", new Dimension(0));
 				}
 				return style;
@@ -599,23 +621,36 @@ implements Runnable, ResourceLoader
 		Style tagStyle = null;
 		String styleName = (String) attributeMap.get("class");
 		if (styleName != null) {
-			if (this.cssStyles != null) {
-				tagStyle = (Style) this.cssStyles.get(styleName);
-			}
+			tagStyle = getStyle(styleName);
 			if (tagStyle == null) {
-				tagStyle = StyleSheet.getStyle(styleName);
+				String[] styleNames = TextUtil.split(styleName, ' ');
+				if (styleNames.length > 1) {
+					for (int i = 0; i < styleNames.length; i++) {
+						styleName = styleNames[i];
+						tagStyle = getStyle(styleName);
+						if (tagStyle != null) {
+							break;
+						}
+					}
+				}
 			}
 		}
 		if (tagStyle == null || styleName == null) {
 			styleName = (String) attributeMap.get("id");
 			if (styleName != null) {
-				if (this.cssStyles != null) {
-					tagStyle = (Style) this.cssStyles.get(styleName);
-				}
-				if (tagStyle == null) {
-					tagStyle = StyleSheet.getStyle(styleName);
-				}
+				tagStyle = getStyle(styleName);
 			}
+		}
+		return tagStyle;
+	}
+	
+	protected Style getStyle( String styleName) {
+		Style tagStyle = null;
+		if (this.cssStyles != null) {
+			tagStyle = (Style) this.cssStyles.get(styleName);
+		}
+		if (tagStyle == null) {
+			tagStyle = StyleSheet.getStyle(styleName);
 		}
 		return tagStyle;
 	}
@@ -1115,8 +1150,8 @@ implements Runnable, ResourceLoader
 				HttpConnection httpConnection = null;
 				if (isHttpConnection) {
 					httpConnection = (HttpConnection) connection;
-					if (this.cookie != null) {
-						httpConnection.setRequestProperty("cookie", this.cookie );
+					if (this.cookieManager != null) {
+						httpConnection.setRequestProperty("cookie", this.cookieManager.getCookiesForDomain(url) );
 					}
 				}
 				if (postData != null && isHttpConnection) {
@@ -1136,14 +1171,12 @@ implements Runnable, ResourceLoader
 					}
 					String newCookie = httpConnection.getHeaderField("Set-cookie");
 					if ( newCookie != null) {
-						int semicolonPos = newCookie.indexOf(';');
-						//#debug
+						// #debug
 						System.out.println("received cookie = [" + newCookie + "]");
-						if (semicolonPos != -1) {
-							// a session cookie has a session ID and a domain to which it should be sent, e.g. 
-							newCookie = newCookie.substring(0, semicolonPos );
+						if (this.cookieManager == null) {
+							this.cookieManager = new CookieManager();
 						}
-						this.cookie = newCookie;
+						this.cookieManager.addCookie(newCookie);
 					}
 				}
 				if (contentEncoding == null) {
@@ -1153,7 +1186,7 @@ implements Runnable, ResourceLoader
 				try {
 					if (contentEncoding != null && contentEncoding.indexOf("gzip") != -1) {
 						is = new GZipInputStream(is, GZipInputStream.TYPE_GZIP, true);
-						contentEncoding = null;
+						contentEncoding = "UTF-8";
 					}
 				}
 				catch (IOException e) {
@@ -1161,6 +1194,9 @@ implements Runnable, ResourceLoader
 					System.out.println("Unable to use GzipInputStream" + e);
 				}
 				//#endif
+//				byte[] data = StreamUtil.readFully(is);
+//				System.out.println("RESPONSE: \n" + new String(data));
+//				is = new ByteArrayInputStream(data);
 				loadPage(is, contentEncoding);
 				notifyPageEnd();
 			}
