@@ -1220,6 +1220,7 @@ public class TableItem
 	 * Moves the internal row index to the next row.
 	 * If necessary a new row will be created.
 	 * The internal row index is used for add()
+	 * The column index will be set to -1 (before the first column)
 	 * @see #add(Item)
 	 */
 	public void moveToNextRow() {
@@ -1228,6 +1229,7 @@ public class TableItem
 		} else {
 			this.currentRowIndex++;
 		}
+		this.currentColumnIndex = -1;
 	}
 	
 	/**
