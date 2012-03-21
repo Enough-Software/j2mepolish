@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class ResourcesPreCompiler extends PreCompiler {
 		if(permissionsString == null){
 			// Allow application without any permissions.
 			permissionsString = "";
-//			throw new BuildException("The variable 'polish.build.android.permissions' must be defined. Normally it is definied in the platforms.xml file for the Android platforms.");
+//			throw new BuildException("The variable 'polish.build.android.permissions' must be defined. Normally it is defined in the platforms.xml file for the Android platforms.");
 		}
 		
 		String[] permissions = permissionsString.split(",");
@@ -438,8 +439,16 @@ public class ResourcesPreCompiler extends PreCompiler {
 	 */
 	void copyResources(Device device, Environment env) throws IOException
 	{
+		AtTargetFilenameFilter filter = null;
+		if (!env.hasSymbol("polish.android.DoNotFilterFiles")) {
+			filter = new AtTargetFilenameFilter();
+		}
 		String assetsPath = ArgumentHelper.getAssets(env);
-		FileUtil.copyDirectoryContents( device.getResourceDir(), new File( assetsPath), true);
+		FileUtil.copyDirectoryContents( device.getResourceDir(), new File( assetsPath ), true, filter);
+		if (filter != null) {
+			File resDir = new File( ArgumentHelper.getRes(env) );
+			filter.copyToTargetDir( resDir );
+		}
 //		
 //		String rawPath = ArgumentHelper.getRaw(env);
 //
@@ -487,9 +496,55 @@ public class ResourcesPreCompiler extends PreCompiler {
 		cleanedName = cleanedName.replace(' ', '_');
 		cleanedName = cleanedName.replace(".", "_dot_");
 		int lastIndexOfSlash = cleanedName.lastIndexOf(File.separatorChar);
-		if(lastIndexOfSlash > 0) {
+		if (lastIndexOfSlash > 0) {
 			cleanedName = cleanedName.substring(lastIndexOfSlash+1);
 		}
 		return cleanedName;
+	}
+	
+	private static class AtTargetFilenameFilter implements FilenameFilter {
+		
+		private ArrayList<AtFile> files = new ArrayList<AtFile>();
+
+		public boolean accept(File dir, String name) {
+			int atIndex = name.indexOf('@');
+			if (atIndex != -1) {
+				String targetName = name.substring(0, atIndex);
+				int dotIndex = name.lastIndexOf('.');
+				if (dotIndex > atIndex) {
+					targetName += name.substring(dotIndex);
+					targetName = name.substring(atIndex+1, dotIndex) + File.separatorChar + targetName;
+				} else {
+					targetName = name.substring(atIndex+1) + File.separatorChar + targetName;
+				}
+				AtFile file = new AtFile( new File(dir, name), targetName);
+				this.files.add(file);
+				return false;
+			}
+			return true;
+		}
+		
+		public void copyToTargetDir( File resDir ) throws FileNotFoundException, IOException {
+			for (int fileIndex=0; fileIndex < this.files.size(); fileIndex++) {
+				AtFile file = this.files.get(fileIndex);
+				file.copyToTargetDir(resDir);
+			}
+		}
+		
+		private static class AtFile {
+			private File file;
+			private String targetFile;
+			
+			public AtFile(File file, String targetFile) {
+				this.file = file;
+				this.targetFile = targetFile;
+			}
+			
+			public void copyToTargetDir( File resDir ) throws FileNotFoundException, IOException {
+				FileUtil.copy(this.file, new File(resDir, this.targetFile));
+			}
+		}
+		
+		
 	}
 }
