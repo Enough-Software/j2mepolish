@@ -64,6 +64,9 @@ public class HtmlForm
 	public HtmlForm(String name, String actionUrl, String method, String encoding, HtmlBrowser browser, FormListener formListener )
 	{
 		this.formName = name;
+		if (actionUrl != null) {
+			actionUrl = TextUtil.replace(actionUrl, "&amp;", "&");
+		}
 		this.actionUrl = actionUrl;
 		this.encoding = encoding;
 		this.browser = browser;
