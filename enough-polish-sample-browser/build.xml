@@ -154,7 +154,9 @@
 				<variable name="polish.Browser.PaintDownloadIndicator" value="true" />
 				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 				<variable name="polish.useScrollBar" value="true" />
+				<!--
 				<variable name="polish.RemoteBluetoothScreen" value="true" />
+				-->
 			</variables>
 			<resources
 				dir="resources"
