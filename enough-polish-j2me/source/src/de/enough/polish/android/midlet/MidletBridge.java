@@ -1,4 +1,4 @@
-//#condition polish.usePolishGui && polish.android && (!polish.android.MidletBridge.skip)
+//#condition polish.usePolishGui && polish.android && !polish.android.MidletBridge.skip
 package de.enough.polish.android.midlet;
 
 import java.io.IOException;
