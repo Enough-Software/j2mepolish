@@ -539,7 +539,7 @@ public class HtmlTagHandler
 					this.browser.setCssStyles(reader.getAllStyles());
 				} catch (Exception e) {
 					//#debug error
-					System.out.println("Unable to parse CSS" + e );
+					System.out.println("Unable to parse CSS code \"" + cssCode + "\"" + e );
 				}
 				//parser.next();
 				return true;
@@ -634,6 +634,9 @@ public class HtmlTagHandler
 				if (value == null) {
 					value = name;
 				}
+				if (value != null) {
+					value = TextUtil.unescapeHtmlEntities(value);
+				}
 
 				//#style browserLink
 				StringItem buttonItem = new StringItem(null, value);
@@ -664,7 +667,9 @@ public class HtmlTagHandler
 					if (type != null) {
 						type = type.toLowerCase();
 					}
-
+					if (value != null) {
+						value = TextUtil.unescapeHtmlEntities(value);
+					}
 					if (this.formListener != null && name != null) {
 						value = this.formListener.verifyInitialFormValue(this.currentForm.getAction(),  name, value);
 					}
