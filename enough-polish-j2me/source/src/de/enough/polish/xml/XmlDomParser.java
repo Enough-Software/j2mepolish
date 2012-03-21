@@ -56,12 +56,7 @@ import java.util.Hashtable;
  * </pre>
  * 
  * 
- * <p>Copyright Enough Software 2006 - 2009</p>
- * 
- * <pre>
- * history
- *        Apr 8, 2006 - mkoch creation
- * </pre>
+ * <p>Copyright Enough Software 2006 - 2012</p>
  * 
  * @author Michael Koch, michael.koch@enough.de
  */
