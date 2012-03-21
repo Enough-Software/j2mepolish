@@ -86,6 +86,7 @@ public class RedirectHttpConnection implements HttpConnection
 	private Object timeoutLock;
 	private boolean timeoutReached;
 	public IOException exception;
+	private String cookie;
 
 	/**
 	 * Creates a new http connection that understands redirects.
@@ -211,6 +212,8 @@ public class RedirectHttpConnection implements HttpConnection
 
 		int redirects = 0;
 		String url = this.originalUrl;
+		//#debug
+		System.out.println("connecting to " + url);
 		
 		while (true)
 		{
@@ -232,8 +235,9 @@ public class RedirectHttpConnection implements HttpConnection
 				{
 					for (int i = 0; i < keys.length; i++)
 					{
-						tmpHttpConnection.setRequestProperty((String) keys[i],
-								(String) this.requestProperties.get(keys[i]));
+						String key = (String) keys[i];
+						String value = (String) this.requestProperties.get(keys[i]);
+						tmpHttpConnection.setRequestProperty(key, value);
 					}
 				}
 			}
@@ -245,7 +249,6 @@ public class RedirectHttpConnection implements HttpConnection
 
 				if (postData != null && postData.length > 0)
 				{
-					
 					tmpHttpConnection.setRequestProperty("Content-Length", Integer.toString(postData.length));
 					if (!this.limitContentLengthParams) {
 						tmpHttpConnection.setRequestProperty("Content-length", Integer.toString(postData.length));	
@@ -277,6 +280,24 @@ public class RedirectHttpConnection implements HttpConnection
 				else {
 					url = tmpUrl;
 				}
+				//#debug
+				System.out.println("redirecting to " + url);
+				String newCookie = tmpHttpConnection.getHeaderField("Set-cookie");
+				if (newCookie != null) {
+					this.cookie = newCookie;
+					int semicolonPos = newCookie.indexOf(';');
+					//#debug
+					System.out.println("received cookie = [" + newCookie + "]");
+					if (semicolonPos != -1) {
+						// a session cookie has a session ID and a domain to which it should be sent, e.g. 
+						newCookie = newCookie.substring(0, semicolonPos );
+					}
+					String existingCookie = (String) this.requestProperties.get("cookie");
+					if (existingCookie != null) {
+						newCookie = newCookie + "; " + existingCookie;
+					}
+					this.requestProperties.put("cookie", newCookie);
+				}
 
 				tmpIn.close(); // close input stream - needed for moto devices,
 								// for example
@@ -293,7 +314,6 @@ public class RedirectHttpConnection implements HttpConnection
 			// no redirect, we are at the final connection:
 			break;
 		}
-
 		this.httpConnection = tmpHttpConnection;
 		this.currentHttpConnection = tmpHttpConnection;
 		this.inputStream = tmpIn;
@@ -358,7 +378,11 @@ public class RedirectHttpConnection implements HttpConnection
 	public String getHeaderField(String name) throws IOException
 	{
 		ensureConnectionCreated();
-		return this.httpConnection.getHeaderField(name);
+		String headerFieldValue = this.httpConnection.getHeaderField(name);
+		if ((this.cookie != null) && (headerFieldValue == null) && ("Set-cookie".equals(name))) {
+			headerFieldValue = this.cookie;
+		}
+		return headerFieldValue;
 	}
 
 	/*
