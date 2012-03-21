@@ -144,6 +144,10 @@ public class Style implements Externalizable
 		if (this.attributeKeys == null || this.attributeKeys.length == 0) {
 			keys = style.attributeKeys;
 			values = style.attributeValues;
+			if (keys == null) {
+				keys = new short[0];
+				values = new Object[0];
+			}
 		} else {		
 			ShortHashMap map = new ShortHashMap();
 			addAttributesToMap(map, style);
