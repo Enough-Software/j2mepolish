@@ -45,6 +45,7 @@ import de.enough.polish.ui.backgrounds.TiledImageBackground;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.StreamUtil;
 import de.enough.polish.util.TextUtil;
+import de.enough.polish.util.base64.Base64;
 
 /**
  * Allows to interpret simple CSS constructs.
@@ -83,6 +84,7 @@ public class CssInterpreter {
 	
 	private Hashtable styles;
 	private ResourceLoader resourceLoader;
+	private boolean isInParenthesis;
 
 	/**
 	 * Creates a new CSS Reader
@@ -147,6 +149,7 @@ public class CssInterpreter {
 			this.hasNextToken = (read == BUFFER_SIZE);
 		}
 		boolean comment = this.isInComment;
+		boolean parenthesis = this.isInParenthesis;
 		boolean checkNextCharForEndComment = false;
 		boolean checkNextCharForStartComment = false;
 		for (int index = this.bufferStartIndex; index < this.bufferEndIndex; index++ ) {
@@ -169,7 +172,7 @@ public class CssInterpreter {
 				strBuffer.deleteCharAt(strBuffer.length() - 1);
 			} else {
 				checkNextCharForStartComment = false;
-				if (c == ';' || c == '{' || c == '}') {
+				if ((!parenthesis && c == ';') || c == '{' || c == '}') {
 					String result = strBuffer.toString().trim();
 					if (c == '}' && result.length() > 0) {
 						// we always want an empty string when a parentheses is closed, so that
@@ -183,6 +186,13 @@ public class CssInterpreter {
 				} else if (c == '\n'){
 					// ignore line breaks
 				} else {
+					if (!parenthesis && c == '(') {
+						parenthesis = true;
+						this.isInParenthesis = true;
+					} else if (parenthesis && c == ')') {
+						parenthesis = false;
+						this.isInParenthesis = false;
+					}
 					strBuffer.append(c);
 				}
 			}
@@ -337,7 +347,27 @@ public class CssInterpreter {
 		} else {
 			String imageUrl = parseUrl(imageValue);
 			Image image = null;
-			if (this.resourceLoader != null) {
+			if (imageUrl.startsWith("/data:image")) {
+				// this is an inline image
+				System.out.println("URL=[" + imageUrl );
+				int base64Pos = imageUrl.indexOf("base64");
+				if (base64Pos != -1) {
+					int start = imageUrl.indexOf(',', base64Pos + "base64".length());
+					if (start == -1) {
+						start = imageUrl.indexOf(' ', base64Pos + "base64".length());
+					}
+					if (start != -1) {
+						String base64DataString = imageUrl.substring(start + 1).trim();
+						try {
+							byte[] imageData = Base64.decode(base64DataString);
+							image = Image.createImage(imageData, 0, imageData.length);
+						} catch (Exception e) {
+							//#debug error
+							System.out.println("Unable to decode base64 image [" + base64DataString);
+						}
+					}
+				}
+			} else if (this.resourceLoader != null) {
 				try {
 					//#if polish.midp2
 						image = Image.createImage( this.resourceLoader.getResourceAsStream(imageUrl) );
