@@ -2160,7 +2160,7 @@ implements UiElement, Animatable
 					//#endif
 					
 					if (time != 0 && keyCode != 0 && (currentTime - time) > interval) {
-						keyReleased(keyCode);
+						_keyReleased(keyCode);
 					}
 				//#endif
 			} catch (Exception e) {
