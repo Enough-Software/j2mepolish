@@ -28,6 +28,7 @@
 package de.enough.polish.io;
 
 import de.enough.polish.util.HashMap;
+import de.enough.polish.util.TextUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -86,7 +87,10 @@ public class RedirectHttpConnection implements HttpConnection
 	private Object timeoutLock;
 	private boolean timeoutReached;
 	public IOException exception;
-	private String cookie;
+	
+	private RedirectListener redirectListener;
+
+	private CookieManager cookieManager;
 
 	/**
 	 * Creates a new http connection that understands redirects.
@@ -156,6 +160,43 @@ public class RedirectHttpConnection implements HttpConnection
 			}
 		//#endif
 		
+	}
+	
+	/**
+	 * Registers a cookie manager.
+	 * The cookie manager will pick up any cookies that are sent in between redirects, but not of the final connection.
+	 * @param manager the cookie manager
+	 * @see #getCookieManager()
+	 */
+	public void setCookieManager( CookieManager manager ) {
+		this.cookieManager = manager;
+	}
+	
+	/**
+	 * Retrieves a previously registered cookie manager
+	 * @return the cookie manager or null if none has been set
+	 * @see #setCookieManager(CookieManager)
+	 */
+	public CookieManager getCookieManager() {
+		return this.cookieManager;
+	}
+	
+	/**
+	 * Sets the RedirectListener for this connection.
+	 * @param redirectListener the listener, use null to unregister a previously set one.
+	 * @see #getRedirectListener()
+	 */
+	public void setRedirectListener( RedirectListener redirectListener ) {
+		this.redirectListener = redirectListener;
+	}
+	
+	/**
+	 * Retrieves a previously registered RedirectListener
+	 * @return the listener or null if none has been registered
+	 * @see #setRedirectListener(RedirectListener)
+	 */
+	public RedirectListener getRedirectListener() {
+		return this.redirectListener;
 	}
 
 	/**
@@ -260,8 +301,10 @@ public class RedirectHttpConnection implements HttpConnection
 			}
 
 			// Opens the connection.
-			tmpIn = tmpHttpConnection.openInputStream();
 			int resultCode = tmpHttpConnection.getResponseCode();
+			if (resultCode < 400) {
+				tmpIn = tmpHttpConnection.openInputStream();
+			}
 			if (this.timeoutReached) {
 				return;
 			}
@@ -280,27 +323,25 @@ public class RedirectHttpConnection implements HttpConnection
 				else {
 					url = tmpUrl;
 				}
+				if (this.redirectListener != null) {
+					url = this.redirectListener.onRedirect(url);
+					if (url == null) {
+						// abort the process
+						throw new IOException("aborted");
+					}
+				}
 				//#debug
 				System.out.println("redirecting to " + url);
-				String newCookie = tmpHttpConnection.getHeaderField("Set-cookie");
-				if (newCookie != null) {
-					this.cookie = newCookie;
-					int semicolonPos = newCookie.indexOf(';');
-					//#debug
-					System.out.println("received cookie = [" + newCookie + "]");
-					if (semicolonPos != -1) {
-						// a session cookie has a session ID and a domain to which it should be sent, e.g. 
-						newCookie = newCookie.substring(0, semicolonPos );
+				if (this.cookieManager != null) {
+					int number = this.cookieManager.extractCookies(tmpHttpConnection);
+					if (number > 0) {
+						setRequestProperty("Set-cookie", this.cookieManager.getCookiesForUrl(url));
 					}
-					String existingCookie = (String) this.requestProperties.get("cookie");
-					if (existingCookie != null) {
-						newCookie = newCookie + "; " + existingCookie;
-					}
-					this.requestProperties.put("cookie", newCookie);
 				}
-
-				tmpIn.close(); // close input stream - needed for moto devices,
-								// for example
+				if (tmpIn != null) {
+					tmpIn.close(); // close input stream - needed for moto devices, for example
+					tmpIn = null;
+				}
 				tmpHttpConnection.close();
 				tmpHttpConnection = null; // setting to null is needed for
 									 	  // some series 40 devices
@@ -308,6 +349,7 @@ public class RedirectHttpConnection implements HttpConnection
 				{
 					throw new IOException("too many redirects");
 				}
+				
 
 				continue;
 			}
@@ -379,9 +421,6 @@ public class RedirectHttpConnection implements HttpConnection
 	{
 		ensureConnectionCreated();
 		String headerFieldValue = this.httpConnection.getHeaderField(name);
-		if ((this.cookie != null) && (headerFieldValue == null) && ("Set-cookie".equals(name))) {
-			headerFieldValue = this.cookie;
-		}
 		return headerFieldValue;
 	}
 
@@ -650,7 +689,11 @@ public class RedirectHttpConnection implements HttpConnection
 	public InputStream openInputStream() throws IOException
 	{
 		ensureConnectionCreated();
-		return this.inputStream;
+		InputStream is = this.inputStream;
+		if (is == null) {
+			is = this.httpConnection.openInputStream();
+		}
+		return is;
 	}
 
 	/*

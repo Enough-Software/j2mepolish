@@ -25,7 +25,11 @@
  * refer to the accompanying LICENSE.txt or visit
  * http://www.j2mepolish.org for details.
  */
-package de.enough.polish.browser;
+package de.enough.polish.io;
+
+import java.io.IOException;
+
+import javax.microedition.io.HttpConnection;
 
 import de.enough.polish.util.ArrayList;
 
@@ -36,25 +40,53 @@ public class CookieManager {
 	public CookieManager() {
 		this.cookiesList = new ArrayList();
 	}
+	
+	public int extractCookies( HttpConnection connection ) throws IOException {
+		int foundCookies = 0;
+		int index = 0;
+		while (true) {
+			String key = connection.getHeaderFieldKey(index);
+			if (key == null && index > 0) {
+				break;
+			}
+			if ("set-cookie".equalsIgnoreCase(key)) {
+				String definition = connection.getHeaderField(index);
+				addCookie(definition);
+				foundCookies++;
+			}
+			index++;
+		}
+		return foundCookies;
+	}
 
 	public void addCookie( String setCookieDefinition) {
+		//#debug
+		System.out.println("adding cookie " + setCookieDefinition);
 		addCookie( new Cookie(setCookieDefinition) );
 	}
+	
+	
 
 	public void addCookie( Cookie cookie) {
 		int index = this.cookiesList.indexOf(cookie);
 		if (index != -1) {
 			if (cookie.isExpired()) {
 				this.cookiesList.remove(index);
+				//#debug
+				System.out.println("Cookie expired: " + cookie);
 			} else {
 				this.cookiesList.set(index, cookie);
+				//#debug
+				System.out.println("Replacing cookie " + cookie);
 			}
 		} else if (!cookie.isExpired()) {
+			//#debug
+			System.out.println("Adding new cookie " + cookie);
 			this.cookiesList.add(cookie);
 		}
 	}
 	
-	public String getCookiesForDomain(String domain) {
+	public String getCookiesForUrl(String url) {
 		Object[] cookies = this.cookiesList.getInternalArray();
 		StringBuffer buffer = null;
 		for (int i = 0; i < cookies.length; i++) {
@@ -62,7 +94,7 @@ public class CookieManager {
 			if (cookie == null) {
 				break;
 			}
-			if (cookie.matchesDomain(domain)) {
+			if (cookie.matchesDomain(url)) {
 				if (buffer == null) {
 					buffer = new StringBuffer(cookie.getNameValuePair());
 				} else {
@@ -73,6 +105,8 @@ public class CookieManager {
 		if (buffer == null) {
 			return null;
 		}
+		//#debug
+		System.out.println("Combined cookie: " + buffer);
 		return buffer.toString();
 	}
 }

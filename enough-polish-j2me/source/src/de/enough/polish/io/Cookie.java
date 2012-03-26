@@ -25,7 +25,7 @@
  * refer to the accompanying LICENSE.txt or visit
  * http://www.j2mepolish.org for details.
  */
-package de.enough.polish.browser;
+package de.enough.polish.io;
 
 import de.enough.polish.util.TextUtil;
 import de.enough.polish.util.TimePoint;
@@ -132,4 +132,19 @@ public class Cookie {
 		return (targetDomain.indexOf(this.domain) != -1);
 	}
 
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(super.toString())
+			.append(' ').append(this.name).append('=').append(TextUtil.decodeUrl(this.value));
+		if (this.domain != null) {
+			buffer.append("; domain=").append(this.domain);
+		}
+		if (this.path != null) {
+			buffer.append("; path=").append(this.path);
+		}
+		if (this.expires != null) {
+			buffer.append("; expires=").append(this.expires.toRfc3339());
+		}
+		return buffer.toString();
+	}
 }

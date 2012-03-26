@@ -568,11 +568,21 @@ public class HtmlTagHandler
 							url = url.substring(equalsPos + 1).trim();
 						}
 						if (url.indexOf(':') == -1) {
-							// assuming resource protocol:
-							if (url.charAt(0) != '/') {
-								url = "resource://" + url;
+							String base = this.browser.getCurrentDocumentBase();
+							if (base == null || "/".equals(base)) {
+								// assuming resource protocol:
+								if (url.charAt(0) != '/') {
+									url = "resource://" + url;
+								} else {
+									url = "resource:/" + url; 
+								}
 							} else {
-								url = "resource:/" + url; 
+								url = TextUtil.unescapeHtmlEntities(url);
+								if (url.charAt(0) != '/') {
+									url = base + "/" + url;
+								} else {
+									url = base + url;
+								}								
 							}
 						}
 						if (waitTime > 0) {

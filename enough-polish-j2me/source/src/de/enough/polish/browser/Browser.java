@@ -43,12 +43,15 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 import de.enough.polish.browser.css.CssInterpreter;
+import de.enough.polish.browser.protocols.CookieEnabledHandler;
 import de.enough.polish.browser.protocols.HttpProtocolHandler;
 import de.enough.polish.browser.protocols.ResourceProtocolHandler;
+import de.enough.polish.io.CookieManager;
 import de.enough.polish.io.RedirectHttpConnection;
 import de.enough.polish.io.ResourceLoader;
 import de.enough.polish.io.StringReader;
 import de.enough.polish.util.ArrayList;
+import de.enough.polish.util.Arrays;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.StreamUtil;
 import de.enough.polish.util.TextUtil;
@@ -211,6 +214,7 @@ implements Runnable, ResourceLoader
 	public Browser( String[] tagNames, TagHandler[] tagHandlers, ProtocolHandler[] protocolHandlers, Style style )
 	{
 		super( true, style );
+		 this.cookieManager = new CookieManager();
 		if (tagHandlers != null && tagNames != null && tagNames.length == tagHandlers.length) {
 			for (int i = 0; i < tagHandlers.length; i++) {
 				TagHandler handler = tagHandlers[i];
@@ -281,6 +285,9 @@ implements Runnable, ResourceLoader
 
 	public void addProtocolHandler(ProtocolHandler handler)
 	{
+		if (handler instanceof CookieEnabledHandler) {
+			((CookieEnabledHandler)handler).setCookieManager(this.cookieManager);
+		}
 		this.protocolHandlersByProtocol.put(handler.getProtocolName(), handler);
 	}
 
@@ -311,6 +318,17 @@ implements Runnable, ResourceLoader
 		}
 		return handler;
 	}
+	
+	/**
+	 * Retrieves all registered protocol handlers
+	 * @return all handlers
+	 */
+	public ProtocolHandler[] getProtocolHandlers() {
+		ProtocolHandler[] handlers = new ProtocolHandler[ this.protocolHandlersByProtocol.size() ];
+		return (ProtocolHandler[]) this.protocolHandlersByProtocol.values(handlers);
+	}
+
+
 
 	public void addTagHandler(String tagName, TagHandler handler)
 	{
@@ -663,13 +681,11 @@ implements Runnable, ResourceLoader
 		return this.cssStyles;
 	}
 
-	//	
-	//	
-	//	public void setStyle(Style style) {
-	//		System.out.println("BROWSER: SETTING STYLE " + style.name);
-	//		super.setStyle(style);
-	//		
-	//	}
+//		public void setStyle(Style style) {
+//			System.out.println("BROWSER: SETTING STYLE " + style.name + ", VIEW-TYPE=" + style.getObjectProperty("view-type"));
+//			super.setStyle(style);
+//			
+//		}
 
 	/**
 	 * Sets dynamically registered styles
@@ -848,7 +864,7 @@ implements Runnable, ResourceLoader
 	public String makeAbsoluteURL(String url)
 	{
 		//#debug debug
-		System.out.println("makeAbsoluteURL: currentDocumentBase = " + this.currentDocumentBase);
+		System.out.println("makeAbsoluteURL from  " + url + "  currentDocumentBase=" + this.currentDocumentBase);
 
 		// If no ":", assume it's a relative link, (no protocol),
 		// and append current page
@@ -1150,8 +1166,9 @@ implements Runnable, ResourceLoader
 				HttpConnection httpConnection = null;
 				if (isHttpConnection) {
 					httpConnection = (HttpConnection) connection;
-					if (this.cookieManager != null) {
-						httpConnection.setRequestProperty("cookie", this.cookieManager.getCookiesForDomain(url) );
+					String cookie = this.cookieManager.getCookiesForUrl(url);
+					if (cookie != null) {
+						httpConnection.setRequestProperty("cookie", cookie );
 					}
 				}
 				if (postData != null && isHttpConnection) {
@@ -1169,15 +1186,7 @@ implements Runnable, ResourceLoader
 					if (contentEncoding == null) {
 						contentEncoding = httpConnection.getHeaderField("Content-Encoding");
 					}
-					String newCookie = httpConnection.getHeaderField("Set-cookie");
-					if ( newCookie != null) {
-						// #debug
-						System.out.println("received cookie = [" + newCookie + "]");
-						if (this.cookieManager == null) {
-							this.cookieManager = new CookieManager();
-						}
-						this.cookieManager.addCookie(newCookie);
-					}
+					this.cookieManager.extractCookies(httpConnection);
 				}
 				if (contentEncoding == null) {
 					contentEncoding = "UTF-8";
@@ -1194,9 +1203,12 @@ implements Runnable, ResourceLoader
 					System.out.println("Unable to use GzipInputStream" + e);
 				}
 				//#endif
-//				byte[] data = StreamUtil.readFully(is);
-//				System.out.println("RESPONSE: \n" + new String(data));
-//				is = new ByteArrayInputStream(data);
+				//#if polish.debug
+					byte[] data = StreamUtil.readFully(is);
+					//#debug
+					System.out.println("RESPONSE: \n" + new String(data));
+					is = new ByteArrayInputStream(data);
+				//#endif
 				loadPage(is, contentEncoding);
 				notifyPageEnd();
 			}
@@ -1235,6 +1247,35 @@ implements Runnable, ResourceLoader
 				this.scheduledHistoryEntry = null;
 			}
 
+		}
+	}
+	
+	/**
+	 * Retrieves the used cookie manager
+	 * @return the cookie manager
+	 * @see #setCookieManager(CookieManager)
+	 */
+	public CookieManager getCookieManager() {
+		return this.cookieManager;
+	}
+	
+	/**
+	 * Sets the cookie manager
+	 * @param manager the new manager
+	 * @throws IllegalArgumentException when the given manager is null
+	 * @see #getCookieManager()
+	 */
+	public void setCookieManager(CookieManager manager) {
+		if (manager == null) {
+			throw new IllegalArgumentException();
+		}
+		this.cookieManager = manager;
+		ProtocolHandler[] handlers = getProtocolHandlers();
+		for (int i = 0; i < handlers.length; i++) {
+			ProtocolHandler handler = handlers[i];
+			if (handler instanceof CookieEnabledHandler) {
+				((CookieEnabledHandler)handler).setCookieManager(manager);
+			}
 		}
 	}
 
@@ -1437,6 +1478,31 @@ implements Runnable, ResourceLoader
 	public boolean isWorking()
 	{
 		return this.isWorking;
+	}
+	
+	/**
+	 * Retrieves the current document base
+	 * @return the current domain without GET parameters or a PATH, null when there is no current base
+	 */
+	public String getCurrentDocumentBase() {
+		String base = this.currentDocumentBase;
+		if (base == null) {
+			return null;
+		}
+		if (base.startsWith("http")) {
+			int pathIndex = base.indexOf('/', "http://a.de".length());
+			if (pathIndex != -1) {
+				base = base.substring(0, pathIndex);
+			}
+			int questionMarkIndex = base.indexOf('?');
+			if (questionMarkIndex != -1) {
+				base = base.substring(0, questionMarkIndex);
+			}
+			return base;
+		} else if (base.startsWith("resource")) {
+			return "/";
+		}
+		return base;
 	}
 
 

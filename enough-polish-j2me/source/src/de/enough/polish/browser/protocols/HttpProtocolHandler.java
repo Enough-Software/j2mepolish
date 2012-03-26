@@ -28,6 +28,7 @@
 package de.enough.polish.browser.protocols;
 
 import de.enough.polish.browser.ProtocolHandler;
+import de.enough.polish.io.CookieManager;
 import de.enough.polish.io.RedirectHttpConnection;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.Locale;
@@ -48,7 +49,9 @@ import javax.microedition.io.StreamConnection;
  * this value by defining the <code>polish.Browser.UserAgent</code> variable
  * in your <code>build.xml</code>.
  */
-public class HttpProtocolHandler extends ProtocolHandler
+public class HttpProtocolHandler 
+extends ProtocolHandler
+implements CookieEnabledHandler
 {
 	private static String USER_AGENT = 
 	//#if polish.Browser.UserAgent:defined
@@ -60,6 +63,7 @@ public class HttpProtocolHandler extends ProtocolHandler
 	private static boolean userAgentSet = false;
 	
 	private HashMap requestProperties;
+	protected CookieManager cookieManager;
 	
 	/**
 	 * Sets the USER_AGENT string used for the request header
@@ -83,7 +87,7 @@ public class HttpProtocolHandler extends ProtocolHandler
 	 */
 	public HttpProtocolHandler()
 	{
-		this("http",new HashMap() );
+		this("http", new HashMap() );
 	}
 
 	/**
@@ -159,6 +163,12 @@ public class HttpProtocolHandler extends ProtocolHandler
 	public StreamConnection getConnection(String url)
 	throws IOException
 	{
-		return new RedirectHttpConnection(url, this.requestProperties);
+		RedirectHttpConnection redirectHttpConnection = new RedirectHttpConnection(url, this.requestProperties);
+		redirectHttpConnection.setCookieManager(this.cookieManager);
+		return redirectHttpConnection;
+	}
+
+	public void setCookieManager(CookieManager cookieManager) {
+		this.cookieManager = cookieManager;
 	}
 }
