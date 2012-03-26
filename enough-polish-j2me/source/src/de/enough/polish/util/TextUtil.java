@@ -26,6 +26,7 @@
 package de.enough.polish.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
 
 //#if polish.midp || polish.usePolishGui
 import javax.microedition.lcdui.Font;
@@ -63,7 +64,8 @@ public final class TextUtil {
 	 */
 	public static final String MAXLINES_APPENDIX = "...";
 
-	private static final String UNRESERVED = "-_.!~*'()\"";
+	//	 Unreserved punctuation mark/symbols for URL encoding
+	private static final String UNRESERVED_URL_ENCODING_SYMBOLS = "-_.!~*'()\"";
 
 	private static final String HEXES = "0123456789ABCDEF";
 	/**
@@ -599,7 +601,6 @@ public final class TextUtil {
 	}
 	//#endif
 
-	//	 Unreserved punctuation mark/symbols
 
 	/**
 	 * Converts Hex digit to a UTF-8 "Hex" character
@@ -608,12 +609,17 @@ public final class TextUtil {
 	 * @return the converted Hex digit
 	 */
 	private static char toHexChar(int digitValue) {
-		if (digitValue < 10)
+		if (digitValue < 10) {
 			// Convert value 0-9 to char 0-9 hex char
 			return (char)('0' + digitValue);
-		else
+		} else {
 			// Convert value 10-15 to A-F hex char
 			return (char)('A' + (digitValue - 10));
+		}
+	}
+	
+	static int fromHexChar(char c) {
+		return Character.digit(c, 16);
 	}
 
 	/**
@@ -635,7 +641,7 @@ public final class TextUtil {
 				// Alphanumeric characters require no encoding, append as is
 				encodedUrl.append(c);
 			} else {
-				int imark = UNRESERVED.indexOf(c);
+				int imark = UNRESERVED_URL_ENCODING_SYMBOLS.indexOf(c);
 				if (imark >=0) {
 					// Unreserved punctuation marks and symbols require
 					//  no encoding, append as is
@@ -652,6 +658,24 @@ public final class TextUtil {
 			}
 		}
 		return encodedUrl.toString(); // Return encoded URL
+	}
+	
+	public static String decodeUrl(String encodedUrl) {
+		int length = encodedUrl.length();
+		StringBuffer url = new StringBuffer(length);
+		for (int charIndex = 0; charIndex < length; charIndex++ ) {
+			char c = encodedUrl.charAt(charIndex);
+			if (c != '%') {
+				url.append(c);
+			} else {
+				// this is an encoded character:
+				char highOrderNibble = encodedUrl.charAt(++charIndex);
+				char lowOrderNibble = encodedUrl.charAt(++charIndex);
+				char next = (char) ((Character.digit(highOrderNibble, 16) << 4) | Character.digit(lowOrderNibble, 16));
+				url.append(next);
+			}
+		}
+		return url.toString();
 	}
 
 	/**
@@ -677,6 +701,16 @@ public final class TextUtil {
 			}
 		}
 		return buffer.toString();
+	}
+	
+	/**
+	 * Decodes named HTTP entities
+	 * @param text the text
+	 * @return the unescaped text
+	 * @see #unescapeHtmlEntities(String)
+ 	 */
+	public static String decodeXml( String text ) {
+		return unescapeHtmlEntities(text);
 	}
 
 	/**
@@ -1043,4 +1077,40 @@ public final class TextUtil {
 		}
 		return output.toString();
 	}
+	
+	/**
+	 * Parses HTTP GET Parameters from the given URL
+	 * @param url the URL, e.g. http://www.myserver.com?param1=true&param2=hello
+	 * @return a table that contains all GET parameters with their respective values
+	 */
+	public static Hashtable parseGetParameters(String url) {
+		Hashtable table = new Hashtable();
+		parseGetParameters(url, table);
+		return table;
+	}
+	
+	/**
+	 * Parses HTTP GET Parameters from the given URL
+	 * @param url the URL, e.g. http://www.myserver.com?param1=true&param2=hello or just the parameters param1=true&param2=hello
+	 * @return a table that contains all GET parameters with their respective values
+	 */
+	public static void parseGetParameters(String url, Hashtable table) {
+		int questionMarkIndex = url.indexOf('?');
+		if (questionMarkIndex != -1) {
+			url = url.substring(questionMarkIndex+1);
+		}
+		String[] keyValuePairs = split(url, '&');
+		for (int i = 0; i < keyValuePairs.length; i++) {
+			String keyValuePair = keyValuePairs[i];
+			int equalsIndex = keyValuePair.indexOf('=');
+			if (equalsIndex == -1) {
+				table.put(keyValuePair, "");
+			} else {
+				String key = keyValuePair.substring(0, equalsIndex);
+				String value = keyValuePair.substring(equalsIndex+1);
+				table.put(key,  value);
+			}
+		}
+	}
+
 }

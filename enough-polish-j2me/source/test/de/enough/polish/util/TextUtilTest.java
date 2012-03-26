@@ -25,6 +25,8 @@
  */
 package de.enough.polish.util;
 
+import java.util.Hashtable;
+
 import junit.framework.TestCase;
 
 public class TextUtilTest extends TestCase {
@@ -208,8 +210,8 @@ public class TextUtilTest extends TestCase {
 		assertEquals( '"', TextUtil.resolveNamedHtmlEntity("quot"));
 		assertEquals( (char)34, TextUtil.resolveNamedHtmlEntity("quot"));
 		assertEquals( (char)189, TextUtil.resolveNamedHtmlEntity("frac12"));
-		assertEquals( 'ä', TextUtil.resolveNamedHtmlEntity("auml"));
-		assertEquals( 'Ä', TextUtil.resolveNamedHtmlEntity("Auml"));
+		assertEquals( 'Š', TextUtil.resolveNamedHtmlEntity("auml"));
+		assertEquals( '€', TextUtil.resolveNamedHtmlEntity("Auml"));
 		assertEquals( '>', TextUtil.resolveNamedHtmlEntity("gt"));
 		assertEquals( '<', TextUtil.resolveNamedHtmlEntity("lt"));
 	}
@@ -219,5 +221,30 @@ public class TextUtilTest extends TestCase {
 		assertEquals( "<variable name=\"test\" />", TextUtil.unescapeHtmlEntities("&#60;variable name=&#34;test&#34; /&#62;"));
 		assertEquals( "19 <= 20 && 19 > 0", TextUtil.unescapeHtmlEntities("19 &lt;= 20 &amp;&amp; 19 &gt; 0"));
 		assertEquals( "19 <= 20 && 19 > 0", TextUtil.unescapeHtmlEntities("19 &#60;= 20 &#38;&#38; 19 &#62; 0"));
+	}
+	
+	public void testDecodeUrl()  {
+		assertEquals(0, TextUtil.fromHexChar('0'));
+		assertEquals(1, TextUtil.fromHexChar('1'));
+		assertEquals(9, TextUtil.fromHexChar('9'));
+		assertEquals(10, TextUtil.fromHexChar('A'));
+		assertEquals(11, TextUtil.fromHexChar('B'));
+		assertEquals(12, TextUtil.fromHexChar('C'));
+		assertEquals(13, TextUtil.fromHexChar('D'));
+		assertEquals(14, TextUtil.fromHexChar('E'));
+		assertEquals(15, TextUtil.fromHexChar('F'));
+		String url = "http://www.j2mepolish.org?value=param";
+		String encodedUrl = TextUtil.encodeUrl(url);
+		String decodedUrl = TextUtil.decodeUrl(encodedUrl);
+		assertEquals(url, decodedUrl);
+	}
+	
+	public void testParseGetParameters() {
+		String text;
+		
+		text = "access_token=AAADk7xalXAYBAHvgt6Ao4v1PuZCSchFDgNO8BpExS9LnTn55mwlGTZAVK4OMOMyZCITAZCdFJXJwT3lgRwwrVJ4aDwIMZB995hdZAmc8ET5bwpTh1U1dCk&expires=5763";
+		Hashtable table = TextUtil.parseGetParameters(text);
+		assertEquals("AAADk7xalXAYBAHvgt6Ao4v1PuZCSchFDgNO8BpExS9LnTn55mwlGTZAVK4OMOMyZCITAZCdFJXJwT3lgRwwrVJ4aDwIMZB995hdZAmc8ET5bwpTh1U1dCk", table.get("access_token"));
+		assertEquals("5763", table.get("expires"));
 	}
 }
