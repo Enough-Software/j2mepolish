@@ -55,6 +55,20 @@ public class StreamUtil {
 	 * Returns the content of a stream as a String
 	 * @param in the stream to read
 	 * @param encoding the encoding to use
+	 * @return the resulting String
+	 * @throws IOException when reading fails
+	 * @throws NullPointerException when the given input stream is null
+	 */	
+	public static String getString(InputStream in, String encoding) 
+	throws IOException
+	{
+		return getString( in, encoding, DEFAULT_BUFFER );
+	}
+	
+	/**
+	 * Returns the content of a stream as a String
+	 * @param in the stream to read
+	 * @param encoding the encoding to use
 	 * @param bufferLength the length of the used temporary buffer
 	 * @return the resulting String
 	 * @throws IOException when reading fails
