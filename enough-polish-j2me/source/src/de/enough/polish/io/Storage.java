@@ -31,11 +31,7 @@ import java.util.Enumeration;
 /**
  * <p>Base interface for storage systems.</p>
  *
- * <p>Copyright Enough Software 2006 - 2009</p>
- * <pre>
- * history
- *        13-Mar-2006 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2006 - 2012</p>
  * @param <K> when you use the enough-polish-client-java5.jar you can parameterize the Storage subclasses, e.g. RmsStorage&lt;Vector&lt;Note&gt;&gt;.
  * @author Robert Virkus, j2mepolish@enough.de
  */

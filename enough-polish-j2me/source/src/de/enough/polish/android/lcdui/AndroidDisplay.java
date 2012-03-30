@@ -665,7 +665,7 @@ implements NativeDisplay //, OnTouchListener
 
 	public void setCurrent(Displayable nextDisplayable) {
 		//#debug
-		System.out.println("AndroidDisplay.setCurrent: "  + nextDisplayable);
+		System.out.println("AndroidDisplay.setCurrent: "  + nextDisplayable + ", instanceof Canvas: " + (nextDisplayable instanceof Canvas) + " for " + this);
 		if (nextDisplayable instanceof Canvas) {
 			Canvas androidCanvas = (Canvas)nextDisplayable;
 			CanvasBridge bridge = androidCanvas._getBridge();
@@ -1278,7 +1278,7 @@ implements NativeDisplay //, OnTouchListener
 			int contY = screen.getScreenContentY();
     		clip = new Rect( contX, contY, contX + screen.getScreenContentWidth(), contY + screen.getScreenContentHeight() );
 		}
-    	this.mainView.draw(canvas);
+		this.mainView.draw(canvas);
     	if (clip != null) {
     		// make sure that native views are not drawn above the title of the screen:
         	canvas.save();
@@ -1327,35 +1327,35 @@ implements NativeDisplay //, OnTouchListener
 
 
 
-		    public static class LayoutParams extends ViewGroup.LayoutParams {
-		        public final int horizontal_spacing;
-		        public final int vertical_spacing;
+	    public static class LayoutParams extends ViewGroup.LayoutParams {
+	        public final int horizontal_spacing;
+	        public final int vertical_spacing;
 
-		        /**
-		         * @param horizontal_spacing Pixels between items, horizontally
-		         * @param vertical_spacing Pixels between items, vertically
-		         */
-		        public LayoutParams(int horizontal_spacing, int vertical_spacing) {
-		            super(0, 0);
-		            this.horizontal_spacing = horizontal_spacing;
-		            this.vertical_spacing = vertical_spacing;     
-		        }
-		    }
+	        /**
+	         * @param horizontal_spacing Pixels between items, horizontally
+	         * @param vertical_spacing Pixels between items, vertically
+	         */
+	        public LayoutParams(int horizontal_spacing, int vertical_spacing) {
+	            super(0, 0);
+	            this.horizontal_spacing = horizontal_spacing;
+	            this.vertical_spacing = vertical_spacing;     
+	        }
+	    }
 
-		   
-		    @Override
-		    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		        int width = MeasureSpec.getSize(widthMeasureSpec);
-		        int height = MeasureSpec.getSize(heightMeasureSpec);
-		        this.mainView.measure(width, height);
-		        
+	   
+	    @Override
+	    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	        int width = MeasureSpec.getSize(widthMeasureSpec);
+	        int height = MeasureSpec.getSize(heightMeasureSpec);
+        	this.mainView.measure(width, height);
+	        
 //		        Screen screen = getCurrentPolishScreen();
 //		        if (screen != null) {
 //		        	UiAccess.init(screen);
 //		        }
-		        
-		        // other views are measured by the J2ME Polish items
-		        setMeasuredDimension(width, height);
+	        
+	        // other views are measured by the J2ME Polish items
+	        setMeasuredDimension(width, height);
 //		        
 //		        final int count = getChildCount();
 //		        System.out.println("measuring " + count + " views");
@@ -1411,39 +1411,39 @@ implements NativeDisplay //, OnTouchListener
 //		                height = ypos + line_height;
 //		            }
 //		        }
-		    }
+	    }
 
-		    @Override
-		    protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
-		        return new LayoutParams(1, 1); // default of 1px spacing
-		    }
+	    @Override
+	    protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
+	        return new LayoutParams(1, 1); // default of 1px spacing
+	    }
 
-		    @Override
-		    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-		        if (p instanceof LayoutParams) {
-		            return true;
-		        }
-		        return false;
-		    }
+	    @Override
+	    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+	        if (p instanceof LayoutParams) {
+	            return true;
+	        }
+	        return false;
+	    }
 
-		    @Override
-		    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		    	int xpos, ypos;
-		        final int count = getChildCount();
-		        for (int i = 0; i < count; i++) {
-		            final View child = getChildAt(i);
-		            if (child == this.mainView) {
-		            	child.layout(0, 0, r-l, b-t);
-		            } else {
-		            	Item item = this.itemsByViewMap.get(child);
-		                xpos = item.getAbsoluteX() + item.getContentX();
-		                ypos = item.getAbsoluteY() + item.getContentY();
-		                child.layout(xpos, ypos, xpos + child.getMeasuredWidth(), ypos + child.getMeasuredHeight());
-		            }
-		        }
-		    }
+	    @Override
+	    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+	    	int xpos, ypos;
+	        final int count = getChildCount();
+	        for (int i = 0; i < count; i++) {
+	            final View child = getChildAt(i);
+	            if (child == this.mainView) {
+	            	child.layout(0, 0, r-l, b-t);
+	            } else {
+	            	Item item = this.itemsByViewMap.get(child);
+	                xpos = item.getAbsoluteX() + item.getContentX();
+	                ypos = item.getAbsoluteY() + item.getContentY();
+	                child.layout(xpos, ypos, xpos + child.getMeasuredWidth(), ypos + child.getMeasuredHeight());
+	            }
+	        }
+	    }
 
-		
+	
 //		    public void addView(View view) {
 //		    	System.out.println("ADDING VIEW " + view);
 //		    	super.addView(view);
@@ -1454,7 +1454,7 @@ implements NativeDisplay //, OnTouchListener
 //		    	System.out.println("ADDING VIEW " + view + " AT POS " + pos);
 //		    	super.addView(view, pos);
 //		    }
-		
+	
 }
 
 
