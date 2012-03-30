@@ -628,6 +628,9 @@ public class TableItem
 			}
 			this.focusedItemHandledKeyEvent = false;
 		}
+		if ((this.selectedColumnIndex == -1) || (this.selectedRowIndex == -1)) {
+			return super.handleKeyPressed(keyCode, gameAction);
+		}
 		if (this.appearanceMode != PLAIN) {
 			if (this.selectionMode != SELECTION_MODE_NONE) {
 				boolean selectInteractive = ((this.selectionMode & SELECTION_MODE_INTERACTIVE) == SELECTION_MODE_INTERACTIVE);
