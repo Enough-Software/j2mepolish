@@ -1,5 +1,3 @@
-//#condition polish.usePolishGui
-
 /*
  * Created on 20-March-2012 at 19:20:28.
  * 
@@ -27,6 +25,10 @@
  */
 package de.enough.polish.io;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import de.enough.polish.util.TextUtil;
 import de.enough.polish.util.TimePoint;
 
@@ -36,13 +38,27 @@ import de.enough.polish.util.TimePoint;
  * <p>Copyright Enough Software 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
-public class Cookie {
-	String nameValuePair;
-	String name;
-	String value;
-	String domain;
-	String path;
-	TimePoint expires;
+public class Cookie 
+implements Externalizable
+{
+	private static final int VERSION = 100;
+	private String nameValuePair;
+	private String name;
+	private String value;
+	private String domain;
+	private String path;
+	private TimePoint expires;
+	
+	/**
+	 * Creates a new cookie from the given data input stream
+	 * @param in the stream
+	 * @throws IOException when reading fails
+	 */
+	public Cookie(DataInputStream in) 
+	throws IOException 
+	{
+		read(in);
+	}
 	
 	/**
 	 * Creates a new cookie
@@ -84,39 +100,74 @@ public class Cookie {
 		return (this.expires == null);
 	}
 
+	/**
+	 * Retrieves the name and value separated by an equals sign
+	 * @return name and value
+	 * @see #getName()
+	 * @see #getValue()
+	 */
 	public String getNameValuePair() {
 		return this.nameValuePair;
 	}
 
+	/**
+	 * Retrieves the name of this cookie
+	 * @return the name
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * Retrieves the value of this cookie
+	 * @return the value
+	 */
 	public String getValue() {
 		return this.value;
 	}
 
+	/**
+	 * Retrieves the domain of this cookie
+	 * @return the domain
+	 */
 	public String getDomain() {
 		return this.domain;
 	}
 
+	/**
+	 * Retrieves the path of this cookie
+	 * @return the path
+	 */ 
 	public String getPath() {
 		return this.path;
 	}
-
+	
+	/**
+	 * Retrieves the expires setting of this cookie
+	 * @return the timepoint when this cookie expires
+	 */
 	public TimePoint getExpires() {
 		return this.expires;
 	}
 	
+	/**
+	 * Cookies are deemed equals when they have the same name and domain
+	 * @return true when the given object is a cookie and the names and domains match
+	 */
 	public boolean equals( Object o) {
 		if (!(o instanceof Cookie)) {
 			return false;
 		}
 		Cookie other = (Cookie)o;
 		return (this.name.equals(other.name))
-				&& (this.domain == null || this.domain.equals(other.domain));
+				&& ((this.domain == null && other.domain == null) 
+					|| this.domain.equals(other.domain));
 	}
 	
+	/**
+	 * The hashcode is calculated by or-ing the hascodes of the name and domain of this cookie
+	 * @return the hashcode of this cookie
+	 */
 	public int hashCode() {
 		int hashCode = this.name.hashCode();
 		if (this.domain != null) {
@@ -125,13 +176,22 @@ public class Cookie {
 		return hashCode;
 	}
 
-	public boolean matchesDomain(String targetDomain) {
+	/**
+	 * Checks if this cookie matches the given url
+	 * @param url the URL
+	 * @return true when this cookie is applicable for the given URL
+	 */
+	public boolean matchesUrl(String url) {
 		if (this.domain == null) {
 			return true;
 		}
-		return (targetDomain.indexOf(this.domain) != -1);
+		return (url.indexOf(this.domain) != -1);
 	}
 
+	/**
+	 * Gives out useful information about this cookie
+	 * @return name and decoded value, domain, path and expires settings along with the identity
+	 */
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(super.toString())
@@ -146,5 +206,56 @@ public class Cookie {
 			buffer.append("; expires=").append(this.expires.toRfc3339());
 		}
 		return buffer.toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.io.Externalizable#write(java.io.DataOutputStream)
+	 */
+	public void write(DataOutputStream out) throws IOException {
+		out.writeInt( VERSION );
+		out.writeUTF(this.name);
+		out.writeUTF(this.value);
+		boolean isNotNull = (this.domain != null);
+		out.writeBoolean(isNotNull);
+		if (isNotNull) {
+			out.writeUTF(this.domain);
+		}
+		isNotNull = (this.path != null);
+		out.writeBoolean(isNotNull);
+		if (isNotNull) {
+			out.writeUTF(this.path);
+		}
+		isNotNull = (this.expires != null);
+		out.writeBoolean(isNotNull);
+		if (isNotNull) {
+			this.expires.write(out);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.io.Externalizable#read(java.io.DataInputStream)
+	 */
+	public void read(DataInputStream in) throws IOException {
+		int version = in.readInt();
+		if (version > VERSION) {
+			throw new IOException("for version " + version);
+		}
+		this.name = in.readUTF();
+		this.value = in.readUTF();
+		this.nameValuePair = this.name + "=" + this.value;
+		boolean isNotNull = in.readBoolean();
+		if (isNotNull) {
+			this.domain = in.readUTF();
+		}
+		isNotNull = in.readBoolean();
+		if (isNotNull) {
+			this.path = in.readUTF();
+		}
+		isNotNull = in.readBoolean();
+		if (isNotNull) {
+			this.expires = new TimePoint(in);
+		}
 	}
 }
