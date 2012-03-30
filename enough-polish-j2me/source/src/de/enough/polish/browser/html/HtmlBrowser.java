@@ -31,6 +31,7 @@ import de.enough.polish.browser.Browser;
 import de.enough.polish.browser.ProtocolHandler;
 import de.enough.polish.browser.protocols.HttpProtocolHandler;
 import de.enough.polish.browser.protocols.ResourceProtocolHandler;
+import de.enough.polish.io.CookieManager;
 import de.enough.polish.io.RedirectHttpConnection;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.Style;
@@ -96,9 +97,9 @@ extends Browser
 	{
 		//#if polish.css.style.browser && !polish.LibraryBuild
 			//#style browser
-			//# this( tagHandler, protocolHandlers );	
+			//# this( tagHandler, protocolHandlers, new CookieManager() );	
 		//#else
-			this( tagHandler, protocolHandlers, (Style) null );
+			this( tagHandler, protocolHandlers,  new CookieManager(), (Style) null );
 		//#endif	  
 	}
 
@@ -113,7 +114,39 @@ extends Browser
 	 */
 	public HtmlBrowser( HtmlTagHandler tagHandler, ProtocolHandler[] protocolHandlers,  Style style )
 	{
-		super( protocolHandlers, style );
+		this( tagHandler, protocolHandlers, new CookieManager(), style );
+	}
+	
+	/**
+	 * Creates a new browser with the specified html tag handler
+	 * 
+	 * @param tagHandler the HtmlTagHandler used for this browser
+	 * @param protocolHandlers the protocol handlers
+	 * 
+	 * @throws NullPointerException when the tagHandler is null
+	 */
+	public HtmlBrowser( HtmlTagHandler tagHandler, ProtocolHandler[] protocolHandlers, CookieManager cookieManager )
+	{
+		//#if polish.css.style.browser && !polish.LibraryBuild
+			//#style browser
+			//# this( tagHandler, protocolHandlers, cookieManager );	
+		//#else
+			this( tagHandler, protocolHandlers, cookieManager, (Style) null );
+		//#endif	  
+	}
+
+	/**
+	 * Creates a new browser with the specified html tag handler
+	 * 
+	 * @param tagHandler the HtmlTagHandler used for this browser
+	 * @param protocolHandlers the protocol handlers
+	 * @param style the style of this browser
+	 * 
+	 * @throws NullPointerException when the tagHandler is null
+	 */
+	public HtmlBrowser( HtmlTagHandler tagHandler, ProtocolHandler[] protocolHandlers, CookieManager cookieManager, Style style )
+	{
+		super( protocolHandlers, cookieManager, style );
 		tagHandler.register(this);
 		this.htmlTagHandler = tagHandler;
 		this.forms = new ArrayList();

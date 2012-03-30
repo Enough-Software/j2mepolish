@@ -169,12 +169,12 @@ implements Runnable, ResourceLoader
 	{
 		//#if polish.css.style.browser && !polish.LibraryBuild
 		//#style browser
-		//# this(protocolHandlers);
+		//# this(protocolHandlers, new CookieManager());
 		//#else
-		this(protocolHandlers, null);
+		this(protocolHandlers, new CookieManager(), null);
 		//#endif
 	}
-
+	
 	/**
 	 * Creates a new Browser with the specified handlers and style.
 	 * 
@@ -185,6 +185,34 @@ implements Runnable, ResourceLoader
 	{
 		this( (String[])null, (TagHandler[])null, protocolHandlers, style);
 	}
+
+
+	/**
+	 * Creates a new Browser with the specified handlers and style.
+	 * 
+	 * @param protocolHandlers the tag handlers
+	 * @param style the style to use for the browser item
+	 */
+	public Browser( ProtocolHandler[] protocolHandlers, CookieManager cookieManager, Style style )
+	{
+		this( (String[])null, (TagHandler[])null, protocolHandlers, cookieManager, style);
+	}
+	
+	/**
+	 * Creates a new Browser with the specified handlers and style.
+	 * 
+	 * @param protocolHandlers the tag handlers
+	 */
+	public Browser( ProtocolHandler[] protocolHandlers, CookieManager cookieManager )
+	{
+		//#if polish.css.style.browser && !polish.LibraryBuild
+		//#style browser
+		//# this(protocolHandlers, cookieManager);
+		//#else
+		this(protocolHandlers, cookieManager, null);
+		//#endif
+	}
+
 
 	/**
 	 * Creates a new Browser with the specified handlers and style.
@@ -197,11 +225,29 @@ implements Runnable, ResourceLoader
 	{
 		//#if polish.css.style.browser && !polish.LibraryBuild
 		//#style browser
-		//# this(tagNames, tagHandlers, protocolHandlers);
+		//# this(tagNames, tagHandlers, protocolHandlers, new CookieManager());
 		//#else
-		this(tagNames,tagHandlers, protocolHandlers, null);
+		this(tagNames,tagHandlers, protocolHandlers, new CookieManager(), null);
 		//#endif
 	}
+	
+	/**
+	 * Creates a new Browser with the specified handlers and style.
+	 * 
+	 * @param tagNames the names of the tags that the taghandler should handle (this allows to use a single taghandler for several tags)
+	 * @param tagHandlers the tag handlers
+	 * @param protocolHandlers the protocol handlers
+	 */
+	public Browser( String[] tagNames, TagHandler[] tagHandlers, ProtocolHandler[] protocolHandlers, CookieManager cookieManager )
+	{
+		//#if polish.css.style.browser && !polish.LibraryBuild
+		//#style browser
+		//# this(tagNames, tagHandlers, protocolHandlers, cookieManager);
+		//#else
+		this(tagNames,tagHandlers, protocolHandlers, cookieManager, null);
+		//#endif
+	}
+
 
 	/**
 	 * Creates a new Browser with the specified handlers and style.
@@ -213,8 +259,22 @@ implements Runnable, ResourceLoader
 	 */
 	public Browser( String[] tagNames, TagHandler[] tagHandlers, ProtocolHandler[] protocolHandlers, Style style )
 	{
+		this( tagNames, tagHandlers, protocolHandlers, new CookieManager(), style);
+	}
+	
+	/**
+	 * Creates a new Browser with the specified handlers and style.
+	 * 
+	 * @param tagNames the names of the tags that the taghandler should handle (this allows to use a single taghandler for several tags)
+	 * @param tagHandlers the tag handlers
+	 * @param protocolHandlers the protocol handlers
+	 * @param cookieManager the manager of cookies
+	 * @param style the style of this browser
+	 */
+	public Browser( String[] tagNames, TagHandler[] tagHandlers, ProtocolHandler[] protocolHandlers, CookieManager cookieManager, Style style )
+	{
 		super( true, style );
-		 this.cookieManager = new CookieManager();
+		 this.cookieManager = cookieManager;
 		if (tagHandlers != null && tagNames != null && tagNames.length == tagHandlers.length) {
 			for (int i = 0; i < tagHandlers.length; i++) {
 				TagHandler handler = tagHandlers[i];
