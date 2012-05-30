@@ -79,15 +79,17 @@ implements Externalizable
 	}
 	
 	/**
-	 * 
-	 * @param url
-	 * @param connection
-	 * @throws IOException 
-	 * @see #extractCookies(HttpConnection)
+	 * Sets the 'cookie' request property for the given URL
+	 * @param url the URL
+	 * @param connection the connection
+	 * @throws IOException when the request property could not be set
+	 * @see #extractCookies(HttpConnection) for the reverse process
 	 */
 	public void setCookie( String url, HttpConnection connection) throws IOException {
 		String cookie = getCookiesForUrl(url);
-		connection.setRequestProperty("cookie", cookie);
+		if (cookie != null) {
+			connection.setRequestProperty("cookie", cookie);
+		}
 	}
 
 	/**
@@ -152,6 +154,13 @@ implements Externalizable
 		//#debug
 		System.out.println("Combined cookie: " + buffer);
 		return buffer.toString();
+	}
+	
+	/**
+	 * Removes all cookies from this manager.
+	 */
+	public void clear() {
+		this.cookiesList.clear();
 	}
 
 	/*

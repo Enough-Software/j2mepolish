@@ -199,6 +199,14 @@ centercommand {
 	inherit: false;
 }
 
+.browserLi {
+	inherit: false;
+	before: url( browserLi.png );
+	padding-left: 4%;
+	layout: left | expand | top;
+}
+
+
 .rssDescriptionAlert {
 	inherit: false;
 }

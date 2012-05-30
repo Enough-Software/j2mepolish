@@ -142,7 +142,6 @@ public class RedirectHttpConnection implements HttpConnection
 		this.originalUrl = url;
 		this.requestProperties = new HashMap();
 		this.timeout = timeout;
-		
 		if (requestProperties != null) {
 			Object[] keys = requestProperties.keys();
 			for (int i = 0; i < keys.length; i++)
@@ -406,7 +405,7 @@ public class RedirectHttpConnection implements HttpConnection
 			return this.httpConnection.getFile();
 		} catch (IOException e)
 		{
-			// #debug error
+			//#debug error
 			System.out.println("Unable to open connection" + e);
 			return null;
 		}
@@ -713,7 +712,7 @@ public class RedirectHttpConnection implements HttpConnection
 					this.inputStream.close();
 				} catch (Exception e)
 				{
-					// #debug error
+					//#debug error
 					System.out.println("Error while closing input stream" + e);
 				}
 				this.inputStream = null;
@@ -725,7 +724,7 @@ public class RedirectHttpConnection implements HttpConnection
 					this.byteArrayOutputStream.close();
 				} catch (Exception e)
 				{
-					// #debug error
+					//#debug error
 					System.out.println("Error while closing output stream" + e);
 				}
 				this.byteArrayOutputStream = null;

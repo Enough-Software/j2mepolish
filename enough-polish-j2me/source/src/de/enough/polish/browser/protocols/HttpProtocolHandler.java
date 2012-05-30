@@ -125,7 +125,7 @@ implements CookieEnabledHandler
 		this.requestProperties = requestProperties;
 		if ( requestProperties.get("User-Agent") == null || userAgentSet)
 		{
-			if(USER_AGENT != null) {
+			if (USER_AGENT != null) {
 				requestProperties.put("User-Agent", USER_AGENT );
 			} else {
 				requestProperties.remove("User-Agent");
@@ -133,7 +133,8 @@ implements CookieEnabledHandler
 			 
 		}
 		if ( requestProperties.get("Accept") == null ) {
-			requestProperties.put("Accept", "text/html, text/xml, text/*, image/png, image/*, application/xhtml+xml, */*" );
+			requestProperties.put("Accept", "text/html,text/xml,text/*,image/png,image/*,application/xhtml+xml,*/*" );
+			//requestProperties.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" );
 		}
 		if (requestProperties.get("Accept-Language") == null) {
 			//#ifdef polish.i18n.useDynamicTranslations
@@ -155,6 +156,7 @@ implements CookieEnabledHandler
 			requestProperties.put("UA-pixels", StyleSheet.currentScreen.getWidth() + "x" + StyleSheet.currentScreen.getHeight() );
 		}
 		//#endif
+		requestProperties.put("Connection", "keep-alive" );
 	}
 
 	/* (non-Javadoc)

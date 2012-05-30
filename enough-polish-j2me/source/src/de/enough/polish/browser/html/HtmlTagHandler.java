@@ -34,6 +34,7 @@ import de.enough.polish.browser.css.CssInterpreter;
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.ChoiceItem;
+import de.enough.polish.ui.Color;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Container;
 import de.enough.polish.ui.ImageItem;
@@ -48,7 +49,9 @@ import de.enough.polish.ui.StyleSheet;
 import de.enough.polish.ui.TableItem;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.UiAccess;
+import de.enough.polish.ui.backgrounds.SimpleBackground;
 import de.enough.polish.util.BooleanStack;
+import de.enough.polish.util.DrawUtil;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.TextUtil;
@@ -120,6 +123,10 @@ public class HtmlTagHandler
   public static final String TAG_TD = "td";
 	/** code tag */
   public static final String TAG_CODE = "code";
+	/** unordered list tag */
+  public static final String TAG_UL = "ul";
+	/** list element tag */
+  public static final String TAG_LI = "li";
   
 	/** type attribute */
   public static final String INPUT_TYPE = "type";
@@ -202,6 +209,8 @@ public class HtmlTagHandler
 
 	private String anchorHref;
 
+	private Style textInputStyle;
+
 	/**
 	 * Creates a new html tag handler
 	 */
@@ -249,6 +258,8 @@ public class HtmlTagHandler
 		parent.addTagHandler(TAG_TH, this);
 		parent.addTagHandler(TAG_TD, this);
 		parent.addTagHandler(TAG_CODE, this);
+		parent.addTagHandler(TAG_UL, this);
+		parent.addTagHandler(TAG_LI, this);
 	}
 
 	/* (non-Javadoc)
@@ -259,7 +270,7 @@ public class HtmlTagHandler
 		//#debug
 		System.out.println( (opening ?  "<" : "</" ) + tagName + ">" );
 		tagName = tagName.toLowerCase();
-		if (TAG_DIV.equals(tagName) || TAG_SPAN.equals(tagName)) {
+		if (TAG_DIV.equals(tagName) || TAG_SPAN.equals(tagName) || TAG_LI.equals(tagName)) {
 			if (opening) {
 				String itemStyleName = (String) attributeMap.get("textclass");
 				Style itemStyle = (itemStyleName == null ? null : StyleSheet.getStyle(itemStyleName));
@@ -268,6 +279,12 @@ public class HtmlTagHandler
 				} else if ((style != null) && ("inline".equals(style.name))) {
 					this.textStyle = style;
 				}
+				//#if polish.css.style.browserLi && !polish.LibraryBuild
+					if (style == null && TAG_LI.equals(tagName)) {
+						//#style browserLi
+						//#= style = ();
+					}
+				//#endif
 				if (this.isDivOrSpanOpened == null) {
 					this.isDivOrSpanOpened = new BooleanStack();
 				}
@@ -694,6 +711,7 @@ public class HtmlTagHandler
 						}
 						//#style browserInput
 						TextField textField = new TextField((String)attributeMap.get("label"), value, 100, constraints);
+						style = adaptStyleForTextInput(style);
 						if (style != null) {
 							textField.setStyle(style);
 						}
@@ -721,6 +739,7 @@ public class HtmlTagHandler
 
 						//#style browserLink
 						StringItem buttonItem = new StringItem((String)attributeMap.get("label"), value);
+						style = adaptStyleForSubmitElement(style);
 						if (style != null) {
 							buttonItem.setStyle(style);
 						}
@@ -929,6 +948,72 @@ public class HtmlTagHandler
 
 		return false;
 	}
+
+	/**
+	 * Allows subclasses to customize the styling of input fields.
+	 * The default implementation ensures that an expand layout is used unless the style has a min-width attribute is specified.
+	 * @param style the style, this can be null
+	 * @return the adapted style
+	 */
+	protected Style adaptStyleForTextInput(Style style) {
+		if (this.textInputStyle != null) {
+			return this.textInputStyle;
+		}
+		if (style != null) {
+			boolean requiresExpansion = true;
+			//#if polish.css.min-width
+				Dimension dim = (Dimension) style.getObjectProperty("min-width");
+				if (dim != null) {
+					requiresExpansion = false;
+				}
+			//#endif
+			if (requiresExpansion) {
+				style.layout = style.layout | Item.LAYOUT_EXPAND;
+			}
+		}
+		return style;
+	}
+	
+	protected Style adaptStyleForSubmitElement(Style style) {
+		if (style != null) {
+			Style focStyle = (Style) style.getObjectProperty("focused-style");
+			//#debug
+			System.out.println("foc style of " + style + " --> " + focStyle);
+			if (focStyle == null) {
+				focStyle = new Style(style);
+				focStyle.name = style.name + "Focused";
+				Color fontColor = style.getColorProperty("font-color");
+				int complementaryColor;
+				if (fontColor != null) {					
+					complementaryColor = DrawUtil.getComplementaryColor(fontColor.getColor());
+				} else {
+					complementaryColor = 0x0;
+					focStyle.addAttribute("font-color", new Color(0xffffff));
+				}
+				focStyle.background = new SimpleBackground( complementaryColor );
+				style.addAttribute("focused-style", focStyle);
+				focStyle = (Style) style.getObjectProperty("focused-style");
+			}
+		}
+		return style;
+	}
+	
+	/**
+	 * Allows a caller to specify an input style that is used for any text input.
+	 * This method needs to be used in combination with a <code>#style</code> preprocessing directive
+	 */
+	public void setTextInputStyle() {
+		// ignore
+	}
+	
+	/**
+	 * Allows a caller to specify an input style that is used for any text input.
+	 * @param inputStyle the style for text input
+	 */
+	public void setTextInputStyle(Style inputStyle) {
+		this.textInputStyle = inputStyle;
+	}
+
 
 	private Dimension parseSizeValue(String s)
 	{

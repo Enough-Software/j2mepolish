@@ -583,6 +583,24 @@ implements Runnable, ResourceLoader
 		}
 	}
 
+	/**
+	 * Sets the user agent for this browser
+	 * @param userAgent the new user agent, use null to remove any notion of user agent
+	 * @see #getUserAgent()
+	 */
+	public void setUserAgent(String userAgent) {
+		HttpProtocolHandler.setUserAgent(userAgent);
+	}
+	
+	/**
+	 * Retrieves the currently used user agent
+	 * @return the user agent
+	 * @see #setUserAgent(String)
+	 */
+	public String getUserAgent() {
+		return HttpProtocolHandler.getUserAgent();
+	}
+
 
 	/**
 	 * @param parser the parser to read the page from
