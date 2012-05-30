@@ -700,6 +700,9 @@ public class StringItem extends Item
 				Object[] lineObjects = lines.getLinesInternalArray();
 				for (int i = startIndex; i < endIndex; i++) {
 					String line = (String) lineObjects[i];
+					if (line == null) {
+						break;
+					}
 					if (isCenter || isRight) {
 						lineWidth = lines.getLineWidth(i);
 						if (isCenter) {
