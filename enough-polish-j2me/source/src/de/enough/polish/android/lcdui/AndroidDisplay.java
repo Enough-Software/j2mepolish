@@ -956,8 +956,14 @@ implements NativeDisplay //, OnTouchListener
 		if (vibrator == null) {
 			return false;
 		}
-		vibrator.vibrate(duration);
-		return true;
+		try {
+			vibrator.vibrate(duration);
+			return true;
+		} catch (SecurityException e) {
+			//#debug warn
+			System.out.println("Unable to vibrate" + e);
+			return false;
+		}
 	}
 
 	/**
