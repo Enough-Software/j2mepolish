@@ -817,9 +817,6 @@ public class Graphics
 	public int getClipWidth()
 	{
 		Rect rect = this.canvas.getClipBounds();
-		if(rect.top == 0 && rect.bottom == 0 && rect.left == 0 && rect.right == 0 ) {
-			return this.canvas.getWidth();
-		}
 		return rect.right - rect.left;
 	}
 
@@ -833,9 +830,6 @@ public class Graphics
 	public int getClipHeight()
 	{
 		Rect rect = this.canvas.getClipBounds();
-		if(rect.top == 0 && rect.bottom == 0 && rect.left == 0 && rect.right == 0 ) {
-			return this.canvas.getHeight();
-		}
 		return rect.bottom - rect.top;
 	}
 
@@ -857,8 +851,7 @@ public class Graphics
 	{
 		x += this.translateX;
 		y += this.translateY;
-		Rect clip = new Rect( x, y, x + width, y + height );
-		this.canvas.clipRect(clip);
+		this.canvas.clipRect(x, y, x + width, y + height );
 	}
 
 	/**
