@@ -542,10 +542,10 @@ public class Style implements Externalizable
 	
 	/**
 	 * Retrieves the font color that should be used.
-	 * The color can be dynamic like Display.COLOR_FOREGROUND and should always be retrieved
-	 * using this method instead of using the public field fontColor.
+	 * The color can be dynamic like Display.COLOR_FOREGROUND.
 	 *  
 	 * @return the color for the font.
+	 * @deprecated use style.getColorProperty("font-color") instead
 	 */
 	public int getFontColor() {
 		//#if polish.css.font-color

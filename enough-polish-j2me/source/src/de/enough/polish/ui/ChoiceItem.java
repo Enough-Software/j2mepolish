@@ -33,7 +33,7 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 /**
- * <p>Paints a single item of a choice group.</p>
+ * <p>Paints a single item of a ChoiceGroup or in a List screen.</p>
  * 
  * As for <code>IconItem</code>,
  * <code>ChoiceItem</code> is a <i>de.enough.polish</i> extension to group
@@ -103,11 +103,7 @@ import javax.microedition.lcdui.Image;
  * }
  * </PRE>
  * <b><i>(Example and JavaDoc provided by Pierre G. Richard)</i></b> 
- * <p>Copyright Enough Software 2004 - 2009</p>
- * <pre>
- * history
- *        05-May-2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2012</p>
  * @author Robert Virkus, robert@enough.de
  */
 public class ChoiceItem extends IconItem 

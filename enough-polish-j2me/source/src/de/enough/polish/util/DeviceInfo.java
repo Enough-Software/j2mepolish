@@ -201,6 +201,15 @@ public class DeviceInfo
 		return deviceName;
 	}
 	
+	/**
+	 * Retrieves the name of the OS and it's version on J2ME, BlackBerry and Android.
+	 * <ul>
+	 * <li>On J2ME this is the system property "microedition.platform"</li>
+	 * <li>On Android it is the system property os.version plus the android.os.Build.VERSION.INCREMENTAL plus the android.os.Build.VERSION.SDK</i>
+	 * <li>On BlackBerry this is net.rim.device.api.system.DeviceInfo.getPlatformVersion() plus net.rim.device.api.system.DeviceInfo.getSoftwareVersion()</li>
+	 * </ul>
+	 * @return the platform name
+	 */
 	public static String getPlatformName() {
 		String platformName = null;
 		//#if polish.blackberry
@@ -208,7 +217,7 @@ public class DeviceInfo
 		//#elif polish.android
 			platformName = System.getProperty("os.version") 
 					+ "(" + android.os.Build.VERSION.INCREMENTAL + ")" 
-					+ " Level: " + android.os.Build.VERSION.SDK;;
+					+ " Level: " + android.os.Build.VERSION.SDK;
 		//#else
 			platformName = 	System.getProperty( "microedition.platform" );
 		//#endif
