@@ -1151,9 +1151,6 @@ implements CycleListener
 		if ( activeFrame != null ) {
 			handled = activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
 		} 
-		if (!handled && activeFrame != this.container) {
-			handled = this.container.handlePointerDragged(x - this.container.relativeX, y - this.container.relativeY, repaintRegion);
-		}
 		return handled;
 	}
 	//#endif
