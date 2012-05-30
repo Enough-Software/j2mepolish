@@ -587,6 +587,24 @@ implements Externalizable, Comparator, Comparable
 		setSecond( s );
 	}
 	
+	/**
+	 * Adds the specified number of seconds to this time point.
+	 * NOTE: Adding seconds can also change the minute setting.
+	 * @param numberOfSeconds the number of seconds that should be added, use a negative number to subtract seconds
+	 */
+	public void addSecond(long numberOfSeconds) {
+		long s = this.second + numberOfSeconds;
+		while (s > 59) {
+			addMinute(1);
+			s -= 60;
+		}
+		while (s < 0) {
+			addMinute(-1);
+			s += 60;
+		}
+		setSecond( (int)s );
+	}
+	
 	
 	/**
 	 * Adds the specified number of minutes to this time point.
