@@ -3,12 +3,13 @@
 package de.enough.polish.ui.backgrounds;
 
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
 
 /**
  * Creates a patch-based background
  * 
- * @author Ovidiu, Andre Schmidt, Robert Virkus
+ * @author Ovidiu Iliescu, Andre Schmidt, Robert Virkus
  *
  */
 public class PatchBackground extends ImageResourceBackground {
@@ -20,14 +21,13 @@ public class PatchBackground extends ImageResourceBackground {
 	private final boolean isTransparent;
 	
 	/**
-	 * 
-	 * @param imageUrl
-	 * @param leftWidth
-	 * @param topHeight
-	 * @param rightWidth
-	 * @param bottomHeight
-	 * @param isTransparent 
-	 * @param style
+	 * Creates a new patch background
+	 * @param imageUrl the URL to the image
+	 * @param leftWidth the width of the left edge
+	 * @param topHeight the height of the top edge
+	 * @param rightWidth the width of the right edge
+	 * @param bottomHeight the height of the bottom edge
+	 * @param isTransparent true when no center tiles should be painted
 	 */
 	public PatchBackground( String imageUrl, int leftWidth, int topHeight, int rightWidth, int bottomHeight, boolean isTransparent) {
 		super(imageUrl);
@@ -52,17 +52,23 @@ public class PatchBackground extends ImageResourceBackground {
 				throw new IllegalArgumentException("Invalid patch-height: top=" + this.topHeight + ", bottom=" + this.bottomHeight + ", image-height=" + this.imageHeight + " of " + this.imageUrl);
 			}
 		}
-		//System.out.println("paint patch");
 		int clipX = g.getClipX();
 		int clipY = g.getClipY();
 		int clipWidth = g.getClipWidth();
 		int clipHeight = g.getClipHeight();
+		if ((clipY + clipHeight < y) || (clipY > y + height)) {
+			return;
+		}
+		g.setColor(0xff0000);
+		g.fillRect(x, y, width, height );
+		//System.out.println("patch start: clipX=" + g.getClipX() + ", clipY=" + (g.getClipY()) +", clip.width=" + g.getClipWidth() + ", clip.height=" + g.getClipHeight());
 		paintHorizontalTiles(x, y, width, height, clipX, clipY, clipWidth, clipHeight, g);
 		paintVerticalTiles(x, y, width, height, clipX, clipY, clipWidth, clipHeight, g);
 		if (!this.isTransparent) {
 			paintCenterTiles(x, y, width, height, clipX, clipY, clipWidth, clipHeight, g);
 		}
 		paintCorners(x, y, width,height,clipX, clipY, clipWidth, clipHeight, g);
+		//System.out.println("patch end: clipX=" + g.getClipX() + ", clipY=" + (g.getClipY()) +", clip.width=" + g.getClipWidth() + ", clip.height=" + g.getClipHeight());
 	}
 	
 	private void paintCorners(int x, int y, int width, int height, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
@@ -72,33 +78,50 @@ public class PatchBackground extends ImageResourceBackground {
 		int srcX;
 		int srcY;
 		
+		int srcWidth;
+		int srcHeight;
+		
+		int minLeftWidth = Math.min( this.leftWidth, width);
+		int minRightWidth = Math.min( this.rightWidth, width);
+		int minTopHeight = Math.min(this.topHeight, height);
+		int minBottomHeight = Math.min(this.bottomHeight, height);
+		
 		// draw top left
 		srcX = 0;
 		srcY = 0;
+		srcWidth = minLeftWidth;
+		srcHeight = minTopHeight;
 		dstX = x + srcX;
 		dstY = y + srcY;
-		drawRegion(this.image, srcX, srcY, this.leftWidth, this.topHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
+		drawRegion(this.image, srcX, srcY,srcWidth, srcHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
 		
 		// draw top right
 		srcX = this.imageWidth - this.rightWidth;
 		srcY = 0;
-		dstX = x + (width - this.rightWidth);
+		srcWidth = minRightWidth;
+		srcHeight = minTopHeight;
+		dstX = x + (width - minRightWidth);
 		dstY = y;
-		drawRegion(this.image, srcX, srcY, this.rightWidth, this.topHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
+		//drawRegion(this.image, srcX, srcY, this.rightWidth, this.topHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
+		drawRegion(this.image, srcX, srcY,srcWidth, srcHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
 		
 		// draw bottom left
 		srcX = 0;
-		srcY = this.imageHeight - this.bottomHeight;
+		srcY = this.imageHeight - minBottomHeight;
+		srcWidth = minLeftWidth;
+		srcHeight = minBottomHeight;
 		dstX = x;
-		dstY = y + (height - this.bottomHeight);
-		drawRegion(this.image, srcX, srcY, this.leftWidth, this.bottomHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
+		dstY = y + (height - minBottomHeight);
+		drawRegion(this.image, srcX, srcY,srcWidth, srcHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
 
 		// draw bottom right
 		srcX = this.imageWidth - this.rightWidth;
-		srcY = this.imageHeight - this.bottomHeight;
-		dstX = x + (width - this.rightWidth);
-		dstY = y + (height - this.bottomHeight);
-		drawRegion(this.image, srcX, srcY, this.rightWidth, this.bottomHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
+		srcY = this.imageHeight - minBottomHeight;
+		srcWidth = minRightWidth;
+		srcHeight = minBottomHeight;
+		dstX = x + (width - minRightWidth);
+		dstY = y + (height - minBottomHeight);
+		drawRegion(this.image, srcX, srcY,srcWidth, srcHeight, dstX, dstY, clipX, clipY, clipWidth, clipHeight, g);
 	}
 	
 	private void paintHorizontalTiles(int x, int y, int width, int height, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
@@ -106,20 +129,27 @@ public class PatchBackground extends ImageResourceBackground {
 		int srcY;
 		
 		int srcWidth = this.imageWidth - (this.leftWidth + this.rightWidth);
-		int srcHeight = this.topHeight;
+		int srcHeight = Math.min( this.topHeight, height);
 		//System.out.println("horizontal tiles: srcWidth=" + srcWidth + ", srcHeight=" + srcHeight);
 		
 		int dstX = x + this.leftWidth;
 		int dstY;
 		
 		int fillWidth = width - (this.leftWidth + this.rightWidth);
-		
 		storeClipping(g);
 		clipX = dstX;
 		clipY = y;
 		clipWidth = fillWidth;
 		clipHeight = height;
 		g.clipRect(clipX, clipY, clipWidth, clipHeight);
+		clipX = g.getClipX();
+		clipY = g.getClipY();
+		clipWidth = g.getClipWidth();
+		clipHeight = g.getClipHeight();
+		if (clipWidth == 0 || clipHeight == 0) {
+			restoreClipping(g);
+			return;
+		}
 		
 		// draw horizontal top tiles:
 		srcY = 0;
@@ -130,9 +160,9 @@ public class PatchBackground extends ImageResourceBackground {
 		}
 		
 		// draw horizontal bottom tiles:
-		srcY = this.imageHeight - this.bottomHeight;
-		srcHeight = this.bottomHeight;
-		dstY = y + (height - this.bottomHeight); 
+		srcHeight = Math.min( this.bottomHeight, height);
+		srcY = this.imageHeight - srcHeight;
+		dstY = y + height - srcHeight;
 		
 		for (int xOffset = 0; xOffset < fillWidth; xOffset = xOffset + srcWidth) {
 			drawRegion(this.image, srcX, srcY, srcWidth, srcHeight,dstX + xOffset, dstY, clipX, clipY, clipWidth, clipHeight, g);
@@ -169,6 +199,14 @@ public class PatchBackground extends ImageResourceBackground {
 		clipWidth = width;
 		clipHeight = fillHeight;
 		g.clipRect(clipX, clipY, clipWidth, clipHeight);
+		clipX = g.getClipX();
+		clipY = g.getClipY();
+		clipWidth = g.getClipWidth();
+		clipHeight = g.getClipHeight();
+		if (clipWidth == 0 || clipHeight == 0) {
+			restoreClipping(g);
+			return;
+		}
 		
 		// draw vertical left fill:
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
@@ -215,13 +253,20 @@ public class PatchBackground extends ImageResourceBackground {
 		clipWidth = fillWidth;
 		clipHeight = fillHeight;
 		g.clipRect(clipX, clipY, clipWidth, clipHeight);
+		clipX = g.getClipX();
+		clipY = g.getClipY();
+		clipWidth = g.getClipWidth();
+		clipHeight = g.getClipHeight();
+		if (clipWidth == 0 || clipHeight == 0) {
+			restoreClipping(g);
+			return;
+		}
 
 
 		for (int yOffset = 0; yOffset < fillHeight; yOffset = yOffset + srcHeight) {
 			for (int xOffset = 0; xOffset < fillWidth; xOffset = xOffset + srcWidth) {
 				drawRegion(this.image, srcX, srcY, srcWidth, srcHeight, dstX + xOffset, dstY + yOffset, clipX, clipY, clipWidth, clipHeight, g);
 			}
-
 		}
 		
 		restoreClipping(g);

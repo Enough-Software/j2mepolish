@@ -116,8 +116,11 @@ implements ImageConsumer
 	}
 	//#endif
 	
-	
+
 	protected void drawRegion( Image img, int xSrc, int ySrc, int width, int height, int xDest, int yDest, int clipX, int clipY, int clipWidth, int clipHeight, Graphics g) {
+		if (yDest + height < clipY || yDest > clipY + clipHeight || xDest + width < clipX || xDest > clipX + clipWidth) {
+			return;
+		}
 		g.clipRect( xDest, yDest, width, height );
 		g.drawImage(img, xDest - xSrc, yDest - ySrc, Graphics.TOP | Graphics.LEFT );
 		g.setClip(clipX, clipY, clipWidth, clipHeight);
