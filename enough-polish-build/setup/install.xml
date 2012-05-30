@@ -143,6 +143,16 @@ When the plugin is not installed correctly, please start eclipse with "-clean" c
             <parsable targetfile="$INSTALL_PATH/samples/blank/.classpath" type="shell" /> 
             <parsable targetfile="$INSTALL_PATH/samples/blank/nbproject/project.properties" type="shell" /> 
         </pack>
+        <pack name="Facebook Authentication Sample Application" required="no" preselected="yes">
+            <description>Shows how to authenticate with Facebook.</description>
+            <file src="samples/authenticate-facebook" targetdir="$INSTALL_PATH/samples"/>
+            <parsable targetfile="$INSTALL_PATH/samples/authenticate-facebook/build.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/authenticate-facebook/build-netbeans.xml" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/authenticate-facebook/.classpath" type="shell" /> 
+            <parsable targetfile="$INSTALL_PATH/samples/authenticate-facebook/nbproject/project.properties" type="shell" /> 
+        </pack>
+        <!-- 
+         -->
         <pack name="CSS Animation Sample Application" required="no" preselected="yes">
             <description>This project shows you how to use CSS animations.</description>
             <file src="samples/animation" targetdir="$INSTALL_PATH/samples"/>

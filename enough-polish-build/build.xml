@@ -736,6 +736,16 @@
 			<fileset dir="setup/samples/blank" excludes="**/macosx/**,**/CVS" />
 			<fileset dir="../enough-polish-sample-blank" includes="resources/**/*.*" excludes="**/CVS"/>
 		</copy>
+		<!-- copy authenticate-facebook application -->
+		<mkdir dir="tmp/samples/authenticate-facebook/source/src" />
+		<copy todir="tmp/samples/authenticate-facebook/source/src">
+			<fileset dir="../enough-polish-sample-authenticate-facebook/source/src" includes="**/*.java, **/*.txt" />
+		</copy>
+		<copy todir="tmp/samples/authenticate-facebook/" 
+			>
+			<fileset dir="setup/samples/authenticate-facebook" excludes="**/macosx/**,**/CVS" />
+			<fileset dir="../enough-polish-sample-authenticate-facebook" includes="resources/**/*.*" excludes="**/CVS"/>
+		</copy>
 		<!-- copy messaging application -->
 		<mkdir dir="tmp/samples/messaging/source/src" />
 		<copy todir="tmp/samples/messaging/source/src">
@@ -1028,7 +1038,7 @@
 	</target>
 
 	<target name="installer"
-			 depends="clean, bin-dist, copyfiles, convertWindowsLineEndings"
+			 depends="bin-dist, copyfiles, convertWindowsLineEndings"
 			 description="creates the j2mepolish-installer." 
 		>
 		<taskdef name="izpack" 

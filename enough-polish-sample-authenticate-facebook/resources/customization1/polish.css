@@ -1,0 +1,30 @@
+/** 
+  * This polish.css file is used for customizing the base style
+  * which is situated in resources/base/polish.css
+  * When overriding a style you only need to specify the "new"
+  * CSS attributes.
+  */
+
+/**
+  * Overwrite the colors defined in resources/base/polish.css
+  */
+colors {
+}
+
+/**
+  * Overwrite the backgrounds defined in resources/base/polish.css
+  */
+backgrounds {
+}
+
+/**
+  * Overwrite the borders defined in resources/base/polish.css
+  */
+borders {
+}
+
+/** Place styles here... */
+
+
+
+
