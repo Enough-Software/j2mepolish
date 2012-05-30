@@ -289,6 +289,38 @@ Alternatively you can specify the path to an existing <i>AndroidManifest.xml</i>
 	/&gt;
 &lt;/manifest&gt;
 </pre>
+<p>
+In the above example we support small, normal, large and extra large screens. Note that this is done by default with the additional setting that all screen densities are also supported.
+</p>
+<p>
+If you are using an Android service in your application, you need to define within the <code>&lt;application&gt;</code> element:
+</p>
+<pre class="brush: xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+	&lt;application&gt;
+	    &lt;service
+			android:name=&quot;com.company.product.AddOnService&quot;
+			android:process=&quot;:addon_service&quot; 
+			android:label=&quot;AddOnService&quot;
+			&gt;
+		&lt;/service&gt;
+	&lt;/application&gt;
+&lt;/manifest&gt;
+</pre>
+<p>
+Note that the <code>&lt;application&gt;</code> element is automatically populated by J2ME Polish, so you do not need to enter your details there. This is the same for any elements
+that are auto-populated; in that case the existing elements will not be replaced but only complimented by your changes.
+<br /> 
+An element attribute, however, will overwrite an existing attribute of an existing element. The following code sets the label of the application to a custom Android one, for example:
+</p>
+<pre class="brush: xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+	&lt;application android:label=&quot;Custom Android Name&quot; &gt;
+	&lt;/application&gt;
+&lt;/manifest&gt;
+</pre>
 
 <table class="borderedTable" cellspacing="0" cellpadding="3" border="1">
 <tr>
@@ -401,7 +433,7 @@ Command cmdNext = new Command( "Next", Command.SCREEN, 2 );
 Use the <code>polish.useNativeAlerts</code> preprocessing variable for enabling native alerts:
 </p>
 <pre class="brush: xml">
-&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;false&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
+&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;true&quot; if=&quot;polish.android || polish.blackberry&quot; /&gt;
 </pre>
 <p>
 <img src="<%= basedir%>images/gui-android-alert-native.png" width="480" height="799" alt="Native Android Alert" />

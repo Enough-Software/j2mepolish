@@ -533,7 +533,7 @@
 			<param name="bottom-background" type="background" description="Reference to the background that is painted on the right side. Reference a background defined in the backgrounds section." />
 			<param name="split-pos" type="dimension" primitive="true" default="50%" description="The split position either in percent (1% - 100%) or in pixels. 0 has a special meeting - it results in a rectangular split area." />
 			<param name="split-side" type="integer" primitive="true" values="top,bottom" default="top" description="The side of the split position - usually makes only sense when using an absolute pixel value, e.g. when you want to have a top height of 40 pixels, e.g. for accomodating an image." />
-			<param name="margin" type="integer" primitive="true" default="0" description="The margin in pixels between the top and the nottom background" />
+			<param name="margin" type="integer" primitive="true" default="0" description="The margin in pixels between the top and the bottom background" />
 		</mapping>
 		<mapping from="mask"                   to="de.enough.polish.ui.backgrounds.MaskBackground"  converter="de.enough.polish.preprocess.backgrounds.MaskBackgroundConverter">
 			<param name="mask" type="background" />
