@@ -90,7 +90,7 @@ implements Comparable<PolishComponent>
 			this.description = definition.getChildTextTrim("description");
             this.description = stripText(this.description);
 		}
-        if(this.description == null) {
+        if (this.description == null) {
 		    this.description = "";
         }
 	}
@@ -207,6 +207,7 @@ implements Comparable<PolishComponent>
 	public void addComponent(PolishComponent component ) {
 		// 1. set the capabilities:
 		HashMap<String,String> caps = component.getCapabilities();
+		HashMap<String,Boolean> featureFilterMap = null;
 		for (Iterator<String> iter = caps.keySet().iterator(); iter.hasNext();) {
 			String name = iter.next();
 			String componentValue = (String) caps.get( name );
@@ -219,6 +220,15 @@ implements Comparable<PolishComponent>
 			}
 			if (add) {
 				addCapability( name, componentValue );
+			} else {
+				if (featureFilterMap == null) {
+					featureFilterMap = new HashMap<String,Boolean>();
+				}
+				String[] singleValues = StringUtil.splitAndTrim(componentValue.toLowerCase(), ',');
+				for (int i = 0; i < singleValues.length; i++) {
+					String value = singleValues[i];					
+					featureFilterMap.put(name + "." + value, Boolean.TRUE);
+				}
 			}
 		}
 		
@@ -226,7 +236,9 @@ implements Comparable<PolishComponent>
 		Set<String> feats = component.features.keySet();
 		for ( Iterator<String> iter = feats.iterator(); iter.hasNext(); ) {
 			String name = iter.next();
-			this.features.put( name, Boolean.TRUE );
+			if (featureFilterMap == null || featureFilterMap.get(name) == null) {
+				this.features.put( name, Boolean.TRUE );
+			}
 		}
 		
 		// 3. set the features-string:
@@ -503,6 +515,10 @@ implements Comparable<PolishComponent>
 		name = name.toLowerCase(); 
 		String previousValue = (String) this.capabilities.get(name);
 		if (previousValue != null) {
+			if (previousValue.equals(value)) {
+				// ignore
+				return;
+			}
 			// remove previous values from defined symbols first:
 			if ("true".equals(previousValue)) {
 				this.features.remove( name );

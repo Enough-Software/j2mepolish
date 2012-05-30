@@ -1564,11 +1564,11 @@ public class PolishTask extends ConditionalTask {
 		// check if a preprocessing variable is set for using the Polish GUI:
 		boolean usePolishGui = usePolishGui(device);
 		if ( usePolishGui) {
-                    this.environment.addSymbol("polish.usePolishGui");
-		}else {
-                    this.environment.removeSymbol("polish.usePolishGui");
-                    this.environment.removeVariable("polish.usePolishGui");
-                }
+			this.environment.addSymbol("polish.usePolishGui");
+		} else {
+			this.environment.removeSymbol("polish.usePolishGui");
+			this.environment.removeVariable("polish.usePolishGui");
+		}
 
 		// set conditional variables:
 		BooleanEvaluator evaluator = this.environment.getBooleanEvaluator();
@@ -1638,14 +1638,14 @@ public class PolishTask extends ConditionalTask {
 		// set support for the J2ME Polish GUI, part 2:
 		if ( usePolishGui(device)) {
 			this.environment.addSymbol("polish.usePolishGui");
-		}else {
-                    this.environment.removeSymbol("polish.usePolishGui");
-                    this.environment.removeVariable("polish.usePolishGui");
-                }
+		} else {
+	        this.environment.removeSymbol("polish.usePolishGui");
+	        this.environment.removeVariable("polish.usePolishGui");
+		}
 
 		// set the temporary build path used for preprocessing, compilation, preverification, etc:
 		String deviceSpecificBuildPath = File.separatorChar + device.getVendorName() 
-		+ File.separatorChar + device.getName();
+				+ File.separatorChar + device.getName();
 		deviceSpecificBuildPath = deviceSpecificBuildPath.replace(' ', '_' );
 		String buildPath = this.buildSetting.getWorkDir().getAbsolutePath() + deviceSpecificBuildPath;
 		if (locale != null) {

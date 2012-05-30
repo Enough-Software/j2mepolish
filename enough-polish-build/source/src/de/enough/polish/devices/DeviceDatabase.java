@@ -371,7 +371,7 @@ public class DeviceDatabase {
 	        polishHomePath = polishHome.getAbsolutePath();
 	        
 	        deviceDatabase = (DeviceDatabase)instanceByPolishHome.get(polishHomePath);
-	        if(deviceDatabase != null) {
+	        if (deviceDatabase != null) {
 	            return deviceDatabase;
 	        }
         }

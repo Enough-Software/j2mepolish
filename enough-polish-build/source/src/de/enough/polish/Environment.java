@@ -218,7 +218,12 @@ public class Environment {
 	 */
 	public void addVariable(String name, String value) {
 		String previousValue = (String) this.variables.get(name);
+
 		if (previousValue != null) {
+			if (previousValue.equals(value)) {
+				// ignore
+				return;
+			}
 			// remove previous values from defined symbols first:
 			if ("true".equals(previousValue)) {
 				this.symbols.remove(name);
@@ -444,7 +449,7 @@ public class Environment {
 			String property = group.substring(2, group.length() - 1).trim(); // ==
 																				// property.name
 
-			String value = getProperty(property, needsToBeDefined);
+			String value = getProperty(property, needsToBeDefined, input);
 			if (value != null) {
 				// We had an endless loop when '${foo}' got replaced by
 				// '${foo}'.
@@ -504,14 +509,32 @@ public class Environment {
 	 * @return the found property or null when it is not found
 	 */
 	public String getProperty(String property, boolean needsToBeDefined) {
+		return getProperty(property, needsToBeDefined, null);
+	}
+	
+	/**
+	 * Retrieves the given property.
+	 * 
+	 * @param property
+	 *            the name of the property
+	 * @param needsToBeDefined
+	 *            true when an exception should be thrown when the property is
+	 *            not defined
+	 * @return the found property or null when it is not found
+	 */
+	public String getProperty(String property, boolean needsToBeDefined, String input) {
 		// System.out.println("getProperty for " + property);
 		if (property.indexOf('(') == -1) {
 			// the property does not contain a property-function:
 			String value = getVariable(property);
 			if (value == null) {
-				if (needsToBeDefined) {
-					throw new IllegalArgumentException("The property ["
-							+ property + "] is not defined.");
+				if (needsToBeDefined) 
+				{
+					String message = "The property [" + property + "] is not defined";
+					if (input != null) {
+						message += " in input [" + input + "]";
+					}
+					throw new IllegalArgumentException(message);
 				} else {
 					return null;
 				}
@@ -560,23 +583,29 @@ public class Environment {
 									functionName, this);
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new IllegalArgumentException(
-							"The property function ["
-									+ functionName
-									+ "] could not be loaded. Please register it in custom-extensions.xml.");
+					String message = "The property function [" + functionName + "] could not be loaded. Please register it in custom-extensions.xml.";
+					if (input != null) {
+						message += " Input is [" + input + "].";
+					}
+					throw new IllegalArgumentException(message);
 				}
 				if (function == null) {
-					throw new IllegalArgumentException(
-							"The property function ["
-									+ functionName
-									+ "] is not known. Please register it in custom-extensions.xml.");
+					String message = "The property function [" + functionName + "] is not known. Please register it in custom-extensions.xml.";
+					if (input != null) {
+						message += " Input is [" + input + "].";
+					}
+					throw new IllegalArgumentException(message);
 				}
 				// now ask the function whether it needs a defined property
 				// value:
 				if (propertyValue == null
-						&& function.needsDefinedPropertyValue()) {
-					throw new IllegalArgumentException("The property ["
-							+ propertyName + "] is not defined.");
+						&& function.needsDefinedPropertyValue()) 
+				{
+					String message = "The property [" + propertyName + "] is not defined";
+					if (input != null) {
+						message += " in input [" + input + "]";
+					}
+					throw new IllegalArgumentException(message);
 				}
 				try {
 					String replacement = function.process(propertyValue, parameters, this);

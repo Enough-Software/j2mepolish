@@ -161,7 +161,7 @@
 	
 	<capability>
 		<identifier>build.android.permissions</identifier>
-		<extension-mode>append</extension-mode>
+		<extension-mode>overwrite</extension-mode>
 		<required>no</required>
 		<description>The permissions for the Android device</description>
 		<type>list</type>

@@ -365,7 +365,7 @@
         <capability name="build.Android.Platform.Target" value="android-5" />
         <capability name="build.Android.Platform.Api" value="5" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 
     <platform>
@@ -377,7 +377,7 @@
         <capability name="build.Android.Platform.Target" value="android-6" />
         <capability name="build.Android.Platform.Api" value="6" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 
     <platform>
@@ -389,7 +389,7 @@
         <capability name="build.Android.Platform.Target" value="android-7" />
         <capability name="build.Android.Platform.Api" value="7" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 
     <platform>
@@ -401,7 +401,7 @@
         <capability name="build.Android.Platform.Target" value="android-8" />
         <capability name="build.Android.Platform.Api" value="8" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 	
 	<platform>
@@ -413,7 +413,7 @@
         <capability name="build.Android.Platform.Target" value="android-9" />
         <capability name="build.Android.Platform.Api" value="9" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
     
     <platform>
@@ -425,7 +425,7 @@
         <capability name="build.Android.Platform.Target" value="android-10" />
         <capability name="build.Android.Platform.Api" value="10" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
     
     <platform>
@@ -450,7 +450,7 @@
         <capability name="build.Android.Platform.Target" value="android-11" />
         <capability name="build.Android.Platform.Api" value="11" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 
 	<platform>
@@ -462,7 +462,7 @@
         <capability name="build.Android.Platform.Target" value="android-12" />
         <capability name="build.Android.Platform.Api" value="12" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 
 	<platform>
@@ -474,7 +474,7 @@
         <capability name="build.Android.Platform.Target" value="android-13" />
         <capability name="build.Android.Platform.Api" value="13" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
 		
 	<platform>
@@ -486,7 +486,7 @@
         <capability name="build.Android.Platform.Target" value="android-14" />
         <capability name="build.Android.Platform.Api" value="14" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
     
     <platform>
@@ -498,7 +498,7 @@
         <capability name="build.Android.Platform.Target" value="android-15" />
         <capability name="build.Android.Platform.Api" value="15" />
         <capability name="android1.1" value="" />
-        <capability name="build.android.permissions" value="BLUETOOTH,BLUETOOTH_ADMIN" />
+	    <capability name="build.android.permissions" value="RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_MOCK_LOCATION,ACCESS_LOCATION_EXTRA_COMMANDS,ACCESS_COARSE_LOCATION,RECEIVE_SMS,SEND_SMS,READ_CONTACTS,WRITE_CONTACTS,READ_PHONE_STATE,WAKE_LOCK,STATUS_BAR,INTERNET,VIBRATE,BLUETOOTH,BLUETOOTH_ADMIN" />
     </platform>
     
 				
