@@ -25,6 +25,7 @@ import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.DisplayMetrics;
@@ -51,6 +52,7 @@ import de.enough.polish.ui.Item;
 import de.enough.polish.ui.Screen;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.StyleSheet;
+import de.enough.polish.util.DeviceInfo;
 import de.enough.polish.util.IdentityArrayList;
 
 
@@ -114,10 +116,6 @@ public class MidletBridge extends Activity {
 
 	private boolean shuttingDown;
 	
-//	private boolean isSoftkeyboardOpen;
-
-	private int currentScreenYOffset;
-
 	private boolean suicideOnExit =
 		//#if polish.android.killProcessOnExit:defined
 			//#= ${polish.android.killProcessOnExit}
@@ -176,12 +174,13 @@ public class MidletBridge extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		CanvasBridge.DISPLAY_HEIGHT_PIXEL = metrics.heightPixels;
 		CanvasBridge.DISPLAY_WIDTH_PIXEL = metrics.widthPixels;
-		//System.out.println("METRICS: DESIRED=" + desiredWindowWidth + "x" + desiredWindowHeight + ", defaultDisplay=" + CanvasBridge.DISPLAY_WIDTH_PIXEL + "x" + CanvasBridge.DISPLAY_HEIGHT_PIXEL);
+		//System.out.println("METRICS: defaultDisplay=" + CanvasBridge.DISPLAY_WIDTH_PIXEL + "x" + CanvasBridge.DISPLAY_HEIGHT_PIXEL);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
-		setSystemProperty("Cell-Id","-1");
-		setSystemProperty("Cell-lac","-1");
-		setSystemProperty("SignalStrength","0");
+		setSystemProperty("microedition.platform", DeviceInfo.getPlatformName() );
+		setSystemProperty("Cell-Id", "-1");
+		setSystemProperty("Cell-lac", "-1");
+		setSystemProperty("SignalStrength", "0");
 		
 		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		PhoneStateListener listener = new PhoneStateListener() {
@@ -204,14 +203,19 @@ public class MidletBridge extends Activity {
 			}
 
 			@Override
-			public void onSignalStrengthChanged(int asu) {
-				String asuString = Integer.toString(asu);
+			public void onSignalStrengthsChanged(SignalStrength asu) {
 				//#debug
-				System.out.println("SignalStrength (asu) is '"+asu+"'");
-				setSystemProperty("SignalStrength",asuString);
+				System.out.println("SignalStrengths is '" + asu + "'");
+				setSystemProperty("SignalStrength", asu.toString());
+				setSystemProperty("SignalStrengths", asu.toString());
 			}
 		};
-		int events = PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTH;
+		int events = 0;
+		//#if polish.build.android.permissions.ACCESS_COARSE_LOCATION
+			events |= PhoneStateListener.LISTEN_CELL_LOCATION;
+		//#endif
+		events |= PhoneStateListener.LISTEN_SIGNAL_STRENGTHS;
+		
 		telephonyManager.listen(listener, events);
 		String subscriberId = telephonyManager.getSubscriberId();
 		if(subscriberId == null) {
@@ -252,12 +256,13 @@ public class MidletBridge extends Activity {
 			//#else
 				//#= midlet = (MIDlet) Class.forName("${polish.classes.midlet-1}").newInstance();		
 			//#endif
+			System.out.println("loaded MIDlet " + midlet);
 			midlet._setMidletBridge(this);
 			//#if true
 				//# display = Display.getDisplay(midlet);
 			//#endif
 		} catch (Exception e) {
-			System.err.println("While loading MIDlet: " + e );
+			System.err.println("Error while loading MIDlet: " + e );
 			e.printStackTrace();
 			notifyDestroyed();
 			return;
@@ -482,8 +487,9 @@ public class MidletBridge extends Activity {
 			}
 		}
 		if (this.suicideOnExit) {
-			int myPid = Process.myPid();
-			Process.killProcess(myPid);
+			System.exit(0);
+//			int myPid = Process.myPid();
+//			Process.killProcess(myPid);
 		}
 	}
 
