@@ -298,15 +298,23 @@ extends ItemView
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ItemView#initMargin(de.enough.polish.ui.Style, int)
 	 */
-	protected void initMargin(Style style, int availWidth) {
-		this.parentContainer.initMargin(style, availWidth);
+	protected void initMargin(Style style, int availWidth, int availHeight) {
+		if (this.parentContainer != null) {
+			this.parentContainer.initMargin(style, availWidth, availHeight);
+		} else {
+			super.initMargin(style, availWidth, availHeight);
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ItemView#initPadding(de.enough.polish.ui.Style, int)
 	 */
-	protected void initPadding(Style style, int availWidth) {
-		this.parentContainer.initPadding(style, availWidth);
+	protected void initPadding(Style style, int availWidth, int availHeight) {
+		if (this.parentContainer != null) {
+			this.parentContainer.initPadding(style, availWidth, availHeight);
+		} else {
+			super.initPadding(style, availWidth, availHeight);
+		}
 	}
 
 	/**

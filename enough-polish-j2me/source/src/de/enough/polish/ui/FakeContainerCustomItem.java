@@ -1366,25 +1366,6 @@ public class FakeContainerCustomItem extends FakeCustomItem
 		}
 	}
 	
-	protected void initLayout(Style style, int availWidth) {
-		//#ifdef polish.css.view-type
-		if (this.containerView != null) {
-			this.containerView.initPadding(style, availWidth);
-		} else
-		//#endif
-		{
-			initPadding(style, availWidth);
-		}
-		
-		//#ifdef polish.css.view-type
-		if (this.containerView != null) {
-			this.containerView.initMargin(style, availWidth);
-		} else
-		//#endif
-		{
-			initMargin(style, availWidth);
-		}
-	}
 	
 	/**
 	 * Retrieves the synchronization lock for this container.

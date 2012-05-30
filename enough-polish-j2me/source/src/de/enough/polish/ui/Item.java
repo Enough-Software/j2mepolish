@@ -3303,7 +3303,7 @@ public abstract class Item implements UiElement, Animatable
 		
 		Style myStyle = this.style;
 		if (myStyle != null) {
-			initLayout(myStyle, availWidth);
+			initLayout(myStyle, availWidth, availHeight);
 		}
 		
 		int labelWidth = 0;
@@ -3763,23 +3763,16 @@ public abstract class Item implements UiElement, Animatable
 	 * @param layoutStyle the style of this item
 	 * @param availWidth the available width in case paddings or margins include relative values
 	 */
-	protected void initLayout(Style layoutStyle, int availWidth) {
+	protected void initLayout(Style layoutStyle, int availWidth, int availHeight) {
 		//#ifdef polish.css.view-type
 		if (this.view != null) {
-			this.view.initPadding(layoutStyle, availWidth);
+			this.view.initPadding(layoutStyle, availWidth, availHeight);
+			this.view.initMargin(layoutStyle, availWidth, availHeight);
 		} else
 		//#endif
 		{
-			initPadding(layoutStyle, availWidth);
-		}
-	
-		//#ifdef polish.css.view-type
-		if (this.view != null) {
-			this.view.initMargin(layoutStyle, availWidth);
-		} else
-		//#endif
-		{
-			initMargin(layoutStyle, availWidth);
+			initPadding(layoutStyle, availWidth, availHeight);
+			initMargin(layoutStyle, availWidth, availHeight);
 		}
 	}
 
@@ -3789,11 +3782,15 @@ public abstract class Item implements UiElement, Animatable
 	 * @param itemStyle the style
 	 * @param availWidth the available width
 	 */
-	protected void initMargin(Style itemStyle, int availWidth) {
+	protected void initMargin(Style itemStyle, int availWidth, int availHeight) {
+		int verticalBase = availWidth;
+		//#if polish.Item.useHeightInsteadOfWidth
+			verticalBase = availHeight;
+		//#endif
 		this.marginLeft = itemStyle.getMarginLeft(availWidth);
 		this.marginRight = itemStyle.getMarginRight(availWidth);
-		this.marginTop = itemStyle.getMarginTop(availWidth);
-		this.marginBottom = itemStyle.getMarginBottom(availWidth);
+		this.marginTop = itemStyle.getMarginTop(verticalBase);
+		this.marginBottom = itemStyle.getMarginBottom(verticalBase);
 	}
 
 	/**
@@ -3802,12 +3799,16 @@ public abstract class Item implements UiElement, Animatable
 	 * @param itemStyle the style
 	 * @param availWidth the available width
 	 */
-	protected void initPadding(Style itemStyle, int availWidth) {
+	protected void initPadding(Style itemStyle, int availWidth, int availHeight) {
+		int verticalBase = availWidth;
+		//#if polish.Item.useHeightInsteadOfWidth
+			verticalBase = availHeight;
+		//#endif
 		this.paddingLeft = itemStyle.getPaddingLeft(availWidth);
 		this.paddingRight = itemStyle.getPaddingRight(availWidth);
-		this.paddingTop = itemStyle.getPaddingTop(availWidth);
-		this.paddingBottom = itemStyle.getPaddingBottom(availWidth);
-		this.paddingVertical = itemStyle.getPaddingVertical(availWidth);
+		this.paddingTop = itemStyle.getPaddingTop(verticalBase);
+		this.paddingBottom = itemStyle.getPaddingBottom(verticalBase);
+		this.paddingVertical = itemStyle.getPaddingVertical(verticalBase);
 		this.paddingHorizontal = itemStyle.getPaddingHorizontal(availWidth);
 	}
 	

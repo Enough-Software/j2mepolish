@@ -1419,25 +1419,20 @@ public class Container extends Item {
 		}
 	}
 
-	protected void initLayout(Style style, int availWidth) {
-		//#ifdef polish.css.view-type
+	//#if tmp.supportViewType
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#initLayout(de.enough.polish.ui.Style, int, int)
+	 */
+	protected void initLayout(Style layoutStyle, int availWidth, int availHeight) {
 		if (this.containerView != null) {
-			this.containerView.initPadding(style, availWidth);
-		} else
-		//#endif
-		{
-			initPadding(style, availWidth);
-		}
-		
-		//#ifdef polish.css.view-type
-		if (this.containerView != null) {
-			this.containerView.initMargin(style, availWidth);
-		} else
-		//#endif
-		{
-			initMargin(style, availWidth);
+			this.containerView.initPadding(layoutStyle, availWidth, availHeight);
+			this.containerView.initMargin(layoutStyle, availWidth, availHeight);
+		} else {
+			super.initLayout(layoutStyle, availWidth, availHeight);
 		}
 	}
+	//#endif
 	
 	/**
 	 * Retrieves the synchronization lock for this container.

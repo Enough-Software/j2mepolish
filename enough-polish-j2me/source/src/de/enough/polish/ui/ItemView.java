@@ -34,11 +34,7 @@ import de.enough.polish.io.Serializable;
 /**
  * <p>An item view can take over the rendering of an item.</p>
  *
- * <p>Copyright Enough Software 2006 - 2009</p>
- * <pre>
- * history
- *        Nov 27, 2006 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2006 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public abstract class ItemView implements Serializable{
@@ -61,8 +57,8 @@ public abstract class ItemView implements Serializable{
 	 * @param style the style
 	 * @param availWidth the available width
 	 */
-	protected void initMargin(Style style, int availWidth) {
-		this.parentItem.initMargin(style, availWidth);
+	protected void initMargin(Style style, int availWidth, int availHeight) {
+		this.parentItem.initMargin(style, availWidth, availHeight);
 	}
 	
 	/**
@@ -71,8 +67,8 @@ public abstract class ItemView implements Serializable{
 	 * @param style the style
 	 * @param availWidth the available width
 	 */
-	protected void initPadding(Style style, int availWidth) {
-		this.parentItem.initPadding(style, availWidth);
+	protected void initPadding(Style style, int availWidth, int availHeight) {
+		this.parentItem.initPadding(style, availWidth, availHeight);
 	}
 	
 	/**

@@ -3175,7 +3175,7 @@ public abstract class FakeCustomItem extends javax.microedition.lcdui.CustomItem
 		
 		Style myStyle = this.style;
 		if (myStyle != null) {
-			initLayout(myStyle, availWidth);
+			initLayout(myStyle, availWidth, availHeight);
 		}
 		
 		int labelWidth = 0;
@@ -3536,53 +3536,60 @@ public abstract class FakeCustomItem extends javax.microedition.lcdui.CustomItem
 	}
 	//#endif
 
-	protected void initLayout(Style style, int availWidth) {
+	/**
+	 * Initializes paddings and margins.
+	 * @param layoutStyle the style of this item
+	 * @param availWidth the available width in case paddings or margins include relative values
+	 */
+	protected void initLayout(Style layoutStyle, int availWidth, int availHeight) {
 		//#ifdef polish.css.view-type
 		if (this.view != null) {
-			this.view.initPadding(style, availWidth);
+			this.view.initPadding(layoutStyle, availWidth, availHeight);
 		} else
 		//#endif
-	{
-			initPadding(style, availWidth);
+		{
+			initPadding(layoutStyle, availWidth, availHeight);
 		}
 	
 		//#ifdef polish.css.view-type
 		if (this.view != null) {
-			this.view.initMargin(style, availWidth);
+			this.view.initMargin(layoutStyle, availWidth, availHeight);
 		} else
 		//#endif
-	{
-			initMargin(style, availWidth);
+		{
+			initMargin(layoutStyle, availWidth, availHeight);
 		}
 	}
 
 	/**
 	 * Initializes the margin of this item
 	 * Subclasses can override this (e.g. the container embedded in a screen)
-	 * @param style the style
+	 * @param itemStyle the style
 	 * @param availWidth the available width
 	 */
-	protected void initMargin(Style style, int availWidth) {
-		this.marginLeft = style.getMarginLeft(availWidth);
-		this.marginRight = style.getMarginRight(availWidth);
-		this.marginTop = style.getMarginTop(availWidth);
-		this.marginBottom = style.getMarginBottom(availWidth);
+	protected void initMargin(Style itemStyle, int availWidth, int availHeight) {
+		this.marginLeft = itemStyle.getMarginLeft(availWidth);
+		this.marginRight = itemStyle.getMarginRight(availWidth);
+		this.marginTop = itemStyle.getMarginTop(availWidth);
+		this.marginBottom = itemStyle.getMarginBottom(availWidth);
 	}
 
 	/**
 	 * Initializes the padding of this item
 	 * Subclasses can override this (e.g. the container embedded in a screen)
-	 * @param style the style
+	 * @param itemStyle the style
 	 * @param availWidth the available width
 	 */
-	protected void initPadding(Style style, int availWidth) {
-		this.paddingLeft = style.getPaddingLeft(availWidth);
-		this.paddingRight = style.getPaddingRight(availWidth);
-		this.paddingTop = style.getPaddingTop(availWidth);
-		this.paddingBottom = style.getPaddingBottom(availWidth);
-		this.paddingVertical = style.getPaddingVertical(availWidth);
-		this.paddingHorizontal = style.getPaddingHorizontal(availWidth);
-		}
+	protected void initPadding(Style itemStyle, int availWidth, int availHeight) {
+		//#if polish.Item.useHeightInsteadOfWidth
+		//#endif
+		this.paddingLeft = itemStyle.getPaddingLeft(availWidth);
+		this.paddingRight = itemStyle.getPaddingRight(availWidth);
+		this.paddingTop = itemStyle.getPaddingTop(availWidth);
+		this.paddingBottom = itemStyle.getPaddingBottom(availWidth);
+		this.paddingVertical = itemStyle.getPaddingVertical(availWidth);
+		this.paddingHorizontal = itemStyle.getPaddingHorizontal(availWidth);
+	}
 
 	/**
 	 * Sets the content width of this item.
