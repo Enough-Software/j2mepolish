@@ -176,27 +176,26 @@ extends Browser
 				if (this.htmlTagHandler.textStyle != null) {
 					stringItem = new StringItem(null, str, this.htmlTagHandler.textStyle);
 				} 
-				else 
-					if (this.htmlTagHandler.textBold && this.htmlTagHandler.textItalic)
-					{
-						//#style browserTextBoldItalic
-						stringItem = new StringItem(null, str);
-					}
-					else if (this.htmlTagHandler.textBold)
-					{
-						//#style browserTextBold
-						stringItem = new StringItem(null, str);
-					}
-					else if (this.htmlTagHandler.textItalic)
-					{
-						//#style browserTextItalic
-						stringItem = new StringItem(null, str);
-					}
-					else
-					{
-						//#style browserText
-						stringItem = new StringItem(null, str);
-					}
+				else if (this.htmlTagHandler.textBold && this.htmlTagHandler.textItalic)
+				{
+					//#style browserTextBoldItalic
+					stringItem = new StringItem(null, str);
+				}
+				else if (this.htmlTagHandler.textBold)
+				{
+					//#style browserTextBold
+					stringItem = new StringItem(null, str);
+				}
+				else if (this.htmlTagHandler.textItalic)
+				{
+					//#style browserTextItalic
+					stringItem = new StringItem(null, str);
+				}
+				else
+				{
+					//#style browserText
+					stringItem = new StringItem(null, str);
+				}
 				add(stringItem);
 			}
 		}
