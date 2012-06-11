@@ -95,6 +95,7 @@ extends Screen
 	 * Creates a new screen for taking screenshots.
 	 *
 	 * @param title the title of the screen
+	 * @throws IllegalStateException when capturing is not supported on this device
 	 */
 	public SnapshotScreen(String title) {
 		this(title, null);
@@ -106,6 +107,7 @@ extends Screen
 	 *
 	 * @param title the title of the screen
 	 * @param style the style
+	 * @throws IllegalStateException when capturing is not supported on this device
 	 */
 	public SnapshotScreen(String title, Style style ) {
 		super(title, true, style );
@@ -113,9 +115,12 @@ extends Screen
 		//#style snapshotitem?
 		this.videoContainer = new VideoContainer(adjustSizeAutomatically);
 		this.captureSource = CaptureSource.CAPTURE;
+		if (this.captureSource == null) {
+			throw new IllegalStateException("capturing not supported");
+		}
 		this.videoContainer.setSource(this.captureSource);
 		this.container.add(this.videoContainer);
-		if (style.getLayout() == 0) {
+		if (style != null && style.getLayout() == 0) {
 			style.setLayout( Item.LAYOUT_CENTER | Item.LAYOUT_VCENTER );
 		}
 	}

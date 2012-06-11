@@ -35,7 +35,7 @@ public class VideoSource implements Serializable {
 		} catch (MediaException e) {
 			CAPTURE = null;
 			//#debug error
-			System.out.println("capture is not supported");
+			System.out.println("capture is not supported" + e);
 		}
 	}
 

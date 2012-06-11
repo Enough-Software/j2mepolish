@@ -428,9 +428,13 @@ public class VideoContainer extends Container implements Runnable, PlayerListene
 	 * has already been set before, close() is called on the current, 
 	 * the state is reset and the new one set as the source.
 	 * @param source the VideoSource to use
+	 * @throws IllegalArgumentException when source is null
 	 */
 	public synchronized void setSource(VideoSource source)
 	{
+		if (source == null) {
+			throw new IllegalArgumentException("source must not be null");
+		}
 		setState(STATE_NOT_PREPARED);
 		this.sourceToClear = this.source;
 		this.source = source;
