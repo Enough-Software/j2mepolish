@@ -1783,8 +1783,10 @@ public class MenuBar extends Item {
 				if ( isSelectKeySelected ) {
 					//System.out.println("selecting command from opened menu");
 					setOpen( false );
-					Command command = (Command) this.commandsList.get( this.commandsContainer.focusedIndex );
-					this.screen.callCommandListener(command);
+					if (this.commandsContainer.focusedIndex != -1) {
+						Command command = (Command) this.commandsList.get( this.commandsContainer.focusedIndex );
+						this.screen.callCommandListener(command);
+					}
 				} else if ( isCloseKeySelected ) {
 					//System.out.println("closing menu");
 					setOpen( false );

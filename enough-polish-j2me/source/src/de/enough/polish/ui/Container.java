@@ -1361,7 +1361,12 @@ public class Container extends Item {
 			int newYOffset = verticalSpace - (y + height + yTopAdjust);
 			// check if the top of the area is still visible when scrolling downwards:
 			if ( !isUpwards && y + newYOffset < 0) {
+				//System.out.println("Adjusting for top of the area, newOffset=" + (-y));
 				newYOffset = -y;
+				if (newYOffset > currentYOffset) {
+					// okay, this seems to be an item that is larger than one page
+					newYOffset = currentYOffset - ((verticalSpace * 2 ) / 3);
+				}
 			}
 			if (isDownwards) {
 				// check if we scroll down more than one page:
@@ -1369,6 +1374,7 @@ public class Container extends Item {
 				 					Math.min(Math.abs(currentYOffset), Math.abs(newYOffset));
 				if (difference > verticalSpace && !force ) {
 					newYOffset = currentYOffset - verticalSpace;
+					//System.out.println("limit to one page, newYOffset=" + newYOffset);
 				}
 			}
 			currentYOffset = newYOffset;
@@ -1379,6 +1385,7 @@ public class Container extends Item {
 			int newYOffset = -y;
 			// check if the bottom of the area is still visible when scrolling upwards:
 			if (isUpwards && newYOffset + y + height > verticalSpace) { //  && height < verticalSpace) {
+				//System.out.println("scrolling larger than a page....");
 				//2008-12-10: scrolling upwards resulted in too large jumps when we have big items, so
 				// adjust the offset in any case, not only when height is smaller than the vertical space (height < verticalSpace):
 				newYOffset = -(y + height) + verticalSpace;
@@ -1389,6 +1396,7 @@ public class Container extends Item {
 			
 			if (difference > verticalSpace && !force ) {
 				newYOffset = currentYOffset + verticalSpace;
+				//System.out.println("difference too large - Adjusting to " + newYOffset);
 			}
 			currentYOffset = newYOffset;
 		} else {

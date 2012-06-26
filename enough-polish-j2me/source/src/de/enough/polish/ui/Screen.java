@@ -4940,6 +4940,8 @@ implements UiElement, Animatable
 					if (this.menuBar.handlePointerDragged(x - this.menuBar.relativeX, y - this.menuBar.relativeY, repaintRegion)) {
 						repaint(repaintRegion);
 						return true;
+					} else if (y >= this.menuBar.relativeY) {
+						return false;
 					}
 				//#else
 					// check if one of the command buttons has been pressed:
