@@ -428,6 +428,9 @@ public class TableItem
 	 * @see de.enough.polish.ui.Container#getChildWidth(Item)
 	 */
 	protected int getChildWidth( Item item ) {
+		if (item == this.label) {
+			return super.getChildWidth(item);
+		}
 		boolean isExpand = false;
 		int previousWidth = 0;
 		if (item.isLayoutExpand) {
