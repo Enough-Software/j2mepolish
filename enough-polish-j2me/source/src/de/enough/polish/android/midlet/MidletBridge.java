@@ -133,6 +133,7 @@ public class MidletBridge extends Activity {
 	 * Creates a new MIDlet Bridge
 	 */
 	public MidletBridge() {
+		System.out.println("Creating new bridge, instance=" + instance);
 		if (instance == null) {
 			instance = this;
 		}
@@ -776,19 +777,19 @@ public class MidletBridge extends Activity {
 //		return isActive;
 		return this.isSoftKeyboardShown;
 	}
-
 	
-	private Screen getCurrentScreen() {
-		Display display = Display.getInstance();
-		if (display == null) {
-			return null;
-		}
-		Displayable disp = display.getNextOrCurrent();
-		if (disp == null || (!(disp instanceof Screen))) {
-			return null;
-		}
-		return (Screen) disp;
-	}
+	
+//	private Screen getCurrentScreen() {
+//		Display display = Display.getInstance();
+//		if (display == null) {
+//			return null;
+//		}
+//		Displayable disp = display.getNextOrCurrent();
+//		if (disp == null || (!(disp instanceof Screen))) {
+//			return null;
+//		}
+//		return (Screen) disp;
+//	}
 	
 //	private void onSoftKeyboardOpened() {
 //		Screen screen = getCurrentScreen();
@@ -1032,5 +1033,12 @@ public class MidletBridge extends Activity {
 		return instance;
 	}
 
+	public void moveTaskToFront() {
+		Context context = this;
+		Intent intent = new Intent(context, getClass() );
+		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		context.startActivity(intent);
+	}
+	
 
 }
