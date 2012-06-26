@@ -45,6 +45,8 @@ extends View
 implements OnTouchListener //, OnKeyListener
 {
 	
+	static int idCounter = 123;
+	
 	//#if polish.useFullScreen
 		//#define tmp.fullScreen
 	//#endif
@@ -53,6 +55,7 @@ implements OnTouchListener //, OnKeyListener
 	private Canvas lcduiCanvas;
 	private DisplayUtil util;
 	private Graphics graphics;
+	private int viewId;
 	private int availableWidth = DISPLAY_HEIGHT_PIXEL;
 	private int availableHeight = DISPLAY_WIDTH_PIXEL;
 	private static CanvasBridge current;
@@ -64,6 +67,8 @@ implements OnTouchListener //, OnKeyListener
 	 */
 	public CanvasBridge(Context context) {
 		super(context);
+		idCounter++;
+		this.viewId = idCounter;
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 	}
@@ -307,6 +312,11 @@ implements OnTouchListener //, OnKeyListener
 
 	public static CanvasBridge current() {
 		return current;
+	}
+	
+	@Override
+	public int getId() {
+		return this.viewId;
 	}
 
 

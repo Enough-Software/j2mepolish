@@ -1448,6 +1448,11 @@ implements NativeDisplay //, OnTouchListener
 	            }
 	        }
 	    }
+	    
+	    @Override
+	    public int getId() {
+	    	return 1234;
+	    }
 
 	
 //		    public void addView(View view) {
