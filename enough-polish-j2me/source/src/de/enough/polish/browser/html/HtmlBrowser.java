@@ -171,7 +171,7 @@ extends Browser
 			while (st.hasMoreTokens())
 			{
 				String str = st.nextToken();
-				str = TextUtil.replace(str, "&nbsp;", " ");
+				str = TextUtil.replace(str, "&nbsp;", " ") + " ";
 				StringItem stringItem = null;
 				if (this.htmlTagHandler.textStyle != null) {
 					stringItem = new StringItem(null, str, this.htmlTagHandler.textStyle);
