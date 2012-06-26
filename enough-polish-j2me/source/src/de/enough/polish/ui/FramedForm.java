@@ -790,7 +790,8 @@ implements CycleListener
 				} else {
 					if ((this.currentlyActiveContainer != this.container) && (!this.container.isInteractive())) {
 						// this allows to scroll the content container even when it is not interactive:
-						return this.container.handleKeyPressed(keyCode, gameAction);
+						handled = this.container.handleKeyPressed(keyCode, gameAction);
+						return handled;
 					}
 					return false;
 				}
@@ -1151,6 +1152,9 @@ implements CycleListener
 		if ( activeFrame != null ) {
 			handled = activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
 		} 
+		if (!handled && (activeFrame != this.container) && !this.container.isInteractive()) {
+			handled = this.container.handlePointerDragged(x - this.container.relativeX, y - this.container.relativeY, repaintRegion);
+		}
 		return handled;
 	}
 	//#endif
@@ -1533,6 +1537,8 @@ implements CycleListener
 			if (newFrame != null && newFrame != this.currentlyActiveContainer) {
 				this.isCycled = true;
 				setActiveFrame(newFrame, false, gameAction );
+				return false;
+			} else if ((direction == CycleListener.DIRECTION_TOP_TO_BOTTOM) && (this.currentlyActiveContainer != this.container) && (this.container.getScrollYOffset() != 0)) {
 				return false;
 			}
 		}
