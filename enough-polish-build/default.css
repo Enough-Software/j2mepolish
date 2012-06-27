@@ -68,33 +68,39 @@ centercommand {
 
 .browserText {
 	inherit: false;
+	padding: 0px;
 }
 
 .browserTextBold {
 	inherit: false;
 	font-color: black;
 	font-style: bold;
+	padding: 0px;
 }
 
 .browserTextItalic {
 	inherit: false;
 	font-style: italic;
+	padding: 0px;
 }
 
 
 .browserTextBoldItalic {
 	inherit: false;
 	font-style: bold | italic;
+	padding: 0px;
 }
 
 .browserTextCode {
 	inherit: false;
 	font-face: monospace;
+	padding: 0px;
 }
 
 
 .browserLink {
 	inherit: false;
+	padding: 0px;
 	padding-bottom: 1;
 	padding-right: 1;
 	font-color: blue;
@@ -104,6 +110,7 @@ centercommand {
 
 .browserLinkFoc {
 	inherit: false;
+	padding: 0px;
 	padding-bottom: 1;
 	padding-right: 1;
 	font-color: red;
@@ -112,7 +119,7 @@ centercommand {
 
 .browserInput extends .browserText {
 	inherit: false;
-	padding: 2;
+	padding: 2px;
 	layout: expand | left;
 	focused-style: browserInputFoc;
 	border {
@@ -123,7 +130,7 @@ centercommand {
 }
 
 .browserInputFoc extends .browserInput {
-	padding: 1;
+	padding: 1px;
 	inherit: false;
 	layout: expand | left;
 	border {
