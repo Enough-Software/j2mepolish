@@ -1028,11 +1028,14 @@ public class MidletBridge extends Activity {
 		
 	}
 
-
 	public static MidletBridge getInstance() {
 		return instance;
 	}
 
+	/**
+	 * Moves this activity to the front.
+	 * The intent has following flags: (Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP)
+	 */
 	public void moveTaskToFront() {
 		Context context = this;
 		Intent intent = new Intent(context, getClass() );
