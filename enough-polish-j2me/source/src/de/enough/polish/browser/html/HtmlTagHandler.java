@@ -797,7 +797,9 @@ public class HtmlTagHandler
 									this.currentRadioChoiceGroup = choiceGroup;
 								}								
 							}
-							choiceGroup.setAttribute(ATTR_NAME, name);
+							if (name != null) {
+								choiceGroup.setAttribute(ATTR_NAME, name);
+							}
 							String styleName = (String) attributeMap.get("groupclass");
 							if (styleName != null) {
 								Style groupStyle = StyleSheet.getStyle(styleName);
