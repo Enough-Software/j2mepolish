@@ -1393,10 +1393,16 @@ public abstract class BaseScreen
                    && this.currentItem != null) 
            { 
         	   try {
-        		   if (this.currentItem._bbField instanceof AccessibleField) {
+        		   Field bbField = this.currentItem._bbField; 
+        		   if (bbField instanceof AccessibleField) {
         			   processed = ((AccessibleField)this.currentItem._bbField).navigationMovement(dx, dy, status, time);                     
+                       superImplementationCalled = true;
+        		   } else if (bbField != null) {
+        			   processed = super.navigationMovement(dx, dy, status, time);                     
+                       superImplementationCalled = true;
         		   } else if ((status & KeypadListener.STATUS_ALT) == KeypadListener.STATUS_ALT) {
         			   processed = super.navigationMovement(dx, dy, status, time);                     
+                       superImplementationCalled = true;
         		   }
                    if (processed) {
                 	   if (focusChangeDetected(screen)
@@ -1416,7 +1422,6 @@ public abstract class BaseScreen
                 		   return true;
                 	   }
                    }
-                   superImplementationCalled = true;
         	   } catch (Exception e) {
         		   //#debug error
         		   System.out.println("super.navigationMovement(" + dx+ ", " + dy+ ", " + status+ ", " + time + ") failed" + e );
