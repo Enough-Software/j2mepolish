@@ -492,13 +492,13 @@ public class Image
      */
     public int getWidth()
     {
-        if ( image == null )
+        if ( this.image == null )
         {
             return -1;
         }
         else
         {
-            return image.getWidth();
+            return this.image.getWidth();
         }
     }
 
@@ -509,13 +509,13 @@ public class Image
      */
     public int getHeight()
     {
-        if ( image == null )
+        if ( this.image == null )
         {
             return -1;
         }
         else
         {
-            return image.getHeight();
+            return this.image.getHeight();
         }
     }
 
@@ -630,9 +630,9 @@ public class Image
      */
     public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height)
     {
-        if ( image != null )
+        if ( this.image != null )
         {
-            image.getRGB(rgbData, offset, scanlength, x, y, width, height);
+            this.image.getRGB(rgbData, offset, scanlength, x, y, width, height);
         }
     }
     //#endif
@@ -667,8 +667,14 @@ public class Image
      */
     public int[] getRgbData ()
     {
-        int data[] = new int [ image.getWidth() * image.getHeight() ];
-        image.getRGB(data, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight() );
+		//#if polish.build.classes.NativeImage:defined
+			//#= ${polish.build.classes.NativeImage}
+		//#else
+			javax.microedition.lcdui.Image
+		//#endif
+			img = this.image;
+		int data[] = new int [ img.getWidth() * img.getHeight() ];
+        img.getRGB(data, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight() );
         return data;
     }
     //#endif
