@@ -182,7 +182,7 @@ implements VolumeControl, MediaPlayer.OnCompletionListener
 			if (loop == -1) {
 				// just start again:
 				mp.start();
-			} else if (loop > 0){
+			} else if (loop > 1){
 				this.currentLoop--;
 				mp.start();
 			} else {
