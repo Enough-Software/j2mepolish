@@ -328,6 +328,7 @@ public class SqlDao {
 	 * @throws RecordStoreException
 	 */
 	public synchronized void setRecord(long recordStorePk, int recordId, byte[] data) throws RecordStoreException {
+		byte[] oldData = getRecord(recordStorePk,recordId);
 		ContentValues values = new ContentValues();
 		values.put(COLUMNNAME_RECORD_DATA, data);
 		try {
@@ -339,7 +340,6 @@ public class SqlDao {
 			throw new RecordStoreException(e.toString());
 		}
 		RecordStore recordStore = getRecordStore(recordStorePk);
-		byte[] oldData = getRecord(recordStorePk,recordId);
 		values.clear();
 		int size = recordStore.getSize() + - oldData.length + data.length;
 		int version = recordStore.getVersion() + 1;
