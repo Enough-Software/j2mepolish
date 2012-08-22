@@ -1701,5 +1701,21 @@ public class Graphics
 		return color;
 		//TODO implement getDisplayColor
 	}
+	
+	/**
+	 * Retrieves access to the native Android canvas
+	 * @return the canvas used for drawing
+	 */
+	public Canvas getCanvas() {
+		return this.canvas;
+	}
+	
+	/**
+	 * Retrieves access to the the native Android paint
+	 * @return the paint used for drawing
+	 */
+	public Paint getPaint(){
+		return this.paint;
+	}
 
 }
