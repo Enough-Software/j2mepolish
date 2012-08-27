@@ -2,7 +2,6 @@ package de.enough.polish.facebook;
 
 import java.util.Hashtable;
 
-import de.enough.polish.authentication.AuthenticationItem;
 import de.enough.polish.authentication.AuthenticationListener;
 import de.enough.polish.authentication.AuthenticationProcess;
 import de.enough.polish.io.CookieManager;
@@ -14,7 +13,7 @@ import de.enough.polish.util.TextUtil;
  * Implements the Facebook OAuth 2.0 based authentication process.
  * 
  * @author Robert Virkus, j2mepolish@enough.de
- * @see AuthenticationItem
+ * @see de.enough.polish.authentication.AuthenticationItem
  * @see AuthenticationProcess
  */
 public abstract class BaseFacebookAuthenticationProcess implements AuthenticationProcess {

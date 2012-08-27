@@ -1,4 +1,3 @@
-//#condition polish.usePolishGui
 package de.enough.polish.browser.protocols;
 
 import de.enough.polish.io.CookieManager;
