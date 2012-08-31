@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Process;
 
 /**
@@ -695,10 +696,14 @@ public class PushRegistry extends BroadcastReceiver
 			//#endif
 			//#debug
 			System.out.println("loaded activity class " + activityClass.getName());
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "j2mep");
+			wl.acquire();
 			Intent newIntent = new Intent(context, activityClass);
 			//newIntent.putExtra(EXTRA_MIDLET_NAME, midletClassName);
 			newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(newIntent);
+			wl.release();
 		} catch (Exception e) {
 			//#debug error
 			System.out.println("Unable to start activity: " + e );
