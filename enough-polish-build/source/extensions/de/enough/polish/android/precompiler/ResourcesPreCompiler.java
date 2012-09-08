@@ -48,6 +48,7 @@ import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.ant.Jad;
 import de.enough.polish.ant.android.ArgumentHelper;
+import de.enough.polish.ant.build.Midlet;
 import de.enough.polish.descriptor.DescriptorCreator;
 import de.enough.polish.manifest.ManifestCreator;
 import de.enough.polish.precompile.PreCompiler;
@@ -172,7 +173,8 @@ public class ResourcesPreCompiler extends PreCompiler {
 		}
 		rootElement.setAttribute("versionName", versionName, namespace);
 		
-		String midletName = env.getBuildSetting().getMidlets(env)[0].name;
+		Midlet midlet = env.getBuildSetting().getMidlets(env)[0];
+		String midletName = midlet.name;
 
 		Element applicationElement = rootElement.getChild("application");
 		applicationElement.setAttribute("label",midletName, namespace);

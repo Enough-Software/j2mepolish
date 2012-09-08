@@ -44,7 +44,7 @@ import de.enough.polish.util.StringUtil;
  * <p>Creates the stub directories for the activity and
  * copies the source files to the stubs</p>
  *
- * <p>Copyright Enough Software 2008 - 2011</p>
+ * <p>Copyright Enough Software 2008 - 2012</p>
  * @author Andre Schmidt, j2mepolish@enough.de
  */
 public class ActivityPreCompiler extends PreCompiler
@@ -135,7 +135,7 @@ implements OutputFilter
 			packageName = midlet.substring(0, packageEnd);
 			className = midlet.substring( packageEnd + 1 );
 		}
-		String[] code = new String[]{
+		String[] code = new String[] {
 			"package " + packageName + ";",
 			"public class " + className + " extends de.enough.polish.android.midlet.MidletBridge {",
 			"	public " + className + "(){ super(); }",
