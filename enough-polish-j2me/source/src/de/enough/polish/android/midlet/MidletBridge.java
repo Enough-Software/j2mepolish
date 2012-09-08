@@ -1036,12 +1036,30 @@ public class MidletBridge extends Activity {
 	 * Moves this activity to the front.
 	 * The intent has following flags: (Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP)
 	 */
-	public void moveTaskToFront() {
-		Context context = this;
-		Intent intent = new Intent(context, getClass() );
-		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		context.startActivity(intent);
+	public void bringActivtyToFront() {
+		//#debug
+		System.out.println("bringActivityToFront()");
+		try {
+			Context context = this;
+			Intent intent = new Intent( context, getClass() );
+			intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			context.startActivity(intent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void bringActivityToBack() {
+		//#debug
+		System.out.println("bringActivityToBack()");
+		try {
+			Intent startMain = new Intent(Intent.ACTION_MAIN);
+			startMain.addCategory(Intent.CATEGORY_HOME);
+			startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(startMain);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-
 }

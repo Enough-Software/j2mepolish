@@ -212,9 +212,7 @@ public abstract class MIDlet
 	 * 
 	 */
 	public final void notifyPaused() {
-		boolean success = this._bridge.moveTaskToBack(true);
-		//#debug
-		System.out.println("notifyPaused(): Activity.moveTaskToBack() succeeded: " + success);
+		this._bridge.bringActivityToBack();
 	}
 
 	/**
@@ -294,7 +292,7 @@ public abstract class MIDlet
 	 * 
 	 */
 	public final void resumeRequest() {
-		this._bridge.moveTaskToFront();
+		this._bridge.bringActivtyToFront();
 	}
 
 	/**
