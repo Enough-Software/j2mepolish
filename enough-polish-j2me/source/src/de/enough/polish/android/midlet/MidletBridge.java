@@ -170,7 +170,9 @@ public class MidletBridge extends Activity {
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//#endif
 		// shrink the application on softkeyboard display:
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		//#if polish.android.ResizeOnSoftInput != false
+			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		//#endif
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		CanvasBridge.DISPLAY_HEIGHT_PIXEL = metrics.heightPixels;

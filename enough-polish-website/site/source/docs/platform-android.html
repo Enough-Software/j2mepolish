@@ -438,6 +438,20 @@ Use the <code>polish.useNativeAlerts</code> preprocessing variable for enabling 
 <p>
 <img src="<%= basedir%>images/gui-android-alert-native.png" width="480" height="799" alt="Native Android Alert" />
 </p>
+<h2 id="android-configuration-other">Other Configuration Options</h2>
+<p>
+J2ME Polish provides following additional configuration options for Android builds:
+</p>
+<ul>
+	<li><b>polish.android.ResizeOnSoftInput</b>: configures whether screens should resize when the soft input panel/virtual keyboard is opened. This is done by default. To deactivate this set it to <code>false</code>:
+<pre>
+&lt;variable name=&quot;polish.android.ResizeOnSoftInput&quot; value=&quot;false&quot; /&gt;
+</pre>
+	</li>
+	<!-- 
+	<li><b></b>: </li>
+	-->
+</ul>
 <h2 id="android-APIs">Supported APIs</h2>
 <p>
 The following J2ME APIs are supported by J2ME Polish:
