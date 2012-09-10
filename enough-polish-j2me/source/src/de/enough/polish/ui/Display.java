@@ -1175,9 +1175,9 @@ public class Display
 						this.nextOrCurrentDisplayable = null;
 						return;
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					//#debug error
-					System.out.println("Screen: unable to start screen change animation" + e );
+					System.out.println("Display: unable to start screen change animation" + e );
 				}
 			}
 		//#endif
