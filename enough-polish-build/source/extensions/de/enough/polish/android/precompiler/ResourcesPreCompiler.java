@@ -215,12 +215,12 @@ public class ResourcesPreCompiler extends PreCompiler {
 			System.err.println("Warning: No icon was defined in this build. You will not be able to deploy this application in the Android Market. Please define an icon with the attribte \"icon\" in the <info> tag of the build.xml file.");
 		}
 		// add PuhsRegistry receiver to <application>:
-//	    <receiver android:enabled="true"
-//	              android:exported="false"
-//	              android:label="PushRegistry"
-//	              android:name="de.enough.polish.io.PushRegistry"
-//	              android:process=":remote">
-//	    </receiver>
+		//	    <receiver android:enabled="true"
+		//	              android:exported="false"
+		//	              android:label="PushRegistry"
+		//	              android:name="de.enough.polish.io.PushRegistry"
+		//	              android:process=":remote">
+		//	    </receiver>
 		Element receiverElement = new Element("receiver");
 		receiverElement.setAttribute("enabled", "true", namespace);
 		receiverElement.setAttribute("exported", "false", namespace);
@@ -228,6 +228,17 @@ public class ResourcesPreCompiler extends PreCompiler {
 		receiverElement.setAttribute("name", "de.enough.polish.android.io.PushRegistry", namespace);
 		receiverElement.setAttribute("process", ":remote", namespace);
 		applicationElement.addContent(receiverElement);
+
+		// add Service for MIDlet.resumeRequest(): 
+		//		<service
+		//			android:name="de.enough.polish.android.midlet.LaunchService"
+		//			android:label="LaunchService"
+		//			>
+		//		</service>
+		Element serviceElement = new Element("service");
+		serviceElement.setAttribute("name", "de.enough.polish.android.midlet.LaunchService", namespace);
+		serviceElement.setAttribute("label", "LaunchService", namespace);
+		applicationElement.addContent(serviceElement);
 
 		
 		// add default supports-screens element:
@@ -306,6 +317,8 @@ public class ResourcesPreCompiler extends PreCompiler {
 				
 			}
 		}
+		
+		
 		
 		// TODO: This does not work. Instead we need to alter the file res/values/string.xml, add the description as a string resource
 		// and reference this resource as value '@string/mystring' to this property.

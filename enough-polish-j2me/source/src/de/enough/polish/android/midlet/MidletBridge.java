@@ -427,7 +427,6 @@ public class MidletBridge extends Activity {
 		//#debug
 		System.out.println("MidletBridge.onStart() for " + this);
 		super.onStart();
-		//Debug.startMethodTracing("skobbler");
 		// on resume will be called directly afterwards...
 //		try {
 //			midlet.startApp();
@@ -1042,10 +1041,9 @@ public class MidletBridge extends Activity {
 		//#debug
 		System.out.println("bringActivityToFront()");
 		try {
-			Context context = this;
-			Intent intent = new Intent( context, getClass() );
-			intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			context.startActivity(intent);
+			Intent intent = new Intent(this, LaunchService.class);
+			intent.putExtra( LaunchService.EXTRA_CLASSNAME_KEY, getClass().getName() );
+			startService(intent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
