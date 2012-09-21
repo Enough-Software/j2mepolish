@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Process;
+import android.os.Vibrator;
 
 /**
  * The <code>PushRegistry</code> maintains a list of inbound
@@ -703,6 +704,17 @@ public class PushRegistry extends BroadcastReceiver
 			//newIntent.putExtra(EXTRA_MIDLET_NAME, midletClassName);
 			newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(newIntent);
+			//#if polish.android.VibrateOnAutomaticStart
+				Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+				if (vibrator != null) {
+					try {
+						vibrator.vibrate(500);
+					} catch (SecurityException e) {
+						//#debug warn
+						System.out.println("Unable to vibrate" + e);
+					}
+				}
+			//#endif
 			wl.release();
 		} catch (Exception e) {
 			//#debug error

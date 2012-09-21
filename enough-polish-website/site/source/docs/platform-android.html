@@ -438,6 +438,14 @@ Use the <code>polish.useNativeAlerts</code> preprocessing variable for enabling 
 <p>
 <img src="<%= basedir%>images/gui-android-alert-native.png" width="480" height="799" alt="Native Android Alert" />
 </p>
+<h2 id="android-configuration-permissions">Configure Permissions</h2>
+<p>
+J2ME Polish adds all sorts of permissions that are required for full MIDP compatibility by default. To restrict the required permissions to the ones that you 
+actually require in your app use the <code>polish.build.android.permissions</code> preprocessing variable:
+</p>
+<pre class="brush: xml">
+&lt;variable name=&quot;polish.build.android.permissions&quot; value=&quot;READ_PHONE_STATE,ACCESS_COARSE_LOCATION,SEND_SMS,INTERNET,VIBRATE,WAKE_LOCK&quot; /&gt;
+</pre>
 <h2 id="android-configuration-other">Other Configuration Options</h2>
 <p>
 J2ME Polish provides following additional configuration options for Android builds:
@@ -448,6 +456,12 @@ J2ME Polish provides following additional configuration options for Android buil
 &lt;variable name=&quot;polish.android.ResizeOnSoftInput&quot; value=&quot;false&quot; /&gt;
 </pre>
 	</li>
+	<li><b>polish.android.VibrateOnAutomaticStart</b>: vibrates the device when the MIDlet is restarted on a previous <code>PushRegistry.registerAlarm()</code> setting. To activate the vibration set it to <code>true</code>:
+<pre>
+&lt;variable name=&quot;polish.android.VibrateOnAutomaticStart&quot; value=&quot;true&quot; /&gt;
+</pre>
+	</li>
+	
 	<!-- 
 	<li><b></b>: </li>
 	-->
