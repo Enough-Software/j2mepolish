@@ -443,7 +443,11 @@ public class ChoiceItem extends IconItem
 				}
 			//#endif
 			//#ifdef polish.css.font-color
-				this.boxColor = style.getFontColor();
+				Color fontColor = style.getColorProperty("font-color");
+				if (fontColor != null)
+				{
+					this.boxColor = fontColor.getColor();
+				}
 			//#endif
 			//#ifdef polish.css.choice-color
 				Color color = style.getColorProperty("choice-color");
