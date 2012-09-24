@@ -77,6 +77,7 @@ backgrounds {
 	always-include: true; /* include this style even though it is not referenced in the source code, but only within HTML pages */
 	font-color: #333;
 	font-style: italic;
+	layout: vertical-center;
 }
 
 .invisible {
@@ -142,6 +143,8 @@ backgrounds {
 .browser {
 	view-type: midp2;
 	layout: center | expand;
+	padding: 0px;
+	padding-vertical: 3px;
 }
 
 .browser:hover {

@@ -472,4 +472,12 @@ public class StringTokenizerTest extends TestCase {
 			// expected
 		}
 }
+	
+	public void testHtmlExtraction() {
+		String text = "4-Enough-Software";
+		StringTokenizer st = new StringTokenizer(text, " \r\n\t");
+		while (st.hasMoreElements()) {
+			System.out.println("next: [" + st.nextToken() + "]");
+		}
+	}
 }

@@ -95,7 +95,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 	private static final int DEMO_CALENDAR = 4;
 	private static final int DEMO_LAST = DEMO_CALENDAR;
 	
-	private int currentDemo = -1;
+	private int currentDemo = DEMO_DEFAULTCOMMAND; //-1;
 	private String lastColor;
 	private Display display;
 
@@ -129,6 +129,16 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 	 */
 	private void next()
 	{
+		if (this.framedForm == null) {
+			//#style gradientFramedForm
+			FramedForm form = new FramedForm( "Framed Form" );
+			form.addCommand( this.cmdNext );
+			form.addCommand( this.cmdExit );
+			form.setItemStateListener( this );
+			form.setCommandListener( this );
+			this.framedForm = form;
+			this.display.setCurrent( form );
+		}
 		this.currentDemo++;
 		if (this.currentDemo > DEMO_LAST) {
 			this.currentDemo = DEMO_RIGHT;
@@ -148,14 +158,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 	 * Shows the color setting demo
 	 */
 	private void nextDemoRight() {
-		//#style gradientFramedForm
-		FramedForm form = new FramedForm( "Framed Form" );
-		form.addCommand( this.cmdNext );
-		form.addCommand( this.cmdExit );
-		form.setItemStateListener( this );
-		form.setCommandListener( this );
-		this.framedForm = form;
-		this.display.setCurrent( form );
+		this.framedForm.deleteAll();
 		this.gradientItem = new GradientItem( 20 );
 		this.framedForm.append( FramedForm.FRAME_RIGHT,  this.gradientItem );
 		this.topColorGroup = createColorChoiceGroup("top: ");
@@ -248,6 +251,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 	
 	private void nextDemoCalendar() {
 		this.framedForm.deleteAll();
+
 		TimePoint startRange = TimePoint.parseRfc3339("2011-01-02");
 		TimePoint endRange = TimePoint.now();
 		endRange.addDay(1);

@@ -85,7 +85,7 @@
 	         You can also define localized attributes in the resources/messages.txt files -->
 		<info
 			name="Browser"
-			version="1.3.4"
+			version="1.3.5"
 			description=""
 			vendorName="Enough Software"
 			infoUrl="http://www.j2mepolish.org"
@@ -178,8 +178,16 @@
 			</obfuscator>
 			
 			<!-- debug settings: only include debug setting when the test-property is true -->
-			<debug if="test or log" showLogOnError="true" verbose="true" level="error">
+			<debug if="test or log" level="error">
 				<filter pattern="de.enough.polish.ui.*" level="warn" />
+				<filter pattern="de.enough.polish.browser.html.*" level="info" />
+		         <handler name="display">
+                   <parameter name="timeout" value="100s" />
+                   <parameter name="max-entries" value="30" />
+                   <parameter name="background-color" value="#a333" />
+                   <parameter name="font-color" value="yellow" />
+                   <parameter name="shadow-color" value="rgb(0,0,0)" />
+                </handler>                     
 				<!--
 				<filter class="de.enough.polish.ui.ChoiceGroup" level="debug" />
 				<filter package="de.enough.polish.sample.browser" level="debug" />

@@ -48,7 +48,7 @@ import de.enough.polish.ui.StyleSheet;
  * 							be smaller than the actual background-area. Or "transparent".</li>
  * 		<li><b>anchor</b>: The anchor of the image, either  "left", "right", 
  * 			"center" (="horizontal-center"), "vertical-center", "top" or "bottom" 
- * 			or any combinationof these values. Defaults to "horizontal-center | vertical-center".
+ * 			or any combination of these values. Defaults to "horizontal-center | vertical-center".
  * 		</li>
  * 		<li><b>x-offset</b>: The number of pixels to move the image horizontally, negative values move it to the left.</li>
  * 		<li><b>y-offset</b>: The number of pixels to move the image vertically, negative values move it to the top.</li>
@@ -56,7 +56,7 @@ import de.enough.polish.ui.StyleSheet;
  * </ul>
  * </p>
  *
- * <p>Copyright Enough Software 2004 - 2011</p>
+ * <p>Copyright Enough Software 2004 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ImageBackground 

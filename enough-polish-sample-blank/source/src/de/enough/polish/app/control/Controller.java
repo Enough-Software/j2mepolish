@@ -147,7 +147,7 @@ implements ApplicationInitializer, CommandListener
 		list.addCommand(this.cmdExit);
 		list.addEntry("Start Busy Indicator");
 		list.addEntry("Stop Busy Indicator");
-		list.addEntry("entry 3");
+		list.addEntry("About");
 		list.addEntry(Locale.get("cmd.exit"));
 		return list;
 	}
