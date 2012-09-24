@@ -453,8 +453,6 @@ public class MidletBridge extends Activity {
 		//#if polish.javaplatform >= Android/1.5
 			hideSoftKeyboard();
 		//#endif
-		//Debug.stopMethodTracing();
-		midlet.pauseApp();
 		// Release the wake lock if it was acquired.
 		backlightRelease();
 	}
