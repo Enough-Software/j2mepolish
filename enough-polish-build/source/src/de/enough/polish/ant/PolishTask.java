@@ -2212,7 +2212,7 @@ public class PolishTask extends ConditionalTask {
 								for (int j = 0; j < processors.length; j++)
 								{
 									LibraryProcessor processor = processors[j];
-									processor.processLibrary( targetDir, fileNames, device, locale, this.environment );
+									processor.processLibrary( targetDir, fileNames, device, locale, setting, this.environment );
 								}
 							}
 							

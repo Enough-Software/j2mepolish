@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
+import de.enough.polish.ant.build.LibrarySetting;
 import de.enough.polish.libraryprocessor.ImportConversionMap;
 import de.enough.polish.libraryprocessor.ImportLibraryProcessor;
 
@@ -50,7 +51,7 @@ public class ImportResolver extends ImportLibraryProcessor
 	 * @see de.enough.polish.libraryprocessor.ImportLibraryProcessor#addImportConversions(de.enough.polish.libraryprocessor.ImportConversionMap, de.enough.polish.Device, java.util.Locale, de.enough.polish.Environment)
 	 */
 	protected void addImportConversions(ImportConversionMap conversions,
-			Device device, Locale locale, Environment env)
+			Device device, Locale locale, LibrarySetting setting, Environment env)
 	{
 		conversions.addConversion( "javax.microedition.lcdui.Graphics", "de.enough.polish.android.lcdui.Graphics" );
 		conversions.addConversion( "javax.microedition.lcdui.Font", "de.enough.polish.android.lcdui.Font" );

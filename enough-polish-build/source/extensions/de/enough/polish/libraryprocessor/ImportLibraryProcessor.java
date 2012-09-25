@@ -40,30 +40,34 @@ import de.enough.bytecode.ClassHelper;
 import de.enough.bytecode.DirClassLoader;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
+import de.enough.polish.ant.build.LibrarySetting;
 import de.enough.polish.postcompile.renaming.ClassRenamingClassVisitor;
 import de.enough.polish.postcompile.renaming.ClassRenamingHelper;
 
 /**
  * <p>Exchanges import statements in class files of binary libraries</p>
  *
- * <p>Copyright Enough Software 2009</p>
+ * <p>Copyright Enough Software 2009 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public abstract class ImportLibraryProcessor extends LibraryProcessor
 {
 	
-	protected abstract void addImportConversions( ImportConversionMap conversions, Device device, Locale locale, Environment env );
+	protected abstract void addImportConversions( ImportConversionMap conversions, Device device, Locale locale, LibrarySetting setting, Environment env );
 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.libraryprocessor.LibraryProcessor#processLibrary(java.io.File, java.lang.String[], de.enough.polish.Device, java.util.Locale, de.enough.polish.Environment)
 	 */
 	public void processLibrary(File baseDir, String[] relativeClassPaths,
-			Device device, Locale locale, Environment env) 
+			Device device, Locale locale, LibrarySetting setting, Environment env) 
 	throws IOException
 	{
+		if (!setting.isConvertImports()) {
+			return;
+		}
 		//boolean isSlash = File.separatorChar == '/';
 		ImportConversionMap renamingMap = new ImportConversionMap();
-		addImportConversions( renamingMap, device, locale, env );
+		addImportConversions( renamingMap, device, locale, setting, env );
 		
 		ArrayList classes = new ArrayList();
 		for (int i = 0; i < relativeClassPaths.length; i++)

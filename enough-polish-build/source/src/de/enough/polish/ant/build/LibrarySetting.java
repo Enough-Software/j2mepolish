@@ -39,11 +39,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Allows to include a binary library depending on conditions.</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        14-Apr-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class LibrarySetting extends Setting {
@@ -54,6 +50,7 @@ public class LibrarySetting extends Setting {
 	private long lastModified;
 	private boolean isDynamic;
 	private String dynamicLibraryPath;
+	private boolean isConvertImports = true;
 
 	/**
 	 * Creates a new library binding.
@@ -80,16 +77,7 @@ public class LibrarySetting extends Setting {
 			throw new BuildException("You cannot specify both the \"file\" as well as the \"dir\" attribute in one <library>-element. Please correct this in your build.xml.");
 		}
 		this.files = dir.listFiles();
-//		this.dir = dir;
-//		this.dirOrFile = dir;
 	}
-
-//  /**
-//	 * @return Returns the file.
-//	 */
-//	public File getFile() {
-//		return this.file;
-//	}
 
 	/**
 	 * @param file The file to set.
@@ -128,21 +116,24 @@ public class LibrarySetting extends Setting {
 			this.files[i] = file;
 		}
 	}
-
-//	/**
-//	 * @return
-//	 */
-//	public File getDirOrFile() {
-//		return this.dirOrFile;
-//	}
-
-
-//	/**
-//	 * @return <code>true</code> if 
-//	 */
-//	public boolean isDirectory() {
-//		return (this.dir != null);
-//	}
+	
+	/**
+	 * Specifies whether imports should be processed
+	 * @param convertImports false when imports should not be converted for this library, defaults to 'true'
+	 */
+	public void setConvertImports(boolean convertImports)
+	{
+		this.isConvertImports = convertImports;
+	}
+	
+	/**
+	 * Returns whether imports should be processed
+	 * @return false when imports should not be converted for this library
+	 */
+	public boolean isConvertImports() 
+	{
+		return this.isConvertImports;
+	}
 
 	/**
 	 * Returns the timestamp of the last modification.

@@ -242,8 +242,13 @@
 &lt;libraries&gt;
 	&lt;library file=&quot;libraries/tinyline.gz&quot; /&gt;
 	&lt;library file=&quot;libraries/svghelper.jar&quot; if=&quot;polish.api.svg&quot; /&gt;
+	&lt;library file=&quot;libraries/native.jar&quot; if=&quot;polish.vendor==Nokia&quot; processImports=&quot;false&quot; /&gt;
 &lt;/libraries&gt;
 </pre>
+	<p>With <code>processImports</code> you can selectively stop the conversion of <code>javax.microedition.lcdui</code> classes to 
+	their J2ME Polish counterparts. This can be important for some libraries that in turn call native code of the target device.
+	This is only relevant when you use the J2ME Polih Lush UI.
+	</p> 
 
 	<h3 id="midlet">&lt;midlet&gt; and &lt;midlets&gt;</h3>
 	<p>The &lt;midlet&gt; element defines the actual MIDlet class:

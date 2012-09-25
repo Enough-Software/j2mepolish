@@ -34,6 +34,7 @@ import de.enough.polish.BuildException;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.Extension;
+import de.enough.polish.ant.build.LibrarySetting;
 
 /**
  * <p>Processes binary libraries before they are compiled.</p>
@@ -70,6 +71,6 @@ public abstract class LibraryProcessor extends Extension
 	 * @param env the environment
 	 * @throws IOException when processing fails
 	 */
-	public abstract void processLibrary( File baseDir, String[] relativeClassPaths, Device device, Locale locale, Environment env ) throws IOException;
+	public abstract void processLibrary( File baseDir, String[] relativeClassPaths, Device device, Locale locale, LibrarySetting setting, Environment env ) throws IOException;
 
 }
