@@ -31,6 +31,7 @@ import java.util.Map;
 
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
+import de.enough.polish.ant.build.LibrarySetting;
 import de.enough.polish.preprocess.custom.ImportPreprocessor;
 
 /**
@@ -57,7 +58,7 @@ public class DefaultLibraryProcessor extends ImportLibraryProcessor {
 	 * @see de.enough.polish.libraryprocessor.ImportLibraryProcessor#addImportConversions(de.enough.polish.libraryprocessor.ImportConversionMap, de.enough.polish.Device, java.util.Locale, de.enough.polish.Environment)
 	 */
 	protected void addImportConversions(ImportConversionMap conversions,
-			Device device, Locale locale, Environment env)
+			Device device, Locale locale, LibrarySetting setting, Environment env)
 	{
 		Map currentImportMappings = (Map) env.get( ImportPreprocessor.KEY_IMPORT_MAP );
 		Object[] keys = currentImportMappings.keySet().toArray();
