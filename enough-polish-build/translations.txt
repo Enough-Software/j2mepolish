@@ -37,6 +37,9 @@ polish.rss.command.followlink=Go
 polish.DateFormatEmptyText=YYYY-MM-DD
 # TextField:
 polish.command.switch_keyboard=Switch keyboard
+# Zoom In/Out:
+polish.command.zoom.in=Zoom In
+polish.command.zoom.out=Zoom Out
 
 # used for predictive setup
 polish.predictive.command.enable=Enable Predictive Input
