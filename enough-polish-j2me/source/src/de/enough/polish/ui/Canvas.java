@@ -5,6 +5,10 @@ package de.enough.polish.ui;
 
 import javax.microedition.lcdui.Graphics;
 
+//#if polish.api.nokia-ui-2.0
+import com.nokia.mid.ui.IconCommand;
+//#endif
+
 import de.enough.polish.util.IdentityArrayList;
 
 
@@ -982,6 +986,15 @@ implements Displayable
     	if (this._commands != null) {
     		Object[] commands = this._commands.getInternalArray();
     		for (int i = 0; i < commands.length; i++) {
+    			
+    			//#if !polish.FullScreen && polish.api.nokia-ui-2.0
+    				Object command = commands[i];
+	    			if ( command != null && command instanceof IconCommand ) {
+	    				instance.addCommand( (IconCommand) command);
+	    				continue;
+					}
+    			//#endif
+	    			
 				Command cmd = (Command) commands[i];
 				if (cmd == null) {
 					break;
@@ -1011,6 +1024,18 @@ implements Displayable
     		Display instance = Display.getInstance();
     		Canvas current = instance.currentCanvas;
     		for (int i = 0; i < commands.length; i++) {
+    			
+    			//#if !polish.FullScreen && polish.api.nokia-ui-2.0
+					Object command = commands[i];
+	    			if ( command != null && command instanceof IconCommand ) {
+	    				if (current == null || current._commands == null || !current._commands.contains(command)) {
+//	    					System.out.println("removing cmd " + cmd.getLabel());
+	    					instance.removeCommand( (IconCommand) command);
+	    				}
+	    				continue;
+					}
+    			//#endif
+    			
 				Command cmd = (Command) commands[i];
 				if (cmd == null) {
 					break;
@@ -1285,11 +1310,41 @@ implements Displayable
 		if (this._commands == null) {
 			this._commands = new IdentityArrayList();
 		}
-		boolean add = !(this._commands.contains(cmd));
-		this._commands.add( cmd );
-		if (add && this._isShown) {
-			Display.getInstance().addCommand( cmd );
-		} 
+		
+		boolean add = false;
+		
+		//#if !polish.FullScreen && polish.api.nokia-ui-2.0
+		
+			javax.microedition.lcdui.Command commandToAdd = cmd;
+			Style style = cmd.getStyle();
+			if (style != null) {
+				String url = style.getProperty("icon-image");
+				if (url != null) {
+					try {
+						Image img = Image.createImage(url);
+						commandToAdd = new IconCommand(cmd.getLabel(), cmd.getLongLabel(), img.image, img.image, Command.SCREEN, 0);
+					} catch (Exception e) {
+						//#debug error
+						System.err.println("Unable to create image from URL " + url + e);						
+			    	}
+				}
+			}
+			
+			add = !(this._commands.contains(commandToAdd));
+			this._commands.add( commandToAdd );
+			if (add && this._isShown) {		
+					Display.getInstance().addCommand(commandToAdd);
+			}
+			
+		//#else	
+			
+			add = !(this._commands.contains(cmd));
+			this._commands.add( cmd );
+			if (add && this._isShown) {
+				Display.getInstance().addCommand( cmd );
+			} 
+			
+		//#endif
 	}
 	
 	/* (non-Javadoc)
