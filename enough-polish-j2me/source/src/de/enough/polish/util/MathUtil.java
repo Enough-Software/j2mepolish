@@ -128,27 +128,52 @@ public final class MathUtil
      */
     public static double atan(double x)
     {
-        double res;
-
-        if (Math.abs(x) < 1) {
-            res= x/(1 + 0.28 * x*x);
+    	double SQRT3 = 1.732050807568877294;
+    	boolean signChange=false;
+        boolean Invert=false;
+        int sp=0;
+        double x2, a;
+        // check up the sign change
+        if(x<0.)
+        {
+            x=-x;
+            signChange=true;
         }
-        else {
-            // NOTE : Due to some weird JVM behavior,
-            // if x is negative it's more accurate to calculate
-            // atan for -x and then negate it, rather than calculate atan
-            // for x directly.
-            if ( x < 0.0) {
-                x = -x;
-                res = ( Math.PI/2 - x/(x*x + 0.28) );
-                res = -res ;
-            }
-            else {
-                res = ( Math.PI/2 - x/(x*x + 0.28) );
-            }            
+        // check up the invertation
+        if(x>1.)
+        {
+            x=1/x;
+            Invert=true;
         }
-
-        return res;
+        // process shrinking the domain until x<PI/12
+        while(x>Math.PI/12)
+        {
+            sp++;
+            a=x+SQRT3;
+            a=1/a;
+            x=x*SQRT3;
+            x=x-1;
+            x=x*a;
+        }
+        // calculation core
+        x2=x*x;
+        a=x2+1.4087812;
+        a=0.55913709/a;
+        a=a+0.60310579;
+        a=a-(x2*0.05160454);
+        a=a*x;
+        // process until sp=0
+        while(sp>0)
+        {
+            a=a+Math.PI/6;
+            sp--;
+        }
+        // inversation took place
+        if(Invert) a=Math.PI/2-a;
+        // sign change took place
+        if(signChange) a=-a;
+        //
+        return a;
     }
     //#endif
 
@@ -190,4 +215,118 @@ public final class MathUtil
         }
     }
     //#endif
+    
+    //#if polish.hasFloatingPoint
+    /**
+     * Calculates e^x
+     * @param x x
+     * @return e^x
+     */
+    public static double exp(double x) {
+    	double sum  = 0.0;
+        double term = 1.0;
+        for (int i = 1; sum != sum + term; i++) {
+            sum  = sum + term;
+            term = term * x / i;
+        }
+        return sum;
+    }
+    //#endif
+    
+  //#if polish.hasFloatingPoint
+    /**
+     * Calculates e^x, faster but less accurate than {@link MathUtil#exp(double)}
+     * @param x x
+     * @return e^x
+     */
+    public static double fastexp(double x) {
+    	return (362880+x*(362880+x*(181440+x*(60480+x*(15120+x*(3024+x*(504+x*(72+x*(9+x)))))))))*2.75573192e-6;
+    }
+    //#endif
+    
+    //#if polish.hasFloatingPoint
+    /**
+     * Calculates a^b
+     * @param a a
+     * @param b b
+     * @return a^b
+     */
+    public static double pow(double a, double b) { 
+    	if ( b == 0 ) {
+    		return 1;
+    	}
+		boolean gt1 = (Math.sqrt((a-1)*(a-1)) <= 1)? false:true; 
+		int oc = -1,iter = 30;
+		double p = a, x, x2, sumX, sumY;
+		
+		if( (b-Math.floor(b)) == 0 )
+		{
+			for( int i = 1; i < b; i++ )p *= a;
+			return p;
+		}
+		
+		x = (gt1)?(a /(a-1)):(a-1);
+		sumX = (gt1)?(1/x):x;
+		
+		for( int i = 2; i < iter; i++ )
+		{
+			p = x;
+			for( int j = 1; j < i; j++)p *= x;
+			
+			double xTemp = (gt1)?(1/(i*p)):(p/i);
+			
+			sumX = (gt1)?(sumX+xTemp):(sumX+(xTemp*oc));
+					
+			oc *= -1;
+		}
+		
+		x2 = b * sumX;
+		sumY = 1+x2;
+				
+		for( int i = 2; i <= iter; i++ )
+		{
+			p = x2;
+			for( int j = 1; j < i; j++)p *= x2;
+			
+			int yTemp = 2;
+			for( int j = i; j > 2; j-- )yTemp *= j;
+			
+			sumY += p/yTemp;
+		}
+		
+		return sumY;
+    }
+    //#endif
+    
+    //#if polish.hasFloatingPoint
+    /**
+     * Calculates the natural logarithm of a number
+     * @param x the number
+     * @return the natural logarithm of x
+     */
+    public static double log(double x) {
+    	long l = Double.doubleToLongBits(x);
+    	long exp = ((0x7ff0000000000000L & l) >> 52) - 1023;
+    	double man = (0x000fffffffffffffL & l) / (double)0x10000000000000L + 1.0;
+    	double lnm = 0.0;
+    	double a = (man - 1) / (man + 1);
+    	for( int n = 1; n < 8; n += 2) {
+    		lnm += pow(a, n) / n;
+    	}
+    	return 2 * lnm + exp * 0.69314718055994530941723212145818;
+    }
+    //#endif
+    
+    //#if polish.hasFloatingPoint
+    /**
+     * Calculates the logarithm of a number, in a given base
+     * @param x the number
+     * @param base the base
+     * @return the logarithm of the number, in the given base
+     */
+    public static double log(double x, double base) {
+        return log(x) / log(base);
+    }
+    //#endif
+    
 }
