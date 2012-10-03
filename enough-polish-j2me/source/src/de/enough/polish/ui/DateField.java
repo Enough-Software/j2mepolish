@@ -1011,7 +1011,7 @@ implements
 			} 
 
 		//#else
-			if ( (keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9) || getScreen().isGameActionFire(keyCode, gameAction) ) 
+			if ( (keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9) ||  (gameAction == Canvas.FIRE)) 
 			{
 				showDateForm();
 			} else {

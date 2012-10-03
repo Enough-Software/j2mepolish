@@ -27,6 +27,7 @@ package de.enough.polish.ui;
 
 import java.io.IOException;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -4057,8 +4058,7 @@ public abstract class Item implements UiElement, Animatable
 	protected boolean handleKeyPressed( int keyCode, int gameAction ) {
 		//#debug
 		System.out.println("item " + this + ": handling keyPressed for keyCode=" + keyCode + ", gameAction=" + gameAction);
-		Screen scr = getScreen();
-		if ( this.appearanceMode != PLAIN && null != scr && scr.isGameActionFire(keyCode, gameAction) )
+		if ( this.appearanceMode != PLAIN && gameAction == Canvas.FIRE )
 		{
 			return notifyItemPressedStart();
 		}
@@ -4112,7 +4112,7 @@ public abstract class Item implements UiElement, Animatable
 		//#debug
 		System.out.println("handleKeyReleased(" + keyCode + ", " + gameAction + ") for " + this + ", isPressed=" + this.isPressed );
 		Screen scr = getScreen();
-		if (this.appearanceMode != PLAIN && this.isPressed && scr != null && scr.isGameActionFire(keyCode, gameAction) )
+		if (gameAction == Canvas.FIRE && this.appearanceMode != PLAIN && this.isPressed && scr != null)
 		{
 			notifyItemPressedEnd();
 			Item item = this;

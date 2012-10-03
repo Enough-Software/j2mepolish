@@ -330,7 +330,7 @@ extends TextField
 	protected boolean handleKeyPressed(int keyCode, int gameAction) {
 		//#debug
 		System.out.println("handleKeyPressed( keyCode=" + keyCode + ", gameAction=" + gameAction +  ", isInChoice=" + this.isInChoice + ", isOpen=" + this.isOpen + ", matches=" + this.numberOfMatches +" )");
-		boolean isFireGameAction = getScreen().isGameActionFire(keyCode, gameAction);
+		boolean isFireGameAction = (gameAction == Canvas.FIRE); 
 		if (this.isInChoice) {
 			if ( this.choicesContainer.handleKeyPressed(keyCode, gameAction) ) {
 				//#debug
@@ -411,7 +411,7 @@ extends TextField
 	protected boolean handleKeyReleased(int keyCode, int gameAction) {
 		//#debug
 		System.out.println("handleKeyReleased( keyCode=" + keyCode + ", gameAction=" + gameAction +  ", isInChoice=" + this.isInChoice + ", isOpen=" + this.isOpen + ", matches=" + this.numberOfMatches +" )");
-		boolean isFireGameAction = getScreen().isGameActionFire(keyCode, gameAction);
+		boolean isFireGameAction = (gameAction == Canvas.FIRE);
 		if (this.isInChoice) {
 			if ( this.choicesContainer.handleKeyReleased(keyCode, gameAction) ) {
 				//#debug
@@ -428,11 +428,12 @@ extends TextField
 				enterChoices( false );
 				// option has been selected!
 				Item item = this.choicesContainer.getFocusedItem();
-				item.notifyItemPressedEnd();
 				String choiceText;
 				if ( item instanceof ChoiceItem ) {
+					item.notifyItemPressedEnd();
 					choiceText = ((ChoiceItem) item).getText();
 				} else if (item != null) {
+					item.notifyItemPressedEnd();
 					choiceText = item.toString();
 				} else {
 					return false;

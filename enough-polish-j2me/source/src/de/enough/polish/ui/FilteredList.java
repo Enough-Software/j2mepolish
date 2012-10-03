@@ -27,6 +27,7 @@
 package de.enough.polish.ui;
 
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -135,7 +136,8 @@ implements ItemStateListener //, CommandListener
 		//#debug
 		System.out.println("handleKeyPressed( " + keyCode + ", " + gameAction + ")");
 		boolean handled = false;
-		if (! isGameActionFire( keyCode, gameAction )) {
+		
+		if (gameAction != Canvas.FIRE) {
 			handled = this.filterTextField.handleKeyPressed(keyCode, gameAction);
 			if (handled && this.filterTextField.getItemHeight( this.contentWidth, this.contentWidth, this.contentHeight + this.filterHeight) != this.filterHeight) {
 				calculateContentArea(0, 0, this.screenWidth, this.screenHeight );
@@ -156,7 +158,7 @@ implements ItemStateListener //, CommandListener
 		//#debug
 		System.out.println("handleKeyReleased( " + keyCode + ", " + gameAction + ")");
 		boolean handled = false; 
-		if (!(isGameActionFire(keyCode, gameAction)) ) {
+		if (gameAction != Canvas.FIRE) {
 			handled = this.filterTextField.handleKeyReleased(keyCode, gameAction);
 		}
 		if (!handled) {
@@ -172,7 +174,7 @@ implements ItemStateListener //, CommandListener
 		//#debug
 		System.out.println("handleKeyRepeated( " + keyCode + ", " + gameAction + ")");
 		boolean handled = false;
-		if (!(isGameActionFire(keyCode, gameAction))) {
+		if (gameAction != Canvas.FIRE) {
 			handled = this.filterTextField.handleKeyRepeated(keyCode, gameAction);
 		}
 		if (!handled) {

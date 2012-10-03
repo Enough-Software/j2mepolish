@@ -213,7 +213,7 @@ public class TabbedList extends Screen {
 			}
 		}
 		handled = super.handleKeyPressed(keyCode, gameAction);
-		if (!handled && isGameActionFire(keyCode, gameAction) && ((ChoiceGroup)this.container).choiceType == Choice.IMPLICIT) {
+		if (!handled && gameAction == Canvas.FIRE && ((ChoiceGroup)this.container).choiceType == Choice.IMPLICIT) {
 			Command command = this.selectCommand;
 			if (command == null) {
 				command = SELECT_COMMAND;

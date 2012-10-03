@@ -26,6 +26,7 @@
  */
 package de.enough.polish.ui;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 
@@ -279,7 +280,7 @@ implements Choice, CommandListener
 	 * @see de.enough.polish.ui.FakeCustomItem#handleKeyReleased(int, int)
 	 */
 	protected boolean handleKeyReleased(int keyCode, int gameAction) {
-		if (getScreen().isGameActionFire(keyCode, gameAction)
+		if ( (gameAction == Canvas.FIRE)
 				&& StyleSheet.display != null) 
 		{
 			showFilteredList( StyleSheet.display );

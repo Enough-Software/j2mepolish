@@ -3599,7 +3599,7 @@ public class TextField extends StringItem
 								)
 						) {
 							handled = handleKeyNavigation(keyCode, gameAction);
-							if (!handled && getScreen().isGameActionFire(keyCode, gameAction) && this.defaultCommand != null) {
+							if (!handled && gameAction == Canvas.FIRE && this.defaultCommand != null) {
 								notifyItemPressedStart();
 								handled = true;
 							}
@@ -3660,7 +3660,7 @@ public class TextField extends StringItem
 			//#if ${ isOS( Windows ) }
 				|| (gameAction != Canvas.DOWN && gameAction != Canvas.UP && gameAction != Canvas.LEFT && gameAction != Canvas.RIGHT)
 			//#endif
-			|| (getScreen().isGameActionFire(keyCode, gameAction) ) )
+			|| (gameAction == Canvas.FIRE ) )
 		{	
 			//#if tmp.useNativeTextBox
 				showTextBox();
@@ -4063,7 +4063,7 @@ public class TextField extends StringItem
 				commitCurrentCharacter();
 			}
 			
-			if (getScreen().isGameActionFire(keyCode, gameAction)
+			if (gameAction == Canvas.FIRE
 					&& this.defaultCommand != null 
 					&& this.itemCommandListener != null) 
 			{

@@ -1715,7 +1715,6 @@ public class Display
 		return  isSoftKeyLeft(keyCode, gameAction) || isSoftKeyRight(keyCode, gameAction) || isSoftKeyMiddle(keyCode, gameAction);
 	}
 	
-	//#if tmp.screenOrientation || polish.Bugs.SoftKeyMappedToFire || polish.Bugs.NormalKeyMappedToFire
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#getGameAction(int)
 	 */
@@ -1774,9 +1773,21 @@ public class Display
 				}
 			}
 		//#endif
+		if (gameAction == FIRE) 
+		{
+			if (keyCode == KEY_NUM5)
+			{
+				gameAction = 0;
+			}
+			//#if polish.Bugs.SoftKeyMappedToFire
+				else if (isSoftKeyLeft(keyCode, gameAction) || isSoftKeyRight(keyCode, gameAction))
+				{
+					gameAction = 0;
+				}
+			//#endif
+		}
 		return gameAction;
 	}	
-	//#endif
 
 
 

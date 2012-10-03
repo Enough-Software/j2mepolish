@@ -1362,7 +1362,7 @@ public class MenuBar extends Item {
 				//#elif polish.key.CenterSoftKey:defined
 					//#= if ( keyCode == ${polish.key.CenterSoftKey}
 				//#else
-					if ( this.screen.isGameActionFire(keyCode, gameAction)
+					if ( gameAction == Canvas.FIRE
 				//#endif
 							&& this.singleMiddleCommand != null && this.singleMiddleCommandItem.getAppearanceMode() != PLAIN) 
 					{
@@ -1588,7 +1588,7 @@ public class MenuBar extends Item {
 			//#elif polish.key.CenterSoftKey:defined
 				//#= if ( keyCode == ${polish.key.CenterSoftKey}
 			//#else
-				if ( getScreen().isGameActionFire(keyCode, gameAction)
+				if ( gameAction == Canvas.FIRE
 			//#endif
 					&& this.singleMiddleCommand != null && this.singleMiddleCommandItem.getAppearanceMode() != PLAIN) 
 				{
