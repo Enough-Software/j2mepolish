@@ -5,7 +5,7 @@ CVS
 .binaryeditor.settings
 
 bin/
-build/
+/*/build/
 dist/
 tmp/
 enough-polish-j2me/doc/
