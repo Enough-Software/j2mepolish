@@ -252,6 +252,27 @@ public class IntHashMap
 	}
 	
 	/**
+	 * Retrieves the key for the given value if that is stored in this map.
+	 * WARNING: this method uses reference checks for testing - you need to ensure to use the identical object that might have been
+	 * stored in this map for testing.
+	 * 
+	 * @param value the value
+	 * @return the integer key if the value is present in this map, otherwise Integer.MIN_VALUE will be returned.
+	 */
+	public int getKeyForValue( Object value ) {
+		for (int i = 0; i < this.buckets.length; i++) {
+			Element element = this.buckets[i];
+			while (element != null) {
+				if (element.value == value ) {
+					return element.key;
+				}
+				element = element.next;
+			}
+		}
+		return Integer.MIN_VALUE;
+	}
+	
+	/**
 	 * Removes all values from this map
 	 */
 	public void clear() {
