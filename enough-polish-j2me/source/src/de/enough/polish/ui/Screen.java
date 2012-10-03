@@ -5753,6 +5753,17 @@ implements UiElement, Animatable
 		}
 	}
 
+	/**
+	 * Scrolls this screen so that the first item is in the visible space
+	 */
+	public void scrollToTop() {
+		if (this.container != null) {
+			if (this.isInitRequested || !this.isInitialized) {
+				calculateContentArea( 0, 0, this.screenWidth, this.screenHeight );
+			}
+			this.container.scrollToTop();
+		}
+	}
 	
 
 	/**
