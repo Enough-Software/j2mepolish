@@ -55,6 +55,8 @@ public class SignSetting extends FinalizerSetting {
 	private String key;
 	private String password;
 	private boolean skipCertificate;
+	private String storePass;
+	private String keyPass;
 
 	/**
 	 * Creates a new sign setting
@@ -93,14 +95,39 @@ public class SignSetting extends FinalizerSetting {
 	public void setKeystore(File keystore) {
 		this.keystore = keystore;
 	}
-	/**
-	 * @return Returns the password.
-	 */
-	public String getPassword() {
-		return this.password;
+	
+	public void setStorePass(String storePass) {
+		this.storePass = storePass;
 	}
+
+	public void setStorepass(String storePass) {
+		this.storePass = storePass;
+	}
+
+	public String getStorePass() {
+		if (this.storePass == null) {
+			return this.password;
+		}
+		return this.storePass;
+	}
+
+	public void setKeyPass(String keyPass) {
+		this.keyPass = keyPass;
+	}
+
+	public void setKeypass(String keyPass) {
+		this.keyPass = keyPass;
+	}
+
+	public String getKeyPass() {
+		if (this.keyPass == null) {
+			return this.password;
+		}
+		return this.keyPass;
+	}
+	
 	/**
-	 * @param password The password to set.
+	 * @param password The key and store password to set.
 	 */
 	public void setPassword(String password) {
 		this.password = password;

@@ -295,8 +295,11 @@ public class BuildSetting {
 		if (setting.getKey() == null) {
 			throw new BuildException("The \"key\" attribute of the <sign> element is mandatory.");
 		}
-		if (setting.getPassword() == null) {
-			throw new BuildException("The \"password\" attribute of the <sign> element is mandatory.");
+		if (setting.getStorePass() == null) {
+			throw new BuildException("The \"storepass\" attribute of the <sign> element is mandatory.");
+		}
+		if (setting.getKeyPass() == null) {
+			throw new BuildException("The \"keypass\" attribute of the <sign> element is mandatory.");
 		}
 		addConfiguredFinalizer( setting );
 	}

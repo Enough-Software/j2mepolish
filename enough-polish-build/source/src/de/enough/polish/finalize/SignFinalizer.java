@@ -26,6 +26,7 @@
 package de.enough.polish.finalize;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -36,6 +37,7 @@ import de.enough.polish.Device;
 import de.enough.polish.Environment;
 import de.enough.polish.ant.android.ArgumentHelper;
 import de.enough.polish.ant.build.SignSetting;
+import de.enough.polish.util.FileUtil;
 import de.enough.polish.util.OsUtil;
 import de.enough.polish.util.ProcessUtil;
 
@@ -71,8 +73,7 @@ public class SignFinalizer extends Finalizer {
 		
 		SignSetting setting = (SignSetting) getExtensionSetting();
 
-		Object feature = device.getFeatures().get("polish.android");
-		boolean isAndroidDevice = feature != null;
+		boolean isAndroidDevice = device.getFeatures().get("polish.android") != null;
 		String alias = setting.getKey();
 		
 		if(isAndroidDevice) {
@@ -112,7 +113,9 @@ public class SignFinalizer extends Finalizer {
 			parametersList.add("-keystore");
 			parametersList.add(keystorePath);
 			parametersList.add( "-storepass" );
-			parametersList.add( setting.getPassword() );
+			parametersList.add( setting.getStorePass() );
+			parametersList.add( "-keypass" );
+			parametersList.add( setting.getKeyPass() );
 			String apkFile = ArgumentHelper.getPackage("apk", env);
 			parametersList.add(apkFile);
 			parametersList.add(alias);
@@ -140,14 +143,24 @@ public class SignFinalizer extends Finalizer {
 				throw new BuildException("Unable to sign application: neither ${wtk.home}/bin/JadTool.jar nor ${polish.home}/bin/JadTool.jar was found.\n${wtk.home}=" + env.getVariable("wtk.home") + ", ${polish.home}=" + env.getVariable("polish.home") );
 			}
 		}
+		// copy JAD to JAD.original:
+		File originalJadFile = new File(jadFile.getAbsolutePath() + ".original");
+		try {
+			FileUtil.copy(jadFile, originalJadFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new BuildException("Unablte to sign application: cannot copy " + jadFile.getAbsolutePath() + ": " + e);
+		}
 		ArrayList<String> parametersList = new ArrayList<String>();
 		// sign the JAR file:
 		parametersList.add( "java" );
 		parametersList.add( "-jar" );
 		parametersList.add( jadTool.getAbsolutePath() );
 		parametersList.add( "-addjarsig" );
+		parametersList.add( "-storepass" );
+		parametersList.add( setting.getStorePass() );
 		parametersList.add( "-keypass" );
-		parametersList.add( setting.getPassword() );
+		parametersList.add( setting.getKeyPass() );
 		parametersList.add( "-alias" );
 		parametersList.add( alias );
 		if (setting.getKeystore() != null) {
@@ -155,7 +168,7 @@ public class SignFinalizer extends Finalizer {
 			parametersList.add( setting.getKeystore().getAbsolutePath() );
 		}
 		parametersList.add( "-inputjad" );
-		parametersList.add( jadFile.getAbsolutePath() );
+		parametersList.add( originalJadFile.getAbsolutePath() );
 		parametersList.add( "-outputjad" );
 		parametersList.add( jadFile.getAbsolutePath() );
 		parametersList.add( "-jarfile" );
