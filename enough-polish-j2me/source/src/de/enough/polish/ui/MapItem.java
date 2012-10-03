@@ -22,7 +22,10 @@ import de.enough.polish.util.Locale;
  * UI Container, useful for creating a GUI overlay.
  * @author Ovidiu Iliescu
  */
-public class MapItem extends Container implements MapTilerEventListener {
+public class MapItem 
+extends Container 
+implements MapTilerEventListener 
+{
 	
 	/**
 	 * The MapTiler to use when rendering maps
@@ -692,7 +695,7 @@ public class MapItem extends Container implements MapTilerEventListener {
 			// If we're NOT ignoring item activations, interpret the pointer resleased as an "activated" event
 			// and try to notify the listener, if one is present
 			if ( itemAtPointer.getListener() != null ) {
-				itemAtPointer.getListener().activated(itemAtPointer, this);
+				itemAtPointer.getListener().onActivated(itemAtPointer, this);
 			}
 		}	
 		

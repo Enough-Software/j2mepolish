@@ -1,3 +1,4 @@
+//#condition polish.usePolishGui
 package de.enough.polish.maps;
 
 import de.enough.polish.ui.MapItem;
@@ -13,6 +14,6 @@ public interface PoiItemListener {
 	 * @param item the item that was activated
 	 * @param map the associated {@link MapItem}
 	 */
-	public void activated(PoiItem item, MapItem map);
+	public void onActivated(PoiItem item, MapItem map);
 
 }

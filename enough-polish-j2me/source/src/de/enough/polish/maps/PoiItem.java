@@ -1,3 +1,4 @@
+//#condition polish.usePolishGui
 package de.enough.polish.maps;
 
 import de.enough.polish.ui.Item;
