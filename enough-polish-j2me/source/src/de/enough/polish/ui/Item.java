@@ -770,6 +770,12 @@ public abstract class Item implements UiElement, Animatable
 		//#ifdef polish.css.before-include-background
 			private boolean beforeIncludeBackground = true;
 		//#endif
+		//#ifdef polish.css.before-layout
+			private Integer beforeLayout;
+		//#endif
+		//#ifdef polish.css.before-width
+			private Dimension beforeDefinedWidth;
+		//#endif
 	//#endif
 
 	//#ifdef polish.css.after
@@ -779,6 +785,12 @@ public abstract class Item implements UiElement, Animatable
 		private Image afterImage;
 		//#ifdef polish.css.after-include-background
 			private boolean afterIncludeBackground = true;
+		//#endif
+		//#ifdef polish.css.after-layout
+			private Integer afterLayout;
+		//#endif
+		//#ifdef polish.css.after-width
+			private Dimension afterDefinedWidth;
 		//#endif
 	//#endif
 	// label settings:
@@ -915,6 +927,8 @@ public abstract class Item implements UiElement, Animatable
 	//#endif
 	private UiEventListener uiEventListener;
 	private CycleListener cycleListener;
+	private int	contentWidthOriginal;
+	private int	contentHeightOriginal;
 
 
 
@@ -1518,7 +1532,21 @@ public abstract class Item implements UiElement, Animatable
 						this.beforeImage = StyleSheet.getImage(beforeUrlStr, null, true );
 						this.beforeWidth = this.beforeImage.getWidth();
 						this.beforeHeight = this.beforeImage.getHeight();
-					} catch (IOException e) {
+						//#if polish.css.before-width
+							Dimension beforeWidthDim = (Dimension) style.getObjectProperty("before-width");
+							if (beforeWidthDim != null)
+							{
+								this.beforeDefinedWidth = beforeWidthDim;
+							}
+						//#endif
+						//#if polish.css.before-layout
+							Integer beforeLayoutInt = style.getIntProperty("before-layout");
+							if (beforeLayoutInt != null)
+							{
+								this.beforeLayout = beforeLayoutInt;
+							}
+						//#endif
+					} catch (Exception e) {
 						this.beforeUrl = null;
 						this.beforeImage = null;
 						this.beforeWidth = 0;
@@ -1547,7 +1575,21 @@ public abstract class Item implements UiElement, Animatable
 						this.afterImage = StyleSheet.getImage(afterUrlStr, null, true );
 						this.afterWidth = this.afterImage.getWidth();
 						this.afterHeight = this.afterImage.getHeight();
-					} catch (IOException e) {
+						//#if polish.css.after-width
+							Dimension afterWidthDim = (Dimension) style.getObjectProperty("after-width");
+							if (afterWidthDim != null)
+							{
+								this.afterDefinedWidth = afterWidthDim;
+							}
+						//#endif
+						//#if polish.css.after-layout
+							Integer afterLayoutInt = style.getIntProperty("after-layout");
+							if (afterLayoutInt != null)
+							{
+								this.afterLayout = afterLayoutInt;
+							}
+						//#endif
+					} catch (Exception e) {
 						this.afterUrl = null;
 						this.afterWidth = 0;
 						this.afterHeight = 0;
@@ -2889,40 +2931,48 @@ public abstract class Item implements UiElement, Animatable
 		int originalContentY = y;
 		
 		// paint before element:
-		//#if polish.css.before || polish.css.after || polish.css.min-height  || polish.css.max-height
-			boolean isVerticalCenter = (this.layout & LAYOUT_VCENTER) == LAYOUT_VCENTER; 
-			boolean isTop = !isVerticalCenter && (this.layout & LAYOUT_TOP) == LAYOUT_TOP; 
-			boolean isBottom = !isVerticalCenter && (this.layout & LAYOUT_BOTTOM) == LAYOUT_BOTTOM;
-		//#endif
 		//#ifdef polish.css.before
 			if (this.beforeImage != null) {
+				int befLayout = this.layout;
+				//#if polish.css.before-layout
+					if (this.beforeLayout != null)
+					{
+						befLayout = this.beforeLayout.intValue();
+					}
+				//#endif
 				int beforeX = origX + getBorderWidthLeft() + this.paddingLeft + this.marginLeft;
 				if (labelItem != null && this.useSingleRow) {
 					beforeX += labelItem.itemWidth;
 				}
-				
+				//#if polish.css.before-width
+					if (this.beforeDefinedWidth != null) 
+					{
+						int defWidth = this.beforeDefinedWidth.getValue(this.availableWidth);
+						int xAdjust = defWidth - this.beforeWidth;
+						if ((befLayout & LAYOUT_CENTER) == LAYOUT_CENTER) {
+							beforeX += xAdjust / 2;
+						} else if ((befLayout & LAYOUT_RIGHT) == LAYOUT_RIGHT) {
+							beforeX += xAdjust;
+						}
+					}
+				//#endif
 				int beforeY = y;
-				int yAdjust = this.beforeHeight - this.contentHeight;
-				if ( this.beforeHeight < this.contentHeight) {
-					if (isTop) {
-						//beforeY -= yAdjust;
-					} else if (isBottom) {
-						beforeY += yAdjust;
-					} else {
+				int yAdjust = this.beforeHeight - this.contentHeightOriginal;
+				if (yAdjust < 0) { // ( this.beforeHeight < this.contentHeightOriginal) {
+					if ((befLayout & LAYOUT_VCENTER) == LAYOUT_VCENTER) {
 						beforeY -= (yAdjust >> 1);
+					} else if ((befLayout & LAYOUT_BOTTOM) == LAYOUT_BOTTOM) {
+						beforeY -= yAdjust;
 					}
 				} else {
-					if (isTop) {
-						// keep contY
-					} else if (isBottom) {
-						y += yAdjust;
-					} else {
+					if ((this.layout & LAYOUT_VCENTER) == LAYOUT_VCENTER) {
 						y += (yAdjust >> 1);
+					} else if ((this.layout & LAYOUT_BOTTOM) == LAYOUT_BOTTOM) {
+						y += yAdjust;
 					}
-					//contY += (this.beforeHeight - this.contentHeight) / 2;
 				}
 				
-				if(this.isLayoutRight)
+				if (this.isLayoutRight)
 				{
 					beforeX = rightBorder - (this.contentWidth + this.beforeWidth);
 				}
@@ -2935,34 +2985,48 @@ public abstract class Item implements UiElement, Animatable
 		// paint after element:
 		//#ifdef polish.css.after
 			if (this.afterImage != null) {
-				int afterY = originalContentY;
-				int yAdjust = this.afterHeight - this.contentHeight;
-				if ( this.afterHeight < this.contentHeight) {
-					if (isTop) {
-						afterY -= yAdjust;
-					} else if (isBottom) {
-						afterY += yAdjust;
-					} else {
-						afterY -= (yAdjust >> 1);
+				int aftLayout = this.layout;
+				//#if polish.css.after-layout
+					if (this.afterLayout != null)
+					{
+						aftLayout = this.afterLayout.intValue();
 					}
-					//afterY += (this.contentHeight - this.afterHeight) / 2;
+				//#endif
+				int afterX = rightBorder + this.paddingHorizontal;
+				//#if polish.css.after-width
+					if (this.afterDefinedWidth != null) 
+					{
+						int defWidth = this.afterDefinedWidth.getValue(this.availableWidth);
+						int xAdjust = defWidth - this.afterWidth;
+						if ((aftLayout & LAYOUT_CENTER) == LAYOUT_CENTER) {
+							afterX += xAdjust / 2;
+						} else if ((aftLayout & LAYOUT_RIGHT) == LAYOUT_RIGHT) {
+							afterX += xAdjust;
+						}
+					}
+				//#endif
+				int afterY = originalContentY;
+				int yAdjust = this.afterHeight - this.contentHeightOriginal;
+				if ( yAdjust < 0) { //this.afterHeight < this.contentHeight) {
+					if ((aftLayout & LAYOUT_VCENTER) == LAYOUT_VCENTER) {
+						afterY -= (yAdjust >> 1);
+					} else if ((aftLayout & LAYOUT_BOTTOM) == LAYOUT_BOTTOM) {
+						afterY -= yAdjust;
+					}
 				} else {
 					//#ifdef polish.css.before
 					if (this.afterHeight > this.beforeHeight) {
 					//#endif
-						if (isTop) {
-							// keep contY
-						} else if (isBottom) {
-							y = originalContentY + yAdjust;
-						} else {
+						if ((this.layout & LAYOUT_VCENTER) == LAYOUT_VCENTER) {
 							y = originalContentY + (yAdjust >> 1);
+						} else if ((this.layout & LAYOUT_BOTTOM) == LAYOUT_BOTTOM) {
+							y = originalContentY + yAdjust;
 						}
-						//contY = originalContentY + (this.afterHeight - this.contentHeight) / 2;
 					//#ifdef polish.css.before
 					}
 					//#endif
 				}
-				g.drawImage(this.afterImage, rightBorder + this.paddingHorizontal, afterY, Graphics.TOP | Graphics.LEFT );
+				g.drawImage(this.afterImage, afterX, afterY, Graphics.TOP | Graphics.LEFT );
 			}
 		//#endif
 		
@@ -3434,6 +3498,8 @@ public abstract class Item implements UiElement, Animatable
 			
 		int cWidth = this.contentWidth;
 		int cHeight = this.contentHeight;
+		this.contentWidthOriginal = cWidth;
+		this.contentHeightOriginal = cHeight;
 
 		if (cWidth == 0 && cHeight == 0) {
 			this.itemWidth = labelWidth;
@@ -3738,6 +3804,12 @@ public abstract class Item implements UiElement, Animatable
 	protected int getBeforeWidthWithPadding() {
 		int w = this.beforeWidth;
 		if (w != 0) {
+			//#if polish.css.before-width
+				if (this.beforeDefinedWidth != null)
+				{
+					w = this.beforeDefinedWidth.getValue(this.availableWidth);
+				}
+			//#endif
 			w += this.paddingHorizontal;
 		}
 		return w;
@@ -3752,6 +3824,12 @@ public abstract class Item implements UiElement, Animatable
 	protected int getAfterWidthWithPadding() {
 		int w = this.afterWidth;
 		if (w != 0) {
+			//#if polish.css.after-width
+				if (this.afterDefinedWidth != null)
+				{
+					w = this.afterDefinedWidth.getValue(this.availableWidth);
+				}
+			//#endif
 			w += this.paddingHorizontal;
 		}
 		return w;

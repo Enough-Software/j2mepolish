@@ -5657,6 +5657,44 @@
 		since="J2ME Polish 2.3.1"
 	/>
 	
+	<attribute
+		name="before-layout"
+		type="layout"
+		appliesTo="Item"
+		description="The layout of the before element when if should differ from the the content layout. Note that the vertical layout is only applicable when the before element is higher than the actual content."
+		shell="new Integer()"
+		id="493"
+		since="J2ME Polish 2.3.1"
+	/>
+	
+	<attribute
+		name="before-width"
+		type="dimension"
+		appliesTo="Item"
+		description="The width of the before element which defaults to the width of the before image."
+		id="494"
+		since="J2ME Polish 2.3.1"
+	/>
+			
+	<attribute
+		name="after-layout"
+		type="layout"
+		appliesTo="Item"
+		description="The layout of the after element when if should differ from the the content layout. Note that the vertical layout is only applicable when the after element is higher than the actual content."
+		shell="new Integer()"
+		id="495"
+		since="J2ME Polish 2.3.1"
+	/>
+	
+	<attribute
+		name="after-width"
+		type="dimension"
+		appliesTo="Item"
+		description="The width of the after element which defaults to the width of the after image."
+		id="496"
+		since="J2ME Polish 2.3.1"
+	/>
+		
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"
