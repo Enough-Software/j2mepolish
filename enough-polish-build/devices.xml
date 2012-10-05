@@ -25001,4 +25001,14 @@ These namespaces/schemas will be used soon.
     <capability name="JavaConfiguration" value="Android/2.1" />
   </device>
   
+    <device supportsPolishGui="true">
+    <identifier>Nokia/Series40SDK20</identifier>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk20</features>
+    <groups>series40sdk20</groups>
+    <description>An Nokia SDK 2.0 for Java compatible device that supports the MIDP 2.0 and CLDC 1.1 standards.</description>
+    <capability name="ScreenSize" value="240x400" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
+  </device>
+  
 </devices>

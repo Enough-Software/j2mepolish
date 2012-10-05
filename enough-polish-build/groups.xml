@@ -505,5 +505,14 @@
 		<name>android</name>
 		<capability name="OS" value="android" />
 	</group>
+	
+	<group>
+		<name>series40sdk20</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-2.0, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi" />	
+	</group>
 
 </groups>

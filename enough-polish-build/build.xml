@@ -91,7 +91,7 @@
 				<pathelement path="import/doja-2.5.jar" />
 				<pathelement path="import/m3g.jar" />
 				<pathelement path="import/mmapi.jar" />
-				<pathelement path="import/nokia-ui.jar" />
+				<pathelement path="import/nokia-ui-2.0.jar" />
 				<pathelement path="import/samsung-api.jar" />
 				<pathelement path="import/sensor.jar" />
 				<pathelement path="import/siemens-extension-api.jar" />

@@ -40,6 +40,19 @@
 	</api>
 	
 	<api>
+		<name>Nokia User Interface API - SDK 2.0</name>
+		<description>The Nokia User Interface API SDK 2.0 is an update over the original Nokia UI API SDK, with features
+		and capabilities updated for modern smartphones
+		</description>
+		<names>nokia-ui-2.0,nokia-ui-api-2.0, nokiaui-2.0, nokiauiapi-2.0</names>
+		<symbol>nokia-ui-2.0</symbol>
+		<files>nokia-ui-2.0.jar</files>
+		<path>import/nokia-ui-2.0.jar</path>
+		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+	</api>
+	
+	<api>
 		<name>Mobile Media API</name>
 		<description>The Mobile Media API provides
 			functionalities for playing and capturing sounds and videos.
