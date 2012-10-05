@@ -364,14 +364,16 @@ public class MidletBridge extends Activity {
 	
 	protected void onPause() {
 		//#debug
-		System.out.println("MidletBridge.onPause() for " + this + ", isTaskRoot=" + isTaskRoot());
+		System.out.println("MidletBridge.onPause() for " + this + ", isTaskRoot=" + isTaskRoot() + ", shuttingDown=" + this.shuttingDown);
 		super.onPause();
 		if (!isTaskRoot()) {
 			return;
 		}
 		try {
-			hideSoftKeyboard();
-			midlet.pauseApp();
+			if (!this.shuttingDown)
+			{
+				midlet.pauseApp();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
