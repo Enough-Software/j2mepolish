@@ -30,7 +30,7 @@ package de.enough.polish.ui;
 import de.enough.polish.util.IntHashMap;
 
 /**
- * A container that contains only uniform 
+ * A container that contains only uniform items, meaning all items have the same type and same height.
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class UniformContainer 
