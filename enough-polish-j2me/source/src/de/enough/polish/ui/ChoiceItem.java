@@ -590,6 +590,9 @@ public class ChoiceItem extends IconItem
 	 */
 	private void setCheckedStyle(boolean select) {
 //			System.out.println("select occurred, all styles defined=" + (this.styleNormal != null) + ( this.styleNormalFocused != null) + ( this.styleChecked != null) + ( this.styleCheckedFocused != null) + ", isFocused=" + this.isFocused);
+			if (!this.isStyleInitialized && this.style != null) {
+				setStyle(this.style);
+			}
 			if (select) {
 				if (this.isFocused && this.styleCheckedFocused != null) {
 //					System.out.println("x 1a checked & focused & styleCheckedFocused");
