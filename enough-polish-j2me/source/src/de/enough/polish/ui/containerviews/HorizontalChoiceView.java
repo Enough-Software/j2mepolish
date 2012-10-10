@@ -549,7 +549,7 @@ public class HorizontalChoiceView extends ContainerView {
 	 */
 	protected Item getNextItem(int keyCode, int gameAction) {
 		//#debug
-		System.out.println("ExclusiveSingleLineView: getNextItem()");
+		System.out.println("HorizontalChoiceView: getNextItem()");
 		ChoiceGroup choiceGroup = (ChoiceGroup) this.parentContainer;
 		Item[] items = this.parentContainer.getItems();
 		ChoiceItem currentItem = (ChoiceItem) this.focusedItem;
