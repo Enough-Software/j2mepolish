@@ -673,6 +673,13 @@
 		
 	</attribute>
 
+		<!--  borders that require a border attribute themselves   -->
+	<attribute name="border">
+		<mapping from="combined"               to="de.enough.polish.ui.backgrounds.CombinedBorder" >
+			<param name="foreground" type="border"  description="Reference to the border that is painted on the top side. Reference a border defined in the borders section." />
+			<param name="background" type="border"  description="Reference to the border that is painted on the bottom side. Reference a border defined in the borders section." />		
+		</mapping>
+	</attribute>
 	
 		<!--
 		<mapping from="" converter="" />
