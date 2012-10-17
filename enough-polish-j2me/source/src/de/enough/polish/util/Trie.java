@@ -2,7 +2,17 @@ package de.enough.polish.util;
 
 
 /**
- * 
+ * A trie is a data structure for efficient matching of words in a search text.
+ * <dl>
+ * <dt>Responsibilities:<dd>
+ * <dt>Life Cycle:<dd>The object is created with new.
+ * <dt>Statefulness:<dd>The object is stateful. Once created, it contains the added words until its end.
+ * <dt>Parents and Children:<dd>The object is not managed by another object. It does not manage other objects.
+ * <dt>Volatility:<dd>The object is in-memory only.
+ * <dt>Synchronization:<dd>The methods of the object are not thread-safe.
+ * <dt>Configuration:<dd>The words to match must be provided, either in the constructor or with {@link #addWord(String)}.
+ * <dt>Dependencies:<dd>To be useful, another object should implement {@link #TrieSearchConsumer} to receive matched words.
+ * </dl>
  * @author rickyn
  *
  */
@@ -27,6 +37,11 @@ public class Trie {
 	private Node root = new Node((char)0);
 	private boolean longestMatchOption = true;
 	
+	/**
+	 * A node object is the building block of the 
+	 * @author rickyn
+	 *
+	 */
 	private class Node{
 		public char character;
 		public Node nextSibling;
@@ -60,21 +75,25 @@ public class Trie {
 	}
 	
 	/**
-	 * 
-	 * @param The words which should be found in the search text. Array MUST not be null and must not contain null elements or empty strings.
+	 * Construct a Trie object and add the given initial words. 
+	 * @param The Array parameter must not be null and must not contain null elements or empty strings.
 	 * @see #addWord(String)
 	 */
 	public Trie(String[] words) {
 		if(words == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("The parameter 'words' must not be null.");
 		}
 		for(int i = 0; i < words.length;i++) {
 			addWord(words[i]);
 		}
 	}
 	
+	/**
+	 * Construct a Trie object without any words registered.
+	 * @see #addWord(String)
+	 */
 	public Trie() {
-		
+		//
 	}
 	
 	public String toString() {
@@ -84,15 +103,15 @@ public class Trie {
 	}
 	
 	/**
-	 * 
-	 * @param word A word which should be found in a search text. Value must not be null or empty.
+	 * Register a word in this Trie to be found when a search text is searched with {@link #search(String, TrieSearchConsumer)}.
+	 * @param word The parameter must not be null or empty.
 	 */
 	public void addWord(String word) {
 		if(word == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("The parameter 'word' must not be null.");
 		}
 		if(word.length() == 0) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("The String parameter 'word' must not be empty.");
 		}
 		int wordLength = word.length();
 		char currentCharacter;
@@ -126,16 +145,13 @@ public class Trie {
 	}
 	
 	/**
-	 * 
-	 * @param text The text in which words should be found.
-	 * @param trieSearchConsumer A callback which is called when a word is found in the text.
+	 * Search the given text to match words registered in this Trie object and notify the consumer about the findings by calling the given callback object.
+	 * @param text The parameter must not be null though the string may be empty.
+	 * @param trieSearchConsumer If the parameter is null, no search is performed.
 	 */
 	public void search(String text, TrieSearchConsumer trieSearchConsumer) {
-		if(this.root == null) {
-			return;
-		}
 		if(text == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("The parameter 'text' must not be null.");
 		}
 		if(trieSearchConsumer == null) {
 			return;
@@ -152,7 +168,7 @@ public class Trie {
 				if(currentCharacter == currentNode.character) {
 					if(currentNode.word != null) {
 						if(this.longestMatchOption) {
-							// Just rememeber the word. We report it later.
+							// Just remember the word. We report it later.
 							lastFoundWord = currentNode.word;
 						} else {
 							trieSearchConsumer.onWordFound(text, currentNode.word, textIndex);
@@ -178,7 +194,7 @@ public class Trie {
 	}
 	
 	/**
-	 * 
+	 * Matching a word in a text can use a shortest or longest match mechanism.
 	 * @param longestMatchOption Value true if the longest matching word should be found in the text. Value false if every word should be matched even if it is a prefix to another word like :) to :)).
 	 */
 	public void setLongestMatchOption(boolean longestMatchOption) {
