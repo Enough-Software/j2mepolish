@@ -241,6 +241,9 @@ public class MidletBridge extends Activity {
 		// read files directory and save it as a system property
 		String appDirectory = getApplicationContext().getFilesDir().getAbsolutePath();
 		setSystemProperty("fileconn.dir.private", appDirectory);
+		//#if polish.build.android.permissions.READ_CONTACTS || polish.build.android.permissions.WRITE_CONTACTS
+			setSystemProperty("microedition.pim.version", "1.0");
+		//#endif
 		
 //		IntentFilter intentFilter = new IntentFilter();
 //		intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
