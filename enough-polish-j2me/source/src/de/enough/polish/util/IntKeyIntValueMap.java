@@ -37,10 +37,10 @@ package de.enough.polish.util;
  *    the new item is linked to the previous item. 
  * </p>
  *
- * <p>Copyright (c) Enough Software 2005 - 2012</p>
+ * <p>Copyright (c) Enough Software 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
-public class IntHashMap
+public class IntKeyIntValueMap
 {
 	
 	/** The default capacity is 16 */
@@ -56,7 +56,7 @@ public class IntHashMap
 	/**
 	 * Creates a new IntHashMap with the default initial capacity 16 and a load factor of 75%. 
 	 */
-	public IntHashMap() {
+	public IntKeyIntValueMap() {
 		this( DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR );
 	}
 	
@@ -66,7 +66,7 @@ public class IntHashMap
 	 * @param initialCapacity the initial number of elements that this map can hold without needing to 
 	 *        increase it's internal size.
 	 */
-	public IntHashMap(int initialCapacity ) {
+	public IntKeyIntValueMap(int initialCapacity ) {
 		this( initialCapacity, DEFAULT_LOAD_FACTOR );
 	}
 	
@@ -81,7 +81,7 @@ public class IntHashMap
 	 * @param loadFactor the loadfactor in percent, a number between 0 and 100. When the loadfactor is 100,
 	 *        the size of this map is only increased after all slots have been filled. 
 	 */
-	public IntHashMap(int initialCapacity, int loadFactor) {
+	public IntKeyIntValueMap(int initialCapacity, int loadFactor) {
 		initialCapacity = (initialCapacity * 100) / loadFactor;
 		// check if initial capacity is a power of 2:
 		int capacity = 1;
@@ -98,12 +98,9 @@ public class IntHashMap
 	 * Adds a new value to this map.
 	 * @param key the integer key
 	 * @param value the value
-	 * @return a value that has been previously stored under this key
+	 * @return a value that has been previously stored under this key, Integer.MIN_VALUE when no value has been registered before
 	 */
-	public Object put( int key, Object value ) {
-		if (value == null ) {
-			throw new IllegalArgumentException("HashMap cannot accept null key [" + key + "] or value [" + value + "].");
-		}
+	public int put( int key, int value ) {
 		if ( (this.size * 100) / this.buckets.length > this.loadFactor ) {
 			increaseSize();
 		}
@@ -119,13 +116,13 @@ public class IntHashMap
 			element = new Element( key, value );
 			this.buckets[index] = element;
 			this.size++;
-			return null;
+			return Integer.MIN_VALUE;
 		}
 		// okay, there is a collision:
 		Element lastElement = element;
 		do {
 			if (element.key == key ) {
-				Object oldValue = element.value;
+				int oldValue = element.value;
 				element.value = value;
 				return oldValue;
 			}
@@ -136,16 +133,16 @@ public class IntHashMap
 		element = new Element( key, value );
 		lastElement.next = element;
 		this.size++;
-		return null;
+		return Integer.MIN_VALUE;
 	}
 	
 	/**
 	 * Retrieves the value that has been stored for the given key.
 	 *
 	 * @param key the integer key
-	 * @return the value for this key, might be null
+	 * @return the value for this key, might be Integer.MIN_VALUE if no value has be found for that key
 	 */
-	public Object get( int key ) {
+	public int get( int key ) {
 		int index;
 		if (this.isPowerOfTwo) {
 			index = (key & 0x7FFFFFFF) & (this.buckets.length - 1);
@@ -154,7 +151,7 @@ public class IntHashMap
 		}
 		Element element = this.buckets[ index ];
 		if (element == null) {
-			return null;
+			return Integer.MIN_VALUE;
 		}
 		do {
 			if (element.key == key ) {
@@ -162,7 +159,7 @@ public class IntHashMap
 			}
 			element = element.next;
 		} while (element != null);
-		return null;
+		return Integer.MIN_VALUE;
 	}
 	
 	/**
@@ -223,7 +220,7 @@ public class IntHashMap
 	 * @return true when a value is stored in this map for the given key
 	 */
 	public boolean containsKey( int key ) {
-		return get( key ) != null;
+		return get( key ) != Integer.MIN_VALUE;
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class IntHashMap
 	 * @param value the value
 	 * @return true when this value is stored in this map
 	 */
-	public boolean containsValue( Object value ) {
+	public boolean containsValue( int value ) {
 		for (int i = 0; i < this.buckets.length; i++) {
 			Element element = this.buckets[i];
 			while (element != null) {
@@ -245,6 +242,27 @@ public class IntHashMap
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Retrieves the key for the given value if that is stored in this map.
+	 * WARNING: this method uses reference checks for testing - you need to ensure to use the identical object that might have been
+	 * stored in this map for testing.
+	 * 
+	 * @param value the value
+	 * @return the integer key if the value is present in this map, otherwise Integer.MIN_VALUE will be returned.
+	 */
+	public int getKeyForValue( int value ) {
+		for (int i = 0; i < this.buckets.length; i++) {
+			Element element = this.buckets[i];
+			while (element != null) {
+				if (element.value == value ) {
+					return element.key;
+				}
+				element = element.next;
+			}
+		}
+		return Integer.MIN_VALUE;
 	}
 	
 	/**
@@ -261,8 +279,8 @@ public class IntHashMap
 	 * Retrieves all stored values
 	 * @return an array of all stored values - might be empty but not null
 	 */
-	public Object[] values() {
-		return values( new Object[ this.size ] );
+	public int[] values() {
+		return values( new int[ this.size ] );
 	}
 
 	/**
@@ -270,7 +288,7 @@ public class IntHashMap
 	 * @param objects the array of the desired type
 	 * @return the given array
 	 */
-	public Object[] values(Object[] objects) {
+	public int[] values(int[] objects) {
 		int index = 0;
 		for (int i = 0; i < this.buckets.length; i++) {
 			Element element = this.buckets[i];
@@ -309,7 +327,7 @@ public class IntHashMap
 	public String toString() {
 		StringBuffer buffer = new StringBuffer( this.size * 23 );
 		buffer.append( super.toString() ).append( "{\n" );
-		Object[] values = values();
+		int[] values = values();
 		for (int i = 0; i < values.length; i++) {
 			buffer.append( values[i] );
 			buffer.append('\n');
@@ -360,9 +378,9 @@ public class IntHashMap
 
 	private static final class Element {
 		public final int key;
-		public Object value;
+		public int value;
 		public Element next;
-		public Element ( int key, Object value ) {
+		public Element ( int key, int value ) {
 			this.key = key;
 			this.value = value;
 		}

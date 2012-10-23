@@ -25,11 +25,11 @@ package de.enough.polish.android.pim;
  * native PIM databases contain all of the fields defined in this API. The PIMList
  * that a PIMItem belongs to determines what fields a PIMItem can support and
  * store (all PIMItems in a particular PIMList support the same set of fields).
- * The <A HREF="../../../javax/microedition/pim/PIMList.html#getSupportedFields()"><CODE>PIMList.getSupportedFields()</CODE></A>
+ * The <A HREF="PIMList.html#getSupportedFields()"><CODE>PIMList.getSupportedFields()</CODE></A>
  * method from a particular PIMItem's PIMList is used to find out what fields are
  * supported within this item. Since not all possible fields are actually
  * supported in a particular PIMItem, <B>all fields should be checked for support in
- * the item's PIMList using <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+ * the item's PIMList using <A HREF="PIMList.html#isSupportedField(int)">
  * <CODE>PIMList.isSupportedField(int)</CODE></A> prior to being used in any
  * retrieval or storage method.</B>
  * </P>
@@ -70,7 +70,7 @@ package de.enough.polish.android.pim;
  * a field up to n-1, where n is the total number of values currently assigned to
  * the field. This behavior is similar to the method <code>Vector.elementAt()</code>.
  * <li>
- * Values are removed from a field by using the method <A HREF="../../../javax/microedition/pim/PIMItem.html#removeValue(int, int)">
+ * Values are removed from a field by using the method <A HREF="PIMItem.html#removeValue(int, int)">
  * <CODE>removeValue(int, int)</CODE></A>. All indexes in the field's array
  * are guaranteed by the implementation to contain an assigned value. Therefore,
  * removing fields from the middle of a field's array causes compacting of the
@@ -79,18 +79,18 @@ package de.enough.polish.android.pim;
  * </ul>
  * <h5>Field Labels</h5>
  * <p>Each field has a human readable <i>label</i>, usually used for display purposes.
- * The label can be retrieved through <A HREF="../../../javax/microedition/pim/PIMList.html#getFieldLabel(int)">
+ * The label can be retrieved through <A HREF="PIMList.html#getFieldLabel(int)">
  * <CODE>PIMList.getFieldLabel(int)</CODE></A>.
  * </p>
  * <h5>Field Data Types</h5>
- * <p>The data values for a field has a <i>data type</i>, such as <A HREF="../../../javax/microedition/pim/PIMItem.html#INT">
- * <CODE>INT</CODE></A>, <A HREF="../../../javax/microedition/pim/PIMItem.html#BINARY">
- * <CODE>BINARY</CODE></A>, <A HREF="../../../javax/microedition/pim/PIMItem.html#BOOLEAN">
- * <CODE>BOOLEAN</CODE></A>, <A HREF="../../../javax/microedition/pim/PIMItem.html#DATE">
- * <CODE>DATE</CODE></A>, <A HREF="../../../javax/microedition/pim/PIMItem.html#STRING_ARRAY">
- * <CODE>STRING_ARRAY</CODE></A> or <A HREF="../../../javax/microedition/pim/PIMItem.html#STRING">
+ * <p>The data values for a field has a <i>data type</i>, such as <A HREF="PIMItem.html#INT">
+ * <CODE>INT</CODE></A>, <A HREF="PIMItem.html#BINARY">
+ * <CODE>BINARY</CODE></A>, <A HREF="PIMItem.html#BOOLEAN">
+ * <CODE>BOOLEAN</CODE></A>, <A HREF="PIMItem.html#DATE">
+ * <CODE>DATE</CODE></A>, <A HREF="PIMItem.html#STRING_ARRAY">
+ * <CODE>STRING_ARRAY</CODE></A> or <A HREF="PIMItem.html#STRING">
  * <CODE>STRING</CODE></A>. The data type of the field's data can be retrieved
- * through <A HREF="../../../javax/microedition/pim/PIMList.html#getFieldDataType(int)">
+ * through <A HREF="PIMList.html#getFieldDataType(int)">
  * <CODE>PIMList.getFieldDataType(int)</CODE></A>. All data values for a
  * particular field have the same data type.
  * </p>
@@ -118,11 +118,11 @@ package de.enough.polish.android.pim;
  * publicly in vendor specific classes. Vendors are allowed to extend the field
  * set for any of the PIM items in this manner to address any platform specific
  * fields they wish to support. Users can find out if a field is an extended field
- * by comparing its value against <A HREF="../../../javax/microedition/pim/PIMItem.html#EXTENDED_FIELD_MIN_VALUE">
+ * by comparing its value against <A HREF="PIMItem.html#EXTENDED_FIELD_MIN_VALUE">
  * <CODE>EXTENDED_FIELD_MIN_VALUE</CODE></A>, find out the field's allowed
- * data type through the method <A HREF="../../../javax/microedition/pim/PIMList.html#getFieldDataType(int)">
+ * data type through the method <A HREF="PIMList.html#getFieldDataType(int)">
  * <CODE>PIMList.getFieldDataType(int)</CODE></A>, and find out the field's
- * label through the method<A HREF="../../../javax/microedition/pim/PIMList.html#getFieldLabel(int)"><CODE>PIMList.getFieldLabel(int)</CODE></A>.
+ * label through the method<A HREF="PIMList.html#getFieldLabel(int)"><CODE>PIMList.getFieldLabel(int)</CODE></A>.
  * </p>
  * <h4>Attributes</h4>
  * <p>Optional attributes can be provided to further describe individual data values
@@ -131,18 +131,18 @@ package de.enough.polish.android.pim;
  * information about the data value than just a field can provide. Since they are
  * hints, they may or may not be ignored by the implementation when adding the
  * data values. The actual attributes used and associated with the data values
- * after adding can be retrieved by the method <A HREF="../../../javax/microedition/pim/PIMItem.html#getAttributes(int, int)">
+ * after adding can be retrieved by the method <A HREF="PIMItem.html#getAttributes(int, int)">
  * <CODE>getAttributes(int, int)</CODE></A>. Attributes can also have human
- * readable labels associated with them, retrieved by the method <A HREF="../../../javax/microedition/pim/PIMList.html#getAttributeLabel(int)">
+ * readable labels associated with them, retrieved by the method <A HREF="PIMList.html#getAttributeLabel(int)">
  * <CODE>PIMList.getAttributeLabel(int)</CODE></A>. If no attributes are to be
- * associated with a data value, then <A HREF="../../../javax/microedition/pim/PIMItem.html#ATTR_NONE">
+ * associated with a data value, then <A HREF="PIMItem.html#ATTR_NONE">
  * <CODE>ATTR_NONE</CODE></A> must be used.
  * </p>
  * <p>
  * Attributes are handled in the API using a single bit to indicate a specific
  * attribute and using int values as bit arrays to indicate a set of attributes.
  * int values can be checked to see if they contain a specific attribute by using
- * bitwise AND (&amp;) with the attribute and the int value. <A HREF="../../../javax/microedition/pim/PIMItem.html#ATTR_NONE">
+ * bitwise AND (&amp;) with the attribute and the int value. <A HREF="PIMItem.html#ATTR_NONE">
  * <CODE>ATTR_NONE</CODE></A> is a special attribute that indicates no
  * attributes are set and has a value of 0 that erases all other attributes
  * previously set.
@@ -151,7 +151,7 @@ package de.enough.polish.android.pim;
  * <p>Optional attributes may also be extended by vendors and their PIM API
  * implementations. These extended attributes also may or may not be exposed
  * publicly in vendor specific classes. The label for these attributes can be
- * retrieved through <A HREF="../../../javax/microedition/pim/PIMList.html#getAttributeLabel(int)">
+ * retrieved through <A HREF="PIMList.html#getAttributeLabel(int)">
  * <CODE>PIMList.getAttributeLabel(int)</CODE></A>.
  * </p>
  * <h3>Categories</h3>
@@ -168,8 +168,8 @@ public interface PIMItem
 	/**
 	 * 
 	 * Data type indicating data is binary in a byte array. Data associated with <code>BINARY</code>
-	 * is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getBinary(int, int)">
-	 * <CODE>getBinary(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addBinary(int, int, byte[], int, int)">
+	 * is retrieved via <A HREF="PIMItem.html#getBinary(int, int)">
+	 * <CODE>getBinary(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addBinary(int, int, byte[], int, int)">
 	 * <CODE>addBinary(int, int, byte[], int, int)</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -181,8 +181,8 @@ public interface PIMItem
 	/**
 	 * 
 	 * Data type indicating data is of boolean primitive data type. Data associated
-	 * with <code>BOOLEAN</code> is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getBoolean(int, int)">
-	 * <CODE>getBoolean(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addBoolean(int, int, boolean)">
+	 * with <code>BOOLEAN</code> is retrieved via <A HREF="PIMItem.html#getBoolean(int, int)">
+	 * <CODE>getBoolean(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addBoolean(int, int, boolean)">
 	 * <CODE>addBoolean(int, int, boolean)</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -196,8 +196,8 @@ public interface PIMItem
 	 * Data type indicating data is a Date in long primitive data type format
 	 * expressed in the same long value format as java.util.Date, which is
 	 * milliseconds since the epoch (00:00:00 GMT, January 1, 1970). Data associated
-	 * with <code>DATE</code> is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getDate(int, int)">
-	 * <CODE>getDate(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addDate(int, int, long)">
+	 * with <code>DATE</code> is retrieved via <A HREF="PIMItem.html#getDate(int, int)">
+	 * <CODE>getDate(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addDate(int, int, long)">
 	 * <CODE>addDate(int, int, long)</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -209,8 +209,8 @@ public interface PIMItem
 	/**
 	 * 
 	 * Data type indicating data is of int primitive data type. Data associated with <code>
-	 * INT</code> is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getInt(int, int)">
-	 * <CODE>getInt(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addInt(int, int, int)">
+	 * INT</code> is retrieved via <A HREF="PIMItem.html#getInt(int, int)">
+	 * <CODE>getInt(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addInt(int, int, int)">
 	 * <CODE>addInt(int, int, int)</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -222,8 +222,8 @@ public interface PIMItem
 	/**
 	 * 
 	 * Data type indicating data is a String object. Data associated with <code>STRING</code>
-	 * is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getString(int, int)">
-	 * <CODE>getString(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addString(int, int, java.lang.String)">
+	 * is retrieved via <A HREF="PIMItem.html#getString(int, int)">
+	 * <CODE>getString(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addString(int, int, java.lang.String)">
 	 * <CODE>addString(int, int, java.lang.String)</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -235,8 +235,8 @@ public interface PIMItem
 	/**
 	 * 
 	 * Data type indicating data is a array of related fields returned in a string
-	 * array. Data associated with <code>STRING_ARRAY</code> is retrieved via <A HREF="../../../javax/microedition/pim/PIMItem.html#getStringArray(int, int)">
-	 * <CODE>getStringArray(int, int)</CODE></A> and added via <A HREF="../../../javax/microedition/pim/PIMItem.html#addStringArray(int, int, java.lang.String[])">
+	 * array. Data associated with <code>STRING_ARRAY</code> is retrieved via <A HREF="PIMItem.html#getStringArray(int, int)">
+	 * <CODE>getStringArray(int, int)</CODE></A> and added via <A HREF="PIMItem.html#addStringArray(int, int, java.lang.String[])">
 	 * <CODE>addStringArray(int, int, java.lang.String[])</CODE></A>.
 	 * <P>
 	 * <DT><B>See Also:</B>
@@ -298,9 +298,9 @@ public interface PIMItem
 	 * data to the underlying data storage for the list.
 	 * <p>
 	 * Some devices may not allow categories in the item to be persisted which are not
-	 * in the list returned from <A HREF="../../../javax/microedition/pim/PIMList.html#getCategories()">
+	 * in the list returned from <A HREF="PIMList.html#getCategories()">
 	 * <CODE>PIMList.getCategories()</CODE></A>. In this case the categories are
-	 * dropped silently when this method is invoked (this allows data imported using <A HREF="../../../javax/microedition/pim/PIM.html#fromSerialFormat(java.io.InputStream, java.lang.String)">
+	 * dropped silently when this method is invoked (this allows data imported using <A HREF="PIM.html#fromSerialFormat(java.io.InputStream, java.lang.String)">
 	 * <CODE>PIM.fromSerialFormat(java.io.InputStream, java.lang.String)</CODE></A>
 	 * to be persisted).
 	 * </p>
@@ -323,8 +323,6 @@ public interface PIMItem
 	 * 
 	 * This method returns a boolean indicating whether any of this item's fields have
 	 * been modified since the item was retrieved or last committed.
-	 * <P></P>
-	 * 
 	 * 
 	 * @return boolean true if any fields have been modified since the item was last retrieved or committed, false otherwise.
 	 */
@@ -336,8 +334,6 @@ public interface PIMItem
 	 * quick access to all of the data stored in the item without having to iterate
 	 * through all supported fields and checking if data is stored for the field or
 	 * not.
-	 * <P></P>
-	 * 
 	 * 
 	 * @return int array of fields that have data currently stored for them. If no fields contain data, a zero length array is returned.
 	 */
@@ -345,11 +341,9 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get a binary data value for a field from the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get a binary data value for a field from the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
-	 * <P></P>
-	 * 
 	 * 
 	 * @param field - The field from which the data is retrieved.
 	 * @param index - an index to a particular value associated with the field.
@@ -364,11 +358,9 @@ public interface PIMItem
 	 * 
 	 * Adds a binary data value to a field in the item. The value is appended as the
 	 * last data value in the field's array, similar to <code>Vector.addElement</code>.
-	 * <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)"><CODE>PIMList.isSupportedField(int)</CODE></A>
+	 * <A HREF="PIMList.html#isSupportedField(int)"><CODE>PIMList.isSupportedField(int)</CODE></A>
 	 * should be used to verify the field validity for this item prior to invoking
 	 * this method.
-	 * <P></P>
-	 * 
 	 * 
 	 * @param field - The field to which the value belongs.
 	 * @param attributes - a bit array specifying any optional attributes describing this value. These attributes are a hint to the about the value's characteristics and some or all may be ignored by this method due to platform restrictions. Attributes that are invalid or not applicable are also ignored.
@@ -386,8 +378,8 @@ public interface PIMItem
 	 * 
 	 * Sets an existing binary data value in a field to a new value. The value located
 	 * at the provided index is set, similar to <code>Vector.setElementAt</code>. This
-	 * method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addBinary(int, int, byte[], int, int)">
-	 * <CODE>addBinary(int, int, byte[], int, int)</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addBinary(int, int, byte[], int, int)">
+	 * <CODE>addBinary(int, int, byte[], int, int)</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -408,7 +400,7 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get a date value from a field in the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get a date value from a field in the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -426,7 +418,7 @@ public interface PIMItem
 	/**
 	 * 
 	 * Adds a date value to a field in the item. The value is appended as the last
-	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -453,8 +445,8 @@ public interface PIMItem
 	 * 
 	 * Sets an existing date data value in a field to a new value. The value located
 	 * at the provided index is set, similar to <code>Vector.setElementAt</code>. This
-	 * method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addDate(int, int, long)">
-	 * <CODE>addDate(int, int, long)</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addDate(int, int, long)">
+	 * <CODE>addDate(int, int, long)</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -480,7 +472,7 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get an integer value from a field in the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get an integer value from a field in the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -498,7 +490,7 @@ public interface PIMItem
 	/**
 	 * 
 	 * Adds an integer value to a field in the item. The value is appended as the last
-	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -517,8 +509,8 @@ public interface PIMItem
 	 * 
 	 * Sets an existing int data value in a field to a new value. The value located at
 	 * the provided index is set, similar to <code>Vector.setElementAt</code>. This
-	 * method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addInt(int, int, int)">
-	 * <CODE>addInt(int, int, int)</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addInt(int, int, int)">
+	 * <CODE>addInt(int, int, int)</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -536,7 +528,7 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get a String value from a field in the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get a String value from a field in the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method. The returned string
 	 * contains no "escaped" characters that may have been used when importing the
@@ -556,7 +548,7 @@ public interface PIMItem
 	/**
 	 * 
 	 * Adds a String value to a field in the item. The value is appended as the last
-	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method. Values given to
 	 * this method should not be "escaped"; i.e. having special characters marked in
@@ -580,8 +572,8 @@ public interface PIMItem
 	 * 
 	 * Sets an existing String data value in a field to a new value. The value located
 	 * at the provided index is set, similar to <code>Vector.setElementAt</code>. This
-	 * method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addString(int, int, java.lang.String)">
-	 * <CODE>addString(int, int, java.lang.String)</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addString(int, int, java.lang.String)">
+	 * <CODE>addString(int, int, java.lang.String)</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method. Values given to
 	 * this method should not be "escaped"; i.e. having special characters marked in
@@ -604,7 +596,7 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get a boolean value from a field in the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get a boolean value from a field in the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -622,7 +614,7 @@ public interface PIMItem
 	/**
 	 * 
 	 * Adds a boolean value to a field in the item. The value is appended as the last
-	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * data value in the field's array, similar to <code>Vector.addElement</code>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -641,8 +633,8 @@ public interface PIMItem
 	 * 
 	 * Sets an existing boolean data value in a field to a new value. The value
 	 * located at the provided index is set, similar to <code>Vector.setElementAt</code>.
-	 * This method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addBoolean(int, int, boolean)">
-	 * <CODE>addBoolean(int, int, boolean)</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * This method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addBoolean(int, int, boolean)">
+	 * <CODE>addBoolean(int, int, boolean)</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -660,7 +652,7 @@ public interface PIMItem
 
 	/**
 	 * 
-	 * Get an array of related values from a field in the item. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * Get an array of related values from a field in the item. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
@@ -686,14 +678,14 @@ public interface PIMItem
 	 * 
 	 * Adds an array of related string values as a single entity to a field in the
 	 * item. The array is appended as the last data value in the field's array of
-	 * values, similar to <code>Vector.addElement</code>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * values, similar to <code>Vector.addElement</code>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
 	 * <P>
 	 * Not all elements in the array are required to be supported by the item. If a
 	 * String is provided at an array index that is not supported by this item, that
-	 * value is silently discarded. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedArrayElement(int, int)">
+	 * value is silently discarded. <A HREF="PIMList.html#isSupportedArrayElement(int, int)">
 	 * <CODE>PIMList.isSupportedArrayElement(int, int)</CODE></A> should be used
 	 * to verify the validity of the array element prior to invoking this method.
 	 * </P>
@@ -715,15 +707,15 @@ public interface PIMItem
 	 * 
 	 * Sets an existing String array data value in a field to a new value. The value
 	 * located at the provided index is set, similar to <code>Vector.setElementAt</code>.
-	 * This method cannot be used to add new values to a field; use <A HREF="../../../javax/microedition/pim/PIMItem.html#addStringArray(int, int, java.lang.String[])">
-	 * <CODE>addStringArray(int, int, java.lang.String[])</CODE></A>. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * This method cannot be used to add new values to a field; use <A HREF="PIMItem.html#addStringArray(int, int, java.lang.String[])">
+	 * <CODE>addStringArray(int, int, java.lang.String[])</CODE></A>. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>PIMList.isSupportedField(int)</CODE></A> should be used to verify the
 	 * field validity for this item prior to invoking this method.
 	 * <P></P>
 	 * <P>
 	 * Not all elements in the array are required to be supported by the item. If a
 	 * String is provided at an array index that is not supported by this item, that
-	 * value is silently discarded. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedArrayElement(int, int)">
+	 * value is silently discarded. <A HREF="PIMList.html#isSupportedArrayElement(int, int)">
 	 * <CODE>PIMList.isSupportedArrayElement(int, int)</CODE></A> should be used
 	 * to verify the validity of the array element prior to invoking this method.
 	 * </P>
@@ -792,10 +784,10 @@ public interface PIMItem
 	/**
 	 * 
 	 * Adds a category to this item. It is recommended to use the category names
-	 * defined in <A HREF="../../../javax/microedition/pim/PIMList.html#getCategories()"><CODE>
+	 * defined in <A HREF="PIMList.html#getCategories()"><CODE>
 	 * PIMList.getCategories()</CODE></A> from the list associated with this
 	 * item. Some devices may not allow categories to be added which are not in the
-	 * list returned from <A HREF="../../../javax/microedition/pim/PIMList.html#getCategories()">
+	 * list returned from <A HREF="PIMList.html#getCategories()">
 	 * <CODE>PIMList.getCategories()</CODE></A>. In this case a <code>PIMException</code>
 	 * may be thrown. If the given category is already associated with this item, the
 	 * category is not added again and the method call is considered successful and

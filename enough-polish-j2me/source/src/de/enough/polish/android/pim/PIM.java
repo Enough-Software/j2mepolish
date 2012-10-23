@@ -3,6 +3,7 @@
 package de.enough.polish.android.pim;
 
 import de.enough.polish.android.pim.enough.AndroidPim;
+import de.enough.polish.android.pim.impl.PimImpl;
 
 /**
  * Class for accessing PIM lists on a device and performing PIM wide functions.
@@ -157,7 +158,7 @@ public abstract class PIM extends java.lang.Object
 	public static PIM getInstance()
 	{
 		if(instance == null) {
-			instance = new AndroidPim();
+			instance = new PimImpl();
 		}
 		return instance;
 	}

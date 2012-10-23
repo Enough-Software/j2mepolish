@@ -6,7 +6,7 @@ package de.enough.polish.android.pim;
  * Represents the common functionality of a PIM list.
  * 
  * Represents the common functionality of a PIM list. PIMLists contain zero or
- * more PIMItems (represented by the class <A HREF="../../../javax/microedition/pim/PIMItem.html">
+ * more PIMItems (represented by the class <A HREF="PIMItem.html">
  * <CODE>PIMItem</CODE></A>
  * . A PIMList allows retrieval of all or some of the PIMItems contained in the
  * list.
@@ -23,7 +23,7 @@ public interface PIMList
 {
 	/**
 	 * 
-	 * Constant for the <A HREF="../../../javax/microedition/pim/PIMList.html#itemsByCategory(java.lang.String)">
+	 * Constant for the <A HREF="PIMList.html#itemsByCategory(java.lang.String)">
 	 * <CODE>itemsByCategory(java.lang.String)</CODE></A> method to indicate to
 	 * search for uncategorized items. The value <code>null</code> is assigned to the
 	 * string <code>UNCATEGORIZED</code>.
@@ -74,7 +74,7 @@ public interface PIMList
 	 * may have more data than is specified in the matching item, but must at least
 	 * match all fields specified in the matching item. Only fields that have values
 	 * set within the matching item are used for matching comparisons (i.e. fields
-	 * returned by <A HREF="../../../javax/microedition/pim/PIMItem.html#getFields()"><CODE>PIMItem.getFields()</CODE></A>
+	 * returned by <A HREF="PIMItem.html#getFields()"><CODE>PIMItem.getFields()</CODE></A>
 	 * for the matching item).
 	 * <P>
 	 * Matching is done with the following rules and may be locale dependent:
@@ -105,7 +105,7 @@ public interface PIMList
 	 * supported in the particular list being searched, then this method would use <code>ATTR_HOME</code>
 	 * as the attribute to match for according to the other attribute maching rules.
 	 * To avoid this situation in which the attribute sets used may different than
-	 * intended, it is recommended to verify the attribute's validity using <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedAttribute(int, int)">
+	 * intended, it is recommended to verify the attribute's validity using <A HREF="PIMList.html#isSupportedAttribute(int, int)">
 	 * <CODE>isSupportedAttribute(int, int)</CODE></A>
 	 * prior to setting the attribute in the searched-for PIMItem.<li>
 	 * For fields that store Strings as values, matching is defined as true if the
@@ -137,9 +137,9 @@ public interface PIMList
 	 * Return an Enumeration of all items in the list that contain at least one String
 	 * field data value that matches the string value provided. Only fields that have
 	 * values set within the matching item are used for matching comparisons (i.e.
-	 * fields returned by <A HREF="../../../javax/microedition/pim/PIMItem.html#getFields()">
+	 * fields returned by <A HREF="PIMItem.html#getFields()">
 	 * <CODE>PIMItem.getFields()</CODE></A> for the matching item). NOTE: this
-	 * method may not be as optimized as <A HREF="../../../javax/microedition/pim/PIMList.html#items(javax.microedition.pim.PIMItem)">
+	 * method may not be as optimized as <A HREF="PIMList.html#items(javax.microedition.pim.PIMItem)">
 	 * <CODE>items(PIMItem)</CODE></A> so that method should be used instead of
 	 * this one if applicable.
 	 * <P>
@@ -397,7 +397,7 @@ public interface PIMList
 	/**
 	 * 
 	 * Returns an int representing the data type of the data associated with the given
-	 * field. This method is useful for platform extended fields. <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)">
+	 * field. This method is useful for platform extended fields. <A HREF="PIMList.html#isSupportedField(int)">
 	 * <CODE>isSupportedField(int)</CODE></A> should be used to verify the field
 	 * validity for this item prior to invoking this method.
 	 * <P></P>
@@ -416,7 +416,7 @@ public interface PIMList
 	 * provided by the platform and are not changeable by the application.
 	 * <P></P>
 	 * <P>
-	 * <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedField(int)"><CODE>isSupportedField(int)</CODE></A>
+	 * <A HREF="PIMList.html#isSupportedField(int)"><CODE>isSupportedField(int)</CODE></A>
 	 * should be used to verify the field validity for this item prior to invoking
 	 * this method.
 	 * <P>
@@ -436,7 +436,7 @@ public interface PIMList
 	 * are provided by the platform and are not changeable by the application.
 	 * <P></P>
 	 * <P>
-	 * <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedAttribute(int, int)">
+	 * <A HREF="PIMList.html#isSupportedAttribute(int, int)">
 	 * <CODE>isSupportedAttribute(int, int)</CODE></A>
 	 * should be used to verify the attribute's validity for this item prior to
 	 * invoking this method.
@@ -457,7 +457,7 @@ public interface PIMList
 	 * labels are provided by the platform and are not changeable by the application.
 	 * <P></P>
 	 * <P>
-	 * <A HREF="../../../javax/microedition/pim/PIMList.html#isSupportedArrayElement(int, int)">
+	 * <A HREF="PIMList.html#isSupportedArrayElement(int, int)">
 	 * <CODE>isSupportedArrayElement(int, int)</CODE></A>
 	 * should be used to verify the array elements's validity for this item prior to
 	 * invoking this method.
