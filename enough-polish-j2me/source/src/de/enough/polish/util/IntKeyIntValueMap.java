@@ -166,9 +166,9 @@ public class IntKeyIntValueMap
 	 * Removes a value from this map.
 	 * 
 	 * @param key the integer key
-	 * @return the object that has been stored for this key
+	 * @return the previous int value that has been stored for this key or Integer.MIN_VALUE when there was no previous value 
 	 */
-	public Object remove( int key ) {
+	public int remove( int key ) {
 		int index;
 		if (this.isPowerOfTwo) {
 			index = (key & 0x7FFFFFFF) & (this.buckets.length - 1);
@@ -178,7 +178,7 @@ public class IntKeyIntValueMap
 		Element element = this.buckets[ index ];
 		if (element == null) {
 			//System.out.println("remove: No bucket found for key " + key + ", containsKey()=" + containsKey(key));
-			return null;
+			return Integer.MIN_VALUE;
 		}
 		Element lastElement = null;
 		do {
@@ -195,7 +195,7 @@ public class IntKeyIntValueMap
 			element = element.next;
 		} while (element != null);
 		//System.out.println("No element found for key " + key + ", containsKey()=" + containsKey(key));
-		return null;
+		return Integer.MIN_VALUE;
 	}
 	
 	/**
