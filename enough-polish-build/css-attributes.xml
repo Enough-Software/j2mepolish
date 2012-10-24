@@ -5676,14 +5676,14 @@
 		since="J2ME Polish 2.3.1"
 	/>
 	
-		<attribute
+	<attribute
 		name="horizontalview-distribution-fixed-count"
 		type="integer"
 		appliesTo="HorizontalContainerView"
 		description="Set the number of items to display at a given time"
 		id="493"
 		default="1"
-		since="J2ME Polish 2.1.3"
+		since="J2ME Polish 2.4"
 	/>
 	
 <!--
