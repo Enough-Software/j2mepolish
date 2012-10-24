@@ -4830,7 +4830,7 @@
 		description="Set to equal for giving each item the same available space."
 		id="404"
 		default="normal"
-		values="normal, equal"
+		values="normal, equal, fixed-count"
 		since="J2ME Polish 2.1.3"
 	/>
 	
@@ -5674,6 +5674,16 @@
 		default="true"
 		id="492"
 		since="J2ME Polish 2.3.1"
+	/>
+	
+		<attribute
+		name="horizontalview-distribution-fixed-count"
+		type="integer"
+		appliesTo="HorizontalContainerView"
+		description="Set the number of items to display at a given time"
+		id="493"
+		default="1"
+		since="J2ME Polish 2.1.3"
 	/>
 	
 <!--
