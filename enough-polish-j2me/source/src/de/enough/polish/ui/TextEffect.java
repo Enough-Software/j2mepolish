@@ -208,6 +208,10 @@ public abstract class TextEffect implements Serializable
 		int size = textLines.size();
 		for (int i = 0; i < size; i++) {
 			String line = (String) lineObjects[i];
+			if (line == null)
+			{
+				break;
+			}
 			int lineX = x;
 			int lineY = y;
 			int anchor = 0;
