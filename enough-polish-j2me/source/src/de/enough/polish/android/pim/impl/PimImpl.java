@@ -1,3 +1,4 @@
+//#condition polish.android
 package de.enough.polish.android.pim.impl;
 
 import java.io.IOException;
