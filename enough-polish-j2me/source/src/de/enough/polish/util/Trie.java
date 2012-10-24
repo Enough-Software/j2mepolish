@@ -44,7 +44,7 @@ public class Trie implements Externalizable {
 		 * @param matchedWord The word which was found.
 		 * @param matchedWordIndex The index in the search text at which the matched word was found.
 		 */
-		public void onWordFound(String searchText, String matchedWord, int matchedWordIndex);
+		void onWordFound(String searchText, String matchedWord, int matchedWordIndex);
 	}
 
 	/**
@@ -409,7 +409,10 @@ public class Trie implements Externalizable {
 		}
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -418,7 +421,10 @@ public class Trie implements Externalizable {
 		return result;
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
