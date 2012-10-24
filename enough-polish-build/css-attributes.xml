@@ -1874,6 +1874,7 @@
 	>
 		<mapping from="bitmap" to="new de.enough.polish.ui.texteffects.BitmapFontTextEffect()" />
 		<mapping from="smiley" to="new de.enough.polish.ui.texteffects.SmileyTextEffect()" />
+		<mapping from="smiley-extended" to="new de.enough.polish.ui.texteffects.FastSmileyTextEffect()" />
 		<mapping from="shadow" to="new de.enough.polish.ui.texteffects.ShadowTextEffect()" />
 		<mapping from="outline" to="new de.enough.polish.ui.texteffects.OutlineTextEffect()" />
 		<mapping from="segment" to="new de.enough.polish.ui.texteffects.SegmentTextEffect()" />
