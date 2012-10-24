@@ -97,9 +97,9 @@ implements ContactDao
 
 	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
 
+	    String[] names = new String[5];
 	    if (cursor.moveToFirst()) 
 	    { 
-	    	String[] names = new String[5];
 	    	for (int columnIndex=0; columnIndex<projection.length; columnIndex++)
 	    	{
 	    		String namePart = cursor.getString(columnIndex);
@@ -108,11 +108,11 @@ implements ContactDao
 	    		}
 				names[columnIndex] = (namePart);
 	    	}
-	    	Field namesField = new Field(Contact.NAME, PIMItem.STRING_ARRAY);
-	    	namesField.addValue(names, Contact.ATTR_NONE );
-	    	//namesField.setValues(names);
-	    	contact.addField(namesField);
 	    } 
+	    // add field in any case:
+    	Field namesField = new Field(Contact.NAME, PIMItem.STRING_ARRAY);
+    	namesField.addValue(names, Contact.ATTR_NONE );
+    	contact.addField(namesField);
 	    cursor.close();
 	}
 
@@ -215,15 +215,14 @@ implements ContactDao
 
 	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
 	    boolean arrayFieldAdded = false;
-	    boolean formattedFieldAdded = false;
 	    Field formattedAddressField = new Field(Contact.FORMATTED_ADDR, PIMItem.STRING);
+    	Field addressField = new Field(Contact.ADDR, PIMItem.STRING_ARRAY);
+    	String[] addresses = new String[projection.length-1];
 	    while (cursor.moveToNext()) 
 	    { 
 	    	if (!arrayFieldAdded)
 	    	{
 		    	// there can be more than one address on Android, however the PIM API only supports one address. So we just take the first one.	
-		    	Field addressField = new Field(Contact.ADDR, PIMItem.STRING_ARRAY);
-		    	String[] addresses = new String[projection.length-1];
 		    	for (int columnIndex=0; columnIndex<projection.length-1; columnIndex++)
 		    	{
 		    		String addressPart = cursor.getString(columnIndex);
@@ -243,7 +242,6 @@ implements ContactDao
 		    	if (arrayFieldAdded)
 		    	{
 			    	addressField.addValue(addresses, Contact.ATTR_NONE);
-			    	contact.addField(addressField);
 		    	}
 	    	}
 	    	String address = cursor.getString(projection.length - 1);
@@ -254,12 +252,9 @@ implements ContactDao
 	    	int type = cursor.getInt(1);
 	    	int pimAttribute = ADDR_ATTRIBUTES_MAPPPING.get(type);
 	    	formattedAddressField.addValue(address, pimAttribute);
-	    	formattedFieldAdded = true;
 	    }
-	    if (formattedFieldAdded)
-	    {
-	    	contact.addField(formattedAddressField);
-	    }
+    	contact.addField(addressField);
+	    contact.addField(formattedAddressField);
 	    cursor.close();
 	}	
 
@@ -273,13 +268,13 @@ implements ContactDao
 
 	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
 	    
+	    Field noteField = new Field(Contact.NOTE, PIMItem.STRING);
 	    if (cursor.moveToFirst()) 
 	    { 
 	    	String noteStr = cursor.getString(0);
-			Field noteField = new Field(Contact.NOTE, PIMItem.STRING);
 	    	noteField.addValue(noteStr, PIMItem.ATTR_NONE);
-	    	contact.addField(noteField);
 	    } 
+	    contact.addField(noteField);
 	    cursor.close();
 	}
 	
