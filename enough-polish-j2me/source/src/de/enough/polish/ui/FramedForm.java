@@ -630,7 +630,7 @@ implements CycleListener
 		
 		int yOffset = getScrollYOffset();
 		// adjust scroll offset for bottom frame animation
-		if(cont != null && yOffset < 0 && (yOffset + cont.getItemAreaHeight() < height) )
+		if (cont != null && yOffset < 0 && (yOffset + cont.getItemAreaHeight() < height) )
 		{
 			cont.setScrollYOffset( -(cont.getItemAreaHeight() - height));
 		}

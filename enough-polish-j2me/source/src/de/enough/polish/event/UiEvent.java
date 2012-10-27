@@ -28,7 +28,7 @@ package de.enough.polish.event;
 /**
  * <p>Allows to handle UI events separately from the UI</p>
  *
- * <p>Copyright Enough Software 2009, 2010</p>
+ * <p>Copyright Enough Software 2010 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class UiEvent {
@@ -37,7 +37,7 @@ public class UiEvent {
 	/**
 	 * Determines whether this event has been handled.
 	 * 
-	 * @return true when it was handled - in that case this event shoudld not be processed anymore.
+	 * @return true when it was handled - in that case this event should not be processed anymore.
 	 */
 	public boolean isHandled() {
 		return this.isHandled;
