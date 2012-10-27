@@ -123,6 +123,38 @@ implements ItemConsumer
 		
 		synchronized (this.itemsList) 
 		{
+			int itemsListSize = this.itemsList.size();
+			if (itemsListSize != 0)
+			{
+				int count = this.itemSource.countItems();
+				if (count == 0)
+				{
+					this.contentHeight = 0;
+					return;
+				}
+				int cumulatedHeight = 0;
+				int numberOfItems = 0;
+				Object[] items = this.itemsList.getInternalArray();
+				int relY = ((Item)this.itemsList.get(0)).relativeY;
+				for (int i = 0; i < items.length; i++)
+				{
+					Item item = (Item) items[i];
+					if (item == null)
+					{
+						break;
+					}
+					item.relativeY = relY;
+					int rowHeight = item.getItemHeight(firstLineWidth, availWidth, availHeight) + this.paddingVertical;
+					relY += rowHeight;
+					cumulatedHeight += rowHeight;
+					numberOfItems++;
+				}
+				int estimatedHeight = count * cumulatedHeight / numberOfItems;
+				this.childRowHeight = estimatedHeight / count;
+				this.contentHeight = estimatedHeight;
+				this.contentWidth = availWidth;
+				return;
+			}
 			this.itemsList.clear();
 			this.itemIndexList.clear();
 			int count = this.itemSource.countItems();
@@ -131,7 +163,7 @@ implements ItemConsumer
 				this.contentHeight = 0;
 				return;
 			}
-			int comulatedHeight = 0;
+			int cumulatedHeight = 0;
 			int numberOfAddedItems = 0;
 			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
 			{
@@ -139,20 +171,22 @@ implements ItemConsumer
 				for (int itemIndex=startIndex; itemIndex >= 0; itemIndex--)
 				{
 					Item item = this.itemSource.createItem(itemIndex);
+					item.parent = this;
 					this.itemsList.add(0, item);
 					this.itemIndexList.add(0, itemIndex);
 					int rowHeight = item.getItemHeight(firstLineWidth, availWidth, availHeight) + this.paddingVertical;
-					comulatedHeight += rowHeight;
+					cumulatedHeight += rowHeight;
 					numberOfAddedItems++;
-					if ((comulatedHeight > (availHeight*2)) && (numberOfAddedItems >= MIN_NUMBER_OF_ITEMS)) // that's 2 screen heights filled.
+					if ((cumulatedHeight > (availHeight*2)) && (numberOfAddedItems >= MIN_NUMBER_OF_ITEMS)) // that's 2 screen heights filled.
 					{
 						break;
 					}
 				}
 			}
-			int estimatedHeight = count * comulatedHeight / numberOfAddedItems;
+			int estimatedHeight = count * cumulatedHeight / numberOfAddedItems;
 			this.childRowHeight = estimatedHeight / count;
 			this.contentHeight = estimatedHeight;
+			this.contentWidth = availWidth;
 			boolean smooth = (this.yOffset != 0);
 			if (estimatedHeight > availHeight && (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM))
 			{
@@ -161,8 +195,9 @@ implements ItemConsumer
 			}
 			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
 			{
+				itemsListSize = this.itemsList.size();
 				int lastRelativeY = estimatedHeight;
-				for (int index=this.itemsList.size()-1; index >= 0; index-- )
+				for (int index=itemsListSize-1; index >= 0; index-- )
 				{
 					Item item = (Item) this.itemsList.get(index);
 					item.relativeY = lastRelativeY - item.itemHeight;
@@ -202,6 +237,7 @@ implements ItemConsumer
 					this.itemIndexList.removeElementAt(itemsListLastIndex);
 					firstItemIndex--;
 					Item item = this.itemSource.createItem(firstItemIndex);
+					item.parent = this;
 					int itemHeight = item.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
 					item.relativeY = firstItem.relativeY - this.paddingVertical - itemHeight;
 					firstItem = item;
@@ -233,6 +269,7 @@ implements ItemConsumer
 					this.itemIndexList.removeElementAt(0);
 					lastItemIndex++;
 					Item item = this.itemSource.createItem(lastItemIndex);
+					item.parent = this;
 					item.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
 					item.relativeY = lastItem.relativeY + lastItem.itemHeight + this.paddingVertical;
 					lastItem = item;
@@ -371,7 +408,110 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
-		requestInit();
+		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event);
+		if (!this.isInitialized)
+		{
+			// ignore
+			return;
+		}
+		if (event == null || (event.getChange() == ItemChangedEvent.CHANGE_COMPLETE_REFRESH))
+		{
+			synchronized (this.itemsList)
+			{
+				this.itemsList.clear();
+				requestInit();
+			}
+			return;
+		}
+		int change = event.getChange();
+		if (change == ItemChangedEvent.CHANGE_ADD)
+		{
+			System.out.println("childStartIndex=" + childStartIndex + ", itemsList.size()=" + itemsList.size() + ", itemSource.countItems()=" + this.itemSource.countItems());
+			// check if last item is visible:
+			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM) // && (this.childStartIndex + this.itemsList.size() == this.itemSource.countItems()-1))
+			{
+				System.out.println("added item to bottom...");
+				Item nextItem = this.itemSource.createItem(event.getItemIndex());
+				synchronized (this.itemsList)
+				{
+					this.itemsList.add(nextItem);
+					Item previousItem = (Item) this.itemsList.remove(0);
+					if (this.isShown)
+					{
+						nextItem.parent = this;
+						nextItem.showNotify();
+						previousItem.hideNotify();
+					}
+					nextItem.getItemHeight(this.availableWidth, this.availableWidth, this.availableHeight);
+					Item previousLastItem = (Item) this.itemsList.get(this.itemsList.size()-2);
+					nextItem.relativeY = previousLastItem.relativeY + previousLastItem.itemHeight + this.paddingVertical;
+				}
+				int offset = getScrollYOffset();
+				this.contentHeight += nextItem.itemHeight + this.paddingVertical;
+				this.itemHeight += nextItem.itemHeight + this.paddingVertical;
+				System.out.println("setting yOffset=" + (offset - nextItem.itemHeight));
+				setScrollYOffset(offset - nextItem.itemHeight, true);
+			}
+		} 
+		else if (change == ItemChangedEvent.CHANGE_REMOVE)
+		{
+			if (event.getItemIndex() >= this.childStartIndex && event.getItemIndex() < this.childStartIndex + this.itemsList.size())
+			{
+				synchronized (this.itemsList)
+				{
+					int itemListIndex = event.getItemIndex() - this.childStartIndex;
+					Item removedItem = (Item) this.itemsList.remove(itemListIndex);
+					Item nextItem = null;
+					if (this.childStartIndex + this.itemsList.size() < this.itemSource.countItems()-1)
+					{
+						nextItem = this.itemSource.createItem( this.childStartIndex + this.itemsList.size() + 1);
+						this.itemsList.add(nextItem);
+					}
+					else if (this.childStartIndex > 0)
+					{
+						nextItem = this.itemSource.createItem( this.childStartIndex - 1);
+						this.itemsList.add(0, nextItem);
+						if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+						{
+							scrollToBottom();
+						}
+					}
+					if (this.isShown)
+					{
+						removedItem.hideNotify();
+						if (nextItem != null)
+						{
+							nextItem.showNotify();
+							nextItem.parent = this;
+						}
+					}
+					requestInit();
+				}
+			}
+		}
+		else if (change == ItemChangedEvent.CHANGE_SET)
+		{
+			if (event.getItemIndex() >= this.childStartIndex && event.getItemIndex() < this.childStartIndex + this.itemsList.size())
+			{
+				synchronized (this.itemsList)
+				{
+					int itemListIndex = event.getItemIndex() - this.childStartIndex;
+					Item item = event.getAffectedItem();
+					if (item == null)
+					{
+						item = this.itemSource.createItem(event.getItemIndex());
+					}
+					Item previous = (Item) this.itemsList.set(itemListIndex, item);
+					if (this.isShown)
+					{
+						previous.hideNotify();
+						item.parent = this;
+						item.showNotify();
+					}
+					requestInit();
+				}
+			}
+		}
 	}
 
 
