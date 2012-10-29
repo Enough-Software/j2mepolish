@@ -128,7 +128,7 @@ public class Container extends Item {
 	/** The height available for scrolling, ignore when set to -1 */
 	protected int scrollHeight = -1;
 	private boolean showCommandsHasBeenCalled;
-	private Item scrollItem;
+	protected Item scrollItem;
 	protected Style plainStyle;
 	private static final String KEY_ORIGINAL_STYLE = "os"; 
 	//#if polish.css.focus-all
@@ -1287,7 +1287,6 @@ public class Container extends Item {
 				// defer scrolling to init at a later stage:
 				//System.out.println( this + ": setting scrollItem to " + item);
 				synchronized(this.itemsList) {
-					System.out.println("XXX Setting Scroll Item to " + item);
 					this.scrollItem = item;
 				}
 				return true;
@@ -4264,7 +4263,8 @@ public class Container extends Item {
 	public void setScrollYOffset( int offset, boolean smooth) {
 		//#debug
 		System.out.println("Setting scrollYOffset to " + offset + " for " + this);
-		//try { throw new RuntimeException("for yOffset " + offset + " in " + this); } catch (Exception e) { e.printStackTrace(); }
+//		if (this.enableScrolling)
+//			try { throw new RuntimeException("for yOffset " + offset + " in " + this + ", was=" + this.yOffset + "/" + this.targetYOffset); } catch (Exception e) { e.printStackTrace(); }
 		if (!this.enableScrolling && this.parent instanceof Container) {
 			((Container)this.parent).setScrollYOffset(offset, smooth);
 			return;
@@ -4773,19 +4773,30 @@ public class Container extends Item {
 	 * Scrolls this container so that its last item is visible.
 	 */
 	public void scrollToBottom() {
+		scrollToBottom(true);
+	}
+	
+	/**
+	 * Scrolls this container so that its last item is visible.
+	 */
+	public void scrollToBottom(boolean smooth) {
 		if (this.enableScrolling) {
 			if (!isInitialized()) {
 				if (this.availableWidth != 0) {
 					init(this.availableWidth, this.availableWidth, this.availableHeight );
+				} 
+				else if (this.itemsList.size() > 0)
+				{
+					this.scrollItem = (Item) this.itemsList.get(this.itemsList.size()-1);
 				} // else we're out of luck for now..
 			}
 			int offset = getScrollHeight() - getItemAreaHeight();
 			if (offset > 0) {
 				offset = 0;
 			}
-			setScrollYOffset(offset, true);
+			setScrollYOffset(offset, smooth);
 		} else if (this.parent instanceof Container) {
-			((Container)this.parent).scrollToBottom();
+			((Container)this.parent).scrollToBottom(smooth);
 		}
 		
 	}

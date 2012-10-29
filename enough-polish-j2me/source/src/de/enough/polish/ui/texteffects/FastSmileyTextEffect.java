@@ -59,7 +59,7 @@ implements Trie.TrieSearchConsumer
 	private static int smileyWidth;
 	
 	private boolean isSmileysFound;
-	private final TextSmileyLayout textSmileyLayout = new TextSmileyLayout();
+	private transient final TextSmileyLayout textSmileyLayout = new TextSmileyLayout();
 	private int	initPreviousSearchIndex;
 	private boolean	initIsAbortSearch;
 	
@@ -341,6 +341,11 @@ implements Trie.TrieSearchConsumer
 		public boolean add( Smiley smiley )
 		{
 //			System.out.println("adding smiley [" + smiley.text + "], initX=" + this.initX + ", initY=" + this.initY + ", containsSmiley=" + this.initCurrentLineContainsSmiley);
+			if (this.initX == 0)
+			{
+				this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
+				this.initCurrentLineContainsSmiley = true;
+			}
 			SmileyTextItem item = new SmileyTextItem(smiley, this.initX, this.initY);
 			this.elementsList.add(item);
 			int x = this.initX + smileyWidth;
@@ -354,6 +359,9 @@ implements Trie.TrieSearchConsumer
 				{
 					return false;
 				}
+				this.initX = 0;
+				this.initY += smileyHeight + this.initPaddingVertical;
+				this.initCurrentLineContainsSmiley = false;
 			}
 			else
 			{

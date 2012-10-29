@@ -151,7 +151,6 @@ public class Color implements Serializable {
 	 * @see #TRANSPARENT
 	 */
 	public Color(int argb, boolean isDynamic) {
-		super();
 		this.argb = argb;
 		this.isDynamic = isDynamic;
 	}

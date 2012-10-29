@@ -196,12 +196,13 @@ implements ItemConsumer
 			this.childRowHeight = estimatedHeight / count;
 			this.contentHeight = estimatedHeight;
 			this.contentWidth = availWidth;
-			boolean smooth = (this.yOffset != 0);
-			if (estimatedHeight > availHeight && (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM))
-			{
-				this.previousYOffset = availHeight - estimatedHeight;
-				setScrollYOffset(availHeight - estimatedHeight, smooth);
-			}
+			this.previousYOffset = 0;
+//			boolean smooth = (this.yOffset != 0);
+//			if (estimatedHeight > availHeight && (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM))
+//			{
+//				this.previousYOffset = availHeight - estimatedHeight;
+//				setScrollYOffset(availHeight - estimatedHeight, smooth);
+//			}
 			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
 			{
 				itemsListSize = this.itemsList.size();
@@ -441,19 +442,26 @@ implements ItemConsumer
 			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM) // && (this.childStartIndex + this.itemsList.size() == this.itemSource.countItems()-1))
 			{
 				System.out.println("added item to bottom...");
-				Item nextItem = this.itemSource.createItem(event.getItemIndex());
+				scrollToBottom(false);
+				Item nextItem = event.getAffectedItem();
+				if (nextItem == null) 
+				{
+					nextItem = this.itemSource.createItem(event.getItemIndex());
+				}
 				synchronized (this.itemsList)
 				{
+					// todo I don't need to have the last visible item in scope...
 					this.itemsList.add(nextItem);
 					Item previousItem = (Item) this.itemsList.remove(0);
+					nextItem.parent = this;
 					if (this.isShown)
 					{
-						nextItem.parent = this;
 						nextItem.showNotify();
 						previousItem.hideNotify();
 					}
 					nextItem.getItemHeight(this.availableWidth, this.availableWidth, this.availableHeight);
 					Item previousLastItem = (Item) this.itemsList.get(this.itemsList.size()-2);
+					nextItem.relativeX = 0;
 					nextItem.relativeY = previousLastItem.relativeY + previousLastItem.itemHeight + this.paddingVertical;
 				}
 				int offset = getScrollYOffset();
@@ -461,6 +469,21 @@ implements ItemConsumer
 				this.itemHeight += nextItem.itemHeight + this.paddingVertical;
 				//System.out.println("setting yOffset=" + (offset - nextItem.itemHeight));
 				setScrollYOffset(offset - nextItem.itemHeight, true);
+				
+				setInitialized(false);
+				//add( nextItem );
+				int height = nextItem.itemHeight; // getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
+				//nextItem.relativeY = this.contentHeight + this.paddingVertical;
+				Item p = this;
+				while (p != null)
+				{
+					p.contentHeight += height;
+					p.itemHeight += height;
+					p = p.parent;
+				}
+				setInitialized(true);
+				scrollToBottom();
+
 			}
 		} 
 		else if (change == ItemChangedEvent.CHANGE_REMOVE)
