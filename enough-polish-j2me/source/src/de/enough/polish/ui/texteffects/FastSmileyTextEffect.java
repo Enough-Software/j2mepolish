@@ -324,11 +324,7 @@ implements Trie.TrieSearchConsumer
 		public void stopInit()
 		{
 			this.initFont = null;
-			if (this.initCurrentLineContainsSmiley)
-			{
-				this.height = this.initY + smileyHeight;
-			}
-			else if (this.initX == 0)
+			if (this.initX == 0)
 			{
 				this.height = this.initY;
 			}
@@ -344,7 +340,7 @@ implements Trie.TrieSearchConsumer
 		
 		public boolean add( Smiley smiley )
 		{
-			//System.out.println("adding smiley [" + smiley.text + "], initX=" + this.initX + ", initY=" + this.initY);
+//			System.out.println("adding smiley [" + smiley.text + "], initX=" + this.initX + ", initY=" + this.initY + ", containsSmiley=" + this.initCurrentLineContainsSmiley);
 			SmileyTextItem item = new SmileyTextItem(smiley, this.initX, this.initY);
 			this.elementsList.add(item);
 			int x = this.initX + smileyWidth;
@@ -388,7 +384,7 @@ implements Trie.TrieSearchConsumer
 			SmileyTextItem wrappedTextItem = new SmileyTextItem(wrappedText, this.initX, this.initY);
 			this.elementsList.add(wrappedTextItem);
 			int wrappedTextSize = wrappedText.size();
-			if (wrappedTextSize == 1)
+			if (wrappedTextSize == 1) // only a single line of text
 			{
 				int x = this.initX + wrappedText.getMaxLineWidth();
 				if (x + smileyWidth >= this.initLineWidth)
@@ -402,6 +398,7 @@ implements Trie.TrieSearchConsumer
 					else
 					{
 						this.initY += this.initFontHeight + this.initPaddingVertical;
+						wrappedTextItem.y += smileyHeight - this.initFontHeight - this.initPaddingVertical;
 					}
 					this.initCurrentLine++;
 					if (this.initCurrentLine >= this.initMaxLines)
@@ -412,6 +409,11 @@ implements Trie.TrieSearchConsumer
 				else // there is still space left on the current line:
 				{
 					this.initX = x;
+					if (!this.initCurrentLineContainsSmiley)
+					{
+						wrappedTextItem.y += smileyHeight - this.initFontHeight - this.initPaddingVertical;
+						this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
+					}
 				}
 			}
 			else // there is more than one line wrapped:
@@ -420,6 +422,7 @@ implements Trie.TrieSearchConsumer
 				if (lastLineWidth + smileyWidth >= this.initLineWidth)
 				{
 					this.initX = 0;
+					wrappedTextSize++;
 					this.initCurrentLine += wrappedTextSize;
 				}
 				else
