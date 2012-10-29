@@ -33,6 +33,10 @@ import de.enough.polish.util.IntList;
 /**
  * A container that loads items only when they are required.
  * @author Robert Virkus, j2mepolish@enough.de
+ * @see ItemSource
+ * @see SourcedContainer
+ * @see UniformContainer
+ * @see LazyLoadingForm
  */
 public class LazyLoadingContainer 
 extends Container 
@@ -111,6 +115,11 @@ implements ItemConsumer
 			throw new NullPointerException();
 		}
 		this.itemSource = itemSource;
+		itemSource.setItemConsumer(this);
+		synchronized (this.itemsList)
+		{
+			this.itemsList.clear();
+		}
 		requestInit();
 	}
 	
@@ -408,6 +417,7 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
+		//#debug
 		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event);
 		if (!this.isInitialized)
 		{
@@ -426,7 +436,7 @@ implements ItemConsumer
 		int change = event.getChange();
 		if (change == ItemChangedEvent.CHANGE_ADD)
 		{
-			System.out.println("childStartIndex=" + childStartIndex + ", itemsList.size()=" + itemsList.size() + ", itemSource.countItems()=" + this.itemSource.countItems());
+			//System.out.println("childStartIndex=" + childStartIndex + ", itemsList.size()=" + itemsList.size() + ", itemSource.countItems()=" + this.itemSource.countItems());
 			// check if last item is visible:
 			if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM) // && (this.childStartIndex + this.itemsList.size() == this.itemSource.countItems()-1))
 			{
@@ -449,7 +459,7 @@ implements ItemConsumer
 				int offset = getScrollYOffset();
 				this.contentHeight += nextItem.itemHeight + this.paddingVertical;
 				this.itemHeight += nextItem.itemHeight + this.paddingVertical;
-				System.out.println("setting yOffset=" + (offset - nextItem.itemHeight));
+				//System.out.println("setting yOffset=" + (offset - nextItem.itemHeight));
 				setScrollYOffset(offset - nextItem.itemHeight, true);
 			}
 		} 
