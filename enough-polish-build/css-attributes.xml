@@ -1885,6 +1885,7 @@
 		<mapping from="vertical-scroll" to="new de.enough.polish.ui.texteffects.VerticalScrollTextEffect()" />
 		<mapping from="html" to="new de.enough.polish.ui.texteffects.HtmlTextEffect()" />
 		<mapping from="message" to="new de.enough.polish.ui.texteffects.MessageTextEffect()" />
+		<mapping from="bold" to="new de.enough.polish.ui.texteffects.BoldTextEffect()"/>
 		<mapping from="mirror-shadow" to="new de.enough.polish.ui.texteffects.VerticalMirrorTextEffect()" >
 			<condition>polish.midp2</condition>
 		</mapping>
@@ -1906,7 +1907,7 @@
 		<mapping from="rotating" to="new de.enough.polish.ui.texteffects.RotatingTextEffect()" >
 			<condition>polish.midp2 and polish.hasFloatingPoint</condition>
 		</mapping>
-		<mapping from="flash" to="new de.enough.polish.ui.texteffects.FlashTextEffect()"/>
+		<mapping from="cycling" to="new de.enough.polish.ui.texteffects.CyclingTextEffect()"/>		
 		<mapping from="split" to="new de.enough.polish.ui.texteffects.VerticalSplitTextEffect()"/>		
 		<mapping from="vertical-split" to="new de.enough.polish.ui.texteffects.VerticalSplitTextEffect()"/>		
 		<mapping from="cycling" to="new de.enough.polish.ui.texteffects.CyclingTextEffect()"/>		
