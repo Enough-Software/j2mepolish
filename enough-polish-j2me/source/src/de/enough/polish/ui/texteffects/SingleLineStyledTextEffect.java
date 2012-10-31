@@ -29,6 +29,10 @@ public class SingleLineStyledTextEffect extends TextEffect
 	private final ArrayList styledTextsList = new ArrayList();
 
 	
+	public SingleLineStyledTextEffect()
+	{
+		this.isTextSensitive = true;
+	}
 	
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.TextEffect#wrap(de.enough.polish.ui.StringItem, java.lang.String, int, javax.microedition.lcdui.Font, int, int, int, java.lang.String, int, de.enough.polish.util.WrappedText)
