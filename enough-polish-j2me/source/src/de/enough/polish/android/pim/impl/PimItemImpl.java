@@ -86,6 +86,7 @@ public abstract class PimItemImpl implements PIMItem
 			Field fieldObj = this.fieldsList.get(i);
 			if (fieldId == fieldObj.getId())
 			{
+				fieldObj.populate();
 				return fieldObj;
 			}
 		}

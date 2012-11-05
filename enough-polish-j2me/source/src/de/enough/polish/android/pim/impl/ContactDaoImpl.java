@@ -91,29 +91,8 @@ implements ContactDao
 	private static final FieldInfo NAME_FIELD_INFO = new FieldInfo(Contact.NAME, "Name", 5, Contact.NAME_GIVEN, new int[] {Contact.NAME_FAMILY, Contact.NAME_GIVEN, Contact.NAME_OTHER, Contact.NAME_PREFIX, Contact.NAME_SUFFIX},new int[] {Contact.ATTR_NONE}, 1);
 	private void loadNames(ContentResolver contentResolver, ContactImpl contact, String id)
 	{
-	    String[] projection = new String[] {CommonDataKinds.StructuredName.FAMILY_NAME, CommonDataKinds.StructuredName.GIVEN_NAME, CommonDataKinds.StructuredName.MIDDLE_NAME, CommonDataKinds.StructuredName.PREFIX, CommonDataKinds.StructuredName.SUFFIX};
-	    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?"; 
-	    String[] whereParameters = new String[]{id, CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-
-	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
-
-	    String[] names = new String[5];
-	    if (cursor.moveToFirst()) 
-	    { 
-	    	for (int columnIndex=0; columnIndex<projection.length; columnIndex++)
-	    	{
-	    		String namePart = cursor.getString(columnIndex);
-	    		if (namePart == null) {
-	    			namePart = "";
-	    		}
-				names[columnIndex] = (namePart);
-	    	}
-	    } 
-	    // add field in any case:
-    	Field namesField = new Field(Contact.NAME, PIMItem.STRING_ARRAY);
-    	namesField.addValue(names, Contact.ATTR_NONE );
+    	Field namesField = new Field(Contact.NAME, PIMItem.STRING_ARRAY, new NameFieldPopulator(id, contentResolver));
     	contact.addField(namesField);
-	    cursor.close();
 	}
 
 	private static final FieldInfo TEL_FIELD_INFO = new FieldInfo(Contact.TEL, PIMItem.STRING, "Phone", new int[] {Contact.ATTR_MOBILE,Contact.ATTR_WORK, Contact.ATTR_PREFERRED, Contact.ATTR_SMS, Contact.ATTR_ASST, Contact.ATTR_HOME,Contact.ATTR_OTHER,Contact.ATTR_PAGER,Contact.ATTR_FAX,Contact.ATTR_NONE}, 21);
@@ -143,25 +122,8 @@ implements ContactDao
 	}
 	private void loadTelNumbers(ContentResolver contentResolver, ContactImpl contact, String id)
 	{
-		Cursor cursor = contentResolver.query( CommonDataKinds.Phone.CONTENT_URI,
-				null,
-				CommonDataKinds.Phone.CONTACT_ID +" = ?",
-				new String[]{id}, null);
-		Field telField = new Field(Contact.TEL, PIMItem.STRING);
-		
-				
-		while (cursor.moveToNext()) 
-		{
-			String phoneNumber = cursor.getString(cursor.getColumnIndex(CommonDataKinds.Phone.NUMBER));
-			int phoneNumberType = cursor.getInt(cursor.getColumnIndex(CommonDataKinds.Phone.TYPE));
-			int pimAttribute = TEL_ATTRIBUTES_MAPPPING.get(phoneNumberType);
-			if (pimAttribute == Integer.MIN_VALUE)
-			{
-				pimAttribute = Contact.ATTR_NONE;
-			}
-			telField.addValue(phoneNumber, pimAttribute);
-		}
-		cursor.close();
+		Field.Populator populator = new TelFieldPopulator(id, contentResolver);
+		Field telField = new Field(Contact.TEL, PIMItem.STRING, populator);
 		contact.addField(telField);
 	}
 	
@@ -176,25 +138,8 @@ implements ContactDao
 	}
 	private void loadEmails(ContentResolver contentResolver, ContactImpl contact, String id)
 	{
-		Cursor cursor = contentResolver.query( CommonDataKinds.Email.CONTENT_URI,
-				new String[]{ CommonDataKinds.Email.DATA, CommonDataKinds.Email.TYPE},
-				CommonDataKinds.Phone.CONTACT_ID +" = ?",
-				new String[]{id}, null);
-		Field emailField = new Field(Contact.EMAIL, PIMItem.STRING);
-		
-				
-		while (cursor.moveToNext()) 
-		{
-			String emailAddress = cursor.getString(0); //pCur.getColumnIndex(CommonDataKinds.Email.DATA));
-			int emailType = cursor.getInt(1); //pCur.getColumnIndex(CommonDataKinds.Email.TYPE));
-			int pimAttribute = EMAIL_ATTRIBUTES_MAPPPING.get(emailType);
-			if (pimAttribute == Integer.MIN_VALUE)
-			{
-				pimAttribute = Contact.ATTR_NONE;
-			}
-			emailField.addValue(emailAddress, pimAttribute);
-		}
-		cursor.close();
+		Field.Populator populator = new EmailFieldPopulator(id, contentResolver);
+		Field emailField = new Field(Contact.EMAIL, PIMItem.STRING, populator);
 		contact.addField(emailField);
 	}
 	
@@ -209,73 +154,20 @@ implements ContactDao
 	}
 	private void loadAddresses(ContentResolver contentResolver, ContactImpl contact, String id)
 	{
-	    String[] projection = new String[] {CommonDataKinds.StructuredPostal.POBOX, CommonDataKinds.StructuredPostal.TYPE, CommonDataKinds.StructuredPostal.STREET, CommonDataKinds.StructuredPostal.CITY, CommonDataKinds.StructuredPostal.REGION, CommonDataKinds.StructuredPostal.POSTCODE, CommonDataKinds.StructuredPostal.COUNTRY, CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS };
-	    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + CommonDataKinds.StructuredPostal.MIMETYPE + " = ?"; 
-	    String[] whereParameters = new String[]{id, CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE};
-
-	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
-	    boolean arrayFieldAdded = false;
-	    Field formattedAddressField = new Field(Contact.FORMATTED_ADDR, PIMItem.STRING);
-    	Field addressField = new Field(Contact.ADDR, PIMItem.STRING_ARRAY);
-    	String[] addresses = new String[projection.length-1];
-	    while (cursor.moveToNext()) 
-	    { 
-	    	if (!arrayFieldAdded)
-	    	{
-		    	// there can be more than one address on Android, however the PIM API only supports one address. So we just take the first one.	
-		    	for (int columnIndex=0; columnIndex<projection.length-1; columnIndex++)
-		    	{
-		    		String addressPart = cursor.getString(columnIndex);
-		    		if (columnIndex == 1)
-		    		{
-		    			addressPart = null;
-		    		}
-		    		if (addressPart == null) {
-		    			addressPart = "";
-		    		} 
-		    		else 
-		    		{
-		    			arrayFieldAdded = true;
-		    		}
-		    		addresses[columnIndex] = addressPart;
-		    	}
-		    	if (arrayFieldAdded)
-		    	{
-			    	addressField.addValue(addresses, Contact.ATTR_NONE);
-		    	}
-	    	}
-	    	String address = cursor.getString(projection.length - 1);
-	    	if (address == null)
-	    	{
-	    		continue;
-	    	}
-	    	int type = cursor.getInt(1);
-	    	int pimAttribute = ADDR_ATTRIBUTES_MAPPPING.get(type);
-	    	formattedAddressField.addValue(address, pimAttribute);
-	    }
+		Field.Populator populator = new AddressFieldPopulator(id, contentResolver);
+	    Field formattedAddressField = new Field(Contact.FORMATTED_ADDR, PIMItem.STRING, populator);
+    	Field addressField = new Field(Contact.ADDR, PIMItem.STRING_ARRAY, populator);
     	contact.addField(addressField);
 	    contact.addField(formattedAddressField);
-	    cursor.close();
 	}	
 
 
 	private static final FieldInfo NOTE_FIELD_INFO = new FieldInfo(Contact.NOTE,PIMItem.STRING,"Note",new int[] {Contact.ATTR_NONE}, 1);
 	private void loadNotes(ContentResolver contentResolver, ContactImpl contact, String id)
 	{
-	    String[] projection = new String[] {CommonDataKinds.Note.NOTE};
-	    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + CommonDataKinds.Note.MIMETYPE + " = ?"; 
-	    String[] whereParameters = new String[]{id, CommonDataKinds.Note.CONTENT_ITEM_TYPE};
-
-	    Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
-	    
-	    Field noteField = new Field(Contact.NOTE, PIMItem.STRING);
-	    if (cursor.moveToFirst()) 
-	    { 
-	    	String noteStr = cursor.getString(0);
-	    	noteField.addValue(noteStr, PIMItem.ATTR_NONE);
-	    } 
+		Field.Populator populator = new NoteFieldPopulator(id, contentResolver);
+	    Field noteField = new Field(Contact.NOTE, PIMItem.STRING, populator);
 	    contact.addField(noteField);
-	    cursor.close();
 	}
 	
 	
@@ -294,5 +186,216 @@ implements ContactDao
 			this.contactCursor = null;
 		}
 	}
+	
+	private static class NameFieldPopulator 
+	implements Field.Populator
+	{
+		
+		private final String id;
+		private final ContentResolver	contentResolver;
+		
+		public NameFieldPopulator(String id, ContentResolver contentResolver)
+		{
+			this.id = id;
+			this.contentResolver = contentResolver;
+		}
+
+		public void populateField(Field field)
+		{
+		    String[] projection = new String[] {CommonDataKinds.StructuredName.FAMILY_NAME, CommonDataKinds.StructuredName.GIVEN_NAME, CommonDataKinds.StructuredName.MIDDLE_NAME, CommonDataKinds.StructuredName.PREFIX, CommonDataKinds.StructuredName.SUFFIX};
+		    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?"; 
+		    String[] whereParameters = new String[]{this.id, CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
+
+		    Cursor cursor = this.contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
+
+		    String[] names = new String[5];
+		    if (cursor.moveToFirst()) 
+		    { 
+		    	for (int columnIndex=0; columnIndex<projection.length; columnIndex++)
+		    	{
+		    		String namePart = cursor.getString(columnIndex);
+		    		if (namePart == null) {
+		    			namePart = "";
+		    		}
+					names[columnIndex] = (namePart);
+		    	}
+		    } 
+	    	field.addValue(names, Contact.ATTR_NONE );
+		    cursor.close();
+		}
+		
+	}
+	
+	private static class AddressFieldPopulator
+	implements Field.Populator
+	{
+		
+		private final String id;
+		private final ContentResolver	contentResolver;
+		
+		public AddressFieldPopulator(String id, ContentResolver contentResolver)
+		{
+			this.id = id;
+			this.contentResolver = contentResolver;
+		}
+
+		public void populateField(Field field)
+		{
+			
+		    String[] projection = new String[] {CommonDataKinds.StructuredPostal.POBOX, CommonDataKinds.StructuredPostal.TYPE, CommonDataKinds.StructuredPostal.STREET, CommonDataKinds.StructuredPostal.CITY, CommonDataKinds.StructuredPostal.REGION, CommonDataKinds.StructuredPostal.POSTCODE, CommonDataKinds.StructuredPostal.COUNTRY, CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS };
+		    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + CommonDataKinds.StructuredPostal.MIMETYPE + " = ?"; 
+		    String[] whereParameters = new String[]{this.id, CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE};
+
+		    Cursor cursor = this.contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
+		    boolean arrayFieldAdded = false;
+	    	String[] addresses = new String[projection.length-1];
+	    	if (field.getId() == Contact.ADDR) 
+	    	{
+	    		field.addValue(addresses, Contact.ATTR_NONE);
+	    	}
+		    while (cursor.moveToNext()) 
+		    { 
+		    	if (!arrayFieldAdded)
+		    	{
+			    	// there can be more than one address on Android, however the PIM API only supports one address. So we just take the first one.	
+			    	for (int columnIndex=0; columnIndex<projection.length-1; columnIndex++)
+			    	{
+			    		String addressPart = cursor.getString(columnIndex);
+			    		if (columnIndex == 1)
+			    		{
+			    			addressPart = null;
+			    		}
+			    		if (addressPart == null) {
+			    			addressPart = "";
+			    		} 
+			    		else 
+			    		{
+			    			arrayFieldAdded = true;
+			    		}
+			    		addresses[columnIndex] = addressPart;
+			    	}
+		    	}
+		    	String address = cursor.getString(projection.length - 1);
+		    	if (address == null)
+		    	{
+		    		continue;
+		    	}
+		    	if (field.getId() == Contact.FORMATTED_ADDR) {
+			    	int type = cursor.getInt(1);
+			    	int pimAttribute = ADDR_ATTRIBUTES_MAPPPING.get(type);
+		    		field.addValue(address, pimAttribute);
+		    	}
+		    }
+		    cursor.close();
+		}
+		
+	}
+	
+	private static class TelFieldPopulator 
+	implements Field.Populator
+	{
+		
+		private final String id;
+		private final ContentResolver	contentResolver;
+		
+		public TelFieldPopulator(String id, ContentResolver contentResolver)
+		{
+			this.id = id;
+			this.contentResolver = contentResolver;
+		}
+
+		public void populateField(Field field)
+		{
+			Cursor cursor = this.contentResolver.query( CommonDataKinds.Phone.CONTENT_URI,
+					null,
+					CommonDataKinds.Phone.CONTACT_ID +" = ?",
+					new String[]{this.id}, null);
+			
+					
+			while (cursor.moveToNext()) 
+			{
+				String phoneNumber = cursor.getString(cursor.getColumnIndex(CommonDataKinds.Phone.NUMBER));
+				int phoneNumberType = cursor.getInt(cursor.getColumnIndex(CommonDataKinds.Phone.TYPE));
+				int pimAttribute = TEL_ATTRIBUTES_MAPPPING.get(phoneNumberType);
+				if (pimAttribute == Integer.MIN_VALUE)
+				{
+					pimAttribute = Contact.ATTR_NONE;
+				}
+				field.addValue(phoneNumber, pimAttribute);
+			}
+			cursor.close();
+		}
+		
+	}
+	
+	private static class EmailFieldPopulator 
+	implements Field.Populator
+	{
+		
+		private final String id;
+		private final ContentResolver	contentResolver;
+		
+		public EmailFieldPopulator(String id, ContentResolver contentResolver)
+		{
+			this.id = id;
+			this.contentResolver = contentResolver;
+		}
+
+		public void populateField(Field field)
+		{
+			Cursor cursor = this.contentResolver.query( CommonDataKinds.Email.CONTENT_URI,
+					new String[]{ CommonDataKinds.Email.DATA, CommonDataKinds.Email.TYPE},
+					CommonDataKinds.Phone.CONTACT_ID +" = ?",
+					new String[]{this.id}, null);
+			
+					
+			while (cursor.moveToNext()) 
+			{
+				String emailAddress = cursor.getString(0); //pCur.getColumnIndex(CommonDataKinds.Email.DATA));
+				int emailType = cursor.getInt(1); //pCur.getColumnIndex(CommonDataKinds.Email.TYPE));
+				int pimAttribute = EMAIL_ATTRIBUTES_MAPPPING.get(emailType);
+				if (pimAttribute == Integer.MIN_VALUE)
+				{
+					pimAttribute = Contact.ATTR_NONE;
+				}
+				field.addValue(emailAddress, pimAttribute);
+			}
+			cursor.close();
+		}
+		
+	}
+	
+	private static class NoteFieldPopulator 
+	implements Field.Populator
+	{
+		
+		private final String id;
+		private final ContentResolver	contentResolver;
+		
+		public NoteFieldPopulator(String id, ContentResolver contentResolver)
+		{
+			this.id = id;
+			this.contentResolver = contentResolver;
+		}
+
+		public void populateField(Field field)
+		{
+		    String[] projection = new String[] {CommonDataKinds.Note.NOTE};
+		    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + CommonDataKinds.Note.MIMETYPE + " = ?"; 
+		    String[] whereParameters = new String[]{this.id, CommonDataKinds.Note.CONTENT_ITEM_TYPE};
+
+		    Cursor cursor = this.contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, where, whereParameters, null);
+		    
+		    if (cursor.moveToFirst()) 
+		    { 
+		    	String noteStr = cursor.getString(0);
+		    	field.addValue(noteStr, PIMItem.ATTR_NONE);
+		    } 
+		    cursor.close();
+		}
+		
+	}
+	
+	
 
 }
