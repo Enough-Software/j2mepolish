@@ -570,7 +570,7 @@ public class Command
 				listener = item.getItemCommandListener();
 			}
 			if (listener != null) {
-				while (item instanceof Container && (item.commands == null || !item.commands.contains(this)) ) {
+				while (item instanceof Container && (item.defaultCommand == null && (item.commands == null || !item.commands.contains(this)) ) ) {
 					item = ((Container)item).getFocusedItem();
 				}
 				if (item != null && ((item.commands != null && item.commands.contains(this)) || (item.getDefaultCommand() == this))) {
