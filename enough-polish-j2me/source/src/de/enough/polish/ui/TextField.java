@@ -2409,12 +2409,12 @@ public class TextField extends StringItem
 				}
 			}
         //#elif polish.android
-			//#if polish.TextField.showHelpText
-				if(myText == null || myText.length() == 0)
-				{
-					this.helpItem.paint(x, y, leftBorder, rightBorder, g);
-				} 
-			//#endif
+//			//#if polish.TextField.showHelpText
+//				if(myText == null || myText.length() == 0)
+//				{
+//					this.helpItem.paint(x, y, leftBorder, rightBorder, g);
+//				} 
+//			//#endif
 			//#if polish.css.repaint-previous-screen
 				// native views are not painted in screens that lie underneath a popup screen:
 				Screen scr = getScreen();
@@ -4842,6 +4842,13 @@ public class TextField extends StringItem
 		if (helpStyle != null) {
 			this.helpItem.setStyle(helpStyle);
 		}
+		//#if polish.android
+			MidletBridge.getInstance().runOnUiThread( new Runnable() {
+				public void run() {
+					TextField.this._androidTextField.applyTextField();
+				}
+			});
+		//#endif
 	}
 	//#endif
 	
@@ -4872,7 +4879,17 @@ public class TextField extends StringItem
 	 */
 	public void setHelpStyle(Style style)
 	{
-		this.helpItem.setStyle(style);
+		if (this.helpItem != null)
+		{
+			this.helpItem.setStyle(style);
+			//#if polish.android
+				MidletBridge.getInstance().runOnUiThread( new Runnable() {
+					public void run() {
+						TextField.this._androidTextField.applyTextField();
+					}
+				});
+			//#endif
+		}
 	}
 	//#endif
 	
@@ -4894,6 +4911,36 @@ public class TextField extends StringItem
 		return text;
 	}
 	//#endif
+	
+	//#if polish.TextField.showHelpText
+	/**
+	 * Retrieves the help text for this TextField.
+	 * This method is only available when you have set the <code>polish.TextField.showHelpText</code> preprocessing variable to <code>true</code>
+	 * in the build.xml.
+	 * @return the help text
+	 * @see #setHelpText(String)
+	 * @see #setHelpText(String,Style)
+	 */
+	public Color getHelpTextColor()
+	{
+		if (!this.isStyleInitialized && this.style != null)
+		{
+			setStyle(this.style);
+		}
+		Style helpStyle = this.helpItem.getStyle();
+		if (helpStyle == null)
+		{
+			helpStyle = this.style;
+		}
+		if (helpStyle != null)
+		{
+			Color color = helpStyle.getColorProperty("font-color");
+			return color;
+		}
+		return new Color( 0x0 );
+	}
+	//#endif
+
 
 	//#if polish.TextField.useExternalInfo && !polish.blackberry
 	/**
