@@ -53,17 +53,17 @@ implements View.OnTouchListener, AndroidTextField
 	}
 	
 	
-	private void applyTextField() {
+	public void applyTextField() {
 		ChoiceTextField field = this.textField;
 		Style style = field.getStyle();
 		if (style != null) {
 			setStyle( style );
 		}
 		setFilters( new InputFilter[] { new InputFilter.LengthFilter(field.getMaxSize()) } );
-		//TODO apply setHintColor() when help texts are being used
 		//#if polish.TextField.showHelpText
 			if (field.getHelpText() != null) {
 				setHint(field.getHelpText());
+				setHintTextColor( 0xff000000 | field.getHelpTextColor().getColor() );
 			}
 		//#endif
 		this.isNumericPassword = false;
