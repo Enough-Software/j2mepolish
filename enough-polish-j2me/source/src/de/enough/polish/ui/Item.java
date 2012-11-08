@@ -905,12 +905,6 @@ public abstract class Item implements UiElement, Animatable
 	//#if polish.supportTouchGestures
 		//#define tmp.supportTouchGestures
 	//#endif
-	//#if tmp.supportTouchGestures
-		private long gestureStartTime;
-		private int gestureStartX;
-		private int gestureStartY;
-		private boolean isIgnorePointerReleaseForGesture;
-	//#endif
 	//#if polish.useNativeGui
 		protected NativeItem nativeItem;
 	//#endif
@@ -4465,16 +4459,10 @@ public abstract class Item implements UiElement, Animatable
 				}
 			//#endif
 			if ( isInItemArea(relX, relY) ) {
-				//#if tmp.supportTouchGestures
-					this.gestureStartTime = System.currentTimeMillis();
-					this.gestureStartX = relX;
-					this.gestureStartY = relY;
-				//#endif
 				return handleKeyPressed( 0, Canvas.FIRE );
 			}
 			//#if polish.Item.ShowCommandsOnHold
 				else {
-					this.gestureStartTime = 0;
 					if (this.isShowCommands) {
 						this.isShowCommands = false;
 						return true;
@@ -4521,33 +4509,12 @@ public abstract class Item implements UiElement, Animatable
 				this.isJustFocused = false;
 				handleOnFocusSoftKeyboardDisplayBehavior();
 			}
-			//#if tmp.supportTouchGestures
-				if (this.isIgnorePointerReleaseForGesture) {
-					this.isIgnorePointerReleaseForGesture = false;
-					return true;
-				}
-			//#endif
 			//#if polish.Item.ShowCommandsOnHold
 				if (this.isShowCommands) {
 					this.commandsContainer.handlePointerReleased(relX - this.commandsContainer.relativeX, relY - this.commandsContainer.relativeY);
 					this.isShowCommands = false;
 					notifyItemPressedEnd();
 					return true;
-				}
-			//#endif
-			//#if tmp.supportTouchGestures
-				int verticalDiff = Math.abs( relY - this.gestureStartY );
-				if (verticalDiff < 20) {
-					int horizontalDiff = relX - this.gestureStartX;
-					if (horizontalDiff > this.itemWidth/2) {
-						if (handleGesture(GestureEvent.GESTURE_SWIPE_RIGHT, relX, relY)) {
-							return true;
-						}
-					} else if (horizontalDiff < -this.itemWidth/2) {
-						if (handleGesture(GestureEvent.GESTURE_SWIPE_LEFT, relX, relY)) {
-							return true;
-						}						
-					}
 				}
 			//#endif
 			//#ifdef polish.css.view-type
@@ -4586,12 +4553,6 @@ public abstract class Item implements UiElement, Animatable
 	{
 		boolean handled = false;
 		//#ifdef polish.hasPointerEvents
-			//#if tmp.supportTouchGestures
-				if (this.gestureStartTime != 0 && Math.abs( relX - this.gestureStartX) > 30 || Math.abs( relY - this.gestureStartY) > 30) {
-					// abort (hold) gesture after moving out for too much:
-					this.gestureStartTime = 0;
-				}
-			//#endif
 			//#if polish.Item.ShowCommandsOnHold
 				if (this.isShowCommands && this.commandsContainer.handlePointerDragged(relX - this.commandsContainer.relativeX, relY - this.commandsContainer.relativeY, repaintRegion)) {
 					handled = true;
@@ -4714,6 +4675,7 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.Item.ShowCommandsOnHold
 			if (this.commands != null && !this.isShowCommands && this.commands.size() > 1) {
 				this.isShowCommands = true;
+				notifyItemPressedEnd();
 				if (this.commandsContainer != null) {
 					this.commandsContainer.focusChild(-1);
 				}
@@ -4902,20 +4864,6 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.view-type
 			if (this.view != null) {
 				this.view.animate(currentTime, repaintRegion);
-			}
-		//#endif
-		//#if tmp.supportTouchGestures
-			if (this.isPressed && (this.gestureStartTime != 0) && (currentTime - this.gestureStartTime > 500)) {
-				boolean handled = handleGesture( GestureEvent.GESTURE_HOLD, this.gestureStartX, this.gestureStartY );
-				if (handled) {
-					this.isIgnorePointerReleaseForGesture = true;
-					notifyItemPressedEnd();
-					this.gestureStartTime = 0;					
-					Screen scr = getScreen();
-					repaintRegion.addRegion( scr.contentX, scr.contentY, scr.contentWidth, scr.contentHeight );
-				} else {
-					this.gestureStartTime = 0;
-				}
 			}
 		//#endif
 		//#if polish.Item.ShowCommandsOnHold

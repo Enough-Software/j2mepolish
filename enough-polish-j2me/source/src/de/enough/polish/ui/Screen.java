@@ -41,6 +41,7 @@ import javax.microedition.lcdui.Image;
 	
 import de.enough.polish.event.AsynchronousMultipleCommandListener;
 import de.enough.polish.event.EventManager;
+import de.enough.polish.event.GestureEvent;
 import de.enough.polish.event.UiEventListener;
 import de.enough.polish.ui.backgrounds.TranslucentSimpleBackground;
 import de.enough.polish.util.ArrayList;
@@ -398,6 +399,21 @@ implements UiElement, Animatable
 	//#endif
 	//#if polish.hasPointerEvents
 		protected final ClippingRegion userEventRepaintRegion = new ClippingRegion();
+	//#endif
+	//#if polish.hasPointerEvents
+		//#if polish.supportTouchGestures
+			//#define tmp.supportTouchGestures
+		//#endif
+		//#if tmp.supportTouchGestures
+			private long gestureStartTime;
+			private int gestureStartX;
+			private int gestureStartY;
+			private int gestureXMin;
+			private int gestureXMax;
+			private int gestureYMin;
+			private int gestureYMax;
+			private boolean isIgnorePointerReleaseForGesture;
+		//#endif
 	//#endif
 	private ScreenInitializerListener screenInitializerListener;
 	
@@ -2161,6 +2177,28 @@ implements UiElement, Animatable
 					
 					if (time != 0 && keyCode != 0 && (currentTime - time) > interval) {
 						_keyReleased(keyCode);
+					}
+				//#endif
+				//#if tmp.supportTouchGestures
+					long gestureStartTimeLocal = this.gestureStartTime;
+					if ((gestureStartTimeLocal != 0) && (currentTime - gestureStartTimeLocal > 700)) {
+						int xDiff = Math.max(
+								Math.abs( this.gestureStartX - this.gestureXMin),
+								Math.abs( this.gestureStartX - this.gestureXMax)
+						);
+						int yDiff = Math.max(
+								Math.abs( this.gestureStartY - this.gestureYMin),
+								Math.abs( this.gestureStartY - this.gestureYMax)
+						);
+						if ((xDiff < this.screenWidth/10) && (yDiff < this.screenHeight/10))
+						{
+							boolean handled = handleGesture( GestureEvent.GESTURE_HOLD, this.gestureStartX, this.gestureStartY );
+							if (handled) {
+								this.isIgnorePointerReleaseForGesture = true;
+								repaintRegion.addRegion( this.contentX, this.contentY, this.contentWidth, this.contentHeight );
+							}
+							this.gestureStartTime = 0;
+						}
 					}
 				//#endif
 			} catch (Exception e) {
@@ -4790,6 +4828,16 @@ implements UiElement, Animatable
 		//#debug
 		System.out.println("pointerPressed at " + x + ", " + y );
 		this.lastInteractionTime = System.currentTimeMillis();
+		//#if tmp.supportTouchGestures
+			this.gestureStartTime = this.lastInteractionTime;
+			this.gestureStartX = x;
+			this.gestureXMin = x;
+			this.gestureXMax = x;
+			this.gestureStartY = y;
+			this.gestureYMin = y;
+			this.gestureYMax = y;
+			this.isIgnorePointerReleaseForGesture = false;
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
 			// let the screen handle the pointer pressing:
@@ -4922,6 +4970,24 @@ implements UiElement, Animatable
 		//#endif
 		//#debug
 		System.out.println("screen: pointer drag " + x + ", " + y);
+		//#if tmp.supportTouchGestures
+			if (x > this.gestureXMax)
+			{
+				this.gestureXMax = x;
+			}
+			else if (x < this.gestureXMin)
+			{
+				this.gestureXMin = x;
+			}
+			if (y > this.gestureYMax)
+			{
+				this.gestureYMax = y;
+			}
+			else if (y < this.gestureYMin)
+			{
+				this.gestureYMin = y;
+			}
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
 			//#if polish.Screen.callSuperEvents
@@ -4995,6 +5061,36 @@ implements UiElement, Animatable
 		//#debug
 		System.out.println("pointerReleased at " + x + ", " + y );
 		boolean processed = false;
+		//#if tmp.supportTouchGestures
+			if (this.isIgnorePointerReleaseForGesture)
+			{
+				processed = true;
+			}
+			else if (this.gestureStartTime != 0)
+			{
+				long gestureTime = (System.currentTimeMillis() - this.gestureStartTime);
+				if (gestureTime < 1600)
+				{
+					int verticalDiff = Math.max(
+							Math.abs( this.gestureYMin - this.gestureStartY ),
+							Math.abs( this.gestureYMax - this.gestureStartY )
+					);
+					if (verticalDiff < this.screenHeight/10) {
+						int horizontalDiff = x - this.gestureStartX;
+						if (horizontalDiff > this.screenWidth/3) {
+							if (handleGesture(GestureEvent.GESTURE_SWIPE_RIGHT, x, y)) {
+								processed = true;
+							}
+						} else if (horizontalDiff < -this.screenWidth/3) {
+							if (handleGesture(GestureEvent.GESTURE_SWIPE_LEFT, x, y)) {
+								processed = true;
+							}						
+						}
+					}
+				}
+			}
+			this.gestureStartTime = 0;
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
 			this.lastInteractionTime = System.currentTimeMillis();
@@ -5068,6 +5164,82 @@ implements UiElement, Animatable
 	}
 	//#endif
 	
+	/**
+	 * Handles a touch gestures.
+	 * Note that touch gesture support needs to be activated using the preprocessing variable polish.supportGestures.
+	 * The default implementation calls handleGestureHold() in case GESTURE_HOLD is specified.
+	 * @param gesture the gesture identifier, e.g. GESTURE_HOLD
+	 * @return true when this gesture was handled
+	 * @see #handleGestureHold(int, int)
+	 */
+	protected boolean handleGesture(int gesture, int x, int y) 
+	{
+		boolean handled = false;
+		//#if tmp.supportTouchGestures
+			switch (gesture) 
+			{
+			case GestureEvent.GESTURE_HOLD:
+				handled = handleGestureHold(x, y);
+				break;
+			case GestureEvent.GESTURE_SWIPE_LEFT:
+				handled = handleGestureSwipeLeft(x, y);
+				break;
+			case GestureEvent.GESTURE_SWIPE_RIGHT:
+				handled = handleGestureSwipeRight(x, y);
+			}
+			if (!handled) 
+			{
+				Container cont = this.container;
+				if (cont != null)
+				{
+					handled = cont.handleGesture(gesture, x - cont.relativeX, y - cont.relativeY);
+				}
+				if (!handled)
+				{
+					GestureEvent event = GestureEvent.getInstance();
+					event.reset( gesture, x, y );
+					UiEventListener listener = getUiEventListener();
+					if (listener != null) {
+						listener.handleUiEvent(event, this);
+						handled = event.isHandled();
+					}
+					//#if tmp.handleEvents
+						if (!handled) {
+							EventManager.fireEvent(event.getGestureName(), this, event );
+							handled = event.isHandled();
+						}
+					//#endif
+				}
+			}
+		//#endif
+		return handled;
+	}
+	
+	/**
+	 * Handles the hold touch gestures.
+	 * Note that touch gesture support needs to be activated using the preprocessing variable polish.supportGesturesOnScreen
+	 * 
+	 * @return true when this gesture was handled
+	 */
+	protected boolean handleGestureHold(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Handles the swipe left gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureSwipeLeft(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Handles the swipe right gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureSwipeRight(int x, int y) {
+		return false;
+	}
 	
 	/**
 	 * Handles the pressing of a pointer.

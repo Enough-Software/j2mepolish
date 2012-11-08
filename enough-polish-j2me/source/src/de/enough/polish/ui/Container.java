@@ -3511,6 +3511,25 @@ public class Container extends Item {
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#handleGesture(int, int, int)
+	 */
+	protected boolean handleGesture(int gesture, int x, int y)
+	{
+		Item item = this.focusedItem;
+		boolean handled = false;
+		if (item != null)
+		{
+			int relX = x - item.relativeX - this.contentX;
+			int relY = y - item.relativeY - this.yOffset - this.contentY;
+			if (item.isInItemArea(relX, relY)) {
+				handled = item.handleGesture(gesture, relX, relY);
+			}
+		}
+		return handled || super.handleGesture(gesture, x, y);
+	}
+	
 	//#ifdef polish.hasPointerEvents
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Item#handlePointerPressed(int, int)
