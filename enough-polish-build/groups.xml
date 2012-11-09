@@ -512,7 +512,16 @@
 		<capability name="OS" value="Nokia OS" />
 		<capability name="JavaPlatform" value="MIDP/2.0" />
 		<capability name="JavaConfiguration" value="CLDC/1.1" />
-		<capability name="JavaPackage" value="nokia-ui-2.0, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi" />	
+		<capability name="JavaPackage" value="nokia-ui-2.0, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+	</group>
+	
+	<group>
+		<name>series40sdk11</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
 	</group>
 
 </groups>
