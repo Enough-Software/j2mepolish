@@ -25011,4 +25011,14 @@ These namespaces/schemas will be used soon.
     <capability name="JavaConfiguration" value="CLDC/1.1" />
   </device>
   
+  <device supportsPolishGui="true">
+    <identifier>Nokia/Series40SDK11</identifier>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk11</features>
+    <groups>series40sdk11</groups>
+    <description>An Nokia SDK1.1for Java compatible device that supports the MIDP 2.0 and CLDC 1.1 standards.</description>
+    <capability name="ScreenSize" value="240x400" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <capability name="JavaConfiguration" value="CLDC/1.1" />
+  </device>
+  
 </devices>

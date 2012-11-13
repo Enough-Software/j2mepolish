@@ -76,7 +76,7 @@ import net.rim.device.api.ui.text.TextFilter;
 
 
 
-//#if polish.series40sdk20
+//#if polish.series40sdk20 || polish.series40sdk11
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
 //#endif
@@ -408,7 +408,7 @@ public class TextField extends StringItem
 //#if polish.blackberry
 	//#defineorappend tmp.implements=FieldChangeListener
 //#endif
-//#if polish.series40sdk20
+//#if polish.series40sdk20 || polish.series40sdk11
 	//#defineorappend tmp.implements=TextEditorListener
 //#endif
 //#if polish.LibraryBuild
@@ -996,7 +996,7 @@ public class TextField extends StringItem
 		private int bbLastCursorPosition;
 	//#endif
 
-	//#if polish.series40sdk20
+	//#if polish.series40sdk20 || polish.series40sdk11
 		private TextEditor series40sdk20Field;
 	//#endif	
 		
@@ -1389,7 +1389,7 @@ public class TextField extends StringItem
 				return this.editField.getText();
 			}
 		//#endif
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if ( this.series40sdk20Field != null ) {
 				return this.series40sdk20Field.getContent();
 			}
@@ -1516,9 +1516,9 @@ public class TextField extends StringItem
 				}
 			}
 		//#endif
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if ( this.series40sdk20Field != null && !this.series40sdk20Field.getContent().equals(text)) {
-				this.series40sdk20Field.setContent(text);
+				this.series40sdk20Field.setContent(text);				
 			}
 		//#endif
 		//#if polish.blackberry
@@ -1966,7 +1966,7 @@ public class TextField extends StringItem
 			curPos = this.editField.getInsertPositionOffset();
 		//#elif tmp.forceDirectInput
 			curPos = this.caretPosition;
-		//#elif polish.series40sdk20
+		//#elif polish.series40sdk20 || polish.series40sdk11
 			curPos = this.series40sdk20Field.getCaretPosition();
 		//#else
 			//#ifdef tmp.useNativeTextBox
@@ -2004,8 +2004,10 @@ public class TextField extends StringItem
 			{
 				this.editField.setCursorPosition(position);
 			}
-		//#elif polish.series40sdk20
-			this.series40sdk20Field.setCaret(position);
+		//#elif polish.series40sdk20 || polish.series40sdk11
+			synchronized ( this.series40sdk20Field) {
+				this.series40sdk20Field.setCaret(position);
+			}
 		//#elif tmp.allowDirectInput || tmp.forceDirectInput
 			this.caretPosition = position;
 			if ( this.isInitialized  && this.realTextLines != null ){
@@ -2058,12 +2060,14 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if polish.series40sdk20
-	protected TextEditor createNativeSeries40Sdk20TextField() {
+	//#if polish.series40sdk20 || polish.series40sdk11
+	protected TextEditor createNativeNokiaTextField() {
 		TextEditor editor = TextEditor.createTextEditor( 
 		        9999, TextField.ANY, 50, 50);
 		editor.setVisible(true);
 		editor.setTouchEnabled(true);
+		editor.setSize(1, 1);
+		editor.setMultiline(true);
 		return editor;
 	}
 	//#endif
@@ -2115,15 +2119,11 @@ public class TextField extends StringItem
 			});
 		//#endif
 			
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if ( this.series40sdk20Field == null ) {
-				this.series40sdk20Field = createNativeSeries40Sdk20TextField();
-				/*if ( getNumberOfLines() > 1) {
-					this.series40sdk20Field.setMultiline(true);
-				} else {
-					this.series40sdk20Field.setMultiline(false);
-				}*/
+				this.series40sdk20Field = createNativeNokiaTextField();
 				//#= this.series40sdk20Field.setTextEditorListener(this);
+				inputAction(this.series40sdk20Field, 0);
 			}
 			this.enableDirectInput = true;
 		//#endif	
@@ -2479,14 +2479,22 @@ public class TextField extends StringItem
 					super.paintContent(x, y, leftBorder, rightBorder, g);
 				}
 			//#endif
-		//#elif polish.series40sdk20
-				if ( ! isFocused() || this.isUneditable ) {
-					super.paintContent(x, y, leftBorder, rightBorder, g);
+		//#elif polish.series40sdk20 || polish.series40sdk11
+				//#if polish.TextField.showHelpText
+					if(myText == null || myText.length() == 0)
+					{
+						this.helpItem.paint(x, y, leftBorder, rightBorder, g);
+					}
+				//#endif
+				if ( ! isFocused() || this.isUneditable ) {					
+		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
 					if ( this.series40sdk20Field != null ) {
-					   Object object = Display.getInstance();					  
+					   Object object = Display.getInstance();
+					   int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop() ;
 					   this.series40sdk20Field.setParent(object);
-					   this.series40sdk20Field.setPosition(x, y);
+					   this.series40sdk20Field.setPosition(x, y);		
+					   this.series40sdk20Field.setSize(this.getAvailableContentWidth(), textFieldHeight);
 					}
 				}
 		//#else
@@ -2768,9 +2776,9 @@ public class TextField extends StringItem
 					
 					updateInternalArea();
 				}
-			//#elif polish.series40sdk20
-				if ( this.series40sdk20Field != null ) {
-					this.series40sdk20Field.setSize(this.contentWidth, this.contentHeight);
+			//#elif polish.series40sdk20 || polish.series40sdk11
+				if ( this.series40sdk20Field != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
+					inputAction(this.series40sdk20Field, 0);					
 				}
 			//#elif tmp.directInput
 				this.rowHeight = getFontHeight() + this.paddingVertical;			
@@ -2970,20 +2978,13 @@ public class TextField extends StringItem
 				this._androidTextField.setStyle(style);
 			}
 		//#endif
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if ( this.series40sdk20Field != null ) {
 				this.series40sdk20Field.setFont(this.font);
 				Color color = style.getColorProperty("font-color");
 				if ( color != null ) {
-					this.series40sdk20Field.setForegroundColor(color.getColor());
-				}
-				color = style.getColorProperty("background-color");
-				if ( color == null ) {
-					color = new Color(Display.COLOR_BACKGROUND,true);
-				}
-				if ( color != null ) {
-					this.series40sdk20Field.setBackgroundColor(color.getColor());
-				}
+					this.series40sdk20Field.setForegroundColor(0xFF000000 | color.getColor());
+				}				
 			}
 		//#endif	
 	}
@@ -3285,7 +3286,7 @@ public class TextField extends StringItem
 				this.screen.setInfo( modeStr );
 			}
 		//#endif
-	}
+}
 	//#endif
 	
 	
@@ -4413,7 +4414,7 @@ public class TextField extends StringItem
 				int fieldType = this.constraints & 0xffff;
 				if (fieldType != FIXED_POINT_DECIMAL) {
 					notifyItemPressedEnd();
-					//#if !polish.series40sdk20
+					//#if !polish.series40sdk20 && !polish.series40sdk11
 					showTextBox();
 					//#endif
 					return true;
@@ -4667,10 +4668,10 @@ public class TextField extends StringItem
 		//#endif
 	}
 		
-	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.series40sdk20 || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
+	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.series40sdk20 || polish.series40sdk11 || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
 	protected void defocus(Style originalStyle) {
 		super.defocus(originalStyle);
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if (this.series40sdk20Field != null) {
 				this.series40sdk20Field.setFocus(false);
 				this.series40sdk20Field.setParent(null);
@@ -4678,6 +4679,8 @@ public class TextField extends StringItem
 				String oldText = this.isPassword ? this.passwordText : this.text;
 				
 				setString( newText );
+				setInitialized(false);
+				repaint();
 				notifyStateChanged();
 			}
 		//#endif
@@ -4715,7 +4718,7 @@ public class TextField extends StringItem
 	
 	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
 	protected Style focus(Style focStyle, int direction) {
-		//#if polish.series40sdk20
+		//#if polish.series40sdk20 || polish.series40sdk11
 			if ( this.series40sdk20Field != null ) {
 				this.series40sdk20Field.setFocus(true);
 			}
@@ -4727,7 +4730,7 @@ public class TextField extends StringItem
 			//#if !polish.TextField.keepCaretPosition
 				setCaretPosition( getString().length() );
 			//#endif
-		//#elif tmp.directInput || polish.blackberry || polish.series40sdk20
+		//#elif tmp.directInput || polish.blackberry || polish.series40sdk20 || polish.series40sdk11
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {
 			//#endif
@@ -4788,18 +4791,38 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if polish.series40sdk20
+	//#if polish.series40sdk11
+		public void multilineToggleFix(TextEditor textEditor) {
+			Object parent = textEditor.getParent();
+			textEditor.setParent(null);
+			textEditor.setParent(parent);
+		}
+	//#endif
+	
+	//#if polish.series40sdk20 || polish.series40sdk11
 		public void inputAction(TextEditor textEditor, int actions) {
-			int oldCaret = this.series40sdk20Field.getCaretPosition();
-			if ( getNumberOfLines() > 1 && this.series40sdk20Field.isMultiline() == false) {
-				this.series40sdk20Field.setMultiline(true);
-			} else if ( this.series40sdk20Field.isMultiline() ) {
-				this.series40sdk20Field.setMultiline(false);
+			if (textEditor == null ) {
+				return;
 			}
-			System.out.println(">> " + oldCaret);
+			
+			// If the text changes, make sure to update the Polish item as needed
 			setText(textEditor.getContent());
-			textEditor.setSize(this.contentWidth, this.contentHeight);
-			//repaint();
+			notifyStateChanged();
+
+			// Switching from multi to single-line and vice-versa in SDK 1.1 does not work as expected.
+			// As such, for now we only do this on SDK 2.0 devices.
+			
+			if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
+					textEditor.setMultiline(true);						
+					//#if polish.series40sdk11
+						multilineToggleFix(textEditor);
+					//#endif
+			} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
+					textEditor.setMultiline(false);						
+					//#if polish.series40sdk11
+						multilineToggleFix(textEditor);
+					//#endif
+			}
 		}
 	//#endif
 
