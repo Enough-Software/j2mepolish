@@ -513,6 +513,12 @@
 			<param name="bottom-height" type="int" primitive="true" default="0"  description="The height of the corners on the bottom side in pixel" since="2.3" />
 			<param name="transparent-fill" type="boolean" primitive="true" default="false" description="Set to true when the center region should not be tiled at all" since="2.3" />
 		</mapping>
+		<mapping from="line"
+			to="de.enough.polish.ui.backgrounds.LineBackground">
+			<param name="line-width" type="dimension" default="1" description="The width of the line that should be painted" since="2.4" />
+			<param name="color" type="color" default="gray" description="The color of the background" />
+			<param name="position" type="integer" primitive="true" default="center" values="center,top,bottom" description="The position of the line background, defaults to the vertical center." />
+		</mapping>
 	</attribute>
 	
 	<!--  backgrounds that require a background attribute themselves   -->
@@ -1272,6 +1278,7 @@
 		<!--  for any Items: -->
 		<mapping from="plain" to="null" />
 		<mapping from="normal" to="null" />
+		<mapping from="scroll" to="new de.enough.polish.ui.itemviews.ScrollableItemView()" appliesTo="Item" />
 		<mapping from="fade-out" to="new de.enough.polish.ui.itemviews.FadeOutItemView()" appliesTo="Item" />
 		<mapping from="fade-in" to="new de.enough.polish.ui.itemviews.FadeInItemView()" appliesTo="Item" />
 		<mapping from="size-increase" to="new de.enough.polish.ui.itemviews.SizeIncreaseItemView()" appliesTo="Item" />
@@ -1876,6 +1883,7 @@
 		<mapping from="smiley" to="new de.enough.polish.ui.texteffects.SmileyTextEffect()" />
 		<mapping from="smiley-extended" to="new de.enough.polish.ui.texteffects.FastSmileyTextEffect()" />
 		<mapping from="styled-single" to="new de.enough.polish.ui.texteffects.SingleLineStyledTextEffect()" />
+		<mapping from="styled" to="new de.enough.polish.ui.texteffects.StyledTextEffect()" />
 		<mapping from="shadow" to="new de.enough.polish.ui.texteffects.ShadowTextEffect()" />
 		<mapping from="outline" to="new de.enough.polish.ui.texteffects.OutlineTextEffect()" />
 		<mapping from="segment" to="new de.enough.polish.ui.texteffects.SegmentTextEffect()" />
@@ -5688,7 +5696,34 @@
 		default="1"
 		since="J2ME Polish 2.4"
 	/>
+
+	<attribute
+		name="scroll-height"
+		type="dimension"
+		appliesTo="ScrollableItemView"
+		description="Set the scrollable height of the item."
+		id="494"
+		since="J2ME Polish 2.4"
+	/>
 	
+	<attribute
+		name="item-content-background"
+		type="background"
+		appliesTo="Item"
+		description="A background name from the backgrounds section. The background covers only the content area of the item and is independent of the item's normal background."
+		id="495"
+		since="J2ME Polish 2.4"
+	/>
+	
+	<attribute
+		name="item-content-border"
+		type="border"
+		appliesTo="Item"
+		description="A border name from the borders section. The border covers only the content area of the item and is independent of the item's normal border."
+		id="496"
+		since="J2ME Polish 2.4"
+	/>
+			
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"

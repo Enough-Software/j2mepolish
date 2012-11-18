@@ -817,6 +817,12 @@ public abstract class Item implements UiElement, Animatable
 	//#if polish.css.complete-border
 		protected Border completeBorder;
 	//#endif
+	//#if polish.css.item-content-background
+		private Background	contentBackground;
+	//#endif
+	//#if polish.css.item-content-border
+		private Border	contentBorder;
+	//#endif
 	//#if polish.css.complete-background || polish.css.complete-border
 		protected Dimension completeBackgroundPadding;
 	//#endif
@@ -1280,6 +1286,30 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 			this.completeBorder = brd;
+		//#endif
+			//#if polish.css.item-content-background
+			Background contentBg = (Background) style.getObjectProperty("item-content-background");
+			if (contentBg != null) {
+				if (this.isShown && this.contentBackground != contentBg) {
+					if (this.contentBackground != null) {
+						this.contentBackground.hideNotify();
+					}
+					contentBg.showNotify();
+				}
+				this.contentBackground = contentBg;
+			}
+		//#endif
+		//#if polish.css.item-content-border
+			Border contentBrd = (Border) style.getObjectProperty("item-content-border");
+			if (contentBrd != null) {
+				if (this.isShown && this.contentBorder != contentBrd) {
+					if (this.contentBorder != null) {
+						this.contentBorder.hideNotify();
+					}
+					contentBrd.showNotify();
+				}
+				this.contentBorder = contentBrd;
+			}
 		//#endif
 			
 		//#ifdef polish.css.view-type
@@ -2776,21 +2806,34 @@ public abstract class Item implements UiElement, Animatable
 			}
 		//#endif
 		//#if polish.css.complete-background || polish.css.complete-border
-			int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
-			int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
-			int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
-			int bX = x + this.marginLeft - cbPadding;
-			int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
+			if (
 			//#if polish.css.complete-background
-				if (this.completeBackground != null) {
-					this.completeBackground.paint(bX, bY, width, height, g);
-				}
+					(this.completeBackground != null)
+			//#endif
+			//#if polish.css.complete-background && polish.css.complete-border
+					||
 			//#endif
 			//#if polish.css.complete-border
-				if (this.completeBorder!= null) {
-					this.completeBorder.paint(bX, bY, width, height, g);
-				}
+				(this.completeBorder != null)
 			//#endif
+			) 
+			{
+				int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
+				int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
+				int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
+				int bX = x + this.marginLeft - cbPadding;
+				int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
+				//#if polish.css.complete-background
+					if (this.completeBackground != null) {
+						this.completeBackground.paint(bX, bY, width, height, g);
+					}
+				//#endif
+				//#if polish.css.complete-border
+					if (this.completeBorder!= null) {
+						this.completeBorder.paint(bX, bY, width, height, g);
+					}
+				//#endif
+			}
 		//#endif
 		
 		// paint label:
@@ -2967,6 +3010,38 @@ public abstract class Item implements UiElement, Animatable
 				this.contentHeight = 0;
 			} else {
 		//#endif
+			// paint item-content-background and item-content-border:
+			//#if polish.css.item-content-background || polish.css.item-content-border
+				if (
+				//#if polish.css.content-background
+						(this.contentBackground != null)
+				//#endif
+				//#if polish.css.content-background && polish.css.content-border
+						||
+				//#endif
+				//#if polish.css.content-border
+					(this.contentBorder != null)
+				//#endif
+				) 
+				{
+					int bX = x - this.paddingLeft;
+					int bY = y - this.paddingTop;
+					int bWidth = this.contentWidth + this.paddingLeft + this.paddingRight;
+					int bHeight = this.contentHeight + this.paddingTop + this.paddingBottom;
+					//#if polish.css.item-content-background
+						if (this.contentBackground != null)
+						{
+							this.contentBackground.paint(bX, bY, bWidth, bHeight, g);
+						}
+					//#endif
+					//#if polish.css.item-content-border
+						if (this.contentBorder != null)
+						{
+							this.contentBorder.paint(bX, bY, bWidth, bHeight, g);
+						}
+					//#endif
+				}
+			//#endif
 			// paint content:
 			//#ifdef polish.css.view-type
 				if (this.view != null) {
