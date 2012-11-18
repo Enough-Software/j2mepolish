@@ -8,10 +8,10 @@ import javax.microedition.lcdui.Graphics;
 
 import de.enough.polish.browser.css.CssInterpreter;
 import de.enough.polish.ui.Color;
+import de.enough.polish.ui.Item;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextEffect;
 import de.enough.polish.util.ArrayList;
-import de.enough.polish.util.IntStack;
 import de.enough.polish.util.TextUtil;
 import de.enough.polish.util.WrappedText;
 
@@ -48,6 +48,11 @@ public class StyledTextEffect extends TextEffect
 		this.styledTextsList.clear();
 		this.maxLineWidth = 0;
 		this.numberOfLines = 0;
+		if (text.length() == 0)
+		{
+			return;
+		}
+
 		wrappedText.clear();
 		int currentLineWidth = 0;
 		
@@ -138,15 +143,37 @@ public class StyledTextEffect extends TextEffect
 		{
 			// add found text:
 			String subText = text.substring(lastStartIndex);
-			addTextChunk(textColor, font, lineWidth,
+			currentLineWidth = addTextChunk(textColor, font, lineWidth,
 					maxLines, maxLinesAppendix,
 					maxLinesAppendixPosition, wrappedText,
 					currentLineWidth, subText);
 		}
-		wrappedText.clear();
-		for (int i=0; i<= this.numberOfLines; i++) {
-			wrappedText.addLine("", this.maxLineWidth);
+		// set the width of the last line:
+		int currentLineIndex = -1;
+		for (int styledTextIndex = this.styledTextsList.size(); --styledTextIndex >= 0; )
+		{
+			StyledText prevStyledText = (StyledText) this.styledTextsList.get(styledTextIndex);
+			if (currentLineIndex == -1)
+			{
+				currentLineIndex = prevStyledText.lineIndex;
+			}
+			if (prevStyledText.lineIndex != currentLineIndex)
+			{
+				break;
+			}
+			prevStyledText.lineWidth = currentLineWidth;
 		}
+		wrappedText.clear();
+		wrappedText.addLine("", this.maxLineWidth);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.TextEffect#calculateLinesHeight(de.enough.polish.util.WrappedText, int, int)
+	 */
+	public int calculateLinesHeight(WrappedText lines, int lineHeight, int paddingVertical)
+	{
+		return ((this.numberOfLines + 1) * (lineHeight + paddingVertical)) - paddingVertical;
 	}
 
 	private int addTextChunk(int textColor, Font font, int lineWidth,
@@ -157,15 +184,16 @@ public class StyledTextEffect extends TextEffect
 		int subWidth = font.stringWidth(subText);
 		if (currentLineWidth + subWidth > lineWidth)
 		{
+			
 			wrappedText.clear();
 			TextUtil.wrap(subText,font, lineWidth - currentLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, wrappedText, subWidth);
+			int currentLineIndex = this.numberOfLines;
 			this.numberOfLines += wrappedText.size() - 1;
 			for (int lineIndex = 0; lineIndex < wrappedText.size(); lineIndex++)
 			{
 				subText = wrappedText.getLine(lineIndex);
 				subWidth = wrappedText.getLineWidth(lineIndex);
-				StyledText styledText = new StyledText(subText, font, textColor, subWidth);
-				styledTextsList.add(styledText);
+				StyledText styledText = new StyledText(subText, font, textColor, subWidth, currentLineIndex + lineIndex);
 				if (subWidth > this.maxLineWidth)
 				{
 					this.maxLineWidth = subWidth;
@@ -174,13 +202,32 @@ public class StyledTextEffect extends TextEffect
 				{
 					this.maxLineWidth = subWidth + currentLineWidth;
 				}
+				if (lineIndex == 0)
+				{
+					styledText.lineWidth = currentLineWidth + subWidth;
+					// assign the same line width for all previous styled text elements that are on the same line:
+					for (int styledTextIndex = this.styledTextsList.size(); --styledTextIndex >= 0; )
+					{
+						StyledText prevStyledText = (StyledText) this.styledTextsList.get(styledTextIndex);
+						if (prevStyledText.lineIndex != currentLineIndex)
+						{
+							break;
+						}
+						prevStyledText.lineWidth = currentLineWidth + subWidth;
+					}
+				}
+				else
+				{
+					styledText.lineWidth = subWidth;
+				}
+				this.styledTextsList.add(styledText);
 			}
 			currentLineWidth = subWidth;
 		}
 		else
 		{
-			StyledText styledText = new StyledText(subText, font, textColor, subWidth);
-			styledTextsList.add(styledText);
+			StyledText styledText = new StyledText(subText, font, textColor, subWidth, this.numberOfLines);
+			this.styledTextsList.add(styledText);
 			currentLineWidth += subWidth;
 			if (currentLineWidth > this.maxLineWidth)
 			{
@@ -199,7 +246,19 @@ public class StyledTextEffect extends TextEffect
 			int leftBorder, int rightBorder, int lineHeight, int maxWidth,
 			int layout, Graphics g)
 	{
+		boolean isLayoutCenter = ( ( layout & Item.LAYOUT_CENTER ) == Item.LAYOUT_CENTER );
+		boolean isLayoutRight = !isLayoutCenter && ( ( layout & Item.LAYOUT_RIGHT ) == Item.LAYOUT_RIGHT );
+		int anchor;
+		//#if polish.Bugs.needsBottomOrientiationForStringDrawing
+			anchor = Graphics.BOTTOM | Graphics.LEFT;
+		//#else
+			anchor = Graphics.TOP | Graphics.LEFT;
+		//#endif
 		Object[] styledTexts = this.styledTextsList.getInternalArray();
+		int availWidth = rightBorder - leftBorder;
+		int currentLineIndex = -1;
+		y -= lineHeight;
+		int currentLineWidth = 0;
 		for (int i = 0; i < styledTexts.length; i++)
 		{
 			StyledText text = (StyledText) styledTexts[i];
@@ -207,19 +266,26 @@ public class StyledTextEffect extends TextEffect
 			{
 				break;
 			}
-			if (x + text.width > rightBorder)
+			if (text.lineIndex != currentLineIndex)
 			{
+				currentLineIndex = text.lineIndex;
 				x = leftBorder;
 				y += lineHeight;
+				currentLineWidth = 0;
+				if (isLayoutCenter)
+				{
+					x += (availWidth - text.lineWidth)/2;
+				}
+				else if (isLayoutRight)
+				{
+					x += (availWidth - text.lineWidth);
+				}
 			}
 			g.setFont(text.font);
 			g.setColor(text.color);
-			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-				g.drawString(text.text, x, y, Graphics.BOTTOM | Graphics.LEFT);
-			//#else
-				g.drawString(text.text, x, y, Graphics.TOP | Graphics.LEFT);
-			//#endif
+			g.drawString(text.text, x, y, anchor);
 			x += text.width; 
+			currentLineWidth += text.width;
 		}
 	}
 
@@ -241,12 +307,15 @@ public class StyledTextEffect extends TextEffect
 		Font font;
 		int color;
 		int width;
-		public StyledText(String text, Font font, int textColor, int width)
+		int lineIndex;
+		int lineWidth;
+		public StyledText(String text, Font font, int textColor, int width, int lineIndex)
 		{
 			this.text = text;
 			this.font = font;
 			this.color = textColor;
 			this.width = width;
+			this.lineIndex = lineIndex;
 		}
 		
 	}

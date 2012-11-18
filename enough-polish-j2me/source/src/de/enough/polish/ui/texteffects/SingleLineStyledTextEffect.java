@@ -8,6 +8,7 @@ import javax.microedition.lcdui.Graphics;
 
 import de.enough.polish.browser.css.CssInterpreter;
 import de.enough.polish.ui.Color;
+import de.enough.polish.ui.Item;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextEffect;
 import de.enough.polish.util.ArrayList;
@@ -27,7 +28,7 @@ import de.enough.polish.util.WrappedText;
 public class SingleLineStyledTextEffect extends TextEffect
 {
 	private final ArrayList styledTextsList = new ArrayList();
-
+	private int completeWidth;
 	
 	public SingleLineStyledTextEffect()
 	{
@@ -138,6 +139,7 @@ public class SingleLineStyledTextEffect extends TextEffect
 		}
 
 		wrappedText.addLine(text, width);
+		this.completeWidth = width;
 	}
 
 
@@ -149,7 +151,21 @@ public class SingleLineStyledTextEffect extends TextEffect
 			int leftBorder, int rightBorder, int lineHeight, int maxWidth,
 			int layout, Graphics g)
 	{
+		int anchor;
+		//#if polish.Bugs.needsBottomOrientiationForStringDrawing
+			anchor = Graphics.BOTTOM | Graphics.LEFT;
+		//#else
+			anchor = Graphics.TOP | Graphics.LEFT;
+		//#endif
 		Object[] styledTexts = this.styledTextsList.getInternalArray();
+		if (( ( layout & Item.LAYOUT_CENTER ) == Item.LAYOUT_CENTER ))
+		{
+			x = leftBorder + ((rightBorder - leftBorder) - this.completeWidth)/2;
+		}
+		else if ( ( layout & Item.LAYOUT_RIGHT ) == Item.LAYOUT_RIGHT )
+		{
+			x = leftBorder + ((rightBorder - leftBorder) - this.completeWidth);
+		}
 		for (int i = 0; i < styledTexts.length; i++)
 		{
 			StyledText text = (StyledText) styledTexts[i];
@@ -159,11 +175,7 @@ public class SingleLineStyledTextEffect extends TextEffect
 			}
 			g.setFont(text.font);
 			g.setColor(text.color);
-			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-				g.drawString(text.text, x, y, Graphics.BOTTOM | Graphics.LEFT);
-			//#else
-				g.drawString(text.text, x, y, Graphics.TOP | Graphics.LEFT);
-			//#endif
+			g.drawString(text.text, x, y, anchor);
 			x += text.width; 
 		}
 	}
