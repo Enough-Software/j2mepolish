@@ -184,9 +184,14 @@ public class StyledTextEffect extends TextEffect
 		int subWidth = font.stringWidth(subText);
 		if (currentLineWidth + subWidth > lineWidth)
 		{
-			
 			wrappedText.clear();
-			TextUtil.wrap(subText,font, lineWidth - currentLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, wrappedText, subWidth);
+			int firstLineWidth = lineWidth - currentLineWidth;
+			if (firstLineWidth <= font.charWidth('W') * 2)
+			{
+				firstLineWidth = lineWidth;
+				wrappedText.addLine("", 0);
+			}
+			TextUtil.wrap(subText,font, firstLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, wrappedText, subWidth);
 			int currentLineIndex = this.numberOfLines;
 			this.numberOfLines += wrappedText.size() - 1;
 			for (int lineIndex = 0; lineIndex < wrappedText.size(); lineIndex++)
