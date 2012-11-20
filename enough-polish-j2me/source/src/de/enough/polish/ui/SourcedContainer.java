@@ -103,6 +103,7 @@ implements ItemConsumer
 		itemSource.setItemConsumer(this);
 		this.distributionPreference = itemSource.getDistributionPreference();
 		int count = this.itemSource.countItems();
+		focusChild(-1);
 		this.itemsList.clear();
 		this.isFirstInitialization = true;
 		for (int itemIndex = 0; itemIndex < count; itemIndex++)
@@ -176,7 +177,7 @@ implements ItemConsumer
 			{
 				setInitialized(false);
 				Item prevItem = remove(event.getItemIndex());
-				System.out.println("removing with height=" + prevItem.itemHeight + ": " + prevItem);
+				//System.out.println("removing with height=" + prevItem.itemHeight + ": " + prevItem);
 				int height = prevItem.itemHeight + this.paddingVertical;
 				Item p = this;
 				while (p != null)
