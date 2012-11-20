@@ -885,9 +885,6 @@ public abstract class Item implements UiElement, Animatable
 		private RgbImage filterProcessedRgbImage;
                 public boolean cacheItemImage ;
 	//#endif
-	//#if polish.css.inline-label
-		protected boolean isInlineLabel;
-	//#endif
 	protected int availableWidth;
 	protected int availableHeight;
 	protected boolean ignoreRepaintRequests;
@@ -1357,7 +1354,7 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.inline-label
 			Boolean inlineBool = style.getBooleanProperty("inline-label");
 			if (inlineBool != null) {
-				this.isInlineLabel = inlineBool.booleanValue();
+				setSameRowForContentAndLabel(inlineBool.booleanValue());
 			}
 		//#endif
 		
@@ -2798,10 +2795,10 @@ public abstract class Item implements UiElement, Animatable
 		// paint background and border when the label should be included in this:
 		//#if polish.css.include-label
 			if (this.includeLabel) {
-				int width = this.itemWidth - this.marginLeft - this.marginRight;
-				int height = this.itemHeight - this.marginTop - this.marginBottom;
-				int bX = x + this.marginLeft;
-				int bY = y + this.marginTop + this.backgroundYOffset;
+				int width = getBackgroundWidth();
+				int height = getBackgroundHeight();
+				int bX = x + getBackgroundX();
+				int bY = y + getBackgroundY();
 				paintBackgroundAndBorder( bX, bY, width, height, g );
 			}
 		//#endif
@@ -2836,17 +2833,7 @@ public abstract class Item implements UiElement, Animatable
 			}
 		//#endif
 		
-		// paint label:
-		StringItem labelItem = this.label;
-		if (labelItem != null) {
-            int labelX = x + labelItem.relativeX;
-            labelItem.paint(labelX, y + labelItem.relativeY, labelX, labelX + labelItem.itemWidth, g );
-            if (this.useSingleRow) {
-                leftBorder += labelItem.itemWidth;
-            } else {
-                y += labelItem.itemHeight;
-            }
-		}
+
 		
 		leftBorder += (this.marginLeft + getBorderWidthLeft() + this.paddingLeft);
 		//#ifdef polish.css.before
@@ -2888,14 +2875,10 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.include-label
 			if (!this.includeLabel) {
 		//#endif
-				int backgroundX = x;
-				if (labelItem != null && this.useSingleRow) { 
-					backgroundX += labelItem.itemWidth;
-				}
+				int backgroundX = origX + getBackgroundX();
 				int backgroundW = this.backgroundWidth;
 				//#if polish.css.before && polish.css.before-include-background
 					if (this.beforeImage != null && !this.beforeIncludeBackground) {
-						backgroundX += getBeforeWidthWithPadding();
 						backgroundW -= getBeforeWidthWithPadding();
 					}
 				//#endif
@@ -2908,6 +2891,16 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.include-label
 			}
 		//#endif
+			
+		// paint label:
+		StringItem labelItem = this.label;
+		if (labelItem != null) {
+            int labelX = origX + labelItem.relativeX;
+            labelItem.paint(labelX, origY + labelItem.relativeY, labelX, labelX + labelItem.itemWidth, g );
+            if (!this.useSingleRow) {
+                y += labelItem.itemHeight;
+            }
+		}
 
 		//#if polish.css.content-x-adjust
 			if (this.contentXAdjustment != null) {
@@ -2960,13 +2953,12 @@ public abstract class Item implements UiElement, Animatable
 					//contY += (this.beforeHeight - this.contentHeight) / 2;
 				}
 				
-				if(this.isLayoutRight)
+				if (this.isLayoutRight)
 				{
 					beforeX = rightBorder - (this.contentWidth + this.beforeWidth);
 				}
 				//System.out.println("drawing before at " + beforeX + ", contentX=" + this.contentX + ", this=" + this);
 				g.drawImage(this.beforeImage, beforeX, beforeY, Graphics.TOP | Graphics.LEFT );
-				//x += getBeforeWidthWithPadding();
 			}
 		//#endif
 		
@@ -3013,13 +3005,13 @@ public abstract class Item implements UiElement, Animatable
 			// paint item-content-background and item-content-border:
 			//#if polish.css.item-content-background || polish.css.item-content-border
 				if (
-				//#if polish.css.content-background
+				//#if polish.css.item-content-background
 						(this.contentBackground != null)
 				//#endif
-				//#if polish.css.content-background && polish.css.content-border
+				//#if polish.css.item-content-background && polish.css.item-content-border
 						||
 				//#endif
-				//#if polish.css.content-border
+				//#if polish.css.item-content-border
 					(this.contentBorder != null)
 				//#endif
 				) 
@@ -3052,6 +3044,10 @@ public abstract class Item implements UiElement, Animatable
 			//#ifdef polish.css.view-type
 				}
 			//#endif
+//				if (this.useSingleRowEnforced) {
+//					g.setColor(0x00ffff);
+//					g.drawRect(leftBorder, y, this.contentWidth, this.contentHeight);
+//				}
 		//#if polish.css.content-visible
 			}
 		//#endif
@@ -3065,10 +3061,9 @@ public abstract class Item implements UiElement, Animatable
 				paintCommands( origX, origY, g );
 			}
 		//#endif
-			
 //			g.setColor(0xff0000);
 //			g.drawRect( origX + this.contentX, origY + this.contentY, this.contentWidth, this.contentHeight );
-//			g.drawLine( origX + this.contentX, origY + this.contentY, origX + this.contentX + this.contentWidth, origY + this.contentY + this.contentHeight );
+//			g.drawLine( origX + this.contentX, origY + this.contentY, origX + this.contentX, origY + this.contentY + this.contentHeight );
 //			g.setColor(0xffFF00);
 //			g.drawRect( getAbsoluteX() + 1, getAbsoluteY() + 1, this.itemWidth - 2, this.itemHeight - 2);
 
@@ -3396,16 +3391,6 @@ public abstract class Item implements UiElement, Animatable
 		
 		int firstLineContentWidth = firstLineWidth - noneContentWidth;
 		int availableContentWidth = availWidth - noneContentWidth;
-		if (this.useSingleRowEnforced) {
-			if (firstLineContentWidth - labelWidth > 5 * availableContentWidth / 100) { // at least 5% of the available width should remain for the first line
-				firstLineContentWidth -= labelWidth;
-			} else {
-				firstLineContentWidth = availableContentWidth;
-			}
-			//#if polish.css.inline-label
-				this.isInlineLabel = false;
-			//#endif
-		}
 		
 		//#ifdef polish.css.max-width
 			if (this.maximumWidth != null ) {
@@ -3439,6 +3424,16 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 		//#endif
+
+		if (this.useSingleRowEnforced) {
+			if (firstLineContentWidth - labelWidth > 5 * availableContentWidth / 100) { // at least 5% of the available width should remain for the first line
+				// use padding-horizontal instead of padding-left when enforcing a single row:
+				firstLineContentWidth -= labelWidth;
+				this.useSingleRow = true;
+			} else {
+				firstLineContentWidth = availableContentWidth;
+			}
+		}
 
 		this.contentX = this.marginLeft + getBorderWidthLeft() + this.paddingLeft;
 		//#ifdef polish.css.before
@@ -3474,12 +3469,6 @@ public abstract class Item implements UiElement, Animatable
 			availHeight -= noneContentHeight;
 			this.availContentWidth = availableContentWidth;
 			this.availContentHeight = availHeight;
-			//#if polish.css.inline-label
-				if (this.isInlineLabel && labelWidth < (90 * availWidth)/100) {
-					firstLineContentWidth -= labelWidth;
-					availableContentWidth -= labelWidth;
-				}
-			//#endif
 			//#ifdef polish.css.view-type
 				ItemView myView = this.view;
 				if (myView != null) {
@@ -3490,11 +3479,6 @@ public abstract class Item implements UiElement, Animatable
 			//#endif
 					initContent( firstLineContentWidth, availableContentWidth, availHeight );
 			//#ifdef polish.css.view-type
-				}
-			//#endif
-			//#if polish.css.inline-label
-				if (this.isInlineLabel && labelWidth < (90 * availWidth)/100) {
-					availableContentWidth += labelWidth;
 				}
 			//#endif
 			
@@ -3518,7 +3502,7 @@ public abstract class Item implements UiElement, Animatable
 		}
 		
 		//#ifdef polish.css.width
-			if(this.cssWidth != null) {
+			if (this.cssWidth != null) {
 				setContentWidth( targetWidth );
 				int diff = this.contentWidth - cWidth;
 				if (isLayoutCenter()) {
@@ -3615,7 +3599,10 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 			if (this.useSingleRow && labelWidth > 0) {
-				this.itemWidth += labelWidth; //TODO: when calling setItemWidth() here it will affect center and right layout items within a Container, but setting the variable directly is also not cool... 
+				if (!this.useSingleRowEnforced || this.itemWidth <= availWidth - labelWidth)
+				{
+					this.itemWidth += labelWidth; //TODO: when calling setItemWidth() here it will affect center and right layout items within a Container, but setting the variable directly is also not cool...
+				}
 				this.contentX += labelWidth;
 				if ( cHeight + noneContentHeight < labelHeight ) {
 					cHeight = labelHeight - noneContentHeight;
@@ -3725,7 +3712,11 @@ public abstract class Item implements UiElement, Animatable
 		this.itemHeight = cHeight + noneContentHeight;
 		
 		if (this.useSingleRow) {
-			this.backgroundWidth = this.itemWidth - this.marginLeft - this.marginRight - labelWidth;
+			this.backgroundWidth = this.itemWidth - this.marginLeft - this.marginRight;
+			if (!this.useSingleRowEnforced)
+			{
+				this.backgroundWidth -= labelWidth;
+			}
 			this.backgroundHeight = cHeight
 							  + noneContentHeight
 							  - this.marginTop
@@ -5628,15 +5619,25 @@ public abstract class Item implements UiElement, Animatable
 	 * @return the horizontal background start in pixels.
 	 */
 	public int getBackgroundX() {
+		int bX = this.marginLeft;
+		if ( this.label == null
 		//#if polish.css.include-label
-			if (this.includeLabel) {
-				return this.marginLeft;
-			} else {
+			|| this.includeLabel
 		//#endif
-				return this.contentX - this.paddingLeft;
-		//#if polish.css.include-label
-			} 
+		){
+			bX = this.marginLeft;
+		}
+		if (this.label != null && this.useSingleRow && !this.useSingleRowEnforced)
+		{
+			bX  = this.contentX - this.paddingLeft;
+		}
+		//#if polish.css.before && polish.css.before-include-background
+			if (this.beforeImage != null && !this.beforeIncludeBackground) 
+			{
+				bX += getBeforeWidthWithPadding();
+			}
 		//#endif
+		return bX;
 	}
 	
 	/**
@@ -5645,15 +5646,17 @@ public abstract class Item implements UiElement, Animatable
 	 * @return the horizontal background start in pixels.
 	 */
 	public int getBackgroundY() {
+		int bY = this.backgroundYOffset;
 		//#if polish.css.include-label
 			if (this.includeLabel) {
-				return this.marginTop;
+				bY += this.marginTop;
 			} else {
 		//#endif
-				return this.contentY - this.paddingTop;
+				bY += this.contentY - this.paddingTop;
 		//#if polish.css.include-label
 			} 
 		//#endif
+		return bY;
 	}
 	
 	/**

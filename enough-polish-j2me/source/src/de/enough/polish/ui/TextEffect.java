@@ -462,6 +462,21 @@ public abstract class TextEffect implements Serializable
 	public int getFontHeight() {
 		return getFont().getHeight();
 	}
+	
+	/**
+	 * Retrieves the font height of the first line.
+	 * This allows to embed labels correctly using 'inline-label' when the 
+	 * text effect uses different line heights.
+	 * The default implementation just returns getFontHeight().
+	 * 
+	 * @return the font height of the first row/line.
+	 * @see #getFontHeight()
+	 */
+	public int getFontHeightOfFirstLine()
+	{
+		return getFontHeight();
+	}
+	
 	/**
 	 * Retrieves the font that should be used.
 	 * 

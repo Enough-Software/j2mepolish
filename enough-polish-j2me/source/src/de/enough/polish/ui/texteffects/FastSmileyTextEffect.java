@@ -88,7 +88,7 @@ implements Trie.TrieSearchConsumer
 		this.isSmileysFound = false;
 		this.initIsAbortSearch = false;
 		this.initPreviousSearchIndex = 0;
-		this.textSmileyLayout.startInit(lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, font, parent.getPaddingVertical());
+		this.textSmileyLayout.startInit(firstLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, font, parent.getPaddingVertical());
 		
 		searchTrie.search(text, this);
 		
@@ -164,6 +164,19 @@ implements Trie.TrieSearchConsumer
 		{
 			return this.textSmileyLayout.height;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.TextEffect#getFontHeightOfFirstLine()
+	 */
+	public int getFontHeightOfFirstLine()
+	{
+		if (this.isSmileysFound && this.textSmileyLayout.isFirstLineContainsSmiley)
+		{
+			return smileyHeight;
+		}
+		return super.getFontHeightOfFirstLine();
 	}
 
 	/* (non-Javadoc)
@@ -300,8 +313,9 @@ implements Trie.TrieSearchConsumer
 		private int height;
 		private String	initMaxLinesAppendix;
 		private int	initMaxLinesAppendixPosition;
+		boolean	isFirstLineContainsSmiley;
 		
-		public void startInit(int lineWidth, int maxLines, String maxLinesAppendix, int maxLinesAppendixPosition, Font font, int paddingVertical)
+		public void startInit(int firstLineWidth, int lineWidth, int maxLines, String maxLinesAppendix, int maxLinesAppendixPosition, Font font, int paddingVertical)
 		{
 			this.initLineWidth = lineWidth;
 			this.initMaxLines = maxLines;
@@ -313,7 +327,7 @@ implements Trie.TrieSearchConsumer
 			
 			this.initCurrentLine = 0;
 			this.initCurrentLineContainsSmiley = false;
-			this.initX = 0;
+			this.initX = lineWidth - firstLineWidth;
 			this.initY = 0;
 			this.width = 0;
 			
@@ -341,7 +355,11 @@ implements Trie.TrieSearchConsumer
 		public boolean add( Smiley smiley )
 		{
 //			System.out.println("adding smiley [" + smiley.text + "], initX=" + this.initX + ", initY=" + this.initY + ", containsSmiley=" + this.initCurrentLineContainsSmiley);
-			if (this.initX == 0)
+			if (this.initY == 0)
+			{
+				this.isFirstLineContainsSmiley = true;
+			}
+			if (this.initX == 0 || this.elementsList.size() == 0)
 			{
 				this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
 				this.initCurrentLineContainsSmiley = true;
@@ -351,16 +369,13 @@ implements Trie.TrieSearchConsumer
 			int x = this.initX + smileyWidth;
 			if (x + smileyWidth >= this.initLineWidth) 
 			{
-				this.initX = 0;
-				this.initY += smileyHeight + this.initPaddingVertical;
-				this.initCurrentLineContainsSmiley = false;
 				this.initCurrentLine++;
 				if (this.initCurrentLine > this.initMaxLines)
 				{
 					return false;
 				}
 				this.initX = 0;
-				this.initY += smileyHeight + this.initPaddingVertical;
+				this.initY += this.initFontHeight + this.initPaddingVertical;
 				this.initCurrentLineContainsSmiley = false;
 			}
 			else
@@ -382,6 +397,14 @@ implements Trie.TrieSearchConsumer
 			{
 				maxLines -= this.initCurrentLine;
 			}
+			if (this.initX == 0 && text.charAt(0) == ' ')
+			{
+				if (text.length() == 1)
+				{
+					return true;
+				}
+				text = text.substring(1);
+			}
 			WrappedText wrappedText = new WrappedText();
 			TextUtil.wrap(text, this.initFont, this.initLineWidth - this.initX, this.initLineWidth, this.initMaxLines, this.initMaxLinesAppendix, this.initMaxLinesAppendixPosition, wrappedText);
 			if (wrappedText.getMaxLineWidth() > this.width)
@@ -397,28 +420,24 @@ implements Trie.TrieSearchConsumer
 				int x = this.initX + wrappedText.getMaxLineWidth();
 				if (x + smileyWidth >= this.initLineWidth)
 				{
-					this.initX = 0;
-					if (this.initCurrentLineContainsSmiley)
-					{
-						this.initY += smileyHeight + this.initPaddingVertical;
-						this.initCurrentLineContainsSmiley = false;
-					}
-					else
-					{
-						this.initY += this.initFontHeight + this.initPaddingVertical;
-						wrappedTextItem.y += smileyHeight - this.initFontHeight - this.initPaddingVertical;
-					}
 					this.initCurrentLine++;
 					if (this.initCurrentLine >= this.initMaxLines)
 					{
 						return false;
 					}
+					this.initX = 0;
+					this.initCurrentLineContainsSmiley = false;
+					this.initY += this.initFontHeight + this.initPaddingVertical;
 				}
 				else // there is still space left on the current line:
 				{
 					this.initX = x;
 					if (!this.initCurrentLineContainsSmiley)
 					{
+						if (this.initY == 0)
+						{
+							this.isFirstLineContainsSmiley = true;
+						}
 						wrappedTextItem.y += smileyHeight - this.initFontHeight - this.initPaddingVertical;
 						this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
 					}
@@ -456,9 +475,9 @@ implements Trie.TrieSearchConsumer
 			return true;
 		}
 		
-		
 		public void drawStrings(int x, int y, int leftBorder, int rightBorder, int maxWidth, int layout, Graphics g)
 		{
+			x = leftBorder;
 			boolean isLayoutRight = false;
 			boolean isLayoutCenter = false;
 			int centerX = 0;

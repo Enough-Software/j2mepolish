@@ -683,9 +683,6 @@ public class StringItem extends Item
 						lineY += startIndex * lineHeight;
 						if (startIndex > 0) {
 							lineX = leftBorder;
-							if ( this.useSingleRow && this.label != null) {
-								lineX -= this.label.itemWidth;
-							}
 						}
 					}
 					//#if polish.Bugs.needsBottomOrientiationForStringDrawing
@@ -716,10 +713,6 @@ public class StringItem extends Item
 					if (i == 0) {
 						if (x > leftBorder) {
 							lineX = leftBorder;
-						}
-						//System.out.println("changing lineX from " + lineX + " to " + leftBorder);
-						if ( this.useSingleRow && this.label != null) {
-							lineX -= this.label.itemWidth;
 						}
 					}
 				}
@@ -826,7 +819,19 @@ public class StringItem extends Item
 		}
 		if (!this.isTextInitializationRequired && availWidth == this.lastAvailableContentWidth) {
 			this.contentWidth = this.lastContentWidth; 
-			this.contentHeight = this.lastContentHeight; 
+			this.contentHeight = this.lastContentHeight;
+			if (this.useSingleRow && this.textEffect != null)
+			//#if polish.css.text-effect
+				if (this.useSingleRow && (this.textEffect != null) && (this.contentHeight > 0) && (this.label != null))
+				{
+					int fontHeightFirstLine = this.textEffect.getFontHeightOfFirstLine();
+					int fontHeight = this.textEffect.getFontHeight();
+					if (fontHeightFirstLine != fontHeight)
+					{
+						this.label.relativeY = fontHeightFirstLine - fontHeight;
+					}
+				}
+			//#endif
 			return;
 		}
 		this.isTextInitializationRequired = false;
@@ -870,6 +875,17 @@ public class StringItem extends Item
 //			System.out.println("init: padding-vertical=" + this.paddingVertical + ", paddingTop=" + this.paddingTop + " for " + this.text);
 		this.lastContentWidth = this.contentWidth;
 		this.lastContentHeight = this.contentHeight;
+		//#if polish.css.text-effect
+			if (this.useSingleRow && (this.textEffect != null) && (this.contentHeight > 0) && (this.label != null))
+			{
+				int fontHeightFirstLine = this.textEffect.getFontHeightOfFirstLine();
+				int fontHeight = this.textEffect.getFontHeight();
+				if (fontHeightFirstLine != fontHeight)
+				{
+					this.label.relativeY = fontHeightFirstLine - fontHeight;
+				}
+			}
+		//#endif
 	}
 	
 	/**
