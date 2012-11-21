@@ -105,6 +105,13 @@ implements ItemConsumer
 		int count = this.itemSource.countItems();
 		focusChild(-1);
 		this.itemsList.clear();
+		if (this.isInitialized)
+		{
+			this.contentHeight = 0;
+			this.itemHeight = this.paddingTop + this.paddingBottom + getBorderWidthTop() + getBorderWidthBottom() + (this.label != null ? this.label.itemHeight : 0);
+			this.backgroundHeight = this.itemHeight;
+			setScrollYOffset(0, false);
+		}
 		this.isFirstInitialization = true;
 		for (int itemIndex = 0; itemIndex < count; itemIndex++)
 		{
@@ -202,6 +209,18 @@ implements ItemConsumer
 				nextItem = this.itemSource.createItem(event.getItemIndex());
 			}
 			set( event.getItemIndex(), nextItem );
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Container#setScrollHeight(int)
+	 */
+	public void setScrollHeight( int height ) {
+		super.setScrollHeight(height);
+		if (height != -1 && this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+		{
+			scrollToBottom();
 		}
 	}
 	
