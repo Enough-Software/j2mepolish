@@ -587,8 +587,18 @@
 			<param name="width-top" type="integer" primitive="true" default="ref:width" description="The width of the border at the top." />
 			<param name="width-bottom" type="integer" primitive="true" default="ref:width" description="The width of the border at the bottom." />
 		</mapping>
+		<mapping from="nested-colors" 				to="de.enough.polish.ui.borders.NestedColorsBorder" >
+			<param name="left-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the left side, one for each line." />
+		    <param name="colors-left"   type="color[]" array-type="Color" default="ref:left-colors" description="The border colors on the left side, one for each line." />
+			<param name="right-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the right side, one for each line." />
+		    <param name="colors-right"  type="color[]" array-type="Color" default="ref:right-colors" description="The border colors on the right side, one for each line." />
+			<param name="top-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the top side, one for each line." />
+		    <param name="colors-top"    type="color[]" array-type="Color" default="ref:top-colors" description="The border colors on the top side, one for each line." />
+			<param name="bottom-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the bottom side, one for each line." />
+		    <param name="colors-bottom" type="color[]" array-type="Color" default="ref:bottom-colors" description="The border colors on the bottom side, one for each line." />
+		</mapping>
 		<mapping from="plain" 				converter="de.enough.polish.preprocess.borders.SimpleBorderConverter" />
-			<mapping from="bottom-right-shadow" to="de.enough.polish.ui.borders.BottomRightShadowBorder" converter="de.enough.polish.preprocess.borders.ShadowBorderConverter" >
+		<mapping from="bottom-right-shadow" to="de.enough.polish.ui.borders.BottomRightShadowBorder" converter="de.enough.polish.preprocess.borders.ShadowBorderConverter" >
 			<param name="color" type="color" primitive="true" default="black" description="The border color." />
 			<param name="width" type="integer" primitive="true" default="1" description="The width of the border." />
 			<param name="offset" type="integer" default="1" primitive="true" description="The distance between item and border in pixels." />		
