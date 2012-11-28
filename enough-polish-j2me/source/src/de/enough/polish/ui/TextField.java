@@ -1811,13 +1811,14 @@ public class TextField extends StringItem
 		String txt = getString(); // cannot be null
 		String start = txt.substring( 0, position );
 		String end = txt.substring( position );
+		int caretPosition = getCaretPosition();
 		setString( start + src + end );
 		//#if tmp.directInput
 			if (position == this.caretPosition) {
 				this.caretPosition += src.length();
 			}
 		//#else
-			setCaretPosition( getCaretPosition() + src.length() );
+			setCaretPosition( Math.min( getString().length(), caretPosition + src.length() ) );
 		//#endif
 			
 		//#if tmp.usePredictiveInput
