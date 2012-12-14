@@ -2063,12 +2063,30 @@ public class TextField extends StringItem
 	
 	//#if polish.series40sdk20 || polish.series40sdk11
 	protected TextEditor createNativeNokiaTextField() {
-		TextEditor editor = TextEditor.createTextEditor( 
-		        9999, TextField.ANY, 50, 50);
+		int width = 50;
+		int rows = 1;
+		int maxSizeLocal = this.maxSize;
+		int midpConstraints = getMidpConstraints();
+		if ((midpConstraints & NUMERIC) == NUMERIC)
+		{
+			// workaround for evil Nokia max size bugs: currently at max 10 digits are allowed
+			maxSizeLocal = Math.max(maxSizeLocal, 10);
+		}
+		TextEditor editor = TextEditor.createTextEditor(maxSizeLocal, midpConstraints, width, rows);
 		editor.setVisible(true);
 		editor.setTouchEnabled(true);
 		editor.setSize(1, 1);
 		editor.setMultiline(true);
+		editor.setForegroundColor(0xFF000000 | this.textColor);
+		editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
+		editor.setBackgroundColor(0);
+		editor.setHighlightBackgroundColor(0);
+		//TODO setTextEditorListener(this)
+		if (this.text != null)
+		{
+			editor.setContent(getString());
+		}
+		editor.setParent( Display.getInstance() );
 		return editor;
 	}
 	//#endif
@@ -2491,12 +2509,11 @@ public class TextField extends StringItem
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
 					if ( this.series40sdk20Field != null ) {
-					   Object object = Display.getInstance();
 					   int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop() ;
 					   this.series40sdk20Field.setVisible(true);
-					   this.series40sdk20Field.setParent(object);
-					   this.series40sdk20Field.setPosition(x, y);		
-					   this.series40sdk20Field.setSize(this.getAvailableContentWidth(), textFieldHeight);
+					   this.series40sdk20Field.setParent(Display.getInstance());
+					   this.series40sdk20Field.setPosition(x, y);
+					   this.series40sdk20Field.setSize(getAvailableContentWidth(), textFieldHeight);
 					}
 				}
 		//#else
@@ -2980,7 +2997,7 @@ public class TextField extends StringItem
 				this._androidTextField.setStyle(style);
 			}
 		//#endif
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if (polish.series40sdk20 || polish.series40sdk11) && polish.css.font-color
 			if ( this.series40sdk20Field != null ) {
 				this.series40sdk20Field.setFont(this.font);
 				Color color = style.getColorProperty("font-color");
@@ -4678,8 +4695,6 @@ public class TextField extends StringItem
 				this.series40sdk20Field.setFocus(false);
 				this.series40sdk20Field.setParent(null);
 				String newText = this.series40sdk20Field.getContent();
-				String oldText = this.isPassword ? this.passwordText : this.text;
-				
 				setString( newText );
 				setInitialized(false);
 				repaint();
