@@ -207,6 +207,21 @@ implements CycleListener
 		focus( item, force, false );
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#focus(int, de.enough.polish.ui.Item, boolean)
+	 */
+	public void focus(int index, Item item, boolean force) {
+		if (index == -1)
+		{
+			this.currentlyActiveContainer.focusChild(-1);
+		}
+		else
+		{
+			super.focus(index, item, force);
+		}
+	}
+	
 	/**
 	 * Focuses the specified item and optionally keeps the current frame focused
 	 * @param item the item
