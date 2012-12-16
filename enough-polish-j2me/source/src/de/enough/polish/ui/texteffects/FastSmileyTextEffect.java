@@ -94,7 +94,7 @@ implements Trie.TrieSearchConsumer
 		
 		if (this.isSmileysFound)
 		{
-			if (this.initPreviousSearchIndex < text.length()-1)
+			if ((this.initPreviousSearchIndex < text.length()-1) && (!this.initIsAbortSearch))
 			{
 				String textTail = text.substring(this.initPreviousSearchIndex);
 				this.textSmileyLayout.add(textTail);
@@ -141,10 +141,13 @@ implements Trie.TrieSearchConsumer
 				this.initIsAbortSearch = true;
 			}
 		}
-		boolean continueLayout = this.textSmileyLayout.add(smiley);
-		if (!continueLayout)
+		if (!this.initIsAbortSearch)
 		{
-			this.initIsAbortSearch = true;
+			boolean continueLayout = this.textSmileyLayout.add(smiley);
+			if (!continueLayout)
+			{
+				this.initIsAbortSearch = true;
+			}
 		}
 		this.initPreviousSearchIndex = matchedWordIndex + matchedWord.length();
 	}
@@ -370,7 +373,7 @@ implements Trie.TrieSearchConsumer
 			if (x + smileyWidth >= this.initLineWidth) 
 			{
 				this.initCurrentLine++;
-				if (this.initCurrentLine > this.initMaxLines)
+				if (this.initCurrentLine >= this.initMaxLines)
 				{
 					return false;
 				}
