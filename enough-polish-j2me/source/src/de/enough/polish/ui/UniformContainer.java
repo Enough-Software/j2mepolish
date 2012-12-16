@@ -143,7 +143,7 @@ implements ItemConsumer
 			{
 				startIndex = Math.min(count - numberOfRealItems, startIndex);
 			}
-			for (int itemIndex=startIndex + 1; itemIndex <= startIndex + numberOfRealItems; itemIndex++) {
+			for (int itemIndex=startIndex + 1; itemIndex < startIndex + numberOfRealItems; itemIndex++) {
 				item = this.itemSource.createItem(itemIndex);
 				item.parent = this;
 				item.getItemHeight(firstLineWidth, availWidth, availHeight);
