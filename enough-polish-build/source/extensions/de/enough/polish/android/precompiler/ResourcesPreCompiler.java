@@ -284,37 +284,12 @@ public class ResourcesPreCompiler extends PreCompiler {
 						existingElement.setAttribute( attribute.getName(), attribute.getValue(), namespace);
 					}
 					List subchildren = childElement.getChildren();
-					for (int subchildIndex=0; subchildIndex < subchildren.size(); subchildIndex++ ) {
-						Element subchildElement = (Element) subchildren.get(childIndex);
+					while (subchildren.size() > 0 ) {
+						Element subchildElement = (Element) subchildren.get(0);
 						subchildElement.detach();
 						existingElement.addContent(subchildElement);
-					}					
-				}
-			}
-			children = furtherManifestRootElement.getContent();
-			for (int childIndex=0; childIndex < children.size(); childIndex++ ) {
-				Object childContent = children.get(childIndex);
-				if (childContent instanceof Element) {
-					Element childElement = (Element) childContent;
-					childElement.detach();
-					Element existingElement = rootElement.getChild( childElement.getName() );
-					if (existingElement == null) {					
-						rootElement.addContent(childElement);
-					} else {
-						List attributes = childElement.getAttributes();
-						for (int attributesIndex=0; attributesIndex < attributes.size(); attributesIndex++) {
-							org.jdom.Attribute attribute = (org.jdom.Attribute) attributes.get(attributesIndex);
-							existingElement.setAttribute( attribute.getName(), attribute.getValue(), namespace);
-						}
-						List subchildren = childElement.getChildren();
-						for (int subchildIndex=0; subchildIndex < subchildren.size(); subchildIndex++ ) {
-							Element subchildElement = (Element) subchildren.get(childIndex);
-							subchildElement.detach();
-							existingElement.addContent(subchildElement);
-						}					
 					}
 				}
-				
 			}
 		}
 		
