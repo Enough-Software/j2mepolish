@@ -311,6 +311,7 @@ public class Command
 	private CommandListener commandListener;
 
 	private Object data;
+	private Object	nativeCommand;
 
 	/**
 	 * Creates a new command object with the given short
@@ -415,7 +416,7 @@ public class Command
 		this.priority = priority;
 		this.style = style;
 	}
-
+	
 	private static int getValidType(int type) {
 		if (type == SEPARATOR) {
 			type = SCREEN;
@@ -713,5 +714,15 @@ public class Command
 	 */
 	public Object getData() {
 		return this.data;
+	}
+
+	protected void setNativeCommand(Object nativeCommand)
+	{
+		this.nativeCommand = nativeCommand;
+	}
+	
+	protected Object getNativeCommand()
+	{
+		return this.nativeCommand;
 	}
 }

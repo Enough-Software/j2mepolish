@@ -317,6 +317,10 @@ public abstract class Canvas
 	extends javax.microedition.lcdui.Canvas
 //#endif
 implements Displayable
+
+//#if !polish.FullScreen && polish.api.nokia-ui-2.0 && polish.css.Icon-Image
+	//#define tmp.useNokiaIconCommand
+//#endif
 {
     /**
      * Constant for the <code>UP</code> game action.
@@ -978,27 +982,30 @@ implements Displayable
 	    //# }
     //#endif
     
-    protected void _showNotify() {
+    protected void _showNotify() 
+    {
     	Display instance = Display.getInstance();
     	//#if polish.midp2
     		instance.setFullScreenMode( (this._commands == null && this._title == null) );
     	//#endif
-    	if (this._commands != null) {
+    	if (this._commands != null) 
+    	{
     		Object[] commands = this._commands.getInternalArray();
-    		for (int i = 0; i < commands.length; i++) {
-    			
-    			//#if !polish.FullScreen && polish.api.nokia-ui-2.0
-    				Object command = commands[i];
-	    			if ( command != null && command instanceof IconCommand ) {
-	    				instance.addCommand( (IconCommand) command);
-	    				continue;
-					}
-    			//#endif
-	    			
+    		for (int i = 0; i < commands.length; i++) 
+    		{
 				Command cmd = (Command) commands[i];
 				if (cmd == null) {
 					break;
 				}
+    			//#if tmp.useNokiaIconCommand
+    				javax.microedition.lcdui.Command nativeCommand = (javax.microedition.lcdui.Command) cmd.getNativeCommand();
+	    			if ( nativeCommand != null) 
+	    			{
+	    				instance.addCommand(nativeCommand);
+	    				continue;
+					}
+    			//#endif
+	    			
 //				System.out.println("adding cmd " + cmd.getLabel());
 				instance.addCommand(cmd);
 			}
@@ -1023,23 +1030,23 @@ implements Displayable
     		Object[] commands = this._commands.getInternalArray();
     		Display instance = Display.getInstance();
     		Canvas current = instance.currentCanvas;
-    		for (int i = 0; i < commands.length; i++) {
-    			
-    			//#if !polish.FullScreen && polish.api.nokia-ui-2.0
-					Object command = commands[i];
-	    			if ( command != null && command instanceof IconCommand ) {
-	    				if (current == null || current._commands == null || !current._commands.contains(command)) {
+    		for (int i = 0; i < commands.length; i++) 
+    		{
+				Command cmd = (Command) commands[i];
+				if (cmd == null) {
+					break;
+				}
+    			//#if tmp.useNokiaIconCommand
+					javax.microedition.lcdui.Command nativeCommand = (javax.microedition.lcdui.Command) cmd.getNativeCommand();
+	    			if (nativeCommand != null) {
+	    				if (current == null || current._commands == null || !current._commands.contains(cmd)) {
 //	    					System.out.println("removing cmd " + cmd.getLabel());
-	    					instance.removeCommand( (IconCommand) command);
+	    					instance.removeCommand( nativeCommand);
 	    				}
 	    				continue;
 					}
     			//#endif
     			
-				Command cmd = (Command) commands[i];
-				if (cmd == null) {
-					break;
-				}
 				//TODO we could skip this test when calling first _hideNotify() on the old screen and then _showNotify() on the new screen
 				// however there are other dependencies that might not get easily resolved (repaint-previous-screen, StyleSheet.currentScreen), so for now we keep it like this.
 				if (current == null || current._commands == null || !current._commands.contains(cmd)) {
@@ -1313,38 +1320,28 @@ implements Displayable
 		
 		boolean add = false;
 		
-		//#if !polish.FullScreen && polish.api.nokia-ui-2.0
-		
-			javax.microedition.lcdui.Command commandToAdd = cmd;
+		javax.microedition.lcdui.Command commandToAdd = cmd;
+		//#if tmp.useNokiaIconCommand
 			Style style = cmd.getStyle();
 			if (style != null) {
 				String url = style.getProperty("icon-image");
 				if (url != null) {
 					try {
 						Image img = Image.createImage(url);
-						commandToAdd = new IconCommand(cmd.getLabel(), cmd.getLongLabel(), img.image, img.image, Command.SCREEN, 0);
+						commandToAdd = new NokiaIconCommand(cmd, img.image);
+						cmd.setNativeCommand(commandToAdd);
 					} catch (Exception e) {
 						//#debug error
 						System.err.println("Unable to create image from URL " + url + e);						
 			    	}
 				}
 			}
-			
-			add = !(this._commands.contains(commandToAdd));
-			this._commands.add( commandToAdd );
-			if (add && this._isShown) {		
-					Display.getInstance().addCommand(commandToAdd);
-			}
-			
-		//#else	
-			
-			add = !(this._commands.contains(cmd));
-			this._commands.add( cmd );
-			if (add && this._isShown) {
-				Display.getInstance().addCommand( cmd );
-			} 
-			
 		//#endif
+		add = !(this._commands.contains(cmd));
+		this._commands.add( cmd );
+		if (add && this._isShown) {
+			Display.getInstance().addCommand( commandToAdd );
+		} 
 	}
 	
 	/* (non-Javadoc)
@@ -1357,6 +1354,14 @@ implements Displayable
 		}
 		this._commands.remove(cmd);
 		if (this._isShown && !this._commands.contains( cmd )) {
+			//#if tmp.useNokiaIconCommand
+				javax.microedition.lcdui.Command commandToRemove = (javax.microedition.lcdui.Command) cmd.getNativeCommand();
+				if (commandToRemove != null)
+				{
+					Display.getInstance().removeCommand(commandToRemove);
+					return;
+				}
+			//#endif
 			Display.getInstance().removeCommand( cmd );
 		} 		
 	}

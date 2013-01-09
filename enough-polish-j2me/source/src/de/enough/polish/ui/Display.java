@@ -2844,10 +2844,19 @@ public class Display
 	 */
 	public void commandAction(javax.microedition.lcdui.Command c, javax.microedition.lcdui.Displayable d)
 	{
-		if (c instanceof Command) {
-			if (this.commandListener != null) {
+		if (c instanceof CommandWrapper)
+		{
+			c = ((CommandWrapper)c).getCommand();
+		}
+		
+		if (c instanceof Command) 
+		{
+			if (this.commandListener != null) 
+			{
 				this.commandListener.commandAction((Command)c, this.currentDisplayable );
-			} else if (this.currentCanvas instanceof Screen) {
+			} 
+			else if (this.currentCanvas instanceof Screen) 
+			{
 				((Screen)this.currentCanvas).handleCommand( (Command)c);
 			}
 		}
