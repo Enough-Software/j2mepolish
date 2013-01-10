@@ -820,7 +820,6 @@ public class StringItem extends Item
 		if (!this.isTextInitializationRequired && availWidth == this.lastAvailableContentWidth) {
 			this.contentWidth = this.lastContentWidth; 
 			this.contentHeight = this.lastContentHeight;
-			if (this.useSingleRow && this.textEffect != null)
 			//#if polish.css.text-effect
 				if (this.useSingleRow && (this.textEffect != null) && (this.contentHeight > 0) && (this.label != null))
 				{
