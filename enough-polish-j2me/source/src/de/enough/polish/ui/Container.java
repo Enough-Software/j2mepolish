@@ -3504,9 +3504,14 @@ public class Container extends Item {
 				this.containerView.hideNotify();
 			}
 		//#endif
-		Item[] myItems = getItems();
-		for (int i = 0; i < myItems.length; i++) {
-			Item item = myItems[i];
+		Object[] myItems = this.itemsList.getInternalArray();
+		for (int i = 0; i < myItems.length; i++) 
+		{
+			Item item = (Item) myItems[i];
+			if (item == null)
+			{
+				break;
+			}
 			item.hideNotify();
 		}
 	}
@@ -3523,7 +3528,8 @@ public class Container extends Item {
 		{
 			int relX = x - item.relativeX - this.contentX;
 			int relY = y - item.relativeY - this.yOffset - this.contentY;
-			if (item.isInItemArea(relX, relY)) {
+			if (item.isInItemArea(relX, relY)) 
+			{
 				handled = item.handleGesture(gesture, relX, relY);
 			}
 		}
