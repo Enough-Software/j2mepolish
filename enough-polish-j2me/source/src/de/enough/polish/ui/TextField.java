@@ -4688,7 +4688,10 @@ public class TextField extends StringItem
 	}
 		
 	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.series40sdk20 || polish.series40sdk11 || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
-	protected void defocus(Style originalStyle) {
+	protected void defocus(Style originalStyle) 
+	{
+		//#debug
+		System.out.println("defocusing TextField");
 		super.defocus(originalStyle);
 		//#if polish.series40sdk20 || polish.series40sdk11
 			if (this.series40sdk20Field != null) {
@@ -4893,13 +4896,13 @@ public class TextField extends StringItem
 	 * (non-Javadoc)
 	 * @see de.enough.polish.ui.StringItem#showNotify()
 	 */
-	protected void showNotify() {
-		
+	protected void showNotify() 
+	{
 		//#if polish.series40sdk20 || polish.series40sdk11
-		if ( this.series40sdk20Field != null && this.isFocused) {
-			this.series40sdk20Field.setVisible(true);
-			this.series40sdk20Field.setFocus(true);
-		}
+			if ( this.series40sdk20Field != null && this.isFocused) {
+				this.series40sdk20Field.setVisible(true);
+				this.series40sdk20Field.setFocus(true);
+			}
 		//#endif
 		
 		//#if tmp.updateDeleteCommand
@@ -4922,21 +4925,14 @@ public class TextField extends StringItem
 		super.showNotify();
 	}
 
-	//#if  (!polish.blackberry && tmp.directInput) || polish.series40sdk20 || polish.series40sdk11
+	//#if  (!polish.blackberry && tmp.directInput)
 		/* (non-Javadoc)
 		 * @see de.enough.polish.ui.StringItem#hideNotify()
 		 */
 		protected void hideNotify() {
-			//#if polish.series40sdk20 || polish.series40sdk11
-				if ( this.series40sdk20Field != null ) {
-					this.series40sdk20Field.setVisible(false);
-					this.series40sdk20Field.setFocus(false);
-				}
-			//#else
-				if (this.caretChar != this.editingCaretChar) {
-					commitCurrentCharacter();
-				}
-			//#endif
+			if (this.caretChar != this.editingCaretChar) {
+				commitCurrentCharacter();
+			}
 			super.hideNotify();
 		}	
 	//#endif
