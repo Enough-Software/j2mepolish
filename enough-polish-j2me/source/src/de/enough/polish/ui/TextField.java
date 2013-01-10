@@ -4897,9 +4897,10 @@ public class TextField extends StringItem
 	 * @see de.enough.polish.ui.StringItem#showNotify()
 	 */
 	protected void showNotify() 
-	{
+	{	
 		//#if polish.series40sdk20 || polish.series40sdk11
-			if ( this.series40sdk20Field != null && this.isFocused) {
+			if ( this.series40sdk20Field != null && this.isFocused) 
+			{
 				this.series40sdk20Field.setVisible(true);
 				this.series40sdk20Field.setFocus(true);
 			}
@@ -4925,14 +4926,22 @@ public class TextField extends StringItem
 		super.showNotify();
 	}
 
-	//#if  (!polish.blackberry && tmp.directInput)
+	//#if  (!polish.blackberry && tmp.directInput) || polish.series40sdk20 || polish.series40sdk11
 		/* (non-Javadoc)
 		 * @see de.enough.polish.ui.StringItem#hideNotify()
 		 */
 		protected void hideNotify() {
-			if (this.caretChar != this.editingCaretChar) {
-				commitCurrentCharacter();
-			}
+			//#if polish.series40sdk20 || polish.series40sdk11
+				if ( this.series40sdk20Field != null && Display.getInstance().isShown()) 
+				{
+					this.series40sdk20Field.setVisible(false);
+					this.series40sdk20Field.setFocus(false);
+				}
+			//#else
+				if (this.caretChar != this.editingCaretChar) {
+					commitCurrentCharacter();
+				}
+			//#endif
 			super.hideNotify();
 		}	
 	//#endif
