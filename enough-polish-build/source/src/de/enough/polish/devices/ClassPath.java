@@ -50,7 +50,7 @@ public class ClassPath {
 
 	private final Device device;
 	private final LibraryManager libraryManager;
-	private boolean isInitalised;
+	private boolean isInitalized;
 	
 	private String bootClassPath;
 	private String classPath;
@@ -69,7 +69,7 @@ public class ClassPath {
 	}
 
 	private void initialize() {
-		Map duplicates = new HashMap();
+		Map<String,Boolean> duplicates = new HashMap<String,Boolean>();
 		initBootClassPath(duplicates);
 		initClassPath(duplicates);
 //		String[] paths = this.bootClassPaths;
@@ -84,12 +84,12 @@ public class ClassPath {
 //			String path = paths[i];
 //			System.out.println("cp=" + path);
 //		}
-		this.isInitalised = true;
+		this.isInitalized = true;
 	}
 	
-	private void initClassPath(Map duplicates) {
+	private void initClassPath(Map<String,Boolean> duplicates) {
 		String[] paths = this.libraryManager.getClassPaths(this.device);
-		ArrayList pathList = new ArrayList();
+		ArrayList<String> pathList = new ArrayList<String>();
 		StringBuffer buffer = new StringBuffer();
 		if (paths != null) {
 			for (int i = 0; i < paths.length; i++) {
@@ -108,7 +108,7 @@ public class ClassPath {
 		this.classPath = buffer.toString();
 	}
 
-	private void initBootClassPath(Map duplicates) {
+	private void initBootClassPath(Map<String,Boolean> duplicates) {
 		String bootPathStr = this.device.getCapability( "polish.build.bootclasspath" );
 		if (bootPathStr == null) {
 			throw new BuildException("IllegalState: device [" + this.device.identifier + "] has no build.BootClassPath defined!");
@@ -122,7 +122,7 @@ public class ClassPath {
 		File polishHome = (File) env.get("polish.home");
 		polishHome = new File( polishHome, "import" );
 		File importFolder = (File) env.get("polish.apidir");
-		ArrayList cleanedPaths = new ArrayList( paths.length );
+		ArrayList<String> cleanedPaths = new ArrayList<String>( paths.length );
 		for (int i = 0; i < paths.length; i++) {
 			String pathElement = env.writeProperties( paths[i] );
 			
@@ -165,9 +165,9 @@ public class ClassPath {
 		}
 		paths = (String[]) cleanedPaths.toArray( new String[ cleanedPaths.size() ] );
 		
-		// now add ccertain optional APIs to the bootclasspath if they require it (like the MMAPI on MIDP 2.0 systems):
+		// now add certain optional APIs to the bootclasspath if they require it (like the MMAPI on MIDP 2.0 systems):
 		Library[] libraries = this.libraryManager.getLibraries( this.device );
-		ArrayList additionalPaths = null;
+		ArrayList<String> additionalPaths = null;
 		for (int i = 0; i < libraries.length; i++) {
 			Library library = libraries[i];
 			if (library.getPosition() == Library.POSITION_BOOTCP_PREPPEND) {
@@ -200,31 +200,45 @@ public class ClassPath {
 	}
 
 
-	private ArrayList createList(String[] paths) {
-		ArrayList list = new ArrayList();
+	private ArrayList<String> createList(String[] paths) {
+		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < paths.length; i++) {
 			String path = paths[i];
 			list.add( path );
 		}
 		return list;
 	}
+	
+	public void addClassPath(String path)
+	{
+		if (!this.isInitalized) {
+			initialize();
+		}
+		path = path.replace('\\', '/');
+		this.classPath = this.classPath + File.pathSeparator + path;
+		int oldClassPathsLength = this.classPaths.length;
+		String[] newPaths = new String[oldClassPathsLength + 1];
+		System.arraycopy(this.classPaths, 0, newPaths, 0, oldClassPathsLength);
+		newPaths[oldClassPathsLength] = path;
+		this.classPaths = newPaths;
+	}
 
 	public String getBootClassPath() {
-		if (!this.isInitalised) {
+		if (!this.isInitalized) {
 			initialize();
 		}
 		return this.bootClassPath;
 	}
 	
 	public String[] getBootClassPaths() {
-		if (!this.isInitalised) {
+		if (!this.isInitalized) {
 			initialize();
 		}
 		return this.bootClassPaths;
 	}
 
 	public String getClassPath() {
-		if (!this.isInitalised) {
+		if (!this.isInitalized) {
 			initialize();
 		}
 		return this.classPath;
@@ -232,7 +246,7 @@ public class ClassPath {
 
 
 	public String[] getClassPaths() {
-		if (!this.isInitalised) {
+		if (!this.isInitalized) {
 			initialize();
 		}
 		return this.classPaths;

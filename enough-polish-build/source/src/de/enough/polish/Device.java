@@ -659,13 +659,6 @@ public class Device extends PolishComponent {
 	}
 
 	/**
-	 * @return Returns the classPath.
-	 */
-	public String getClassPath() {
-		return this.classPath.getClassPath();
-	}
-
-	/**
 	 * @return Returns the sourceDir.
 	 */
 	public String getSourceDir() {
@@ -796,15 +789,6 @@ public class Device extends PolishComponent {
 		return this.numberOfChangedFiles;
 	}
 
-
-	/**
-	 * Retrieves the classpaths for this device as a string array
-	 * 
-	 * @return an array containing the classpaths for this device.
-	 */
-	public String[] getClassPaths() {
-		return this.classPath.getClassPaths();
-	}
 	
 	/**
 	 * Determines whether this device supports the CLDC/1.0 or the CLDC/1.1 standard.
@@ -847,6 +831,33 @@ public class Device extends PolishComponent {
 	public String[] getBootClassPaths() {
 		return this.classPath.getBootClassPaths();
 	}
+	
+	/**
+	 * @return Returns the classPath.
+	 */
+	public String getClassPath() {
+		return this.classPath.getClassPath();
+	}
+
+
+	/**
+	 * Retrieves the classpaths for this device as a string array
+	 * 
+	 * @return an array containing the classpaths for this device.
+	 */
+	public String[] getClassPaths() {
+		return this.classPath.getClassPaths();
+	}
+
+	/**
+	 * Adds the given path to the classpath for this device
+	 * @param path the path
+	 */
+	public void addClassPath(String path)
+	{
+		this.classPath.addClassPath(path);
+	}
+
 
 	
 	/**
@@ -949,7 +960,5 @@ public class Device extends PolishComponent {
 	public void setThemeDir(File themeDir) {
 		this.themeDir = themeDir;
 	}
-
-	
 
 }

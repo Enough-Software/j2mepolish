@@ -216,7 +216,7 @@ public class JDPTask extends Task {
 		LibrarySetting[] settings = libraries.getLibraries();
 		for (int i = 0; i < settings.length; i++) {
 			LibrarySetting library = settings[i];
-			if (library.isActive(env)) {
+			if (library.isActive(env) && !library.isOnDevice()) {
 				return true;
 			}
 		}
@@ -271,7 +271,7 @@ public class JDPTask extends Task {
 		ArrayList filesList = new ArrayList();
 		for (int i = 0; i < settings.length; i++) {
 			LibrarySetting library = settings[i];
-			if (library.isActive(env)) {
+			if (library.isActive(env) && !library.isOnDevice()) {
 				File dir = library.getCacheDirectory();
 				addFilesRecursively( dir, device.getClassesDir(), filesList, rootFolder );
 			}

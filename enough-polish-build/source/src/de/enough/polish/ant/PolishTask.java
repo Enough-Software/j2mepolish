@@ -2204,22 +2204,30 @@ public class PolishTask extends ConditionalTask {
 				for (int i = 0; i < settings.length; i++) {
 					LibrarySetting setting = settings[i];
 					if (setting.isActive( this.environment )) {
-						try
+						if (setting.isOnDevice())
 						{
-							FileUtil.copyDirectoryContents( setting.getCacheDirectory(), targetDir, true );
-							if (processLibraries) {
-								fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
-								for (int j = 0; j < processors.length; j++)
-								{
-									LibraryProcessor processor = processors[j];
-									processor.processLibrary( targetDir, fileNames, device, locale, setting, this.environment );
+							device.addClassPath(setting.getPath(this.environment));
+						}
+						else
+						{
+							try
+							{
+								FileUtil.copyDirectoryContents( setting.getCacheDirectory(), targetDir, true );
+								if (processLibraries) {
+									fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
+									for (int j = 0; j < processors.length; j++)
+									{
+										LibraryProcessor processor = processors[j];
+										processor.processLibrary( targetDir, fileNames, device, locale, setting, this.environment );
+									}
 								}
+								
+							} 
+							catch (IOException e)
+							{
+								e.printStackTrace();
+								throw new BuildException("Unable to copy or process binary library " + setting + ": " + e );
 							}
-							
-						} catch (IOException e)
-						{
-							e.printStackTrace();
-							throw new BuildException("Unable to copy or process binary library " + setting + ": " + e );
 						}
 					}
 				}

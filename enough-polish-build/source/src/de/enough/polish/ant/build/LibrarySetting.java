@@ -51,6 +51,7 @@ public class LibrarySetting extends Setting {
 	private boolean isDynamic;
 	private String dynamicLibraryPath;
 	private boolean isConvertImports = true;
+	private boolean	isOnDevice;
 
 	/**
 	 * Creates a new library binding.
@@ -133,6 +134,25 @@ public class LibrarySetting extends Setting {
 	public boolean isConvertImports() 
 	{
 		return this.isConvertImports;
+	}
+	
+	
+	/**
+	 * Specifies whether this library is an device library meaning that it does not end up in the generated JAR file
+	 * @param isOnDevice true when this is a device library
+	 */
+	public void setOnDevice(boolean isOnDevice)
+	{
+		this.isOnDevice = isOnDevice;
+	}
+	
+	/**
+	 * Returns whether this library is an device library meaning that it does not end up in the generated JAR file
+	 * @return true when this is a device library (default is false)
+	 */
+	public boolean isOnDevice() 
+	{
+		return this.isOnDevice;
 	}
 
 	/**
