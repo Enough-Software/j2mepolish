@@ -39,7 +39,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Allows to include a binary library depending on conditions.</p>
  *
- * <p>Copyright Enough Software 2005 - 2012</p>
+ * <p>Copyright Enough Software 2005 - 2013</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class LibrarySetting extends Setting {
@@ -52,6 +52,7 @@ public class LibrarySetting extends Setting {
 	private String dynamicLibraryPath;
 	private boolean isConvertImports = true;
 	private boolean	isOnDevice;
+	private boolean	isObfuscate = true;
 
 	/**
 	 * Creates a new library binding.
@@ -154,6 +155,25 @@ public class LibrarySetting extends Setting {
 	{
 		return this.isOnDevice;
 	}
+	
+	/**
+	 * Specifies whether this library should be obfuscated
+	 * @param obfuscate false when this library should not be obfuscated, default is true
+	 */
+	public void setObfuscate(boolean obfuscate)
+	{
+		this.isObfuscate = obfuscate;
+	}
+	
+	/**
+	 * Returns whether this library should be obfuscated
+	 * @return false when this library should not be obfuscated (default is true)
+	 */
+	public boolean isObfuscate() 
+	{
+		return this.isObfuscate;
+	}
+
 
 	/**
 	 * Returns the timestamp of the last modification.

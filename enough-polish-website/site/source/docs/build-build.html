@@ -243,6 +243,7 @@
 	&lt;library file=&quot;libraries/tinyline.gz&quot; /&gt;
 	&lt;library file=&quot;libraries/svghelper.jar&quot; if=&quot;polish.api.svg&quot; /&gt;
 	&lt;library file=&quot;libraries/native.jar&quot; if=&quot;polish.vendor==Nokia&quot; convertImports=&quot;false&quot; /&gt;
+	&lt;library file=&quot;libraries/native2-obfuscated.jar&quot; if=&quot;polish.vendor==Nokia&quot; obfuscate=&quot;false&quot; /&gt;
 	&lt;library file=&quot;libraries/samsung-extension.jar&quot; if=&quot;polish.vendor==Samsung&quot; onDevice=&quot;true&quot; /&gt;
 &lt;/libraries&gt;
 </pre>
@@ -253,6 +254,9 @@
 	<p>Use <code>onDevice=&quot;true&quot;</code> for specifying a device library that is not included into the packaged application JAR, 
 	but that is available for compilation. Alternatively you can achieve the same result by specifying a device in 
 	<i>custom-devices.xml</i> and register the library in <i>custom-apis.xml</i>, but embedding this into the <i>build.xml</i> script is often easier.
+	</p> 
+	<p>Use <code>obfuscate=&quot;false&quot;</code> to exclude a library from obfuscation. In this case it will be merged into the generated package after the obfuscation step.This
+	setting also implicitely tells J2ME Polish not to convert the import statements (<code>convertImports</code>).
 	</p> 
 
 	<h3 id="midlet">&lt;midlet&gt; and &lt;midlets&gt;</h3>
@@ -960,6 +964,7 @@ Use the &quot;svgconverter&quot; for modifying SVG images of the resources befor
 &lt;obfuscator unless=&quot;test&quot; name=&quot;ProGuard&quot; &gt;
 	&lt;keep class=&quot;com.company.dynamic.SomeDynamicClass&quot; /&gt;
 	&lt;keep class=&quot;com.company.dynamic.AnotherDynamicClass&quot; /&gt;
+	&lt;parameter name=&quot;-verbose&quot; value=&quot;true&quot; /&gt;
 &lt;/obfuscator&gt;
 </pre>
 	<p>The used MIDlet classes do not need to be set with the &lt;keep&gt; element, since they are saved from obfuscation automatically.</p>

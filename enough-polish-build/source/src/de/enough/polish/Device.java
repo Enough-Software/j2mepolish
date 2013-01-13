@@ -858,6 +858,15 @@ public class Device extends PolishComponent {
 		this.classPath.addClassPath(path);
 	}
 
+	/**
+	 * Removes the given path from the classpath for this device
+	 * @param path the path
+	 */
+	public void removeClassPath(String path)
+	{
+		this.classPath.removeClassPath(path);
+	}
+
 
 	
 	/**

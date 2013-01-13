@@ -34,6 +34,7 @@ import de.enough.polish.BuildException;
 
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
+import de.enough.polish.util.ProcessUtil;
 import de.enough.polish.util.StringUtil;
 
 /**
@@ -222,6 +223,50 @@ public class ClassPath {
 		newPaths[oldClassPathsLength] = path;
 		this.classPaths = newPaths;
 	}
+	
+
+	public void removeClassPath(String path)
+	{
+		if (!this.isInitalized) {
+			initialize();
+		}
+		path = path.replace('\\', '/');
+		int index = this.classPath.lastIndexOf(path);
+		if (index == -1)
+		{
+			return;
+		}
+		if (index + path.length() == this.classPath.length())
+		{
+			if (index == 0)
+			{
+				this.classPath = "";
+			}
+			else
+			{
+				this.classPath = this.classPath.substring(0, index - 1);
+			}
+		}
+		else
+		{
+			this.classPath = this.classPath.substring(0, index - 1) + this.classPath.substring(index + path.length() + 1);
+		}
+		int oldClassPathsLength = this.classPaths.length;
+		String[] newPaths = new String[oldClassPathsLength - 1];
+		int newIndex = 0;
+		for (int oldIndex = 0; oldIndex < oldClassPathsLength; oldIndex++)
+		{
+			String oldPath = this.classPaths[oldIndex];
+			if (!oldPath.equals(path))
+			{
+				newPaths[newIndex] = oldPath;
+				newIndex++;
+			}
+			
+		}
+		this.classPaths = newPaths;
+	}
+
 
 	public String getBootClassPath() {
 		if (!this.isInitalized) {
