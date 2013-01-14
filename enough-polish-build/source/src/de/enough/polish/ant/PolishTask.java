@@ -2195,7 +2195,28 @@ public class PolishTask extends ConditionalTask {
 				e.printStackTrace();
 				throw new BuildException("Unable to copy the binary libraries to the internal cache [" + binaryBaseDir.getAbsolutePath() + "]: " + e.toString(), e );
 			}
-			if (this.binaryLibrariesUpdated || (!targetDir.exists() && this.binaryLibraries != null) ) 
+			if (!(this.binaryLibrariesUpdated || (!targetDir.exists() && this.binaryLibraries != null)) ) 
+			{
+				// store -keep settings for libraries that should not get obfuscated
+				// and add device libraries to classpath:
+				LibrarySetting[] settings = this.binaryLibraries.getLibraries();
+				for (int i = 0; i < settings.length; i++)
+				{
+					LibrarySetting setting = settings[i];
+					if (setting.isActive(this.environment))
+					{
+						if (setting.isOnDevice()) 
+						{
+							device.addClassPath(setting.getPath(this.environment));
+						}
+						else if (!setting.isObfuscate())
+						{
+							keepLibrary(setting);
+						}
+					}
+				}
+			}
+			else
 			{
 				System.out.println("copying binary libraries to [" + targetDirName + "]...");
 				LibrarySetting[] settings = this.binaryLibraries.getLibraries();
@@ -2218,16 +2239,7 @@ public class PolishTask extends ConditionalTask {
 								FileUtil.copyDirectoryContents( setting.getCacheDirectory(), targetDir, true );
 								if (!setting.isObfuscate())
 								{
-									// add all classes to the keep class name list:
-									fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
-									for (int j = 0; j < fileNames.length; j++)
-									{
-										String className = fileNames[j];
-										className = className.substring(0, className.length() - ".class".length() );
-										className = StringUtil.replace(className, File.separatorChar, '.' );
-										this.environment.addToVariable(Obfuscator.VARIABLE_DYNAMIC_KEEP_CLASSES, className);										
-									}
-
+									keepLibrary(setting);
 								}
 								else if (processLibraries) 
 								{
@@ -2250,6 +2262,20 @@ public class PolishTask extends ConditionalTask {
 				}
 			}
 		} // done preparing of binary libraries.		
+	}
+
+	private void keepLibrary(LibrarySetting setting)
+	{
+		String[] fileNames;
+		// add all classes to the keep class name list:
+		fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
+		for (int j = 0; j < fileNames.length; j++)
+		{
+			String className = fileNames[j];
+			className = className.substring(0, className.length() - ".class".length() );
+			className = StringUtil.replace(className, File.separatorChar, '.' );
+			this.environment.addToVariable(Obfuscator.VARIABLE_DYNAMIC_KEEP_CLASSES, className);										
+		}
 	}
 
 	/**
