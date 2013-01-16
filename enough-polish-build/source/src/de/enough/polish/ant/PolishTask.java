@@ -2195,23 +2195,26 @@ public class PolishTask extends ConditionalTask {
 				e.printStackTrace();
 				throw new BuildException("Unable to copy the binary libraries to the internal cache [" + binaryBaseDir.getAbsolutePath() + "]: " + e.toString(), e );
 			}
-			if (!(this.binaryLibrariesUpdated || (!targetDir.exists() && this.binaryLibraries != null)) ) 
+			if (!(this.binaryLibrariesUpdated || (!targetDir.exists() && (this.binaryLibraries != null))) ) 
 			{
-				// store -keep settings for libraries that should not get obfuscated
-				// and add device libraries to classpath:
-				LibrarySetting[] settings = this.binaryLibraries.getLibraries();
-				for (int i = 0; i < settings.length; i++)
+				if (this.binaryLibraries != null)
 				{
-					LibrarySetting setting = settings[i];
-					if (setting.isActive(this.environment))
+					// store -keep settings for libraries that should not get obfuscated
+					// and add device libraries to classpath:
+					LibrarySetting[] settings = this.binaryLibraries.getLibraries();
+					for (int i = 0; i < settings.length; i++)
 					{
-						if (setting.isOnDevice()) 
+						LibrarySetting setting = settings[i];
+						if (setting.isActive(this.environment))
 						{
-							device.addClassPath(setting.getPath(this.environment));
-						}
-						else if (!setting.isObfuscate())
-						{
-							keepLibrary(setting);
+							if (setting.isOnDevice()) 
+							{
+								device.addClassPath(setting.getPath(this.environment));
+							}
+							else if (!setting.isObfuscate())
+							{
+								keepLibrary(setting);
+							}
 						}
 					}
 				}
