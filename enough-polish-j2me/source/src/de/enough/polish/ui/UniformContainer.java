@@ -42,6 +42,7 @@ implements ItemConsumer
 	private int childRowHeight;
 	private int childStartIndex;
 	private final BackupItemStorage backupItemStorage;
+	private boolean	isIgnoreYOffsetChange;
 
 	/**
 	 * Creates a new container
@@ -128,7 +129,6 @@ implements ItemConsumer
 			int rowHeight = item.getItemHeight(firstLineWidth, availWidth, availHeight) + this.paddingVertical;
 			this.childRowHeight = rowHeight;
 			int startIndex = Math.max( 0, (-this.yOffset)/rowHeight - 5);
-			this.childStartIndex = startIndex;
 			if (startIndex != 0) 
 			{
 				this.itemSource.populateItem(startIndex, item);
@@ -143,6 +143,7 @@ implements ItemConsumer
 			{
 				startIndex = Math.min(count - numberOfRealItems, startIndex);
 			}
+			this.childStartIndex = startIndex;
 			for (int itemIndex=startIndex + 1; itemIndex < startIndex + numberOfRealItems; itemIndex++) {
 				item = this.itemSource.createItem(itemIndex);
 				item.parent = this;
@@ -158,6 +159,10 @@ implements ItemConsumer
 	 */
 	protected void onScrollYOffsetChanged(int offset) 
 	{
+		if (this.isIgnoreYOffsetChange)
+		{
+			return;
+		}
 		int startIndex = Math.max( 0, (-offset)/this.childRowHeight - 5);
 		int count = this.itemSource.countItems();
 		int itemsListSize = this.itemsList.size();
@@ -167,7 +172,7 @@ implements ItemConsumer
 		}
 		int delta = Math.abs(startIndex - this.childStartIndex);
 		if (delta != 0) {
-			synchronized (this.itemsList)
+			synchronized (getSynchronizationLock())
 			{
 				itemsListSize = this.itemsList.size();
 				if (count > itemsListSize) 
@@ -203,7 +208,9 @@ implements ItemConsumer
 						item.setInitialized(false);
 						this.itemSource.populateItem(index, item);
 						item.relativeY = index * this.childRowHeight;
-						item.getItemHeight(this.contentWidth, this.contentWidth, this.contentHeight);
+						int cw = this.availContentWidth;
+						int ch = this.availContentHeight;
+						item.getItemHeight(cw, cw, ch);
 					}
 				}
 				else
@@ -234,7 +241,9 @@ implements ItemConsumer
 							item.setInitialized(false);
 							this.itemSource.populateItem(index, item);
 							item.relativeY = index * this.childRowHeight;
-							item.getItemHeight(this.contentWidth, this.contentWidth, this.contentHeight);
+							int cw = this.availContentWidth;
+							int ch = this.availContentHeight;
+							item.getItemHeight(cw, cw, ch);
 						}
 					}
 					else
@@ -252,7 +261,9 @@ implements ItemConsumer
 							item.setInitialized(false);
 							this.itemSource.populateItem(index, item);
 							item.relativeY = index * this.childRowHeight;
-							item.getItemHeight(this.contentWidth, this.contentWidth, this.contentHeight);
+							int cw = this.availContentWidth;
+							int ch = this.availContentHeight;
+							item.getItemHeight(cw, cw, ch);
 						}
 					}
 				}
@@ -353,7 +364,9 @@ implements ItemConsumer
 		item = this.itemSource.createItem(index);
 		item.parent = this;
 		item.relativeY = index * this.childRowHeight;
-		item.getItemHeight(this.contentWidth, this.contentWidth, this.contentHeight);
+		int cw = this.availContentWidth;
+		int ch = this.availContentHeight;
+		item.getItemHeight(cw, cw, ch);
 		this.backupItemStorage.put(itemIndex, item); 
 		return item;
 	}
@@ -385,6 +398,15 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
+		if (event.getChange() == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
+		{
+			synchronized (getSynchronizationLock())
+			{
+				this.isIgnoreYOffsetChange = true;
+				setScrollYOffset(0);
+				this.isIgnoreYOffsetChange = false;
+			}
+		}
 		requestInit();
 	}
 
