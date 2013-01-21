@@ -6638,9 +6638,21 @@ implements UiElement, Animatable
 	 * @param cont the root container
 	 */
 	public void setRootContainer(Container cont) {
+		if (this.container != null)
+		{
+			this.container.screen = null;
+			if (isShown())
+			{
+				this.container.hideNotify();
+			}
+		}
 		if (cont != null) {
 			cont.screen = this;
 			cont.isFocused = true;
+			if (isShown())
+			{
+				cont.showNotify();
+			}
 		}
 		this.container = cont;
 		if (this.isInitialized) {
