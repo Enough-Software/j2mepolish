@@ -71,12 +71,13 @@ import de.enough.polish.util.WrappedText;
 	import net.rim.device.api.ui.Manager;
 	import net.rim.device.api.ui.UiApplication;
 	import net.rim.device.api.ui.component.BasicEditField;
-import net.rim.device.api.ui.text.TextFilter;
+	import net.rim.device.api.ui.text.TextFilter;
 //#endif
 
 
 
-//#if polish.series40sdk20 || polish.series40sdk11
+//#if NokiaUiApiVersion >= 1.1
+	//#define tmp.useNokiaInput
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
 //#endif
@@ -86,10 +87,10 @@ import net.rim.device.api.ui.text.TextFilter;
 //#endif
 
 //#if polish.android
-import de.enough.polish.android.lcdui.AndroidDisplay;
-import de.enough.polish.android.lcdui.AndroidTextField;
-import de.enough.polish.android.lcdui.AndroidTextFieldImpl;
-import de.enough.polish.android.midlet.MidletBridge;
+	import de.enough.polish.android.lcdui.AndroidDisplay;
+	import de.enough.polish.android.lcdui.AndroidTextField;
+	import de.enough.polish.android.lcdui.AndroidTextFieldImpl;
+	import de.enough.polish.android.midlet.MidletBridge;
 //#endif
 
 /**
@@ -369,7 +370,7 @@ import de.enough.polish.android.midlet.MidletBridge;
  * @since MIDP 1.0
  */
 public class TextField extends StringItem
-//#if polish.TextField.useDirectInput && !(polish.blackberry || polish.android)
+//#if (polish.TextField.useDirectInput || tmp.useNokiaInput) && !(polish.blackberry || polish.android)
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
 //#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android)
@@ -408,7 +409,7 @@ public class TextField extends StringItem
 //#if polish.blackberry
 	//#defineorappend tmp.implements=FieldChangeListener
 //#endif
-//#if polish.series40sdk20 || polish.series40sdk11
+//#if tmp.useNokiaInput
 	//#defineorappend tmp.implements=TextEditorListener
 //#endif
 //#if polish.LibraryBuild
@@ -996,7 +997,7 @@ public class TextField extends StringItem
 		private int bbLastCursorPosition;
 	//#endif
 
-	//#if polish.series40sdk20 || polish.series40sdk11
+	//#if NokiaUiApiVersion >= 1.1
 		private TextEditor series40sdk20Field;
 	//#endif	
 		
@@ -1389,7 +1390,7 @@ public class TextField extends StringItem
 				return this.editField.getText();
 			}
 		//#endif
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field != null ) {
 				return this.series40sdk20Field.getContent();
 			}
@@ -1516,7 +1517,7 @@ public class TextField extends StringItem
 				}
 			}
 		//#endif
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field != null && !this.series40sdk20Field.getContent().equals(text)) {
 				this.series40sdk20Field.setContent(text);				
 			}
@@ -1967,7 +1968,7 @@ public class TextField extends StringItem
 			curPos = this.editField.getInsertPositionOffset();
 		//#elif tmp.forceDirectInput
 			curPos = this.caretPosition;
-		//#elif polish.series40sdk20 || polish.series40sdk11
+		//#elif tmp.useNokiaInput
 			curPos = this.series40sdk20Field.getCaretPosition();
 		//#else
 			//#ifdef tmp.useNativeTextBox
@@ -2005,7 +2006,7 @@ public class TextField extends StringItem
 			{
 				this.editField.setCursorPosition(position);
 			}
-		//#elif polish.series40sdk20 || polish.series40sdk11
+		//#elif tmp.useNokiaInput
 			synchronized ( this.series40sdk20Field) {
 				this.series40sdk20Field.setCaret(position);
 			}
@@ -2061,7 +2062,7 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if polish.series40sdk20 || polish.series40sdk11
+	//#if tmp.useNokiaInput
 	protected TextEditor createNativeNokiaTextField() {
 		int width = 50;
 		int rows = 1;
@@ -2138,7 +2139,7 @@ public class TextField extends StringItem
 			});
 		//#endif
 			
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field == null ) {
 				this.series40sdk20Field = createNativeNokiaTextField();
 				//#= this.series40sdk20Field.setTextEditorListener(this);
@@ -2498,7 +2499,7 @@ public class TextField extends StringItem
 					super.paintContent(x, y, leftBorder, rightBorder, g);
 				}
 			//#endif
-		//#elif polish.series40sdk20 || polish.series40sdk11
+		//#elif tmp.useNokiaInput
 				//#if polish.TextField.showHelpText
 					if(myText == null || myText.length() == 0)
 					{
@@ -2795,7 +2796,7 @@ public class TextField extends StringItem
 					
 					updateInternalArea();
 				}
-			//#elif polish.series40sdk20 || polish.series40sdk11
+			//#elif tmp.useNokiaInput
 				if ( this.series40sdk20Field != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
 					inputAction(this.series40sdk20Field, 0);					
 				}
@@ -2997,7 +2998,7 @@ public class TextField extends StringItem
 				this._androidTextField.setStyle(style);
 			}
 		//#endif
-		//#if (polish.series40sdk20 || polish.series40sdk11) && polish.css.font-color
+		//#if tmp.useNokiaInput && polish.css.font-color
 			if ( this.series40sdk20Field != null ) {
 				this.series40sdk20Field.setFont(this.font);
 				Color color = style.getColorProperty("font-color");
@@ -4433,7 +4434,7 @@ public class TextField extends StringItem
 				int fieldType = this.constraints & 0xffff;
 				if (fieldType != FIXED_POINT_DECIMAL) {
 					notifyItemPressedEnd();
-					//#if !polish.series40sdk20 && !polish.series40sdk11
+					//#if !tmp.useNokiaInput
 					showTextBox();
 					//#endif
 					return true;
@@ -4687,13 +4688,13 @@ public class TextField extends StringItem
 		//#endif
 	}
 		
-	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.series40sdk20 || polish.series40sdk11 || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
+	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || tmp.useNokiaInput || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
 	protected void defocus(Style originalStyle) 
 	{
 		//#debug
 		System.out.println("defocusing TextField");
 		super.defocus(originalStyle);
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if (this.series40sdk20Field != null) {
 				this.series40sdk20Field.setFocus(false);
 				this.series40sdk20Field.setParent(null);
@@ -4738,7 +4739,7 @@ public class TextField extends StringItem
 	
 	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
 	protected Style focus(Style focStyle, int direction) {
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field != null ) {
 				this.series40sdk20Field.setFocus(true);
 			}
@@ -4750,7 +4751,7 @@ public class TextField extends StringItem
 			//#if !polish.TextField.keepCaretPosition
 				setCaretPosition( getString().length() );
 			//#endif
-		//#elif tmp.directInput || polish.blackberry || polish.series40sdk20 || polish.series40sdk11
+		//#elif tmp.directInput || polish.blackberry || tmp.useNokiaInput
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {
 			//#endif
@@ -4811,7 +4812,7 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if polish.series40sdk11
+	//#if tmp.useNokiaInput
 		public void multilineToggleFix(TextEditor textEditor) {
 			Object parent = textEditor.getParent();
 			textEditor.setParent(null);
@@ -4819,7 +4820,7 @@ public class TextField extends StringItem
 		}
 	//#endif
 	
-	//#if polish.series40sdk20 || polish.series40sdk11
+	//#if tmp.useNokiaInput
 		public void inputAction(TextEditor textEditor, int actions) {
 			if (textEditor == null ) {
 				return;
@@ -4898,7 +4899,7 @@ public class TextField extends StringItem
 	 */
 	protected void showNotify() 
 	{	
-		//#if polish.series40sdk20 || polish.series40sdk11
+		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field != null && this.isFocused) 
 			{
 				this.series40sdk20Field.setVisible(true);
@@ -4926,12 +4927,12 @@ public class TextField extends StringItem
 		super.showNotify();
 	}
 
-	//#if  (!polish.blackberry && tmp.directInput) || polish.series40sdk20 || polish.series40sdk11
+	//#if  (!polish.blackberry && tmp.directInput) || tmp.useNokiaInput
 		/* (non-Javadoc)
 		 * @see de.enough.polish.ui.StringItem#hideNotify()
 		 */
 		protected void hideNotify() {
-			//#if polish.series40sdk20 || polish.series40sdk11
+			//#if tmp.useNokiaInput
 				if ( this.series40sdk20Field != null && Display.getInstance().isShown()) 
 				{
 					this.series40sdk20Field.setVisible(false);

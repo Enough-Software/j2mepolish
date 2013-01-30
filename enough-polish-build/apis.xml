@@ -37,6 +37,21 @@
 		<path>import/nokia-ui.jar</path>
 		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
 		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="NokiaUiApiVersion" value="1.0" />
+	</api>
+		
+	<api>
+		<name>Nokia User Interface API - SDK 1.1</name>
+		<description>The Nokia User Interface API SDK 1.1 is an update over the original Nokia UI API SDK, with features
+		and capabilities updated for modern smartphones
+		</description>
+		<names>nokia-ui-1.1,nokia-ui-api-1.1, nokiaui-1.1, nokiauiapi-1.1</names>
+		<symbol>nokia-ui-1.1</symbol>
+		<files>nokia-ui-1.1.jar</files>
+		<path>import/nokia-ui-1.1.jar</path>
+		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="NokiaUiApiVersion" value="1.1" />
 	</api>
 	
 	<api>
@@ -50,19 +65,7 @@
 		<path>import/nokia-ui-2.0.jar</path>
 		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
 		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
-	</api>
-	
-	<api>
-		<name>Nokia User Interface API - SDK 1.1</name>
-		<description>The Nokia User Interface API SDK 1.1 is an update over the original Nokia UI API SDK, with features
-		and capabilities updated for modern smartphones
-		</description>
-		<names>nokia-ui-1.1,nokia-ui-api-1.1, nokiaui-1.1, nokiauiapi-1.1</names>
-		<symbol>nokia-ui-1.1</symbol>
-		<files>nokia-ui-1.1.jar</files>
-		<path>import/nokia-ui-1.1.jar</path>
-		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
-		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="NokiaUiApiVersion" value="2.0" />
 	</api>
 	
 	<api>
