@@ -351,11 +351,11 @@ implements MapTilerEventListener
 				this.tiler.drawWholeResponse(bufferGraphics, this.responseToRender, 0, 0);
 			} else {
 				// Draw only the specified response tile, if one is given
-				this.tiler.drawIndividualResponseTile(bufferGraphics, this.responseToRender, 0, 0, responseTileToRender);
+				this.tiler.drawIndividualResponseTile(bufferGraphics, this.responseToRender, 0, 0, this.responseTileToRender);
 			}
 			
 			// Draw the map buffer on the Graphics object
-			g.drawImage(bufferImage, x, y, Graphics.TOP | Graphics.LEFT);
+			g.drawImage(this.bufferImage, x, y, Graphics.TOP | Graphics.LEFT);
 		}
 		
 		// For drawing the PoiItems, set the clipping rectangle
@@ -494,7 +494,7 @@ implements MapTilerEventListener
 			int availHeight) {				
 
 		// Adjust the Polish item and initialize it
-		availHeight += paddingBottom + paddingTop + border.borderWidthTop + border.borderWidthBottom;		
+		availHeight += this.paddingBottom + this.paddingTop + this.border.borderWidthTop + this.border.borderWidthBottom;		
 		super.initContent(firstLineWidth, availWidth, availHeight);				
 		setContentWidth( availWidth );
 		setContentHeight( availHeight);
@@ -608,13 +608,12 @@ implements MapTilerEventListener
 	        	oX += 10;
 	            break;
 	    }	    
-	    double newCoords[] = this.tiler.getProvider().getCoordsByPixelOffset(lat, lon, oY, oX, zoomLevel);
+	    double newCoords[] = this.tiler.getProvider().getCoordsByPixelOffset(this.lat, this.lon, oY, oX, this.zoomLevel);
 	    
 	    // Set the new coordinates
 	    setCoords(newCoords[0],newCoords[1]);
 	}
 	
-	//#if polish.hasPointerEvents	
     /**
      * Checks if a given pixel (relative to the item) is within the bounds
      * of the Processing canvas.
@@ -624,14 +623,15 @@ implements MapTilerEventListener
      */
     protected boolean isWithinBounds(int x, int y)
     {
-        if ( (x<paddingLeft) || (x>itemWidth-paddingRight) ||
-              (y<paddingTop) || (y>itemHeight-paddingBottom) )
+        if ( (x < this.paddingLeft) || (x > this.itemWidth-this.paddingRight) ||
+              (y < this.paddingTop) || (y > this.itemHeight-this.paddingBottom) )
         {
             return false;
         }
         return true;
     }
     
+	//#if polish.hasPointerEvents	
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.Container#handlePointerDragged(int, int)
 	 */
@@ -646,12 +646,12 @@ implements MapTilerEventListener
 		if ( this.oldX < 0 && isWithinBounds(x, y) ) {
 			this.oldX = x;
 			this.oldY = y;
-			this.oldLat = lat;
-			this.oldLon = lon;
+			this.oldLat = this.lat;
+			this.oldLon = this.lon;
 			this.isInMapNavigationMode = true;
 			notifyStateChanged();
 			return true;
-		} else if ( oldX < 0 ) {
+		} else if ( this.oldX < 0 ) {
 			return false;
 		}
 		
