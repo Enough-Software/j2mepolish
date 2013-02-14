@@ -33,6 +33,7 @@ import javax.microedition.lcdui.Image;
 import de.enough.polish.app.App;
 import de.enough.polish.app.model.Configuration;
 import de.enough.polish.app.model.Message;
+import de.enough.polish.app.view.ContactSelectionForm;
 import de.enough.polish.app.view.MainMenuList;
 import de.enough.polish.app.view.MessageForm;
 import de.enough.polish.io.RmsStorage;
@@ -68,6 +69,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
 	private Command cmdAbout = new Command(Locale.get("cmd.about"), Command.SCREEN, 3);
+	private Command cmdSelectContact = new Command(Locale.get("cmd.contact.select"), Command.SCREEN, 3);
 	private Command cmdMessageSend = new Command(Locale.get("cmd.message.send"), Command.OK, 1);
 	private Command cmdMessageShowSource = new Command(Locale.get("cmd.message.showSource"), Command.SCREEN, 3);
 	private Command cmdMessageShowParsed = new Command(Locale.get("cmd.message.showParsed"), Command.SCREEN, 3);
@@ -159,6 +161,7 @@ implements ApplicationInitializer, CommandListener
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
 		list.addCommand(this.cmdAbout);
+		list.addCommand(this.cmdSelectContact);
 		list.addEntry("Start Busy Indicator");
 		list.addEntry("Stop Busy Indicator");
 		list.addEntry("Messages");
@@ -271,8 +274,20 @@ implements ApplicationInitializer, CommandListener
 		} else if (cmd == this.cmdAbout) {
 			showAbout();
 			return true;
+		} else if (cmd == this.cmdSelectContact)
+		{
+			showContacts();
+			return true;
 		}
 		return false;
+	}
+
+	private void showContacts()
+	{
+		ContactSelectionForm form = new ContactSelectionForm(Locale.get("contact.select.title"), this.cmdSelectContact);
+		form.addCommand(this.cmdBack);
+		form.setCommandListener(this);
+		this.screenHistory.show(form);
 	}
 
 	private void showAbout() {

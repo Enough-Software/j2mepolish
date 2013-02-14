@@ -21,7 +21,7 @@ main.title=J2ME Polish
 ##############################
 cmd.about=About
 about.title=About
-about.text=Copyright 2012 Enough Software\nIcons by http://www.tonygines.com.
+about.text=Copyright 2013 Enough Software\nIcons by http://www.tonygines.com.
 
 ##############################
 # message screen:
@@ -34,3 +34,9 @@ cmd.message.showParsed=Show message
 cmd.message.openWebsite=Go
 cmd.message.openMailto=Mail
 cmd.message.openCall=Call
+
+##############################
+# select contact screen:
+##############################
+cmd.contact.select=Select Contact
+contact.select.title=Select Contact

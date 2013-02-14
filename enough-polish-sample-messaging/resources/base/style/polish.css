@@ -182,6 +182,18 @@ info {
 	background-color: red;
 }
 
+/*********************   CONTACT FORM   ******************************************************************************************************/
+
+.contactItem {
+	font-color: silver;
+	layout: expand;
+	max-lines: 1;
+}
+
+.contactItem:hover {
+	background-color: silver;
+	font-color: #333;	
+}
 
 /*********************   ABOUT FORM   ******************************************************************************************************/
 
