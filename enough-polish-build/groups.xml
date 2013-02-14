@@ -156,6 +156,7 @@
 		<capability name="JavaPlatform" value="MIDP/2.0" />
 		<capability name="JavaConfiguration" value="CLDC/1.1" />
 		<capability name="JavaPackage" value="nokia-ui-2.0, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+    	<capability name="Emulator.Skin" value="Nokia_SDK_2_0_Java" />
 	</group>
 	
 	<group>
@@ -165,6 +166,7 @@
 		<capability name="JavaPlatform" value="MIDP/2.0" />
 		<capability name="JavaConfiguration" value="CLDC/1.1" />
 		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+    	<capability name="Emulator.Skin" value="Nokia_SDK_1_1_Java" />
 	</group>
 	
 	<group>
