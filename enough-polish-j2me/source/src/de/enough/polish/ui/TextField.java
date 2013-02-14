@@ -43,7 +43,7 @@ import android.view.View;
 	import android.view.View.MeasureSpec;
 //#endif
 
-//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android)
+//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android || (polish.NokiaUiApiVersion >= 1.1))
 	import de.enough.polish.predictive.TextBuilder;
 	import de.enough.polish.predictive.trie.TrieProvider;
 //#endif
@@ -76,8 +76,10 @@ import de.enough.polish.util.WrappedText;
 
 
 
-//#if NokiaUiApiVersion >= 1.1
+//#if polish.NokiaUiApiVersion >= 1.1
 	//#define tmp.useNokiaInput
+	//#define polish.TextField.suppressAddSymbolCommand=true
+	//#define tmp.suppressCommands=true
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
 //#endif
@@ -370,10 +372,10 @@ import de.enough.polish.util.WrappedText;
  * @since MIDP 1.0
  */
 public class TextField extends StringItem
-//#if (polish.TextField.useDirectInput || tmp.useNokiaInput) && !(polish.blackberry || polish.android)
+//#if polish.TextField.useDirectInput && !(polish.blackberry || polish.android || tmp.useNokiaInput)
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
-//#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android)
+//#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android || tmp.useNokiaInput)
 	//#define tmp.directInput
 	//#define tmp.allowDirectInput
 //#elif polish.api.windows
@@ -416,6 +418,10 @@ public class TextField extends StringItem
 	//#define tmp.implementsCommandListener
 	//#define tmp.implementsItemCommandListener
 	implements CommandListener, ItemCommandListener
+	//#if false
+	// just for making the IDE happy:
+	, TextEditorListener
+	//#endif
 	//#if polish.blackberry
 	//	, FieldChangeListener
 	//#endif
@@ -997,7 +1003,7 @@ public class TextField extends StringItem
 		private int bbLastCursorPosition;
 	//#endif
 
-	//#if NokiaUiApiVersion >= 1.1
+	//#if tmp.useNokiaInput
 		private TextEditor series40sdk20Field;
 	//#endif	
 		
@@ -1519,6 +1525,10 @@ public class TextField extends StringItem
 		//#endif
 		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field != null && !this.series40sdk20Field.getContent().equals(text)) {
+				if (text == null)
+				{
+					text = "";
+				}
 				this.series40sdk20Field.setContent(text);				
 			}
 		//#endif
@@ -2082,12 +2092,13 @@ public class TextField extends StringItem
 		editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
 		editor.setBackgroundColor(0);
 		editor.setHighlightBackgroundColor(0);
-		//TODO setTextEditorListener(this)
 		if (this.text != null)
 		{
 			editor.setContent(getString());
 		}
 		editor.setParent( Display.getInstance() );
+		editor.setTextEditorListener(this);
+		inputAction(editor, 0);
 		return editor;
 	}
 	//#endif
@@ -2142,8 +2153,6 @@ public class TextField extends StringItem
 		//#if tmp.useNokiaInput
 			if ( this.series40sdk20Field == null ) {
 				this.series40sdk20Field = createNativeNokiaTextField();
-				//#= this.series40sdk20Field.setTextEditorListener(this);
-				inputAction(this.series40sdk20Field, 0);
 			}
 			this.enableDirectInput = true;
 		//#endif	
@@ -4821,29 +4830,54 @@ public class TextField extends StringItem
 	//#endif
 	
 	//#if tmp.useNokiaInput
+		/*
+		 * (non-Javadoc)
+		 * @see com.nokia.mid.ui.TextEditorListener#inputAction(com.nokia.mid.ui.TextEditor, int)
+		 */
 		public void inputAction(TextEditor textEditor, int actions) {
 			if (textEditor == null ) {
 				return;
 			}
+			//#debug
+			System.out.println("inpAct(" + actions + ")");
 			
 			// If the text changes, make sure to update the Polish item as needed
-			setText(textEditor.getContent());
-			notifyStateChanged();
+			if ((actions & TextEditorListener.ACTION_CONTENT_CHANGE) != 0)
+			{
+				String content = textEditor.getContent();
+				if (!content.equals(this.text))
+				{
+					setString(content);
+					notifyStateChanged();
+				}
 
-			// Switching from multi to single-line and vice-versa in SDK 1.1 does not work as expected.
-			// As such, for now we only do this on SDK 2.0 devices.
-			
-			if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
-					textEditor.setMultiline(true);						
-					//#if polish.series40sdk11
-						multilineToggleFix(textEditor);
-					//#endif
-			} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
-					textEditor.setMultiline(false);						
-					//#if polish.series40sdk11
-						multilineToggleFix(textEditor);
-					//#endif
+				// Switching from multi to single-line and vice-versa in SDK 1.1 does not work as expected.
+				// As such, for now we only do this on SDK 2.0 devices.
+				
+				if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
+						textEditor.setMultiline(true);						
+						//#if polish.series40sdk11
+							multilineToggleFix(textEditor);
+						//#endif
+				} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
+						textEditor.setMultiline(false);						
+						//#if polish.series40sdk11
+							multilineToggleFix(textEditor);
+						//#endif
+				}
 			}
+			if ((actions & TextEditorListener.ACTION_TRAVERSE_NEXT) != 0)
+			{
+				// trying to go down:
+				UiAccess.emitGameActionPress(Canvas.DOWN);
+			}
+			else if ((actions & TextEditorListener.ACTION_TRAVERSE_PREVIOUS) != 0)
+			{
+				// trying to go down:
+				UiAccess.emitGameActionPress(Canvas.UP);
+			}
+			
+			
 		}
 	//#endif
 

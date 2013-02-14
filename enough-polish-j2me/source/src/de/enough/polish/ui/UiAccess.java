@@ -4129,7 +4129,7 @@ public final class UiAccess {
 	 */
 	public static List getTextFieldSymbols() {
 		List result = null;
-		//#if polish.TextField.useDirectInput && polish.TextField.supportSymbolsEntry && !(polish.blackberry || polish.android)
+		//#if polish.TextField.useDirectInput && polish.TextField.supportSymbolsEntry && !(polish.blackberry || polish.android || (polish.NokiaUiApiVersion >= 1.1))
 			TextField.initSymbolsList();
 			result = TextField.symbolsList;
 		//#endif
