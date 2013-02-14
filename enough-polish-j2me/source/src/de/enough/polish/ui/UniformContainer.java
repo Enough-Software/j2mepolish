@@ -403,6 +403,10 @@ implements ItemConsumer
 			synchronized (getSynchronizationLock())
 			{
 				this.isIgnoreYOffsetChange = true;
+				if (this.focusedItem != null)
+				{
+					focusChild(-1);
+				}
 				setScrollYOffset(0);
 				this.isIgnoreYOffsetChange = false;
 			}
