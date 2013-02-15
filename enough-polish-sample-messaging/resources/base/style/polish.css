@@ -184,6 +184,12 @@ info {
 
 /*********************   CONTACT FORM   ******************************************************************************************************/
 
+.contactList {
+}
+
+.contactList:hover {
+}
+
 .contactItem {
 	font-color: silver;
 	layout: expand;
@@ -210,13 +216,13 @@ info {
 /*********************   SCROLL BAR   ******************************************************************************************************/
 /* You need to activate the scrollbar by setting the "polish.useScrollBar" variable to "true" in your build.xml script. */
 scrollbar {
-	scrollbar-slider-color: #333;
+	scrollbar-slider-color: #fff;
 	scrollbar-slider-width: 3;
 	/*
 	when the scrollbar should be faded out when not used:
+	*/
 	scrollbar-fadeout: true;
 	opacity: 80%;
-	*/
 }
 
 /*********************   BUSY INDICATOR   ******************************************************************************************************/

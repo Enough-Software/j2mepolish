@@ -31,6 +31,7 @@ public class ContactSelectionForm extends FramedForm implements
 		//#style screenMessage
 		super(title);
 		this.contactItemSource = new ContactItemSource( ContactCollection.getInstance(), cmdSelectContact );
+		//#style contactList
 		UniformContainer cont = new UniformContainer(this.contactItemSource);
 		setRootContainer(cont);
 		// add a text field for filtering contacts:
