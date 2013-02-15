@@ -417,8 +417,7 @@ implements ItemConsumer
 			synchronized (getSynchronizationLock())
 			{
 				this.isIgnoreYOffsetChange = true;
-				boolean refocus = (this.focusedItem != null);
-				//System.out.println("complete change: refocus=" + refocus);
+				boolean refocus = (this.isFocused && this.focusedItem != null);
 				if (refocus)
 				{
 					focusChild(-1);
