@@ -793,6 +793,7 @@ implements CycleListener
 	protected boolean handleKeyPressed(int keyCode, int gameAction) {
 		this.isCycled = false;
 		boolean handled = this.currentlyActiveContainer.handleKeyPressed(keyCode, gameAction);
+		System.out.println("currently active container=" + this.currentlyActiveContainer + ", handled=" + handled);
 		if (!handled && !this.keepContentFocused) {
 			if (this.isCycled) {
 				handled = true;
@@ -1001,6 +1002,28 @@ implements CycleListener
 		}
 		return this.container.focusedItem;
 	}
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#setRootContainer(de.enough.polish.ui.Container)
+	 */
+	public void setRootContainer(Container cont)
+	{
+		boolean replaceCurrentlyActiveContainer = (this.currentlyActiveContainer == this.container);
+		super.setRootContainer(cont);
+		if (replaceCurrentlyActiveContainer)
+		{
+			this.currentlyActiveContainer = cont;
+		}
+		else
+		{
+			cont.isFocused = false;
+			cont.autoFocusEnabled = false;
+		}
+	}
+
+
+	
+	
 	
 	/**
 	 * Focuses the specified frame.
@@ -1559,49 +1582,6 @@ implements CycleListener
 		}
 		return true;
 	}
-
-	
-	
-	
-	
-
-//	/* (non-Javadoc)
-//	 * @see de.enough.polish.ui.Screen#focus(int, de.enough.polish.ui.Item, boolean)
-//	 */
-//	public void focus(int index, Item item, boolean force)
-//	{
-//		// TODO robertvirkus implement focus
-//		super.focus(index, item, force);
-//		
-//		/**
-//		 * Focuses the specified item.
-//		 * 
-//		 * @param index the index of the item which is already shown on this screen.
-//		 * @param item the item which is already shown on this screen.
-//		 * @param force true when the item should be focused even when it is inactive (like a label for example)
-//		 */
-//		public void focus(int index, Item item, boolean force) {
-//			if (index != -1 && item != null && (item.appearanceMode != Item.PLAIN || force ) ) {
-//				//#debug
-//				System.out.println("Screen: focusing item " + index );
-//				this.container.focus( index, item, 0 );
-//				if (index == 0) {
-//					this.container.setScrollYOffset( 0, false );
-//				}
-//			} else if (index == -1) {
-//				this.container.focus( -1 );
-//			} else {
-//				//#debug warn
-//				System.out.println("Screen: unable to focus item (did not find it in the container or is not activatable) " + index);
-//			}
-//		}
-//	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

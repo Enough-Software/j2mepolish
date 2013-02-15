@@ -151,6 +151,20 @@ implements ItemConsumer
 				item.relativeY = itemIndex * rowHeight;
 				this.itemsList.add(item);
 			}
+			if (this.autoFocusEnabled)
+			{
+				this.autoFocusEnabled = false;
+				int index = this.autoFocusIndex;
+				if (index < startIndex)
+				{ 
+					index = startIndex;
+				}
+				else if (index > startIndex + numberOfRealItems)
+				{
+					index = startIndex + numberOfRealItems;
+				}
+				focusChild(index);
+			}
 		}
 	}
 
@@ -403,16 +417,24 @@ implements ItemConsumer
 			synchronized (getSynchronizationLock())
 			{
 				this.isIgnoreYOffsetChange = true;
-				if (this.focusedItem != null)
+				boolean refocus = (this.focusedItem != null);
+				//System.out.println("complete change: refocus=" + refocus);
+				if (refocus)
 				{
 					focusChild(-1);
 				}
 				setScrollYOffset(0);
+				if (refocus)
+				{
+					focusChild(0);
+				}
 				this.isIgnoreYOffsetChange = false;
 			}
 		}
 		requestInit();
 	}
+	
+	
 
 
 	

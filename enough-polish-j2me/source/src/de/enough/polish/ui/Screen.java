@@ -6649,8 +6649,14 @@ implements UiElement, Animatable
 		if (cont != null) {
 			cont.screen = this;
 			cont.isFocused = true;
+			cont.autoFocusEnabled = true;
 			if (isShown())
 			{
+				if (cont.style == null && this.style != null)
+				{
+					boolean ignoreBackground = true;
+					cont.setStyleWithBackground(this.style, ignoreBackground);
+				}
 				cont.showNotify();
 			}
 		}
