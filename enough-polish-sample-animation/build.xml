@@ -161,7 +161,7 @@
 			</resources>
 			
 			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
-			<obfuscator name="ProGuard" useDefaultPackage="true" unless="test || polish.blackberry" >
+			<obfuscator name="ProGuard" unless="test || polish.blackberry" >
 				<!--
 				You can set additional parameters here, e.g.:
 				<parameter name="optimize" value="false" />
