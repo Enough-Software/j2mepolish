@@ -2656,19 +2656,7 @@ public abstract class Item implements UiElement, Animatable
 				return;
 			}
 		//#endif
-			
-
-//			Item p = this.parent; xxx
-//			String start = "";
-//			while (p != null) {
-//				start += " ";
-//				p = p.parent;
-//			}
-//			System.out.println(start + "paint at x=" + x + ", contentX=" + this.contentX + ", leftBorder=" + leftBorder +", rightBorder=" + rightBorder + " of "  + this);
-			
-		//#debug ovidiu
-		Benchmark.startSmartTimer("0");
-			
+						
 		// initialise this item if necessary:
 		if (!this.isInitialized) {
 			if (this.availableWidth == 0) {
@@ -2751,11 +2739,6 @@ public abstract class Item implements UiElement, Animatable
 //				}
 //				DrawUtil.drawRgb(rgbData, x, y, width, height, true, g );
 //				
-				//#mdebug ovidiu
-				Benchmark.pauseSmartTimer("0");
-				Benchmark.incrementSmartTimer("1");
-				Benchmark.check();
-				//#enddebug
 				//#if polish.Item.ShowCommandsOnHold
 					if (this.isShowCommands) {
 						paintCommands( origX, origY, g );
@@ -2797,8 +2780,8 @@ public abstract class Item implements UiElement, Animatable
 			if (this.includeLabel) {
 				int width = getBackgroundWidth();
 				int height = getBackgroundHeight();
-				int bX = x + getBackgroundX();
-				int bY = y + getBackgroundY();
+				int bX = origX + getBackgroundX();
+				int bY = origY + getBackgroundY();
 				paintBackgroundAndBorder( bX, bY, width, height, g );
 			}
 		//#endif
@@ -2887,7 +2870,8 @@ public abstract class Item implements UiElement, Animatable
 						backgroundW -= getAfterWidthWithPadding();
 					}
 				//#endif
-				paintBackgroundAndBorder(backgroundX, y, backgroundW, this.backgroundHeight, g);
+				int backY = origY + getBackgroundY();
+				paintBackgroundAndBorder(backgroundX, backY, backgroundW, this.backgroundHeight, g);
 		//#if polish.css.include-label
 			}
 		//#endif
@@ -3728,6 +3712,12 @@ public abstract class Item implements UiElement, Animatable
 							  - this.marginTop
 							  - this.marginBottom
 							  - labelHeight;
+			//#if polish.css.include-label
+				if (this.includeLabel)
+				{
+					this.backgroundHeight += labelHeight;
+				}
+			//#endif
 //			if (labelWidth > this.itemWidth) {
 //				int diff = labelWidth - this.itemWidth;
 //				if (isLayoutCenter()) {
@@ -5652,7 +5642,11 @@ public abstract class Item implements UiElement, Animatable
 				bY += this.marginTop;
 			} else {
 		//#endif
-				bY += this.contentY - this.paddingTop;
+				bY += this.marginTop;
+				if (this.label != null && !this.useSingleRow)
+				{
+					bY += this.label.itemHeight;
+				}
 		//#if polish.css.include-label
 			} 
 		//#endif
