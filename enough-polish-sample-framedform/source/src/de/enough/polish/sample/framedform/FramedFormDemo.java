@@ -117,7 +117,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 		
 		
 		this.display = Display.getDisplay( this );
-		next();
+		nextDemo();
 		
 		//#debug
 		System.out.println("FramedFormDemo MIDlet is up and running.");
@@ -127,7 +127,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 	/**
 	 * Shows the next demo
 	 */
-	private void next()
+	private void nextDemo()
 	{
 		if (this.framedForm == null) {
 			//#style gradientFramedForm
@@ -344,7 +344,7 @@ implements ItemStateListener, CommandListener, ItemCommandListener
 		//#debug 
 		System.out.println("commandAction for " + cmd.getLabel());
 		if (cmd == this.cmdNext) {
-			next();
+			nextDemo();
 		} else if (cmd == this.cmdShowAlert) {
 			//#style popupAlert
 			Alert alert = new Alert("Showing a popup alert!");
