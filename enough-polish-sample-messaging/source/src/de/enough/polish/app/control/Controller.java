@@ -29,9 +29,9 @@ import java.io.IOException;
 
 import javax.microedition.lcdui.Image;
 
-
 import de.enough.polish.app.App;
 import de.enough.polish.app.model.Configuration;
+import de.enough.polish.app.model.ContactCollection;
 import de.enough.polish.app.model.Message;
 import de.enough.polish.app.view.ContactSelectionForm;
 import de.enough.polish.app.view.MainMenuList;
@@ -80,8 +80,9 @@ implements ApplicationInitializer, CommandListener
 	private MainMenuList screenMainMenu;
 	private static final int MAIN_ACTION_START = 0;
 	private static final int MAIN_ACTION_STOP = 1;
-	private static final int MAIN_ACTION_MESSAGES = 2;
-	private static final int MAIN_ACTION_EXIT = 3;
+	private static final int MAIN_ACTION_SELECT_CONTACT = 2;
+	private static final int MAIN_ACTION_MESSAGES = 3;
+	private static final int MAIN_ACTION_EXIT = 4;
 	
 	private SimpleScreenHistory screenHistory;
 	private int busyIndicators;
@@ -143,9 +144,11 @@ implements ApplicationInitializer, CommandListener
 		this.configuration = configurationLoad();
 		// create main menu:
 		this.screenMainMenu = createMainMenu();
+		// init contacts:
+		ContactCollection.getInstance();
 		long currentTime = System.currentTimeMillis();
 		long maxTime = 1500;
-		if (currentTime - initStartTime < maxTime) { // show the splash at least for 1500 ms / 2 seconds:
+		if (currentTime - initStartTime < maxTime) { // show the splash at least for 1500 ms / 1.5 seconds:
 			try {
 				Thread.sleep(maxTime - currentTime + initStartTime);
 			} catch (InterruptedException e) {
@@ -161,9 +164,9 @@ implements ApplicationInitializer, CommandListener
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
 		list.addCommand(this.cmdAbout);
-		list.addCommand(this.cmdSelectContact);
 		list.addEntry("Start Busy Indicator");
 		list.addEntry("Stop Busy Indicator");
+		list.addEntry("Select Contact");
 		list.addEntry("Messages");
 		list.addEntry(Locale.get("cmd.exit"));
 		return list;
@@ -263,6 +266,9 @@ implements ApplicationInitializer, CommandListener
 				break;
 			case MAIN_ACTION_STOP:
 				stopBusyIndicator();
+				break;
+			case MAIN_ACTION_SELECT_CONTACT:
+				showContacts();
 				break;
 			case MAIN_ACTION_MESSAGES:
 				showMessages();

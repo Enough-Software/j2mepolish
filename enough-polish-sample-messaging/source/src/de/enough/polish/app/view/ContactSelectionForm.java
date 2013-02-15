@@ -8,6 +8,7 @@ import de.enough.polish.ui.Item;
 import de.enough.polish.ui.ItemChangedEvent;
 import de.enough.polish.ui.ItemConsumer;
 import de.enough.polish.ui.ItemStateListener;
+import de.enough.polish.ui.SourcedContainer;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.UniformContainer;
