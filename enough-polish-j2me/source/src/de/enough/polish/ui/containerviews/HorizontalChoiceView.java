@@ -859,6 +859,8 @@ public class HorizontalChoiceView extends ContainerView {
 				}
 			}
 		//#endif
+		int selectedIndex = ((ChoiceGroup)this.parentContainer).getSelectedIndex();
+		this.parentContainer.focusChild( selectedIndex );
 		//System.out.println("EXCLUSIVE:   FOCUS, parentBackround != null: " + (this.parentBackground != null));
 		super.focus(focusstyle, direction);
 	}
