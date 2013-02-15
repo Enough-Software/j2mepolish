@@ -793,7 +793,6 @@ implements CycleListener
 	protected boolean handleKeyPressed(int keyCode, int gameAction) {
 		this.isCycled = false;
 		boolean handled = this.currentlyActiveContainer.handleKeyPressed(keyCode, gameAction);
-		System.out.println("currently active container=" + this.currentlyActiveContainer + ", handled=" + handled);
 		if (!handled && !this.keepContentFocused) {
 			if (this.isCycled) {
 				handled = true;
