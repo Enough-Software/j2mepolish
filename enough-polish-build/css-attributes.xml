@@ -1905,6 +1905,7 @@
 		<mapping from="html" to="new de.enough.polish.ui.texteffects.HtmlTextEffect()" />
 		<mapping from="message" to="new de.enough.polish.ui.texteffects.MessageTextEffect()" />
 		<mapping from="bold" to="new de.enough.polish.ui.texteffects.BoldTextEffect()"/>
+		<mapping from="flash" to="new de.enough.polish.ui.texteffects.FlashTextEffect()" />
 		<mapping from="mirror-shadow" to="new de.enough.polish.ui.texteffects.VerticalMirrorTextEffect()" >
 			<condition>polish.midp2</condition>
 		</mapping>
