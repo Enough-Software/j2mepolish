@@ -4353,7 +4353,10 @@ implements UiElement, Animatable
 		if (!parent.addSubCommand(child)) {
 			return; // this command has been added already
 		}
-		//#if tmp.menuFullScreen
+		//#if !tmp.menuFullScreen
+			addCommand(child);
+			removeCommand(parent);
+		//#else
 			//#debug
 			System.out.println("Adding subcommand " + child.getLabel() );
 			//#ifdef tmp.useExternalMenuBar
