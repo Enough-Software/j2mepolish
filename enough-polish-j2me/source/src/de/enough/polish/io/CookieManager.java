@@ -32,6 +32,7 @@ import java.io.IOException;
 import javax.microedition.io.HttpConnection;
 
 import de.enough.polish.util.ArrayList;
+import de.enough.polish.util.TextUtil;
 
 /**
  * Manages cookie for a HttpConnection
@@ -68,7 +69,7 @@ implements Externalizable
 			if (key == null && index > 0) {
 				break;
 			}
-			if ("set-cookie".equalsIgnoreCase(key)) {
+			if (TextUtil.equalsIgnoreCase("set-cookie", key)) {
 				String definition = connection.getHeaderField(index);
 				addCookie(definition);
 				foundCookies++;
