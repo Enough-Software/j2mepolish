@@ -382,7 +382,7 @@ public class TextField extends StringItem
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
 //#endif
-//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android)
+//#if tmp.directInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android || polish.api.windows)
 	//#define tmp.usePredictiveInput
 //#endif
 //#if tmp.directInput && polish.TextField.useDynamicCharset
