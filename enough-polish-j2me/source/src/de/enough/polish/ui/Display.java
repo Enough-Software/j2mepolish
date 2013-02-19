@@ -1045,6 +1045,22 @@ public class Display
 				this.nextOrCurrentDisplayable = null;
 				return;
 			}
+		//#else
+			if (nextDisplayable instanceof Alert && this.currentDisplayable != nextDisplayable) {
+				Alert alert = (Alert)nextDisplayable;
+				if (alert.nextDisplayable == null) {
+					Displayable nxt = instance.currentDisplayable;
+					//#if tmp.screenTransitions
+						if (nxt instanceof ScreenChangeAnimation) {
+							nxt = ((ScreenChangeAnimation)nxt).nextDisplayable;
+						}
+					//#endif
+					alert.nextDisplayable = nxt;
+				}
+				//#if polish.useNativeAlerts
+					nextDisplayable = new de.enough.polish.midp.ui.NativeAlert(alert);
+				//#endif
+			}
 		//#endif
 		if (nextDisplayable == null || !(nextDisplayable instanceof Canvas)) {
 			// this is a native Displayable
@@ -1059,20 +1075,7 @@ public class Display
 			this.nextOrCurrentDisplayable = null;
 			return;
 		}
-		
-		if (nextDisplayable instanceof Alert && this.currentDisplayable != nextDisplayable) {
-			Alert alert = (Alert)nextDisplayable;
-			if (alert.nextDisplayable == null) {
-				Displayable nxt = instance.currentDisplayable;
-				//#if tmp.screenTransitions
-					if (nxt instanceof ScreenChangeAnimation) {
-						nxt = ((ScreenChangeAnimation)nxt).nextDisplayable;
-					}
-				//#endif
-				alert.nextDisplayable = nxt;
-			}
-		}
-		
+				
 		Canvas canvas = (Canvas) nextDisplayable;
 		
 		//#if tmp.screenTransitions
