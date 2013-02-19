@@ -1,3 +1,4 @@
+//#condition polish.hasFloatingPoint
 package de.enough.polish.maps;
 
 /**

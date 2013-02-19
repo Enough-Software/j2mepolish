@@ -1,4 +1,4 @@
-//#condition polish.usePolishGui
+//#condition polish.usePolishGui && polish.hasFloatingPoint
 package de.enough.polish.maps;
 
 import de.enough.polish.ui.Item;

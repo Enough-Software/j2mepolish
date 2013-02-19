@@ -1,4 +1,4 @@
-//#condition polish.usePolishGui
+//#condition polish.usePolishGui && polish.hasFloatingPoint
 package de.enough.polish.ui;
 
 import java.util.Vector;
@@ -8,13 +8,11 @@ import javax.microedition.lcdui.Image;
 import de.enough.polish.maps.MapProvider;
 import de.enough.polish.maps.MapRequest;
 import de.enough.polish.maps.MapResponse;
-import de.enough.polish.maps.MapTile;
 import de.enough.polish.maps.MapTileCache;
 import de.enough.polish.maps.MapTiler;
 import de.enough.polish.maps.MapTilerEventListener;
 import de.enough.polish.maps.MapUtils;
 import de.enough.polish.maps.PoiItem;
-import de.enough.polish.maps.PoiItemListener;
 import de.enough.polish.util.Locale;
 
 /**
