@@ -78,10 +78,7 @@ implements de.enough.polish.ui.Displayable, javax.microedition.lcdui.CommandList
 				addCommand(command);
 			}
 		}
-		if (alert.getCommandListener() != null)
-		{
-			setCommandListener(this);
-		}
+		setCommandListener(this);
 	}
 
 	public Ticker getPolishTicker()
@@ -118,7 +115,7 @@ implements de.enough.polish.ui.Displayable, javax.microedition.lcdui.CommandList
 	{
 		if (cmd instanceof de.enough.polish.ui.Command)
 		{
-			this.alert.commandAction( (de.enough.polish.ui.Command)cmd, this.alert);
+			this.alert.getCommandListener().commandAction( (de.enough.polish.ui.Command)cmd, this.alert);
 		}
 		
 	}
