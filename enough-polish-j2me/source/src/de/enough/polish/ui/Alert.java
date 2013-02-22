@@ -58,7 +58,7 @@ import de.enough.polish.util.Locale;
  * to provide an indication of the nature of the alert.
  * The implementation may use this type to play an
  * appropriate sound when the <code>Alert</code> is presented to the user.
- * See <A HREF="../../../javax/microedition/lcdui/AlertType.html#playSound(javax.microedition.lcdui.Display)"><CODE>AlertType.playSound()</CODE></A>.</P>
+ * See <A HREF="AlertType.html#playSound(javax.microedition.lcdui.Display)"><CODE>AlertType.playSound()</CODE></A>.</P>
  * 
  * <P>An alert may contain an optional <code>Image</code>.  The
  * <code>Image</code> may be mutable or
@@ -82,10 +82,10 @@ import de.enough.polish.util.Locale;
  * <a name="indicator"></a>
  * <h3>Activity Indicators</h3>
  * 
- * <P>An alert may contain an optional <A HREF="../../../javax/microedition/lcdui/Gauge.html"><CODE>Gauge</CODE></A> object that is used as an
+ * <P>An alert may contain an optional <A HREF="Gauge.html"><CODE>Gauge</CODE></A> object that is used as an
  * activity or progress indicator.  By default, an <code>Alert</code>
  * has no activity
- * indicator; one may be set with the <A HREF="../../../javax/microedition/lcdui/Alert.html#setIndicator(javax.microedition.lcdui.Gauge)"><CODE>setIndicator(javax.microedition.lcdui.Gauge)</CODE></A> method.
+ * indicator; one may be set with the <A HREF="Alert.html#setIndicator(javax.microedition.lcdui.Gauge)"><CODE>setIndicator(javax.microedition.lcdui.Gauge)</CODE></A> method.
  * The <code>Gauge</code>
  * object used for the activity indicator must conform to all of the following
  * restrictions:</P>
@@ -121,7 +121,7 @@ import de.enough.polish.util.Locale;
  * 
  * <P>When it is created, an <code>Alert</code> implicitly has the
  * special <code>Command</code>
- * <A HREF="../../../javax/microedition/lcdui/Alert.html#DISMISS_COMMAND"><CODE>DISMISS_COMMAND</CODE></A> present on it.  If the application adds any
+ * <A HREF="Alert.html#DISMISS_COMMAND"><CODE>DISMISS_COMMAND</CODE></A> present on it.  If the application adds any
  * other <code>Commands</code> to the <code>Alert</code>,
  * <code>DISMISS_COMMAND</code> is implicitly removed.  If the
  * application removes all other <code>Commands</code>,
@@ -136,7 +136,7 @@ import de.enough.polish.util.Locale;
  * <code>Alert</code>, it is
  * automatically turned into a modal <code>Alert</code>, and the
  * timeout value is always
- * <A HREF="../../../javax/microedition/lcdui/Alert.html#FOREVER"><CODE>FOREVER</CODE></A>.  The <code>Alert</code> remains on the display
+ * <A HREF="Alert.html#FOREVER"><CODE>FOREVER</CODE></A>.  The <code>Alert</code> remains on the display
  * until a <code>Command</code> is
  * invoked.  If the Alert has one Command (whether it is DISMISS_COMMAND or it
  * is one provided by the application), the <code>Alert</code> may have
@@ -147,11 +147,11 @@ import de.enough.polish.util.Locale;
  * <P>When it is created, an <code>Alert</code> implicitly has a
  * <code>CommandListener</code> called the
  * <em>default listener</em> associated with it.  This listener may be
- * replaced by an application-provided listener through use of the <A HREF="../../../javax/microedition/lcdui/Alert.html#setCommandListener(javax.microedition.lcdui.CommandListener)"><CODE>setCommandListener(javax.microedition.lcdui.CommandListener)</CODE></A> method.  If the application removes its listener by
+ * replaced by an application-provided listener through use of the <A HREF="Alert.html#setCommandListener(javax.microedition.lcdui.CommandListener)"><CODE>setCommandListener(javax.microedition.lcdui.CommandListener)</CODE></A> method.  If the application removes its listener by
  * passing <code>null</code> to the <code>setCommandListener</code> method,
  * the default listener is implicitly restored.</P>
  * 
- * <P>The <A HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Alert, javax.microedition.lcdui.Displayable)"><CODE>Display.setCurrent(Alert, Displayable)</CODE></A> method and the <A HREF="../../../javax/microedition/lcdui/Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>Display.setCurrent(Displayable)</CODE></A> method (when called with an
+ * <P>The <A HREF="Display.html#setCurrent(javax.microedition.lcdui.Alert, javax.microedition.lcdui.Displayable)"><CODE>Display.setCurrent(Alert, Displayable)</CODE></A> method and the <A HREF="Display.html#setCurrent(javax.microedition.lcdui.Displayable)"><CODE>Display.setCurrent(Displayable)</CODE></A> method (when called with an
  * <code>Alert</code>) define
  * special behavior for automatically advancing to another
  * <code>Displayable</code> after
@@ -180,8 +180,8 @@ import de.enough.polish.util.Locale;
  * <P>The application can restore the default listener by passing
  * <code>null</code> to the <code>setCommandListener</code> method.</P>
  * 
- * <strong>Note:</strong> An application may set a <A HREF="../../../javax/microedition/lcdui/Ticker.html"><CODE>Ticker</CODE></A>
- * with <A HREF="../../../javax/microedition/lcdui/Displayable.html#setTicker(javax.microedition.lcdui.Ticker)"><CODE>Displayable.setTicker</CODE></A> on an
+ * <strong>Note:</strong> An application may set a <A HREF="Ticker.html"><CODE>Ticker</CODE></A>
+ * with <A HREF="Displayable.html#setTicker(Ticker)"><CODE>Displayable.setTicker</CODE></A> on an
  * <code>Alert</code>, however it may not be displayed due to
  * implementation restrictions.
  * 
@@ -196,7 +196,7 @@ implements CommandListener
 	 * <code>FOREVER</code> indicates that an <code>Alert</code> is
 	 * kept visible until the user
 	 * dismisses it.  It is used as a value for the parameter to
-	 * <A HREF="../../../javax/microedition/lcdui/Alert.html#setTimeout(int)"><CODE>setTimeout()</CODE></A>
+	 * <A HREF="#setTimeout(int)"><CODE>setTimeout()</CODE></A>
 	 * to indicate that the alert is modal.  Instead of waiting for a
 	 * specified period of time, a modal <code>Alert</code> will wait
 	 * for the user to take
@@ -350,7 +350,7 @@ implements CommandListener
 	 * The <code>Image</code> provided may either be mutable or immutable.
 	 * The handling and behavior of specific <code>AlertTypes</code>
 	 * is described in
-	 * <A HREF="../../../javax/microedition/lcdui/AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
+	 * <A HREF="AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
 	 * of the <code>alertType</code>
 	 * parameter and indicates that the <code>Alert</code> is not to
 	 * have a specific alert
@@ -381,7 +381,7 @@ implements CommandListener
 	 * The <code>Image</code> provided may either be mutable or immutable.
 	 * The handling and behavior of specific <code>AlertTypes</code>
 	 * is described in
-	 * <A HREF="../../../javax/microedition/lcdui/AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
+	 * <A HREF="AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
 	 * of the <code>alertType</code>
 	 * parameter and indicates that the <code>Alert</code> is not to
 	 * have a specific alert
@@ -417,7 +417,7 @@ implements CommandListener
 	 * The <code>Image</code> provided may either be mutable or immutable.
 	 * The handling and behavior of specific <code>AlertTypes</code>
 	 * is described in
-	 * <A HREF="../../../javax/microedition/lcdui/AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
+	 * <A HREF="AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
 	 * of the <code>alertType</code>
 	 * parameter and indicates that the <code>Alert</code> is not to
 	 * have a specific alert
@@ -449,7 +449,7 @@ implements CommandListener
 	 * The <code>Image</code> provided may either be mutable or immutable.
 	 * The handling and behavior of specific <code>AlertTypes</code>
 	 * is described in
-	 * <A HREF="../../../javax/microedition/lcdui/AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
+	 * <A HREF="AlertType.html"><CODE>AlertType</CODE></A>.  <code>null</code> is allowed as the value
 	 * of the <code>alertType</code>
 	 * parameter and indicates that the <code>Alert</code> is not to
 	 * have a specific alert
@@ -508,7 +508,6 @@ implements CommandListener
 	public void addCommand(Command cmd) {
 		//#if tmp.useButtonsForCommands
 			removeCommand( DISMISS_COMMAND );
-			System.out.println("adding command " + cmd.getLabel());
 			//#style alertButton?
 			StringItem item = new StringItem( null, cmd.getLabel() );
 			item.setDefaultCommand(cmd);
@@ -588,7 +587,7 @@ implements CommandListener
 	 * is either a
 	 * positive value, which indicates a time in milliseconds, or the special
 	 * value
-	 * <A HREF="../../../javax/microedition/lcdui/Alert.html#FOREVER"><CODE>FOREVER</CODE></A>,
+	 * <A HREF="#FOREVER"><CODE>FOREVER</CODE></A>,
 	 * which indicates that <code>Alerts</code> are modal by default.  The
 	 * value returned will vary across implementations and is presumably
 	 * tailored to be suitable for each.
@@ -608,7 +607,7 @@ implements CommandListener
 	 * <code>Alert</code> is modal.  This value is not
 	 * necessarily the same value that might have been set by the
 	 * application
-	 * in a call to <A HREF="../../../javax/microedition/lcdui/Alert.html#setTimeout(int)"><CODE>setTimeout(int)</CODE></A>.  In particular, if the
+	 * in a call to <A HREF="#setTimeout(int)"><CODE>setTimeout(int)</CODE></A>.  In particular, if the
 	 * <code>Alert</code> is made
 	 * modal because its contents is large enough to scroll, the value
 	 * returned by <code>getTimeout</code> will be <code>FOREVER</code>.
@@ -651,7 +650,7 @@ implements CommandListener
 	 * Sets the type of the <code>Alert</code>.
 	 * The handling and behavior of specific <code>AlertTypes</code>
 	 * is described in
-	 * <A HREF="../../../javax/microedition/lcdui/AlertType.html"><CODE>AlertType</CODE></A>.
+	 * <A HREF="AlertType.html"><CODE>AlertType</CODE></A>.
 	 * 
 	 * @param type - an AlertType, or null if the Alert has no specific type
 	 * @see #getType()
@@ -833,7 +832,7 @@ implements CommandListener
 	/**
 	 * Sets an activity indicator on this <code>Alert</code>.  The
 	 * activity indicator is a
-	 * <A HREF="../../../javax/microedition/lcdui/Gauge.html"><CODE>Gauge</CODE></A> object.  It must be in a restricted state in order for it
+	 * <A HREF="Gauge.html"><CODE>Gauge</CODE></A> object.  It must be in a restricted state in order for it
 	 * to be used as the activity indicator for an <code>Alert</code>.
 	 * The restrictions
 	 * are listed <a href="#indicator">above</a>.  If the
@@ -857,7 +856,7 @@ implements CommandListener
 	/**
 	 * Sets an activity indicator on this <code>Alert</code>.  The
 	 * activity indicator is a
-	 * <A HREF="../../../javax/microedition/lcdui/Gauge.html"><CODE>Gauge</CODE></A> object.  It must be in a restricted state in order for it
+	 * <A HREF="Gauge.html"><CODE>Gauge</CODE></A> object.  It must be in a restricted state in order for it
 	 * to be used as the activity indicator for an <code>Alert</code>.
 	 * The restrictions
 	 * are listed <a href="#indicator">above</a>.  If the
