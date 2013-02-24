@@ -34,12 +34,21 @@ in the default position you don't need to specify it. In your <i>build.xml</i> s
 Currently we support two virtual Asha devices:
 </p>
 <ul>
-	<li><code>Nokia/Series40SDK20</code> Asha devices with Nokia-UI API 2.0 support</li>
-	<li><code>Nokia/Series40SDK11</code> Asha devices with Nokia-UI API 1.1 support</li>
+	<li><code>Nokia/Series40JR20</code> Asha devices with Nokia-UI API 1.6 and Nokia In-App-Purchase API 1.0 support</li>
+	<li><code>Nokia/Series40JR10</code> Asha devices with Nokia-UI API 1.1c support</li>
 </ul>
 <p>
 Target these devices using the <a href="build-deviceRequirements.html">&lt;deviceRequirements&gt;</a> section of your <i>build.xml</i> script.
 </p>
+<p>
+To compare the differences between these implementations visit <a href="http://www.developer.nokia.com/Resources/Library/Java/#!developers-guides/ui-and-graphics/nokia-ui-api/changes-between-platform-releases.html" target="_blank">http://www.developer.nokia.com/Resources/Library/Java/#!developers-guides/ui-and-graphics/nokia-ui-api/changes-between-platform-releases.html</a>.
+</p>
+<p>
+To check if a minimum Nokia UI API is supported, just use a preprocessing comparison:
+</p>
+<pre class="brush: java">
+//#if polish.NokiaUiApiVersion &gt;= 1.1b
+</pre>
 <h2 id="asha-features">Asha-specific J2ME Polish Features</h2>
 <p>
 J2ME Polish supports the following Nokia Asha-specific features:

@@ -76,7 +76,7 @@ import de.enough.polish.util.WrappedText;
 
 
 
-//#if polish.NokiaUiApiVersion >= 1.1
+//#if polish.NokiaUiApiVersion >= 1.1b
 	//#define tmp.useNokiaInput
 	//#define polish.TextField.suppressAddSymbolCommand=true
 	//#define tmp.suppressCommands=true

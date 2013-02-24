@@ -90,8 +90,14 @@ public class VersionFunctionTest extends TestCase {
 		} catch (IllegalArgumentException e) {
 			// expected
 		}
+		output = calculate.process("1.1b", null, null);
+		assertEquals("001001002", output );
 
+		output = calculate.process("1.1c", null, null);
+		assertEquals("001001003", output );
 
+		output = calculate.process("1.6", null, null);
+		assertEquals("001006000", output );
 	}
 
 }

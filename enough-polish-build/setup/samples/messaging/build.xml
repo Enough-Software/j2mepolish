@@ -112,12 +112,12 @@
 					<variable
 						name="polish.FullScreen"
 						value="menu" 
-						unless="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1)" 
+						unless="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1b)" 
 					/>
 					<variable
 						name="polish.useNativeAlerts"
 						value="true" 
-						if="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1)" 
+						if="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1b)" 
 					/>
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 					<variable name="polish.ScreenInfo.enable" value="true" />

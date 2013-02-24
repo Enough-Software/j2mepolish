@@ -386,8 +386,12 @@ public class CssConverter extends Converter {
 		
 		// generate general warnings and hints:
 		// check if title style has beend defined:
-		if (styleSheet.getStyle("title" ) == null) {
-			System.out.println("Warning: CSS style [title] not found, you should define it for designing the titles of screens.");
+		if (styleSheet.getStyle("title" ) == null) 
+		{
+			if ("menu".equals(env.getVariable("polish.FullScreen")))
+			{
+				System.out.println("Warning: CSS style [title] not found, you should define it for designing the titles of screens.");
+			}
 		}
 		
 		// add media queries:

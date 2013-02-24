@@ -39,35 +39,58 @@
 		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
 		<capability name="NokiaUiApiVersion" value="1.0" />
 	</api>
+	
+	<api>
+		<name>Nokia User Interface API 1.1b</name>
+		<description>The Nokia User Interface API 1.1b support direct text input, frame animation, gesture, clipboard and audio output control APIs.
+		</description>
+		<names>nokia-ui-1.1b,nokia-ui-api-1.1b, nokiaui-1.1b, nokiauiapi-1.1b</names>
+		<symbol>nokia-ui-1.1b</symbol>
+		<files>nokia-ui-1.1b.jar</files>
+		<path>import/nokia-ui-1.1b.jar</path>
+		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="NokiaUiApiVersion" value="1.1b" />
+	</api>
+	
 		
 	<api>
-		<name>Nokia User Interface API - SDK 1.1</name>
-		<description>The Nokia User Interface API SDK 1.1 is an update over the original Nokia UI API SDK, with features
-		and capabilities updated for modern smartphones
+		<name>Nokia User Interface API 1.1c</name>
+		<description>The Nokia User Interface API 1.1c support custom font heights.
 		</description>
-		<names>nokia-ui-1.1,nokia-ui-api-1.1, nokiaui-1.1, nokiauiapi-1.1</names>
-		<symbol>nokia-ui-1.1</symbol>
-		<files>nokia-ui-1.1.jar</files>
-		<path>import/nokia-ui-1.1.jar</path>
+		<names>nokia-ui-1.1c,nokia-ui-api-1.1c, nokiaui-1.1c, nokiauiapi-1.1c</names>
+		<symbol>nokia-ui-1.1c</symbol>
+		<files>nokia-ui-1.1c.jar</files>
+		<path>import/nokia-ui-1.1c.jar</path>
 		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
 		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
-		<capability name="NokiaUiApiVersion" value="1.1" />
+		<capability name="NokiaUiApiVersion" value="1.1c" />
 	</api>
 	
 	<api>
-		<name>Nokia User Interface API - SDK 2.0</name>
-		<description>The Nokia User Interface API SDK 2.0 is an update over the original Nokia UI API SDK, with features
-		and capabilities updated for modern smartphones
+		<name>Nokia User Interface API 1.6</name>
+		<description>The Nokia User Interface API 1.6 supports Locale API, Multitouch Point API, Orientation API, Virtual Keyboard API, Gesture API 1.2 (pinch gestures).
 		</description>
-		<names>nokia-ui-2.0,nokia-ui-api-2.0, nokiaui-2.0, nokiauiapi-2.0</names>
-		<symbol>nokia-ui-2.0</symbol>
-		<files>nokia-ui-2.0.jar</files>
-		<path>import/nokia-ui-2.0.jar</path>
+		<names>nokia-ui-1.6,nokia-ui-api-1.6, nokiaui-1.6, nokiauiapi-1.6</names>
+		<symbol>nokia-ui-1.6</symbol>
+		<files>nokia-ui-1.6.jar</files>
+		<path>import/nokia-ui-1.6.jar</path>
 		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
 		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
-		<capability name="NokiaUiApiVersion" value="2.0" />
+		<capability name="NokiaUiApiVersion" value="1.6" />
 	</api>
-	
+
+	<api>
+		<name>Nokia In-App Purchase API 1.0</name>
+		<description>The Nokia In-App Purchase API 1.0 supports in-app purchases.
+		</description>
+		<names>nokia-inapp, nokia-in-app, nokia-in-app-purchase, nokia-inapp-1.0, nokia-in-app-1.0, nokia-in-app-purchase-1.0</names>
+		<symbol>nokia-in-app-purchase-1.0</symbol>
+		<files>nokia-inapp-1.0.jar</files>
+		<path>import/nokia-inapp-1.0.jar</path>
+		<capability name="NokiaInAppPurchaseApiVersion" value="1.0" />
+	</api>
+		
 	<api>
 		<name>Mobile Media API</name>
 		<description>The Mobile Media API provides

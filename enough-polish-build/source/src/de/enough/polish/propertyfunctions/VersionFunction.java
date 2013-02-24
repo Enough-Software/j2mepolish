@@ -58,8 +58,8 @@ public class VersionFunction extends PropertyFunction
 	}
 
 	/**
-	 * Processes a simple version like 3.2.1
-	 * @param version the version
+	 * Processes a simple version like 3.2.1, or a more complex such as 1.1b (thanks, Nokia-UI-API!)
+	 * @param version the version, if there is a single character at the end it will be counted like it's position in the alphabet (b=2, c=3, etc) and added as the last chunk, e.g. "1.1b" will be translated into "1.1.2", "1.1c" into "1.1.3", etc.
 	 * @return the processed version, e.g. 3200100
 	 */
 	public static String process(String version) {
@@ -101,15 +101,24 @@ public class VersionFunction extends PropertyFunction
 			char c = input.charAt(i);
 			if (Character.isDigit(c)) {
 				chunk.append(c);
-			} else if (c == '.') {
-				for (int j=0; j < (3 - chunk.length()); j++ ) {
-					version.append('0');
+			} else {
+				boolean isDot = (c == '.');
+				boolean lastCharIsCharacter = !isDot && (i == input.length()-1 && Character.isLetter(c));
+				if (isDot || lastCharIsCharacter) {
+					for (int j=0; j < (3 - chunk.length()); j++ ) {
+						version.append('0');
+					}
+					version.append(chunk);
+					chunk.delete(0, chunk.length());
+					hierarchy++;
+					if (hierarchy > 2) {
+						throw new IllegalArgumentException("The version function requires a version as input, e.g. 2.1 or 3.2.999 - the provided version \"" + input + "\" is not valid: contains too many version chunks.");
+					}
 				}
-				version.append(chunk);
-				chunk.delete(0, chunk.length());
-				hierarchy++;
-				if (hierarchy > 2) {
-					throw new IllegalArgumentException("The version function requires a version as input, e.g. 2.1 or 3.2.999 - the provided version \"" + input + "\" is not valid: contains too many version chunks.");
+				if (lastCharIsCharacter) {
+					// okay, the last character is allowed to be a character
+					int numericRepresentation = (c - 'a') + 1;
+					chunk.append(numericRepresentation);
 				}
 			}
 		}
