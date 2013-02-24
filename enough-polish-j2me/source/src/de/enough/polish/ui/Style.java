@@ -562,21 +562,25 @@ public class Style implements Externalizable
 	 * Retrieves the font associated with this style
 	 * @return the font of this style, can be null if none is defined
 	 */
-	public Font getFont() {
-		if (this.font == null) {
+	public Font getFont() 
+	{
+		if (this.font == null) 
+		{
 			Style style = this;
 			int fontStyle = Font.STYLE_PLAIN;
 			boolean fontDefined = false;
 			//#if polish.css.font
-				Font f = (Font) style.getObjectProperty( "font" );
-				if (f != null) {
+				Font f = (Font) style.getObjectProperty("font");
+				if (f != null) 
+				{
 					this.font = f;
 					return f;
 				}
 			//#endif
 			//#if polish.css.font-style
 				Integer styleInt = style.getIntProperty("font-style");
-				if (styleInt != null) {
+				if (styleInt != null) 
+				{
 					fontStyle = styleInt.intValue();
 					fontDefined = true;
 				}
@@ -585,12 +589,16 @@ public class Style implements Externalizable
 			Dimension fontSizeDimension = null;
 			//#if polish.css.font-size
 				Object size = style.getObjectProperty("font-size");
-				if (size instanceof Dimension) {
+				if (size instanceof Dimension) 
+				{
 					fontSizeDimension = (Dimension) size;
 					fontDefined = true;
-				} else {
+				} 
+				else 
+				{
 					Integer sizeInt = style.getIntProperty("font-size");
-					if (sizeInt != null) {
+					if (sizeInt != null) 
+					{
 						fontSizeConstant = sizeInt.intValue();
 						fontDefined = true;
 					}
@@ -599,47 +607,65 @@ public class Style implements Externalizable
 			int fontFace = Font.FACE_SYSTEM;
 			//#if polish.css.font-face;
 				Integer faceInt = style.getIntProperty("font-face");
-				if (faceInt != null) {
+				if (faceInt != null) 
+				{
 					fontFace = faceInt.intValue();
 					fontDefined = true;
 				}
 			//#endif
-			if (fontDefined) {
-				if (fontSizeDimension != null) {
-				//#if polish.android
-					//# this.font = de.enough.polish.android.lcdui.Font.getFont(fontFace, fontStyle, fontSizeDimension);
-				//#elif polish.blackberry
-					//# this.font = de.enough.polish.blackberry.ui.Font.getFont(fontFace, fontStyle, fontSizeDimension);
-				//#else
-					if (fontSizeDimension.isPercent()) {
-						if (fontSizeDimension.getValue(100) < 100) {
-							fontSizeConstant = Font.SIZE_SMALL;
-						} else if (fontSizeDimension.getValue(100) == 100) {
-							fontSizeConstant = Font.SIZE_MEDIUM;
-						} else {
-							fontSizeConstant = Font.SIZE_LARGE;
-						}
-					} else {
-						int height = fontSizeDimension.getValue( 100 );
-						Font fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_MEDIUM );
-						int minDifference = Math.abs( fnt.getHeight() - height ); 
-						fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_SMALL );
-						int difference = Math.abs( fnt.getHeight() - height );
-						if (difference < minDifference) {
-							fontSizeConstant = Font.SIZE_SMALL;
-						} else {
-							fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_LARGE );
-							difference = Math.abs( fnt.getHeight() - height );
-							if (difference < minDifference) {
+			if (fontDefined) 
+			{
+				if (fontSizeDimension != null) 
+				{
+					//#if polish.android
+						//# this.font = de.enough.polish.android.lcdui.Font.getFont(fontFace, fontStyle, fontSizeDimension);
+					//#elif polish.blackberry
+						//# this.font = de.enough.polish.blackberry.ui.Font.getFont(fontFace, fontStyle, fontSizeDimension);
+					//#elif polish.NokiaUiApiVersion >= 1.1c
+						fontSizeConstant = fontSizeDimension.getValue(Font.getDefaultFont().getHeight());
+						this.font = com.nokia.mid.ui.DirectUtils.getFont(fontFace, fontStyle, fontSizeConstant);
+					//#else
+						if (fontSizeDimension.isPercent()) 
+						{
+							if (fontSizeDimension.getValue(100) < 90) 
+							{
+								fontSizeConstant = Font.SIZE_SMALL;
+							} 
+							else if (fontSizeDimension.getValue(100) < 111) 
+							{
+								fontSizeConstant = Font.SIZE_MEDIUM;
+							} 
+							else 
+							{
 								fontSizeConstant = Font.SIZE_LARGE;
 							}
+						} 
+						else 
+						{
+							int height = fontSizeDimension.getValue( 100 );
+							Font fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_MEDIUM );
+							int minDifference = Math.abs( fnt.getHeight() - height ); 
+							fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_SMALL );
+							int difference = Math.abs( fnt.getHeight() - height );
+							if (difference < minDifference) 
+							{
+								fontSizeConstant = Font.SIZE_SMALL;
+							} 
+							else 
+							{
+								fnt = Font.getFont( fontFace, fontStyle, Font.SIZE_LARGE );
+								difference = Math.abs( fnt.getHeight() - height );
+								if (difference < minDifference) 
+								{
+									fontSizeConstant = Font.SIZE_LARGE;
+								}
+							}
 						}
-						
-					}
-					
-					this.font = Font.getFont(fontFace, fontStyle, fontSizeConstant);
-				//#endif
-				} else {
+						this.font = Font.getFont(fontFace, fontStyle, fontSizeConstant);
+					//#endif
+				} 
+				else 
+				{
 					this.font = Font.getFont(fontFace, fontStyle, fontSizeConstant);
 				}
 			}
