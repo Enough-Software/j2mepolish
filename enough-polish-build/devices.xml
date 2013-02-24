@@ -25031,7 +25031,7 @@ These namespaces/schemas will be used soon.
   </device>
   
   <device supportsPolishGui="true">
-    <identifier>Nokia/SeriesJRSDK11</identifier>
+    <identifier>Nokia/Series40JR11</identifier>
     <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk11</features>
     <groups>series40sdk11</groups>
     <description>An Nokia Java Runtime 1.1 for Java compatible Asha device that supports the MIDP 2.0 and CLDC 1.1 standards as well as Nokia UI API 1.1c.</description>
