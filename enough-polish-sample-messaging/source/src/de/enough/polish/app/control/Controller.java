@@ -31,12 +31,15 @@ import javax.microedition.lcdui.Image;
 
 import de.enough.polish.app.App;
 import de.enough.polish.app.model.Configuration;
+import de.enough.polish.app.model.Contact;
 import de.enough.polish.app.model.ContactCollection;
 import de.enough.polish.app.model.Message;
 import de.enough.polish.app.view.ContactSelectionForm;
 import de.enough.polish.app.view.MainMenuList;
 import de.enough.polish.app.view.MessageForm;
 import de.enough.polish.io.RmsStorage;
+import de.enough.polish.ui.Alert;
+import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
@@ -217,7 +220,11 @@ implements ApplicationInitializer, CommandListener
 			if (handleCommandMessageForm( cmd, (MessageForm)disp)) {
 				return;
 			}
-		} 
+		} else if (disp instanceof ContactSelectionForm) {
+			if (handleCommandContactSelectionForm(cmd, (ContactSelectionForm)disp)) {
+				return;
+			}
+		}
 		if (cmd == this.cmdBack) {
 			if (this.screenHistory.hasPrevious()) {
 				this.screenHistory.showPrevious();
@@ -233,7 +240,7 @@ implements ApplicationInitializer, CommandListener
 		if (cmd == this.cmdMessageSend) {
 			String input = form.getInputAndClearField();
 			if (input.length() > 0) {
-				Message message = new Message("j2mepolish", input);
+				Message message = new Message("me", input);
 				form.addMessage(message);
 				UiAccess.scrollToBottom(form);
 			}
@@ -249,6 +256,38 @@ implements ApplicationInitializer, CommandListener
 			form.showMessageParsed();
 			return true;
 		} 
+		return false;
+	}
+	
+	private boolean handleCommandContactSelectionForm(Command cmd, final ContactSelectionForm form)
+	{
+		if (cmd == this.cmdSelectContact)
+		{
+			Contact contact = form.getCurrentContact();
+			if (contact != null)
+			{
+				final String userName = contact.getFirstName() + " " + contact.getLastName();
+				Alert alert = new Alert("Start Chat", "Chat with " + userName + "?", null, AlertType.CONFIRMATION);
+				final Command cmdYes = new Command("Yes", Command.OK, 1);
+				final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+				alert.addCommand(cmdYes);
+				alert.addCommand(cmdNo);
+				alert.setCommandListener(new CommandListener() {
+					public void commandAction(Command c, Displayable d) {
+						if (c == cmdYes) 
+						{
+							showMessages(userName);
+						}
+						else
+						{
+							Controller.this.display.setCurrent(form);
+						}				
+					}
+				});
+				this.display.setCurrent(alert);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -271,12 +310,12 @@ implements ApplicationInitializer, CommandListener
 				showContacts();
 				break;
 			case MAIN_ACTION_MESSAGES:
-				showMessages();
+				showMessages("j2mepolish");
 				break;
 			case MAIN_ACTION_EXIT:
-				exit();
-				return true;
+				showExitDialog();
 			}
+			return true;			
 		} else if (cmd == this.cmdAbout) {
 			showAbout();
 			return true;
@@ -306,12 +345,12 @@ implements ApplicationInitializer, CommandListener
 		this.screenHistory.show(form);
 	}
 
-	private void showMessages() {
+	private void showMessages(String userName) {
 		Message[] messages = new Message[]{
 				new Message("me", "Hi J2ME Polish, what's up...?"),
-				new Message("j2mepolish", "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
+				new Message(userName, "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
 				new Message("me", "Cool! When will it be out?"),
-				new Message("j2mepolish", "That's the /good part/, it's available now: www.j2mepolish.org."),
+				new Message(userName, "That's the /good part/, it's available now: www.j2mepolish.org."),
 				new Message("me", "fan-tas-tic :-)")
 		};
 		MessageForm form = new MessageForm(this.cmdMessageSend);
@@ -375,4 +414,27 @@ implements ApplicationInitializer, CommandListener
 		//#debug
 		System.out.println("start busy indicator: Number of busy indicators: " + this.busyIndicators);
 	}
+	
+	private void showExitDialog() {
+		Alert alert = new Alert("Exit?", "Wanna exit?", null, AlertType.CONFIRMATION);
+		final Command cmdYes = new Command("Yes", Command.OK, 1);
+		final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+		alert.addCommand(cmdYes);
+		alert.addCommand(cmdNo);
+		alert.setCommandListener(new CommandListener() {
+			public void commandAction(Command c,
+					Displayable d) {
+				if (c == cmdYes) {
+					exit();
+				}
+				else
+				{
+					Controller.this.display.setCurrent(Controller.this.screenMainMenu);
+				}				
+			}
+		});
+		this.display.setCurrent(alert);
+	}
+
 }
+

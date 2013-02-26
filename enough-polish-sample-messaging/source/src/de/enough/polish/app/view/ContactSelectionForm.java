@@ -25,6 +25,7 @@ public class ContactSelectionForm extends FramedForm implements
 {
 	private TextField	filterTextField;
 	private ContactItemSource contactItemSource;
+	private UniformContainer	uniformContainer;
 
 	public ContactSelectionForm(String title, Command cmdSelectContact)
 	{
@@ -34,12 +35,23 @@ public class ContactSelectionForm extends FramedForm implements
 		//#style contactList
 		UniformContainer cont = new UniformContainer(this.contactItemSource);
 		setRootContainer(cont);
+		this.uniformContainer = cont;
 		// add a text field for filtering contacts:
 		//#style messageInput
 		TextField textField = new TextField(null, "", 1000, TextField.ANY);
 		textField.setItemStateListener(this);
 		this.filterTextField = textField;
 		append(FRAME_TOP, textField);
+	}
+	
+	/**
+	 * Retrieves the currently focused contact
+	 * @return the current contact or null when none is focused.
+	 */
+	public Contact getCurrentContact()
+	{
+		int itemSourceIndex = this.uniformContainer.getFocusedIndex();
+		return this.contactItemSource.getContact( itemSourceIndex);
 	}
 
 	/*
