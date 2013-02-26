@@ -418,7 +418,7 @@ implements ItemConsumer
 			{
 				this.isIgnoreYOffsetChange = true;
 				boolean refocus = (this.isFocused && this.focusedItem != null);
-				if (refocus)
+				if (refocus || this.focusedItem != null)
 				{
 					focusChild(-1);
 				}
@@ -431,12 +431,7 @@ implements ItemConsumer
 			}
 		}
 		requestInit();
-	}
-	
-	
-
-
-	
+	}	
 	
 	private static class BackupItemStorage 
 	extends IntHashMap 
