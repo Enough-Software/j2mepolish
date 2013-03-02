@@ -412,7 +412,8 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
-		if (event.getChange() == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
+		int change = event.getChange();
+		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
 		{
 			synchronized (getSynchronizationLock())
 			{
@@ -428,6 +429,30 @@ implements ItemConsumer
 					focusChild(0);
 				}
 				this.isIgnoreYOffsetChange = false;
+			}
+		}
+		else if ((change == ItemChangedEvent.CHANGE_SET) && (event.getItemIndex() == this.focusedIndex))
+		{
+			synchronized (getSynchronizationLock())
+			{
+				int itemIndex = event.getItemIndex();
+				if ((itemIndex >= this.childStartIndex) && (itemIndex < this.childStartIndex + this.itemsList.size()))
+				{
+					Item affectedItem = event.getAffectedItem();
+					if (affectedItem == null)
+					{
+						affectedItem = (Item) this.itemsList.get(itemIndex - this.childStartIndex);
+						this.itemSource.populateItem(itemIndex, affectedItem);
+					}
+					this.isIgnoreYOffsetChange = true;
+					int offset = getScrollYOffset();
+					focusChild( -1 );
+					this.itemsList.set(itemIndex - this.childStartIndex, affectedItem );
+					focusChild(itemIndex);
+					setScrollYOffset(offset, false);
+					this.isIgnoreYOffsetChange = false;
+				}
+						
 			}
 		}
 		requestInit();
