@@ -67,7 +67,12 @@
                         value="menu"
                         unless="polish.blackberry || polish.android || polish.vendor.Nokia"
                 />
-				<!--
+				<variable
+                        name="polish.useNativeAlerts"
+                        value="true"
+                        if="polish.blackberry || polish.android || polish.vendor.Nokia"
+                />
+								<!--
 				<variable name="polish.Container.allowCycling" value="false" />
 				<variable name="polish.MenuBar.OptionsPosition" value="right" />
 				-->

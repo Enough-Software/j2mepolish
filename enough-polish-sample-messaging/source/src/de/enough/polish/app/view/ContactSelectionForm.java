@@ -74,6 +74,29 @@ public class ContactSelectionForm extends FramedForm implements
 		{
 			return;
 		}
+		if (true)
+		{
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					try 
+					{
+						Thread.sleep(2000);
+					}
+					catch (Exception e)
+					{
+						// ignore
+					}
+					Contact contact = ContactCollection.getInstance().getContact(2);
+					contact.setFirstName("# " + contact.getFirstName());
+					ItemChangedEvent event = new ItemChangedEvent( ItemChangedEvent.CHANGE_SET, 2, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+				}
+			};
+			t.start();
+			return;
+		}
 		Thread t = new Thread(){
 			public void run() {
 				try {

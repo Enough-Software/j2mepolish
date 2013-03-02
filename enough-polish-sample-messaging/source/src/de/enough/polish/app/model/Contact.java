@@ -2,8 +2,8 @@ package de.enough.polish.app.model;
 
 public class Contact
 {
-	private final String	firstName;
-	private final String	lastName;
+	private String	firstName;
+	private String	lastName;
 	private String lowercaseCombined;
 
 	public Contact(String firstName, String lastName)
@@ -41,5 +41,15 @@ public class Contact
 	{
 		return this.firstName + " " + this.lastName;
 	}
-	
+
+	public void setFirstName(String name)
+	{
+		this.firstName = name;
+	}
+
+	public void setLastName(String name)
+	{
+		this.lastName = name;
+	}
+
 }
