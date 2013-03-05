@@ -413,6 +413,8 @@ implements UiElement, Animatable
 			private int gestureYMin;
 			private int gestureYMax;
 			private boolean isIgnorePointerReleaseForGesture;
+			private long gesturePointerReleasedTime;
+			private Item gesturePointerReleaseItem;
 		//#endif
 	//#endif
 	private ScreenInitializerListener screenInitializerListener;
@@ -1542,6 +1544,10 @@ implements UiElement, Animatable
 	public void hideNotify() {
 		//#if polish.Screen.callSuperEvents
 			super.hideNotify();
+		//#endif
+		//#if tmp.supportTouchGestures
+			this.gesturePointerReleaseItem = null;
+			this.gesturePointerReleasedTime = 0;
 		//#endif
 		//#if polish.Bugs.noSoftKeyReleasedEvents
 			this.triggerReleasedKeyCode = 0;
@@ -5064,6 +5070,7 @@ implements UiElement, Animatable
 		//#debug
 		System.out.println("pointerReleased at " + x + ", " + y );
 		boolean processed = false;
+		long currentTimeMillis = System.currentTimeMillis();
 		//#if tmp.supportTouchGestures
 			if (this.isIgnorePointerReleaseForGesture)
 			{
@@ -5071,7 +5078,7 @@ implements UiElement, Animatable
 			}
 			else if (this.gestureStartTime != 0)
 			{
-				long gestureTime = (System.currentTimeMillis() - this.gestureStartTime);
+				long gestureTime = (currentTimeMillis - this.gestureStartTime);
 				if (gestureTime < 1600)
 				{
 					int verticalDiff = Math.max(
@@ -5088,7 +5095,22 @@ implements UiElement, Animatable
 							if (handleGesture(GestureEvent.GESTURE_SWIPE_LEFT, x, y)) {
 								processed = true;
 							}						
+						} else {
+							if ((this.gesturePointerReleasedTime != 0) && (currentTimeMillis - this.gesturePointerReleasedTime < 600)) {
+								Item item = getCurrentItem();
+								if (item == this.gesturePointerReleaseItem) {
+									if (handleGesture(GestureEvent.GESTURE_DOUBLE_TAP, x, y)) {
+										processed = true;
+									}
+								}
+								this.gesturePointerReleasedTime = 0;
+								this.gesturePointerReleaseItem = null;
+							} else {
+								this.gesturePointerReleasedTime = currentTimeMillis;
+								this.gesturePointerReleaseItem = getCurrentItem();
+							}
 						}
+						
 					}
 				}
 			}
@@ -5096,7 +5118,7 @@ implements UiElement, Animatable
 		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
-			this.lastInteractionTime = System.currentTimeMillis();
+			this.lastInteractionTime = currentTimeMillis;
 			//#ifdef tmp.menuFullScreen
 				//#ifdef tmp.useExternalMenuBar
 					if (!processed) {
@@ -5189,6 +5211,10 @@ implements UiElement, Animatable
 				break;
 			case GestureEvent.GESTURE_SWIPE_RIGHT:
 				handled = handleGestureSwipeRight(x, y);
+				break;
+			case GestureEvent.GESTURE_DOUBLE_TAP:
+				handled = handleGestureDoubleTap(x, y);
+				break;
 			}
 			if (!handled) 
 			{
@@ -5243,7 +5269,15 @@ implements UiElement, Animatable
 	protected boolean handleGestureSwipeRight(int x, int y) {
 		return false;
 	}
-	
+
+	/**
+	 * Handles the double tap gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureDoubleTap(int x, int y) {
+		return false;
+	}
+
 	/**
 	 * Handles the pressing of a pointer.
 	 * This method should be overwritten only when the polish.hasPointerEvents 
@@ -5795,7 +5829,7 @@ implements UiElement, Animatable
 					}
 				}
 			}
-			return this.container.focusedItem;
+			return this.container.getFocusedChild();
 		}
 		return this.focusedItem;
 	}

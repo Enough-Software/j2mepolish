@@ -997,7 +997,7 @@ implements CycleListener
 	 */
 	public Item getCurrentItem() {
 		if (!this.keepContentFocused && this.currentlyActiveContainer != null) {
-			return this.currentlyActiveContainer.focusedItem;
+			return this.currentlyActiveContainer.getFocusedChild();
 		}
 		return this.container.focusedItem;
 	}

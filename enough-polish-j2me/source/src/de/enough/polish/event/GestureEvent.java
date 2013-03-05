@@ -39,6 +39,8 @@ public class GestureEvent extends PointerEvent {
 	public static final int GESTURE_SWIPE_LEFT = 2;
 	/** The 'swipe-right' touch gesture is triggered when the user swipes on the screen to the right side */
 	public static final int GESTURE_SWIPE_RIGHT = 3;
+	/** The gesture that is triggered when an element is tapped twice in a short duration */
+	public static final int GESTURE_DOUBLE_TAP = 4;
 	
 	/** event name when the touch gesture 'SWIPE LEFT' was recognized */
 	public static final String EVENT_GESTURE_SWIPE_LEFT = "swipe-left";
@@ -46,6 +48,8 @@ public class GestureEvent extends PointerEvent {
 	public static final String EVENT_GESTURE_SWIPE_RIGHT = "swipe-right";
 	/** event name when the touch gesture 'HOLD' was recognized */
 	public static final String EVENT_GESTURE_HOLD = "hold";
+	/** event name when an element is tapped twice in a short duration */
+	public static final String EVENT_GESTURE_DOUBLE_TAP = "double-tap";
 	/** event name when the unknown touch gesture was recognized */
 	public static final String EVENT_GESTURE_UNKNOWN = "unknown";
 
@@ -104,6 +108,7 @@ public class GestureEvent extends PointerEvent {
 		case GESTURE_HOLD: name = EVENT_GESTURE_HOLD; break;
 		case GESTURE_SWIPE_LEFT: name = EVENT_GESTURE_SWIPE_LEFT; break;
 		case GESTURE_SWIPE_RIGHT: name = EVENT_GESTURE_SWIPE_RIGHT; break;
+		case GESTURE_DOUBLE_TAP: name = EVENT_GESTURE_DOUBLE_TAP; break;
 		default: name = EVENT_GESTURE_UNKNOWN;
 		}
 		return name;

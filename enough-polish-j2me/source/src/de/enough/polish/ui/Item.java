@@ -907,6 +907,7 @@ public abstract class Item implements UiElement, Animatable
 	//#endif
 	//#if polish.supportTouchGestures
 		//#define tmp.supportTouchGestures
+		private Command	doubleTabCommand;
 	//#endif
 	//#if polish.useNativeGui
 		protected NativeItem nativeItem;
@@ -2503,8 +2504,10 @@ public abstract class Item implements UiElement, Animatable
 		if (this.isFocused) 
 		{
 			Screen scr = getScreen();
-			if(scr != null)
+			if (scr != null)
+			{
 				scr.notifyDefaultCommand( cmd );
+			}
 		}
 	}
 	
@@ -2518,6 +2521,34 @@ public abstract class Item implements UiElement, Animatable
 		// ignore
 	}
 	//#endif
+	
+	/**
+	 * Sets the command that should be triggered when this item is tapped double in short duration.
+	 * Note that you need to define the preprocessing variable "polish.supportTouchGestures" and set it to "true" for this to work.
+	 * Currently you cannot have a default command (triggered by a single tap) and a doube-tap command at the same time.
+	 * @param command the command that should be triggered when receiving a double tab
+	 */
+	public void setDoubleTapCommand(Command command)
+	{
+		//#if tmp.supportTouchGestures
+			this.doubleTabCommand = command;
+			this.appearanceMode = INTERACTIVE;
+		//#endif
+	}
+
+	//#if polish.LibraryBuild
+	/**
+	 * Sets the command that should be triggered when this item is tapped double in short duration
+	 * Note that you need to define the preprocessing variable "polish.supportTouchGestures" and set it to "true" for this to work.
+	 * Currently you cannot have a default command (triggered by a single tap) and a doube-tap command at the same time.
+	 * @param command the command that should be triggered when receiving a double tab
+	 */
+	public void setDoubleTapCommand(javax.microedition.lcdui.Command command)
+	{
+		// ignore
+	}
+	//#endif
+
 
 	/**
 	 * Causes this <code>Item's</code> containing <code>Form</code> to notify
@@ -4579,6 +4610,7 @@ public abstract class Item implements UiElement, Animatable
 				}
 			//#endif
 			if ( isInItemArea(relX, relY) ) {
+				
 				return handleKeyReleased( 0, Canvas.FIRE );
 			} else if (this.isPressed) {
 				notifyItemPressedEnd();
@@ -4700,6 +4732,8 @@ public abstract class Item implements UiElement, Animatable
 			break;
 		case GestureEvent.GESTURE_SWIPE_RIGHT:
 			handled = handleGestureSwipeRight(x, y);
+		case GestureEvent.GESTURE_DOUBLE_TAP:
+			handled = handleGestureDoubleTap(x, y);
 		}
 		if (!handled) {
 			GestureEvent event = GestureEvent.getInstance();
@@ -4757,6 +4791,19 @@ public abstract class Item implements UiElement, Animatable
 		return false;
 	}
 
+	/**
+	 * Handles the double tap gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureDoubleTap(int x, int y) {
+		//#if tmp.supportTouchGestures
+			if (this.doubleTabCommand != null)
+			{
+				return this.doubleTabCommand.commandAction(this, getScreen());
+			}
+		//#endif
+		return false;
+	}
 
 	/**
 	 * Adds a repaint request for this item's space.
