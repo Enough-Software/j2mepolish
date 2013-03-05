@@ -1,4 +1,4 @@
-//#condition polish.usePolishGui && polish.api.nokia-ui-2.0
+//#condition polish.usePolishGui && (polish.NokiaUiApiVersion >= 1.6)
 
 package de.enough.polish.ui;
 

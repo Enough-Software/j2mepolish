@@ -318,7 +318,7 @@ public abstract class Canvas
 //#endif
 implements Displayable
 
-//#if !polish.FullScreen && polish.api.nokia-ui-2.0 && polish.css.Icon-Image
+//#if !polish.FullScreen && (polish.NokiaUiApiVersion >= 1.6) && polish.css.Icon-Image
 	//#define tmp.useNokiaIconCommand
 //#endif
 {

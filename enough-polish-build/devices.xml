@@ -25003,7 +25003,7 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Nokia/Series40SDK20</identifier>
-    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk20</features>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering</features>
     <groups>series40sdk20</groups>
     <description>An Nokia SDK 2.0 for Java compatible Asha device that supports the MIDP 2.0 and CLDC 1.1 standards as well as Nokia UI API 1.6.</description>
     <capability name="ScreenSize" value="240x400" />
@@ -25013,7 +25013,7 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Nokia/Series40SDK11</identifier>
-    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk11</features>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering</features>
     <groups>series40sdk11</groups>
     <description>An Nokia SDK 1.1 for Java compatible Asha device that supports the MIDP 2.0 and CLDC 1.1 standards as well as Nokia UI API 1.1c.</description>
     <capability name="ScreenSize" value="240x400" />
@@ -25023,7 +25023,7 @@ These namespaces/schemas will be used soon.
 
   <device supportsPolishGui="true">
     <identifier>Nokia/Series40JR20</identifier>
-    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk20</features>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering</features>
     <groups>series40sdk20</groups>
     <description>An Nokia Java Runtime 2.0 for Java compatible Asha device that supports the MIDP 2.0 and CLDC 1.1 standards as well as Nokia UI API 1.6 and Nokia In-App-Purchase API 1.0.</description>
     <capability name="JavaPlatform" value="MIDP/2.0" />
@@ -25032,7 +25032,7 @@ These namespaces/schemas will be used soon.
   
   <device supportsPolishGui="true">
     <identifier>Nokia/Series40JR11</identifier>
-    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering, series40sdk11</features>
+    <features>hasPointerEvents, hasCommandKeyEvents, isVirtual, doubleBuffering</features>
     <groups>series40sdk11</groups>
     <description>An Nokia Java Runtime 1.1 for Java compatible Asha device that supports the MIDP 2.0 and CLDC 1.1 standards as well as Nokia UI API 1.1c.</description>
     <capability name="JavaPlatform" value="MIDP/2.0" />
