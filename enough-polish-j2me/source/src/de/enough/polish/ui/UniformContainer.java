@@ -177,9 +177,13 @@ implements ItemConsumer
 		{
 			return;
 		}
-		int startIndex = Math.max( 0, (-offset)/this.childRowHeight - 5);
 		int count = this.itemSource.countItems();
 		int itemsListSize = this.itemsList.size();
+		if (count <= itemsListSize)
+		{
+			return;
+		}
+		int startIndex = Math.max( 0, (-offset)/this.childRowHeight - 5);
 		if (count > itemsListSize) 
 		{
 			startIndex = Math.min(count - itemsListSize, startIndex);
@@ -196,7 +200,6 @@ implements ItemConsumer
 				delta = Math.abs(startIndex - this.childStartIndex);
 				if (delta >= itemsListSize)
 				{
-					//System.out.println("replacing all");
 					// all items need to be re=populated:
 					Object[] items = this.itemsList.getInternalArray();
 					for (int itemIndex=0; itemIndex<itemsListSize; itemIndex++)
