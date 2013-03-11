@@ -155,6 +155,38 @@ implements CycleListener
 		}
 		return null;
 	}
+	
+	/**
+	 * Retrieves the currently active frame ID
+	 * @return the ID of the currently active frame
+	 * @see #FRAME_CENTER
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 */
+	public int getActiveFrameId()
+	{
+		int id = FRAME_CENTER;
+		Container cont = this.currentlyActiveContainer;
+		if (cont == this.topFrame)
+		{
+			id = FRAME_TOP;
+		}
+		else if (cont == this.bottomFrame)
+		{
+			id = FRAME_BOTTOM;
+		}
+		else if (cont == this.leftFrame)
+		{
+			id = FRAME_LEFT;
+		}
+		else if (cont == this.rightFrame)
+		{
+			id = FRAME_RIGHT;
+		}
+		return id;
+	}
 
 	/*
 	 * (non-Javadoc)
