@@ -2519,7 +2519,7 @@ public class TextField extends StringItem
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
 					if ( this.series40sdk20Field != null ) {
-					   int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop() ;
+					   int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
 					   this.series40sdk20Field.setVisible(true);
 					   this.series40sdk20Field.setParent(Display.getInstance());
 					   this.series40sdk20Field.setPosition(x, y);
