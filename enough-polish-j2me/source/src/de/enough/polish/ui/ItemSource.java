@@ -50,5 +50,11 @@ public interface ItemSource
 	 * @see #DISTRIBUTION_PREFERENCE_NONE
 	 */
 	int getDistributionPreference();
+	
+	/**
+	 * Retrieves the item for notifying the user that there is currently no entry in the list. 
+	 * @return the item or null, when no additional information should be shown to the user.
+	 */
+	Item getEmptyItem();
 
 }

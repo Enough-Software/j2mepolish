@@ -70,9 +70,48 @@ public class ContactSelectionForm extends FramedForm implements
 	public void showNotify()
 	{
 		super.showNotify();
-		if (true)
+		if (false)
 		{
 			return;
+		}
+		else
+		{
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					try 
+					{
+						Thread.sleep(2000);
+					}
+					catch (Exception e)
+					{
+						// ignore
+					}
+					Contact contact = ContactCollection.getInstance().removeContact(0);
+					ItemChangedEvent event = new ItemChangedEvent( ItemChangedEvent.CHANGE_REMOVE, 0, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+					try 
+					{
+						Thread.sleep(2000);
+					}
+					catch (Exception e)
+					{
+						// ignore
+					}
+					contact = new Contact("Steve", "Gates");
+					ContactCollection.getInstance().addContact(contact);
+					event = new ItemChangedEvent( ItemChangedEvent.CHANGE_ADD, 0, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+					contact = new Contact("Bob", "Jobs");
+					ContactCollection.getInstance().addContact(contact);
+					event = new ItemChangedEvent( ItemChangedEvent.CHANGE_ADD, 1, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+				}
+			};
+			t.start();			
+			if (true)
+				return;
 		}
 		if (true)
 		{
@@ -88,9 +127,33 @@ public class ContactSelectionForm extends FramedForm implements
 					{
 						// ignore
 					}
-					Contact contact = ContactCollection.getInstance().getContact(2);
+					Contact contact = ContactCollection.getInstance().getContact(1);
 					contact.setFirstName("# " + contact.getFirstName());
-					ItemChangedEvent event = new ItemChangedEvent( ItemChangedEvent.CHANGE_SET, 2, null);
+					ItemChangedEvent event = new ItemChangedEvent( ItemChangedEvent.CHANGE_SET, 1, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+					try 
+					{
+						Thread.sleep(2000);
+					}
+					catch (Exception e)
+					{
+						// ignore
+					}
+					contact = new Contact("Steve", "Gates");
+					ContactCollection.getInstance().addContact(contact);
+					event = new ItemChangedEvent( ItemChangedEvent.CHANGE_ADD, 2, null);
+					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
+					try 
+					{
+						Thread.sleep(2000);
+					}
+					catch (Exception e)
+					{
+						// ignore
+					}
+					contact = new Contact("Bill", "Jobs");
+					ContactCollection.getInstance().addContact(contact);
+					event = new ItemChangedEvent( ItemChangedEvent.CHANGE_ADD, 2, null);
 					ContactSelectionForm.this.uniformContainer.onItemsChanged(event);
 				}
 			};
@@ -165,25 +228,27 @@ public class ContactSelectionForm extends FramedForm implements
 				this.isFiltered = false;
 				this.filteredContacts.clear();
 				this.filterText = null;
-				return;
 			}
-			text = text.toLowerCase();
-			this.filterText = text;
-			this.filteredContacts.clear();
-			Object[] contacts = this.contactCollection.getInternalArray();
-			for (int i = 0; i < contacts.length; i++)
+			else
 			{
-				Contact contact = (Contact) contacts[i];
-				if (contact == null)
+				text = text.toLowerCase();
+				this.filterText = text;
+				this.filteredContacts.clear();
+				Object[] contacts = this.contactCollection.getInternalArray();
+				for (int i = 0; i < contacts.length; i++)
 				{
-					break;
+					Contact contact = (Contact) contacts[i];
+					if (contact == null)
+					{
+						break;
+					}
+					if (contact.matches(text))
+					{
+						this.filteredContacts.add(contact);
+					}
 				}
-				if (contact.matches(text))
-				{
-					this.filteredContacts.add(contact);
-				}
+				this.isFiltered = true;
 			}
-			this.isFiltered = true;
 			if (this.itemConsumer != null)
 			{
 				this.itemConsumer.onItemsChanged(this.eventRefreshAll);
@@ -212,8 +277,10 @@ public class ContactSelectionForm extends FramedForm implements
 		public Item createItem(int index)
 		{
 			Contact contact = getContact(index);
-			//#style contactItem
-			StringItem item = new StringItem(null, contact.getFirstName() + " " +  contact.getLastName());
+			//#style address_book_contact_item_two_columns
+			ContactChatItem item = new ContactChatItem(contact, false);
+			// #style contactItem
+			//StringItem item = new StringItem(null, contact.getFirstName() + " " +  contact.getLastName());
 			item.setDefaultCommand(this.cmdSelectContact);
 			return item;
 		}
@@ -225,8 +292,10 @@ public class ContactSelectionForm extends FramedForm implements
 		public void populateItem(int itemIndex, Item item)
 		{
 			Contact contact = getContact(itemIndex);
-			StringItem stringItem = (StringItem) item;
-			stringItem.setText(contact.getFirstName() + " " + contact.getLastName());
+			ContactChatItem contactItem = (ContactChatItem) item;
+			contactItem.refresh(contact);
+//			StringItem stringItem = (StringItem) item;
+//			stringItem.setText(contact.getFirstName() + " " + contact.getLastName());
 		}
 
 
@@ -255,6 +324,16 @@ public class ContactSelectionForm extends FramedForm implements
 		public int getDistributionPreference()
 		{
 			return DISTRIBUTION_PREFERENCE_TOP;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#getEmptyItem()
+		 */
+		public Item getEmptyItem()
+		{
+			//#style itemMainMenuEntry
+			return new StringItem(null, "there is no contact");
 		}
 
 	}

@@ -118,6 +118,14 @@ implements ItemConsumer
 			Item item = itemSource.createItem(itemIndex);
 			add(item);
 		}
+		if (count == 0)
+		{
+			Item item = itemSource.getEmptyItem();
+			if (item != null)
+			{
+				add(item);
+			}
+		}
 	}
 	
 	
@@ -129,20 +137,21 @@ implements ItemConsumer
 	{
 		//#debug
 		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event);
-		if (event == null || (event.getChange() == ItemChangedEvent.CHANGE_COMPLETE_REFRESH))
+		int change = event.getChange();
+		int itemIndex = event.getItemIndex();
+		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH || itemIndex == -1)
 		{
 			setItemSource(this.itemSource);
 			return;
 		}
-		int change = event.getChange();
 		if (change == ItemChangedEvent.CHANGE_ADD)
 		{
 			Item nextItem = event.getAffectedItem();
 			if (nextItem == null)
 			{
-				nextItem = this.itemSource.createItem(event.getItemIndex());
+				nextItem = this.itemSource.createItem(itemIndex);
 			}
-			if (event.getItemIndex() >= this.itemsList.size())
+			if (itemIndex >= this.itemsList.size())
 			{
 				if (!this.isInitialized)
 				{
@@ -171,19 +180,19 @@ implements ItemConsumer
 			}
 			else
 			{
-				add( event.getItemIndex(), nextItem );
+				add( itemIndex, nextItem );
 			}
 		} 
 		else if (change == ItemChangedEvent.CHANGE_REMOVE)
 		{
-			if (!this.isInitialized || (event.getItemIndex() < this.itemsList.size()-1))
+			if (!this.isInitialized || (itemIndex < this.itemsList.size()-1))
 			{
-				remove(event.getItemIndex());
+				remove(itemIndex);
 			}
 			else // last element is removed
 			{
 				setInitialized(false);
-				Item prevItem = remove(event.getItemIndex());
+				Item prevItem = remove(itemIndex);
 				//System.out.println("removing with height=" + prevItem.itemHeight + ": " + prevItem);
 				int height = prevItem.itemHeight + this.paddingVertical;
 				Item p = this;
@@ -206,9 +215,9 @@ implements ItemConsumer
 			Item nextItem = event.getAffectedItem();
 			if (nextItem == null)
 			{
-				nextItem = this.itemSource.createItem(event.getItemIndex());
+				nextItem = this.itemSource.createItem(itemIndex);
 			}
-			set( event.getItemIndex(), nextItem );
+			set( itemIndex, nextItem );
 		}
 	}
 	
