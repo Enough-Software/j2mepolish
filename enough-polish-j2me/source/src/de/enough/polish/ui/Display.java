@@ -1201,8 +1201,23 @@ public class Display
 		this.currentCanvas = canvas;
 		this.currentDisplayable = nextDisplayable;
 		
-		if ( oldCanvas != null ) {
+		if ( oldCanvas != null ) 
+		{
 			oldCanvas._hideNotify();
+			// workaround for native TextEditor on Nokia Asha devices:
+			// when the native menubar is opened, this Display is hidden
+			// when then another screen is shown, the TextField won't be removed.
+			//#if polish.NokiaUiApiVersion >= 1.1b
+				if (oldCanvas instanceof Screen)
+				{
+					Screen oldScreen = (Screen)oldCanvas;
+					Item item = oldScreen.getCurrentItem();
+					if (item instanceof TextField)
+					{
+						oldScreen.focus(-1);
+					}
+				}
+			//#endif
 		}
 
 		//#if polish.css.repaint-previous-screen
