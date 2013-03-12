@@ -1004,7 +1004,7 @@ public class TextField extends StringItem
 	//#endif
 
 	//#if tmp.useNokiaInput
-		private TextEditor series40sdk20Field;
+		private TextEditor nokiaTextEditor;
 	//#endif	
 		
 	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
@@ -1397,8 +1397,8 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if tmp.useNokiaInput
-			if ( this.series40sdk20Field != null ) {
-				return this.series40sdk20Field.getContent();
+			if ( this.nokiaTextEditor != null ) {
+				return this.nokiaTextEditor.getContent();
 			}
 		//#endif
 		if ( this.isPassword ) {
@@ -1524,12 +1524,12 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if tmp.useNokiaInput
-			if ( this.series40sdk20Field != null && !this.series40sdk20Field.getContent().equals(text)) {
+			if ( this.nokiaTextEditor != null && !this.nokiaTextEditor.getContent().equals(text)) {
 				if (text == null)
 				{
 					text = "";
 				}
-				this.series40sdk20Field.setContent(text);				
+				this.nokiaTextEditor.setContent(text);				
 			}
 		//#endif
 		//#if polish.blackberry
@@ -1979,7 +1979,7 @@ public class TextField extends StringItem
 		//#elif tmp.forceDirectInput
 			curPos = this.caretPosition;
 		//#elif tmp.useNokiaInput
-			curPos = this.series40sdk20Field.getCaretPosition();
+			curPos = this.nokiaTextEditor.getCaretPosition();
 		//#else
 			//#ifdef tmp.useNativeTextBox
 				if (this.midpTextBox != null) {
@@ -2017,8 +2017,8 @@ public class TextField extends StringItem
 				this.editField.setCursorPosition(position);
 			}
 		//#elif tmp.useNokiaInput
-			synchronized ( this.series40sdk20Field) {
-				this.series40sdk20Field.setCaret(position);
+			synchronized ( this.nokiaTextEditor) {
+				this.nokiaTextEditor.setCaret(position);
 			}
 		//#elif tmp.allowDirectInput || tmp.forceDirectInput
 			this.caretPosition = position;
@@ -2151,8 +2151,8 @@ public class TextField extends StringItem
 		//#endif
 			
 		//#if tmp.useNokiaInput
-			if ( this.series40sdk20Field == null ) {
-				this.series40sdk20Field = createNativeNokiaTextField();
+			if ( this.nokiaTextEditor == null ) {
+				this.nokiaTextEditor = createNativeNokiaTextField();
 			}
 			this.enableDirectInput = true;
 		//#endif	
@@ -2518,12 +2518,19 @@ public class TextField extends StringItem
 				if ( ! isFocused() || this.isUneditable ) {					
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
-					if ( this.series40sdk20Field != null ) {
-					   int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
-					   this.series40sdk20Field.setVisible(true);
-					   this.series40sdk20Field.setParent(Display.getInstance());
-					   this.series40sdk20Field.setPosition(x, y);
-					   this.series40sdk20Field.setSize(getAvailableContentWidth(), textFieldHeight);
+					if ( this.nokiaTextEditor != null ) {
+						try {
+							int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
+							this.nokiaTextEditor.setVisible(true);
+							this.nokiaTextEditor.setParent(Display.getInstance());
+							this.nokiaTextEditor.setPosition(x, y);
+							this.nokiaTextEditor.setSize(getAvailableContentWidth(), textFieldHeight);
+						} 
+						catch (Exception e)
+						{
+							//#debug error
+							System.out.println("unable to paint tf " + e);
+						}
 					}
 				}
 		//#else
@@ -2806,8 +2813,8 @@ public class TextField extends StringItem
 					updateInternalArea();
 				}
 			//#elif tmp.useNokiaInput
-				if ( this.series40sdk20Field != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
-					inputAction(this.series40sdk20Field, 0);					
+				if ( this.nokiaTextEditor != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
+					inputAction(this.nokiaTextEditor, 0);					
 				}
 			//#elif tmp.directInput
 				this.rowHeight = getFontHeight() + this.paddingVertical;			
@@ -3008,11 +3015,11 @@ public class TextField extends StringItem
 			}
 		//#endif
 		//#if tmp.useNokiaInput && polish.css.font-color
-			if ( this.series40sdk20Field != null ) {
-				this.series40sdk20Field.setFont(this.font);
+			if ( this.nokiaTextEditor != null ) {
+				this.nokiaTextEditor.setFont(this.font);
 				Color color = style.getColorProperty("font-color");
 				if ( color != null ) {
-					this.series40sdk20Field.setForegroundColor(0xFF000000 | color.getColor());
+					this.nokiaTextEditor.setForegroundColor(0xFF000000 | color.getColor());
 				}				
 			}
 		//#endif	
@@ -4704,10 +4711,10 @@ public class TextField extends StringItem
 		System.out.println("defocusing TextField");
 		super.defocus(originalStyle);
 		//#if tmp.useNokiaInput
-			if (this.series40sdk20Field != null) {
-				this.series40sdk20Field.setFocus(false);
-				this.series40sdk20Field.setParent(null);
-				String newText = this.series40sdk20Field.getContent();
+			if (this.nokiaTextEditor != null) {
+				this.nokiaTextEditor.setFocus(false);
+				this.nokiaTextEditor.setParent(null);
+				String newText = this.nokiaTextEditor.getContent();
 				setString( newText );
 				setInitialized(false);
 				repaint();
@@ -4746,11 +4753,20 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
+	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus) || tmp.useNokiaInput
 	protected Style focus(Style focStyle, int direction) {
 		//#if tmp.useNokiaInput
-			if ( this.series40sdk20Field != null ) {
-				this.series40sdk20Field.setFocus(true);
+			//#debug info
+			System.out.println("focus tf != null: " + (this.nokiaTextEditor != null));
+			if ( this.nokiaTextEditor != null ) {
+				try {
+					this.nokiaTextEditor.setFocus(true);
+				} 
+				catch (Exception e)
+				{
+					//#debug error
+					System.out.println("unable to set focus" + e);
+				}
 			}
 		//#endif
 		//#if polish.android
@@ -4934,10 +4950,10 @@ public class TextField extends StringItem
 	protected void showNotify() 
 	{	
 		//#if tmp.useNokiaInput
-			if ( this.series40sdk20Field != null && this.isFocused) 
+			if ( this.nokiaTextEditor != null && this.isFocused) 
 			{
-				this.series40sdk20Field.setVisible(true);
-				this.series40sdk20Field.setFocus(true);
+				this.nokiaTextEditor.setVisible(true);
+				this.nokiaTextEditor.setFocus(true);
 			}
 		//#endif
 		
@@ -4967,10 +4983,12 @@ public class TextField extends StringItem
 		 */
 		protected void hideNotify() {
 			//#if tmp.useNokiaInput
-				if ( this.series40sdk20Field != null && Display.getInstance().isShown()) 
+				//#debug info
+				System.out.println("hideNotify: Display.isShown=" + Display.getInstance().isShown());
+				if ( this.nokiaTextEditor != null && Display.getInstance().isShown()) 
 				{
-					this.series40sdk20Field.setVisible(false);
-					this.series40sdk20Field.setFocus(false);
+					this.nokiaTextEditor.setVisible(false);
+					this.nokiaTextEditor.setFocus(false);
 				}
 			//#else
 				if (this.caretChar != this.editingCaretChar) {
