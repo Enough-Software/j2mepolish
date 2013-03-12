@@ -114,6 +114,8 @@ implements ItemConsumer
 	 */
 	protected void initContent(int firstLineWidth, int availWidth, int availHeight) 
 	{
+		//#debug info
+		System.out.println("uc init " + firstLineWidth + ", " + availWidth + ", " + availHeight);
 		synchronized (this.itemsList) 
 		{
 			this.itemsList.clear();
@@ -132,8 +134,26 @@ implements ItemConsumer
 				{
 					this.itemsList.add(item);
 					this.contentWidth = item.getItemWidth(firstLineWidth, availWidth, availHeight);
-					this.contentHeight = item.itemHeight;
-					//TODO allow vertical adjustment etc
+					if (item.isLayoutVerticalExpand())
+					{
+						item.setItemHeight(availHeight);
+						this.contentHeight = availHeight;
+					}
+					else if (item.isLayoutBottom())
+					{
+						this.contentHeight = availHeight;
+						item.relativeY = availHeight - item.itemHeight;
+					}
+					else if (item.isLayoutVerticalCenter())
+					{
+						this.contentHeight = availHeight;
+						item.relativeY = (availHeight - item.itemHeight) / 2;
+					}
+					else
+					{
+						this.contentHeight = item.itemHeight;
+						item.relativeY = 0;
+					}
 				}
 				return;
 			}
@@ -150,7 +170,7 @@ implements ItemConsumer
 			
 			int height = (count * rowHeight) - this.paddingVertical;
 			this.contentHeight = height;
-			this.contentWidth = item.itemWidth;
+			this.contentWidth = availWidth; // always use fully available width
 			
 			int numberOfRealItems = Math.min( count, (availHeight / rowHeight) + 10);
 			if (count > numberOfRealItems) 
