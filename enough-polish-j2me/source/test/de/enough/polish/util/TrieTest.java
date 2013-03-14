@@ -36,7 +36,7 @@ public class TrieTest extends TestCase {
 		public String matchedWord;
 		public int matchIndex;
 	}
-
+	
 	public void testSmoketest() {
 		String source = "Hallo:)Welt";
 		Trie.TrieSearchConsumer trieSearchConsumer = new SearchResultConsumer();
@@ -50,6 +50,23 @@ public class TrieTest extends TestCase {
 		assertEquals(":)", searchResult.matchedWord);
 		assertEquals(5, searchResult.matchIndex);
 	}
+	
+	public void testSmoketestWithResult() {
+		String source = "Hallo:)Welt";
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		int startIndex = 0;
+		Trie trie = new Trie(SMILIES);
+		boolean found = trie.search(source, startIndex, searchResult);
+
+		assertTrue(found);
+		assertEquals(":)", searchResult.matchedWord);
+		assertEquals(5, searchResult.matchedWordIndex);
+		
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+		found = trie.search(source, startIndex, searchResult);
+		assertFalse(found);
+	}
+
 
 	public void testGreedyOption() {
 		String source = "HalloWelt:))";
@@ -63,6 +80,22 @@ public class TrieTest extends TestCase {
 		searchResult = (SearchResult) this.searchResults.get(0);
 		assertEquals(":))", searchResult.matchedWord);
 		assertEquals(9, searchResult.matchIndex);
+	}
+
+	public void testGreedyOptionWithResult() {
+		String source = "HalloWelt:))";
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		int startIndex = 0;
+		Trie trie = new Trie(SMILIES);
+		boolean found = trie.search(source, startIndex, searchResult);
+
+		assertTrue(found);
+		assertEquals(":))", searchResult.matchedWord);
+		assertEquals(9, searchResult.matchedWordIndex);
+		
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+		found = trie.search(source, startIndex, searchResult);
+		assertFalse(found);
 	}
 
 	public void testShortestMatch() {
@@ -83,6 +116,24 @@ public class TrieTest extends TestCase {
 		assertEquals(":))", searchResult.matchedWord);
 		assertEquals(9, searchResult.matchIndex);
 	}
+	
+	public void testShortestMatchWithResult() {
+		String source = "HalloWelt:))";
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		int startIndex = 0;
+		Trie trie = new Trie(SMILIES);
+		trie.setLongestMatchOption(false);
+		boolean found = trie.search(source, startIndex, searchResult);
+
+		assertTrue(found);
+		assertEquals(":)", searchResult.matchedWord);
+		assertEquals(9, searchResult.matchedWordIndex);
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+		
+		found = trie.search(source, startIndex, searchResult);
+		assertFalse(found);
+	}
+
 
 	public void testLongUnmatched() {
 		Trie.TrieSearchConsumer trieSearchConsumer = new SearchResultConsumer();
@@ -98,12 +149,38 @@ public class TrieTest extends TestCase {
 
 		searchResult = (SearchResult) this.searchResults.get(1);
 		assertEquals(":-P", searchResult.matchedWord);
-		assertEquals(121, searchResult.matchIndex);
+		assertEquals(122, searchResult.matchIndex);
 
 		searchResult = (SearchResult) this.searchResults.get(2);
 		assertEquals("(stop)", searchResult.matchedWord);
-		assertEquals(531, searchResult.matchIndex);
+		assertEquals(532, searchResult.matchIndex);
 	}
+	
+	public void testLongUnmatchedWithResult() {
+		Trie trie = new Trie(SMILIES);
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		int startIndex = 0;
+		boolean found = trie.search(LONGSEARCHTEXT, startIndex, searchResult);
+		assertTrue( found );
+		assertEquals(":)", searchResult.matchedWord);
+		assertEquals(0, searchResult.matchedWordIndex);
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+		
+		found = trie.search(LONGSEARCHTEXT, startIndex, searchResult);
+		assertTrue( found );
+		assertEquals(":-P", searchResult.matchedWord);
+		assertEquals(122, searchResult.matchedWordIndex);
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+
+		found = trie.search(LONGSEARCHTEXT, startIndex, searchResult);
+		assertEquals("(stop)", searchResult.matchedWord);
+		assertEquals(532, searchResult.matchedWordIndex);
+
+		startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+		found = trie.search(LONGSEARCHTEXT, startIndex, searchResult);
+		assertFalse( found );
+	}
+
 
 	public void testWrongConstructorParameters() {
 		try {

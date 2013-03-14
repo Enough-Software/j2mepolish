@@ -46,6 +46,25 @@ public class Trie implements Externalizable {
 		 */
 		void onWordFound(String searchText, String matchedWord, int matchedWordIndex);
 	}
+	
+	/**
+	 * A search result that provides both the found word and that word's index
+	 *  
+	 * @author Robert Virkus
+	 * @see Trie#search(String, int, TrieSearchResult)
+	 */
+	public static class TrieSearchResult
+	{
+		/**
+		 * The found word
+		 */
+		public String matchedWord;
+		
+		/**
+		 * The start index of the found word
+		 */
+		public int matchedWordIndex;
+	}
 
 	/**
 	 * A node object is the building block of the trie. They relate in a child-sibling organization to prevent dynamic management of children (First-Child Next-Sibling Tree)
@@ -260,6 +279,64 @@ public class Trie implements Externalizable {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Searches the given text to match words registered in this Trie object.
+	 * 
+	 * @param text The parameter must not be null though the string may be empty.
+	 * @param result The result for the next match, this parameter should be reused over a search
+	 * @throws IllegalArgumentException when either text or result are null
+	 * @return true when the search was successful, false if nothing was found
+	 */
+	public boolean search(String text, int startIndex, TrieSearchResult result) {
+		if (text == null) {
+			throw new IllegalArgumentException("The parameter 'text' must not be null.");
+		}
+		if (result == null) {
+			throw new IllegalArgumentException("The parameter 'result' must not be null.");
+		}
+		int textLength = text.length();
+		int searchIndex;
+		char currentCharacter;
+		for (int textIndex = startIndex; textIndex < textLength; textIndex++) {
+			Node currentNode = this.root;
+			currentCharacter = text.charAt(textIndex);
+			searchIndex = textIndex;
+			String lastFoundWord = null;
+			do {
+				if (currentCharacter == currentNode.character) {
+					if (currentNode.word != null) {
+						if (this.longestMatchOption) {
+							// Just remember the word. We report it later.
+							lastFoundWord = currentNode.word;
+						} else {
+							result.matchedWord = currentNode.word;
+							result.matchedWordIndex = textIndex;
+							return true;
+							//trieSearchConsumer.onWordFound(text, currentNode.word, textIndex);
+						}
+					}
+					searchIndex += 1;
+					if (searchIndex >= textLength) {
+						break;
+					}
+					currentCharacter = text.charAt(searchIndex);
+					currentNode = currentNode.firstChild;
+				} else {
+					currentNode = currentNode.nextSibling;
+				}
+			} while (currentNode != null);
+			if (this.longestMatchOption) {
+				if (lastFoundWord != null) {
+					result.matchedWord = lastFoundWord;
+					result.matchedWordIndex = textIndex;
+					lastFoundWord = null;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
