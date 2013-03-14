@@ -49,7 +49,6 @@ import de.enough.polish.util.WrappedText;
  */
 public class FastSmileyTextEffect 
 extends TextEffect
-implements Trie.TrieSearchConsumer
 {
 
 	private static final Hashtable smileysByText = new Hashtable();
@@ -60,8 +59,6 @@ implements Trie.TrieSearchConsumer
 	
 	private boolean isSmileysFound;
 	private transient final TextSmileyLayout textSmileyLayout = new TextSmileyLayout();
-	private int	initPreviousSearchIndex;
-	private boolean	initIsAbortSearch;
 	
 	public static void addSmiley( Smiley smiley )
 	{
@@ -85,71 +82,64 @@ implements Trie.TrieSearchConsumer
 	{
 		// search for smileys, if none are registered or found just paint the text normally,
 		// otherwise split up the text, change the spacing/lineheight
-		this.isSmileysFound = false;
-		this.initIsAbortSearch = false;
-		this.initPreviousSearchIndex = 0;
 		this.textSmileyLayout.startInit(firstLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, font, parent.getPaddingVertical());
 		
-		searchTrie.search(text, this);
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		int startIndex = 0;
 		
-		if (this.isSmileysFound)
+		boolean found = searchTrie.search(text, startIndex, searchResult);
+		
+		
+		if (!found)
 		{
-			if ((this.initPreviousSearchIndex < text.length()-1) && (!this.initIsAbortSearch))
+			this.isSmileysFound = false;
+			super.wrap(parent, text, textColor, font, firstLineWidth, lineWidth, maxLines,
+					maxLinesAppendix, maxLinesAppendixPosition, wrappedText);
+		}
+		else
+		{
+			this.isSmileysFound = true;
+			boolean continueLayout = false;
+			while (found)
 			{
-				String textTail = text.substring(this.initPreviousSearchIndex);
+				Smiley smiley = (Smiley) smileysByText.get(searchResult.matchedWord);
+				if (smileyHeight == 0)
+				{
+					Image image = smiley.getImage();
+					if (image != null)
+					{
+						smileyWidth = image.getWidth();
+						smileyHeight = image.getHeight();
+					}
+				}
+				if (searchResult.matchedWordIndex > startIndex)
+				{
+					// ok, we need to add a new WrappedTextItem:
+					String intermediateText = text.substring(startIndex, searchResult.matchedWordIndex);
+					continueLayout = this.textSmileyLayout.add(intermediateText);
+					if (!continueLayout)
+					{
+						break;
+					}
+				}
+				continueLayout = this.textSmileyLayout.add(smiley);
+				if (!continueLayout)
+				{
+					break;
+				}
+
+				startIndex = searchResult.matchedWordIndex + searchResult.matchedWord.length();
+				found = searchTrie.search(text, startIndex, searchResult);
+			}
+			if (continueLayout)
+			{
+				String textTail = text.substring(startIndex);
 				this.textSmileyLayout.add(textTail);
 			}
 			this.textSmileyLayout.stopInit();
 			wrappedText.addLine("", this.textSmileyLayout.width);
-			//wrappedText.setMaxLineWidth(this.textSmileyLayout.width);
-			//System.out.println("smileys found in [" + text + "]. Height=" + this.textSmileyLayout.height + ", item=" + parent);
+
 		}
-		else
-		{
-			super.wrap(parent, text, textColor, font, firstLineWidth, lineWidth, maxLines,
-				maxLinesAppendix, maxLinesAppendixPosition, wrappedText);
-		}
-		
-		
-	}
-	
-	public void onWordFound(String searchText, String matchedWord, int matchedWordIndex)
-	{
-		if (this.initIsAbortSearch)
-		{
-			return; //TODO implement pull feature on Trie
-		}
-		this.isSmileysFound = true;
-		Smiley smiley = (Smiley) smileysByText.get(matchedWord);
-		if (smileyHeight == 0)
-		{
-			Image image = smiley.getImage();
-			if (image != null)
-			{
-				smileyWidth = image.getWidth();
-				smileyHeight = image.getHeight();
-			}
-		}
-		
-		if (matchedWordIndex > this.initPreviousSearchIndex)
-		{
-			// ok, we need to add a new WrappedTextItem:
-			String intermediateText = searchText.substring(this.initPreviousSearchIndex, matchedWordIndex);
-			boolean continueLayout = this.textSmileyLayout.add(intermediateText);
-			if (!continueLayout)
-			{
-				this.initIsAbortSearch = true;
-			}
-		}
-		if (!this.initIsAbortSearch)
-		{
-			boolean continueLayout = this.textSmileyLayout.add(smiley);
-			if (!continueLayout)
-			{
-				this.initIsAbortSearch = true;
-			}
-		}
-		this.initPreviousSearchIndex = matchedWordIndex + matchedWord.length();
 	}
 
 
