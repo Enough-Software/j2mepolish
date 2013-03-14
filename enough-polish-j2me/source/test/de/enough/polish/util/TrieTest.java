@@ -133,6 +133,23 @@ public class TrieTest extends TestCase {
 		found = trie.search(source, startIndex, searchResult);
 		assertFalse(found);
 	}
+	
+	public void testNoMatchWithResult() {
+		String source = "HelloWorld What is going on :-";
+		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
+		Trie trie = new Trie(SMILIES);
+		trie.setLongestMatchOption(false);
+		
+		int startIndex = 0;
+		boolean found = trie.search(source, startIndex, searchResult);
+		assertFalse(found);
+		
+		source = ":- HelloWorld What is going on";
+		startIndex = 0;
+		found = trie.search(source, startIndex, searchResult);
+		assertFalse(found);
+	}
+
 
 
 	public void testLongUnmatched() {
