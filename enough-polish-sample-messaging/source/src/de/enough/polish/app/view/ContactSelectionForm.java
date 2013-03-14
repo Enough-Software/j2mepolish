@@ -70,7 +70,7 @@ public class ContactSelectionForm extends FramedForm implements
 	public void showNotify()
 	{
 		super.showNotify();
-		if (false)
+		if (true)
 		{
 			return;
 		}
@@ -277,10 +277,8 @@ public class ContactSelectionForm extends FramedForm implements
 		public Item createItem(int index)
 		{
 			Contact contact = getContact(index);
-			//#style address_book_contact_item_two_columns
-			ContactChatItem item = new ContactChatItem(contact, false);
-			// #style contactItem
-			//StringItem item = new StringItem(null, contact.getFirstName() + " " +  contact.getLastName());
+			//#style contactItem
+			StringItem item = new StringItem(null, contact.getFirstName() + " " +  contact.getLastName());
 			item.setDefaultCommand(this.cmdSelectContact);
 			return item;
 		}
@@ -292,10 +290,8 @@ public class ContactSelectionForm extends FramedForm implements
 		public void populateItem(int itemIndex, Item item)
 		{
 			Contact contact = getContact(itemIndex);
-			ContactChatItem contactItem = (ContactChatItem) item;
-			contactItem.refresh(contact);
-//			StringItem stringItem = (StringItem) item;
-//			stringItem.setText(contact.getFirstName() + " " + contact.getLastName());
+			StringItem stringItem = (StringItem) item;
+			stringItem.setText(contact.getFirstName() + " " + contact.getLastName());
 		}
 
 

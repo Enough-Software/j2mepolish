@@ -49,13 +49,13 @@ public class ContactCollection
 	private void setup()
 	{
 		String[] firstNames = new String[]{ 
-				"Anna", "Andy", "Benny", "Chris", "Deeboorah", "Denise", "Eliza", "Frank", "Guz", "Heather", "Ivan", "Jim", "Kim", "Kimberley", "Liz", "Madlaine", "Michael", "Nele", "Olga", "Peter", "Robert", "Sina", "Tom", "Udo", "Vic", "Walt", "Yvy", "Zach"
+				"Anna", "Alicia", "Babette", "Chris", "Deeboorah", "Denise", "Eliza", "Frances", "Gabriella", "Heather", "Iris", "Josie", "Kim", "Kimberley", "Liz", "Madeline", "Madison", "Nele", "Naomi", "Olga", "Payton", "Riley", "Sina", "Trinity", "Ula", "Val", "Walida", "Yvy", "Zoey"
  		};
 		String[] lastNames = new String[]{ 
 				"Archer", "Beiley", "Baker", "Brewer", "Carter", "Chandler", "Cooper", "Cook", "Thatcher", "Walker", "Weaver", "Sawyer", "Slater", "Wright", "Brown", "Short", "Burton", "Hamilton", "Richardson"
  		};
 		Random random = new Random(System.currentTimeMillis());
-		int numberOfContacts = 1000;
+		int numberOfContacts = 1500;
 		while (numberOfContacts > 0)
 		{
 			String first = setupName(random, firstNames);
@@ -95,5 +95,12 @@ public class ContactCollection
 			isFirstRound = false;
 		}
 		return buffer.toString();
+	}
+
+	public Contact removeContact(int index)
+	{
+		Contact contact = getContact(index);
+		this.contactsList.remove(index);
+		return contact;
 	}
 }
