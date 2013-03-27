@@ -41,4 +41,28 @@ public class ItemChangedEvent
 	}
 	
 	
+	public String toString()
+	{
+		StringBuffer buffer = new StringBuffer();
+		switch (this.change)
+		{
+		case CHANGE_ADD:
+			buffer.append("add: ");
+			break;
+		case CHANGE_REMOVE:
+			buffer.append("remove: ");
+			break;
+		case CHANGE_SET:
+			buffer.append("set: ");
+			break;
+		case CHANGE_COMPLETE_REFRESH:
+			return "complete refresh";
+		default:
+			buffer.append("unknown change [").append(this.change).append("]: ");	
+		}
+		buffer.append("itemIndex=").append(this.itemIndex);
+		buffer.append(", item=").append(this.affectedItem);
+		return buffer.toString();
+	}
+	
 }
