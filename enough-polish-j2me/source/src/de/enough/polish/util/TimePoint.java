@@ -1,7 +1,7 @@
 /*
  * Created on Jun 29, 2010 at 10:41:21 PM.
  * 
- * Copyright (c) 2007 Robert Virkus / Enough Software
+ * Copyright (c) 2013 Robert Virkus / Enough Software
  *
  * This file is part of J2ME Polish.
  *
@@ -1108,6 +1108,28 @@ implements Externalizable, Comparator, Comparable
 			buffer.append(": ").append( this.timeZone.getID() );
 		}
 		buffer.append(" ~ ").append( super.toString() );
+		return buffer.toString();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toStringTime() {
+		StringBuffer buffer = new StringBuffer(100);
+		if (this.hour < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.hour ).append(':');
+		if (this.minute < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.minute ).append(':');
+		if (this.second < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.second ).append(':');
+		buffer.append( this.millisecond );
 		return buffer.toString();
 	}
 

@@ -27,6 +27,8 @@
  */
 package de.enough.polish.ui;
 
+import de.enough.polish.util.TimePoint;
+
 
 /**
  * A container that loads items from an ItemSource.
@@ -135,8 +137,8 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
-		//#debug
-		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event);
+		//#debug info
+		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event + " at " + TimePoint.now().toStringTime());
 		int change = event.getChange();
 		int itemIndex = event.getItemIndex();
 		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH || itemIndex == -1)
@@ -144,45 +146,60 @@ implements ItemConsumer
 			setItemSource(this.itemSource);
 			return;
 		}
-		if (change == ItemChangedEvent.CHANGE_ADD)
+		if (change == ItemChangedEvent.CHANGE_ADD || change == ItemChangedEvent.CHANGE_SET)
 		{
 			Item nextItem = event.getAffectedItem();
 			if (nextItem == null)
 			{
 				nextItem = this.itemSource.createItem(itemIndex);
 			}
-			if (itemIndex >= this.itemsList.size())
+			if (change == ItemChangedEvent.CHANGE_ADD)
 			{
-				if (!this.isInitialized)
+				if (itemIndex >= this.itemsList.size()-1)
 				{
-					add( nextItem );
+					if (!this.isInitialized)
+					{
+						add( nextItem );
+					}
+					else // this container is initialized already, just scroll down to the new item:
+					{
+						setInitialized(false);
+						add( nextItem );
+						int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
+						nextItem.relativeX = 0;
+						if (nextItem.isLayoutRight())
+						{
+							nextItem.relativeX = this.availContentWidth - nextItem.itemWidth;
+						}
+						else if (nextItem.isLayoutCenter())
+						{
+							nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
+						}
+						nextItem.relativeY = this.contentHeight + this.paddingVertical;
+						Item p = this;
+						while (p != null)
+						{
+							p.contentHeight += height;
+							p.itemHeight += height;
+							p = p.parent;
+						}
+						setInitialized(true);
+						if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+						{
+							scrollToBottom();
+						}
+					}
 				}
-				else // this container is initialized already, just scroll down to the new item:
+				else
 				{
-					setInitialized(false);
-					add( nextItem );
-					int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
-					nextItem.relativeX = 0;
-					nextItem.relativeY = this.contentHeight + this.paddingVertical;
-					Item p = this;
-					while (p != null)
-					{
-						p.contentHeight += height;
-						p.itemHeight += height;
-						p = p.parent;
-					}
-					setInitialized(true);
-					if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
-					{
-						scrollToBottom();
-					}
+					add( itemIndex, nextItem );
 				}
-			}
-			else
+			} 
+			else // if (change == ItemChangedEvent.CHANGE_SET)
 			{
-				add( itemIndex, nextItem );
+				set( itemIndex, nextItem );
 			}
-		} 
+		}
 		else if (change == ItemChangedEvent.CHANGE_REMOVE)
 		{
 			if (!this.isInitialized || (itemIndex < this.itemsList.size()-1))
@@ -209,15 +226,6 @@ implements ItemConsumer
 					scrollToBottom();
 				}
 			}
-		}
-		else if (change == ItemChangedEvent.CHANGE_SET)
-		{
-			Item nextItem = event.getAffectedItem();
-			if (nextItem == null)
-			{
-				nextItem = this.itemSource.createItem(itemIndex);
-			}
-			set( itemIndex, nextItem );
 		}
 	}
 	
