@@ -41,7 +41,7 @@ implements ItemConsumer
 	
 	private ItemSource itemSource;
 	private int distributionPreference;
-	private boolean isFirstInitialization;
+	private boolean	isEmpty;
 
 	/**
 	 * Creates a new container
@@ -96,38 +96,57 @@ implements ItemConsumer
 	 * @param itemSource the new item source
 	 * @throws NullPointerException when itemSource is null
 	 */
-	public void setItemSource( ItemSource itemSource) 
+	public void setItemSource(ItemSource itemSource) 
 	{
 		if (itemSource == null) {
 			throw new NullPointerException();
 		}
-		this.itemSource = itemSource;
-		itemSource.setItemConsumer(this);
-		this.distributionPreference = itemSource.getDistributionPreference();
-		int count = this.itemSource.countItems();
-		focusChild(-1);
-		this.itemsList.clear();
-		if (this.isInitialized)
+		synchronized (getSynchronizationLock())
 		{
-			this.contentHeight = 0;
-			this.itemHeight = this.paddingTop + this.paddingBottom + getBorderWidthTop() + getBorderWidthBottom() + (this.label != null ? this.label.itemHeight : 0);
-			this.backgroundHeight = this.itemHeight;
-			setScrollYOffset(0, false);
-		}
-		this.isFirstInitialization = true;
-		for (int itemIndex = 0; itemIndex < count; itemIndex++)
-		{
-			Item item = itemSource.createItem(itemIndex);
-			add(item);
-		}
-		if (count == 0)
-		{
-			Item item = itemSource.getEmptyItem();
-			if (item != null)
+			//#debug
+			System.out.println("before setItemSource: " + this.itemsList.size());
+			try 
 			{
-				add(item);
+				this.itemSource = itemSource;
+				itemSource.setItemConsumer(this);
+				this.distributionPreference = itemSource.getDistributionPreference();
+				int count = this.itemSource.countItems();
+				focusChild(-1);
+				this.itemsList.clear();
+				if (this.isInitialized)
+				{
+					this.contentHeight = 0;
+					this.itemHeight = this.paddingTop + this.paddingBottom + getBorderWidthTop() + getBorderWidthBottom() + (this.label != null ? this.label.itemHeight : 0);
+					this.backgroundHeight = this.itemHeight;
+					setScrollYOffset(0, false);
+				}
+				for (int itemIndex = 0; itemIndex < count; itemIndex++)
+				{
+					Item item = itemSource.createItem(itemIndex);
+					add(item);
+				}
+				if (count == 0)
+				{
+					Item item = itemSource.getEmptyItem();
+					if (item != null)
+					{
+						this.isEmpty = true;
+						add(item);
+					}
+				}
+				else
+				{
+					this.isEmpty = false;
+				}
+			} 
+			catch (Exception e)
+			{
+				//#debug error
+				System.out.println("setItemSource" + e);
 			}
 		}
+		//#debug
+		System.out.println("after setItemSource: " + this.itemsList.size());
 	}
 	
 	
@@ -138,7 +157,7 @@ implements ItemConsumer
 	public void onItemsChanged(ItemChangedEvent event)
 	{
 		//#debug info
-		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event + " at " + TimePoint.now().toStringTime());
+		System.out.println("itemsChanged, initialized=" + this.isInitialized + ", event=" + event + ", size=" + size()); //" at " + TimePoint.now().toStringTime());
 		int change = event.getChange();
 		int itemIndex = event.getItemIndex();
 		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH || itemIndex == -1)
@@ -155,6 +174,11 @@ implements ItemConsumer
 			}
 			if (change == ItemChangedEvent.CHANGE_ADD)
 			{
+				if (this.isEmpty)
+				{
+					this.isEmpty = false;
+					clear();
+				}
 				if (itemIndex >= this.itemsList.size()-1)
 				{
 					if (!this.isInitialized)
@@ -197,16 +221,24 @@ implements ItemConsumer
 			} 
 			else // if (change == ItemChangedEvent.CHANGE_SET)
 			{
-				set( itemIndex, nextItem );
+				if (itemIndex >= this.itemsList.size())
+				{
+					setItemSource(this.itemSource);
+				}
+				else
+				{
+					set( itemIndex, nextItem );
+				}
 			}
 		}
 		else if (change == ItemChangedEvent.CHANGE_REMOVE)
 		{
-			if (!this.isInitialized || (itemIndex < this.itemsList.size()-1))
+			int size = this.itemsList.size();
+			if (!this.isInitialized || (itemIndex < size - 1))
 			{
 				remove(itemIndex);
 			}
-			else // last element is removed
+			else if (itemIndex < size) // last element is removed
 			{
 				setInitialized(false);
 				Item prevItem = remove(itemIndex);
@@ -226,7 +258,13 @@ implements ItemConsumer
 					scrollToBottom();
 				}
 			}
+			else
+			{
+				setItemSource(this.itemSource);
+			}
 		}
+		//#debug
+		System.out.println("after: size=" + size() + ", source=" + this.itemSource.countItems());
 	}
 	
 	/*

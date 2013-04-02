@@ -1329,29 +1329,33 @@ implements UiElement, Animatable
 	 * Initialises this screen and informs all items about being painted soon.
 	 */
 	public void showNotify() {
+		int errorStep = 0;
 		//#if polish.Screen.callSuperEvents
 			super.showNotify();
 		//#endif
-
+			
 		//#debug
 		System.out.println("showNotify " + this + " isInitialized=" + this.isInitialized);
 		try {
-			
+			errorStep = 1;
 			//#ifdef polish.Screen.showNotifyCode:defined
 				//#include ${polish.Screen.showNotifyCode}
 			//#endif
 			if (!this.isInitialized) {
+				errorStep = 2;
 				int w = getScreenFullWidth();
 				int h = getScreenFullHeight();
 				init( w, h );
 			}
 			//#if polish.blackberry
 				else {
+					errorStep = 3;
 					notifyFocusSet(getCurrentItem());
 				}
 			//#endif
 			//#if polish.css.repaint-previous-screen
 				if (this.repaintPreviousScreen) {
+					errorStep = 4;
 					//#if !polish.Bugs.noTranslucencyWithDrawRgb
 						if (this.previousScreenOverlayBackground == null) {
 							//#if polish.color.overlay:defined
@@ -1425,14 +1429,16 @@ implements UiElement, Animatable
 					 */
 				}
 			//#endif
-			
+				
 			//#if tmp.handleEvents
+				errorStep = 5;
 				if (!this.hasBeenShownBefore) {
 					EventManager.fireEvent( EventManager.EVENT_SHOW_FIRST_TIME,  this, null );
 					this.hasBeenShownBefore = true;
 				}
 				EventManager.fireEvent( EventManager.EVENT_SHOW,  this, null );
 			//#endif
+			errorStep = 6;
 			// inform all root items that they belong to this screen
 			// and that they will be shown soon:
 			Item[] items = getRootItems();
@@ -1441,15 +1447,18 @@ implements UiElement, Animatable
 				item.screen = this;
 				item.showNotify();
 			}
+			errorStep = 7;
 			if (this.container != null) {
 				this.container.showNotify();
 			}
 			//#ifndef polish.skipTicker
+				errorStep = 8;
 				if (this.ticker != null) {
 					this.ticker.showNotify();
 				}
 			//#endif
 			//#ifdef tmp.usingTitle
+				errorStep = 9;
 				if (this.title != null) {
 					this.title.showNotify();
 				}
@@ -1458,6 +1467,7 @@ implements UiElement, Animatable
 				this.ignoreTitleCall = true;
 			//#endif
 			//#ifdef tmp.useExternalMenuBar
+				errorStep = 10;
 				this.menuBar.showNotify();
 			//#endif
 			
@@ -1509,7 +1519,7 @@ implements UiElement, Animatable
 //			}
 		} catch (Exception e) {
 			//#debug error
-			System.out.println("error while calling showNotify" + e );
+			System.out.println("error while calling showNotify at step " + errorStep + e );
 		}
 
 		// register this screen:

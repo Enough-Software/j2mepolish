@@ -28,6 +28,7 @@
 package de.enough.polish.ui;
 
 import de.enough.polish.util.IntHashMap;
+import de.enough.polish.util.TimePoint;
 
 /**
  * A container that contains only uniform items, meaning all items have the same type and same height.
@@ -116,7 +117,7 @@ implements ItemConsumer
 	{
 		//#debug info
 		System.out.println("uc init " + firstLineWidth + ", " + availWidth + ", " + availHeight);
-		synchronized (this.itemsList) 
+		synchronized (getSynchronizationLock()) 
 		{
 			this.itemsList.clear();
 			int count = this.itemSource.countItems();
@@ -449,13 +450,15 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
-		int change = event.getChange();
-		int itemIndex = event.getItemIndex();
-		//#debug info
-		System.out.println("onItemsChanged: change=" + change + ", item=" + itemIndex);
-		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
+		synchronized (getSynchronizationLock())
 		{
-			synchronized (getSynchronizationLock())
+			int change = event.getChange();
+			int itemIndex = event.getItemIndex();
+			Item affectedItem = event.getAffectedItem();
+			//#debug info
+			System.out.println("onItemsChanged: change=" + event + ", index=" + itemIndex + ", at " + TimePoint.now().toStringTime());
+			if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH 
+					|| (itemIndex == -1 && affectedItem == null))
 			{
 				this.isIgnoreYOffsetChange = true;
 				boolean refocus = (this.isFocused && this.focusedItem != null);
@@ -469,20 +472,16 @@ implements ItemConsumer
 					focusChild(0);
 				}
 				this.isIgnoreYOffsetChange = false;
-			}
-		} 
-		else if ((itemIndex == this.focusedIndex) || (itemIndex == -1))
-		{
-			itemIndex = this.focusedIndex; // in case the index is not known (-1), the item _could_ be the currently focused item
-			if (itemIndex != -1)
+			} 
+			else if ((itemIndex == this.focusedIndex) || (itemIndex == -1))
 			{
-				if (change == ItemChangedEvent.CHANGE_SET || change == ItemChangedEvent.CHANGE_ADD)
+				itemIndex = this.focusedIndex; // in case the index is not known (-1), the item _could_ be the currently focused item
+				if (itemIndex != -1)
 				{
-					synchronized (getSynchronizationLock())
+					if (change == ItemChangedEvent.CHANGE_SET || change == ItemChangedEvent.CHANGE_ADD)
 					{
 						if ((itemIndex >= this.childStartIndex) && (itemIndex < this.childStartIndex + this.itemsList.size()))
 						{
-							Item affectedItem = event.getAffectedItem();
 							if (affectedItem == null)
 							{
 								affectedItem = (Item) this.itemsList.get(itemIndex - this.childStartIndex);
@@ -496,19 +495,14 @@ implements ItemConsumer
 							setScrollYOffset(offset, false);
 							this.isIgnoreYOffsetChange = false;
 						}
-								
 					}
-				}
-				else if (change == ItemChangedEvent.CHANGE_REMOVE)
-				{
-					synchronized (getSynchronizationLock())
+					else if (change == ItemChangedEvent.CHANGE_REMOVE)
 					{
 						this.isIgnoreYOffsetChange = true;
 						focusChild(-1);
 						setScrollYOffset(0);
 						if (this.itemSource.countItems() > 0)
 						{
-							Item affectedItem = event.getAffectedItem();
 							if (affectedItem == null)
 							{
 								affectedItem = (Item) this.itemsList.get(0);

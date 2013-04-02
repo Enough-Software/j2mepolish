@@ -244,7 +244,7 @@ public class Container extends Item {
 			//#debug
 			System.out.println("setScrollHeight(): scrolling to item=" + item + " with y=" + item.relativeY + ", height=" + height);
 			scroll( 0, item, true);
-			synchronized(this.itemsList) {
+			synchronized(getSynchronizationLock()) {
 				this.isScrollRequired = false;
 			}
 		}
@@ -322,7 +322,7 @@ public class Container extends Item {
 	public void add( Item item ) {
 		//#debug
 		System.out.println("adding " + item + " to " + this);
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			item.relativeY =  0;
 			item.internalX = Item.NO_POSITION_SET;
 			item.parent = this;
@@ -385,7 +385,7 @@ public class Container extends Item {
 	 * @throws IndexOutOfBoundsException when the index < 0 || index >= size()
 	 */
 	public void add( int index, Item item ) {
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			item.relativeY = 0;
 			item.internalX = NO_POSITION_SET;
 			item.parent = this;
@@ -560,7 +560,7 @@ public class Container extends Item {
 			// this can cause deadlocks with Container.initContent().
 			synchronized (de.enough.polish.blackberry.midlet.MIDlet.getEventLock()) {
 		//#endif
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			removedItem = (Item) this.itemsList.remove(index);
 			if (removedItem == this.scrollItem) {
 				this.scrollItem = null;
@@ -777,7 +777,7 @@ public class Container extends Item {
 	 */
 	public void clear() {
 		//System.out.println("CLEARING CONTAINER " + this);
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			//#if tmp.supportViewType
 				if (this.containerView != null) {
 					this.containerView.focusedIndex = -1;
@@ -1286,7 +1286,7 @@ public class Container extends Item {
 			if (!isInitialized() && item.relativeY == 0) {
 				// defer scrolling to init at a later stage:
 				//System.out.println( this + ": setting scrollItem to " + item);
-				synchronized(this.itemsList) {
+				synchronized(getSynchronizationLock()) {
 					this.scrollItem = item;
 				}
 				return true;
@@ -1431,7 +1431,7 @@ public class Container extends Item {
 		super.setAppearanceMode(appearanceMode);
 		// this is used in initContent() to circumvent the 
 		// reversal of the previously set appearance mode
-		synchronized(this.itemsList) {
+		synchronized(getSynchronizationLock()) {
 			this.appearanceModeSet = true;
 		}
 	}
@@ -1486,7 +1486,7 @@ public class Container extends Item {
 				}
 			}
 		//#endif
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			int myContentWidth = 0;
 			int myContentHeight = 0;
 			Item[] myItems = getItems();
@@ -2785,7 +2785,7 @@ public class Container extends Item {
 		//#endif
 			
 		//#if polish.css.expand-items
-			synchronized(this.itemsList) {
+			synchronized(getSynchronizationLock()) {
 				Boolean expandItemsBool = style.getBooleanProperty("expand-items");
 				if (expandItemsBool != null) {
 					this.isExpandItems = expandItemsBool.booleanValue();
