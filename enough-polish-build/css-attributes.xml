@@ -1346,6 +1346,7 @@
     	<mapping from="gauge-rotating-circles" to="new de.enough.polish.ui.gaugeviews.RotatingCirclesGaugeView()" appliesTo="Gauge" />
     	<mapping from="gauge-images" to="new de.enough.polish.ui.gaugeviews.ImagesGaugeView()" appliesTo="Gauge" />
 		<mapping from="gauge-clock-instrument" to="new de.enough.polish.ui.gaugeviews.ClockInstrumentGaugeView()" appliesTo="Gauge" />
+		<mapping from="gauge-pie" to="new de.enough.polish.ui.gaugeviews.PieGaugeView()" appliesTo="Gauge" />
 
 
 		<!-- 
