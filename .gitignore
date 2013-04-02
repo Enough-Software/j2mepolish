@@ -3,6 +3,7 @@ CVS
 .launch
 .polishSettings
 .binaryeditor.settings
+.metadata
 
 bin/
 /*/build/
