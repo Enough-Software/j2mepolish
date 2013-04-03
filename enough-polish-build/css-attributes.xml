@@ -2329,7 +2329,7 @@
 		name="include-label"
 		type="boolean"
 		appliesTo="Item"
-		description="Usually the label of an item is rendered separately of the item's content. You can expand the background and border over the label as well using this attribute." 
+		description="Usually the label of an item is rendered separately of the item's content. You can expand the background and border over the label as well using this attribute. If you want to inline the label so that it sits on the same line as the content use inline-label instead." 
 		default="false"
 		id="132"
 	/>

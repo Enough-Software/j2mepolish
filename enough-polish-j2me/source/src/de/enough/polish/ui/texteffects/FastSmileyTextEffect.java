@@ -58,10 +58,14 @@ extends TextEffect
 	private static int smileyWidth;
 	
 	private boolean isSmileysFound;
-	private transient final TextSmileyLayout textSmileyLayout = new TextSmileyLayout();
+	//private transient final TextSmileyLayout textSmileyLayout = new TextSmileyLayout();
+	private transient final LineBasedLayout textSmileyLayout = new LineBasedLayout();
+	
+	private static boolean isConfigured;
 	
 	public static void addSmiley( Smiley smiley )
 	{
+		isConfigured = true;
 		smileysByText.put(smiley.text, smiley);
 		searchTrie.addWord(smiley.text);
 	}
@@ -80,9 +84,29 @@ extends TextEffect
 			String maxLinesAppendix, int maxLinesAppendixPosition,
 			WrappedText wrappedText)
 	{
+		if (!isConfigured)
+		{
+			// add default configuration:
+			Smiley smiley;
+			smiley = new Smiley(":-)", "/emoticon_smile.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":)", "/emoticon_smile.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":-(", "/emoticon_frown.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":(", "/emoticon_frown.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":-D", "/emoticon_laugh.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":D", "/emoticon_laugh.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":'-(", "/emoticon_cry.png");
+			addSmiley(smiley);
+			smiley = new Smiley(":'(", "/emoticon_cry.png");
+			addSmiley(smiley);
+		}
 		// search for smileys, if none are registered or found just paint the text normally,
 		// otherwise split up the text, change the spacing/lineheight
-		this.textSmileyLayout.startInit(firstLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, font, parent.getPaddingVertical());
 		
 		Trie.TrieSearchResult searchResult = new Trie.TrieSearchResult();
 		int startIndex = 0;
@@ -98,6 +122,7 @@ extends TextEffect
 		}
 		else
 		{
+			this.textSmileyLayout.startInit(firstLineWidth, lineWidth, maxLines, maxLinesAppendix, maxLinesAppendixPosition, font, parent.getPaddingVertical());
 			this.isSmileysFound = true;
 			boolean continueLayout = false;
 			while (found)
@@ -114,7 +139,7 @@ extends TextEffect
 				}
 				if (searchResult.matchedWordIndex > startIndex)
 				{
-					// ok, we need to add a new WrappedTextItem:
+					// ok, we need to insert text first:
 					String intermediateText = text.substring(startIndex, searchResult.matchedWordIndex);
 					continueLayout = this.textSmileyLayout.add(intermediateText);
 					if (!continueLayout)
@@ -165,9 +190,9 @@ extends TextEffect
 	 */
 	public int getFontHeightOfFirstLine()
 	{
-		if (this.isSmileysFound && this.textSmileyLayout.isFirstLineContainsSmiley)
+		if (this.isSmileysFound)
 		{
-			return smileyHeight;
+			return ((SmileyTextLine)this.textSmileyLayout.lines.get(0)).lineHeight;
 		}
 		return super.getFontHeightOfFirstLine();
 	}
@@ -271,45 +296,48 @@ extends TextEffect
 	private static class SmileyTextItem 
 	{
 		Smiley smiley;
-		WrappedText wrappedText;
+		String text;
 		int x;
-		int y;
 		
-		public SmileyTextItem(Smiley smiley, int x, int y)
+		public SmileyTextItem(Smiley smiley, int x)
 		{
 			this.smiley = smiley;
 			this.x = x;
-			this.y = y;
 		}
 
-		public SmileyTextItem(WrappedText wrappedText, int x, int y)
+		public SmileyTextItem(String text, int x)
 		{
-			this.wrappedText = wrappedText;
+			this.text = text;
 			this.x = x;
-			this.y = y;
 		}
+
 	}
 
-	private static class TextSmileyLayout
+	
+	private static class LineBasedLayout
 	{
+		private ArrayList lines;
+		private SmileyTextLine currentLine;
 		public int	width;
-		private final ArrayList elementsList = new ArrayList();
-		private int initX;
-		private int initY;
+		private int height;
+		
 		private int initLineWidth;
+		private int initFirstLineWidth;
 		private int initMaxLines;
-		private int initCurrentLine;
-		private boolean initCurrentLineContainsSmiley;
 		private Font	initFont;
 		private int	initFontHeight;
 		private int	initPaddingVertical;
-		private int height;
 		private String	initMaxLinesAppendix;
 		private int	initMaxLinesAppendixPosition;
-		boolean	isFirstLineContainsSmiley;
+		
+		public LineBasedLayout()
+		{
+			this.lines = new ArrayList();
+		}
 		
 		public void startInit(int firstLineWidth, int lineWidth, int maxLines, String maxLinesAppendix, int maxLinesAppendixPosition, Font font, int paddingVertical)
 		{
+			this.initFirstLineWidth = firstLineWidth;
 			this.initLineWidth = lineWidth;
 			this.initMaxLines = maxLines;
 			this.initMaxLinesAppendix = maxLinesAppendix;
@@ -318,79 +346,77 @@ extends TextEffect
 			this.initFontHeight = font.getHeight();
 			this.initPaddingVertical = paddingVertical;
 			
-			this.initCurrentLine = 0;
-			this.initCurrentLineContainsSmiley = false;
-			this.initX = lineWidth - firstLineWidth;
-			this.initY = 0;
 			this.width = 0;
+			this.height = 0;
 			
-			this.elementsList.clear();
+			this.lines.clear();
+			this.currentLine = new SmileyTextLine();
+			this.lines.add(this.currentLine);
 			//System.out.println("startInitialization: lineWidth=" + lineWidth  + ", smileyWidth=" + smileyWidth);
 		}
 		
 		public void stopInit()
 		{
 			this.initFont = null;
-			if (this.initX == 0)
-			{
-				this.height = this.initY;
-			}
-			else
-			{
-				this.height = this.initY + this.initFontHeight;
-			}
-			if (this.initX > this.width)
-			{
-				this.width = this.initX;
-			}
+			lineBreak();
 		}
 		
+		private SmileyTextLine checkLineBreak(int width)
+		{
+			SmileyTextLine current = this.currentLine;
+			if (current.lineWidth + width > this.initFirstLineWidth)
+			{
+				lineBreak();
+				current = new SmileyTextLine();
+				this.lines.add(current);
+				this.currentLine = current;
+			}
+			return current;
+		}
+		
+		private void lineBreak()
+		{
+			SmileyTextLine current = this.currentLine;
+			if (current.lineWidth > this.width)
+			{
+				this.width = current.lineWidth;
+			}
+			this.height += current.lineHeight;
+			if (lines.size() > 1)
+			{
+				this.height +=  this.initPaddingVertical;
+			}
+			this.initFirstLineWidth = this.initLineWidth;
+
+		}
 		public boolean add( Smiley smiley )
 		{
-//			System.out.println("adding smiley [" + smiley.text + "], initX=" + this.initX + ", initY=" + this.initY + ", containsSmiley=" + this.initCurrentLineContainsSmiley);
-			if (this.initY == 0)
+			SmileyTextLine current = this.currentLine;
+			current.addSmiley(smiley);
+			// make sure at least another smiley fits:
+			checkLineBreak(smileyWidth);
+			if ((this.initMaxLines != TextUtil.MAXLINES_UNLIMITED) &&  (this.lines.size() > this.initMaxLines))
 			{
-				this.isFirstLineContainsSmiley = true;
-			}
-			if (this.initX == 0 || this.elementsList.size() == 0)
-			{
-				this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
-				this.initCurrentLineContainsSmiley = true;
-			}
-			SmileyTextItem item = new SmileyTextItem(smiley, this.initX, this.initY);
-			this.elementsList.add(item);
-			int x = this.initX + smileyWidth;
-			if (x + smileyWidth >= this.initLineWidth) 
-			{
-				this.initCurrentLine++;
-				if (this.initCurrentLine >= this.initMaxLines)
-				{
-					return false;
-				}
-				this.initX = 0;
-				this.initY += this.initFontHeight + this.initPaddingVertical;
-				this.initCurrentLineContainsSmiley = false;
-			}
-			else
-			{
-				this.initX = x;
-				this.initCurrentLineContainsSmiley = true;
-				if (x > this.width)
-				{
-					this.width = x;
-				}
+				return false;
 			}
 			return true;
 		}
 		
 		public boolean add(String text)
 		{
+			if (text.length() == 0)
+			{
+				return true;
+			}
 			int maxLines = this.initMaxLines;
 			if (maxLines != TextUtil.MAXLINES_UNLIMITED)
 			{
-				maxLines -= this.initCurrentLine;
+				maxLines -= this.lines.size() - 1;
 			}
-			if (this.initX == 0 && text.charAt(0) == ' ')
+			SmileyTextLine current = this.currentLine;
+			
+			// remove space at beginning of a line:
+			if (current.lineWidth == 0 && text.charAt(0) == ' ')
 			{
 				if (text.length() == 1)
 				{
@@ -399,172 +425,138 @@ extends TextEffect
 				text = text.substring(1);
 			}
 			WrappedText wrappedText = new WrappedText();
-			TextUtil.wrap(text, this.initFont, this.initLineWidth - this.initX, this.initLineWidth, this.initMaxLines, this.initMaxLinesAppendix, this.initMaxLinesAppendixPosition, wrappedText);
+			TextUtil.wrap(text, this.initFont, this.initFirstLineWidth - current.lineWidth, this.initLineWidth, maxLines, this.initMaxLinesAppendix, this.initMaxLinesAppendixPosition, wrappedText);
 			if (wrappedText.getMaxLineWidth() > this.width)
 			{
 				this.width = wrappedText.getMaxLineWidth();
 			}
-			//System.out.println("adding text [" + text + "], initX=" + this.initX + ", initY=" + this.initY + ", lastLineWidth=" + wrappedText.getLineWidth(wrappedText.size()-1));
-			SmileyTextItem wrappedTextItem = new SmileyTextItem(wrappedText, this.initX, this.initY);
-			this.elementsList.add(wrappedTextItem);
 			int wrappedTextSize = wrappedText.size();
 			if (wrappedTextSize == 1) // only a single line of text
 			{
-				int x = this.initX + wrappedText.getMaxLineWidth();
-				if (x + smileyWidth >= this.initLineWidth)
-				{
-					this.initCurrentLine++;
-					if (this.initCurrentLine >= this.initMaxLines)
-					{
-						return false;
-					}
-					this.initX = 0;
-					this.initCurrentLineContainsSmiley = false;
-					this.initY += this.initFontHeight + this.initPaddingVertical;
-				}
-				else // there is still space left on the current line:
-				{
-					this.initX = x;
-					if (!this.initCurrentLineContainsSmiley)
-					{
-						if (this.initY == 0)
-						{
-							this.isFirstLineContainsSmiley = true;
-						}
-						wrappedTextItem.y += smileyHeight - this.initFontHeight - this.initPaddingVertical;
-						this.initY += smileyHeight - this.initFontHeight - this.initPaddingVertical;
-					}
-				}
+				current.addText(text, wrappedText.getMaxLineWidth(), this.initFontHeight);
 			}
 			else // there is more than one line wrapped:
 			{
-				int lastLineWidth = wrappedText.getLineWidth(wrappedTextSize-1);
-				if (lastLineWidth + smileyWidth >= this.initLineWidth)
+				for (int wrappedLineIndex=0; wrappedLineIndex < wrappedTextSize; wrappedLineIndex++)
 				{
-					this.initX = 0;
-					wrappedTextSize++;
-					this.initCurrentLine += wrappedTextSize;
+					String lineText = wrappedText.getLine(wrappedLineIndex);
+					int lineWidth = wrappedText.getLineWidth(wrappedLineIndex);
+					current.addText(lineText, lineWidth, this.initFontHeight);
+					if (wrappedLineIndex < wrappedTextSize - 1)
+					{
+						lineBreak();
+						current = new SmileyTextLine();
+						this.lines.add(current);
+						this.currentLine = current;
+					}
 				}
-				else
-				{
-					this.initX = lastLineWidth;
-					this.initCurrentLine += wrappedTextSize - 1;	
-					wrappedTextSize--;
-				}
-				int y = this.initY;
-				if (this.initCurrentLineContainsSmiley)
-				{
-					y += smileyHeight + this.initPaddingVertical;
-					this.initCurrentLineContainsSmiley = false;
-					wrappedTextSize--;
-				}
-				y += wrappedTextSize * (this.initFontHeight + this.initPaddingVertical) - this.initPaddingVertical;
-				this.initY = y;
-				if (this.initCurrentLine >= this.initMaxLines)
-				{
-					return false;
-				}
+
 			}
-			return true;
+			// make sure at least another smiley fits:
+			checkLineBreak(smileyWidth);
+			return (maxLines == TextUtil.MAXLINES_UNLIMITED) || (this.lines.size() <= maxLines);
 		}
 		
 		public void drawStrings(int x, int y, int leftBorder, int rightBorder, int maxWidth, int layout, Graphics g)
 		{
-			x = leftBorder;
+			//System.out.println("draw");
+			//x = leftBorder;
 			boolean isLayoutRight = false;
 			boolean isLayoutCenter = false;
-			int centerX = 0;
 			if ( ( layout & Item.LAYOUT_CENTER ) == Item.LAYOUT_CENTER ) {
 				isLayoutCenter = true;
-				centerX = leftBorder + (rightBorder - leftBorder) / 2;
 			} else if ( ( layout & Item.LAYOUT_RIGHT ) == Item.LAYOUT_RIGHT ) {
 				isLayoutRight = true;
 			}
-			int anchor = Graphics.TOP | Graphics.LEFT;
-			// adjust the painting according to the layout:
-			if (isLayoutRight) {
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.RIGHT;
-				//#else
-					anchor = Graphics.TOP | Graphics.RIGHT;
-				//#endif
-			} else if (isLayoutCenter) {
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.HCENTER;
-				//#else
-					anchor = Graphics.TOP | Graphics.HCENTER;
-				//#endif
-			} else {
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.LEFT;
-				//#else
-					anchor = Graphics.TOP | Graphics.LEFT;
-				//#endif
-			}
-			int lineHeight = this.initFontHeight + this.initPaddingVertical;
 			
-			Object[] elements = this.elementsList.getInternalArray();
-			int elementsSize = this.elementsList.size();
-			boolean isLastElement = false;
-			for (int elementsIndex = 0; elementsIndex < elementsSize; elementsIndex++)
+			Object[] lines = this.lines.getInternalArray();
+			int linesSize = this.lines.size();
+			//#if !polish.Bugs.needsBottomOrientiationForStringDrawing
+				y += this.initFontHeight;
+			//#endif
+			int lineX;
+			int availableLineWidth = rightBorder - x;
+			int smileyTextDiff = smileyHeight - this.initFontHeight;
+			for (int lineIndex = 0; lineIndex < linesSize; lineIndex++)
 			{
-				if (elementsIndex == elementsSize -1) 
+				SmileyTextLine line = (SmileyTextLine) lines[lineIndex];
+				lineX = x;
+				if (isLayoutRight)
 				{
-					isLastElement = true;
+					lineX = rightBorder - line.lineWidth;
 				}
-				SmileyTextItem item = (SmileyTextItem) elements[elementsIndex];
-				WrappedText textLines = item.wrappedText;
-				if (textLines == null)
+				else if (isLayoutCenter)
 				{
-					// draw the smiley:
-					Image image = item.smiley.getImage();
-					if (image != null)
-					{
-						//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-							g.drawImage(image, x + item.x, y + item.y, Graphics.BOTTOM | Graphics.LEFT);
-						//#else
-							g.drawImage(image, x + item.x, y + item.y, Graphics.TOP | Graphics.LEFT);
-						//#endif
-					}
-				} 
-				else
-				{
-					String lineText;
-					int lineX = x + item.x;
-					int lineY = y + item.y;
-
-					if (isLayoutRight) 
-					{
-						lineX = rightBorder;
-					} 
-					else if (isLayoutCenter) 
-					{
-						lineX = centerX;
-					}
-					
-					Object[] lineObjects = textLines.getLinesInternalArray();
-					int linesSize = textLines.size();
-					for (int linesIndex = 0; linesIndex < linesSize; linesIndex++) 
-					{
-						lineText = (String) lineObjects[linesIndex];
-						g.drawString( lineText, lineX, lineY, anchor);
-						if ((linesIndex < linesSize - 2) || isLastElement)
-						{
-							lineY += lineHeight;
-						} else {
-							lineY += smileyHeight;
-						}
-						if (!isLayoutCenter && !isLayoutRight)
-						{
-							lineX = leftBorder;
-						}
-					}
+					lineX = x + (availableLineWidth - line.lineWidth)/2;
 				}
+				line.paint(lineX, y, smileyTextDiff, g);
+				availableLineWidth = rightBorder - leftBorder;
+				x = leftBorder;
+				y += line.lineHeight + this.initPaddingVertical;
 			}
 			
 		}
-
 	}
-
+	
+	private static class SmileyTextLine
+	{
+		int lineWidth;
+		int lineHeight;
+		
+		private boolean isContainsSmiley;
+		
+		private ArrayList elements;
+		
+		public SmileyTextLine()
+		{
+			elements = new ArrayList();
+		}
+		public void addText(String text, int width, int fontHeight)
+		{
+			SmileyTextItem item = new SmileyTextItem(text, this.lineWidth);
+			elements.add(item);
+			this.lineWidth += width;
+			if (fontHeight > this.lineHeight)
+			{
+				this.lineHeight = fontHeight;
+			}
+		}
+		
+		public void addSmiley(Smiley smiley)
+		{
+			
+			SmileyTextItem item = new SmileyTextItem(smiley, this.lineWidth);
+			elements.add(item);
+			this.lineWidth += smileyWidth;
+			if (smileyHeight > this.lineHeight)
+			{
+				this.lineHeight = smileyHeight;
+			}
+			this.isContainsSmiley = true;
+		}
+		
+		public void paint(int x, int y, int smileyTextDiff, Graphics g)
+		{
+			int size = this.elements.size();
+			Object[] items = this.elements.getInternalArray();
+			int yAdjust = 0;
+			if (this.isContainsSmiley)
+			{
+				yAdjust = smileyTextDiff;
+			}
+			for (int i = 0; i < size; i++) 
+			{
+				SmileyTextItem item = (SmileyTextItem)items[i];
+				if (item.text != null)
+				{
+					g.drawString(item.text, x + item.x, y + yAdjust, Graphics.BOTTOM | Graphics.LEFT);
+				}
+				else
+				{
+					g.drawImage(item.smiley.getImage(), x + item.x, y + yAdjust, Graphics.BOTTOM | Graphics.LEFT);
+				}
+			}
+		}
+	}
 
 }

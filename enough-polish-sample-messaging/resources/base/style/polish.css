@@ -182,6 +182,28 @@ info {
 	background-color: red;
 }
 
+.simpleMessage {
+	text-effect: smiley-extended;
+	label-style: nameLabel;
+	inline-label: true;
+}
+
+.nameLabel {
+	font-style: bold;
+}
+
+.simpleMessageFromMe extends simpleMessage
+{
+	layout: left;
+	background-color: silver;
+}
+
+.simpleMessageFromYou extends simpleMessage
+{
+	layout: right;
+	background-color: #faa;
+}
+
 /*********************   CONTACT FORM   ******************************************************************************************************/
 
 .contactList {

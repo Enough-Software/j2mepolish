@@ -836,6 +836,7 @@ public class StringItem extends Item
 		this.isTextInitializationRequired = false;
 		this.lastAvailableContentWidth = availWidth;
 		this.textLines.clear();
+		int firstLineContentWidth;
 		//#if polish.css.text-wrap
 			if ( this.useSingleLine ) {
 				this.availableTextWidth = availWidth;
@@ -850,6 +851,7 @@ public class StringItem extends Item
 					this.clipText = false;
 					this.contentWidth = myTextWidth;
 				}
+				firstLineContentWidth = this.contentWidth;
 				this.contentHeight = getFontHeight();
 			} else {
 		//#endif
@@ -867,24 +869,35 @@ public class StringItem extends Item
 					}
 				//#endif
 				this.contentWidth = maxWidth;
+				firstLineContentWidth = lines.getLineWidth(0);
 		//#if polish.css.text-wrap
 			}
 		//#endif
-//		if (this.textEffect != null)
-//			System.out.println("init: padding-vertical=" + this.paddingVertical + ", paddingTop=" + this.paddingTop + " for " + this.text);
+	
+	//				if (this.textEffect != null)
+	//					System.out.println("init: padding-vertical=" + this.paddingVertical + ", paddingTop=" + this.paddingTop + " for " + this.text);
+		if (this.useSingleRow && (this.contentHeight > 0) && (this.label != null))
+		{
+			//#if polish.css.text-effect
+				if (this.textEffect != null)
+				{
+					int fontHeightFirstLine = this.textEffect.getFontHeightOfFirstLine();
+					int fontHeight = this.textEffect.getFontHeight();
+					if (fontHeightFirstLine != fontHeight)
+					{
+						this.label.relativeY = fontHeightFirstLine - fontHeight;
+					}
+				}
+			//#endif
+			if (firstLineContentWidth + this.label.itemWidth + this.paddingHorizontal > this.contentWidth)
+			{
+				this.contentWidth = firstLineContentWidth + this.label.itemWidth + this.paddingHorizontal;
+			}
+		}
+		
+
 		this.lastContentWidth = this.contentWidth;
 		this.lastContentHeight = this.contentHeight;
-		//#if polish.css.text-effect
-			if (this.useSingleRow && (this.textEffect != null) && (this.contentHeight > 0) && (this.label != null))
-			{
-				int fontHeightFirstLine = this.textEffect.getFontHeightOfFirstLine();
-				int fontHeight = this.textEffect.getFontHeight();
-				if (fontHeightFirstLine != fontHeight)
-				{
-					this.label.relativeY = fontHeightFirstLine - fontHeight;
-				}
-			}
-		//#endif
 	}
 	
 	/**

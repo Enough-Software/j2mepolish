@@ -37,6 +37,7 @@ import de.enough.polish.app.model.Message;
 import de.enough.polish.app.view.ContactSelectionForm;
 import de.enough.polish.app.view.MainMenuList;
 import de.enough.polish.app.view.MessageForm;
+import de.enough.polish.app.view.SimpleMessageForm;
 import de.enough.polish.io.RmsStorage;
 import de.enough.polish.ui.Alert;
 import de.enough.polish.ui.AlertType;
@@ -84,8 +85,9 @@ implements ApplicationInitializer, CommandListener
 	private static final int MAIN_ACTION_START = 0;
 	private static final int MAIN_ACTION_STOP = 1;
 	private static final int MAIN_ACTION_SELECT_CONTACT = 2;
-	private static final int MAIN_ACTION_MESSAGES = 3;
-	private static final int MAIN_ACTION_EXIT = 4;
+	private static final int MAIN_ACTION_CHAT_COMPLEX = 3;
+	private static final int MAIN_ACTION_CHAT_SIMPLE = 4;
+	private static final int MAIN_ACTION_EXIT = 5;
 	
 	private SimpleScreenHistory screenHistory;
 	private int busyIndicators;
@@ -170,7 +172,8 @@ implements ApplicationInitializer, CommandListener
 		list.addEntry("Start Busy Indicator");
 		list.addEntry("Stop Busy Indicator");
 		list.addEntry("Select Contact");
-		list.addEntry("Messages");
+		list.addEntry("Chat");
+		list.addEntry("Simple Chat");
 		list.addEntry(Locale.get("cmd.exit"));
 		return list;
 	}
@@ -220,6 +223,10 @@ implements ApplicationInitializer, CommandListener
 			if (handleCommandMessageForm( cmd, (MessageForm)disp)) {
 				return;
 			}
+		} else if (disp instanceof SimpleMessageForm) {
+			if (handleCommandSimpleMessageForm( cmd, (SimpleMessageForm)disp)) {
+				return;
+			}
 		} else if (disp instanceof ContactSelectionForm) {
 			if (handleCommandContactSelectionForm(cmd, (ContactSelectionForm)disp)) {
 				return;
@@ -258,7 +265,20 @@ implements ApplicationInitializer, CommandListener
 		} 
 		return false;
 	}
-	
+
+	private boolean handleCommandSimpleMessageForm(Command cmd, SimpleMessageForm form) {
+		if (cmd == this.cmdMessageSend) {
+			String input = form.getInputAndClearField();
+			if (input.length() > 0) {
+				Message message = new Message("me", input);
+				form.addMessage(message);
+				UiAccess.scrollToBottom(form);
+			}
+			return true;
+		} 
+		return false;
+	}
+
 	private boolean handleCommandContactSelectionForm(Command cmd, final ContactSelectionForm form)
 	{
 		if (cmd == this.cmdSelectContact)
@@ -276,12 +296,12 @@ implements ApplicationInitializer, CommandListener
 					public void commandAction(Command c, Displayable d) {
 						if (c == cmdYes) 
 						{
-							showMessages(userName);
+							showMessages(userName, false);
 						}
 						else
 						{
 							Controller.this.display.setCurrent(form);
-						}				
+						}
 					}
 				});
 				this.display.setCurrent(alert);
@@ -309,8 +329,11 @@ implements ApplicationInitializer, CommandListener
 			case MAIN_ACTION_SELECT_CONTACT:
 				showContacts();
 				break;
-			case MAIN_ACTION_MESSAGES:
-				showMessages("j2mepolish");
+			case MAIN_ACTION_CHAT_COMPLEX:
+				showMessages("j2mepolish", false);
+				break;
+			case MAIN_ACTION_CHAT_SIMPLE:
+				showMessages("j2mepolish", true);
 				break;
 			case MAIN_ACTION_EXIT:
 				showExitDialog();
@@ -345,25 +368,47 @@ implements ApplicationInitializer, CommandListener
 		this.screenHistory.show(form);
 	}
 
-	private void showMessages(String userName) {
-		Message[] messages = new Message[]{
-				new Message("me", "Hi J2ME Polish, what's up...?"),
-				new Message(userName, "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
-				new Message("me", "Cool! When will it be out?"),
-				new Message(userName, "That's the /good part/, it's available now: www.j2mepolish.org."),
-				new Message("me", "fan-tas-tic :-)")
-		};
-		MessageForm form = new MessageForm(this.cmdMessageSend);
-		for (int i = 0; i < messages.length; i++) {
-			Message message = messages[i];
-			form.addMessage(message);
+	private void showMessages(String userName, boolean useSimpleChat) {
+		Form messageForm;
+		if (!useSimpleChat)
+		{
+			Message[] messages = new Message[]{
+					new Message("me", "Hi J2ME Polish, what's up...?"),
+					new Message(userName, "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
+					new Message("me", "Cool! When will it be out?"),
+					new Message(userName, "That's the /good part/, it's available now: www.j2mepolish.org."),
+					new Message("me", "fan-tas-tic :-)")
+			};
+			MessageForm form = new MessageForm(this.cmdMessageSend);
+			for (int i = 0; i < messages.length; i++) {
+				Message message = messages[i];
+				form.addMessage(message);
+			}
+			messageForm = form;
 		}
-		form.addCommand(this.cmdBack);
-		form.addCommand(this.cmdMessageShowSource);
-		form.setCommandListener(this);
-		UiAccess.init(form);
-		form.scrollToBottom();
-		this.screenHistory.show(form);
+		else
+		{
+			Message[] messages = new Message[]{
+					new Message("me", "Hi J2ME Polish, what's up...?"),
+					new Message(userName, ":-) Hey, this is the new smiley-extended text-effect in action :-D"),
+					new Message("me", "Cool-hoooooooooooooliooooooo! :-) When will it be out?"),
+					new Message(userName, "It's available now: www.j2mepolish.org."),
+					new Message("me", "fan-tas-tic :-) Sad that I didn't know it before :'("),
+					new Message("me", ":-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D")
+			};
+			SimpleMessageForm form = new SimpleMessageForm(this.cmdMessageSend);
+			for (int i = 0; i < messages.length; i++) {
+				Message message = messages[i];
+				form.addMessage(message);
+			}
+			messageForm = form;
+		}
+		messageForm.addCommand(this.cmdBack);
+		messageForm.addCommand(this.cmdMessageShowSource);
+		messageForm.setCommandListener(this);
+		UiAccess.init(messageForm);
+		messageForm.scrollToBottom();
+		this.screenHistory.show(messageForm);
 	}
 
 	/**
@@ -381,7 +426,8 @@ implements ApplicationInitializer, CommandListener
 	 * When no busy indicators are left, the busy indicator won't be shown any more.
 	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
 	 * <variable name="polish.ScreenInfo.enable" value="true" />
-	 * in your build.xml script.
+	 * in your build.xml 
+	 * script.
 	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
 	 * @see #startBusyIndicator()
 	 */
