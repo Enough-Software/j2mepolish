@@ -739,5 +739,38 @@ public final class Serializer {
 		}
 	}
 
+	/**
+	 * Helper method to write nullable text
+	 * @param text the text that could be null
+	 * @param out the output stream
+	 * @throws IOException when writing fails
+	 * @see #readUtfNullable(String, DataInputStream)
+	 */
+	public static void writeUtfNullable(String text, DataOutputStream out) throws IOException
+	{
+		boolean isNull = (text == null);
+		out.writeBoolean(isNull);
+		if (!isNull)
+		{
+			out.writeUTF(text);
+		}
+	}
+	
 
+	/**
+	 * Helper method to read nullable text
+	 * @param in the input stream
+	 * @return the read text or null when no text was previously written
+	 * @throws IOException when reading fails
+	 * @see #writeUtfNullable(String, DataOutputStream)
+	 */
+	public static String readUtfNullable(DataInputStream in) throws IOException
+	{
+		boolean isNull = in.readBoolean();
+		if (isNull)
+		{
+			return null;
+		}
+		return in.readUTF();
+	}
 }
