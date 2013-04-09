@@ -221,4 +221,29 @@ public class StreamUtil {
 		}
 		return out.toByteArray();
 	}
+	
+	/**
+	 * Reads a byte array
+	 * @param in the input stream
+	 * @param length the expected length of the array
+	 * @return the read byte array
+	 * @throws IOException when the full byte array could not be read
+	 */
+	public static byte[] readByteArray(InputStream in, int length) throws IOException
+	{
+		byte[] data = new byte[length];
+		int completeRead = 0;
+		int read = in.read(data, 0, length);
+		completeRead += read;
+		while (completeRead < length)
+		{
+			read = in.read(data, completeRead, length - completeRead);
+			if (read == -1)
+			{
+				throw new IOException("stream finished at " + completeRead + " bytes, expected=" + length);
+			}
+			completeRead += read;
+		}
+		return data;
+	}
 }
