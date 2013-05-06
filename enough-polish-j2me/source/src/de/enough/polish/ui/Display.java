@@ -1065,9 +1065,10 @@ public class Display
 		if (nextDisplayable == null || !(nextDisplayable instanceof Canvas)) {
 			// this is a native Displayable
 			if (nextDisplayable != null) {
-				if (this.currentCanvas != null) {
-					this.currentCanvas._hideNotify();
+				Canvas currentCanv = this.currentCanvas;
+				if (currentCanv != null) {
 					this.currentCanvas = null;
+					currentCanv._hideNotify();
 				}
 				this.currentDisplayable = nextDisplayable;
 			}

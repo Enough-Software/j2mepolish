@@ -725,4 +725,14 @@ public class Command
 	{
 		return this.nativeCommand;
 	}
+	
+	public String toString()
+	{
+		String toString = "Cmd " + getLabel() + ": " + super.toString();
+		if (this.nativeCommand != null)
+		{
+			toString += ", native=" + nativeCommand;
+		}
+		return toString;
+	}
 }
