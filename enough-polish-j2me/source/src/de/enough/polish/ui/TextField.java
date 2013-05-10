@@ -4865,16 +4865,17 @@ public class TextField extends StringItem
 				{
 					// If newline is not allowed, treat any newline as the activation of the textfield's default command (if any)
 					if ( isNoNewLine() && content.indexOf('\n') >= 0) {
-						if ( this.defaultCommand != null && this.itemCommandListener != null ) {
-							this.itemCommandListener.commandAction(this.defaultCommand, this);
-						}
 						content = TextUtil.replace(content, "\r", "");
 						content = TextUtil.replace(content, "\n", "");
 						textEditor.setContent(content);
+						if ( this.defaultCommand != null && this.itemCommandListener != null ) {
+							this.itemCommandListener.commandAction(this.defaultCommand, this);
+						}
 						return;
 					}
 					
 					setString(content);
+					setText(content);
 					Display.getInstance().serviceRepaints();
 					notifyStateChanged();
 				}
