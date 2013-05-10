@@ -308,14 +308,12 @@ public final class TextUtil {
 			char[] valueChars = value.toCharArray();
 			int lastIndex = 0;
 			char c =' ';
-			int lineBreakCount = 0;
 			for (int i = 0; i < valueChars.length; i++) {
 				c = valueChars[i];
 				boolean isCRLF = (c == 0x0D && i < valueChars.length -1 &&  valueChars[i +1] == 0x0A);
 				if (c == '\n' || i == valueChars.length -1 || isCRLF ) {
-					lineBreakCount++;
 					String line = null;
-					if (i == valueChars.length -1) {
+					if (i == valueChars.length -1  && c!='\n' && !isCRLF) {
 						line = new String( valueChars, lastIndex, (i + 1) - lastIndex );
 						//System.out.println("wrap: adding last line " + line );
 					} else {
@@ -343,7 +341,7 @@ public final class TextUtil {
 				} // for each line
 			} // for all chars
 			// special case for lines that end with \n: add a further line
-			if (lineBreakCount > 1 && (c == '\n' || c == 10) && result.size() != maxLines) {
+			if ((c == '\n' || c == 10) && result.size() != maxLines) {
 				result.addLine("", 0);
 			}
 		}
