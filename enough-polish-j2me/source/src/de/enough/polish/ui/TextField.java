@@ -2087,7 +2087,7 @@ public class TextField extends StringItem
 		editor.setVisible(true);
 		editor.setTouchEnabled(true);
 		editor.setSize(1, 1);
-		editor.setMultiline(true);
+		editor.setMultiline(false);
 		editor.setForegroundColor(0xFF000000 | this.textColor);
 		editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
 		editor.setBackgroundColor(0);
@@ -2098,7 +2098,7 @@ public class TextField extends StringItem
 		}
 		editor.setParent( Display.getInstance() );
 		editor.setTextEditorListener(this);
-		inputAction(editor, 0);
+		inputAction(editor, TextField.ACTION_CONTENT_CHANGE);
 		return editor;
 	}
 	//#endif
@@ -4863,23 +4863,29 @@ public class TextField extends StringItem
 				String content = textEditor.getContent();
 				if (!content.equals(this.text))
 				{
+					// If newline is not allowed, treat any newline as the activation of the textfield's default command (if any)
+					if ( isNoNewLine() && content.indexOf('\n') >= 0) {
+						content = TextUtil.replace(content, "\r", "");
+						content = TextUtil.replace(content, "\n", "");
+						textEditor.setContent(content);
+						if ( this.defaultCommand != null && this.itemCommandListener != null ) {
+							this.itemCommandListener.commandAction(this.defaultCommand, this);
+						}
+						return;
+					}
+					
 					setString(content);
+					setText(content);
+					Display.getInstance().serviceRepaints();
 					notifyStateChanged();
 				}
 
-				// Switching from multi to single-line and vice-versa in SDK 1.1 does not work as expected.
-				// As such, for now we only do this on SDK 2.0 devices.
-				
 				if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
-						textEditor.setMultiline(true);						
-						//#if polish.series40sdk11
-							multilineToggleFix(textEditor);
-						//#endif
+						textEditor.setMultiline(true);	
+						multilineToggleFix(textEditor);
 				} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
-						textEditor.setMultiline(false);						
-						//#if polish.series40sdk11
-							multilineToggleFix(textEditor);
-						//#endif
+						textEditor.setMultiline(false);	
+						multilineToggleFix(textEditor);
 				}
 			}
 			if ((actions & TextEditorListener.ACTION_TRAVERSE_NEXT) != 0)
