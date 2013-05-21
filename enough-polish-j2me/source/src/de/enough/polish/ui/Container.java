@@ -526,10 +526,13 @@ public class Container extends Item {
 			Item followingItem = get(i);
 			followingItem.relativeY = 0;
 		}
-		requestInit();
-		repaint();
+		if (this.isInitialized)
+		{
+			requestInit();
+		}
 		if (this.isShown) {
 			item.showNotify();
+			repaint();
 		}
 		notifyValueChanged(item);
 		return last;

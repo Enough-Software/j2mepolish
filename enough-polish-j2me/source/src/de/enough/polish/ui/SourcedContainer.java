@@ -157,7 +157,7 @@ implements ItemConsumer
 	public void onItemsChanged(ItemChangedEvent event)
 	{
 		//#debug info
-		System.out.println("itemsChanged, initialized=" + this.isInitialized + ", event=" + event + ", size=" + size()); //" at " + TimePoint.now().toStringTime());
+		System.out.println("itemsChanged, initialized=" + this.isInitialized + ", event=" + event + ", size=" + size() + " for " + this); //" at " + TimePoint.now().toStringTime());
 		int change = event.getChange();
 		int itemIndex = event.getItemIndex();
 		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH || itemIndex == -1)
@@ -225,9 +225,32 @@ implements ItemConsumer
 				{
 					setItemSource(this.itemSource);
 				}
-				else
+				else if (!this.isInitialized)
 				{
 					set( itemIndex, nextItem );
+				}
+				else
+				{
+					Item previousItem = get(itemIndex);
+					int previousHeight = previousItem.itemHeight;
+					setInitialized(false);
+					set( itemIndex, nextItem );
+					int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
+					nextItem.relativeX = 0;
+					if (nextItem.isLayoutRight())
+					{
+						nextItem.relativeX = this.availContentWidth - nextItem.itemWidth;
+					}
+					else if (nextItem.isLayoutCenter())
+					{
+						nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
+					}
+					nextItem.relativeY = previousItem.relativeY;
+					setInitialized(true);
+					if (height != previousHeight)
+					{
+						requestInit();
+					}
 				}
 			}
 		}
