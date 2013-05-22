@@ -3335,8 +3335,8 @@ public class Container extends Item {
 				}
 			}
 			this.yOffset = offset;
-			onScrollYOffsetChanged(offset);
 			this.targetYOffset = target;
+			onScrollYOffsetChanged(offset);
 			addFullRepaintRegion = true;
 		}
 		
@@ -3939,7 +3939,7 @@ public class Container extends Item {
 		//#if !polish.Container.selectEntriesWhileTouchScrolling
 			if (item != null) {
 				int dragDistance = Math.abs(relY - this.lastPointerPressY);
-				if(dragDistance > minimumDragDistance) {
+				if (dragDistance > minimumDragDistance) {
 					focusChild(-1);
 			   		//#if polish.blackberry
 			   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
@@ -4297,18 +4297,23 @@ public class Container extends Item {
 			((Container)this.parent).setScrollYOffset(offset, smooth);
 			return;
 		}
+		int current = this.yOffset;
 		this.scrollStartTime = System.currentTimeMillis();
 		this.scrollStartYOffset = this.yOffset;
+		this.targetYOffset = offset;
+		this.scrollSpeed = 0;
 		if (!smooth  
 		//#ifdef polish.css.scroll-mode
 			|| !this.scrollSmooth
 		//#endif
 		) {
 			this.yOffset = offset;
-			onScrollYOffsetChanged(offset);
+			this.scrollStartYOffset = offset;
+			if (offset != current)
+			{
+				onScrollYOffsetChanged(offset);
+			}
 		}
-		this.targetYOffset = offset;
-		this.scrollSpeed = 0;
 	}
 	
 	/**
@@ -4350,6 +4355,19 @@ public class Container extends Item {
 		this.scrollDirection = direction;
 		this.scrollDamping = damping;
 		this.scrollSpeed = speed;
+	}
+	
+	/**
+	 * Checks if this container allowes boucning during scrolling vertically outside of the actual content area.
+	 * @return true when this container bounces
+	 */
+	protected boolean isBouncingAllowed()
+	{
+		boolean result = true;
+		//#if tmp.checkBouncing
+			result = this.allowBouncing;
+		//#endif
+		return result;
 	}
 
 	/**

@@ -122,6 +122,8 @@ public abstract class CssAnimation
 		if (passedTime >= duration) {
 			//System.out.println("too long, returning " + endValue + ", passedTime=" + passedTime + ", duration=" + duration);
 			return endValue;
+		} else if (passedTime <= 0) {
+			return startValue;
 		}
 
 		int valueRange = endValue - startValue;

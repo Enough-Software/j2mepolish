@@ -39,7 +39,7 @@ extends Container
 implements ItemConsumer
 {
 	
-	private ItemSource itemSource;
+	protected ItemSource itemSource;
 	private int distributionPreference;
 	private boolean	isEmpty;
 
