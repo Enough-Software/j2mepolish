@@ -82,6 +82,10 @@ import de.enough.polish.util.WrappedText;
 	//#define tmp.suppressCommands=true
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
+	import com.nokia.mid.ui.gestures.GestureListener;
+	import com.nokia.mid.ui.gestures.GestureEvent;
+	import com.nokia.mid.ui.gestures.GestureInteractiveZone;
+	import com.nokia.mid.ui.gestures.GestureRegistrationManager;
 //#endif
 
 //#if polish.api.windows
@@ -413,6 +417,7 @@ public class TextField extends StringItem
 //#endif
 //#if tmp.useNokiaInput
 	//#defineorappend tmp.implements=TextEditorListener
+	//#defineorappend tmp.implements=GestureListener
 //#endif
 //#if polish.LibraryBuild
 	//#define tmp.implementsCommandListener
@@ -1005,6 +1010,7 @@ public class TextField extends StringItem
 
 	//#if tmp.useNokiaInput
 		private TextEditor nokiaTextEditor;
+		private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
 	//#endif	
 		
 	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
@@ -2073,6 +2079,14 @@ public class TextField extends StringItem
 	//#endif
 	
 	//#if tmp.useNokiaInput
+	public void gestureAction(java.lang.Object container, GestureInteractiveZone gestureInteractiveZone, GestureEvent gestureEvent) {
+		if ( GestureInteractiveZone.GESTURE_LONG_PRESS == gestureEvent.getType() ) {
+			handleGestureHold(gestureEvent.getStartX() - getAbsoluteX(), gestureEvent.getStartY() - getAbsoluteY());
+		}
+	}
+	//#endif
+	
+	//#if tmp.useNokiaInput
 	protected TextEditor createNativeNokiaTextField() {
 		int width = 50;
 		int rows = 1;
@@ -2525,6 +2539,13 @@ public class TextField extends StringItem
 							this.nokiaTextEditor.setParent(Display.getInstance());
 							this.nokiaTextEditor.setPosition(x, y);
 							this.nokiaTextEditor.setSize(getAvailableContentWidth(), textFieldHeight);
+
+							// Register as a Nokia gesture listener to the canvas
+							// (used for e.g. to detect long presses on the TextEditor object, as there's no other way to achieve this)
+							editorZone.setRectangle(this.getAbsoluteX(), this.getAbsoluteY(), getAvailableWidth(), getAvailableHeight() );							
+							javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+							GestureRegistrationManager.register(objs, editorZone);
+							GestureRegistrationManager.setListener(objs, (GestureListener) this);
 						} 
 						catch (Exception e)
 						{
@@ -4873,6 +4894,11 @@ public class TextField extends StringItem
 						}
 						return;
 					}
+					
+					// Unregister all canvas gesture listeners, to prevent repeat events while updating the textfield.
+					// The paintContent() method takes care of re-registering after the update is completed
+					javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+					GestureRegistrationManager.unregisterAll(objs);
 					
 					setString(content);
 					setText(content);
