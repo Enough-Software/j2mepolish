@@ -4735,6 +4735,10 @@ public class TextField extends StringItem
 			if (this.nokiaTextEditor != null) {
 				this.nokiaTextEditor.setFocus(false);
 				this.nokiaTextEditor.setParent(null);
+				
+				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+				GestureRegistrationManager.unregisterAll(objs);
+				
 				String newText = this.nokiaTextEditor.getContent();
 				setString( newText );
 				setInitialized(false);
