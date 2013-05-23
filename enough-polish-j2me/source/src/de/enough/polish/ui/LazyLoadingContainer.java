@@ -129,8 +129,8 @@ implements ItemConsumer
 	 */
 	protected void initContent(int firstLineWidth, int availWidth, int availHeight) 
 	{
-		
-		synchronized (this.itemsList) 
+		System.out.println("LazyLoadingContainer: initContent");
+		synchronized (getSynchronizationLock()) 
 		{
 			int itemsListSize = this.itemsList.size();
 			if (itemsListSize != 0)
@@ -222,7 +222,7 @@ implements ItemConsumer
 	 */
 	protected void onScrollYOffsetChanged(int offset) 
 	{
-		synchronized (this.itemsList)
+		synchronized (getSynchronizationLock())
 		{
 			int prevOffset = this.previousYOffset;
 			int diff = Math.abs(offset - prevOffset);
@@ -418,7 +418,7 @@ implements ItemConsumer
 	 */
 	public void onItemsChanged(ItemChangedEvent event)
 	{
-		//#debug
+		// #debug
 		System.out.println("itemsChanged, isInitialized=" + this.isInitialized + ", event=" + event);
 		if (!this.isInitialized)
 		{
@@ -427,7 +427,7 @@ implements ItemConsumer
 		}
 		if (event == null || (event.getChange() == ItemChangedEvent.CHANGE_COMPLETE_REFRESH))
 		{
-			synchronized (this.itemsList)
+			synchronized (getSynchronizationLock())
 			{
 				this.itemsList.clear();
 				requestInit();
@@ -448,7 +448,7 @@ implements ItemConsumer
 				{
 					nextItem = this.itemSource.createItem(event.getItemIndex());
 				}
-				synchronized (this.itemsList)
+				synchronized (getSynchronizationLock())
 				{
 					// todo I don't need to have the last visible item in scope...
 					this.itemsList.add(nextItem);
@@ -462,6 +462,14 @@ implements ItemConsumer
 					nextItem.getItemHeight(this.availableWidth, this.availableWidth, this.availableHeight);
 					Item previousLastItem = (Item) this.itemsList.get(this.itemsList.size()-2);
 					nextItem.relativeX = 0;
+					if (nextItem.isLayoutRight())
+					{
+						nextItem.relativeX = this.availableWidth - nextItem.itemWidth;
+					} 
+					else if (nextItem.isLayoutCenter())
+					{
+						nextItem.relativeX = (this.availableWidth - nextItem.itemWidth) / 2;
+					}
 					nextItem.relativeY = previousLastItem.relativeY + previousLastItem.itemHeight + this.paddingVertical;
 				}
 				int offset = getScrollYOffset();
@@ -490,7 +498,7 @@ implements ItemConsumer
 		{
 			if (event.getItemIndex() >= this.childStartIndex && event.getItemIndex() < this.childStartIndex + this.itemsList.size())
 			{
-				synchronized (this.itemsList)
+				synchronized (getSynchronizationLock())
 				{
 					int itemListIndex = event.getItemIndex() - this.childStartIndex;
 					Item removedItem = (Item) this.itemsList.remove(itemListIndex);

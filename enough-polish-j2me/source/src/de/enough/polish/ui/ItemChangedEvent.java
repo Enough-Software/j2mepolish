@@ -10,7 +10,7 @@ public class ItemChangedEvent
 	
 	private final int	change;
 	private final Item	affectedItem;
-	private final int	itemIndex;
+	private int	itemIndex;
 	
 	public ItemChangedEvent(int change, int itemIndex, Item affectedItem)
 	{
@@ -63,6 +63,10 @@ public class ItemChangedEvent
 		buffer.append("itemIndex=").append(this.itemIndex);
 		buffer.append(", item=").append(this.affectedItem);
 		return buffer.toString();
+	}
+
+	public void setItemIndex(int index) {
+		this.itemIndex = index;
 	}
 	
 }
