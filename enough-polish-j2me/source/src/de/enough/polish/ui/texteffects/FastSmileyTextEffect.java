@@ -70,6 +70,22 @@ extends TextEffect
 		searchTrie.addWord(smiley.text);
 	}
 	
+	/**
+	 * Allows to specify the smiley's dimension.
+	 * Typically this is done automatically when the first smiley
+	 * is being resolved - however this method can be useful when
+	 * the smileys have different dimensions and you want to make
+	 * sure that the biggest smiley is being used for layouting.
+	 * 
+	 * @param width the width of smileys in pixel
+	 * @param height the height of smileys in pixel
+	 */
+	public static void initSmileyDimension(int width, int height)
+	{
+		smileyWidth = width;
+		smileyHeight = height;
+	}
+	
 	public FastSmileyTextEffect()
 	{
 		this.isTextSensitive = true;
