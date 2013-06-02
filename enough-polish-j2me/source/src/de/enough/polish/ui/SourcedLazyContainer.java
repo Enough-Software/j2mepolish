@@ -45,24 +45,26 @@ public class SourcedLazyContainer extends SourcedContainer {
 	private boolean isIgnoreScrollOffsetChange;
 	private int previousScrollYOffset;
 	private int currentPointerDragY;
+	private int maxNumberOfItems;
 
-	public SourcedLazyContainer(ItemSource itemSource, int initialNumberOfItems) {
-		this(itemSource, false, initialNumberOfItems, null);
+	public SourcedLazyContainer(ItemSource itemSource, int initialNumberOfItems, int maxNumberOfItems) {
+		this(itemSource, false, initialNumberOfItems, maxNumberOfItems, null);
 	}
 
-	public SourcedLazyContainer(ItemSource itemSource, int initialNumberOfItems, Style style) {
-		this(itemSource, false, initialNumberOfItems, style);
+	public SourcedLazyContainer(ItemSource itemSource, int initialNumberOfItems, int maxNumberOfItems, Style style) {
+		this(itemSource, false, initialNumberOfItems, maxNumberOfItems, style);
 	}
 
-	public SourcedLazyContainer(ItemSource itemSource, boolean focusFirst, int initialNumberOfItems) {
-		this(itemSource, focusFirst, initialNumberOfItems, null);
+	public SourcedLazyContainer(ItemSource itemSource, boolean focusFirst, int initialNumberOfItems, int maxNumberOfItems) {
+		this(itemSource, focusFirst, initialNumberOfItems, maxNumberOfItems, null);
 	}
 
-	public SourcedLazyContainer(ItemSource itemSource, boolean focusFirst, int initialNumberOfItems,
-			Style style) 
+	public SourcedLazyContainer(ItemSource itemSource, boolean focusFirst, int initialNumberOfItems, 
+			int maxNumberOfItems, Style style) 
 	{
 		super( new WrappedItemSource(itemSource, initialNumberOfItems), focusFirst, style);
 		this.initialNumberOfItems = initialNumberOfItems;
+		this.maxNumberOfItems = maxNumberOfItems;
 		this.realItemSource = itemSource;
 		this.wrappedItemSource = (WrappedItemSource) this.itemSource;
 		this.isDistributionPreferenceBottom = (itemSource.getDistributionPreference() == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM);
@@ -224,10 +226,16 @@ public class SourcedLazyContainer extends SourcedContainer {
 			if (this.source.getDistributionPreference() == DISTRIBUTION_PREFERENCE_BOTTOM)
 			{
 				int count = this.source.countItems();
-				if (count > this.currentNumberOfItems)
+				int currentNumber = this.currentNumberOfItems;
+				if (count > currentNumber)
 				{
 					//System.out.println("real=" + count + ", currentNumber=" + currentNumberOfItems + ", previousIndex=" + index + ", translatedIndex="  + (index + count - currentNumberOfItems));
-					index += count - this.currentNumberOfItems;
+					index += count - currentNumber;
+				}
+				else if (count < currentNumber)
+				{
+					//System.out.println("exceeding count=" + count + ", currentNumberOfItems=" + currentNumber);
+					this.currentNumberOfItems = count;
 				}
 			}
 			return this.source.createItem(index);
