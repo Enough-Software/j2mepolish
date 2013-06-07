@@ -150,7 +150,7 @@
 	</group>
 	
 	<group>
-		<name>series40sdk20</name>
+		<name>series40jr20</name>
 		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
 		<capability name="OS" value="Nokia OS" />
 		<capability name="JavaPlatform" value="MIDP/2.0" />
@@ -161,14 +161,38 @@
 	</group>
 	
 	<group>
-		<name>series40sdk11</name>
+		<name>series40jr11</name>
 		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
 		<capability name="OS" value="Nokia OS" />
 		<capability name="JavaPlatform" value="MIDP/2.0" />
 		<capability name="JavaConfiguration" value="CLDC/1.1" />
-		<capability name="JavaPackage" value="nokia-ui-1.1c, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
 		<capability name="Emulator.Class" value="NokiaEmulator" />
 		<capability name="Emulator.Skin" value="Nokia_SDK_1_1_Java" />
+		<capability name="key.maybeSupportsAsciiKeyMap" value="true" />
+	</group>
+	
+	<group>
+		<name>series40jr11ui11b</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1b, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_1_1_Java" />
+	</group>
+	
+	<group>
+		<name>series40jr10</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_1_0_Java" />
+		<capability name="key.maybeSupportsAsciiKeyMap" value="true" />
 	</group>
 	
 	<group>
