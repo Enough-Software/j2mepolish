@@ -62,7 +62,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 	public SourcedLazyContainer(ItemSource itemSource, boolean focusFirst, int initialNumberOfItems, 
 			int maxNumberOfItems, Style style) 
 	{
-		super( new WrappedItemSource(itemSource, initialNumberOfItems), focusFirst, style);
+		super( new WrappedItemSource(itemSource, initialNumberOfItems, maxNumberOfItems), focusFirst, style);
 		this.initialNumberOfItems = initialNumberOfItems;
 		this.maxNumberOfItems = maxNumberOfItems;
 		this.realItemSource = itemSource;
@@ -84,7 +84,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 			if (!(itemSource instanceof WrappedItemSource))
 			{
 				this.realItemSource = itemSource;
-				this.wrappedItemSource = new WrappedItemSource(itemSource, initialNumberOfItems);
+				this.wrappedItemSource = new WrappedItemSource(itemSource, this.initialNumberOfItems, this.maxNumberOfItems);
 				itemSource = this.wrappedItemSource;
 			}
 			super.setItemSource(itemSource);
@@ -119,30 +119,78 @@ public class SourcedLazyContainer extends SourcedContainer {
 			}
 			if (offset >= triggerOffset && offset > this.previousScrollYOffset && size() > 0)
 			{
+				// the user scrolls upwards to/over the first item, so now is a good time
+				// to ask for more items:
 				try {
 					this.isIgnoreScrollOffsetChange = true;
-					int realCount = this.realItemSource.countItems();
-					int shownCount = this.wrappedItemSource.currentNumberOfItems;
+					IndexRange indexRange = this.wrappedItemSource.indexRange;
 					this.previousScrollYOffset = offset;
-					if (realCount > shownCount)
+					if (indexRange.canMoveUp())
 					{
 						setInitialized(false);
-						int number = Math.min( this.initialNumberOfItems, realCount - shownCount);
-						int startIndex = realCount - shownCount - 1;
-						int endIndex = startIndex - number + 1;
+						int startIndex = indexRange.getIndexStart() - 1;
+						int endIndex = Math.max(startIndex - this.initialNumberOfItems + 1, 0);
 						//System.out.println("adding " + number + " items from " + startIndex + " to " + endIndex);
-						this.wrappedItemSource.currentNumberOfItems += number;
+						//this.wrappedItemSource.currentNumberOfItems += number;
 						Item previousFirstItem = get(0);
 						int previousRelativeY = previousFirstItem.relativeY;
 						for (int itemIndex = startIndex; itemIndex >= endIndex; itemIndex--)
 						{
 							Item item = this.realItemSource.createItem(itemIndex);
 							add(0, item);
+							if (indexRange.moveRangeUpRequiresDeleteAtEnd())
+							{
+								remove(size() - 1);
+							}
 						}
 						init(this.availableWidth, this.availableWidth, this.availableHeight);
 						int currentRelativeY = previousFirstItem.relativeY;
 						int newOffset = previousRelativeY - currentRelativeY + offset;
 						//System.out.println("changing offset from " + offset + " to " + newOffset + " for " + this);
+						setScrollYOffset( newOffset, false);
+						this.lastPointerPressY = this.currentPointerDragY;
+						this.lastPointerPressYOffset = newOffset;
+						this.previousScrollYOffset = newOffset;
+						//System.out.println("up: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
+						//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
+					}
+				} 
+				finally
+				{
+					this.isIgnoreScrollOffsetChange = false;
+				}
+			} // if (offset >= triggerOffset && offset > this.previousScrollYOffset && size() > 0)
+			else if ((this.maxNumberOfItems > 1) && (size() >= this.maxNumberOfItems) && (offset <= this.scrollHeight - getItemAreaHeight()))
+			{
+				// the user scrolls down to items that have been cleared previously:
+				try 
+				{
+					this.isIgnoreScrollOffsetChange = true;
+					IndexRange indexRange = this.wrappedItemSource.indexRange;
+					this.previousScrollYOffset = offset;
+					if (indexRange.canMoveDown())
+					{
+						setInitialized(false);
+						Item previousLastItem = get(size() - 1);
+						int previousRelativeY = previousLastItem.relativeY;
+
+						int itemIndex = indexRange.getIndexEnd() + 1;
+						int maxIndex = itemIndex + this.initialNumberOfItems;
+						while (indexRange.canMoveDown() && itemIndex < maxIndex)
+						{
+							Item item = this.realItemSource.createItem(itemIndex);
+							add(item);
+							if (indexRange.moveRangeDownRequiresDeleteAtStart())
+							{
+								remove(0);
+							}
+							itemIndex++;
+						}
+						//System.out.println("down: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
+						init(this.availableWidth, this.availableWidth, this.availableHeight);
+						int currentRelativeY = previousLastItem.relativeY;
+						int newOffset = previousRelativeY - currentRelativeY + offset;
+						//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
 						setScrollYOffset( newOffset, false);
 						this.lastPointerPressY = this.currentPointerDragY;
 						this.lastPointerPressYOffset = newOffset;
@@ -154,20 +202,22 @@ public class SourcedLazyContainer extends SourcedContainer {
 					this.isIgnoreScrollOffsetChange = false;
 				}
 			}
+			else
+			{
+				//System.out.println("offset=" + offset + ", sH-itemAreaHeight=" + (this.scrollHeight - getItemAreaHeight()));
+			}
 		}
 	}
-
 
 	/*
 	 * (non-Javadoc)
 	 * @see de.enough.polish.ui.SourcedContainer#onItemsChanged(de.enough.polish.ui.ItemChangedEvent)
-	 */
 	public void onItemsChanged(ItemChangedEvent event) {
 		//System.out.println("onItemsChanged: " + event);
 		int change = event.getChange();
 		if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
 		{
-			this.wrappedItemSource.refresh( this.initialNumberOfItems );
+			this.wrappedItemSource.refresh();
 		}
 		else
 		{
@@ -192,57 +242,45 @@ public class SourcedLazyContainer extends SourcedContainer {
 		}
 		super.onItemsChanged(event);
 	}
+		 */
 
 
 
 
 
 
-	private static class WrappedItemSource implements ItemSource
+
+	private static class WrappedItemSource implements ItemSource, ItemConsumer
 	{
 		private ItemSource source;
-		private int currentNumberOfItems;
+		private ItemConsumer consumer;
+		public final IndexRange indexRange;
+		
 
-		public WrappedItemSource(ItemSource source, int initialNumberOfItems)
+		public WrappedItemSource(ItemSource source, int initialNumberOfItems, int maxNumberOfItems)
 		{
 			this.source = source;
-			refresh(initialNumberOfItems);
+			this.indexRange = new IndexRange(initialNumberOfItems, maxNumberOfItems, source);
+			refresh();
+			source.setItemConsumer(this);
 		}
 
-		public void refresh(int initialNumberOfItems) {
-			this.currentNumberOfItems = Math.min(source.countItems(), initialNumberOfItems);			
+		public void refresh() 
+		{
+			this.indexRange.refresh(this.source);
 		}
 
 		public int countItems() {
-			int count = this.source.countItems();
-			if (count > this.currentNumberOfItems)
-			{
-				count = this.currentNumberOfItems;
-			}
-			return count;
+			return this.indexRange.getRange();
 		}
 
 		public Item createItem(int index) {
-			if (this.source.getDistributionPreference() == DISTRIBUTION_PREFERENCE_BOTTOM)
-			{
-				int count = this.source.countItems();
-				int currentNumber = this.currentNumberOfItems;
-				if (count > currentNumber)
-				{
-					//System.out.println("real=" + count + ", currentNumber=" + currentNumberOfItems + ", previousIndex=" + index + ", translatedIndex="  + (index + count - currentNumberOfItems));
-					index += count - currentNumber;
-				}
-				else if (count < currentNumber)
-				{
-					//System.out.println("exceeding count=" + count + ", currentNumberOfItems=" + currentNumber);
-					this.currentNumberOfItems = count;
-				}
-			}
+			index = this.indexRange.translateIndexToOriginal(index);
 			return this.source.createItem(index);
 		}
 
 		public void setItemConsumer(ItemConsumer consumer) {
-			this.source.setItemConsumer(consumer);
+			this.consumer = consumer;
 		}
 
 		public int getDistributionPreference() {
@@ -251,6 +289,160 @@ public class SourcedLazyContainer extends SourcedContainer {
 
 		public Item getEmptyItem() {
 			return this.source.getEmptyItem();
+		}
+
+		public void onItemsChanged(ItemChangedEvent event) {
+			//System.out.println("Wrapped: " + event);
+			int change = event.getChange();
+			if (change == ItemChangedEvent.CHANGE_COMPLETE_REFRESH)
+			{
+				refresh();
+			}
+			else
+			{
+				int index = event.getItemIndex();
+				if (index != -1)
+				{
+					if (change == ItemChangedEvent.CHANGE_ADD)
+					{
+						System.out.println("add: range.indexEnd=" + indexRange.indexEnd + ", index=" + index);
+						if (index == this.indexRange.getIndexEnd() + 1)
+						{
+							//TODO: this behavior is only for LAYOUT_BOTTOM ItemSources correct
+							boolean needToDelete = this.indexRange.moveRangeDownRequiresDeleteAtStart();
+							//System.out.println("need to delete: " + needToDelete);
+							if (needToDelete && this.consumer != null)
+							{
+								// need to remove first item in order to make space:
+								Item affectedItem = event.getAffectedItem();
+								event.setAffectedItem(null);
+								event.setChange(ItemChangedEvent.CHANGE_REMOVE);
+								event.setItemIndex(0);
+								this.consumer.onItemsChanged(event);
+								event.setChange(ItemChangedEvent.CHANGE_ADD);
+								event.setAffectedItem(affectedItem);
+							}
+						}
+						else //TODO allow item to be added to the top or within the current range
+						{
+							// this event does not affect the currently shown range:
+							return;
+						}
+					} 
+					else if (!this.indexRange.isInRange(index))
+					{
+						// this event does not affect the currently shown range:
+						return;
+					}
+					int translatedIndex = this.indexRange.translateIndexFromOriginal(index);
+					event.setItemIndex(translatedIndex);
+				}
+			}
+			if (this.consumer != null)
+			{
+				this.consumer.onItemsChanged(event);
+			}
+		}
+	}
+	
+	private static class IndexRange
+	{
+		private int	indexStart;
+		private int indexEnd;
+		private final int maxNumberOfItems;
+		private final int initialNumberOfItems;
+		private ItemSource source;
+		
+		public IndexRange(int initialNumberOfItems, int maxNumberOfItems, ItemSource source)
+		{
+			this.initialNumberOfItems = initialNumberOfItems;
+			this.maxNumberOfItems = maxNumberOfItems;
+			refresh(source);
+		}
+		
+		public boolean canMoveDown() {
+			return this.indexEnd < this.source.countItems() - 1;
+		}
+		
+		public boolean canMoveUp()
+		{
+			return this.indexStart  > 0;
+		}
+
+		public boolean isInRange(int index) {
+			return (index >= this.indexStart) && (index <= this.indexEnd);
+		}
+
+		public int translateIndexToOriginal(int index) {
+			return index + this.indexStart;
+		}
+
+		public int translateIndexFromOriginal(int index) {
+			return index - this.indexStart;
+		}
+
+		public boolean moveRangeDownRequiresDeleteAtStart()
+		{
+			boolean needToDelete = false;
+			this.indexEnd++;
+			if (this.indexEnd - this.indexStart >= this.maxNumberOfItems && this.maxNumberOfItems > 0)
+			{
+				this.indexStart++;
+				needToDelete = true;
+			}
+			return needToDelete;
+		}
+		
+		public boolean moveRangeUpRequiresDeleteAtEnd()
+		{
+			boolean needToDelete = false;
+			if (this.indexStart == 0)
+			{
+				return false;
+			}
+			this.indexStart--;
+			if (this.indexEnd - this.indexStart >= this.maxNumberOfItems && this.maxNumberOfItems > 0)
+			{
+				needToDelete = true;
+				this.indexEnd--;
+			}
+			return needToDelete;
+		}			
+			
+		public int getIndexStart()
+		{
+			return this.indexStart;
+		}
+		
+		public int getIndexEnd()
+		{
+			return this.indexEnd;
+		}
+		
+		public int getRange()
+		{
+			return this.indexEnd - this.indexStart + 1;
+		}
+		
+		public void refresh(ItemSource source)
+		{
+			this.source = source;
+			int count = source.countItems();
+			int numberOfItems = count;
+			if (numberOfItems > this.initialNumberOfItems)
+			{
+				numberOfItems = this.initialNumberOfItems;
+			}
+			if (source.getDistributionPreference() == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+			{
+				this.indexEnd = count - 1;
+				this.indexStart = count - numberOfItems;
+			}
+			else
+			{
+				this.indexStart = 0;
+				this.indexEnd = numberOfItems - 1;
+			}
 		}
 	}
 }

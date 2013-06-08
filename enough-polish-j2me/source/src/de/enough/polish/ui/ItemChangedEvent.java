@@ -8,8 +8,8 @@ public class ItemChangedEvent
 	public static final int CHANGE_SET = 3;
 	public static final int CHANGE_COMPLETE_REFRESH = 10;
 	
-	private final int	change;
-	private final Item	affectedItem;
+	private int	change;
+	private Item	affectedItem;
 	private int	itemIndex;
 	
 	public ItemChangedEvent(int change, int itemIndex, Item affectedItem)
@@ -68,5 +68,13 @@ public class ItemChangedEvent
 	public void setItemIndex(int index) {
 		this.itemIndex = index;
 	}
-	
+
+	public void setChange(int change) {
+		this.change = change;
+	}
+
+	public void setAffectedItem(Item affectedItem)
+	{
+		this.affectedItem = affectedItem;
+	}
 }
