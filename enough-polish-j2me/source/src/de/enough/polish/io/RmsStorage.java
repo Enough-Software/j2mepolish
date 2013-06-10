@@ -47,7 +47,7 @@ import de.enough.polish.util.HashMap;
 /**
  * <p>Stores serializable objects in the record store system.</p>
  *
- * <p>Copyright Enough Software 2006 - 2009</p>
+ * <p>Copyright Enough Software 2006 - 2013</p>
  * <pre>
  * history
  *        13-Mar-2006 - rob creation

@@ -63,6 +63,10 @@ public class SourcedLazyContainer extends SourcedContainer {
 			int maxNumberOfItems, Style style) 
 	{
 		super( new WrappedItemSource(itemSource, initialNumberOfItems, maxNumberOfItems), focusFirst, style);
+		if (maxNumberOfItems < 2 * initialNumberOfItems)
+		{
+			throw new IllegalArgumentException("maxNumberOfItems needs to be at least twice initialNumberOfItems");
+		}
 		this.initialNumberOfItems = initialNumberOfItems;
 		this.maxNumberOfItems = maxNumberOfItems;
 		this.realItemSource = itemSource;
