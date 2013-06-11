@@ -53,12 +53,13 @@ implements Externalizable
 	private int completeSize;
 	private int tailCollectionStartIndex;
 	private ArrayList tailCollection;
+	private boolean tailCollectionIsDirty;
 	private ArrayList currentCollection;
 	private int currentCollectionIndex = -1;
-	private boolean currentColletionIsDirty;
+	private boolean currentCollectionIsDirty;
 
 	private ChunkedStorageSystem storageSystem;
-	private boolean isTailCollectionLoaded;
+	private boolean tailCollectionIsLoaded;
 	private int storageStrategy;
 	
 	public ChunkedStorageCollection(String identifier, int chunkSize, ChunkedStorageSystem storageSystem, int storageStrategy)
@@ -111,7 +112,7 @@ implements Externalizable
 	 */
 	public int size()
 	{
-		if (!this.isTailCollectionLoaded)
+		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
@@ -120,7 +121,7 @@ implements Externalizable
 	
 	public int sizeTail()
 	{
-		if (!this.isTailCollectionLoaded)
+		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
@@ -142,7 +143,7 @@ implements Externalizable
 	
 	public Object get(int index)
 	{
-		if (!this.isTailCollectionLoaded)
+		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
@@ -171,14 +172,66 @@ implements Externalizable
 		return this.currentCollection.get(indexWithinChunk);
 	}
 	
+	public int indexOf(Mutable element)
+	{
+		if (!this.tailCollectionIsLoaded)
+		{
+			loadTailCollection();
+		}
+		int index = this.tailCollection.indexOf(element);
+		if (index == -1 && this.currentCollection != null)
+		{
+			index = this.currentCollection.indexOf(element);
+		}
+		return index;
+	}
+	
+	public void clear()
+	{
+		this.tailCollectionIsLoaded = false;
+		this.tailCollectionIsDirty = false; 
+		this.tailCollection = null;
+		this.currentCollection = null;
+	}
+	
+	public void deleteCollection()
+	{
+		this.tailCollectionIsDirty = false; 
+		this.currentCollectionIsDirty = false; 
+		this.tailCollectionIsLoaded = false;
+		clear();
+		try {
+			this.storageSystem.delete(this.identifier);
+		} catch (IOException e) {
+			//#debug error
+			System.out.println("unable to delete storage" + e);
+			e.printStackTrace();
+		}
+	}
+	
+	public Object lastElement()
+	{
+		if (!this.tailCollectionIsLoaded)
+		{
+			loadTailCollection();
+		}
+		int size = this.tailCollection.size();
+		if (size > 0)
+		{
+			return this.tailCollection.get(size - 1);
+		}
+		throw new IllegalStateException("there is no element");
+	}
+	
 	public void add(Mutable element)
 	{
-		if (!this.isTailCollectionLoaded)
+		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
 		this.tailCollection.add(element);
 		this.completeSize++;
+		this.tailCollectionIsDirty = true; 
 		// check if we have reached a new chunk for the archive:
 		if (this.tailCollection.size() >= this.chunkSize * 2)
 		{
@@ -202,6 +255,10 @@ implements Externalizable
 			//#debug error
 			System.out.println("unable to save tail collection" + e);
 			e.printStackTrace();
+		}
+		finally
+		{
+			this.tailCollectionIsDirty = false;
 		}
 	}
 
@@ -234,28 +291,37 @@ implements Externalizable
 
 	public Object remove(int index)
 	{
-		if (!this.isTailCollectionLoaded)
+		if (!isRemovable(index))
+		{
+			throw new IllegalArgumentException("cannot remove already chunked element " + index);
+		}
+		index -= this.tailCollectionStartIndex;
+		Object removed = this.tailCollection.remove(index);
+		this.tailCollectionIsDirty = true;
+		this.completeSize--;
+		return removed;
+	}
+	
+	public boolean isRemovable(int index)
+	{
+		if (!this.tailCollectionIsLoaded)
+		{
+			loadTailCollection();
+		}
+		return (index >= this.tailCollectionStartIndex);
+	}
+
+	
+	public Object set(int index, Mutable element)
+	{
+		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
 		if (index >= this.tailCollectionStartIndex)
 		{
 			index -= this.tailCollectionStartIndex;
-			Object removed = this.tailCollection.remove(index);
-			this.completeSize--;
-			return removed;
-		}
-		throw new IllegalArgumentException("cannot remove already chunked element " + index);
-	}
-	
-	public Object set(int index, Mutable element)
-	{
-		if (!this.isTailCollectionLoaded)
-		{
-			loadTailCollection();
-		}
-		if (index < this.tailCollection.size())
-		{
+			this.tailCollectionIsDirty = true;
 			return this.tailCollection.set(index, element);
 		}
 		throw new IllegalArgumentException("cannot set/replace already chunked element " + index);
@@ -277,7 +343,8 @@ implements Externalizable
 		}
 		finally
 		{
-			this.isTailCollectionLoaded = true;
+			this.tailCollectionIsLoaded = true;
+			this.tailCollectionIsDirty = false;
 		}
 	}
 
@@ -290,10 +357,10 @@ implements Externalizable
 		DataInputStream in = new DataInputStream( new ByteArrayInputStream(data));
 		if (this.currentCollection != null)
 		{
-			if (this.currentColletionIsDirty || containsDirtyElement(this.currentCollection))
+			if (this.currentCollectionIsDirty || containsDirtyElement(this.currentCollection))
 			{
 				saveCurrentCollection();
-				this.currentColletionIsDirty = false;
+				this.currentCollectionIsDirty = false;
 			}
 			this.currentCollection.clear();
 		}
@@ -359,34 +426,75 @@ implements Externalizable
 		return null;
 	}
 	
+	
+	protected ArrayList getTailCollection()
+	{
+		if (!this.tailCollectionIsLoaded)
+		{
+			loadTailCollection();
+		}
+		return this.tailCollection;
+	}
+
+	protected ArrayList getCurrentCollection()
+	{
+		return this.currentCollection;
+	}
+	
 	public void releaseResources()
 	{
 		this.tailCollection.clear();
-		this.isTailCollectionLoaded = false;
+		this.tailCollectionIsLoaded = false;
 		if (this.currentCollection != null)
 		{
 			this.currentCollection.clear();
 			this.currentCollectionIndex = -1;
-			this.currentColletionIsDirty = false;
+			this.currentCollectionIsDirty = false;
 		}
 	}
 	
 	public void saveCollection() throws IOException
 	{
+		if (this.tailCollection != null)
+		{
+			boolean saveTailCollection = this.tailCollectionIsDirty || containsDirtyElement(this.tailCollection);
+			if (saveTailCollection)
+			{
+				saveTailCollection();
+			}
+		}
 		if (this.currentCollection != null)
 		{
-			boolean saveCurrentCollection = this.currentColletionIsDirty || containsDirtyElement(this.currentCollection);
+			boolean saveCurrentCollection = this.currentCollectionIsDirty || containsDirtyElement(this.currentCollection);
 			if (saveCurrentCollection)
 			{
 				saveCurrentCollection();
-				this.currentColletionIsDirty = false;
+				this.currentCollectionIsDirty = false;
 			}
 		}
-		if (this.tailCollection != null)
-		{
-			saveTailCollection();
-		}
 	}
+	
+	/**
+	 * Checks if this collection contains at least one updated element
+	 * @return true when this collection contains at least one updated element
+	 */
+	public boolean isDirty()
+	{
+		if (this.currentCollectionIsDirty || this.tailCollectionIsDirty)
+		{
+			return true;
+		}
+		if (this.tailCollectionIsLoaded && containsDirtyElement(this.tailCollection))
+		{
+			return true;
+		}
+		if (this.currentCollection != null && containsDirtyElement(this.currentCollection))
+		{
+			return true;
+		}
+		return false;
+	}
+	
 
 	private boolean containsDirtyElement(ArrayList collection) 
 	{

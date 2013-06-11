@@ -28,6 +28,7 @@ package de.enough.polish.io;
 import java.io.IOException;
 
 import javax.microedition.rms.RecordStore;
+import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
 
 
@@ -39,11 +40,18 @@ public class ChunkedStorageRmsSystem implements ChunkedStorageSystem {
 	}
 
 	public byte[] loadData(int chunkIndex, String identifier) throws IOException {
+		try { throw new RuntimeException("load: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
 		RecordStore store = null;
 		try
 		{
 			store = RecordStore.openRecordStore(identifier, false);
-			int recordSetId = chunkIndex + 1;
+			int recordSetId = chunkIndex + 2;
+			if (store.getNumRecords() == 0)
+			{
+				throw new IOException("no records in " + identifier);
+			}
+			//#debug
+			System.out.println(identifier + ": loading " + recordSetId);
 			byte[] data = store.getRecord(recordSetId);
 			return data;
 		} 
@@ -71,12 +79,13 @@ public class ChunkedStorageRmsSystem implements ChunkedStorageSystem {
 	public void saveChunkData(int chunkIndex, String identifier, byte[] data)
 			throws IOException 
 	{
+		try { throw new RuntimeException("save: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
 		RecordStore store = null;
 		try
 		{
-			store = RecordStore.openRecordStore(identifier, false);
-			int recordSetId = chunkIndex + 1;
-			if (store.getNumRecords() > recordSetId)
+			store = RecordStore.openRecordStore(identifier, true);
+			int recordSetId = chunkIndex + 2;
+			if (store.getNumRecords() >= recordSetId)
 			{
 				store.setRecord(recordSetId, data, 0, data.length);
 			}
@@ -103,6 +112,19 @@ public class ChunkedStorageRmsSystem implements ChunkedStorageSystem {
 			{
 				try { store.closeRecordStore(); } catch (Exception e){}
 			}
+		}
+	}
+
+	public void delete(String identifier) throws IOException {
+		try {
+			RecordStore.deleteRecordStore(identifier);
+		} catch (RecordStoreNotFoundException e) {
+			//#debug info
+			System.out.println("record store not found: " + identifier);
+		} catch (RecordStoreException e) {
+			//#debug error
+			System.out.println("Unable to delete record store" + e);
+			throw new IOException(e.toString());
 		}
 	}
 }

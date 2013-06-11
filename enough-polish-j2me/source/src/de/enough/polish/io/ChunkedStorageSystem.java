@@ -12,4 +12,6 @@ public interface ChunkedStorageSystem {
 	
 	void saveChunkData(int chunkIndex, String identifier, byte[] data) throws IOException;
 
+	void delete(String identifier) throws IOException;
+
 }

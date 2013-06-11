@@ -25,6 +25,15 @@ public class ChunkedStorageCollectionTest extends TestCase
 		assertNotNull(list);
 		assertTrue(list.size() > 0);
 		assertEquals(list.size(), testSize / 20);
+		assertTrue(collection.isDirty());
+		try {
+			collection.saveCollection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("for " + e.toString());
+		}
+		assertFalse(collection.isDirty());
 		
 		for (int i=testSize-1; i>=0; i--)
 		{
@@ -33,6 +42,7 @@ public class ChunkedStorageCollectionTest extends TestCase
 		}
 		
 		collection.remove(1000);
+		assertTrue(collection.isDirty());
 		assertEquals(testSize - 1, collection.size());
 		
 		int toAdd = 23;
@@ -136,6 +146,10 @@ public class ChunkedStorageCollectionTest extends TestCase
 					throw new IOException("inconsistent state: expected size=" + (index + 1) + ", actual size=" + list.size());
 				}				
 			}
+		}
+
+		public void delete(String identifier) throws IOException {
+			listsPerIdentifier.remove(identifier);
 		}
 		
 	}
