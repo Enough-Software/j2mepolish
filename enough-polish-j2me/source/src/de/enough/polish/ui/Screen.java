@@ -5200,6 +5200,16 @@ implements UiElement, Animatable
 	//#endif
 	
 	/**
+	 * Returns the top-level frame/container at the specified coordinates.
+	 * @param x the absolute x position
+	 * @param y the absolute y position
+	 * @return the frame of the specified position, might be null
+	 */
+	public Container getFrame(int x, int y) {
+		return this.container;
+	}
+	
+	/**
 	 * Handles a touch gestures.
 	 * Note that touch gesture support needs to be activated using the preprocessing variable polish.supportGestures.
 	 * The default implementation calls handleGestureHold() in case GESTURE_HOLD is specified.
@@ -5228,7 +5238,7 @@ implements UiElement, Animatable
 			}
 			if (!handled) 
 			{
-				Container cont = this.container;
+				Container cont = getFrame(x,y);
 				if (cont != null)
 				{
 					handled = cont.handleGesture(gesture, x - cont.relativeX, y - cont.relativeY);
