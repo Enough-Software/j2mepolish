@@ -40,7 +40,7 @@ public class ChunkedStorageRmsSystem implements ChunkedStorageSystem {
 	}
 
 	public byte[] loadData(int chunkIndex, String identifier) throws IOException {
-		try { throw new RuntimeException("load: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
+		//try { throw new RuntimeException("load: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
 		RecordStore store = null;
 		try
 		{
@@ -79,7 +79,7 @@ public class ChunkedStorageRmsSystem implements ChunkedStorageSystem {
 	public void saveChunkData(int chunkIndex, String identifier, byte[] data)
 			throws IOException 
 	{
-		try { throw new RuntimeException("save: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
+		//try { throw new RuntimeException("save: for " + chunkIndex + " of " + identifier); } catch (Exception e) { e.printStackTrace(); }
 		RecordStore store = null;
 		try
 		{

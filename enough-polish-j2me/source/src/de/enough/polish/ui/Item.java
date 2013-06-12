@@ -979,22 +979,48 @@ public abstract class Item implements UiElement, Animatable
 	 * <p>It is illegal to call this method if this <code>Item</code>
 	 * is contained within  an <code>Alert</code>.</p>
 	 * 
-	 * @param label - the label string
+	 * @param labelText the label string
 	 * @throws IllegalStateException - if this Item is contained  within an Alert
 	 * @see #getLabel()
 	 */
-	public void setLabel( String label)
+	public void setLabel(String labelText)
 	{
-		if (this.label == null) {
-			this.label = new StringItem( null, label, this.labelStyle );
+		setLabel(labelText, this.labelStyle);
+	}
+
+	/**
+	 * Sets the label of the <code>Item</code>. If <code>label</code>
+	 * is <code>null</code>, specifies that this item has no label.
+	 * 
+	 * <p>It is illegal to call this method if this <code>Item</code>
+	 * is contained within  an <code>Alert</code>.</p>
+	 * 
+	 * @param labelText the label string
+	 * @param lstyle the style for the label
+	 * @throws IllegalStateException - if this Item is contained  within an Alert
+	 * @see #getLabel()
+	 */
+	public void setLabel( String labelText, Style lstyle )
+	{
+		if ((this.label == null) && (labelText != null)) 
+		{
+			this.label = new StringItem( null, labelText, lstyle );
 			this.label.parent = this; // orginally used "this.parent", however that field might not be known at this moment.
-			if (this.isShown){
+			if (this.isShown)
+			{
 				this.label.showNotify();
 			}
-		} else if ((label == null && this.label.getText() == null) || (label != null && label.equals(this.label.getText())) ){
+		} 
+		else if (
+				(labelText == null && (this.label == null || this.label.getText() == null)) 
+				|| (labelText != null && (this.label != null && labelText.equals(this.label.getText()))) 
+				)
+		{
 			return;
-		} else {
-			this.label.setText( label );
+		} 
+		else if (this.label != null)
+		{
+			this.label.setText( labelText, lstyle );
 		}
 		if (isInitialized()) {
 			setInitialized(false);
@@ -1234,13 +1260,16 @@ public abstract class Item implements UiElement, Animatable
 			Style labStyle = (Style) style.getObjectProperty("label-style");
 			if (labStyle != null) {
 				this.labelStyle = labStyle;
+				if (this.label != null) {
+					this.label.setStyle( labStyle );			
+				}
 			} else if (this.labelStyle == null) {
 				this.labelStyle = StyleSheet.labelStyle;
 			}
 		//#else
 			this.labelStyle = StyleSheet.labelStyle;
 		//#endif
-		if (this.label != null) {
+		if (this.label != null && this.label.style == null) {
 			this.label.setStyle( this.labelStyle );			
 		}
 		

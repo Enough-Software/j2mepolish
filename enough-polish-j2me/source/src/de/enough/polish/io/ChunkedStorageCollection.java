@@ -225,6 +225,7 @@ implements Externalizable
 	
 	public void add(Mutable element)
 	{
+		//try { throw new RuntimeException("ADD FOR " + element); } catch (Exception e) { e.printStackTrace(); }
 		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
@@ -337,9 +338,9 @@ implements Externalizable
 		} 
 		catch (IOException e) 
 		{
-			// either there is no stored seed collection or it could not be loaded
+			// either there is no stored tail collection or it could not be loaded
 			//#debug warn
-			System.out.println("Unable to load seed collection for " + this.identifier + e);
+			System.out.println("Unable to load tail collection for " + this.identifier + e);
 		}
 		finally
 		{

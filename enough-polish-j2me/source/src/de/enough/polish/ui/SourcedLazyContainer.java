@@ -265,7 +265,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 		{
 			this.source = source;
 			this.indexRange = new IndexRange(initialNumberOfItems, maxNumberOfItems, source);
-			refresh();
+			this.indexRange.refresh(this.source);
 			source.setItemConsumer(this);
 		}
 
@@ -309,8 +309,9 @@ public class SourcedLazyContainer extends SourcedContainer {
 				{
 					if (change == ItemChangedEvent.CHANGE_ADD)
 					{
-						System.out.println("add: range.indexEnd=" + indexRange.indexEnd + ", index=" + index);
-						if (index == this.indexRange.getIndexEnd() + 1)
+						//System.out.println("add: range.indexEnd=" + indexRange.indexEnd + ", index=" + index);
+						int indexEnd = this.indexRange.getIndexEnd();
+						if (index == indexEnd + 1)
 						{
 							//TODO: this behavior is only for LAYOUT_BOTTOM ItemSources correct
 							boolean needToDelete = this.indexRange.moveRangeDownRequiresDeleteAtStart();

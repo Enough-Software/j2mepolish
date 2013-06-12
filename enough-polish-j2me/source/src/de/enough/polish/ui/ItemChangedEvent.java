@@ -8,6 +8,8 @@ public class ItemChangedEvent
 	public static final int CHANGE_SET = 3;
 	public static final int CHANGE_COMPLETE_REFRESH = 10;
 	
+	public static ItemChangedEvent EVENT_COMPLETE_REFRESH = new ItemChangedEvent(CHANGE_COMPLETE_REFRESH, -1, null);
+	
 	private int	change;
 	private Item	affectedItem;
 	private int	itemIndex;
