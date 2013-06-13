@@ -1015,7 +1015,7 @@ public class Container extends Item {
 	 * 
 	 * @param index the position
 	 * @param item the item which should be focused
-	 * @param direction the direction, either Canvas.DOWN, Canvas.RIGHT, Canvas.UP, Canvas.LEFT or 0.
+	 * @param direction the direction, either Canvas.DOWN, Canvas.RIGHT, Canvas.UP, Canvas.LEFT or 0. For focus via touch, use Canvas.FIRE
 	 * @param force true when the child should be focused again even though is has been focused before
 	 */
 	public void focusChild( int index, Item item, int direction, boolean force ) {
@@ -3632,7 +3632,7 @@ public class Container extends Item {
 			System.out.println("Container.handlePointerPressed(" + relX + "," + relY + "): found item " + index + "=" + nextItem + " at relative " + relX + "," + relY + ", itemHeight=" + nextItem.itemHeight);
 			// only focus the item when it has not been focused already:
 			int offset = getScrollYOffset();
-			focusChild(index, nextItem, 0, true);
+			focusChild(index, nextItem, Canvas.FIRE, true);
 			setScrollYOffset( offset, false ); // don't move the UI while handling the press event:
 			// let the item also handle the pointer-pressing event:
 			nextItem.handlePointerPressed( relX - nextItem.relativeX , relY - nextItem.relativeY );

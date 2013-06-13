@@ -5046,7 +5046,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @param newStyle the style which is used to indicate the focused state
 	 * @param direction the direction from which this item is focused,
 	 *        either Canvas.UP, Canvas.DOWN, Canvas.LEFT, Canvas.RIGHT or 0.
-	 *        When 0 is given, the direction is unknown.
+	 *        When 0 is given, the direction is unknown. For focus via touch, use Canvas.FIRE.
 	 * @return the current style of this item
 	 */
 	protected Style focus( Style newStyle, int direction ) {
