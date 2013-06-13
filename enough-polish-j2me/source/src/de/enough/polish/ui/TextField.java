@@ -2918,6 +2918,11 @@ public class TextField extends StringItem
 			// end if !polish.android
 			//#endif
 		//#endif
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
+				multilineToggleFix(this.nokiaTextEditor);					
+			}
+		//#endif
 	}
 	
 	//#if tmp.directInput
@@ -4467,6 +4472,11 @@ public class TextField extends StringItem
 	protected boolean handlePointerReleased( int x, int y ) {
 		repaint();
 		if (isInItemArea(x, y)) {
+			//#if tmp.useNokiaInput
+				if ( this.nokiaTextEditor != null && !this.nokiaTextEditor.hasFocus()) {
+					this.nokiaTextEditor.setFocus(true);					
+				}
+			//#endif
 			//#if tmp.useNativeTextBox 
 				int fieldType = this.constraints & 0xffff;
 				if (fieldType != FIXED_POINT_DECIMAL) {
@@ -4783,15 +4793,8 @@ public class TextField extends StringItem
 		//#if tmp.useNokiaInput
 			//#debug info
 			System.out.println("focus tf != null: " + (this.nokiaTextEditor != null));
-			if ( this.nokiaTextEditor != null ) {
-				try {
-					this.nokiaTextEditor.setFocus(true);
-				} 
-				catch (Exception e)
-				{
-					//#debug error
-					System.out.println("unable to set focus" + e);
-				}
+			if ( this.nokiaTextEditor != null && direction != Canvas.FIRE && !this.nokiaTextEditor.hasFocus()) {
+				this.nokiaTextEditor.setFocus(true);				
 			}
 		//#endif
 		//#if polish.android
@@ -4864,9 +4867,19 @@ public class TextField extends StringItem
 	
 	//#if tmp.useNokiaInput
 		public void multilineToggleFix(TextEditor textEditor) {
-			Object parent = textEditor.getParent();
-			textEditor.setParent(null);
-			textEditor.setParent(parent);
+			boolean isResetNeeded = false;
+			if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
+				textEditor.setMultiline(true);
+				isResetNeeded = true;
+			} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
+				textEditor.setMultiline(false);
+				isResetNeeded = true;
+			}
+			if ( isResetNeeded ) {
+				Object parent = textEditor.getParent();
+				textEditor.setParent(null);
+				textEditor.setParent(parent);
+			}
 		}
 	//#endif
 	
@@ -4910,13 +4923,7 @@ public class TextField extends StringItem
 					notifyStateChanged();
 				}
 
-				if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
-						textEditor.setMultiline(true);	
-						multilineToggleFix(textEditor);
-				} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
-						textEditor.setMultiline(false);	
-						multilineToggleFix(textEditor);
-				}
+				multilineToggleFix(textEditor);
 			}
 			if ((actions & TextEditorListener.ACTION_TRAVERSE_NEXT) != 0)
 			{
@@ -4986,7 +4993,7 @@ public class TextField extends StringItem
 	protected void showNotify() 
 	{	
 		//#if tmp.useNokiaInput
-			if ( this.nokiaTextEditor != null && this.isFocused) 
+			if ( this.nokiaTextEditor != null && this.isFocused && !this.nokiaTextEditor.hasFocus()) 
 			{
 				this.nokiaTextEditor.setVisible(true);
 				this.nokiaTextEditor.setFocus(true);
