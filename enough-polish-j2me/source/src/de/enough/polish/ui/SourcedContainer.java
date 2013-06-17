@@ -165,30 +165,78 @@ implements ItemConsumer
 			setItemSource(this.itemSource);
 			return;
 		}
-		if (change == ItemChangedEvent.CHANGE_ADD || change == ItemChangedEvent.CHANGE_SET)
+		synchronized (getSynchronizationLock())
 		{
-			Item nextItem = event.getAffectedItem();
-			if (nextItem == null)
+			if (change == ItemChangedEvent.CHANGE_ADD || change == ItemChangedEvent.CHANGE_SET)
 			{
-				nextItem = this.itemSource.createItem(itemIndex);
-			}
-			if (change == ItemChangedEvent.CHANGE_ADD)
-			{
-				if (this.isEmpty)
+				Item nextItem = event.getAffectedItem();
+				if (nextItem == null)
 				{
-					this.isEmpty = false;
-					clear();
+					nextItem = this.itemSource.createItem(itemIndex);
 				}
-				if (itemIndex >= this.itemsList.size()-1)
+				if (change == ItemChangedEvent.CHANGE_ADD)
 				{
-					if (!this.isInitialized)
+					if (this.isEmpty)
 					{
-						add( nextItem );
+						this.isEmpty = false;
+						clear();
 					}
-					else // this container is initialized already, just scroll down to the new item:
+					if (itemIndex >= this.itemsList.size()-1)
 					{
+						if (!this.isInitialized)
+						{
+							add( nextItem );
+						}
+						else // this container is initialized already, just scroll down to the new item:
+						{
+							setInitialized(false);
+							add( nextItem );
+							int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
+							nextItem.relativeX = 0;
+							if (nextItem.isLayoutRight())
+							{
+								nextItem.relativeX = this.availContentWidth - nextItem.itemWidth;
+							}
+							else if (nextItem.isLayoutCenter())
+							{
+								nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
+							}
+							nextItem.relativeY = this.contentHeight + this.paddingVertical;
+							Item p = this;
+							while (p != null)
+							{
+								p.contentHeight += height;
+								p.itemHeight += height;
+								p = p.parent;
+							}
+							setInitialized(true);
+							if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+							{
+								scrollToBottom();
+							}
+						}
+					}
+					else
+					{
+						add( itemIndex, nextItem );
+					}
+				} 
+				else // if (change == ItemChangedEvent.CHANGE_SET)
+				{
+					if (itemIndex >= this.itemsList.size())
+					{
+						setItemSource(this.itemSource);
+					}
+					else if (!this.isInitialized)
+					{
+						set( itemIndex, nextItem );
+					}
+					else
+					{
+						Item previousItem = get(itemIndex);
+						int previousHeight = previousItem.itemHeight;
 						setInitialized(false);
-						add( nextItem );
+						set( itemIndex, nextItem );
 						int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
 						nextItem.relativeX = 0;
 						if (nextItem.isLayoutRight())
@@ -199,91 +247,46 @@ implements ItemConsumer
 						{
 							nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
 						}
-						nextItem.relativeY = this.contentHeight + this.paddingVertical;
-						Item p = this;
-						while (p != null)
-						{
-							p.contentHeight += height;
-							p.itemHeight += height;
-							p = p.parent;
-						}
+						nextItem.relativeY = previousItem.relativeY;
 						setInitialized(true);
-						if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+						if (height != previousHeight)
 						{
-							scrollToBottom();
+							requestInit();
 						}
 					}
 				}
-				else
-				{
-					add( itemIndex, nextItem );
-				}
-			} 
-			else // if (change == ItemChangedEvent.CHANGE_SET)
+			}
+			else if (change == ItemChangedEvent.CHANGE_REMOVE)
 			{
-				if (itemIndex >= this.itemsList.size())
+				int size = this.itemsList.size();
+				if (!this.isInitialized || (itemIndex < size - 1))
+				{
+					remove(itemIndex);
+				}
+				else if (itemIndex < size) // last element is removed
+				{
+					setInitialized(false);
+					Item prevItem = remove(itemIndex);
+					//System.out.println("removing with height=" + prevItem.itemHeight + ": " + prevItem);
+					int height = prevItem.itemHeight + this.paddingVertical;
+					Item p = this;
+					while (p != null)
+					{
+						p.contentHeight -= height;
+						p.itemHeight -= height;
+						p.backgroundHeight -= height;
+						p = p.parent;
+					}
+					setInitialized(true);
+					if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+					{
+						scrollToBottom();
+					}
+				}
+				else
 				{
 					setItemSource(this.itemSource);
 				}
-				else if (!this.isInitialized)
-				{
-					set( itemIndex, nextItem );
-				}
-				else
-				{
-					Item previousItem = get(itemIndex);
-					int previousHeight = previousItem.itemHeight;
-					setInitialized(false);
-					set( itemIndex, nextItem );
-					int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
-					nextItem.relativeX = 0;
-					if (nextItem.isLayoutRight())
-					{
-						nextItem.relativeX = this.availContentWidth - nextItem.itemWidth;
-					}
-					else if (nextItem.isLayoutCenter())
-					{
-						nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
-					}
-					nextItem.relativeY = previousItem.relativeY;
-					setInitialized(true);
-					if (height != previousHeight)
-					{
-						requestInit();
-					}
-				}
-			}
-		}
-		else if (change == ItemChangedEvent.CHANGE_REMOVE)
-		{
-			int size = this.itemsList.size();
-			if (!this.isInitialized || (itemIndex < size - 1))
-			{
-				remove(itemIndex);
-			}
-			else if (itemIndex < size) // last element is removed
-			{
-				setInitialized(false);
-				Item prevItem = remove(itemIndex);
-				//System.out.println("removing with height=" + prevItem.itemHeight + ": " + prevItem);
-				int height = prevItem.itemHeight + this.paddingVertical;
-				Item p = this;
-				while (p != null)
-				{
-					p.contentHeight -= height;
-					p.itemHeight -= height;
-					p.backgroundHeight -= height;
-					p = p.parent;
-				}
-				setInitialized(true);
-				if (this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
-				{
-					scrollToBottom();
-				}
-			}
-			else
-			{
-				setItemSource(this.itemSource);
 			}
 		}
 		//#debug
