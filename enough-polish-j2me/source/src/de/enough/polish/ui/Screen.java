@@ -4304,13 +4304,11 @@ implements UiElement, Animatable
 		//#else
 			Object[] commands = getCommands();
 			if (commands != null) {
-				for (int i = 0; i < commands.length; i++) {
+				for (int i = commands.length - 1; i >= 0 ; i--) {
 					Command cmd = (Command) commands[i];
-					if (cmd == null) {
-						break;
+					if (cmd != null) {
+						removeCommand(cmd);
 					}
-					removeCommand(cmd);
-					i--;
 				}
 			}
 		//#endif
