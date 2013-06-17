@@ -4310,6 +4310,7 @@ implements UiElement, Animatable
 						break;
 					}
 					removeCommand(cmd);
+					i--;
 				}
 			}
 		//#endif
