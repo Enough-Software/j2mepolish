@@ -179,11 +179,19 @@ implements Externalizable
 			loadTailCollection();
 		}
 		int index = this.tailCollection.indexOf(element);
-		if (index == -1 && this.currentCollection != null)
+		if (index != -1)
+		{
+			return this.tailCollectionStartIndex + index;
+		}
+		if (this.currentCollection != null)
 		{
 			index = this.currentCollection.indexOf(element);
+			if (index != -1)
+			{
+				return index + (this.chunkSize * this.currentCollectionIndex);
+			}
 		}
-		return index;
+		return -1;
 	}
 	
 	public void clear()
