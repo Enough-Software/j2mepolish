@@ -236,8 +236,15 @@ implements ItemConsumer
 						Item previousItem = get(itemIndex);
 						int previousHeight = previousItem.itemHeight;
 						setInitialized(false);
+						int prevFocusedIndex = getFocusedIndex();
+						int prevScrollYOffset = getScrollYOffset();
+						if (prevFocusedIndex == itemIndex)
+						{
+							focusChild(-1);
+						}
 						set( itemIndex, nextItem );
 						int height = nextItem.getItemHeight(this.availContentWidth, this.availContentWidth, this.availContentHeight);
+						
 						nextItem.relativeX = 0;
 						if (nextItem.isLayoutRight())
 						{
@@ -248,6 +255,11 @@ implements ItemConsumer
 							nextItem.relativeX = (this.availContentWidth - nextItem.itemWidth) / 2;
 						}
 						nextItem.relativeY = previousItem.relativeY;
+						if (prevFocusedIndex == itemIndex)
+						{
+							focusChild(itemIndex);
+						}
+						setScrollYOffset(prevScrollYOffset, false);
 						setInitialized(true);
 						if (height != previousHeight)
 						{
@@ -301,7 +313,7 @@ implements ItemConsumer
 		super.setScrollHeight(height);
 		if (height != -1 && this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
 		{
-			scrollToBottom();
+			scrollToBottom(false);
 		}
 	}
 	

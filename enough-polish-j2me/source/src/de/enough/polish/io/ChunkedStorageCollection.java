@@ -347,7 +347,7 @@ implements Externalizable
 		catch (IOException e) 
 		{
 			// either there is no stored tail collection or it could not be loaded
-			//#debug warn
+			//#debug info
 			System.out.println("Unable to load tail collection for " + this.identifier + e);
 		}
 		finally
