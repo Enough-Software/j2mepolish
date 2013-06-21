@@ -79,9 +79,9 @@ implements Externalizable
 		out.writeInt(this.chunkSize);
 		out.writeInt(this.completeSize);
 		out.writeInt(this.tailCollectionStartIndex);
-		int tailSize = this.tailCollection.size();
+		int tailSize = getTailCollection().size();
 		out.writeInt(tailSize);
-		Object[] internalObjects = this.tailCollection.getInternalArray();
+		Object[] internalObjects = getTailCollection().getInternalArray();
 		for (int i = 0; i < tailSize; i++) {
 			Externalizable externalizable = (Externalizable) internalObjects[i];
 			externalizable.write(out);
@@ -102,6 +102,9 @@ implements Externalizable
 		this.completeSize = in.readInt();
 		this.tailCollectionStartIndex = in.readInt();
 		int size = in.readInt();
+		if ( this.tailCollection == null ) {
+			this.tailCollection = new ArrayList(chunkSize*2);
+		}
 		fillCollection(this.tailCollection, size, in);
 	}
 	
@@ -125,7 +128,7 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		return this.tailCollection.size();
+		return getTailCollection().size();
 	}
 	private void fillCollection(ArrayList collection, int size,
 			DataInputStream in) throws IOException 
@@ -155,7 +158,7 @@ implements Externalizable
 		if (index >= this.tailCollectionStartIndex)
 		{
 			index -= this.tailCollectionStartIndex;
-			return this.tailCollection.get(index);
+			return getTailCollection().get(index);
 		}
 		int chunkIndex = index / this.chunkSize;
 		int indexWithinChunk = index % this.chunkSize;
@@ -178,7 +181,7 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		int index = this.tailCollection.indexOf(element);
+		int index = getTailCollection().indexOf(element);
 		if (index != -1)
 		{
 			return this.tailCollectionStartIndex + index;
@@ -223,10 +226,10 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		int size = this.tailCollection.size();
+		int size = getTailCollection().size();
 		if (size > 0)
 		{
-			return this.tailCollection.get(size - 1);
+			return getTailCollection().get(size - 1);
 		}
 		throw new IllegalStateException("there is no element");
 	}
@@ -238,11 +241,11 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		this.tailCollection.add(element);
+		getTailCollection().add(element);
 		this.completeSize++;
 		this.tailCollectionIsDirty = true; 
 		// check if we have reached a new chunk for the archive:
-		if (this.tailCollection.size() >= this.chunkSize * 2)
+		if (getTailCollection().size() >= this.chunkSize * 2)
 		{
 			saveChunk();
 		}
@@ -275,7 +278,7 @@ implements Externalizable
 	{
 		try
 		{
-			byte[] data = serializeCollectionChunk(this.tailCollection);
+			byte[] data = serializeCollectionChunk(getTailCollection());
 			int chunkIndex = this.tailCollectionStartIndex / this.chunkSize;
 
 			this.tailCollectionStartIndex += this.chunkSize;
@@ -283,7 +286,7 @@ implements Externalizable
 			System.out.println("saving chunk " + chunkIndex + ", tailCollectionStartIndex=" + this.tailCollectionStartIndex);
 			for (int i=0; i<this.chunkSize; i++)
 			{
-				this.tailCollection.remove(0);
+				getTailCollection().remove(0);
 			}
 			saveTailCollection();
 			
@@ -305,7 +308,7 @@ implements Externalizable
 			throw new IllegalArgumentException("cannot remove already chunked element " + index);
 		}
 		index -= this.tailCollectionStartIndex;
-		Object removed = this.tailCollection.remove(index);
+		Object removed = getTailCollection().remove(index);
 		this.tailCollectionIsDirty = true;
 		this.completeSize--;
 		return removed;
@@ -331,7 +334,7 @@ implements Externalizable
 		{
 			index -= this.tailCollectionStartIndex;
 			this.tailCollectionIsDirty = true;
-			return this.tailCollection.set(index, element);
+			return getTailCollection().set(index, element);
 		}
 		throw new IllegalArgumentException("cannot set/replace already chunked element " + index);
 	}
@@ -438,7 +441,7 @@ implements Externalizable
 	
 	protected ArrayList getTailCollection()
 	{
-		if (!this.tailCollectionIsLoaded)
+		if (!this.tailCollectionIsLoaded || this.tailCollection == null )
 		{
 			loadTailCollection();
 		}
@@ -493,7 +496,7 @@ implements Externalizable
 		{
 			return true;
 		}
-		if (this.tailCollectionIsLoaded && containsDirtyElement(this.tailCollection))
+		if (this.tailCollectionIsLoaded && containsDirtyElement(getTailCollection()))
 		{
 			return true;
 		}
