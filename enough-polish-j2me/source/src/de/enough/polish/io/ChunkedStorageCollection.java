@@ -74,14 +74,14 @@ implements Externalizable
 	 * (non-Javadoc)
 	 * @see de.enough.polish.io.Externalizable#write(java.io.DataOutputStream)
 	 */
-	public void write(DataOutputStream out) throws IOException {
+	public synchronized void write(DataOutputStream out) throws IOException {
 		out.writeInt(PERSISTENCE_VERSION);
 		out.writeInt(this.chunkSize);
 		out.writeInt(this.completeSize);
 		out.writeInt(this.tailCollectionStartIndex);
-		int tailSize = this.tailCollection.size();
+		int tailSize = getTailCollection().size();
 		out.writeInt(tailSize);
-		Object[] internalObjects = this.tailCollection.getInternalArray();
+		Object[] internalObjects = getTailCollection().getInternalArray();
 		for (int i = 0; i < tailSize; i++) {
 			Externalizable externalizable = (Externalizable) internalObjects[i];
 			externalizable.write(out);
@@ -92,7 +92,7 @@ implements Externalizable
 	 * (non-Javadoc)
 	 * @see de.enough.polish.io.Externalizable#read(java.io.DataInputStream)
 	 */
-	public void read(DataInputStream in) throws IOException {
+	public synchronized void read(DataInputStream in) throws IOException {
 		int version = in.readInt();
 		if (version > PERSISTENCE_VERSION)
 		{
@@ -102,6 +102,9 @@ implements Externalizable
 		this.completeSize = in.readInt();
 		this.tailCollectionStartIndex = in.readInt();
 		int size = in.readInt();
+		if ( this.tailCollection == null ) {
+			this.tailCollection = new ArrayList(chunkSize*2);
+		}
 		fillCollection(this.tailCollection, size, in);
 	}
 	
@@ -110,7 +113,7 @@ implements Externalizable
 	 * @return the complete size of this collection
 	 * @see #sizeTail();
 	 */
-	public int size()
+	public synchronized int size()
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
@@ -119,15 +122,16 @@ implements Externalizable
 		return this.completeSize;
 	}
 	
-	public int sizeTail()
+	public synchronized int sizeTail()
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
-		return this.tailCollection.size();
+		return getTailCollection().size();
 	}
-	private void fillCollection(ArrayList collection, int size,
+	
+	private synchronized void fillCollection(ArrayList collection, int size,
 			DataInputStream in) throws IOException 
 	{
 		for (int i=0; i < size; i++)
@@ -141,7 +145,7 @@ implements Externalizable
 	
 	protected abstract Mutable createCollectionObject();
 	
-	public Object get(int index)
+	public synchronized Object get(int index)
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
@@ -155,7 +159,7 @@ implements Externalizable
 		if (index >= this.tailCollectionStartIndex)
 		{
 			index -= this.tailCollectionStartIndex;
-			return this.tailCollection.get(index);
+			return getTailCollection().get(index);
 		}
 		int chunkIndex = index / this.chunkSize;
 		int indexWithinChunk = index % this.chunkSize;
@@ -172,13 +176,13 @@ implements Externalizable
 		return this.currentCollection.get(indexWithinChunk);
 	}
 	
-	public int indexOf(Mutable element)
+	public synchronized int indexOf(Mutable element)
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
-		int index = this.tailCollection.indexOf(element);
+		int index = getTailCollection().indexOf(element);
 		if (index != -1)
 		{
 			return this.tailCollectionStartIndex + index;
@@ -194,7 +198,7 @@ implements Externalizable
 		return -1;
 	}
 	
-	public void clear()
+	public synchronized void clear()
 	{
 		this.tailCollectionIsLoaded = false;
 		this.tailCollectionIsDirty = false; 
@@ -202,7 +206,7 @@ implements Externalizable
 		this.currentCollection = null;
 	}
 	
-	public void deleteCollection()
+	public synchronized void deleteCollection()
 	{
 		this.tailCollectionIsDirty = false; 
 		this.currentCollectionIsDirty = false; 
@@ -217,32 +221,32 @@ implements Externalizable
 		}
 	}
 	
-	public Object lastElement()
+	public synchronized Object lastElement()
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
-		int size = this.tailCollection.size();
+		int size = getTailCollection().size();
 		if (size > 0)
 		{
-			return this.tailCollection.get(size - 1);
+			return getTailCollection().get(size - 1);
 		}
 		throw new IllegalStateException("there is no element");
 	}
 	
-	public void add(Mutable element)
+	public synchronized void add(Mutable element)
 	{
 		//try { throw new RuntimeException("ADD FOR " + element); } catch (Exception e) { e.printStackTrace(); }
 		if (!this.tailCollectionIsLoaded)
 		{
 			loadTailCollection();
 		}
-		this.tailCollection.add(element);
+		getTailCollection().add(element);
 		this.completeSize++;
 		this.tailCollectionIsDirty = true; 
 		// check if we have reached a new chunk for the archive:
-		if (this.tailCollection.size() >= this.chunkSize * 2)
+		if (getTailCollection().size() >= this.chunkSize * 2)
 		{
 			saveChunk();
 		}
@@ -252,7 +256,7 @@ implements Externalizable
 		}
 	}
 	
-	private void saveTailCollection() {
+	private synchronized void saveTailCollection() {
 		try
 		{
 			boolean serializeDirectly = true;
@@ -271,11 +275,11 @@ implements Externalizable
 		}
 	}
 
-	private void saveChunk() 
+	private synchronized void saveChunk() 
 	{
 		try
 		{
-			byte[] data = serializeCollectionChunk(this.tailCollection);
+			byte[] data = serializeCollectionChunk(getTailCollection());
 			int chunkIndex = this.tailCollectionStartIndex / this.chunkSize;
 
 			this.tailCollectionStartIndex += this.chunkSize;
@@ -283,7 +287,7 @@ implements Externalizable
 			System.out.println("saving chunk " + chunkIndex + ", tailCollectionStartIndex=" + this.tailCollectionStartIndex);
 			for (int i=0; i<this.chunkSize; i++)
 			{
-				this.tailCollection.remove(0);
+				getTailCollection().remove(0);
 			}
 			saveTailCollection();
 			
@@ -298,20 +302,20 @@ implements Externalizable
 		}
 	}
 
-	public Object remove(int index)
+	public synchronized Object remove(int index)
 	{
 		if (!isRemovable(index))
 		{
 			throw new IllegalArgumentException("cannot remove already chunked element " + index);
 		}
 		index -= this.tailCollectionStartIndex;
-		Object removed = this.tailCollection.remove(index);
+		Object removed = getTailCollection().remove(index);
 		this.tailCollectionIsDirty = true;
 		this.completeSize--;
 		return removed;
 	}
 	
-	public boolean isRemovable(int index)
+	public synchronized boolean isRemovable(int index)
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
@@ -321,7 +325,7 @@ implements Externalizable
 	}
 
 	
-	public Object set(int index, Mutable element)
+	public synchronized Object set(int index, Mutable element)
 	{
 		if (!this.tailCollectionIsLoaded)
 		{
@@ -331,12 +335,12 @@ implements Externalizable
 		{
 			index -= this.tailCollectionStartIndex;
 			this.tailCollectionIsDirty = true;
-			return this.tailCollection.set(index, element);
+			return getTailCollection().set(index, element);
 		}
 		throw new IllegalArgumentException("cannot set/replace already chunked element " + index);
 	}
 
-	private void loadTailCollection() {
+	private synchronized void loadTailCollection() {
 		try 
 		{
 			byte[] data = this.storageSystem.loadTailData(this.identifier);
@@ -357,7 +361,7 @@ implements Externalizable
 		}
 	}
 
-	private void loadChunk(int chunkIndex) 
+	private synchronized void loadChunk(int chunkIndex) 
 	throws IOException 
 	{
 		//#debug
@@ -387,7 +391,7 @@ implements Externalizable
 		in.close();
 	}
 
-	private void saveCurrentCollection() {
+	private synchronized void saveCurrentCollection() {
 		if (this.currentCollection == null)
 		{
 			return;
@@ -405,7 +409,7 @@ implements Externalizable
 		}
 	}
 	
-	private byte[] serializeCollectionChunk(ArrayList collection)
+	private synchronized byte[] serializeCollectionChunk(ArrayList collection)
 	{
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(byteOut);
@@ -436,21 +440,21 @@ implements Externalizable
 	}
 	
 	
-	protected ArrayList getTailCollection()
+	protected synchronized ArrayList getTailCollection()
 	{
-		if (!this.tailCollectionIsLoaded)
+		if (!this.tailCollectionIsLoaded || this.tailCollection == null )
 		{
 			loadTailCollection();
 		}
 		return this.tailCollection;
 	}
 
-	protected ArrayList getCurrentCollection()
+	protected synchronized ArrayList getCurrentCollection()
 	{
 		return this.currentCollection;
 	}
 	
-	public void releaseResources()
+	public synchronized void releaseResources()
 	{
 		this.tailCollection.clear();
 		this.tailCollectionIsLoaded = false;
@@ -462,7 +466,7 @@ implements Externalizable
 		}
 	}
 	
-	public void saveCollection() throws IOException
+	public synchronized void saveCollection() throws IOException
 	{
 		if (this.tailCollection != null)
 		{
@@ -487,13 +491,13 @@ implements Externalizable
 	 * Checks if this collection contains at least one updated element
 	 * @return true when this collection contains at least one updated element
 	 */
-	public boolean isDirty()
+	public synchronized boolean isDirty()
 	{
 		if (this.currentCollectionIsDirty || this.tailCollectionIsDirty)
 		{
 			return true;
 		}
-		if (this.tailCollectionIsLoaded && containsDirtyElement(this.tailCollection))
+		if (this.tailCollectionIsLoaded && containsDirtyElement(getTailCollection()))
 		{
 			return true;
 		}
@@ -505,7 +509,7 @@ implements Externalizable
 	}
 	
 
-	private boolean containsDirtyElement(ArrayList collection) 
+	private synchronized boolean containsDirtyElement(ArrayList collection) 
 	{
 		int size = collection.size();
 		Object[] objects = collection.getInternalArray();
