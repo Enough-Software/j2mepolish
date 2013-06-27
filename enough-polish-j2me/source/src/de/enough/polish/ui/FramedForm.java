@@ -117,7 +117,17 @@ implements CycleListener
 		this.container.setCycleListener(this);
 	}
 
-	private Container getFrame( int frameOrientation ) {
+	/**
+	 * Retrieves the specified frame
+	 * @param frameOrientation the frame orientation
+	 * @return the container that is used for the given frame, this can be null
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 * @see #FRAME_CENTER
+	 */
+	protected Container getFrame( int frameOrientation ) {
 		switch (frameOrientation) {
 		case  Graphics.TOP:
 			return this.topFrame;
@@ -623,6 +633,26 @@ implements CycleListener
 		}
 		if (isShown()) {
 			requestInit();
+		}
+	}
+	
+	/**
+	 * Inserts the given item at the specified index in the specified frame
+	 * @param frameOrientation the frame
+	 * @param index the index at which the item should be inserted, 0 is the first position
+	 * @param item the item
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 * @see #FRAME_CENTER
+	 */
+	public void insert(int frameOrientation, int index, Item item)
+	{
+		Container frame = getFrame(frameOrientation);
+		if (frame != null)
+		{
+			frame.add(index, item);
 		}
 	}
 	

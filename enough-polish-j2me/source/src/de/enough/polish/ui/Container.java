@@ -399,14 +399,12 @@ public class Container extends Item {
 				//#endif
 			}
 			if (this.isShown) {
+				// set following items to relativeY=0, so that they will be scrolled correctly:
+				for (int i= index + 1; i < this.itemsList.size(); i++ ) {
+					Item followingItem = get(i);
+					followingItem.relativeY = 0;
+				}
 				requestInit();
-			}
-			// set following items to relativeY=0, so that they will be scrolled correctly:
-			for (int i= index + 1; i < this.itemsList.size(); i++ ) {
-				Item followingItem = get(i);
-				followingItem.relativeY = 0;
-			}
-			if (this.isShown) {
 				item.showNotify();
 			}
 			
