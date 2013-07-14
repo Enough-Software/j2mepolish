@@ -231,6 +231,27 @@ Thread th = new Thread() {
 th.start();
 </pre>
 
-
+<h2 id="asha-emulator-deadlock">Deadlock Detection with the Nokia Asha Emulator</h2>
+<p>
+Finding deadlocks can be tough work in J2ME development. J2ME Polish can help you to track down deadlocked threads
+by providing the <a href="build-emulator.html#emulator-filters">deadlock</a> emulator filter.
+Use this filter by extending your <code>&lt;emulator&gt;</code> setting in your <i>build.xml</i> script:
+</p>
+<pre class="brush: xml">
+&lt;filters&gt;
+	&lt;filter name=&quot;deadlock&quot;&gt;
+		&lt;package name=&quot;de.enough.polish.ui&quot; /&gt;
+		&lt;package name=&quot;com.company.myproject&quot; /&gt;
+	&lt;/filter&gt;
+&lt;/filters&gt;
+</pre>
+<p>After you have started the emulator, and your are about to approach the deadlock situation, 
+go to the Tools -&gt; Preferences -&gt; MIDP Monitor and select to monitor Method calls.
+Please note that this tracing option will slow down your app considerably.
+</p>
+<p>J2ME Polish will now regularly print out the traces of methods that are called. In a deadlock situation
+you will easily spot stuck threads as their method trances will be repeated often. You can now check the 
+synchronized statements within these methods to trace the order of locks that have been obtained by each thread.
+</p>
 
 <%include end.txt %>

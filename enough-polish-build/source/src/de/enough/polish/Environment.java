@@ -838,6 +838,15 @@ public class Environment {
 	}
 	
 	/**
+	 * Retrieves the extension manager
+	 * @return the extension manager
+	 */
+	public ExtensionManager getExtensionManager()
+	{
+		return this.extensionManager;
+	}
+	
+	/**
 	 * Sets the basic properties which are available the whole time.
 	 * @param properties the properties
 	 */

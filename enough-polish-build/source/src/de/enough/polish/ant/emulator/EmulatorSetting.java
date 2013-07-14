@@ -62,6 +62,7 @@ public class EmulatorSetting extends ExtensionSetting {
 	private List debuggers;
 	private int transientPort = 9090;
 	private String ignore;
+	private ArrayList<FilterSetting> filterSettings;
 	
 	/**
 	 * Creates an empty uninitialised run setting.
@@ -72,11 +73,36 @@ public class EmulatorSetting extends ExtensionSetting {
 		super();
 	}
 	
+	public ArrayList<FilterSetting> getFilterSettings(BooleanEvaluator evaluator) {
+		if (this.filterSettings == null)
+		{
+			return null;
+		}
+		ArrayList<FilterSetting> activeSettings = new ArrayList<FilterSetting>();
+		for (FilterSetting setting : this.filterSettings)
+		{
+			if (setting.isActive(evaluator))
+			{
+				activeSettings.add(setting);
+			}
+		}
+		return activeSettings;
+	}
+
+	public void setFilterSettings(ArrayList<FilterSetting> filterSettings) {
+		this.filterSettings = filterSettings;
+	}
+
 	public void addConfiguredDebugger( DebuggerSetting setting ) {
 		if ( this.debuggers == null ) {
 			this.debuggers = new ArrayList();
 		}
 		this.debuggers.add( setting );
+	}
+	
+	public void addConfiguredFilters(FilterSettings settings)
+	{
+		setFilterSettings(settings.settings);
 	}
 
 	/**

@@ -1038,4 +1038,12 @@
 		<classpath>${polish.home}/bin/extensions:${polish.home}/lib/appler.jar</classpath>
 	</extension>
 
+	<!-- Emulator Filters -->
+	
+	<extension>
+		<type>EmulatorFilter</type>
+		<name>deadlock</name>
+		<class>de.enough.polish.emulator.DeadlockFilter</class>
+	</extension>
+
 </extensions>
