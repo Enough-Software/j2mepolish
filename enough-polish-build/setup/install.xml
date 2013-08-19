@@ -124,17 +124,14 @@ When the plugin is not installed correctly, please start eclipse with "-clean" c
             <file src="samples/thirdparty-smaato-blackbox" targetdir="$INSTALL_PATH/samples"/>
             <parsable targetfile="$INSTALL_PATH/samples/thirdparty-smaato-blackbox/build.xml" type="shell" /> 
         </pack>
-         -->
         <pack id="thirdparty-nutiteq-openstreetmap" name="Third Party: Nutiteq Open Street Map" required="no" preselected="yes">
             <description>A library for including openstreetmap maps in your application.</description>
-            <!--  
-            <file src="../setup/thirdparty/nutiteq" targetdir="$INSTALL_PATH/thirdparty"/>
-            -->
             <file src="samples/thirdparty-nutiteq-openstreetmap" targetdir="$INSTALL_PATH/samples"/>
             <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/build.xml" type="shell" /> 
             <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/build-netbeans.xml" type="shell" /> 
             <parsable targetfile="$INSTALL_PATH/samples/thirdparty-nutiteq-openstreetmap/.classpath" type="shell" /> 
         </pack>
+         -->
         <pack name="Blank Sample Application" required="no" preselected="yes">
             <description>A sample skeleton project structure useful for creating new J2ME Polish projects.</description>
             <file src="samples/blank" targetdir="$INSTALL_PATH/samples"/>

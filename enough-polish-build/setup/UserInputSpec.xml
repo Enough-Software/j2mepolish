@@ -9,7 +9,7 @@
 	<field type="staticText" txt="Find more information about J2ME Polish at www.j2mepolish.org. " />
 	<field type="staticText" txt="" />
 	<divider alignment="top"/>
-	<field type="staticText" txt="Copyright 2003 - 2012 Enough Software GmbH &amp; Co. KG" />
+	<field type="staticText" txt="Copyright 2003 - 2013 Enough Software GmbH &amp; Co. KG" />
 </panel>
 
 
