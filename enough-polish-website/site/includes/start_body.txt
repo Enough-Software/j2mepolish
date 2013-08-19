@@ -238,6 +238,7 @@
 				<div id="currentSecondLevelLink"><a href="<%= basedir %>docs/platform.html">Platforms</a></div>
 				<div id="thirdLevel">
 				<p class="thirdLevel">
+				<a href="<%= basedir %>docs/platform-nokia-asha.html">Nokia Asha</a>
 				<a href="<%= basedir %>docs/platform-android.html">Android</a>
 				<a href="<%= basedir %>docs/platform-blackberry.html">BlackBerry</a>
 				<a href="<%= basedir %>docs/platform-midp.html">MIDP</a>

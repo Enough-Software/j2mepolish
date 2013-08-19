@@ -1,7 +1,7 @@
 /*
  * Created on Jun 29, 2010 at 10:41:21 PM.
  * 
- * Copyright (c) 2007 Robert Virkus / Enough Software
+ * Copyright (c) 2013 Robert Virkus / Enough Software
  *
  * This file is part of J2ME Polish.
  *
@@ -1110,6 +1110,28 @@ implements Externalizable, Comparator, Comparable
 		buffer.append(" ~ ").append( super.toString() );
 		return buffer.toString();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toStringTime() {
+		StringBuffer buffer = new StringBuffer(100);
+		if (this.hour < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.hour ).append(':');
+		if (this.minute < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.minute ).append(':');
+		if (this.second < 10) {
+			buffer.append('0');
+		}
+		buffer.append( this.second ).append(':');
+		buffer.append( this.millisecond );
+		return buffer.toString();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1313,6 +1335,7 @@ implements Externalizable, Comparator, Comparable
 			int minute = 0;
 			int second = 0;
 			int millisecond = 0;
+			long rawOffset = 0;
 			TimeZone timeZone = null;
 			if (dateTimeText.length() > 10){
 				hour = Integer.parseInt(dateTimeText.substring( 11, 13));
@@ -1338,37 +1361,31 @@ implements Externalizable, Comparator, Comparable
 							timeZone = TimeZone.getTimeZone("GMT");
 						} else if (c == '+' ||c == '-'){
 							// this is a timezone definition
+							timeZone = TimeZone.getTimeZone("GMT");
 							int tzHour = Integer.parseInt(dateTimeText.substring(index, index + 2));
 							int tzMinute = Integer.parseInt(dateTimeText.substring(index + 3, index + 5));
-							long rawOffset =      tzMinute * 60L * 1000L
+							rawOffset =      tzMinute * 60L * 1000L
 											+ tzHour * 60L * 60L * 1000L;
 							if (c == '-') {
 								rawOffset *= -1;
-							}
-							String[] ids = TimeZone.getAvailableIDs();
-							long minDiff = Long.MAX_VALUE;
-							TimeZone minDiffTimeZone = null;
-							for (int i = 0; i < ids.length; i++) {
-								TimeZone tz = TimeZone.getTimeZone( ids[i] );
-								long diff = tz.getRawOffset() - rawOffset;
-								if (diff == 0) {
-									// found the correct one:
-									minDiffTimeZone = tz;
-									break;
-								}
-								if (diff < minDiff) {
-									minDiffTimeZone = tz;
-									minDiff = diff;
-								}
-							}
-							if (minDiffTimeZone != null) {
-								timeZone = minDiffTimeZone;
 							}
 						}
 					}
 				}
 			}
-			TimePoint tp = new TimePoint(year, month, day, hour, minute, second, millisecond, timeZone);
+			// Create a new Date object based on the time and offset specified in the RFC3339 string
+			Calendar calendar = Calendar.getInstance(timeZone);
+			calendar.set(Calendar.YEAR, year);
+			calendar.set(Calendar.DAY_OF_MONTH, day);
+			calendar.set(Calendar.HOUR_OF_DAY, hour);
+			calendar.set(Calendar.MINUTE, minute);
+			calendar.set(Calendar.SECOND, second);
+			calendar.set(Calendar.MILLISECOND, millisecond);
+			Date date = calendar.getTime();
+			long timeInMs = date.getTime() - rawOffset;
+			date = new Date(timeInMs);
+			// Create a new TimePoint object based on the date
+			TimePoint tp = new TimePoint(date);
 			return tp;
 		} catch (Exception e) {
 			throw new IllegalArgumentException("for " + dateTimeText + ": " + e);

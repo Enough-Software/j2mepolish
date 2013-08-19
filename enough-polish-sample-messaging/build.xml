@@ -37,12 +37,12 @@
 	<j2mepolish>
 	    <!-- general settings -->
 		<info 
-			copyright="Copyright 2012 Enough Software. All rights reserved." 
+			copyright="Copyright 2013 Enough Software. All rights reserved." 
 			description="An application stub." 
 			infoUrl="http://www.enough.de" 
-			jarName="${polish.vendor}-${polish.name}-${polish.locale}-app.jar" 
+			jarName="${polish.vendor}-${polish.name}-${polish.locale}-messaging.jar" 
 			jarUrl="${deploy-url}${polish.jarName}" 
-			name="App" 
+			name="Messaging" 
 			vendorName="Enough Software" 
 			version="1.0.4"
 	    />
@@ -54,17 +54,25 @@
 			<requirement name="Identifier" value="${device}"/>
 		</deviceRequirements>
 	    <!-- build settings -->
-		<build fullscreen="menu" 
-                usePolishGui="true"
-			>
+		<build usePolishGui="true">
 			<!-- midlets definition -->
-			<midlet class="de.enough.polish.app.App" name="BlankApp" />
+			<midlet class="de.enough.polish.app.App" name="Messaging" />
 			<!-- project-wide variables - used for preprocessing  -->
 			<variables>
 				<variable name="polish.TextField.useDirectInput" value="true" />
 				<variable name="polish.TextField.supportSymbolsEntry" value="true" />
 				<variable name="polish.TextField.includeInputInfo" value="true" />
-				<!--
+				<variable
+                        name="polish.FullScreen"
+                        value="menu"
+                        unless="polish.blackberry || polish.android || polish.vendor.Nokia"
+                />
+				<variable
+                        name="polish.useNativeAlerts"
+                        value="true"
+                        if="polish.blackberry || polish.android || polish.vendor.Nokia"
+                />
+								<!--
 				<variable name="polish.Container.allowCycling" value="false" />
 				<variable name="polish.MenuBar.OptionsPosition" value="right" />
 				-->
@@ -77,10 +85,20 @@
 				<keep class="de.enough.polish.example.Dummy" />
 			</obfuscator>
 			<!-- debug settings: only include debug setting when the test-property is true -->
-			<debug if="test" level="error" showLogOnError="true" verbose="true">
+			<debug if="test || log" level="error" showLogOnError="false" verbose="false">
+			    <handler name="display" if="log">
+				     <!-- hide entries after 10 seconds: -->
+				     <parameter name="timeout" value="10s" />
+				     <!-- show maximum 30 log entries: -->
+				     <parameter name="max-entries" value="30" />
+				     <!-- specify used colors: -->
+				     <parameter name="background-color" value="#a333" />
+				     <parameter name="font-color" value="yellow" />
+				     <parameter name="shadow-color" value="rgb(0,0,0)" />
+				  </handler>
 				<filter level="info" pattern="de.enough.polish.ui.*"/>
-				<!--
-				<filter level="debug" class="de.enough.polish.ui.Container" />
+								<!--
+				<filter level="debug" class="de.enough.polish.ui.TextField" />
 				<filter level="debug" class="de.enough.polish.ui.ChoiceTextField" />
 				<filter level="debug" class="de.enough.polish.ui.TreeItem" />
 				-->

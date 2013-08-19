@@ -293,11 +293,20 @@ implements ImageConsumer
 	 * @see de.enough.polish.ui.Item#setContentWidth(int)
 	 */
 	protected void setContentWidth( int width ) {
-		if (this.imageAlign == Graphics.TOP || this.imageAlign == Graphics.BOTTOM || this.text == null) {
-			int diff = width - this.contentWidth;
-			this.relativeIconX += diff/2;
-		} else if (this.imageAlign == Graphics.RIGHT) {
-			this.relativeIconX = width - this.imageWidth;
+		if (this.imageAlign == Graphics.RIGHT) {
+			if (!isLayoutRight()) {
+				if (isLayoutCenter()) {
+					this.relativeIconX = (width - this.imageWidth)/2;
+				} else {
+					this.relativeIconX = width - this.imageWidth;
+				}
+			}
+		} else if (this.imageAlign == Graphics.LEFT) {
+			if (isLayoutCenter()) {				
+				this.relativeIconX = (this.contentWidth - width)/2;
+			} else if (isLayoutRight()) {
+				this.relativeIconX = this.contentWidth - width;
+			}
 		}
 		super.setContentWidth(width);
 	}

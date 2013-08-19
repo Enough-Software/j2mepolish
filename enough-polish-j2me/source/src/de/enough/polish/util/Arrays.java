@@ -77,8 +77,19 @@ public final class Arrays implements Comparator {
 	 * @param obj the array of objects that is sorted
 	 */
     public static void sort(Object[] obj) {
-    		sort( obj, STRING_COMPARATOR );
+		sort( obj, STRING_COMPARATOR );
     }
+    
+	/**
+	 * Sorts the objects using the standard shell sort implementation and the toString() comparator.
+	 * 
+	 * @param obj the array of objects that is sorted
+	 * @param comparator the comparator used for comparing the entries
+	 */
+    public static void sort(Object[] obj, Comparator comparator) {
+		shellSort( obj, comparator );
+    }
+
     
     /**
      * Sorts the given array using the shell sorting algorithm and the default toString() comparator.
@@ -88,7 +99,7 @@ public final class Arrays implements Comparator {
      * @param array the array elements that should be sorted
      */
     public static void shellSort( Object[] array ) {
-    		shellSort( array, STRING_COMPARATOR );
+		shellSort( array, STRING_COMPARATOR );
     }
 
     /**
@@ -100,25 +111,80 @@ public final class Arrays implements Comparator {
      * @param comparator the comparator used for comparing the entries
      */
     public static void shellSort(Object[] array, Comparator comparator) {
-    		int i, j, increment;
-    		Object temp;
-    		increment = 3;
-    		while (true) {
-    			for (i=0; i < array.length; i++) {
-    				j = i;
-    				temp = array[i];
-    				while ((j >= increment) && ( comparator.compare( array[j-increment], temp) > 0 ) ) {
-    					array[j] = array[j - increment];
-    					j -= increment;
-    				}
-    				array[j] = temp;
-    			}
-    			if (increment == 1) {
-    				break;
-    			} else {
-    				increment >>=  1;
-    			}
-    		}
+    	shellSort(array, array.length, comparator);
+	}
+    
+    /**
+     * Sorts the given array using the shell sorting algorithm and the default toString() comparator.
+     * The shell sort is not as fast as the default quicksort, but it
+     * uses less resources and is well suited to sort less than 5,000 entries.
+     * 
+     * @param arrayList the array list that should be sorted
+     */
+    public static void shellSort( ArrayList arrayList ) {
+    		shellSort( arrayList, STRING_COMPARATOR );
+    }
+
+    /**
+     * Sorts the given array using the shell sorting algorithm.
+     * The shell sort is not as fast as the default quicksort, but it
+     * uses less resources and is well suited to sort less than 5,000 entries.
+     * 
+     * @param arrayList the array list that should be sorted
+     * @param comparator the comparator used for comparing the entries
+     */
+    public static void shellSort(ArrayList arrayList, Comparator comparator) 
+    {
+    	Object[] array = arrayList.getInternalArray();
+    	int length = arrayList.size();
+    	shellSort(array, length, comparator);
+	}
+    
+    /**
+     * Sorts the given array using the shell sorting algorithm and the default toString() comparator.
+     * The shell sort is not as fast as the default quicksort, but it
+     * uses less resources and is well suited to sort less than 5,000 entries.
+     * 
+     * @param array the array elements that should be sorted
+     * @param arrayLength the length of the array
+     */
+    public static void shellSort( Object[] array, int arrayLength ) {
+    		shellSort( array, arrayLength, STRING_COMPARATOR );
+    }
+
+    /**
+     * Sorts the given array using the shell sorting algorithm.
+     * The shell sort is not as fast as the default quicksort, but it
+     * uses less resources and is well suited to sort less than 5,000 entries.
+     * 
+     * @param array the array elements that should be sorted
+     * @param comparator the comparator used for comparing the entries
+     */
+    public static void shellSort(Object[] array, int arrayLength, Comparator comparator) 
+    {
+    	int length = arrayLength;
+		int i, j, increment;
+		Object temp;
+		increment = 3;
+		while (true) 
+		{
+			for (i=0; i < length; i++) 
+			{
+				j = i;
+				temp = array[i];
+				while ((j >= increment) && ( comparator.compare( array[j-increment], temp) > 0 ) ) 
+				{
+					array[j] = array[j - increment];
+					j -= increment;
+				}
+				array[j] = temp;
+			}
+			if (increment == 1) {
+				break;
+			} else {
+				increment >>=  1;
+			}
+		}
 	}
 
     /**
@@ -268,66 +334,10 @@ public final class Arrays implements Comparator {
     }
     
     
-    public static void sort(Object[] obj, Comparator comparator) {
-    		shellSort( obj, comparator );
-    		/*
-    	int elements = obj.length;
-    	int left=0, right=elements-1, top=0;
-    	int sSize = elements/2;
-    	int lStack[] = new int[sSize];
-    	int rStack[] = new int[sSize];
-    	Object tmp;
-    	int i = 0, j = 0, x = 0;
-    	lStack[top] = left; rStack[top] = right;
-        while (top >= 0) {
-            left = lStack[top];
-            right = rStack[top];
-            top--;
-            do{
-                i = left;
-                j = right;
-                x = (left+right)/2;
-                while (i <= j) {    	
-                    while (comparator.compare(obj[x],obj[i]) >= 0) {
-                    	i++;
-                    }
-                    while (comparator.compare(obj[x],obj[j]) <= 0) {
-                    	j--;
-                    }
-                    if (i<=j) {
-                        // SWAP
-                        tmp = obj[i];
-                        obj[i] = obj[j];
-                        obj[j] = tmp;         
-                        i++;
-                        j--;
-                    }
-                }
-
-                if (j-left < right-i) {
-                    if (i < right) {
-                        top++;
-                        lStack[top] = i;
-                        rStack[top] = right;
-                    }
-                    right = j;
-                } else {
-                    if (left < j) {
-                        top++;
-                        lStack[top] = left;
-                        rStack[top] = j;
-                    }
-                    left = i;
-                }
-            }while (left <= right) ;
-        }
-        */
-    }
     
     /**
      * Compares two given array on equality.
      * You can test primitive arrays (like int[] or float[]) and Object based arrays.
-     * Ob Object arrays the equals() method is used for comparison.
      * 
      * @param array1 the first array
      * @param array2 the second array

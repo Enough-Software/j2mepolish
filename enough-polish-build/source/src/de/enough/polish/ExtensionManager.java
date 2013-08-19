@@ -52,11 +52,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Manages the available extensions.</p>
  *
- * <p>Copyright Enough Software 2005</p>
- * <pre>
- * history
- *        22-Apr-2005 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2005 - 2013</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
 public class ExtensionManager {
@@ -77,6 +73,7 @@ public class ExtensionManager {
 	public static final String TYPE_MANIFEST_CREATOR = "manifestcreator";
 	public static final String TYPE_DESCRIPTOR_CREATOR =  "descriptorcreator";
 	public static final String TYPE_DEBUGGER = "debugger";
+	public static final String TYPE_EMULATOR_FILTER = "EmulatorFilter";
 	
 	
 	private final Map definitionsByType;
@@ -283,7 +280,7 @@ public class ExtensionManager {
 	 * @param setting the configuration of the extension, taken from the build.xml
 	 * @param environment the environment settings
 	 * @return the extension, null when the type or the name is not known
-	 * @throws IllegalAccessException when the extension could not be accesssed
+	 * @throws IllegalAccessException when the extension could not be accessed
 	 * @throws InstantiationException when the extension could not be loaded
 	 * @throws ClassNotFoundException when the extension was not found or when the extension class was not found in the classpath
 	 */

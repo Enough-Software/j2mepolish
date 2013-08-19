@@ -621,7 +621,7 @@ public class PolishTask extends ConditionalTask {
 			
 			copyResources( device, locale );
 			
-			if(this.doObfuscate && this.doPostObfuscate)
+			if (this.doPostObfuscate)
 			{
 				postObfuscate(device, locale);
 			}
@@ -2195,31 +2195,71 @@ public class PolishTask extends ConditionalTask {
 				e.printStackTrace();
 				throw new BuildException("Unable to copy the binary libraries to the internal cache [" + binaryBaseDir.getAbsolutePath() + "]: " + e.toString(), e );
 			}
-			if (this.binaryLibrariesUpdated || (!targetDir.exists() && this.binaryLibraries != null) ) {
+			if (!(this.binaryLibrariesUpdated || (!targetDir.exists() && (this.binaryLibraries != null))) ) 
+			{
+				if (this.binaryLibraries != null)
+				{
+					// store -keep settings for libraries that should not get obfuscated
+					// and add device libraries to classpath:
+					LibrarySetting[] settings = this.binaryLibraries.getLibraries();
+					for (int i = 0; i < settings.length; i++)
+					{
+						LibrarySetting setting = settings[i];
+						if (setting.isActive(this.environment))
+						{
+							if (setting.isOnDevice()) 
+							{
+								device.addClassPath(setting.getPath(this.environment));
+							}
+							else if (!setting.isObfuscate())
+							{
+								keepLibrary(setting);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
 				System.out.println("copying binary libraries to [" + targetDirName + "]...");
 				LibrarySetting[] settings = this.binaryLibraries.getLibraries();
 				LibraryProcessor[] processors = getLibraryProcessors( device, locale, this.environment );
-				boolean processLibraries = processors != null && processors.length > 0;
+				boolean processLibraries = (processors != null) && (processors.length > 0);
 				String[] fileNames = null;
-				for (int i = 0; i < settings.length; i++) {
+				for (int i = 0; i < settings.length; i++) 
+				{
 					LibrarySetting setting = settings[i];
-					if (setting.isActive( this.environment )) {
-						try
+					if (setting.isActive( this.environment )) 
+					{
+						if (setting.isOnDevice()) 
 						{
-							FileUtil.copyDirectoryContents( setting.getCacheDirectory(), targetDir, true );
-							if (processLibraries) {
-								fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
-								for (int j = 0; j < processors.length; j++)
+							device.addClassPath(setting.getPath(this.environment));
+						}
+						else
+						{
+							try
+							{
+								FileUtil.copyDirectoryContents( setting.getCacheDirectory(), targetDir, true );
+								if (!setting.isObfuscate())
 								{
-									LibraryProcessor processor = processors[j];
-									processor.processLibrary( targetDir, fileNames, device, locale, setting, this.environment );
+									keepLibrary(setting);
 								}
+								else if (processLibraries) 
+								{
+									fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
+									for (int j = 0; j < processors.length; j++)
+									{
+										LibraryProcessor processor = processors[j];
+										processor.processLibrary( targetDir, fileNames, device, locale, setting, this.environment );
+									}
+								}
+								
+							} 
+							catch (IOException e)
+							{
+								e.printStackTrace();
+								throw new BuildException("Unable to copy or process binary library " + setting + ": " + e );
 							}
-							
-						} catch (IOException e)
-						{
-							e.printStackTrace();
-							throw new BuildException("Unable to copy or process binary library " + setting + ": " + e );
 						}
 					}
 				}
@@ -2227,7 +2267,19 @@ public class PolishTask extends ConditionalTask {
 		} // done preparing of binary libraries.		
 	}
 
-
+	private void keepLibrary(LibrarySetting setting)
+	{
+		String[] fileNames;
+		// add all classes to the keep class name list:
+		fileNames = FileUtil.filterDirectory( setting.getCacheDirectory(), ".class", true );
+		for (int j = 0; j < fileNames.length; j++)
+		{
+			String className = fileNames[j];
+			className = className.substring(0, className.length() - ".class".length() );
+			className = StringUtil.replace(className, File.separatorChar, '.' );
+			this.environment.addToVariable(Obfuscator.VARIABLE_DYNAMIC_KEEP_CLASSES, className);										
+		}
+	}
 
 	/**
 	 * @param device
@@ -2702,17 +2754,18 @@ public class PolishTask extends ConditionalTask {
 	}
 	
 	/**
-	 * Postcompiles the project for the given device.
+	 * Postobfuscates the project for the given device.
 	 * 
 	 * @param device The device for which the obfuscation should be done.
 	 * @param locale the current localization
 	 */
 	protected void postObfuscate( Device device, Locale locale ) {
 		this.extensionManager.postObfuscate( device, locale, this.environment );
-
-		// execute active postcompilers:
+		
+		// execute active postobfuscators:
 		PostObfuscator[] postObfuscators = getActivePostObfuscators();
-		for (int i = 0; i < postObfuscators.length; i++) {
+		for (int i = 0; i < postObfuscators.length; i++) 
+		{
 			PostObfuscator postObfuscator = postObfuscators[i];
 			System.out.println("postobfuscating with " + postObfuscator.getClass().getName());
 			postObfuscator.execute( device, locale, this.environment );

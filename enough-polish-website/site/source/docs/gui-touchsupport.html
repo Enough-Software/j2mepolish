@@ -41,6 +41,28 @@
 	<p>
 	Add item commands by calling <code>item.addCommand(Command)</code> on the corresponding items.
 	</p>
+	<h3 id="gesture-double-tap">Double-Tap Gesture</h3>
+	<p>
+		The double-tap gesture is triggered when you tap an item twice within a short duration.
+		<br />
+		Just specify a command that is triggered when an item is tapped twice by calling <code>item.setDoubleTapCommand(Command)</code>.
+		Note that you cannot use a default command and a double-tap command at the same time.
+	</p>
+	<p>
+		Alternatively you can also override the <code>handleGestureDoubleTap(int x, int y)</code> method on any <code>Screen</code> or <code>Item</code> subclass:  
+	</p>
+<pre class="brush: java">
+public boolean handleGestureDoubleTap(int x, int y)
+{
+	if (this.showInfo)
+	{
+		this.showInfo = false;
+		this.infoTextField.setString("Double-tap happened");
+		return true;
+	}
+	return false;
+}
+</pre>
 	<h3 id="gesture-swipe">Swipe Right/Left Gesture</h3>
 	<p>
 		J2ME Polish also recognizes swipe left and swipe right touch gestures that you can use within your application easily. 
@@ -49,7 +71,7 @@
 	
 	<h2 id="programming">Reacting to Gestures</h2>
 	<p>
-		You can react to gestures in your application in differnent ways:<br />
+		You can react to gestures in your application in different ways:<br />
 	</p>
 	<ul>
 		<li>You can override <code>Item.handleGesture( int gestureId, int x, int y )</code>.</li>
@@ -58,14 +80,16 @@
 		<li>Last but not least you can also create a global solution by implementing and registering an <code>EventListener</code>.</li>
 	</ul>
 	
-	<h3 id="programming-override">Override Item Methods</h3>
+	<h3 id="programming-override">Override Item or Screen Methods</h3>
 	<p>
-		When you extend J2ME Polish <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Items</a> 
-		you can alternatively override on of the following methods:
+		When you extend an J2ME Polish <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a>
+		or  <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Screen.html">Screen</a> class,
+		you can alternatively override one of the following methods:
 	</p>
 	<ul>
 		<li><code>protected boolean handleGesture(int gesture, int x, int y)</code>: is called for every recognized gesture.</li>
 		<li><code>protected boolean handleGestureHold(int x, int y)</code>: is subsequently called for the hold gesture</li>
+		<li><code>protected boolean handleGestureDoubleTap(int x, int y)</code>: is subsequently called for the double-tap gesture</li>
 		<li><code>protected boolean handleGestureSwipeLeft(int x, int y)</code>: is subsequently called for the swipe left gesture</li>
 		<li><code>protected boolean handleGestureSwipeRight(int x, int y)</code>: is subsequently called for the swipe right gesture</li>
 	</ul>
@@ -88,7 +112,7 @@ public class MyStringItem extends StringItem {
 		
 	<h3 id="programming-uieventlistener">UiEventListener</h3>
 	<p>
-		The least invasive way to deal with gestures for a specific screen or item is to implement and register an
+		Another option to deal with gestures for a specific screen or item is to implement and register an
 		<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEventListener.html">UiEventListener</a>.
 		You will receive an <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEvent.html">UiEvent</a> in 
 		the listener's callback method. Check if this is an <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/GestureEvent.html">GestureEvent</a>
@@ -99,11 +123,11 @@ public class MyStringItem extends StringItem {
 		The following sample code demonstrates this option:
 	</p>
 <pre class="brush: java">
-import de.enough.polish.ui.UiAccess;
 import de.enough.polish.event.UiEvent;
 import de.enough.polish.event.UiEventListener;
 import de.enough.polish.event.GestureEvent;
-import javax.microedition.lcdui.StringItem;
+import de.enough.polish.ui.StringItem;
+import de.enough.polish.ui.UiAccess;
 ...
 //#style testButton
 StringItem stringItem = new StringItem( null, Locale.get("gestures.test.button"));
@@ -188,8 +212,7 @@ public class GlobalEventHandler implements EventListener {
 	
 	<h2 id="sample">Sample Application</h2>
 	<p>
-	Please have a look at the <i>rssbrowser/News Cup</i> sample application for a real world example. You can also download
-	this demo app on <a href="http://m.j2mepolish.org" target="_blank">m.j2mepolish.org</a> under the name 'News Cup'.
+	Please have a look at the <i>rssbrowser</i> sample project.
 	</p>
 	
 	<h2 id="JavaDoc">JavaDoc</h2>
@@ -201,6 +224,7 @@ public class GlobalEventHandler implements EventListener {
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/UiEvent.html">UiEvent</a></li>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/event/GestureEvent.html">GestureEvent</a></li>
 		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Item.html">Item</a></li>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Screen.html">Screen</a></li>
 	</ul>
 
 

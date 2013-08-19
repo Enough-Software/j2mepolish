@@ -41,6 +41,7 @@ import javax.microedition.lcdui.Image;
 	
 import de.enough.polish.event.AsynchronousMultipleCommandListener;
 import de.enough.polish.event.EventManager;
+import de.enough.polish.event.GestureEvent;
 import de.enough.polish.event.UiEventListener;
 import de.enough.polish.ui.backgrounds.TranslucentSimpleBackground;
 import de.enough.polish.util.ArrayList;
@@ -398,6 +399,23 @@ implements UiElement, Animatable
 	//#endif
 	//#if polish.hasPointerEvents
 		protected final ClippingRegion userEventRepaintRegion = new ClippingRegion();
+	//#endif
+	//#if polish.hasPointerEvents
+		//#if polish.supportTouchGestures
+			//#define tmp.supportTouchGestures
+		//#endif
+		//#if tmp.supportTouchGestures
+			private long gestureStartTime;
+			private int gestureStartX;
+			private int gestureStartY;
+			private int gestureXMin;
+			private int gestureXMax;
+			private int gestureYMin;
+			private int gestureYMax;
+			private boolean isIgnorePointerReleaseForGesture;
+			private long gesturePointerReleasedTime;
+			private Item gesturePointerReleaseItem;
+		//#endif
 	//#endif
 	private ScreenInitializerListener screenInitializerListener;
 	
@@ -1311,29 +1329,33 @@ implements UiElement, Animatable
 	 * Initialises this screen and informs all items about being painted soon.
 	 */
 	public void showNotify() {
+		int errorStep = 0;
 		//#if polish.Screen.callSuperEvents
 			super.showNotify();
 		//#endif
-
+			
 		//#debug
 		System.out.println("showNotify " + this + " isInitialized=" + this.isInitialized);
 		try {
-			
+			errorStep = 1;
 			//#ifdef polish.Screen.showNotifyCode:defined
 				//#include ${polish.Screen.showNotifyCode}
 			//#endif
 			if (!this.isInitialized) {
+				errorStep = 2;
 				int w = getScreenFullWidth();
 				int h = getScreenFullHeight();
 				init( w, h );
 			}
 			//#if polish.blackberry
 				else {
+					errorStep = 3;
 					notifyFocusSet(getCurrentItem());
 				}
 			//#endif
 			//#if polish.css.repaint-previous-screen
 				if (this.repaintPreviousScreen) {
+					errorStep = 4;
 					//#if !polish.Bugs.noTranslucencyWithDrawRgb
 						if (this.previousScreenOverlayBackground == null) {
 							//#if polish.color.overlay:defined
@@ -1407,14 +1429,16 @@ implements UiElement, Animatable
 					 */
 				}
 			//#endif
-			
+				
 			//#if tmp.handleEvents
+				errorStep = 5;
 				if (!this.hasBeenShownBefore) {
 					EventManager.fireEvent( EventManager.EVENT_SHOW_FIRST_TIME,  this, null );
 					this.hasBeenShownBefore = true;
 				}
 				EventManager.fireEvent( EventManager.EVENT_SHOW,  this, null );
 			//#endif
+			errorStep = 6;
 			// inform all root items that they belong to this screen
 			// and that they will be shown soon:
 			Item[] items = getRootItems();
@@ -1423,15 +1447,18 @@ implements UiElement, Animatable
 				item.screen = this;
 				item.showNotify();
 			}
+			errorStep = 7;
 			if (this.container != null) {
 				this.container.showNotify();
 			}
 			//#ifndef polish.skipTicker
+				errorStep = 8;
 				if (this.ticker != null) {
 					this.ticker.showNotify();
 				}
 			//#endif
 			//#ifdef tmp.usingTitle
+				errorStep = 9;
 				if (this.title != null) {
 					this.title.showNotify();
 				}
@@ -1440,6 +1467,7 @@ implements UiElement, Animatable
 				this.ignoreTitleCall = true;
 			//#endif
 			//#ifdef tmp.useExternalMenuBar
+				errorStep = 10;
 				this.menuBar.showNotify();
 			//#endif
 			
@@ -1491,7 +1519,7 @@ implements UiElement, Animatable
 //			}
 		} catch (Exception e) {
 			//#debug error
-			System.out.println("error while calling showNotify" + e );
+			System.out.println("error while calling showNotify at step " + errorStep + e );
 		}
 
 		// register this screen:
@@ -1526,6 +1554,10 @@ implements UiElement, Animatable
 	public void hideNotify() {
 		//#if polish.Screen.callSuperEvents
 			super.hideNotify();
+		//#endif
+		//#if tmp.supportTouchGestures
+			this.gesturePointerReleaseItem = null;
+			this.gesturePointerReleasedTime = 0;
 		//#endif
 		//#if polish.Bugs.noSoftKeyReleasedEvents
 			this.triggerReleasedKeyCode = 0;
@@ -2161,6 +2193,28 @@ implements UiElement, Animatable
 					
 					if (time != 0 && keyCode != 0 && (currentTime - time) > interval) {
 						_keyReleased(keyCode);
+					}
+				//#endif
+				//#if tmp.supportTouchGestures
+					long gestureStartTimeLocal = this.gestureStartTime;
+					if ((gestureStartTimeLocal != 0) && (currentTime - gestureStartTimeLocal > 700)) {
+						int xDiff = Math.max(
+								Math.abs( this.gestureStartX - this.gestureXMin),
+								Math.abs( this.gestureStartX - this.gestureXMax)
+						);
+						int yDiff = Math.max(
+								Math.abs( this.gestureStartY - this.gestureYMin),
+								Math.abs( this.gestureStartY - this.gestureYMax)
+						);
+						if ((xDiff < this.screenWidth/10) && (yDiff < this.screenHeight/10))
+						{
+							boolean handled = handleGesture( GestureEvent.GESTURE_HOLD, this.gestureStartX, this.gestureStartY );
+							if (handled) {
+								this.isIgnorePointerReleaseForGesture = true;
+								repaintRegion.addRegion( this.contentX, this.contentY, this.contentWidth, this.contentHeight );
+							}
+							this.gestureStartTime = 0;
+						}
 					}
 				//#endif
 			} catch (Exception e) {
@@ -4250,12 +4304,11 @@ implements UiElement, Animatable
 		//#else
 			Object[] commands = getCommands();
 			if (commands != null) {
-				for (int i = 0; i < commands.length; i++) {
+				for (int i = commands.length - 1; i >= 0 ; i--) {
 					Command cmd = (Command) commands[i];
-					if (cmd == null) {
-						break;
+					if (cmd != null) {
+						removeCommand(cmd);
 					}
-					removeCommand(cmd);
 				}
 			}
 		//#endif
@@ -4315,7 +4368,10 @@ implements UiElement, Animatable
 		if (!parent.addSubCommand(child)) {
 			return; // this command has been added already
 		}
-		//#if tmp.menuFullScreen
+		//#if !tmp.menuFullScreen
+			addCommand(child);
+			removeCommand(parent);
+		//#else
 			//#debug
 			System.out.println("Adding subcommand " + child.getLabel() );
 			//#ifdef tmp.useExternalMenuBar
@@ -4790,6 +4846,16 @@ implements UiElement, Animatable
 		//#debug
 		System.out.println("pointerPressed at " + x + ", " + y );
 		this.lastInteractionTime = System.currentTimeMillis();
+		//#if tmp.supportTouchGestures
+			this.gestureStartTime = this.lastInteractionTime;
+			this.gestureStartX = x;
+			this.gestureXMin = x;
+			this.gestureXMax = x;
+			this.gestureStartY = y;
+			this.gestureYMin = y;
+			this.gestureYMax = y;
+			this.isIgnorePointerReleaseForGesture = false;
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
 			// let the screen handle the pointer pressing:
@@ -4922,6 +4988,24 @@ implements UiElement, Animatable
 		//#endif
 		//#debug
 		System.out.println("screen: pointer drag " + x + ", " + y);
+		//#if tmp.supportTouchGestures
+			if (x > this.gestureXMax)
+			{
+				this.gestureXMax = x;
+			}
+			else if (x < this.gestureXMin)
+			{
+				this.gestureXMin = x;
+			}
+			if (y > this.gestureYMax)
+			{
+				this.gestureYMax = y;
+			}
+			else if (y < this.gestureYMin)
+			{
+				this.gestureYMin = y;
+			}
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
 			//#if polish.Screen.callSuperEvents
@@ -4995,9 +5079,55 @@ implements UiElement, Animatable
 		//#debug
 		System.out.println("pointerReleased at " + x + ", " + y );
 		boolean processed = false;
+		long currentTimeMillis = System.currentTimeMillis();
+		//#if tmp.supportTouchGestures
+			if (this.isIgnorePointerReleaseForGesture)
+			{
+				processed = true;
+			}
+			else if (this.gestureStartTime != 0)
+			{
+				long gestureTime = (currentTimeMillis - this.gestureStartTime);
+				if (gestureTime < 1600)
+				{
+					int verticalDiff = Math.max(
+							Math.abs( this.gestureYMin - this.gestureStartY ),
+							Math.abs( this.gestureYMax - this.gestureStartY )
+					);
+					if (verticalDiff < this.screenHeight/10) {
+						int horizontalDiff = x - this.gestureStartX;
+						if (horizontalDiff > this.screenWidth/3) {
+							if (handleGesture(GestureEvent.GESTURE_SWIPE_RIGHT, x, y)) {
+								processed = true;
+							}
+						} else if (horizontalDiff < -this.screenWidth/3) {
+							if (handleGesture(GestureEvent.GESTURE_SWIPE_LEFT, x, y)) {
+								processed = true;
+							}						
+						} else {
+							if ((this.gesturePointerReleasedTime != 0) && (currentTimeMillis - this.gesturePointerReleasedTime < 600)) {
+								Item item = getCurrentItem();
+								if (item == this.gesturePointerReleaseItem) {
+									if (handleGesture(GestureEvent.GESTURE_DOUBLE_TAP, x, y)) {
+										processed = true;
+									}
+								}
+								this.gesturePointerReleasedTime = 0;
+								this.gesturePointerReleaseItem = null;
+							} else {
+								this.gesturePointerReleasedTime = currentTimeMillis;
+								this.gesturePointerReleaseItem = getCurrentItem();
+							}
+						}
+						
+					}
+				}
+			}
+			this.gestureStartTime = 0;
+		//#endif
 		try {
 			this.ignoreRepaintRequests = true;
-			this.lastInteractionTime = System.currentTimeMillis();
+			this.lastInteractionTime = currentTimeMillis;
 			//#ifdef tmp.menuFullScreen
 				//#ifdef tmp.useExternalMenuBar
 					if (!processed) {
@@ -5068,7 +5198,105 @@ implements UiElement, Animatable
 	}
 	//#endif
 	
+	/**
+	 * Returns the top-level frame/container at the specified coordinates.
+	 * @param x the absolute x position
+	 * @param y the absolute y position
+	 * @return the frame of the specified position, might be null
+	 */
+	public Container getFrame(int x, int y) {
+		return this.container;
+	}
 	
+	/**
+	 * Handles a touch gestures.
+	 * Note that touch gesture support needs to be activated using the preprocessing variable polish.supportGestures.
+	 * The default implementation calls handleGestureHold() in case GESTURE_HOLD is specified.
+	 * @param gesture the gesture identifier, e.g. GESTURE_HOLD
+	 * @return true when this gesture was handled
+	 * @see #handleGestureHold(int, int)
+	 */
+	protected boolean handleGesture(int gesture, int x, int y) 
+	{
+		boolean handled = false;
+		//#if tmp.supportTouchGestures
+			switch (gesture) 
+			{
+			case GestureEvent.GESTURE_HOLD:
+				handled = handleGestureHold(x, y);
+				break;
+			case GestureEvent.GESTURE_SWIPE_LEFT:
+				handled = handleGestureSwipeLeft(x, y);
+				break;
+			case GestureEvent.GESTURE_SWIPE_RIGHT:
+				handled = handleGestureSwipeRight(x, y);
+				break;
+			case GestureEvent.GESTURE_DOUBLE_TAP:
+				handled = handleGestureDoubleTap(x, y);
+				break;
+			}
+			if (!handled) 
+			{
+				Container cont = getFrame(x,y);
+				if (cont != null)
+				{
+					handled = cont.handleGesture(gesture, x - cont.relativeX, y - cont.relativeY);
+				}
+				if (!handled)
+				{
+					GestureEvent event = GestureEvent.getInstance();
+					event.reset( gesture, x, y );
+					UiEventListener listener = getUiEventListener();
+					if (listener != null) {
+						listener.handleUiEvent(event, this);
+						handled = event.isHandled();
+					}
+					//#if tmp.handleEvents
+						if (!handled) {
+							EventManager.fireEvent(event.getGestureName(), this, event );
+							handled = event.isHandled();
+						}
+					//#endif
+				}
+			}
+		//#endif
+		return handled;
+	}
+	
+	/**
+	 * Handles the hold touch gestures.
+	 * Note that touch gesture support needs to be activated using the preprocessing variable polish.supportGesturesOnScreen
+	 * 
+	 * @return true when this gesture was handled
+	 */
+	protected boolean handleGestureHold(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Handles the swipe left gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureSwipeLeft(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Handles the swipe right gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureSwipeRight(int x, int y) {
+		return false;
+	}
+
+	/**
+	 * Handles the double tap gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureDoubleTap(int x, int y) {
+		return false;
+	}
+
 	/**
 	 * Handles the pressing of a pointer.
 	 * This method should be overwritten only when the polish.hasPointerEvents 
@@ -5620,7 +5848,7 @@ implements UiElement, Animatable
 					}
 				}
 			}
-			return this.container.focusedItem;
+			return this.container.getFocusedChild();
 		}
 		return this.focusedItem;
 	}
@@ -6466,9 +6694,27 @@ implements UiElement, Animatable
 	 * @param cont the root container
 	 */
 	public void setRootContainer(Container cont) {
+		if (this.container != null)
+		{
+			this.container.screen = null;
+			if (isShown())
+			{
+				this.container.hideNotify();
+			}
+		}
 		if (cont != null) {
 			cont.screen = this;
 			cont.isFocused = true;
+			cont.autoFocusEnabled = true;
+			if (isShown())
+			{
+				if (cont.style == null && this.style != null)
+				{
+					boolean ignoreBackground = true;
+					cont.setStyleWithBackground(this.style, ignoreBackground);
+				}
+				cont.showNotify();
+			}
 		}
 		this.container = cont;
 		if (this.isInitialized) {

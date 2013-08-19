@@ -68,7 +68,8 @@
 		<page file="programming-porting.html" title="Porting" />
 	</page>
 	<page file="platform.html" title="Platforms" >
-		<page file="platform-android.html" title="Android" />
+		<page file="platform-nokia-asha.html" title="Nokia Asha" />
+	    <page file="platform-android.html" title="Android" />
 		<page file="platform-blackberry.html" title="BlackBerry" />
 		<page file="platform-midp.html" title="MIDP" />
 		<page file="platform-javase.html" title="Java SE" />

@@ -117,7 +117,17 @@ implements CycleListener
 		this.container.setCycleListener(this);
 	}
 
-	private Container getFrame( int frameOrientation ) {
+	/**
+	 * Retrieves the specified frame
+	 * @param frameOrientation the frame orientation
+	 * @return the container that is used for the given frame, this can be null
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 * @see #FRAME_CENTER
+	 */
+	protected Container getFrame( int frameOrientation ) {
 		switch (frameOrientation) {
 		case  Graphics.TOP:
 			return this.topFrame;
@@ -154,6 +164,38 @@ implements CycleListener
 			return this.container;
 		}
 		return null;
+	}
+	
+	/**
+	 * Retrieves the currently active frame ID
+	 * @return the ID of the currently active frame
+	 * @see #FRAME_CENTER
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 */
+	public int getActiveFrameId()
+	{
+		int id = FRAME_CENTER;
+		Container cont = this.currentlyActiveContainer;
+		if (cont == this.topFrame)
+		{
+			id = FRAME_TOP;
+		}
+		else if (cont == this.bottomFrame)
+		{
+			id = FRAME_BOTTOM;
+		}
+		else if (cont == this.leftFrame)
+		{
+			id = FRAME_LEFT;
+		}
+		else if (cont == this.rightFrame)
+		{
+			id = FRAME_RIGHT;
+		}
+		return id;
 	}
 
 	/*
@@ -205,6 +247,21 @@ implements CycleListener
 	 */
 	public void focus(Item item, boolean force) {
 		focus( item, force, false );
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#focus(int, de.enough.polish.ui.Item, boolean)
+	 */
+	public void focus(int index, Item item, boolean force) {
+		if (index == -1)
+		{
+			this.currentlyActiveContainer.focusChild(-1);
+		}
+		else
+		{
+			super.focus(index, item, force);
+		}
 	}
 	
 	/**
@@ -579,6 +636,26 @@ implements CycleListener
 		}
 	}
 	
+	/**
+	 * Inserts the given item at the specified index in the specified frame
+	 * @param frameOrientation the frame
+	 * @param index the index at which the item should be inserted, 0 is the first position
+	 * @param item the item
+	 * @see #FRAME_TOP
+	 * @see #FRAME_BOTTOM
+	 * @see #FRAME_LEFT
+	 * @see #FRAME_RIGHT
+	 * @see #FRAME_CENTER
+	 */
+	public void insert(int frameOrientation, int index, Item item)
+	{
+		Container frame = getFrame(frameOrientation);
+		if (frame != null)
+		{
+			frame.add(index, item);
+		}
+	}
+	
 	/* 
 	 * (non-Javadoc)
 	 * @see de.enough.polish.ui.Screen#adjustContentArea(int, int, int, int, de.enough.polish.ui.Container)
@@ -630,7 +707,7 @@ implements CycleListener
 		
 		int yOffset = getScrollYOffset();
 		// adjust scroll offset for bottom frame animation
-		if(cont != null && yOffset < 0 && (yOffset + cont.getItemAreaHeight() < height) )
+		if (cont != null && yOffset < 0 && (yOffset + cont.getItemAreaHeight() < height) )
 		{
 			cont.setScrollYOffset( -(cont.getItemAreaHeight() - height));
 		}
@@ -982,10 +1059,32 @@ implements CycleListener
 	 */
 	public Item getCurrentItem() {
 		if (!this.keepContentFocused && this.currentlyActiveContainer != null) {
-			return this.currentlyActiveContainer.focusedItem;
+			return this.currentlyActiveContainer.getFocusedChild();
 		}
 		return this.container.focusedItem;
 	}
+	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Screen#setRootContainer(de.enough.polish.ui.Container)
+	 */
+	public void setRootContainer(Container cont)
+	{
+		boolean replaceCurrentlyActiveContainer = (this.currentlyActiveContainer == this.container);
+		super.setRootContainer(cont);
+		if (replaceCurrentlyActiveContainer)
+		{
+			this.currentlyActiveContainer = cont;
+		}
+		else
+		{
+			cont.isFocused = false;
+			cont.autoFocusEnabled = false;
+		}
+	}
+
+
+	
+	
 	
 	/**
 	 * Focuses the specified frame.
@@ -1152,7 +1251,7 @@ implements CycleListener
 		if ( activeFrame != null ) {
 			handled = activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
 		} 
-		if (!handled && (activeFrame != this.container) && !this.container.isInteractive()) {
+		if (!handled && (activeFrame != this.container)) {
 			handled = this.container.handlePointerDragged(x - this.container.relativeX, y - this.container.relativeY, repaintRegion);
 		}
 		return handled;
@@ -1544,49 +1643,6 @@ implements CycleListener
 		}
 		return true;
 	}
-
-	
-	
-	
-	
-
-//	/* (non-Javadoc)
-//	 * @see de.enough.polish.ui.Screen#focus(int, de.enough.polish.ui.Item, boolean)
-//	 */
-//	public void focus(int index, Item item, boolean force)
-//	{
-//		// TODO robertvirkus implement focus
-//		super.focus(index, item, force);
-//		
-//		/**
-//		 * Focuses the specified item.
-//		 * 
-//		 * @param index the index of the item which is already shown on this screen.
-//		 * @param item the item which is already shown on this screen.
-//		 * @param force true when the item should be focused even when it is inactive (like a label for example)
-//		 */
-//		public void focus(int index, Item item, boolean force) {
-//			if (index != -1 && item != null && (item.appearanceMode != Item.PLAIN || force ) ) {
-//				//#debug
-//				System.out.println("Screen: focusing item " + index );
-//				this.container.focus( index, item, 0 );
-//				if (index == 0) {
-//					this.container.setScrollYOffset( 0, false );
-//				}
-//			} else if (index == -1) {
-//				this.container.focus( -1 );
-//			} else {
-//				//#debug warn
-//				System.out.println("Screen: unable to focus item (did not find it in the container or is not activatable) " + index);
-//			}
-//		}
-//	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

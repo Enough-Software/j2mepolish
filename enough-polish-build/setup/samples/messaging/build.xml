@@ -12,7 +12,7 @@
 <!--                                                          -->
 <!-- Have fun!                                                -->
 <project 
-	name="blank" 
+	name="messaging" 
 	default="j2mepolish">
 	
 	<!-- import user specific properties                          -->
@@ -29,7 +29,7 @@
 	<!-- the device for the test mode - you can define it on the command-line
 	     using the -D switch, e.g. ant -Ddevice=Generic/midp2 emulator -->
 	<property name="device" value="Generic/AnyPhone"/>
-	<property name="devices" value="${device},Generic/AnyMsaPhone,Nokia/Series40E3,Nokia/Series60E3,Sony-Ericsson/JavaPlatform7,Sony-Ericsson/JavaPlatform8"/>
+	<property name="devices" value="${device},Generic/AnyMsaPhone,Sony-Ericsson/JavaPlatform8,Nokia/Series40SDK20"/>
 	
 	
 
@@ -68,14 +68,14 @@
 		    <!-- Have a look at the <jad>-section for setting specialised attributes.
 		         You can also define localized attributes in the resources/messages.txt files -->
 			<info
-				name="Blank"
+				name="Messaging"
 				version="1.0.0"
 				description="Please describe me"
 				vendorName="Enough Software"
 				infoUrl="http://www.j2mepolish.org"
-				jarName="${polish.vendor}-${polish.name}-${polish.locale}-blank.jar" 
+				jarName="${polish.vendor}-${polish.name}-${polish.locale}-messaging.jar" 
 				jarUrl="${deploy-url}${polish.jarName}"
-				copyright="Copyright 2011 Your Company. All rights reserved."
+				copyright="Copyright 2013 Your Company. All rights reserved."
 			/>
 			<!-- selection of supported devices -->
 			<deviceRequirements if="test">
@@ -96,14 +96,13 @@
 			</deviceRequirements>
 		    <!-- build settings -->
 			<build
-				symbols="ExampleSymbol, AnotherExample"
 				usePolishGui="true"
 				workDir="${dir.work}"
 				destDir="${dir.dist}"
 			>
 				<!-- midlets definition -->
 				<!-- CHANGE THIS!       -->
-				<midlet class="de.enough.polish.app.App" name="BlankApp" />
+				<midlet class="de.enough.polish.app.App" name="Messaging" />
 				<!-- project-wide variables - used for preprocessing.  -->
 				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
 				<variables includeAntProperties="true" >
@@ -113,7 +112,12 @@
 					<variable
 						name="polish.FullScreen"
 						value="menu" 
-						unless="polish.blackberry || polish.android" 
+						unless="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1b)" 
+					/>
+					<variable
+						name="polish.useNativeAlerts"
+						value="true" 
+						if="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1b)" 
 					/>
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 					<variable name="polish.ScreenInfo.enable" value="true" />

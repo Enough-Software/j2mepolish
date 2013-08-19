@@ -150,6 +150,52 @@
 	</group>
 	
 	<group>
+		<name>series40jr20</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.6, nokia-in-app-purchase-1.0, jsr75, jsr82, jsr135, jsr172, jsr177, jsr179, jsr184, jsr205, jsr211, jsr226, jsr234, jsr256" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_2_0_Java" />
+	</group>
+	
+	<group>
+		<name>series40jr11</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_1_1_Java" />
+		<capability name="key.maybeSupportsAsciiKeyMap" value="true" />
+	</group>
+	
+	<group>
+		<name>series40jr11ui11b</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1c, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_1_1_Java" />
+	</group>
+	
+	<group>
+		<name>series40jr10</name>
+		<features>supportSpriteTransformation, hasCommandKeyEvents, isDoubleBuffered</features>			
+		<capability name="OS" value="Nokia OS" />
+		<capability name="JavaPlatform" value="MIDP/2.0" />
+		<capability name="JavaConfiguration" value="CLDC/1.1" />
+		<capability name="JavaPackage" value="nokia-ui-1.1, fileconnectionapi, svgapi, securityapi, pdaapi, pimapi, webservice" />	
+		<capability name="Emulator.Class" value="NokiaEmulator" />
+		<capability name="Emulator.Skin" value="Nokia_SDK_1_0_Java" />
+		<capability name="key.maybeSupportsAsciiKeyMap" value="true" />
+	</group>
+	
+	<group>
 		<name>Series60</name>
 		<parent>Nokia-UI</parent>
 		<capability name="OS" value="Symbian OS 6.1" />
@@ -505,5 +551,6 @@
 		<name>android</name>
 		<capability name="OS" value="android" />
 	</group>
+	
 
 </groups>

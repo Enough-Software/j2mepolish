@@ -1045,13 +1045,30 @@ public class Display
 				this.nextOrCurrentDisplayable = null;
 				return;
 			}
+		//#else
+			if (nextDisplayable instanceof Alert && this.currentDisplayable != nextDisplayable) {
+				Alert alert = (Alert)nextDisplayable;
+				if (alert.nextDisplayable == null) {
+					Displayable nxt = instance.currentDisplayable;
+					//#if tmp.screenTransitions
+						if (nxt instanceof ScreenChangeAnimation) {
+							nxt = ((ScreenChangeAnimation)nxt).nextDisplayable;
+						}
+					//#endif
+					alert.nextDisplayable = nxt;
+				}
+				//#if polish.useNativeAlerts
+					nextDisplayable = new de.enough.polish.midp.ui.NativeAlert(alert);
+				//#endif
+			}
 		//#endif
 		if (nextDisplayable == null || !(nextDisplayable instanceof Canvas)) {
 			// this is a native Displayable
 			if (nextDisplayable != null) {
-				if (this.currentCanvas != null) {
-					this.currentCanvas._hideNotify();
+				Canvas currentCanv = this.currentCanvas;
+				if (currentCanv != null) {
 					this.currentCanvas = null;
+					currentCanv._hideNotify();
 				}
 				this.currentDisplayable = nextDisplayable;
 			}
@@ -1059,20 +1076,7 @@ public class Display
 			this.nextOrCurrentDisplayable = null;
 			return;
 		}
-		
-		if (nextDisplayable instanceof Alert && this.currentDisplayable != nextDisplayable) {
-			Alert alert = (Alert)nextDisplayable;
-			if (alert.nextDisplayable == null) {
-				Displayable nxt = instance.currentDisplayable;
-				//#if tmp.screenTransitions
-					if (nxt instanceof ScreenChangeAnimation) {
-						nxt = ((ScreenChangeAnimation)nxt).nextDisplayable;
-					}
-				//#endif
-				alert.nextDisplayable = nxt;
-			}
-		}
-		
+				
 		Canvas canvas = (Canvas) nextDisplayable;
 		
 		//#if tmp.screenTransitions
@@ -1198,8 +1202,23 @@ public class Display
 		this.currentCanvas = canvas;
 		this.currentDisplayable = nextDisplayable;
 		
-		if ( oldCanvas != null ) {
+		if ( oldCanvas != null ) 
+		{
 			oldCanvas._hideNotify();
+			// workaround for native TextEditor on Nokia Asha devices:
+			// when the native menubar is opened, this Display is hidden
+			// when then another screen is shown, the TextField won't be removed.
+			//#if polish.NokiaUiApiVersion >= 1.1b
+				if (oldCanvas instanceof Screen)
+				{
+					Screen oldScreen = (Screen)oldCanvas;
+					Item item = oldScreen.getCurrentItem();
+					if (item instanceof TextField)
+					{
+						oldScreen.focus(-1);
+					}
+				}
+			//#endif
 		}
 
 		//#if polish.css.repaint-previous-screen
@@ -1715,7 +1734,6 @@ public class Display
 		return  isSoftKeyLeft(keyCode, gameAction) || isSoftKeyRight(keyCode, gameAction) || isSoftKeyMiddle(keyCode, gameAction);
 	}
 	
-	//#if tmp.screenOrientation || polish.Bugs.SoftKeyMappedToFire || polish.Bugs.NormalKeyMappedToFire
 	/* (non-Javadoc)
 	 * @see javax.microedition.lcdui.Canvas#getGameAction(int)
 	 */
@@ -1774,9 +1792,21 @@ public class Display
 				}
 			}
 		//#endif
+		if (gameAction == FIRE) 
+		{
+			if (keyCode == KEY_NUM5)
+			{
+				gameAction = 0;
+			}
+			//#if polish.Bugs.SoftKeyMappedToFire
+				else if (isSoftKeyLeft(keyCode, gameAction) || isSoftKeyRight(keyCode, gameAction))
+				{
+					gameAction = 0;
+				}
+			//#endif
+		}
 		return gameAction;
 	}	
-	//#endif
 
 
 
@@ -2833,10 +2863,19 @@ public class Display
 	 */
 	public void commandAction(javax.microedition.lcdui.Command c, javax.microedition.lcdui.Displayable d)
 	{
-		if (c instanceof Command) {
-			if (this.commandListener != null) {
+		if (c instanceof CommandWrapper)
+		{
+			c = ((CommandWrapper)c).getCommand();
+		}
+		
+		if (c instanceof Command) 
+		{
+			if (this.commandListener != null) 
+			{
 				this.commandListener.commandAction((Command)c, this.currentDisplayable );
-			} else if (this.currentCanvas instanceof Screen) {
+			} 
+			else if (this.currentCanvas instanceof Screen) 
+			{
 				((Screen)this.currentCanvas).handleCommand( (Command)c);
 			}
 		}

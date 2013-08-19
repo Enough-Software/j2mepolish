@@ -27,6 +27,7 @@ package de.enough.polish.ui;
 
 import java.io.IOException;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -828,6 +829,12 @@ public abstract class Item implements UiElement, Animatable
 	//#if polish.css.complete-border
 		protected Border completeBorder;
 	//#endif
+	//#if polish.css.item-content-background
+		private Background	contentBackground;
+	//#endif
+	//#if polish.css.item-content-border
+		private Border	contentBorder;
+	//#endif
 	//#if polish.css.complete-background || polish.css.complete-border
 		protected Dimension completeBackgroundPadding;
 	//#endif
@@ -890,9 +897,6 @@ public abstract class Item implements UiElement, Animatable
 		private RgbImage filterProcessedRgbImage;
                 public boolean cacheItemImage ;
 	//#endif
-	//#if polish.css.inline-label
-		protected boolean isInlineLabel;
-	//#endif
 	protected int availableWidth;
 	protected int availableHeight;
 	protected boolean ignoreRepaintRequests;
@@ -915,12 +919,7 @@ public abstract class Item implements UiElement, Animatable
 	//#endif
 	//#if polish.supportTouchGestures
 		//#define tmp.supportTouchGestures
-	//#endif
-	//#if tmp.supportTouchGestures
-		private long gestureStartTime;
-		private int gestureStartX;
-		private int gestureStartY;
-		private boolean isIgnorePointerReleaseForGesture;
+		private Command	doubleTabCommand;
 	//#endif
 	//#if polish.useNativeGui
 		protected NativeItem nativeItem;
@@ -994,22 +993,48 @@ public abstract class Item implements UiElement, Animatable
 	 * <p>It is illegal to call this method if this <code>Item</code>
 	 * is contained within  an <code>Alert</code>.</p>
 	 * 
-	 * @param label - the label string
+	 * @param labelText the label string
 	 * @throws IllegalStateException - if this Item is contained  within an Alert
 	 * @see #getLabel()
 	 */
-	public void setLabel( String label)
+	public void setLabel(String labelText)
 	{
-		if (this.label == null) {
-			this.label = new StringItem( null, label, this.labelStyle );
+		setLabel(labelText, this.labelStyle);
+	}
+
+	/**
+	 * Sets the label of the <code>Item</code>. If <code>label</code>
+	 * is <code>null</code>, specifies that this item has no label.
+	 * 
+	 * <p>It is illegal to call this method if this <code>Item</code>
+	 * is contained within  an <code>Alert</code>.</p>
+	 * 
+	 * @param labelText the label string
+	 * @param lstyle the style for the label
+	 * @throws IllegalStateException - if this Item is contained  within an Alert
+	 * @see #getLabel()
+	 */
+	public void setLabel( String labelText, Style lstyle )
+	{
+		if ((this.label == null) && (labelText != null)) 
+		{
+			this.label = new StringItem( null, labelText, lstyle );
 			this.label.parent = this; // orginally used "this.parent", however that field might not be known at this moment.
-			if (this.isShown){
+			if (this.isShown)
+			{
 				this.label.showNotify();
 			}
-		} else if ((label == null && this.label.getText() == null) || (label != null && label.equals(this.label.getText())) ){
+		} 
+		else if (
+				(labelText == null && (this.label == null || this.label.getText() == null)) 
+				|| (labelText != null && (this.label != null && labelText.equals(this.label.getText()))) 
+				)
+		{
 			return;
-		} else {
-			this.label.setText( label );
+		} 
+		else if (this.label != null)
+		{
+			this.label.setText( labelText, lstyle );
 		}
 		if (isInitialized()) {
 			setInitialized(false);
@@ -1249,13 +1274,16 @@ public abstract class Item implements UiElement, Animatable
 			Style labStyle = (Style) style.getObjectProperty("label-style");
 			if (labStyle != null) {
 				this.labelStyle = labStyle;
+				if (this.label != null) {
+					this.label.setStyle( labStyle );			
+				}
 			} else if (this.labelStyle == null) {
 				this.labelStyle = StyleSheet.labelStyle;
 			}
 		//#else
 			this.labelStyle = StyleSheet.labelStyle;
 		//#endif
-		if (this.label != null) {
+		if (this.label != null && this.label.style == null) {
 			this.label.setStyle( this.labelStyle );			
 		}
 		
@@ -1299,6 +1327,30 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 			this.completeBorder = brd;
+		//#endif
+			//#if polish.css.item-content-background
+			Background contentBg = (Background) style.getObjectProperty("item-content-background");
+			if (contentBg != null) {
+				if (this.isShown && this.contentBackground != contentBg) {
+					if (this.contentBackground != null) {
+						this.contentBackground.hideNotify();
+					}
+					contentBg.showNotify();
+				}
+				this.contentBackground = contentBg;
+			}
+		//#endif
+		//#if polish.css.item-content-border
+			Border contentBrd = (Border) style.getObjectProperty("item-content-border");
+			if (contentBrd != null) {
+				if (this.isShown && this.contentBorder != contentBrd) {
+					if (this.contentBorder != null) {
+						this.contentBorder.hideNotify();
+					}
+					contentBrd.showNotify();
+				}
+				this.contentBorder = contentBrd;
+			}
 		//#endif
 			
 		//#ifdef polish.css.view-type
@@ -1346,7 +1398,7 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.inline-label
 			Boolean inlineBool = style.getBooleanProperty("inline-label");
 			if (inlineBool != null) {
-				this.isInlineLabel = inlineBool.booleanValue();
+				setSameRowForContentAndLabel(inlineBool.booleanValue());
 			}
 		//#endif
 		
@@ -2523,8 +2575,10 @@ public abstract class Item implements UiElement, Animatable
 		if (this.isFocused) 
 		{
 			Screen scr = getScreen();
-			if(scr != null)
+			if (scr != null)
+			{
 				scr.notifyDefaultCommand( cmd );
+			}
 		}
 	}
 	
@@ -2538,6 +2592,34 @@ public abstract class Item implements UiElement, Animatable
 		// ignore
 	}
 	//#endif
+	
+	/**
+	 * Sets the command that should be triggered when this item is tapped double in short duration.
+	 * Note that you need to define the preprocessing variable "polish.supportTouchGestures" and set it to "true" for this to work.
+	 * Currently you cannot have a default command (triggered by a single tap) and a doube-tap command at the same time.
+	 * @param command the command that should be triggered when receiving a double tab
+	 */
+	public void setDoubleTapCommand(Command command)
+	{
+		//#if tmp.supportTouchGestures
+			this.doubleTabCommand = command;
+			this.appearanceMode = INTERACTIVE;
+		//#endif
+	}
+
+	//#if polish.LibraryBuild
+	/**
+	 * Sets the command that should be triggered when this item is tapped double in short duration
+	 * Note that you need to define the preprocessing variable "polish.supportTouchGestures" and set it to "true" for this to work.
+	 * Currently you cannot have a default command (triggered by a single tap) and a doube-tap command at the same time.
+	 * @param command the command that should be triggered when receiving a double tab
+	 */
+	public void setDoubleTapCommand(javax.microedition.lcdui.Command command)
+	{
+		// ignore
+	}
+	//#endif
+
 
 	/**
 	 * Causes this <code>Item's</code> containing <code>Form</code> to notify
@@ -2676,19 +2758,7 @@ public abstract class Item implements UiElement, Animatable
 				return;
 			}
 		//#endif
-			
-
-//			Item p = this.parent; xxx
-//			String start = "";
-//			while (p != null) {
-//				start += " ";
-//				p = p.parent;
-//			}
-//			System.out.println(start + "paint at x=" + x + ", contentX=" + this.contentX + ", leftBorder=" + leftBorder +", rightBorder=" + rightBorder + " of "  + this);
-			
-		//#debug ovidiu
-		Benchmark.startSmartTimer("0");
-			
+						
 		// initialise this item if necessary:
 		if (!this.isInitialized) {
 			if (this.availableWidth == 0) {
@@ -2771,11 +2841,6 @@ public abstract class Item implements UiElement, Animatable
 //				}
 //				DrawUtil.drawRgb(rgbData, x, y, width, height, true, g );
 //				
-				//#mdebug ovidiu
-				Benchmark.pauseSmartTimer("0");
-				Benchmark.incrementSmartTimer("1");
-				Benchmark.check();
-				//#enddebug
 				//#if polish.Item.ShowCommandsOnHold
 					if (this.isShowCommands) {
 						paintCommands( origX, origY, g );
@@ -2815,42 +2880,45 @@ public abstract class Item implements UiElement, Animatable
 		// paint background and border when the label should be included in this:
 		//#if polish.css.include-label
 			if (this.includeLabel) {
-				int width = this.itemWidth - this.marginLeft - this.marginRight;
-				int height = this.itemHeight - this.marginTop - this.marginBottom;
-				int bX = x + this.marginLeft;
-				int bY = y + this.marginTop + this.backgroundYOffset;
+				int width = getBackgroundWidth();
+				int height = getBackgroundHeight();
+				int bX = origX + getBackgroundX();
+				int bY = origY + getBackgroundY();
 				paintBackgroundAndBorder( bX, bY, width, height, g );
 			}
 		//#endif
 		//#if polish.css.complete-background || polish.css.complete-border
-			int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
-			int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
-			int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
-			int bX = x + this.marginLeft - cbPadding;
-			int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
+			if (
 			//#if polish.css.complete-background
-				if (this.completeBackground != null) {
-					this.completeBackground.paint(bX, bY, width, height, g);
-				}
+					(this.completeBackground != null)
+			//#endif
+			//#if polish.css.complete-background && polish.css.complete-border
+					||
 			//#endif
 			//#if polish.css.complete-border
-				if (this.completeBorder!= null) {
-					this.completeBorder.paint(bX, bY, width, height, g);
-				}
+				(this.completeBorder != null)
 			//#endif
+			) 
+			{
+				int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
+				int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
+				int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
+				int bX = x + this.marginLeft - cbPadding;
+				int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
+				//#if polish.css.complete-background
+					if (this.completeBackground != null) {
+						this.completeBackground.paint(bX, bY, width, height, g);
+					}
+				//#endif
+				//#if polish.css.complete-border
+					if (this.completeBorder!= null) {
+						this.completeBorder.paint(bX, bY, width, height, g);
+					}
+				//#endif
+			}
 		//#endif
 		
-		// paint label:
-		StringItem labelItem = this.label;
-		if (labelItem != null) {
-            int labelX = x + labelItem.relativeX;
-            labelItem.paint(labelX, y + labelItem.relativeY, labelX, labelX + labelItem.itemWidth, g );
-            if (this.useSingleRow) {
-                leftBorder += labelItem.itemWidth;
-            } else {
-                y += labelItem.itemHeight;
-            }
-		}
+
 		
 		leftBorder += (this.marginLeft + getBorderWidthLeft() + this.paddingLeft);
 		//#ifdef polish.css.before
@@ -2892,14 +2960,10 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.css.include-label
 			if (!this.includeLabel) {
 		//#endif
-				int backgroundX = x;
-				if (labelItem != null && this.useSingleRow) { 
-					backgroundX += labelItem.itemWidth;
-				}
+				int backgroundX = origX + getBackgroundX();
 				int backgroundW = this.backgroundWidth;
 				//#if polish.css.before && polish.css.before-include-background
 					if (this.beforeImage != null && !this.beforeIncludeBackground) {
-						backgroundX += getBeforeWidthWithPadding();
 						backgroundW -= getBeforeWidthWithPadding();
 					}
 				//#endif
@@ -2908,10 +2972,21 @@ public abstract class Item implements UiElement, Animatable
 						backgroundW -= getAfterWidthWithPadding();
 					}
 				//#endif
-				paintBackgroundAndBorder(backgroundX, y, backgroundW, this.backgroundHeight, g);
+				int backY = origY + getBackgroundY();
+				paintBackgroundAndBorder(backgroundX, backY, backgroundW, this.backgroundHeight, g);
 		//#if polish.css.include-label
 			}
 		//#endif
+			
+		// paint label:
+		StringItem labelItem = this.label;
+		if (labelItem != null) {
+            int labelX = origX + labelItem.relativeX;
+            labelItem.paint(labelX, origY + labelItem.relativeY, labelX, labelX + labelItem.itemWidth, g );
+            if (!this.useSingleRow) {
+                y += labelItem.itemHeight;
+            }
+		}
 
 		//#if polish.css.content-x-adjust
 			if (this.contentXAdjustment != null) {
@@ -2978,7 +3053,6 @@ public abstract class Item implements UiElement, Animatable
 				}
 				//System.out.println("drawing before at " + beforeX + ", contentX=" + this.contentX + ", this=" + this);
 				g.drawImage(this.beforeImage, beforeX, beforeY, Graphics.TOP | Graphics.LEFT );
-				//x += getBeforeWidthWithPadding();
 			}
 		//#endif
 		
@@ -3036,6 +3110,38 @@ public abstract class Item implements UiElement, Animatable
 				this.contentHeight = 0;
 			} else {
 		//#endif
+			// paint item-content-background and item-content-border:
+			//#if polish.css.item-content-background || polish.css.item-content-border
+				if (
+				//#if polish.css.item-content-background
+						(this.contentBackground != null)
+				//#endif
+				//#if polish.css.item-content-background && polish.css.item-content-border
+						||
+				//#endif
+				//#if polish.css.item-content-border
+					(this.contentBorder != null)
+				//#endif
+				) 
+				{
+					int bX = x - this.paddingLeft;
+					int bY = y - this.paddingTop;
+					int bWidth = this.contentWidth + this.paddingLeft + this.paddingRight;
+					int bHeight = this.contentHeight + this.paddingTop + this.paddingBottom;
+					//#if polish.css.item-content-background
+						if (this.contentBackground != null)
+						{
+							this.contentBackground.paint(bX, bY, bWidth, bHeight, g);
+						}
+					//#endif
+					//#if polish.css.item-content-border
+						if (this.contentBorder != null)
+						{
+							this.contentBorder.paint(bX, bY, bWidth, bHeight, g);
+						}
+					//#endif
+				}
+			//#endif
 			// paint content:
 			//#ifdef polish.css.view-type
 				if (this.view != null) {
@@ -3046,6 +3152,10 @@ public abstract class Item implements UiElement, Animatable
 			//#ifdef polish.css.view-type
 				}
 			//#endif
+//				if (this.useSingleRowEnforced) {
+//					g.setColor(0x00ffff);
+//					g.drawRect(leftBorder, y, this.contentWidth, this.contentHeight);
+//				}
 		//#if polish.css.content-visible
 			}
 		//#endif
@@ -3059,10 +3169,9 @@ public abstract class Item implements UiElement, Animatable
 				paintCommands( origX, origY, g );
 			}
 		//#endif
-			
 //			g.setColor(0xff0000);
 //			g.drawRect( origX + this.contentX, origY + this.contentY, this.contentWidth, this.contentHeight );
-//			g.drawLine( origX + this.contentX, origY + this.contentY, origX + this.contentX + this.contentWidth, origY + this.contentY + this.contentHeight );
+//			g.drawLine( origX + this.contentX, origY + this.contentY, origX + this.contentX, origY + this.contentY + this.contentHeight );
 //			g.setColor(0xffFF00);
 //			g.drawRect( getAbsoluteX() + 1, getAbsoluteY() + 1, this.itemWidth - 2, this.itemHeight - 2);
 
@@ -3390,16 +3499,6 @@ public abstract class Item implements UiElement, Animatable
 		
 		int firstLineContentWidth = firstLineWidth - noneContentWidth;
 		int availableContentWidth = availWidth - noneContentWidth;
-		if (this.useSingleRowEnforced) {
-			if (firstLineContentWidth - labelWidth > 5 * availableContentWidth / 100) { // at least 5% of the available width should remain for the first line
-				firstLineContentWidth -= labelWidth;
-			} else {
-				firstLineContentWidth = availableContentWidth;
-			}
-			//#if polish.css.inline-label
-				this.isInlineLabel = false;
-			//#endif
-		}
 		
 		//#ifdef polish.css.max-width
 			if (this.maximumWidth != null ) {
@@ -3433,6 +3532,16 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 		//#endif
+
+		if (this.useSingleRowEnforced) {
+			if (firstLineContentWidth - labelWidth > 5 * availableContentWidth / 100) { // at least 5% of the available width should remain for the first line
+				// use padding-horizontal instead of padding-left when enforcing a single row:
+				firstLineContentWidth -= labelWidth;
+				this.useSingleRow = true;
+			} else {
+				firstLineContentWidth = availableContentWidth;
+			}
+		}
 
 		this.contentX = this.marginLeft + getBorderWidthLeft() + this.paddingLeft;
 		//#ifdef polish.css.before
@@ -3468,12 +3577,6 @@ public abstract class Item implements UiElement, Animatable
 			availHeight -= noneContentHeight;
 			this.availContentWidth = availableContentWidth;
 			this.availContentHeight = availHeight;
-			//#if polish.css.inline-label
-				if (this.isInlineLabel && labelWidth < (90 * availWidth)/100) {
-					firstLineContentWidth -= labelWidth;
-					availableContentWidth -= labelWidth;
-				}
-			//#endif
 			//#ifdef polish.css.view-type
 				ItemView myView = this.view;
 				if (myView != null) {
@@ -3484,11 +3587,6 @@ public abstract class Item implements UiElement, Animatable
 			//#endif
 					initContent( firstLineContentWidth, availableContentWidth, availHeight );
 			//#ifdef polish.css.view-type
-				}
-			//#endif
-			//#if polish.css.inline-label
-				if (this.isInlineLabel && labelWidth < (90 * availWidth)/100) {
-					availableContentWidth += labelWidth;
 				}
 			//#endif
 			
@@ -3514,7 +3612,7 @@ public abstract class Item implements UiElement, Animatable
 		}
 		
 		//#ifdef polish.css.width
-			if(this.cssWidth != null) {
+			if (this.cssWidth != null) {
 				setContentWidth( targetWidth );
 				int diff = this.contentWidth - cWidth;
 				if (isLayoutCenter()) {
@@ -3611,7 +3709,10 @@ public abstract class Item implements UiElement, Animatable
 				}
 			}
 			if (this.useSingleRow && labelWidth > 0) {
-				this.itemWidth += labelWidth; //TODO: when calling setItemWidth() here it will affect center and right layout items within a Container, but setting the variable directly is also not cool... 
+				if (!this.useSingleRowEnforced || this.itemWidth <= availWidth - labelWidth)
+				{
+					this.itemWidth += labelWidth; //TODO: when calling setItemWidth() here it will affect center and right layout items within a Container, but setting the variable directly is also not cool...
+				}
 				this.contentX += labelWidth;
 				if ( cHeight + noneContentHeight < labelHeight ) {
 					cHeight = labelHeight - noneContentHeight;
@@ -3721,7 +3822,11 @@ public abstract class Item implements UiElement, Animatable
 		this.itemHeight = cHeight + noneContentHeight;
 		
 		if (this.useSingleRow) {
-			this.backgroundWidth = this.itemWidth - this.marginLeft - this.marginRight - labelWidth;
+			this.backgroundWidth = this.itemWidth - this.marginLeft - this.marginRight;
+			if (!this.useSingleRowEnforced)
+			{
+				this.backgroundWidth -= labelWidth;
+			}
 			this.backgroundHeight = cHeight
 							  + noneContentHeight
 							  - this.marginTop
@@ -3733,6 +3838,12 @@ public abstract class Item implements UiElement, Animatable
 							  - this.marginTop
 							  - this.marginBottom
 							  - labelHeight;
+			//#if polish.css.include-label
+				if (this.includeLabel)
+				{
+					this.backgroundHeight += labelHeight;
+				}
+			//#endif
 //			if (labelWidth > this.itemWidth) {
 //				int diff = labelWidth - this.itemWidth;
 //				if (isLayoutCenter()) {
@@ -4135,8 +4246,7 @@ public abstract class Item implements UiElement, Animatable
 	protected boolean handleKeyPressed( int keyCode, int gameAction ) {
 		//#debug
 		System.out.println("item " + this + ": handling keyPressed for keyCode=" + keyCode + ", gameAction=" + gameAction);
-		Screen scr = getScreen();
-		if ( this.appearanceMode != PLAIN && null != scr && scr.isGameActionFire(keyCode, gameAction) )
+		if ( this.appearanceMode != PLAIN && gameAction == Canvas.FIRE )
 		{
 			return notifyItemPressedStart();
 		}
@@ -4190,7 +4300,7 @@ public abstract class Item implements UiElement, Animatable
 		//#debug
 		System.out.println("handleKeyReleased(" + keyCode + ", " + gameAction + ") for " + this + ", isPressed=" + this.isPressed );
 		Screen scr = getScreen();
-		if (this.appearanceMode != PLAIN && this.isPressed && scr != null && scr.isGameActionFire(keyCode, gameAction) )
+		if (gameAction == Canvas.FIRE && this.appearanceMode != PLAIN && this.isPressed && scr != null)
 		{
 			notifyItemPressedEnd();
 			Item item = this;
@@ -4543,16 +4653,10 @@ public abstract class Item implements UiElement, Animatable
 				}
 			//#endif
 			if ( isInItemArea(relX, relY) ) {
-				//#if tmp.supportTouchGestures
-					this.gestureStartTime = System.currentTimeMillis();
-					this.gestureStartX = relX;
-					this.gestureStartY = relY;
-				//#endif
 				return handleKeyPressed( 0, Canvas.FIRE );
 			}
 			//#if polish.Item.ShowCommandsOnHold
 				else {
-					this.gestureStartTime = 0;
 					if (this.isShowCommands) {
 						this.isShowCommands = false;
 						return true;
@@ -4599,12 +4703,6 @@ public abstract class Item implements UiElement, Animatable
 				this.isJustFocused = false;
 				handleOnFocusSoftKeyboardDisplayBehavior();
 			}
-			//#if tmp.supportTouchGestures
-				if (this.isIgnorePointerReleaseForGesture) {
-					this.isIgnorePointerReleaseForGesture = false;
-					return true;
-				}
-			//#endif
 			//#if polish.Item.ShowCommandsOnHold
 				if (this.isShowCommands) {
 					this.commandsContainer.handlePointerReleased(relX - this.commandsContainer.relativeX, relY - this.commandsContainer.relativeY);
@@ -4613,27 +4711,13 @@ public abstract class Item implements UiElement, Animatable
 					return true;
 				}
 			//#endif
-			//#if tmp.supportTouchGestures
-				int verticalDiff = Math.abs( relY - this.gestureStartY );
-				if (verticalDiff < 20) {
-					int horizontalDiff = relX - this.gestureStartX;
-					if (horizontalDiff > this.itemWidth/2) {
-						if (handleGesture(GestureEvent.GESTURE_SWIPE_RIGHT, relX, relY)) {
-							return true;
-						}
-					} else if (horizontalDiff < -this.itemWidth/2) {
-						if (handleGesture(GestureEvent.GESTURE_SWIPE_LEFT, relX, relY)) {
-							return true;
-						}						
-					}
-				}
-			//#endif
 			//#ifdef polish.css.view-type
 				if (this.view != null && this.view.handlePointerReleased(relX, relY)) {
 					return true;
 				}
 			//#endif
 			if ( isInItemArea(relX, relY) ) {
+				
 				return handleKeyReleased( 0, Canvas.FIRE );
 			} else if (this.isPressed) {
 				notifyItemPressedEnd();
@@ -4664,12 +4748,6 @@ public abstract class Item implements UiElement, Animatable
 	{
 		boolean handled = false;
 		//#ifdef polish.hasPointerEvents
-			//#if tmp.supportTouchGestures
-				if (this.gestureStartTime != 0 && Math.abs( relX - this.gestureStartX) > 30 || Math.abs( relY - this.gestureStartY) > 30) {
-					// abort (hold) gesture after moving out for too much:
-					this.gestureStartTime = 0;
-				}
-			//#endif
 			//#if polish.Item.ShowCommandsOnHold
 				if (this.isShowCommands && this.commandsContainer.handlePointerDragged(relX - this.commandsContainer.relativeX, relY - this.commandsContainer.relativeY, repaintRegion)) {
 					handled = true;
@@ -4761,6 +4839,8 @@ public abstract class Item implements UiElement, Animatable
 			break;
 		case GestureEvent.GESTURE_SWIPE_RIGHT:
 			handled = handleGestureSwipeRight(x, y);
+		case GestureEvent.GESTURE_DOUBLE_TAP:
+			handled = handleGestureDoubleTap(x, y);
 		}
 		if (!handled) {
 			GestureEvent event = GestureEvent.getInstance();
@@ -4792,6 +4872,7 @@ public abstract class Item implements UiElement, Animatable
 		//#if polish.Item.ShowCommandsOnHold
 			if (this.commands != null && !this.isShowCommands && this.commands.size() > 1) {
 				this.isShowCommands = true;
+				notifyItemPressedEnd();
 				if (this.commandsContainer != null) {
 					this.commandsContainer.focusChild(-1);
 				}
@@ -4817,6 +4898,19 @@ public abstract class Item implements UiElement, Animatable
 		return false;
 	}
 
+	/**
+	 * Handles the double tap gesture.
+	 * @return true when the gesture was handled
+	 */
+	protected boolean handleGestureDoubleTap(int x, int y) {
+		//#if tmp.supportTouchGestures
+			if (this.doubleTabCommand != null)
+			{
+				return this.doubleTabCommand.commandAction(this, getScreen());
+			}
+		//#endif
+		return false;
+	}
 
 	/**
 	 * Adds a repaint request for this item's space.
@@ -4982,20 +5076,6 @@ public abstract class Item implements UiElement, Animatable
 				this.view.animate(currentTime, repaintRegion);
 			}
 		//#endif
-		//#if tmp.supportTouchGestures
-			if (this.isPressed && (this.gestureStartTime != 0) && (currentTime - this.gestureStartTime > 500)) {
-				boolean handled = handleGesture( GestureEvent.GESTURE_HOLD, this.gestureStartX, this.gestureStartY );
-				if (handled) {
-					this.isIgnorePointerReleaseForGesture = true;
-					notifyItemPressedEnd();
-					this.gestureStartTime = 0;					
-					Screen scr = getScreen();
-					repaintRegion.addRegion( scr.contentX, scr.contentY, scr.contentWidth, scr.contentHeight );
-				} else {
-					this.gestureStartTime = 0;
-				}
-			}
-		//#endif
 		//#if polish.Item.ShowCommandsOnHold
 			if (this.isShowCommands && this.commandsContainer != null) {
 				this.commandsContainer.animate(currentTime, repaintRegion);
@@ -5073,7 +5153,7 @@ public abstract class Item implements UiElement, Animatable
 	 * @param newStyle the style which is used to indicate the focused state
 	 * @param direction the direction from which this item is focused,
 	 *        either Canvas.UP, Canvas.DOWN, Canvas.LEFT, Canvas.RIGHT or 0.
-	 *        When 0 is given, the direction is unknown.
+	 *        When 0 is given, the direction is unknown. For focus via touch, use Canvas.FIRE.
 	 * @return the current style of this item
 	 */
 	protected Style focus( Style newStyle, int direction ) {
@@ -5683,15 +5763,25 @@ public abstract class Item implements UiElement, Animatable
 	 * @return the horizontal background start in pixels.
 	 */
 	public int getBackgroundX() {
+		int bX = this.marginLeft;
+		if ( this.label == null
 		//#if polish.css.include-label
-			if (this.includeLabel) {
-				return this.marginLeft;
-			} else {
+			|| this.includeLabel
 		//#endif
-				return this.contentX - this.paddingLeft;
-		//#if polish.css.include-label
-			} 
+		){
+			bX = this.marginLeft;
+		}
+		if (this.label != null && this.useSingleRow && !this.useSingleRowEnforced)
+		{
+			bX  = this.contentX - this.paddingLeft;
+		}
+		//#if polish.css.before && polish.css.before-include-background
+			if (this.beforeImage != null && !this.beforeIncludeBackground) 
+			{
+				bX += getBeforeWidthWithPadding();
+			}
 		//#endif
+		return bX;
 	}
 	
 	/**
@@ -5700,15 +5790,21 @@ public abstract class Item implements UiElement, Animatable
 	 * @return the horizontal background start in pixels.
 	 */
 	public int getBackgroundY() {
+		int bY = this.backgroundYOffset;
 		//#if polish.css.include-label
 			if (this.includeLabel) {
-				return this.marginTop;
+				bY += this.marginTop;
 			} else {
 		//#endif
-				return this.contentY - this.paddingTop;
+				bY += this.marginTop;
+				if (this.label != null && !this.useSingleRow)
+				{
+					bY += this.label.itemHeight;
+				}
 		//#if polish.css.include-label
 			} 
 		//#endif
+		return bY;
 	}
 	
 	/**

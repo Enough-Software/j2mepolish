@@ -29,13 +29,18 @@ import java.io.IOException;
 
 import javax.microedition.lcdui.Image;
 
-
 import de.enough.polish.app.App;
 import de.enough.polish.app.model.Configuration;
+import de.enough.polish.app.model.Contact;
+import de.enough.polish.app.model.ContactCollection;
 import de.enough.polish.app.model.Message;
+import de.enough.polish.app.view.ContactSelectionForm;
 import de.enough.polish.app.view.MainMenuList;
 import de.enough.polish.app.view.MessageForm;
+import de.enough.polish.app.view.SimpleMessageForm;
 import de.enough.polish.io.RmsStorage;
+import de.enough.polish.ui.Alert;
+import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
@@ -68,6 +73,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
 	private Command cmdAbout = new Command(Locale.get("cmd.about"), Command.SCREEN, 3);
+	private Command cmdSelectContact = new Command(Locale.get("cmd.contact.select"), Command.SCREEN, 3);
 	private Command cmdMessageSend = new Command(Locale.get("cmd.message.send"), Command.OK, 1);
 	private Command cmdMessageShowSource = new Command(Locale.get("cmd.message.showSource"), Command.SCREEN, 3);
 	private Command cmdMessageShowParsed = new Command(Locale.get("cmd.message.showParsed"), Command.SCREEN, 3);
@@ -78,8 +84,10 @@ implements ApplicationInitializer, CommandListener
 	private MainMenuList screenMainMenu;
 	private static final int MAIN_ACTION_START = 0;
 	private static final int MAIN_ACTION_STOP = 1;
-	private static final int MAIN_ACTION_MESSAGES = 2;
-	private static final int MAIN_ACTION_EXIT = 3;
+	private static final int MAIN_ACTION_SELECT_CONTACT = 2;
+	private static final int MAIN_ACTION_CHAT_COMPLEX = 3;
+	private static final int MAIN_ACTION_CHAT_SIMPLE = 4;
+	private static final int MAIN_ACTION_EXIT = 5;
 	
 	private SimpleScreenHistory screenHistory;
 	private int busyIndicators;
@@ -141,9 +149,11 @@ implements ApplicationInitializer, CommandListener
 		this.configuration = configurationLoad();
 		// create main menu:
 		this.screenMainMenu = createMainMenu();
+		// init contacts:
+		ContactCollection.getInstance();
 		long currentTime = System.currentTimeMillis();
 		long maxTime = 1500;
-		if (currentTime - initStartTime < maxTime) { // show the splash at least for 1500 ms / 2 seconds:
+		if (currentTime - initStartTime < maxTime) { // show the splash at least for 1500 ms / 1.5 seconds:
 			try {
 				Thread.sleep(maxTime - currentTime + initStartTime);
 			} catch (InterruptedException e) {
@@ -161,7 +171,9 @@ implements ApplicationInitializer, CommandListener
 		list.addCommand(this.cmdAbout);
 		list.addEntry("Start Busy Indicator");
 		list.addEntry("Stop Busy Indicator");
-		list.addEntry("Messages");
+		list.addEntry("Select Contact");
+		list.addEntry("Chat");
+		list.addEntry("Simple Chat");
 		list.addEntry(Locale.get("cmd.exit"));
 		return list;
 	}
@@ -211,7 +223,15 @@ implements ApplicationInitializer, CommandListener
 			if (handleCommandMessageForm( cmd, (MessageForm)disp)) {
 				return;
 			}
-		} 
+		} else if (disp instanceof SimpleMessageForm) {
+			if (handleCommandSimpleMessageForm( cmd, (SimpleMessageForm)disp)) {
+				return;
+			}
+		} else if (disp instanceof ContactSelectionForm) {
+			if (handleCommandContactSelectionForm(cmd, (ContactSelectionForm)disp)) {
+				return;
+			}
+		}
 		if (cmd == this.cmdBack) {
 			if (this.screenHistory.hasPrevious()) {
 				this.screenHistory.showPrevious();
@@ -227,7 +247,7 @@ implements ApplicationInitializer, CommandListener
 		if (cmd == this.cmdMessageSend) {
 			String input = form.getInputAndClearField();
 			if (input.length() > 0) {
-				Message message = new Message("j2mepolish", input);
+				Message message = new Message("me", input);
 				form.addMessage(message);
 				UiAccess.scrollToBottom(form);
 			}
@@ -246,6 +266,51 @@ implements ApplicationInitializer, CommandListener
 		return false;
 	}
 
+	private boolean handleCommandSimpleMessageForm(Command cmd, SimpleMessageForm form) {
+		if (cmd == this.cmdMessageSend) {
+			String input = form.getInputAndClearField();
+			if (input.length() > 0) {
+				Message message = new Message("me", input);
+				form.addMessage(message);
+				UiAccess.scrollToBottom(form);
+			}
+			return true;
+		} 
+		return false;
+	}
+
+	private boolean handleCommandContactSelectionForm(Command cmd, final ContactSelectionForm form)
+	{
+		if (cmd == this.cmdSelectContact)
+		{
+			Contact contact = form.getCurrentContact();
+			if (contact != null)
+			{
+				final String userName = contact.getFirstName() + " " + contact.getLastName();
+				Alert alert = new Alert("Start Chat", "Chat with " + userName + "?", null, AlertType.CONFIRMATION);
+				final Command cmdYes = new Command("Yes", Command.OK, 1);
+				final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+				alert.addCommand(cmdYes);
+				alert.addCommand(cmdNo);
+				alert.setCommandListener(new CommandListener() {
+					public void commandAction(Command c, Displayable d) {
+						if (c == cmdYes) 
+						{
+							showMessages(userName, false);
+						}
+						else
+						{
+							Controller.this.display.setCurrent(form);
+						}
+					}
+				});
+				this.display.setCurrent(alert);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Handles commands for the main menu
 	 * @param cmd the command of the main menu
@@ -261,18 +326,36 @@ implements ApplicationInitializer, CommandListener
 			case MAIN_ACTION_STOP:
 				stopBusyIndicator();
 				break;
-			case MAIN_ACTION_MESSAGES:
-				showMessages();
+			case MAIN_ACTION_SELECT_CONTACT:
+				showContacts();
+				break;
+			case MAIN_ACTION_CHAT_COMPLEX:
+				showMessages("j2mepolish", false);
+				break;
+			case MAIN_ACTION_CHAT_SIMPLE:
+				showMessages("j2mepolish", true);
 				break;
 			case MAIN_ACTION_EXIT:
-				exit();
-				return true;
+				showExitDialog();
 			}
+			return true;			
 		} else if (cmd == this.cmdAbout) {
 			showAbout();
 			return true;
+		} else if (cmd == this.cmdSelectContact)
+		{
+			showContacts();
+			return true;
 		}
 		return false;
+	}
+
+	private void showContacts()
+	{
+		ContactSelectionForm form = new ContactSelectionForm(Locale.get("contact.select.title"), this.cmdSelectContact);
+		form.addCommand(this.cmdBack);
+		form.setCommandListener(this);
+		this.screenHistory.show(form);
 	}
 
 	private void showAbout() {
@@ -285,25 +368,47 @@ implements ApplicationInitializer, CommandListener
 		this.screenHistory.show(form);
 	}
 
-	private void showMessages() {
-		Message[] messages = new Message[]{
-				new Message("me", "Hi J2ME Polish, what's up...?"),
-				new Message("j2mepolish", "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
-				new Message("me", "Cool! When will it be out?"),
-				new Message("j2mepolish", "That's the /good part/, it's available now: www.j2mepolish.org."),
-				new Message("me", "fan-tas-tic :-)")
-		};
-		MessageForm form = new MessageForm(this.cmdMessageSend);
-		for (int i = 0; i < messages.length; i++) {
-			Message message = messages[i];
-			form.addMessage(message);
+	private void showMessages(String userName, boolean useSimpleChat) {
+		Form messageForm;
+		if (!useSimpleChat)
+		{
+			Message[] messages = new Message[]{
+					new Message("me", "Hi J2ME Polish, what's up...?"),
+					new Message(userName, "Hey, this is the new *message* text effect in <div style=\"color: red;\">action</div>. "),
+					new Message("me", "Cool! When will it be out?"),
+					new Message(userName, "That's the /good part/, it's available now: www.j2mepolish.org."),
+					new Message("me", "fan-tas-tic :-)")
+			};
+			MessageForm form = new MessageForm(this.cmdMessageSend);
+			for (int i = 0; i < messages.length; i++) {
+				Message message = messages[i];
+				form.addMessage(message);
+			}
+			messageForm = form;
 		}
-		form.addCommand(this.cmdBack);
-		form.addCommand(this.cmdMessageShowSource);
-		form.setCommandListener(this);
-		UiAccess.init(form);
-		form.scrollToBottom();
-		this.screenHistory.show(form);
+		else
+		{
+			Message[] messages = new Message[]{
+					new Message("me", "Hi J2ME Polish, what's up...?"),
+					new Message(userName, ":-) Hey, this is the new smiley-extended text-effect in action :-D"),
+					new Message("me", "Cool-hoooooooooooooliooooooo! :-) When will it be out?"),
+					new Message(userName, "It's available now: www.j2mepolish.org."),
+					new Message("me", "fan-tas-tic :-) Sad that I didn't know it before :'("),
+					new Message("me", ":-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D")
+			};
+			SimpleMessageForm form = new SimpleMessageForm(this.cmdMessageSend);
+			for (int i = 0; i < messages.length; i++) {
+				Message message = messages[i];
+				form.addMessage(message);
+			}
+			messageForm = form;
+		}
+		messageForm.addCommand(this.cmdBack);
+		messageForm.addCommand(this.cmdMessageShowSource);
+		messageForm.setCommandListener(this);
+		UiAccess.init(messageForm);
+		messageForm.scrollToBottom();
+		this.screenHistory.show(messageForm);
 	}
 
 	/**
@@ -321,7 +426,8 @@ implements ApplicationInitializer, CommandListener
 	 * When no busy indicators are left, the busy indicator won't be shown any more.
 	 * The busy indicator uses ScreenInfo, this element requires the preprocessing variable 
 	 * <variable name="polish.ScreenInfo.enable" value="true" />
-	 * in your build.xml script.
+	 * in your build.xml 
+	 * script.
 	 * Each long running operation should call startBusyIndicator() and stopBusyIndicator() for giving the user feedback.
 	 * @see #startBusyIndicator()
 	 */
@@ -354,4 +460,27 @@ implements ApplicationInitializer, CommandListener
 		//#debug
 		System.out.println("start busy indicator: Number of busy indicators: " + this.busyIndicators);
 	}
+	
+	private void showExitDialog() {
+		Alert alert = new Alert("Exit?", "Wanna exit?", null, AlertType.CONFIRMATION);
+		final Command cmdYes = new Command("Yes", Command.OK, 1);
+		final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+		alert.addCommand(cmdYes);
+		alert.addCommand(cmdNo);
+		alert.setCommandListener(new CommandListener() {
+			public void commandAction(Command c,
+					Displayable d) {
+				if (c == cmdYes) {
+					exit();
+				}
+				else
+				{
+					Controller.this.display.setCurrent(Controller.this.screenMainMenu);
+				}				
+			}
+		});
+		this.display.setCurrent(alert);
+	}
+
 }
+

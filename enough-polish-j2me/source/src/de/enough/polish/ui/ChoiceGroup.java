@@ -1388,7 +1388,7 @@ implements Choice
 			System.out.println("itemsList.size()==0, aborting handleKeyPressed");
 			return super.handleKeyPressed(keyCode, gameAction);
 		}
-		boolean gameActionIsFire = getScreen().isGameActionFire(keyCode, gameAction); 
+		boolean gameActionIsFire = (gameAction == Canvas.FIRE); 
 		//#debug
 		System.out.println("handleKeyPressed( " + keyCode + ", " + gameAction + " ) for " + this + ", isFire=" + gameActionIsFire);
 		
@@ -1605,7 +1605,7 @@ implements Choice
 //				&& this.isPopup && !this.isPopupClosed
 //				)
 //			) {
-		boolean gameActionIsFire = getScreen().isGameActionFire(keyCode, gameAction); 
+		boolean gameActionIsFire = (gameAction == Canvas.FIRE); 
 		if (gameActionIsFire) {
 			ChoiceItem choiceItem = (ChoiceItem) this.focusedItem;
 			boolean handled = false;

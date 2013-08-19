@@ -125,6 +125,22 @@ When only a command-line switch should be defined, just define an empty value, e
 	</tr>
 	</table>
 	
+	<h2 id="emulator-filters">The &lt;filters&gt; Subelement</h2>
+	<p>
+	You can add filters for filtering and managing debug output. The only currently configured filter is the 
+	<code>deadlock</code> filter:
+	</p>
+<pre class="brush: xml">
+&lt;filters&gt;
+	&lt;filter name=&quot;deadlock&quot;&gt;
+		&lt;package name=&quot;de.enough.polish.ui&quot; /&gt;
+		&lt;package name=&quot;com.company.myproject&quot; /&gt;
+	&lt;/filter&gt;
+&lt;/filters&gt;
+</pre>
+	<p>Please refer to <a href="platform-nokia-asha.html#asha-emulator-deadlock">Nokia Asha</a> documentation
+	for a full description.</p>
+
 	<h2 id="emulator-definition">Emulator-Settings in the Device Database and in the build.xml</h2>
 <p>
 J2ME Polish uses the device-database to determine the correct emulator. 

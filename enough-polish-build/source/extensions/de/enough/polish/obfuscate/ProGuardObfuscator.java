@@ -70,7 +70,7 @@ implements OutputFilter
 	
 	private Map<String,String> furtherParameters;
 	private boolean isVerbose;
-	private boolean doPreverify = true;
+	private boolean doPreverify;
 
 	/**
 	 * Creates a new pro guard obfuscator.
@@ -87,6 +87,7 @@ implements OutputFilter
 	public void obfuscate(Device device, File sourceFile, File targetFile, String[] preserve, Path bootClassPath) 
 	throws BuildException 
 	{
+		this.doPreverify = Obfuscator.isAllowedToPreverify;
 		OrderedMultipleEntriesMap params = new OrderedMultipleEntriesMap();
 		
 		Environment env = Environment.getInstance();
@@ -425,11 +426,9 @@ implements OutputFilter
 	 */
 	public void filter(String message, PrintStream output) {
 		if (this.isVerbose 
-			|| (message.indexOf("Note:") == -1
+			|| (message.indexOf("Note: duplicate") == -1
 			&& message.indexOf("Reading program") == -1
 			&& message.indexOf("Reading library") == -1			
-			&& message.indexOf("You might consider") == -1
-			&& message.indexOf("their implementations") == -1
 			&& message.indexOf("Copying resources") == -1
 			) )
 		{

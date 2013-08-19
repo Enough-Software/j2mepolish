@@ -35,6 +35,7 @@ import javax.microedition.lcdui.Image;
 import de.enough.polish.ui.Background;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.ChoiceItem;
+import de.enough.polish.ui.ClippingRegion;
 import de.enough.polish.ui.Container;
 import de.enough.polish.ui.ContainerView;
 import de.enough.polish.ui.Form;
@@ -52,6 +53,7 @@ import de.enough.polish.ui.StyleSheet;
 public class HorizontalChoiceView extends ContainerView {
 	
 	private static final int DISTRIBUTE_EQUALS = 1;
+	private static final int DISTRIBUTE_FIXED_COUNT = 2;
 
 	private final static int POSITION_BOTH_SIDES = 0; 
 	private final static int POSITION_RIGHT = 1; 
@@ -85,6 +87,8 @@ public class HorizontalChoiceView extends ContainerView {
 	//#endif
 	//#if polish.css.horizontalview-distribution
 		private boolean isDistributeEquals;
+		private boolean isDistributeFixedCount;
+		private int distributeFixedCount = -1;
 	//#endif
 
 	private int arrowWidth = 10;
@@ -213,6 +217,10 @@ public class HorizontalChoiceView extends ContainerView {
 				int left = availItemWidth - ((items.length - 1)*this.paddingHorizontal);
 				availItemWidth = left / items.length;
 				availItemWidthWithPaddingShift8 = (availWidth << 8) / items.length;
+			} else if ( this.isDistributeFixedCount ) {
+				int left = availItemWidth - ((this.distributeFixedCount-1)*this.paddingHorizontal);
+				availItemWidth = left/ this.distributeFixedCount;
+				availItemWidthWithPaddingShift8 = (availWidth << 8) / this.distributeFixedCount;
 			}
 		//#endif
 		for (int i = 0; i < items.length; i++) {
@@ -235,7 +243,7 @@ public class HorizontalChoiceView extends ContainerView {
 			int startX = completeWidth;
 			completeWidth += itemWidth + this.paddingHorizontal;
 			//#if polish.css.horizontalview-distribution
-				if (this.isDistributeEquals) {
+				if (this.isDistributeEquals || this.isDistributeFixedCount) {
 					completeWidth = (availItemWidthWithPaddingShift8 * (i+1)) >> 8;
 				}
 			//#endif
@@ -384,6 +392,15 @@ public class HorizontalChoiceView extends ContainerView {
 			Integer distribution = style.getIntProperty("horizontalview-distribution");
 			if (distribution != null) {
 				this.isDistributeEquals = (distribution.intValue() == DISTRIBUTE_EQUALS);
+				this.isDistributeFixedCount = (distribution.intValue() == DISTRIBUTE_FIXED_COUNT);
+			}
+		//#endif	
+		//#if polish.css.horizontalview-distribution
+			Integer distributionFixedCount = style.getIntProperty("horizontalview-distribution-fixed-count");
+			if (distributionFixedCount != null) {
+				this.distributeFixedCount = distributionFixedCount.intValue();
+			} else {
+				this.distributeFixedCount = 3;
 			}
 		//#endif	
 	}
@@ -549,7 +566,7 @@ public class HorizontalChoiceView extends ContainerView {
 	 */
 	protected Item getNextItem(int keyCode, int gameAction) {
 		//#debug
-		System.out.println("ExclusiveSingleLineView: getNextItem()");
+		System.out.println("HorizontalChoiceView: getNextItem()");
 		ChoiceGroup choiceGroup = (ChoiceGroup) this.parentContainer;
 		Item[] items = this.parentContainer.getItems();
 		ChoiceItem currentItem = (ChoiceItem) this.focusedItem;
@@ -614,11 +631,23 @@ public class HorizontalChoiceView extends ContainerView {
 		// in all other cases there is no next item:
 		return nextItem;
 	}
-	
-
-	
+		
 
 	//#ifdef polish.hasPointerEvents
+	
+	//#ifdef polish.css.horizontalview-distribution
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.ItemView#handlePointerDragged(int, int,ClippingRegion)
+	 */
+	public boolean handlePointerDragged(int x, int y, ClippingRegion repaintRegion) {
+		if ( ! this.isDistributeFixedCount ) {
+			return super.handlePointerDragged(x, y, repaintRegion);
+		} else {
+			return false;
+		}
+	}
+	//#endif
+	
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.ItemView#handlePointerPressed(int, int)
 	 */
@@ -676,6 +705,20 @@ public class HorizontalChoiceView extends ContainerView {
 	}
 	//#endif
 	
+	
+	//#if polish.css.horizontalview-distribution
+	public Style focusItem(int index, Item item, int direction, Style focusedStyle) {
+		Style res = super.focusItem(index, item, direction, focusedStyle);
+		if ( this.isDistributeFixedCount ) {
+			Item [] items = this.parentContainer.getItems();
+			if ( (index > 0) && (index < items.length-1) ) {
+				Item prevItem = items[index-1];
+				setScrollXOffset(-prevItem.relativeX + this.contentStart, false);
+			}
+		}
+		return res;
+	}
+	//#endif
 	
 	private Item getItemAt( int x ) {
 		x -= getScrollXOffset() - this.contentStart;
@@ -816,6 +859,8 @@ public class HorizontalChoiceView extends ContainerView {
 				}
 			}
 		//#endif
+		int selectedIndex = ((ChoiceGroup)this.parentContainer).getSelectedIndex();
+		this.parentContainer.focusChild( selectedIndex );
 		//System.out.println("EXCLUSIVE:   FOCUS, parentBackround != null: " + (this.parentBackground != null));
 		super.focus(focusstyle, direction);
 	}

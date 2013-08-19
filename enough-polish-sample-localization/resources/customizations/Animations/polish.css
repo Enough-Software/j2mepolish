@@ -62,6 +62,7 @@ title {
   */
 .mainCommand:hover {
 	font-color: #ccc;
+	background-type: simple; /* need to explicitely state this as we are overriding a patch background from the base polish.css file */
 	background-color: #ddd;
 	background-color-animation {
 		on: focus;

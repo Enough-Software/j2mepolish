@@ -39,6 +39,7 @@ import de.enough.polish.util.StringUtil;
 /**
  * <p>Allows to include a binary library depending on conditions.</p>
  *
+ * <p>Copyright Enough Software 2005 - 2013</p>
  * <p>Copyright Enough Software 2005 - 2012</p>
  * @author Robert Virkus, j2mepolish@enough.de
  */
@@ -51,6 +52,8 @@ public class LibrarySetting extends Setting {
 	private boolean isDynamic;
 	private String dynamicLibraryPath;
 	private boolean isConvertImports = true;
+	private boolean	isOnDevice;
+	private boolean	isObfuscate = true;
 
 	/**
 	 * Creates a new library binding.
@@ -133,6 +136,43 @@ public class LibrarySetting extends Setting {
 	public boolean isConvertImports() 
 	{
 		return this.isConvertImports;
+	}
+	
+	
+	/**
+	 * Specifies whether this library is an device library meaning that it does not end up in the generated JAR file
+	 * @param isOnDevice true when this is a device library
+	 */
+	public void setOnDevice(boolean isOnDevice)
+	{
+		this.isOnDevice = isOnDevice;
+	}
+	
+	/**
+	 * Returns whether this library is an device library meaning that it does not end up in the generated JAR file
+	 * @return true when this is a device library (default is false)
+	 */
+	public boolean isOnDevice() 
+	{
+		return this.isOnDevice;
+	}
+	
+	/**
+	 * Specifies whether this library should be obfuscated
+	 * @param obfuscate false when this library should not be obfuscated, default is true
+	 */
+	public void setObfuscate(boolean obfuscate)
+	{
+		this.isObfuscate = obfuscate;
+	}
+	
+	/**
+	 * Returns whether this library should be obfuscated
+	 * @return false when this library should not be obfuscated (default is true)
+	 */
+	public boolean isObfuscate() 
+	{
+		return this.isObfuscate;
 	}
 
 	/**

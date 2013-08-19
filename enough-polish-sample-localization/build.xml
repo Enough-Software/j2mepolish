@@ -142,7 +142,7 @@
 		<delete dir="dist"/>
 	</target>
 	
-	<target name="emulator" depends="test,j2mepolish" />
+	<target name="emulator" depends="test,j2mepolish" description="launches the emulator after building." />
 
 	<target name="cleanbuild" depends="clean,j2mepolish" />
 	
@@ -156,6 +156,7 @@
 			depends="enableBarbie, j2mepolish"
 	/>
 
+	<target name="emulatorBarbie" depends="test,enableBarbie,j2mepolish" description="launches the emulator after building with the barbie customization." />
 	
 	<target name="enableFrogger">
 		<property name="customization" value="Frogger" />
@@ -167,6 +168,7 @@
 			depends="enableFrogger, j2mepolish"
 	/>
 	
+	<target name="emulatorFrogger" depends="test,enableFrogger,j2mepolish" description="launches the emulator after building with the frogger customization." />
 
 	<target name="enableAnimations">
 		<property name="customization" value="Animations" />
@@ -178,6 +180,8 @@
 			description="customizes this project with the settings found in resources/customizations/Animations"
 			depends="enableAnimations, j2mepolish"
 	/>
+
+	<target name="emulatorAnimations" depends="test,enableAnimations,j2mepolish" description="launches the emulator after building with the animations customization." />
 
 	<target 
 		name="build-all"

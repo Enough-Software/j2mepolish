@@ -29,7 +29,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Vector;
 
 import de.enough.polish.BuildException;
 
@@ -40,6 +43,8 @@ import de.enough.polish.ExtensionManager;
 import de.enough.polish.Variable;
 import de.enough.polish.ant.emulator.DebuggerSetting;
 import de.enough.polish.ant.emulator.EmulatorSetting;
+import de.enough.polish.ant.emulator.FilterSetting;
+import de.enough.polish.emulator.EmulatorOutputFilter.FilterResult;
 import de.enough.polish.stacktrace.BinaryStackTrace;
 import de.enough.polish.stacktrace.DecompilerNotInstalledException;
 import de.enough.polish.stacktrace.StackTraceUtil;
@@ -70,6 +75,7 @@ implements Runnable, OutputFilter
 	private boolean decompilerInstalled;
 	private String header;
 	private String ignoreMessagePattern;
+	private EmulatorOutputFilter[] outputFilters;
 	
 	/**
 	 * Creates a new emulator instance.
@@ -420,6 +426,35 @@ implements Runnable, OutputFilter
 			}
 		}
 		emulator.setBasicSettings(device, setting, sourceDirs, environment );
+		ArrayList<FilterSetting> filterSettings = setting.getFilterSettings(environment.getBooleanEvaluator());
+		if (filterSettings != null && filterSettings.size() > 0)
+		{
+			emulator.outputFilters = new EmulatorOutputFilter[filterSettings.size()];
+			for (int filterIndex=0; filterIndex < filterSettings.size(); filterIndex++)
+			{
+				FilterSetting filterSetting = filterSettings.get(filterIndex);
+				try 
+				{
+					EmulatorOutputFilter filter;
+					if (setting.getClassName() == null)
+					{
+						filter = (EmulatorOutputFilter) environment.getExtensionManager().getTemporaryExtension(EmulatorOutputFilter.EXTENSION_TYPE, filterSetting, environment);
+					}
+					else
+					{
+						filter = (EmulatorOutputFilter) Class.forName(filterSetting.getClassName()).newInstance();
+						filter.configure(filterSetting);
+					}
+					emulator.outputFilters[filterIndex] = filter;
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+					System.err.println("Warning: unable to initiate filter " + filterSetting.getClassName() + ": " + ex.toString());
+				}
+			}
+			
+		}
 		//Thread thread = new Thread( emulator );
 		//thread.start();
 		return emulator;
@@ -456,30 +491,46 @@ implements Runnable, OutputFilter
 				return;
 			}
 		}
-		output.println( logMessage );
-		if (this.decompilerInstalled
-				&& (logMessage.indexOf('+') != -1) 
-				&& (logMessage.indexOf("at ") != -1)) {
-			try {
-				// this seems to be an error message like
-				// "   at de.enough.polish.ClassName(+263)"
-				// so try to use JAD for finding out the source code address:
-				BinaryStackTrace stackTrace = StackTraceUtil.translateStackTrace(logMessage, Emulator.this.classPath, Emulator.this.preprocessedSourcePath, Emulator.this.sourceDirs, Emulator.this.environment);
-				if (stackTrace != null) {
-					boolean showDecompiledStackTrace = true;
-					if (stackTrace.couldBeResolved()) {
-						output.println( this.header + stackTrace.getSourceCodeMessage() );
-						showDecompiledStackTrace = false;
-					} 
-					if (showDecompiledStackTrace || Emulator.this.emulatorSetting.showDecompiledStackTrace()){
-						output.println( this.header + "Decompiled stack-trace: " + stackTrace.getDecompiledCodeSnippet() );
-					}
+		if (this.outputFilters != null)
+		{
+			for (EmulatorOutputFilter filter : outputFilters)
+			{
+				EmulatorOutputFilter.FilterResult result = filter.filter(logMessage);
+				if (result == EmulatorOutputFilter.FilterResult.DoNotPrint)
+				{
+					return;
 				}
-			} catch (DecompilerNotInstalledException e) {
-				output.println("Unable to translate stacktrace: " + e.getMessage() );
-				this.decompilerInstalled = false;
+				if (result == EmulatorOutputFilter.FilterResult.Print)
+				{
+					output.println( logMessage );
+					return;
+				}
 			}
 		}
+		output.println( logMessage );
+//		if (this.decompilerInstalled
+//				&& (logMessage.indexOf('+') != -1) 
+//				&& (logMessage.indexOf("at ") != -1)) {
+//			try {
+//				// this seems to be an error message like
+//				// "   at de.enough.polish.ClassName(+263)"
+//				// so try to use JAD for finding out the source code address:
+//				BinaryStackTrace stackTrace = StackTraceUtil.translateStackTrace(logMessage, Emulator.this.classPath, Emulator.this.preprocessedSourcePath, Emulator.this.sourceDirs, Emulator.this.environment);
+//				if (stackTrace != null) {
+//					boolean showDecompiledStackTrace = true;
+//					if (stackTrace.couldBeResolved()) {
+//						output.println( this.header + stackTrace.getSourceCodeMessage() );
+//						showDecompiledStackTrace = false;
+//					} 
+//					if (showDecompiledStackTrace || Emulator.this.emulatorSetting.showDecompiledStackTrace()){
+//						output.println( this.header + "Decompiled stack-trace: " + stackTrace.getDecompiledCodeSnippet() );
+//					}
+//				}
+//			} catch (DecompilerNotInstalledException e) {
+//				output.println("Unable to translate stacktrace: " + e.getMessage() );
+//				this.decompilerInstalled = false;
+//			}
+//		}
 	}
 
 	class DebuggerThread extends Thread {

@@ -409,7 +409,8 @@ public class BooleanEvaluatorTest extends TestCase {
 		variables.put("polish.BitsPerPixel", "8");
 		variables.put("polish.Identifier", "Nokia/6600");
 		variables.put("polish.JavaPlatform", "MIDP/2.0,BlackBerry/6.0");
-	
+		variables.put("polish.JavaPlatform", "MIDP/2.0,BlackBerry/6.0");
+		variables.put("polish.NokiaUiApiVersion", "1.1b");
 		BooleanEvaluator evaluator = new BooleanEvaluator( symbols, variables );
 		String term = "polish.BitsPerPixel >=  8";
 		assertTrue( evaluator.evaluateTerm( term, "MyClass", 12) );
@@ -478,7 +479,10 @@ public class BooleanEvaluatorTest extends TestCase {
 		assertTrue( evaluator.evaluateTerm( term, "MyClass", 12) );
 		term = "polish.JavaPlatform <  BlackBerry/6.0";
 		assertFalse( evaluator.evaluateTerm( term, "MyClass", 12) );
-		
+		term = "polish.NokiaUiApiVersion >= 1.1b";
+		assertTrue( evaluator.evaluateTerm( term, "MyClass", 12) );
+		term = "polish.NokiaUiApiVersion >= 1.6";
+		assertFalse( evaluator.evaluateTerm( term, "MyClass", 12) );
 	}
 	
 	public void testCompareNonNumeric() {

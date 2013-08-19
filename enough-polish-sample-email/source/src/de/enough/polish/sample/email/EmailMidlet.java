@@ -209,13 +209,35 @@ implements CommandListener, ItemStateListener
 	protected void destroyApp(boolean unconditional) throws MIDletStateChangeException {
 		// nothing to clean up
 	}
+	
+	private void showExitDialog() {
+		Alert alert = new Alert("Exit?", "Wanna exit?", null, AlertType.CONFIRMATION);
+		final Command cmdYes = new Command("Yes", Command.OK, 1);
+		final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+		alert.addCommand(cmdYes);
+		alert.addCommand(cmdNo);
+		alert.setCommandListener(new CommandListener() {
+			public void commandAction(Command c,
+					Displayable d) {
+				if (c == cmdYes) {
+					notifyDestroyed();
+				}
+				else
+				{
+					EmailMidlet.this.display.setCurrent(EmailMidlet.this.mainScreen);
+				}				
+			}
+		});
+		this.display.setCurrent(alert);
+	}
 
 	public void commandAction(Command cmd, Displayable disp) {
 		//#debug
 		System.out.println("commandAction with cmd=" + cmd.getLabel() + ", screen=" + disp );
 		if ( disp == this.mainScreen ) {
 			if (cmd == this.exitCommand ) {
-				notifyDestroyed();				
+				//notifyDestroyed();
+				showExitDialog();
 			} else if (cmd == this.createNewMailCommand) {
 				//#style createMessageForm
 				CreateMessageForm form = new CreateMessageForm( "Create E-Mail");

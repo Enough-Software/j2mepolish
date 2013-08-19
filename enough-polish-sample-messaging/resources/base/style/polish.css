@@ -182,6 +182,46 @@ info {
 	background-color: red;
 }
 
+.simpleMessage {
+	text-effect: smiley-extended;
+	label-style: nameLabel;
+	inline-label: true;
+}
+
+.nameLabel {
+	font-style: bold;
+}
+
+.simpleMessageFromMe extends simpleMessage
+{
+	layout: left;
+	background-color: silver;
+}
+
+.simpleMessageFromYou extends simpleMessage
+{
+	layout: right;
+	background-color: #faa;
+}
+
+/*********************   CONTACT FORM   ******************************************************************************************************/
+
+.contactList {
+}
+
+.contactList:hover {
+}
+
+.contactItem {
+	font-color: silver;
+	layout: expand;
+	max-lines: 1;
+}
+
+.contactItem:hover {
+	background-color: silver;
+	font-color: #333;	
+}
 
 /*********************   ABOUT FORM   ******************************************************************************************************/
 
@@ -198,13 +238,13 @@ info {
 /*********************   SCROLL BAR   ******************************************************************************************************/
 /* You need to activate the scrollbar by setting the "polish.useScrollBar" variable to "true" in your build.xml script. */
 scrollbar {
-	scrollbar-slider-color: #333;
+	scrollbar-slider-color: #fff;
 	scrollbar-slider-width: 3;
 	/*
 	when the scrollbar should be faded out when not used:
+	*/
 	scrollbar-fadeout: true;
 	opacity: 80%;
-	*/
 }
 
 /*********************   BUSY INDICATOR   ******************************************************************************************************/

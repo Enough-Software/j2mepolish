@@ -43,7 +43,7 @@ import android.view.View;
 	import android.view.View.MeasureSpec;
 //#endif
 
-//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android)
+//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android || (polish.NokiaUiApiVersion >= 1.1))
 	import de.enough.polish.predictive.TextBuilder;
 	import de.enough.polish.predictive.trie.TrieProvider;
 //#endif
@@ -71,7 +71,21 @@ import de.enough.polish.util.WrappedText;
 	import net.rim.device.api.ui.Manager;
 	import net.rim.device.api.ui.UiApplication;
 	import net.rim.device.api.ui.component.BasicEditField;
-import net.rim.device.api.ui.text.TextFilter;
+	import net.rim.device.api.ui.text.TextFilter;
+//#endif
+
+
+
+//#if polish.NokiaUiApiVersion >= 1.1b
+	//#define tmp.useNokiaInput
+	//#define polish.TextField.suppressAddSymbolCommand=true
+	//#define tmp.suppressCommands=true
+	import com.nokia.mid.ui.TextEditor;
+	import com.nokia.mid.ui.TextEditorListener;
+	import com.nokia.mid.ui.gestures.GestureListener;
+	import com.nokia.mid.ui.gestures.GestureEvent;
+	import com.nokia.mid.ui.gestures.GestureInteractiveZone;
+	import com.nokia.mid.ui.gestures.GestureRegistrationManager;
 //#endif
 
 //#if polish.api.windows
@@ -79,10 +93,10 @@ import net.rim.device.api.ui.text.TextFilter;
 //#endif
 
 //#if polish.android
-import de.enough.polish.android.lcdui.AndroidDisplay;
-import de.enough.polish.android.lcdui.AndroidTextField;
-import de.enough.polish.android.lcdui.AndroidTextFieldImpl;
-import de.enough.polish.android.midlet.MidletBridge;
+	import de.enough.polish.android.lcdui.AndroidDisplay;
+	import de.enough.polish.android.lcdui.AndroidTextField;
+	import de.enough.polish.android.lcdui.AndroidTextFieldImpl;
+	import de.enough.polish.android.midlet.MidletBridge;
 //#endif
 
 /**
@@ -362,17 +376,17 @@ import de.enough.polish.android.midlet.MidletBridge;
  * @since MIDP 1.0
  */
 public class TextField extends StringItem
-//#if polish.TextField.useDirectInput && !(polish.blackberry || polish.android)
+//#if polish.TextField.useDirectInput && !(polish.blackberry || polish.android || tmp.useNokiaInput)
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
-//#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android)
+//#elif polish.css.textfield-direct-input && !(polish.blackberry || polish.android || tmp.useNokiaInput)
 	//#define tmp.directInput
 	//#define tmp.allowDirectInput
 //#elif polish.api.windows
 	//#define tmp.forceDirectInput
 	//#define tmp.directInput
 //#endif
-//#if polish.TextField.useDirectInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android)
+//#if tmp.directInput && polish.TextField.usePredictiveInput && !(polish.blackberry || polish.android || polish.api.windows)
 	//#define tmp.usePredictiveInput
 //#endif
 //#if tmp.directInput && polish.TextField.useDynamicCharset
@@ -401,10 +415,18 @@ public class TextField extends StringItem
 //#if polish.blackberry
 	//#defineorappend tmp.implements=FieldChangeListener
 //#endif
+//#if tmp.useNokiaInput
+	//#defineorappend tmp.implements=TextEditorListener
+	//#defineorappend tmp.implements=GestureListener
+//#endif
 //#if polish.LibraryBuild
 	//#define tmp.implementsCommandListener
 	//#define tmp.implementsItemCommandListener
 	implements CommandListener, ItemCommandListener
+	//#if false
+	// just for making the IDE happy:
+	, TextEditorListener
+	//#endif
 	//#if polish.blackberry
 	//	, FieldChangeListener
 	//#endif
@@ -985,6 +1007,12 @@ public class TextField extends StringItem
 		//#endif
 		private int bbLastCursorPosition;
 	//#endif
+
+	//#if tmp.useNokiaInput
+		private TextEditor nokiaTextEditor;
+		private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
+	//#endif	
+		
 	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
 		//#define tmp.useNativeTextBox
 		private de.enough.polish.midp.ui.TextBox midpTextBox;
@@ -1374,6 +1402,11 @@ public class TextField extends StringItem
 				return this.editField.getText();
 			}
 		//#endif
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor != null ) {
+				return this.nokiaTextEditor.getContent();
+			}
+		//#endif
 		if ( this.isPassword ) {
 			if (this.passwordText == null) {
 				return "";
@@ -1494,6 +1527,15 @@ public class TextField extends StringItem
 						this._androidTextField.moveCursor( cursorAdjustment );
 					}
 				}
+			}
+		//#endif
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor != null && !this.nokiaTextEditor.getContent().equals(text)) {
+				if (text == null)
+				{
+					text = "";
+				}
+				this.nokiaTextEditor.setContent(text);				
 			}
 		//#endif
 		//#if polish.blackberry
@@ -1786,13 +1828,14 @@ public class TextField extends StringItem
 		String txt = getString(); // cannot be null
 		String start = txt.substring( 0, position );
 		String end = txt.substring( position );
+		int caretPosition = getCaretPosition();
 		setString( start + src + end );
 		//#if tmp.directInput
 			if (position == this.caretPosition) {
 				this.caretPosition += src.length();
 			}
 		//#else
-			setCaretPosition( getCaretPosition() + src.length() );
+			setCaretPosition( Math.min( getString().length(), caretPosition + src.length() ) );
 		//#endif
 			
 		//#if tmp.usePredictiveInput
@@ -1941,6 +1984,8 @@ public class TextField extends StringItem
 			curPos = this.editField.getInsertPositionOffset();
 		//#elif tmp.forceDirectInput
 			curPos = this.caretPosition;
+		//#elif tmp.useNokiaInput
+			curPos = this.nokiaTextEditor.getCaretPosition();
 		//#else
 			//#ifdef tmp.useNativeTextBox
 				if (this.midpTextBox != null) {
@@ -1976,6 +2021,10 @@ public class TextField extends StringItem
 			synchronized ( bbLock )
 			{
 				this.editField.setCursorPosition(position);
+			}
+		//#elif tmp.useNokiaInput
+			synchronized ( this.nokiaTextEditor) {
+				this.nokiaTextEditor.setCaret(position);
 			}
 		//#elif tmp.allowDirectInput || tmp.forceDirectInput
 			this.caretPosition = position;
@@ -2028,6 +2077,45 @@ public class TextField extends StringItem
 		return new AndroidTextFieldImpl(TextField.this);
 	}
 	//#endif
+	
+	//#if tmp.useNokiaInput
+	public void gestureAction(java.lang.Object container, GestureInteractiveZone gestureInteractiveZone, GestureEvent gestureEvent) {
+		if ( GestureInteractiveZone.GESTURE_LONG_PRESS == gestureEvent.getType() ) {
+			handleGestureHold(gestureEvent.getStartX() - getAbsoluteX(), gestureEvent.getStartY() - getAbsoluteY());
+		}
+	}
+	//#endif
+	
+	//#if tmp.useNokiaInput
+	protected TextEditor createNativeNokiaTextField() {
+		int width = 50;
+		int rows = 1;
+		int maxSizeLocal = this.maxSize;
+		int midpConstraints = getMidpConstraints();
+		if ((midpConstraints & NUMERIC) == NUMERIC)
+		{
+			// workaround for evil Nokia max size bugs: currently at max 10 digits are allowed
+			maxSizeLocal = Math.max(maxSizeLocal, 10);
+		}
+		TextEditor editor = TextEditor.createTextEditor(maxSizeLocal, midpConstraints, width, rows);
+		editor.setVisible(true);
+		editor.setTouchEnabled(true);
+		editor.setSize(1, 1);
+		editor.setMultiline(false);
+		editor.setForegroundColor(0xFF000000 | this.textColor);
+		editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
+		editor.setBackgroundColor(0);
+		editor.setHighlightBackgroundColor(0);
+		if (this.text != null)
+		{
+			editor.setContent(getString());
+		}
+		editor.setParent( Display.getInstance() );
+		editor.setTextEditorListener(this);
+		inputAction(editor, TextField.ACTION_CONTENT_CHANGE);
+		return editor;
+	}
+	//#endif
 
 
 	/**
@@ -2075,6 +2163,13 @@ public class TextField extends StringItem
 				}
 			});
 		//#endif
+			
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor == null ) {
+				this.nokiaTextEditor = createNativeNokiaTextField();
+			}
+			this.enableDirectInput = true;
+		//#endif	
 			
 		//#if polish.blackberry
 			int filterType = TextFilter.DEFAULT;
@@ -2389,7 +2484,7 @@ public class TextField extends StringItem
 	 * @see de.enough.polish.ui.Item#paintContent(int, int, int, int, javax.microedition.lcdui.Graphics)
 	 */
 	public void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
-    	String myText = this.text;
+    	String myText = this.text;    	
 		//#if polish.blackberry
 			if (this.isFocused && getScreen().isNativeUiShownFor(this)) {
         		x--; // blackberry paints a border around the text that is one pixel wide
@@ -2427,6 +2522,38 @@ public class TextField extends StringItem
 					super.paintContent(x, y, leftBorder, rightBorder, g);
 				}
 			//#endif
+		//#elif tmp.useNokiaInput
+				//#if polish.TextField.showHelpText
+					if(myText == null || myText.length() == 0)
+					{
+						this.helpItem.paint(x, y, leftBorder, rightBorder, g);
+					}
+				//#endif
+				if ( ! isFocused() || this.isUneditable ) {					
+		    		super.paintContent(x, y, leftBorder, rightBorder, g);
+				} else {
+					if ( this.nokiaTextEditor != null ) {
+						try {
+							int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
+							this.nokiaTextEditor.setVisible(true);
+							this.nokiaTextEditor.setParent(Display.getInstance());
+							this.nokiaTextEditor.setPosition(x, y);
+							this.nokiaTextEditor.setSize(getAvailableContentWidth(), textFieldHeight);
+
+							// Register as a Nokia gesture listener to the canvas
+							// (used for e.g. to detect long presses on the TextEditor object, as there's no other way to achieve this)
+							editorZone.setRectangle(this.getAbsoluteX(), this.getAbsoluteY(), getAvailableWidth(), getAvailableHeight() );							
+							javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+							GestureRegistrationManager.register(objs, editorZone);
+							GestureRegistrationManager.setListener(objs, (GestureListener) this);
+						} 
+						catch (Exception e)
+						{
+							//#debug error
+							System.out.println("unable to paint tf " + e);
+						}
+					}
+				}
 		//#else
         
 		if (this.isUneditable || !this.isFocused) {
@@ -2641,7 +2768,8 @@ public class TextField extends StringItem
 				firstLineWidth -= infoWidth;
 				availWidth -= infoWidth;
 			}
-		//#endif
+		//#endif		
+			
 		//#if polish.blackberry && polish.css.text-wrap
 			if (this.isFocused) {
 				this.useSingleLine = false;
@@ -2704,6 +2832,10 @@ public class TextField extends StringItem
 		            }
 					
 					updateInternalArea();
+				}
+			//#elif tmp.useNokiaInput
+				if ( this.nokiaTextEditor != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
+					inputAction(this.nokiaTextEditor, 0);					
 				}
 			//#elif tmp.directInput
 				this.rowHeight = getFontHeight() + this.paddingVertical;			
@@ -2785,6 +2917,11 @@ public class TextField extends StringItem
 				}
 			// end if !polish.android
 			//#endif
+		//#endif
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor != null && this.contentWidth > 0 && this.contentHeight > 0 ) {
+				multilineToggleFix(this.nokiaTextEditor);					
+			}
 		//#endif
 	}
 	
@@ -2903,6 +3040,15 @@ public class TextField extends StringItem
 				this._androidTextField.setStyle(style);
 			}
 		//#endif
+		//#if tmp.useNokiaInput && polish.css.font-color
+			if ( this.nokiaTextEditor != null ) {
+				this.nokiaTextEditor.setFont(this.font);
+				Color color = style.getColorProperty("font-color");
+				if ( color != null ) {
+					this.nokiaTextEditor.setForegroundColor(0xFF000000 | color.getColor());
+				}				
+			}
+		//#endif	
 	}
 	
 	
@@ -3202,7 +3348,7 @@ public class TextField extends StringItem
 				this.screen.setInfo( modeStr );
 			}
 		//#endif
-	}
+}
 	//#endif
 	
 	
@@ -3516,7 +3662,7 @@ public class TextField extends StringItem
 								)
 						) {
 							handled = handleKeyNavigation(keyCode, gameAction);
-							if (!handled && getScreen().isGameActionFire(keyCode, gameAction) && this.defaultCommand != null) {
+							if (!handled && gameAction == Canvas.FIRE && this.defaultCommand != null) {
 								notifyItemPressedStart();
 								handled = true;
 							}
@@ -3577,7 +3723,7 @@ public class TextField extends StringItem
 			//#if ${ isOS( Windows ) }
 				|| (gameAction != Canvas.DOWN && gameAction != Canvas.UP && gameAction != Canvas.LEFT && gameAction != Canvas.RIGHT)
 			//#endif
-			|| (getScreen().isGameActionFire(keyCode, gameAction) ) )
+			|| (gameAction == Canvas.FIRE ) )
 		{	
 			//#if tmp.useNativeTextBox
 				showTextBox();
@@ -3980,7 +4126,7 @@ public class TextField extends StringItem
 				commitCurrentCharacter();
 			}
 			
-			if (getScreen().isGameActionFire(keyCode, gameAction)
+			if (gameAction == Canvas.FIRE
 					&& this.defaultCommand != null 
 					&& this.itemCommandListener != null) 
 			{
@@ -4324,12 +4470,20 @@ public class TextField extends StringItem
 	 * @return true when the pressing of the pointer was actually handled by this item.
 	 */
 	protected boolean handlePointerReleased( int x, int y ) {
+		repaint();
 		if (isInItemArea(x, y)) {
-			//#if tmp.useNativeTextBox
+			//#if tmp.useNokiaInput
+				if ( this.nokiaTextEditor != null && !this.nokiaTextEditor.hasFocus()) {
+					this.nokiaTextEditor.setFocus(true);					
+				}
+			//#endif
+			//#if tmp.useNativeTextBox 
 				int fieldType = this.constraints & 0xffff;
 				if (fieldType != FIXED_POINT_DECIMAL) {
 					notifyItemPressedEnd();
+					//#if !tmp.useNokiaInput
 					showTextBox();
+					//#endif
 					return true;
 				}
 			//#elif polish.TextField.useVirtualKeyboard
@@ -4581,9 +4735,27 @@ public class TextField extends StringItem
 		//#endif
 	}
 		
-	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
-	protected void defocus(Style originalStyle) {
+	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || tmp.useNokiaInput || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
+	protected void defocus(Style originalStyle) 
+	{
+		//#debug
+		System.out.println("defocusing TextField");
 		super.defocus(originalStyle);
+		//#if tmp.useNokiaInput
+			if (this.nokiaTextEditor != null) {
+				this.nokiaTextEditor.setFocus(false);
+				this.nokiaTextEditor.setParent(null);
+				
+				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+				GestureRegistrationManager.unregisterAll(objs);
+				
+				String newText = this.nokiaTextEditor.getContent();
+				setString( newText );
+				setInitialized(false);
+				repaint();
+				notifyStateChanged();
+			}
+		//#endif
 		//#if polish.blackberry
 			//#if polish.Bugs.ItemStateListenerCalledTooEarly
 				String newText = this.editField.getText();
@@ -4616,8 +4788,15 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus)
+	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand  || (polish.android && polish.android.autoFocus) || tmp.useNokiaInput
 	protected Style focus(Style focStyle, int direction) {
+		//#if tmp.useNokiaInput
+			//#debug info
+			System.out.println("focus tf != null: " + (this.nokiaTextEditor != null));
+			if ( this.nokiaTextEditor != null && direction != Canvas.FIRE && !this.nokiaTextEditor.hasFocus()) {
+				this.nokiaTextEditor.setFocus(true);				
+			}
+		//#endif
 		//#if polish.android
 			if (this.isShown) {
 				DeviceControl.showSoftKeyboard();
@@ -4625,7 +4804,7 @@ public class TextField extends StringItem
 			//#if !polish.TextField.keepCaretPosition
 				setCaretPosition( getString().length() );
 			//#endif
-		//#elif tmp.directInput || polish.blackberry
+		//#elif tmp.directInput || polish.blackberry || tmp.useNokiaInput
 			//#ifdef tmp.allowDirectInput
 				if (this.enableDirectInput) {
 			//#endif
@@ -4685,6 +4864,81 @@ public class TextField extends StringItem
 		}
 	}
 	//#endif
+	
+	//#if tmp.useNokiaInput
+		public void multilineToggleFix(TextEditor textEditor) {
+			boolean isResetNeeded = false;
+			if ( getNumberOfLines() > 1 && textEditor.isMultiline() == false ) {
+				textEditor.setMultiline(true);
+				isResetNeeded = true;
+			} else if ( getNumberOfLines() <= 1 && textEditor.isMultiline() ) {
+				textEditor.setMultiline(false);
+				isResetNeeded = true;
+			}
+			if ( isResetNeeded ) {
+				Object parent = textEditor.getParent();
+				textEditor.setParent(null);
+				textEditor.setParent(parent);
+			}
+		}
+	//#endif
+	
+	//#if tmp.useNokiaInput
+		/*
+		 * (non-Javadoc)
+		 * @see com.nokia.mid.ui.TextEditorListener#inputAction(com.nokia.mid.ui.TextEditor, int)
+		 */
+		public void inputAction(TextEditor textEditor, int actions) {
+			if (textEditor == null ) {
+				return;
+			}
+			//#debug
+			System.out.println("inpAct(" + actions + ")");
+			
+			// If the text changes, make sure to update the Polish item as needed
+			if ((actions & TextEditorListener.ACTION_CONTENT_CHANGE) != 0)
+			{
+				String content = textEditor.getContent();
+				if (!content.equals(this.text))
+				{
+					// If newline is not allowed, treat any newline as the activation of the textfield's default command (if any)
+					if ( isNoNewLine() && content.indexOf('\n') >= 0) {
+						content = TextUtil.replace(content, "\r", "");
+						content = TextUtil.replace(content, "\n", "");
+						textEditor.setContent(content);
+						if ( this.defaultCommand != null && this.itemCommandListener != null ) {
+							this.itemCommandListener.commandAction(this.defaultCommand, this);
+						}
+						return;
+					}
+					
+					// Unregister all canvas gesture listeners, to prevent repeat events while updating the textfield.
+					// The paintContent() method takes care of re-registering after the update is completed
+					javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+					GestureRegistrationManager.unregisterAll(objs);
+					
+					setString(content);
+					setText(content);
+					Display.getInstance().serviceRepaints();
+					notifyStateChanged();
+				}
+
+				multilineToggleFix(textEditor);
+			}
+			if ((actions & TextEditorListener.ACTION_TRAVERSE_NEXT) != 0)
+			{
+				// trying to go down:
+				UiAccess.emitGameActionPress(Canvas.DOWN);
+			}
+			else if ((actions & TextEditorListener.ACTION_TRAVERSE_PREVIOUS) != 0)
+			{
+				// trying to go down:
+				UiAccess.emitGameActionPress(Canvas.UP);
+			}
+			
+			
+		}
+	//#endif
 
 	/**
 	 * Sets the input mode for this TextField.
@@ -4736,7 +4990,16 @@ public class TextField extends StringItem
 	 * (non-Javadoc)
 	 * @see de.enough.polish.ui.StringItem#showNotify()
 	 */
-	protected void showNotify() {
+	protected void showNotify() 
+	{	
+		//#if tmp.useNokiaInput
+			if ( this.nokiaTextEditor != null && this.isFocused && !this.nokiaTextEditor.hasFocus()) 
+			{
+				this.nokiaTextEditor.setVisible(true);
+				this.nokiaTextEditor.setFocus(true);
+			}
+		//#endif
+		
 		//#if tmp.updateDeleteCommand
 			updateDeleteCommand(this.text);
 		//#endif
@@ -4757,14 +5020,24 @@ public class TextField extends StringItem
 		super.showNotify();
 	}
 
-	//#if  (!polish.blackberry && tmp.directInput)
+	//#if  (!polish.blackberry && tmp.directInput) || tmp.useNokiaInput
 		/* (non-Javadoc)
 		 * @see de.enough.polish.ui.StringItem#hideNotify()
 		 */
 		protected void hideNotify() {
-			if (this.caretChar != this.editingCaretChar) {
-				commitCurrentCharacter();
-			}
+			//#if tmp.useNokiaInput
+				//#debug info
+				System.out.println("hideNotify: Display.isShown=" + Display.getInstance().isShown());
+				if ( this.nokiaTextEditor != null && Display.getInstance().isShown()) 
+				{
+					this.nokiaTextEditor.setVisible(false);
+					this.nokiaTextEditor.setFocus(false);
+				}
+			//#else
+				if (this.caretChar != this.editingCaretChar) {
+					commitCurrentCharacter();
+				}
+			//#endif
 			super.hideNotify();
 		}	
 	//#endif

@@ -33,12 +33,7 @@ import de.enough.polish.ant.emulator.EmulatorSetting;
 /**
  * <p>Launches Nokia emulators.</p>
  *
- * <p>Copyright Enough Software 2004 - 2011</p>
-
- * <pre>
- * history
- *        02.10.2004 - rob creation
- * </pre>
+ * <p>Copyright Enough Software 2004 - 2013</p>
  * 
  * @author Robert Virkus, j2mepolish@enough.de
  */

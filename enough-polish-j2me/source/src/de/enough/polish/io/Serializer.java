@@ -35,6 +35,7 @@ package de.enough.polish.io;
 	import java.util.HashMap;
 	import java.io.BufferedReader;
 //#endif
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -51,7 +52,7 @@ import java.util.Vector;
 
 //#if polish.midp
 	import javax.microedition.lcdui.Command;
-	import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Font;
 //#endif
 //#if polish.midp2
 import javax.microedition.lcdui.Image;
@@ -147,6 +148,60 @@ public final class Serializer {
 		// no instantiation allowed
 	}
 	
+	/**
+	 * Serializes an object into a byte array.
+	 * @param object the object
+	 * @param serializeDirectly true if the given object is either Serializable or Externalizable 
+	 * and if the object should not be instantiated using the default constructor 
+	 * when the object is deserialized
+	 * @return the serialized data
+	 * @throws IOException when serialization fails
+	 * @see #deserialize(byte[])
+	 * @see #deserialize(byte[], Externalizable)
+	 */
+	public static byte[] serialize(Object object, boolean serializeDirectly) throws IOException
+	{
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(byteOut);
+		if (serializeDirectly)
+		{
+			((Externalizable)object).write(out);
+		}
+		else
+		{
+			serialize( object, out );
+		}
+		byte[] data = byteOut.toByteArray();
+		return data;
+	}
+
+	/**
+	 * Reads an object directly from a byte array
+	 * @param data the serialized data
+	 * @return the original object
+	 * @throws IOException when serialization fails
+	 * @see #serialize(Object, boolean)
+	 */
+	public static void deserialize(byte[] data, Externalizable object) throws IOException
+	{
+		ByteArrayInputStream byteIn = new ByteArrayInputStream(data);
+		DataInputStream in = new DataInputStream(byteIn);
+		object.read(in);
+	}
+	
+	/**
+	 * Restores an object from a byte array
+	 * @param data the serialized data
+	 * @return the original object
+	 * @throws IOException when serialization fails
+	 * @see #serialize(Object, boolean)
+	 */
+	public static Object deserialize(byte[] data) throws IOException
+	{
+		ByteArrayInputStream byteIn = new ByteArrayInputStream(data);
+		DataInputStream in = new DataInputStream(byteIn);
+		return deserialize(in);
+	}
 
 	/**
 	 * Serializes the specified object.
@@ -739,5 +794,38 @@ public final class Serializer {
 		}
 	}
 
+	/**
+	 * Helper method to write nullable text
+	 * @param text the text that could be null
+	 * @param out the output stream
+	 * @throws IOException when writing fails
+	 * @see #readUtfNullable(String, DataInputStream)
+	 */
+	public static void writeUtfNullable(String text, DataOutputStream out) throws IOException
+	{
+		boolean isNull = (text == null);
+		out.writeBoolean(isNull);
+		if (!isNull)
+		{
+			out.writeUTF(text);
+		}
+	}
+	
 
+	/**
+	 * Helper method to read nullable text
+	 * @param in the input stream
+	 * @return the read text or null when no text was previously written
+	 * @throws IOException when reading fails
+	 * @see #writeUtfNullable(String, DataOutputStream)
+	 */
+	public static String readUtfNullable(DataInputStream in) throws IOException
+	{
+		boolean isNull = in.readBoolean();
+		if (isNull)
+		{
+			return null;
+		}
+		return in.readUTF();
+	}
 }

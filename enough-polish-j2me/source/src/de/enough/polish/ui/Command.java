@@ -311,6 +311,7 @@ public class Command
 	private CommandListener commandListener;
 
 	private Object data;
+	private Object	nativeCommand;
 
 	/**
 	 * Creates a new command object with the given short
@@ -415,7 +416,7 @@ public class Command
 		this.priority = priority;
 		this.style = style;
 	}
-
+	
 	private static int getValidType(int type) {
 		if (type == SEPARATOR) {
 			type = SCREEN;
@@ -570,7 +571,7 @@ public class Command
 				listener = item.getItemCommandListener();
 			}
 			if (listener != null) {
-				while (item instanceof Container && (item.commands == null || !item.commands.contains(this)) ) {
+				while (item instanceof Container && (item.defaultCommand == null && (item.commands == null || !item.commands.contains(this)) ) ) {
 					item = ((Container)item).getFocusedItem();
 				}
 				if (item != null && ((item.commands != null && item.commands.contains(this)) || (item.getDefaultCommand() == this))) {
@@ -713,5 +714,25 @@ public class Command
 	 */
 	public Object getData() {
 		return this.data;
+	}
+
+	protected void setNativeCommand(Object nativeCommand)
+	{
+		this.nativeCommand = nativeCommand;
+	}
+	
+	protected Object getNativeCommand()
+	{
+		return this.nativeCommand;
+	}
+	
+	public String toString()
+	{
+		String toString = "Cmd " + getLabel() + ": " + super.toString();
+		if (this.nativeCommand != null)
+		{
+			toString += ", native=" + nativeCommand;
+		}
+		return toString;
 	}
 }

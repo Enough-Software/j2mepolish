@@ -69,7 +69,7 @@
 			<midlet class="de.enough.polish.sample.email.EmailMidlet" name="MobileMail"/>
 			<!-- project-wide variables - used for preprocessing  -->
 			<variables>
-				<variable name="polish.FullScreen" value="menu" unless="polish.blackberry or polish.android" />
+				<variable name="polish.FullScreen" value="menu" unless="polish.blackberry or polish.android or (polish.NokiaUiApiVersion >= 1.1) or cfg.NoFullScreen" />
 				<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 				<variable name="polish.TextField.includeInputInfo" value="false" />
 				<variable name="polish.TextField.usePredictiveInput" value="true" />

@@ -59,8 +59,6 @@ public class PatchBackground extends ImageResourceBackground {
 		if ((clipY + clipHeight < y) || (clipY > y + height)) {
 			return;
 		}
-		g.setColor(0xff0000);
-		g.fillRect(x, y, width, height );
 		//System.out.println("patch start: clipX=" + g.getClipX() + ", clipY=" + (g.getClipY()) +", clip.width=" + g.getClipWidth() + ", clip.height=" + g.getClipHeight());
 		paintHorizontalTiles(x, y, width, height, clipX, clipY, clipWidth, clipHeight, g);
 		paintVerticalTiles(x, y, width, height, clipX, clipY, clipWidth, clipHeight, g);

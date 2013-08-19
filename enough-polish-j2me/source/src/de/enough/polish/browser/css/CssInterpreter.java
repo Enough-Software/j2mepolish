@@ -684,14 +684,14 @@ public class CssInterpreter {
 	 * @return the parsed color value
 	 * @throws IllegalArgumentException when the value is not a well defined color
 	 */
-	protected Color parseColor(String value) {
+	public static Color parseColor(String value) {
 		int valueLength = value.length();
 		if ("transparent".equals(value)) {
 			return new Color( Color.TRANSPARENT );
 		}
 		try {
 			if (value.charAt(0) == '#') {
-				if (valueLength <= 4) {
+				if (valueLength <= 5) {
 					// this is either #rgb or #argb:
 					StringBuffer buffer = new StringBuffer( (valueLength -1) *2 );
 					for (int i = 1; i < valueLength; i++) {

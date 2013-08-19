@@ -1,0 +1,257 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.platform %>
+<%define inDocumentationSection.blackberry %>
+<%set title = J2ME Polish: Nokia Asha Development %>
+<%set basedir = ../ %>
+<%include start.txt %>
+
+
+<h1 id="top">Developing for Nokia Asha Devices</h1>
+	<%index %>
+<p>
+Nokia Asha is a popular line of smartphones that comes with proven Java ME as well as Nokia specific extensions (the Nokia-UI-API).
+It's easy to support Nokia Asha from within J2ME Polish.
+</p>
+<h2 id="asha-preparation">Preparations</h2>
+<p>
+Download Nokia's Asha SDKs from <a href="http://forum.nokia.com/" target="_blank">http://forum.nokia.com</a> for testing locally.
+</p>
+<p>
+After the installation you should define the <code>nokia.home</code> in either <i>${polish.home}/global.properties</i>, 
+${project.home}/${user.name}.properties or in your <i>build.xml</i> script.
+<code>nokia.home</code> should point to the directory that contains all Nokia SDKs, by default it is installed in <i>C:\\Nokia</i>. If it's in installed
+in the default position you don't need to specify it. In your <i>build.xml</i> script the definition could look like this:
+</p>
+<pre class="brush: xml">
+&lt;property 
+	name=&quot;nokia.home&quot; 
+	location=&quot;D:/SDKs/Nokia&quot; 
+/&gt;
+</pre>
+
+<h2 id="asha-devices">Asha Target Devices</h2>
+<p>
+Currently we support four virtual Asha devices:
+</p>
+<ul>
+	<li><code>Nokia/Series40JR20</code> Asha devices with Nokia Java Runtime 2.0, Nokia-UI API 1.6 and Nokia In-App-Purchase API 1.0 support</li>
+	<li><code>Nokia/Series40JR11UI11b</code> Asha devices with Nokia Java Runtime 1.1 and Nokia-UI API 1.1b support</li>
+	<li><code>Nokia/Series40JR11</code> Asha devices with Nokia Java Runtime 1.1 and Nokia-UI API 1.1 support</li>
+	<li><code>Nokia/Series40JR10</code> Asha devices with Nokia Java Runtime 1.0 Nokia-UI API 1.1 support</li>
+</ul>
+<p>
+Target these devices using the <a href="build-deviceRequirements.html">&lt;deviceRequirements&gt;</a> section of your <i>build.xml</i> script.
+</p>
+<p>
+To compare the differences between these implementations visit <a href="http://www.developer.nokia.com/Resources/Library/Java/#!developers-guides/ui-and-graphics/nokia-ui-api/changes-between-platform-releases.html" target="_blank">http://www.developer.nokia.com/Resources/Library/Java/#!developers-guides/ui-and-graphics/nokia-ui-api/changes-between-platform-releases.html</a>.
+</p>
+<p>
+To check if a minimum Nokia UI API is supported, just use a preprocessing comparison:
+</p>
+<pre class="brush: java">
+//#if polish.NokiaUiApiVersion &gt;= 1.1b
+</pre>
+<h2 id="asha-features">Asha-specific J2ME Polish Features</h2>
+<p>
+J2ME Polish supports the following Nokia Asha-specific features:
+</p>
+<ul>
+	<li><b>Native text input</b> native text input is automatically enabled when building for Asha devices.</li>
+	<li><b>Native icon commands</b>: you should enable native command rendering, you can also easily add icons for native commands.</li>
+	<li><b>Native alerts</b> you can improve the native integration of your app using native alerts.</li>
+	<li><b>Nokia Maps</b>: use our Nokia Maps integration for realizing location based services and more.</li>
+</ul>
+<h3 id="asha-feature-native-text">Native Text Input</h3>
+<p>
+Native text input is automatically enabled when targeting a Nokia Asha device.
+You can use any MIDP or J2ME Polish supported text input mode.
+</p>
+<h3 id="asha-feature-icon-commands">Native Icon Commands</h3>
+<p>
+We highly recommend to use native commands when targeting Nokia Asha devices. Do this by setting the <code>polish.FullScreen</code> variable to <code>menu</code> only 
+for standard Java ME devices:
+</p>
+<pre class="brush: xml">
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.polish.FullScreen&quot; value=&quot;menu&quot; unless=&quot;polish.blackberry or polish.android or (polish.NokiaUiApiVersion &gt;= 1.1)&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+<p>
+You can define icon-images for commands in their style:
+</p>
+<pre class="brush: java">
+//#style cmdWithIcon
+Command command = new Command("Send", Command.OK, 1 );
+</pre>
+<pre class="brush: css">
+.cmdWithIcon {
+	icon-image: url(send.png);
+}
+</pre>
+
+<h3 id="asha-feature-native-alerts">Native Alerts</h3>
+<p>
+While not Asha-specific we recommend to enable native alerts for Nokia Asha devices. This improves the overall user-experience and Asha-specific look and feel of your app.
+<br/>Just define the <code>polish.useNativeAlerts</code> preprocessing variable in your <i>build.xml</i> script:
+</p>
+<pre  class="brush: xml">
+&lt;variables&gt;
+	&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;true&quot; if=&quot;polish.blackberry or polish.android or (polish.NokiaUiApiVersion &gt;= 1.1)&quot; /&gt;
+&lt;/variables&gt;
+</pre>
+
+<h3 id="asha-feature-font">Font Heights</h3>
+<p>
+Like on Android and BlackBerry you can define a font-height also in pixels or in percent.
+</p>
+<pre  class="brush: css">
+title {
+	font-height: 28px;
+}
+</pre>
+
+<h3 id="asha-feature-nokia-map">Nokia Maps</h3>
+<p>
+TBD
+</p>
+
+<h2 id="asha-debugging">Debugging</h2>
+<p>
+Okay, so the steps towards integrating On-Device debugging with vanilla Eclipse + Polish are detailed below. They may seem complicated at first, but once you go through them once it only takes 5-10 minutes to do this for another project. After everything is set up, it also takes less than 1 minute to start a new debugging session for a new build.
+</p>
+<h3 id="asha-debugging-setup">Initial setup</h3>
+<ol>
+	<li>Download the Nokia On-Device Debugger kit: <a href="http://www.developer.nokia.com/info/sw.nokia.com/id/c39911e1-6031-4722-9091-55b723b3c938/Series_40_ODD_Tool.html" target="_blank">http://www.developer.nokia.com/info/sw.nokia.com/id/c39911e1-6031-4722-9091-55b723b3c938/Series_40_ODD_Tool.html</a>.</li>
+	<li>Unzip it to a folder, henceforth called <i>${ROOT}</i>.</li>
+	<li>In <i>${ROOT}/application</i> you will find a special Debugger app. Copy the app to the device, for example by sending it via Bluetooth.</li>
+</ol>
+
+<h3 id="asha-debugging-connecting">Connecting the device to the PC</h3>
+<ol>
+	<li>In <i>${ROOT}/bin</i> you will find the Connection Manager utility. Start it up. Select &quot;Add Device&quot;. Choose to connect by IP (Bluetooth should also work, but we haven't tested it yet).</li>
+	<li>On the device, start the debugger app. Connect it to the PC by entering the PC's IP. If all goes well, you should see &quot;Status: connected&quot; in the connection manager on the PC.</li>
+	<li>On the device, press &quot;Hide&quot; in the debugger app. Don't worry, the debugger is still running in the background.</li>
+</ol>
+
+<h3 id="asha-debugging-sourcecode">Required sourcecode change</h3>
+<p>
+Next, it's time to configure your application to work with on-device debugging:
+</p>
+<ol>
+	<li>In order to use on-device debugging, you must make one change to the app. 
+	Specifically, somewhere in the source code you must ensure that <code>System.getProperty(&quot;com.nokia.targetdebug&quot;)</code> gets called, preferably as early as possible in the app's lifecycle. 
+	A great place to do this is in the <code>startApp()</code> method. 
+	*** UNTIL THIS SPECIFIC METHOD CALL IS MADE, YOU WILL NOT BE ABLE TO DEBUG YOUR APP ON THE DEVICE! ***</li>
+</ol>
+<pre class="brush: java">
+protected void startApp() throws MIDletStateChangeException {
+	System.getProperty(&quot;com.nokia.targetdebug&quot;);
+	[...]
+}
+</pre>
+
+<h3 id="asha-debugging-starting">Seeing Logger Output</h3>
+<ol>
+	<li>Once the build with the <code>System.getProperty()</code> call has been created (see above step), copy it to the device. Also keep a copy of the JAR on the PC.</li>
+	<li>Run the app on the device.</li>
+	<li>On the PC, in the Connection Manager, go to &quot;Session&quot;. You should see your MIDlet in the &quot;Running applications&quot; list. Select it.</li>
+	<li>If you want to see the app's console output, it's enough to press &quot;Get Trace&quot;. A console window with the application output will appear. 
+	If you want full debug support, read on. 
+	*** ONCE YOU ARE DONE WITH THE CONSOLE OUTPUT, OR IF YOU WANT TO SWITCH TO FULL DEBUGGING SUPPORT, ALWAYS MAKE SURE TO PRESS &quot;END SESSION&quot;. 
+	YOU WILL NOT BE ABLE TO USE BOTH CONSOLE OUTPUT AND FULL DEBUGGING SUPPORT AT THE SAME TIME, AND YOU CANNOT USE FULL DEBUGGING SUPPORT IF A CONSOLE SESSION 
+	IS ALREADY RUNNING (AND VICE-VERSA)! ***
+	</li>
+</ol>
+
+<h3 id="asha-debugging-full">Start debugging for real</h3>
+<h4 id="asha-debugging-full-debugger">Part 1: Setting up the debugger</h4>
+<ol>
+	<li>Select your MIDlet from the list and press &quot;Attach&quot;. A pop-up window will appear.</li>
+	<li>Navigate to the location of the application JAR and select it.</li>
+	<li>If all is OK, you should see a pop-up saying &quot;Please attach the debugger to port 5000&quot;.</li>
+</ol>
+
+<h4 id="asha-debugging-full-eclipse">Part 2. Setting up Eclipse</h4>
+<ol>
+	<li>Open Eclipse.</li>
+	<li>Go to <i>Run/Debug Configurations</i>.</li>
+	<li>Create a new &quot;Remove Java Application&quot; configuration, based on the application's project (use &quot;Browse&quot; to change the currently selected project, if needed).</li>
+	<li>Change the port to 5000 and save the configuration.</li>
+</ol>
+<h4 id="asha-debugging-full-start">Part 3. Start debugging!</h4>
+<ol>
+<li>Run the debug configuration you created above. The pop-up from <a href="#asha-debugging-full-debugger">Part 1</a>should now disappear, and Eclipse should be connected to the debugger. Congratulations!</li>
+</ol>
+<h4 id="asha-debugging-full-restart">Part 4. Restart debugging</h4>
+<p>
+If you want to restart the debugging like after an exit of the app, follow these steps:
+</p>
+<ul>
+    <li>Make sure the debugger is running (a green symbol should be present on the status bar on some devices) and connected to the PC (connection manager says "Status: connected". 
+    If not, repeat <a href="#asha-debugging-connecting">Connecting the device to the PC</a>.
+    </li>
+	<li>
+    If you've changed anything in the source code or if you have created a new build, repeat steps copy the JAR again to the device.
+    </li>
+	<li>
+    Run the app again and create a new debugging session for it (like in <a href="asha-debugging-full">Start debugging for real</a>).
+    </li>
+</ul>
+
+<h3 id="asha-debugging-notes">Debugging Troubleshooting</h3>
+<p>
+On-device debugging mostly works great, but there are a few caveats.
+<p>
+<ul>
+    <li>On-device debugging sometimes causes the device to reset itself.</li>
+	<li>If you are not careful (e.g. forget to close console sessions before starting a full debug session), you might end up with a &quot;hanging&quot; session. 
+	This means that the debugger won't connect properly and that the console output won't show in the dedicated window. In this case, from experience it's fastest 
+	if you just close everything (Eclipse, Connection Manager &amp; Debugger app on the device) and start again clean 
+	(start eclipse, start connection manager, start debugger app, connect debugger app to connection manager).</li>
+	<li> For some reason, the debugger (or Eclipse) does not like some breakpoints. In particular, we can reproduce this with a a breakpoint inside an anonymous 
+	Thread class (see below). In this case, you won't be able to connect Eclipse to the on device debugger (with an error code of 41) and you'll be left with a hanging session 
+	(see previous bullet point).</li>
+</ul>
+<pre class="brush: java">
+Thread th = new Thread() {
+	public void run() {
+		while (true) {
+			// break here and prepare to die:
+			System.out.println("TIME " + System.currentTimeMillis()); 
+			try
+			{ 
+				Thread.sleep(1000); }
+			catch (InterruptedException e)
+			{  
+				e.printStackTrace(); 
+			}
+		}
+	}
+};
+th.start();
+</pre>
+
+<h2 id="asha-emulator-deadlock">Deadlock Detection with the Nokia Asha Emulator</h2>
+<p>
+Finding deadlocks can be tough work in J2ME development. J2ME Polish can help you to track down deadlocked threads
+by providing the <a href="build-emulator.html#emulator-filters">deadlock</a> emulator filter.
+Use this filter by extending your <code>&lt;emulator&gt;</code> setting in your <i>build.xml</i> script:
+</p>
+<pre class="brush: xml">
+&lt;filters&gt;
+	&lt;filter name=&quot;deadlock&quot;&gt;
+		&lt;package name=&quot;de.enough.polish.ui&quot; /&gt;
+		&lt;package name=&quot;com.company.myproject&quot; /&gt;
+	&lt;/filter&gt;
+&lt;/filters&gt;
+</pre>
+<p>After you have started the emulator, and your are about to approach the deadlock situation, 
+go to the Tools -&gt; Preferences -&gt; MIDP Monitor and select to monitor Method calls.
+Please note that this tracing option will slow down your app considerably.
+</p>
+<p>J2ME Polish will now regularly print out the traces of methods that are called. In a deadlock situation
+you will easily spot stuck threads as their method trances will be repeated often. You can now check the 
+synchronized statements within these methods to trace the order of locks that have been obtained by each thread.
+</p>
+
+<%include end.txt %>

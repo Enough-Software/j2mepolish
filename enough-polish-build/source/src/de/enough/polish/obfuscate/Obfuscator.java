@@ -62,6 +62,10 @@ public abstract class Obfuscator extends Extension {
 	 * It can contain a comma separated list of keep classes that should be preserved.
 	 */
 	public static final String VARIABLE_DYNAMIC_KEEP_CLASSES = "polish.buildcontrol.obfuscation.keep";
+	/**
+	 * Specifies whether an obfuscator is allowed to preverify
+	 */
+	public static boolean	isAllowedToPreverify = true;
 	protected Project project;
 	protected LibraryManager libraryManager;
 	protected File libDir;
@@ -74,18 +78,15 @@ public abstract class Obfuscator extends Extension {
 		super();
 	}
 	
-	
-	
 	/* (non-Javadoc)
 	 * @see de.enough.polish.Extension#execute(de.enough.polish.Device, java.util.Locale, de.enough.polish.Environment)
 	 */
 	public void execute(Device device, Locale locale, Environment env)
 	throws BuildException 
 	{
-		
-		// TODO enough implement execute
-
+		throw new BuildException("not implemented - call obfuscate(...) directly");
 	}
+	
 	/**
 	 * Obfuscates a jar-file for the given device.
 	 * 
@@ -125,7 +126,7 @@ public abstract class Obfuscator extends Extension {
 	}
 
 	/**
-	 * Initialises this obfuscator.
+	 * Initializes this obfuscator.
 	 * The protected field project, libDir and libraryManager are set in the default implementation.
 	 * 
 	 * @param obfuscatorSetting the settings for this obfuscator

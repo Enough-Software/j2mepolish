@@ -41,7 +41,7 @@ rightframe {
 }
 
 .colorChoiceGroup {
-	padding: 2;
+	padding: 2px;
 	include-label: true;
 	/*
 	layout: expand | center;
@@ -66,7 +66,6 @@ rightframe {
 }
 
 .colorChoiceGroup:hover {
-	padding: 2;
 	font-color: focusedFontColor;
 	background {
 		type: web20;
@@ -235,7 +234,7 @@ label {
 	padding: -3px;
 	border {
 		color: #f90;
-		width: 3;
+		width: 3px;
 	}
 }
 
@@ -252,7 +251,7 @@ label {
 	padding: -3px;
 	border {
 		color: #f90;
-		width: 3;
+		width: 3px;
 	}
 }
 

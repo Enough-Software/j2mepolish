@@ -513,6 +513,12 @@
 			<param name="bottom-height" type="int" primitive="true" default="0"  description="The height of the corners on the bottom side in pixel" since="2.3" />
 			<param name="transparent-fill" type="boolean" primitive="true" default="false" description="Set to true when the center region should not be tiled at all" since="2.3" />
 		</mapping>
+		<mapping from="line"
+			to="de.enough.polish.ui.backgrounds.LineBackground">
+			<param name="line-width" type="dimension" default="1" description="The width of the line that should be painted" since="2.4" />
+			<param name="color" type="color" default="gray" description="The color of the background" />
+			<param name="position" type="integer" primitive="true" default="center" values="center,top,bottom" description="The position of the line background, defaults to the vertical center." />
+		</mapping>
 	</attribute>
 	
 	<!--  backgrounds that require a background attribute themselves   -->
@@ -568,6 +574,28 @@
 			<param name="width-right" type="integer" primitive="true" default="ref:width" description="The width of the border on the right side." />
 			<param name="width-top" type="integer" primitive="true" default="ref:width" description="The width of the border at the top." />
 			<param name="width-bottom" type="integer" primitive="true" default="ref:width" description="The width of the border at the bottom." />
+		</mapping>
+		<mapping from="multicolored" 				to="de.enough.polish.ui.borders.MulticoloredBorder" >
+			<param name="color" type="color" hidden="true" primitive="true" default="black" description="The border color." />
+			<param name="color-left" type="color" primitive="true" default="ref:color" description="The border color on the left side." />
+			<param name="color-right" type="color" primitive="true" default="ref:color" description="The border color on the right side." />
+			<param name="color-top" type="color" primitive="true" default="ref:color" description="The border color on the top side." />
+			<param name="color-bottom" type="color" primitive="true" default="ref:color" description="The border color on the bottom side." />
+			<param name="width" type="integer" hidden="true" primitive="true" default="1" description="The width of the border." />
+			<param name="width-left" type="integer" primitive="true" default="ref:width" description="The width of the border on the left side." />
+			<param name="width-right" type="integer" primitive="true" default="ref:width" description="The width of the border on the right side." />
+			<param name="width-top" type="integer" primitive="true" default="ref:width" description="The width of the border at the top." />
+			<param name="width-bottom" type="integer" primitive="true" default="ref:width" description="The width of the border at the bottom." />
+		</mapping>
+		<mapping from="nested-colors" 				to="de.enough.polish.ui.borders.NestedColorsBorder" >
+			<param name="left-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the left side, one for each line." />
+		    <param name="colors-left"   type="color[]" array-type="Color" default="ref:left-colors" description="The border colors on the left side, one for each line." />
+			<param name="right-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the right side, one for each line." />
+		    <param name="colors-right"  type="color[]" array-type="Color" default="ref:right-colors" description="The border colors on the right side, one for each line." />
+			<param name="top-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the top side, one for each line." />
+		    <param name="colors-top"    type="color[]" array-type="Color" default="ref:top-colors" description="The border colors on the top side, one for each line." />
+			<param name="bottom-colors"   type="color[]" array-type="Color" default="null" hidden="true" description="The border colors on the bottom side, one for each line." />
+		    <param name="colors-bottom" type="color[]" array-type="Color" default="ref:bottom-colors" description="The border colors on the bottom side, one for each line." />
 		</mapping>
 		<mapping from="plain" 				converter="de.enough.polish.preprocess.borders.SimpleBorderConverter" />
 		<mapping from="bottom-right-shadow" to="de.enough.polish.ui.borders.BottomRightShadowBorder" converter="de.enough.polish.preprocess.borders.ShadowBorderConverter" >
@@ -673,6 +701,13 @@
 		
 	</attribute>
 
+		<!--  borders that require a border attribute themselves   -->
+	<attribute name="border">
+		<mapping from="combined"               to="de.enough.polish.ui.backgrounds.CombinedBorder" >
+			<param name="foreground" type="border"  description="Reference to the border that is painted on the top side. Reference a border defined in the borders section." />
+			<param name="background" type="border"  description="Reference to the border that is painted on the bottom side. Reference a border defined in the borders section." />		
+		</mapping>
+	</attribute>
 	
 		<!--
 		<mapping from="" converter="" />
@@ -1253,6 +1288,7 @@
 		<!--  for any Items: -->
 		<mapping from="plain" to="null" />
 		<mapping from="normal" to="null" />
+		<mapping from="scroll" to="new de.enough.polish.ui.itemviews.ScrollableItemView()" appliesTo="Item" />
 		<mapping from="fade-out" to="new de.enough.polish.ui.itemviews.FadeOutItemView()" appliesTo="Item" />
 		<mapping from="fade-in" to="new de.enough.polish.ui.itemviews.FadeInItemView()" appliesTo="Item" />
 		<mapping from="size-increase" to="new de.enough.polish.ui.itemviews.SizeIncreaseItemView()" appliesTo="Item" />
@@ -1310,6 +1346,7 @@
     	<mapping from="gauge-rotating-circles" to="new de.enough.polish.ui.gaugeviews.RotatingCirclesGaugeView()" appliesTo="Gauge" />
     	<mapping from="gauge-images" to="new de.enough.polish.ui.gaugeviews.ImagesGaugeView()" appliesTo="Gauge" />
 		<mapping from="gauge-clock-instrument" to="new de.enough.polish.ui.gaugeviews.ClockInstrumentGaugeView()" appliesTo="Gauge" />
+		<mapping from="gauge-pie" to="new de.enough.polish.ui.gaugeviews.PieGaugeView()" appliesTo="Gauge" />
 
 
 		<!-- 
@@ -1855,6 +1892,9 @@
 	>
 		<mapping from="bitmap" to="new de.enough.polish.ui.texteffects.BitmapFontTextEffect()" />
 		<mapping from="smiley" to="new de.enough.polish.ui.texteffects.SmileyTextEffect()" />
+		<mapping from="smiley-extended" to="new de.enough.polish.ui.texteffects.FastSmileyTextEffect()" />
+		<mapping from="styled-single" to="new de.enough.polish.ui.texteffects.SingleLineStyledTextEffect()" />
+		<mapping from="styled" to="new de.enough.polish.ui.texteffects.StyledTextEffect()" />
 		<mapping from="shadow" to="new de.enough.polish.ui.texteffects.ShadowTextEffect()" />
 		<mapping from="outline" to="new de.enough.polish.ui.texteffects.OutlineTextEffect()" />
 		<mapping from="segment" to="new de.enough.polish.ui.texteffects.SegmentTextEffect()" />
@@ -1865,6 +1905,8 @@
 		<mapping from="vertical-scroll" to="new de.enough.polish.ui.texteffects.VerticalScrollTextEffect()" />
 		<mapping from="html" to="new de.enough.polish.ui.texteffects.HtmlTextEffect()" />
 		<mapping from="message" to="new de.enough.polish.ui.texteffects.MessageTextEffect()" />
+		<mapping from="bold" to="new de.enough.polish.ui.texteffects.BoldTextEffect()"/>
+		<mapping from="flash" to="new de.enough.polish.ui.texteffects.FlashTextEffect()" />
 		<mapping from="mirror-shadow" to="new de.enough.polish.ui.texteffects.VerticalMirrorTextEffect()" >
 			<condition>polish.midp2</condition>
 		</mapping>
@@ -1886,7 +1928,7 @@
 		<mapping from="rotating" to="new de.enough.polish.ui.texteffects.RotatingTextEffect()" >
 			<condition>polish.midp2 and polish.hasFloatingPoint</condition>
 		</mapping>
-		<mapping from="flash" to="new de.enough.polish.ui.texteffects.FlashTextEffect()"/>
+		<mapping from="cycling" to="new de.enough.polish.ui.texteffects.CyclingTextEffect()"/>		
 		<mapping from="split" to="new de.enough.polish.ui.texteffects.VerticalSplitTextEffect()"/>		
 		<mapping from="vertical-split" to="new de.enough.polish.ui.texteffects.VerticalSplitTextEffect()"/>		
 		<mapping from="cycling" to="new de.enough.polish.ui.texteffects.CyclingTextEffect()"/>		
@@ -2287,7 +2329,7 @@
 		name="include-label"
 		type="boolean"
 		appliesTo="Item"
-		description="Usually the label of an item is rendered separately of the item's content. You can expand the background and border over the label as well using this attribute." 
+		description="Usually the label of an item is rendered separately of the item's content. You can expand the background and border over the label as well using this attribute. If you want to inline the label so that it sits on the same line as the content use inline-label instead." 
 		default="false"
 		id="132"
 	/>
@@ -4811,7 +4853,7 @@
 		description="Set to equal for giving each item the same available space."
 		id="404"
 		default="normal"
-		values="normal, equal"
+		values="normal, equal, fixed-count"
 		since="J2ME Polish 2.1.3"
 	/>
 	
@@ -5695,6 +5737,44 @@
 		since="J2ME Polish 2.3.1"
 	/>
 		
+	<attribute
+		name="horizontalview-distribution-fixed-count"
+		type="integer"
+		appliesTo="HorizontalContainerView"
+		description="Set the number of items to display at a given time"
+		id="497"
+		default="1"
+		since="J2ME Polish 2.4"
+	/>
+
+	<attribute
+		name="scroll-height"
+		type="dimension"
+		appliesTo="ScrollableItemView"
+		description="Set the scrollable height of the item."
+		id="498"
+		since="J2ME Polish 2.4"
+	/>
+	
+	<attribute
+		name="item-content-background"
+		type="background"
+		appliesTo="Item"
+		description="A background name from the backgrounds section. The background covers only the content area of the item and is independent of the item's normal background."
+		id="499"
+		since="J2ME Polish 2.4"
+	/>
+	
+	<attribute
+		name="item-content-border"
+		type="border"
+		appliesTo="Item"
+		description="A border name from the borders section. The border covers only the content area of the item and is independent of the item's normal border."
+		id="500"
+		since="J2ME Polish 2.4"
+	/>
+			
+
 <!--
 	<attribute
 		name="repaint-previous-screen-anchor"

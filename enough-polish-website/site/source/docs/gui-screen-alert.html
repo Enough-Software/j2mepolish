@@ -13,7 +13,7 @@
 </p>
 <h2 id="design">Design</h2>
 <p>	The above design has been realized with following CSS code:</p>
-<pre>
+<pre class="brush: css">
 .mailForm {
 	padding: 5;
 	padding-left: 5;
@@ -59,6 +59,28 @@ alertcontent {
 	font-color: white;
 }
 </pre>
+<h2 id="code">Code</h2>
+<pre class="brush: java">
+import de.enough.polish.ui.Alert;
+import de.enough.polish.ui.AlertType;
+[...]
+//#style mailAlert
+Alert alert = new Alert("Exit?", "Do you really want to exit?", null, AlertType.CONFIRMATION);
+final Command cmdYes = new Command("Yes", Command.OK, 1);
+final Command cmdNo = 	new Command("No", Command.CANCEL, 1);
+alert.addCommand(cmdYes);
+alert.addCommand(cmdNo);
+alert.setCommandListener(new CommandListener() {
+	public void commandAction(Command c, Displayable d) {
+		if (c == cmdYes) {
+			notifyDestroyed();
+		} else {
+			display.setCurrent(mainScreen);
+		}				
+	}
+});
+this.display.setCurrent(alert);
+</pre>
 
 <h3 id="attributes-alert">Alert CSS Attributes</h3>
 <p>You can use the following CSS attributes for the Alert:</p>
@@ -74,7 +96,7 @@ custom style using the <code>content-style</code> CSS attribute.
 
 <h2 id="programming">Programming</h2>
 <p>
-Use a <code>javax.microedition.lcdui.Alert</code> as you would normally in your application and
+Use a <code>alert</code> as you would use a normal <code>javax.microedition.lcdui.Alert</code> in your application and
 use <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UiAccess.html">UiAccess</a> for
 using J2ME Polish specific functionalities like:
 </p>
@@ -141,14 +163,14 @@ alert.addCommand( new Command( "custom", Command.SCREEN, 2));
 </pre>
  
 
-<h2 id="configuration-buttons">Configuration: Native Alerts</h2>
+<h2 id="configuration-native">Configuration: Native Alerts</h2>
 <p>
-On BlackBerry and Android platforms you can use native Alerts, which is highly recommended. 
+On JavaME, BlackBerry and Android platforms you can use native Alerts, which is highly recommended for BlackBerry, Android and Nokia Asha platforms. 
 Just define the <code>polish.useNativeAlerts</code> preprocessing variable in your <i>build.xml</i> script:
 </p>
 <pre>
 &lt;variables&gt;
-	&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;true&quot; /&gt;
+	&lt;variable name=&quot;polish.useNativeAlerts&quot; value=&quot;true&quot; if=&quot;polish.blackberry or polish.android or (polish.NokiaUiApiVersion &gt;= 1.1)&quot; /&gt;	
 &lt;/variables&gt;
 </pre>
 

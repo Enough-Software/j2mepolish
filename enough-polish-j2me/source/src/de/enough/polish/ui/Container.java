@@ -87,7 +87,17 @@ public class Container extends Item {
 	//#else
 		//#	public boolean allowCycling = false;
 	//#endif
+	/** 
+	 * Current vertical scrolloffset, grows negatively.
+	 * Subclasses can listen for changes by overriding onScrollYOffsetChanged(int).
+	 * @see Container#onScrollYOffsetChanged(int)
+	 */
 	protected int yOffset;
+	/** 
+	 * Target vertical scrolloffset, grows negatively.
+	 * Subclasses can listen for changes by overriding onScrollYOffsetChanged(int).
+	 * @see Container#onScrollYOffsetChanged(int)
+	 */
 	protected int targetYOffset;
 	private int focusedTopMargin;
 	//#if polish.css.view-type || polish.css.columns
@@ -117,9 +127,8 @@ public class Container extends Item {
 	private boolean isScrollRequired;
 	/** The height available for scrolling, ignore when set to -1 */
 	protected int scrollHeight = -1;
-	private Item[] containerItems;
 	private boolean showCommandsHasBeenCalled;
-	private Item scrollItem;
+	protected Item scrollItem;
 	protected Style plainStyle;
 	private static final String KEY_ORIGINAL_STYLE = "os"; 
 	//#if polish.css.focus-all
@@ -235,7 +244,7 @@ public class Container extends Item {
 			//#debug
 			System.out.println("setScrollHeight(): scrolling to item=" + item + " with y=" + item.relativeY + ", height=" + height);
 			scroll( 0, item, true);
-			synchronized(this.itemsList) {
+			synchronized(getSynchronizationLock()) {
 				this.isScrollRequired = false;
 			}
 		}
@@ -313,7 +322,7 @@ public class Container extends Item {
 	public void add( Item item ) {
 		//#debug
 		System.out.println("adding " + item + " to " + this);
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			item.relativeY =  0;
 			item.internalX = Item.NO_POSITION_SET;
 			item.parent = this;
@@ -376,7 +385,7 @@ public class Container extends Item {
 	 * @throws IndexOutOfBoundsException when the index < 0 || index >= size()
 	 */
 	public void add( int index, Item item ) {
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			item.relativeY = 0;
 			item.internalX = NO_POSITION_SET;
 			item.parent = this;
@@ -390,14 +399,12 @@ public class Container extends Item {
 				//#endif
 			}
 			if (this.isShown) {
+				// set following items to relativeY=0, so that they will be scrolled correctly:
+				for (int i= index + 1; i < this.itemsList.size(); i++ ) {
+					Item followingItem = get(i);
+					followingItem.relativeY = 0;
+				}
 				requestInit();
-			}
-			// set following items to relativeY=0, so that they will be scrolled correctly:
-			for (int i= index + 1; i < this.itemsList.size(); i++ ) {
-				Item followingItem = get(i);
-				followingItem.relativeY = 0;
-			}
-			if (this.isShown) {
 				item.showNotify();
 			}
 			
@@ -511,16 +518,18 @@ public class Container extends Item {
 				
 			}
 		//#endif
-		//requestInit();
-		// set following items to relativeY=0, so that they will be scrolled correctly:
-		for (int i= index + 1; i < this.itemsList.size(); i++ ) {
-			Item followingItem = get(i);
-			followingItem.relativeY = 0;
+		if (this.isInitialized)
+		{
+			// set following items to relativeY=0, so that they will be scrolled correctly:
+			for (int i= index + 1; i < this.itemsList.size(); i++ ) {
+				Item followingItem = get(i);
+				followingItem.relativeY = 0;
+			}
+			requestInit();
 		}
-		requestInit();
-		repaint();
 		if (this.isShown) {
 			item.showNotify();
+			repaint();
 		}
 		notifyValueChanged(item);
 		return last;
@@ -551,7 +560,7 @@ public class Container extends Item {
 			// this can cause deadlocks with Container.initContent().
 			synchronized (de.enough.polish.blackberry.midlet.MIDlet.getEventLock()) {
 		//#endif
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			removedItem = (Item) this.itemsList.remove(index);
 			if (removedItem == this.scrollItem) {
 				this.scrollItem = null;
@@ -754,7 +763,7 @@ public class Container extends Item {
 	 * @throws IllegalArgumentException when the given item is null
 	 */
 	public boolean remove( Item item ) {
-		int index = this.itemsList.indexOf(item);
+		int index = getPosition(item);
 		if (index != -1) {
 			remove( index );
 			return true;
@@ -768,7 +777,7 @@ public class Container extends Item {
 	 */
 	public void clear() {
 		//System.out.println("CLEARING CONTAINER " + this);
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			//#if tmp.supportViewType
 				if (this.containerView != null) {
 					this.containerView.focusedIndex = -1;
@@ -788,7 +797,6 @@ public class Container extends Item {
 				}
 			}
 			this.itemsList.clear();
-			this.containerItems = new Item[0];
 			//this.items = new Item[0];
 			if (this.focusedIndex != -1) {
 				setAutoFocusEnabled( this.isFocused );
@@ -812,7 +820,11 @@ public class Container extends Item {
 				}
 				this.focusedItem = null;
 			}
-			this.yOffset = 0;
+			if (this.yOffset != 0)
+			{
+				this.yOffset = 0;
+				onScrollYOffsetChanged(0);
+			}
 			this.targetYOffset = 0;
 			if (this.internalX != NO_POSITION_SET) {
 				this.internalX = NO_POSITION_SET;
@@ -851,15 +863,12 @@ public class Container extends Item {
 	
 	/**
 	 * Retrieves all items which this container holds.
-	 * The items might not have been intialised.
+	 * The items might not have been initialized.
 	 * 
 	 * @return an array of all items, can be empty but not null.
 	 */
 	public Item[] getItems() {
-		if (!isInitialized() || this.containerItems == null) {
-			this.containerItems = (Item[]) this.itemsList.toArray( new Item[ this.itemsList.size() ]);
-		}
-		return this.containerItems;
+		return (Item[]) this.itemsList.toArray( new Item[ this.itemsList.size() ]);
 	}
 	
 	/**
@@ -1003,7 +1012,7 @@ public class Container extends Item {
 	 * 
 	 * @param index the position
 	 * @param item the item which should be focused
-	 * @param direction the direction, either Canvas.DOWN, Canvas.RIGHT, Canvas.UP, Canvas.LEFT or 0.
+	 * @param direction the direction, either Canvas.DOWN, Canvas.RIGHT, Canvas.UP, Canvas.LEFT or 0. For focus via touch, use Canvas.FIRE
 	 * @param force true when the child should be focused again even though is has been focused before
 	 */
 	public void focusChild( int index, Item item, int direction, boolean force ) {
@@ -1277,7 +1286,7 @@ public class Container extends Item {
 			if (!isInitialized() && item.relativeY == 0) {
 				// defer scrolling to init at a later stage:
 				//System.out.println( this + ": setting scrollItem to " + item);
-				synchronized(this.itemsList) {
+				synchronized(getSynchronizationLock()) {
 					this.scrollItem = item;
 				}
 				return true;
@@ -1422,7 +1431,7 @@ public class Container extends Item {
 		super.setAppearanceMode(appearanceMode);
 		// this is used in initContent() to circumvent the 
 		// reversal of the previously set appearance mode
-		synchronized(this.itemsList) {
+		synchronized(getSynchronizationLock()) {
 			this.appearanceModeSet = true;
 		}
 	}
@@ -1477,16 +1486,10 @@ public class Container extends Item {
 				}
 			}
 		//#endif
-		synchronized (this.itemsList) {
+		synchronized (getSynchronizationLock()) {
 			int myContentWidth = 0;
 			int myContentHeight = 0;
-			Item[] myItems;
-			if (this.containerItems == null || this.containerItems.length != this.itemsList.size()) {
-				myItems = (Item[]) this.itemsList.toArray( new Item[ this.itemsList.size() ]);
-				this.containerItems = myItems;
-			} else {
-				myItems = (Item[]) this.itemsList.toArray(this.containerItems);
-			}
+			Item[] myItems = getItems();
 			//#if (polish.css.child-style-first || polish.css.child-style-last) && polish.css.child-style
 				if (this.style != null && this.childStyle != null) {
 					Style firstStyle = null;
@@ -1906,20 +1909,18 @@ public class Container extends Item {
 		if (this.containerView == null) {
 		//#endif
 			boolean hasCenterOrRightAlignedItems = false;
-			Item[] myItems = this.containerItems; 
-			if (myItems != null) {
-				for (int i = 0; i < myItems.length; i++) {
-					Item item = myItems[i];
-					width = item.itemWidth;
-					if (item.isLayoutCenter) {
-						item.relativeX = (myContentWidth - width) / 2;
-						hasCenterOrRightAlignedItems = true;
-					} else if (item.isLayoutRight) {
-						item.relativeX = (myContentWidth - width);
-						hasCenterOrRightAlignedItems = true;
-					}
+			Object[] myItems = this.itemsList.getInternalArray(); 
+			int myItemsLength = this.itemsList.size();
+			for (int i = 0; i < myItemsLength; i++) {
+				Item item = (Item) myItems[i];
+				width = item.itemWidth;
+				if (item.isLayoutCenter) {
+					item.relativeX = (myContentWidth - width) / 2;
+					hasCenterOrRightAlignedItems = true;
+				} else if (item.isLayoutRight) {
+					item.relativeX = (myContentWidth - width);
+					hasCenterOrRightAlignedItems = true;
 				}
-				
 			}
 			if (hasCenterOrRightAlignedItems) {
 				this.contentWidth = myContentWidth;
@@ -1982,26 +1983,26 @@ public class Container extends Item {
 				}
 			} else {
 		//#endif
-			Item[] myItems = this.containerItems;
+			Object[] myItems = this.itemsList.getInternalArray();
 			int startY = g.getClipY();
 			int endY = startY + g.getClipHeight();
 			Item focItem = this.focusedItem;
-			int focIndex = this.focusedIndex;
 			int itemX;
 			//int originalY = y;
 			for (int i = 0; i < myItems.length; i++) {
-				Item item = myItems[i];
+				Item item = (Item) myItems[i];
+				if (item == null) 
+				{
+					break;
+				}
 				// currently the NEWLINE_AFTER and NEWLINE_BEFORE layouts will be ignored,
 				// since after every item a line break will be done. Use view-type: midp2; to place several items into a single row.
 				int itemY = y + item.relativeY;
-				if (i != focIndex &&  itemY + item.itemHeight >= startY && itemY < endY ){
+				if (item != focItem &&  itemY + item.itemHeight >= startY && itemY < endY ){
 					//item.paint(x, y, leftBorder, rightBorder, g);
 					itemX = x + item.relativeX;
 					item.paint(itemX, itemY, itemX, itemX + item.itemWidth, g);
 				}
-//				if (item.itemHeight != 0) {
-//					y += item.itemHeight + this.paddingVertical;
-//				}
 			}
 			boolean paintFocusedItemOutside = false;
 			if (focItem != null) {
@@ -2515,7 +2516,7 @@ public class Container extends Item {
 	 *        0 for the current item, negative values go backwards.
 	 * @return true when the focus could be moved to either the next or the previous item.
 	 */
-	private boolean shiftFocus(boolean forwardFocus, int steps ) {
+	protected boolean shiftFocus(boolean forwardFocus, int steps ) {
 		Item[] items = getItems();
 		if ( items == null || items.length <= 1) {
 			//#debug
@@ -2784,7 +2785,7 @@ public class Container extends Item {
 		//#endif
 			
 		//#if polish.css.expand-items
-			synchronized(this.itemsList) {
+			synchronized(getSynchronizationLock()) {
 				Boolean expandItemsBool = style.getBooleanProperty("expand-items");
 				if (expandItemsBool != null) {
 					this.isExpandItems = expandItemsBool.booleanValue();
@@ -2930,14 +2931,14 @@ public class Container extends Item {
 	public String parseIndexUrl(String url, Item item) {
 		int pos = url.indexOf("%INDEX%");
 		if (pos != -1) {
-			int index = this.itemsList.indexOf( item );
+			int index = getPosition( item );
 			//TODO rob check if valid, when url ends with %INDEX%
 			url = url.substring(0, pos) + index + url.substring( pos + 7 );
 		}
 		return url;
 	}
 	/**
-	 * Retrieves the position of the specified item.
+	 * Retrieves the index position of the specified item.
 	 * 
 	 * @param item the item
 	 * @return the position of the item, or -1 when it is not defined
@@ -3269,6 +3270,7 @@ public class Container extends Item {
 			long passedTime = (currentTime - this.scrollStartTime);
 			int nextOffset = CssAnimation.calculatePointInRange(this.scrollStartYOffset, target, passedTime, this.scrollDuration , CssAnimation.FUNCTION_EXPONENTIAL_OUT );
 			this.yOffset = nextOffset;
+			onScrollYOffsetChanged(nextOffset);
 			addFullRepaintRegion = true;
 		}
 		int speed = this.scrollSpeed;
@@ -3331,6 +3333,7 @@ public class Container extends Item {
 			}
 			this.yOffset = offset;
 			this.targetYOffset = target;
+			onScrollYOffsetChanged(offset);
 			addFullRepaintRegion = true;
 		}
 		
@@ -3501,11 +3504,36 @@ public class Container extends Item {
 				this.containerView.hideNotify();
 			}
 		//#endif
-		Item[] myItems = getItems();
-		for (int i = 0; i < myItems.length; i++) {
-			Item item = myItems[i];
+		Object[] myItems = this.itemsList.getInternalArray();
+		for (int i = 0; i < myItems.length; i++) 
+		{
+			Item item = (Item) myItems[i];
+			if (item == null)
+			{
+				break;
+			}
 			item.hideNotify();
 		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#handleGesture(int, int, int)
+	 */
+	protected boolean handleGesture(int gesture, int x, int y)
+	{
+		Item item = this.focusedItem;
+		boolean handled = false;
+		if (item != null)
+		{
+			int relX = x - item.relativeX - this.contentX;
+			int relY = y - item.relativeY - this.yOffset - this.contentY;
+			if (item.isInItemArea(relX, relY)) 
+			{
+				handled = item.handleGesture(gesture, relX, relY);
+			}
+		}
+		return handled || super.handleGesture(gesture, x, y);
 	}
 	
 	//#ifdef polish.hasPointerEvents
@@ -3596,12 +3624,12 @@ public class Container extends Item {
 		}
 		Item nextItem = getChildAt( origRelX, origRelY );
 		if (nextItem != null && nextItem != item) {
-			int index = this.itemsList.indexOf(nextItem);
+			int index = getPosition(nextItem);
 			//#debug
 			System.out.println("Container.handlePointerPressed(" + relX + "," + relY + "): found item " + index + "=" + nextItem + " at relative " + relX + "," + relY + ", itemHeight=" + nextItem.itemHeight);
 			// only focus the item when it has not been focused already:
 			int offset = getScrollYOffset();
-			focusChild(index, nextItem, 0, true);
+			focusChild(index, nextItem, Canvas.FIRE, true);
 			setScrollYOffset( offset, false ); // don't move the UI while handling the press event:
 			// let the item also handle the pointer-pressing event:
 			nextItem.handlePointerPressed( relX - nextItem.relativeX , relY - nextItem.relativeY );
@@ -3908,7 +3936,7 @@ public class Container extends Item {
 		//#if !polish.Container.selectEntriesWhileTouchScrolling
 			if (item != null) {
 				int dragDistance = Math.abs(relY - this.lastPointerPressY);
-				if(dragDistance > minimumDragDistance) {
+				if (dragDistance > minimumDragDistance) {
 					focusChild(-1);
 			   		//#if polish.blackberry
 			   		//# ((BaseScreen)(Object)Display.getInstance()).notifyFocusSet(null);
@@ -4260,22 +4288,38 @@ public class Container extends Item {
 	public void setScrollYOffset( int offset, boolean smooth) {
 		//#debug
 		System.out.println("Setting scrollYOffset to " + offset + " for " + this);
-		//try { throw new RuntimeException("for yOffset " + offset + " in " + this); } catch (Exception e) { e.printStackTrace(); }
+//		if (this.enableScrolling)
+//			try { throw new RuntimeException("for yOffset " + offset + " in " + this + ", was=" + this.yOffset + "/" + this.targetYOffset); } catch (Exception e) { e.printStackTrace(); }
 		if (!this.enableScrolling && this.parent instanceof Container) {
 			((Container)this.parent).setScrollYOffset(offset, smooth);
 			return;
 		}
+		int current = this.yOffset;
 		this.scrollStartTime = System.currentTimeMillis();
 		this.scrollStartYOffset = this.yOffset;
+		this.targetYOffset = offset;
+		this.scrollSpeed = 0;
 		if (!smooth  
 		//#ifdef polish.css.scroll-mode
 			|| !this.scrollSmooth
 		//#endif
 		) {
-			this.yOffset = offset;			
+			this.yOffset = offset;
+			this.scrollStartYOffset = offset;
+			if (offset != current)
+			{
+				onScrollYOffsetChanged(offset);
+			}
 		}
-		this.targetYOffset = offset;
-		this.scrollSpeed = 0;
+	}
+	
+	/**
+	 * Notifies subclasses about a change of the vertical scroll offset.
+	 * @param offset the new offset (grows negatively)
+	 */
+	protected void onScrollYOffsetChanged(int offset) 
+	{
+		// don't do anything
 	}
 	
 	/**
@@ -4308,6 +4352,19 @@ public class Container extends Item {
 		this.scrollDirection = direction;
 		this.scrollDamping = damping;
 		this.scrollSpeed = speed;
+	}
+	
+	/**
+	 * Checks if this container allowes boucning during scrolling vertically outside of the actual content area.
+	 * @return true when this container bounces
+	 */
+	protected boolean isBouncingAllowed()
+	{
+		boolean result = true;
+		//#if tmp.checkBouncing
+			result = this.allowBouncing;
+		//#endif
+		return result;
 	}
 
 	/**
@@ -4390,7 +4447,6 @@ public class Container extends Item {
 			setScrollYOffset(0, false);
 		}
 		this.itemsList = itemsList;
-		this.containerItems = null;
 		Object[] myItems = this.itemsList.getInternalArray();
 		for (int i = 0; i < myItems.length; i++) {
 			Item item = (Item) myItems[i];
@@ -4760,19 +4816,30 @@ public class Container extends Item {
 	 * Scrolls this container so that its last item is visible.
 	 */
 	public void scrollToBottom() {
+		scrollToBottom(true);
+	}
+	
+	/**
+	 * Scrolls this container so that its last item is visible.
+	 */
+	public void scrollToBottom(boolean smooth) {
 		if (this.enableScrolling) {
 			if (!isInitialized()) {
 				if (this.availableWidth != 0) {
 					init(this.availableWidth, this.availableWidth, this.availableHeight );
+				} 
+				else if (this.itemsList.size() > 0)
+				{
+					this.scrollItem = (Item) this.itemsList.get(this.itemsList.size()-1);
 				} // else we're out of luck for now..
 			}
 			int offset = getScrollHeight() - getItemAreaHeight();
 			if (offset > 0) {
 				offset = 0;
 			}
-			setScrollYOffset(offset, true);
+			setScrollYOffset(offset, smooth);
 		} else if (this.parent instanceof Container) {
-			((Container)this.parent).scrollToBottom();
+			((Container)this.parent).scrollToBottom(smooth);
 		}
 		
 	}

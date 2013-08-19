@@ -205,38 +205,41 @@ public abstract class TextEffect implements Serializable
 			isLayoutRight = true;
 		}
 		Object[] lineObjects = textLines.getLinesInternalArray();
+		int lineX = x;
+		int lineY = y;
+		int anchor = 0;
+		// adjust the painting according to the layout:
+		if (isLayoutRight) {
+			lineX = rightBorder;
+			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
+				anchor = Graphics.BOTTOM | Graphics.RIGHT;
+			//#else
+				anchor = Graphics.TOP | Graphics.RIGHT;
+			//#endif
+		} else if (isLayoutCenter) {
+			lineX = centerX;
+			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
+				anchor = Graphics.BOTTOM | Graphics.HCENTER;
+			//#else
+				anchor = Graphics.TOP | Graphics.HCENTER;
+			//#endif
+		} else {
+			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
+				anchor = Graphics.BOTTOM | Graphics.LEFT;
+			//#else
+				anchor = Graphics.TOP | Graphics.LEFT;
+			//#endif
+		}
+		
 		int size = textLines.size();
 		for (int i = 0; i < size; i++) {
-			String line = (String) lineObjects[i];
-			int lineX = x;
-			int lineY = y;
-			int anchor = 0;
-			// adjust the painting according to the layout:
-			if (isLayoutRight) {
-				lineX = rightBorder;
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.RIGHT;
-				//#else
-					anchor = Graphics.TOP | Graphics.RIGHT;
-				//#endif
-			} else if (isLayoutCenter) {
-				lineX = centerX;
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.HCENTER;
-				//#else
-					anchor = Graphics.TOP | Graphics.HCENTER;
-				//#endif
-			} else {
-				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-					anchor = Graphics.BOTTOM | Graphics.LEFT;
-				//#else
-					anchor = Graphics.TOP | Graphics.LEFT;
-				//#endif
+			String lineText = (String) lineObjects[i];
+			drawString( lineText, textColor, lineX, lineY, anchor, g );
+			lineY += lineHeight;
+			if (!isLayoutCenter && !isLayoutRight && (x != leftBorder))
+			{
+				lineX = leftBorder;
 			}
-			
-			drawString( line, textColor, lineX, lineY, anchor, g );
-			x = leftBorder;
-			y += lineHeight;
 		}
 		
 	}
@@ -459,6 +462,21 @@ public abstract class TextEffect implements Serializable
 	public int getFontHeight() {
 		return getFont().getHeight();
 	}
+	
+	/**
+	 * Retrieves the font height of the first line.
+	 * This allows to embed labels correctly using 'inline-label' when the 
+	 * text effect uses different line heights.
+	 * The default implementation just returns getFontHeight().
+	 * 
+	 * @return the font height of the first row/line.
+	 * @see #getFontHeight()
+	 */
+	public int getFontHeightOfFirstLine()
+	{
+		return getFontHeight();
+	}
+	
 	/**
 	 * Retrieves the font that should be used.
 	 * 

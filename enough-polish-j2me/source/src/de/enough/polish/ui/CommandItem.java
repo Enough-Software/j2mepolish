@@ -349,7 +349,7 @@ public class CommandItem extends IconItem {
 	protected boolean handleKeyPressed(int keyCode, int gameAction) {
 		//#debug
 		System.out.println( this + " handleKeyPressed, isOpen=" + this.isOpen);
-		boolean isFireGameAction = getScreen().isGameActionFire(keyCode, gameAction);
+		boolean isFireGameAction = (gameAction == Canvas.FIRE); 
 		if ( this.isOpen ) {
 			if (
 			//#if !polish.blackberry || polish.hasTrackBallEvents
@@ -445,7 +445,7 @@ public class CommandItem extends IconItem {
 		}
 		else
 		{
-			boolean isFireGameAction = getScreen().isGameActionFire(keyCode, gameAction);
+			boolean isFireGameAction = (gameAction == Canvas.FIRE); 
 			if ( this.hasChildren && this.appearanceMode != PLAIN ) { // has children but is not open
 				if ( isFireGameAction 
 					//#if !polish.blackberry || polish.hasTrackBallEvents
