@@ -41,6 +41,19 @@
 	</api>
 	
 	<api>
+		<name>Nokia User Interface API 1.1</name>
+		<description>The Nokia User Interface API 1.1.
+		</description>
+		<names>nokia-ui-1.1,nokia-ui-api-1.1, nokiaui-1.1, nokiauiapi-1.1</names>
+		<symbol>nokia-ui-1.1</symbol>
+		<files>nokia-ui-1.1.jar</files>
+		<path>import/nokia-ui-1.1.jar</path>
+		<capability name="Bugs" value="FillPolygonRequiresPositiveXYInNokiaUiApi" />
+		<capability name="classes.fullscreen" value="com.nokia.mid.ui.FullCanvas" />
+		<capability name="NokiaUiApiVersion" value="1.1" />
+	</api>
+	
+	<api>
 		<name>Nokia User Interface API 1.1b</name>
 		<description>The Nokia User Interface API 1.1b support direct text input, frame animation, gesture, clipboard and audio output control APIs.
 		</description>
