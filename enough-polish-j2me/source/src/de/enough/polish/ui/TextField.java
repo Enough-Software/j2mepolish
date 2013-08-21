@@ -76,12 +76,15 @@ import de.enough.polish.util.WrappedText;
 
 
 
-//#if polish.NokiaUiApiVersion >= 1.1b
+//#if polish.NokiaUiApiVersion >= 1.1b || polish.TextField.Nokia.forceNative
 	//#define tmp.useNokiaInput
 	//#define polish.TextField.suppressAddSymbolCommand=true
 	//#define tmp.suppressCommands=true
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
+//#endif
+	
+//#if polish.NokiaUiApiVersion >= 1.1b
 	import com.nokia.mid.ui.gestures.GestureListener;
 	import com.nokia.mid.ui.gestures.GestureEvent;
 	import com.nokia.mid.ui.gestures.GestureInteractiveZone;
@@ -417,7 +420,9 @@ public class TextField extends StringItem
 //#endif
 //#if tmp.useNokiaInput
 	//#defineorappend tmp.implements=TextEditorListener
-	//#defineorappend tmp.implements=GestureListener
+	//#if polish.NokiaUiApiVersion >= 1.1b
+		//#defineorappend tmp.implements=GestureListener
+	//#endif
 //#endif
 //#if polish.LibraryBuild
 	//#define tmp.implementsCommandListener
@@ -1010,7 +1015,9 @@ public class TextField extends StringItem
 
 	//#if tmp.useNokiaInput
 		private TextEditor nokiaTextEditor;
-		private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
+		//#if polish.NokiaUiApiVersion >= 1.1b
+			private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
+		//#endif
 	//#endif	
 		
 	//#if polish.midp && !(polish.blackberry || polish.android || polish.api.windows) && !polish.TextField.useVirtualKeyboard
@@ -2078,7 +2085,7 @@ public class TextField extends StringItem
 	}
 	//#endif
 	
-	//#if tmp.useNokiaInput
+	//#if tmp.useNokiaInput && polish.NokiaUiApiVersion >= 1.1b
 	public void gestureAction(java.lang.Object container, GestureInteractiveZone gestureInteractiveZone, GestureEvent gestureEvent) {
 		if ( GestureInteractiveZone.GESTURE_LONG_PRESS == gestureEvent.getType() ) {
 			handleGestureHold(gestureEvent.getStartX() - getAbsoluteX(), gestureEvent.getStartY() - getAbsoluteY());
@@ -2542,10 +2549,12 @@ public class TextField extends StringItem
 
 							// Register as a Nokia gesture listener to the canvas
 							// (used for e.g. to detect long presses on the TextEditor object, as there's no other way to achieve this)
-							editorZone.setRectangle(this.getAbsoluteX(), this.getAbsoluteY(), getAvailableWidth(), getAvailableHeight() );							
-							javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
-							GestureRegistrationManager.register(objs, editorZone);
-							GestureRegistrationManager.setListener(objs, (GestureListener) this);
+							//#if polish.NokiaUiApiVersion >= 1.1b
+								editorZone.setRectangle(this.getAbsoluteX(), this.getAbsoluteY(), getAvailableWidth(), getAvailableHeight() );							
+								javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+								GestureRegistrationManager.register(objs, editorZone);
+								GestureRegistrationManager.setListener(objs, (GestureListener) this);
+							//#endif
 						} 
 						catch (Exception e)
 						{
@@ -4747,7 +4756,9 @@ public class TextField extends StringItem
 				this.nokiaTextEditor.setParent(null);
 				
 				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
-				GestureRegistrationManager.unregisterAll(objs);
+				//#if polish.NokiaUiApiVersion >= 1.1b
+					GestureRegistrationManager.unregisterAll(objs);
+				//#endif
 				
 				String newText = this.nokiaTextEditor.getContent();
 				setString( newText );
@@ -4915,7 +4926,9 @@ public class TextField extends StringItem
 					// Unregister all canvas gesture listeners, to prevent repeat events while updating the textfield.
 					// The paintContent() method takes care of re-registering after the update is completed
 					javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
-					GestureRegistrationManager.unregisterAll(objs);
+					//#if polish.NokiaUiApiVersion >= 1.1b
+						GestureRegistrationManager.unregisterAll(objs);
+					//#endif
 					
 					setString(content);
 					setText(content);
