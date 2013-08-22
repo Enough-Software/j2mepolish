@@ -2106,13 +2106,14 @@ public class TextField extends StringItem
 		}
 		TextEditor editor = TextEditor.createTextEditor(maxSizeLocal, midpConstraints, width, rows);
 		editor.setVisible(true);
-		editor.setTouchEnabled(true);
 		editor.setSize(1, 1);
 		editor.setMultiline(false);
 		editor.setForegroundColor(0xFF000000 | this.textColor);
-		editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
 		editor.setBackgroundColor(0);
-		editor.setHighlightBackgroundColor(0);
+		//#if tmp.useNokiaInput && polish.NokiaUiApiVersion >= 1.1b
+			editor.setHighlightForegroundColor(0xFF000000 | this.textColor);
+			editor.setHighlightBackgroundColor(0);
+		//#endif
 		if (this.text != null)
 		{
 			editor.setContent(getString());
