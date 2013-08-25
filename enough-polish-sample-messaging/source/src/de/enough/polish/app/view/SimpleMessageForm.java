@@ -28,6 +28,11 @@ import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Form;
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Item;
+import de.enough.polish.ui.ItemChangedEvent;
+import de.enough.polish.ui.ItemConsumer;
+import de.enough.polish.ui.ItemSource;
+import de.enough.polish.ui.LazyLoadingContainer;
+import de.enough.polish.ui.SourcedLazyContainer;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TextField;
@@ -43,6 +48,7 @@ public class SimpleMessageForm extends FramedForm {
 
 	TextField inputField;
 	private ArrayList messageList = new ArrayList();
+	private MessageItemSource itemSource;
 
 	/**
 	 * Creates a new message form
@@ -55,20 +61,24 @@ public class SimpleMessageForm extends FramedForm {
 		this.inputField.setDefaultCommand(cmdSend);
 		append(FramedForm.FRAME_BOTTOM, this.inputField);
 		setActiveFrame(FramedForm.FRAME_BOTTOM);
+		this.itemSource = new MessageItemSource();
+		SourcedLazyContainer llContainer = new SourcedLazyContainer(this.itemSource, 5, 15);
+		setRootContainer(llContainer);
 	}
 	
 	public void addMessage( Message message ) {
-		this.messageList.add(message);
-		String text = message.getMessage();
-		if (message.isFromMe()) {
-			//#style simpleMessageFromMe
-			StringItem item = new StringItem("me:", text);
-			append(item);
-		} else {
-			//#style simpleMessageFromYou
-			StringItem item = new StringItem(message.getSender() + ":", text);
-			append(item);
-		}
+		this.itemSource.addMessage(message);
+//		this.messageList.add(message);
+//		String text = message.getMessage();
+//		if (message.isFromMe()) {
+//			//#style simpleMessageFromMe
+//			StringItem item = new StringItem("me:", text);
+//			append(item);
+//		} else {
+//			//#style simpleMessageFromYou
+//			StringItem item = new StringItem(message.getSender() + ":", text);
+//			append(item);
+//		}
 	}
 	
 	public String getInput() {
@@ -81,4 +91,69 @@ public class SimpleMessageForm extends FramedForm {
 		return input;
 	}
 
+	static class MessageItemSource implements ItemSource
+	{
+		private ArrayList messages = new ArrayList();
+		private ItemConsumer consumer;
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#countItems()
+		 */
+		public int countItems() {
+			return this.messages.size();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#createItem(int)
+		 */
+		public Item createItem(int index) {
+			Message message = (Message) this.messages.get(index);
+			StringItem item;
+			String text = message.getMessage();
+			if (message.isFromMe()) {
+				//#style simpleMessageFromMe
+				item = new StringItem("me:", text);
+			} else {
+				//#style simpleMessageFromYou
+				item = new StringItem(message.getSender() + ":", text);
+			};
+			return item;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#setItemConsumer(de.enough.polish.ui.ItemConsumer)
+		 */
+		public void setItemConsumer(ItemConsumer consumer) {
+			this.consumer = consumer;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#getDistributionPreference()
+		 */
+		public int getDistributionPreference() {
+			return DISTRIBUTION_PREFERENCE_BOTTOM;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see de.enough.polish.ui.ItemSource#getEmptyItem()
+		 */
+		public Item getEmptyItem() {
+			//#style simpleMessageFromMe
+			StringItem item = new StringItem(null, "Send a message to get started");
+			return item;
+		}
+	
+		public void addMessage(Message message)
+		{
+			this.messages.add(message);
+			if (this.consumer != null)
+			{
+				this.consumer.onItemsChanged(ItemChangedEvent.EVENT_COMPLETE_REFRESH);
+			}
+		}
+	}
 }

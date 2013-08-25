@@ -397,17 +397,21 @@ implements ApplicationInitializer, CommandListener
 					new Message("me", ":-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D :-( :-) :'( :D")
 			};
 			SimpleMessageForm form = new SimpleMessageForm(this.cmdMessageSend);
+			for (int round=0; round < 10; round++)
+			{
 			for (int i = 0; i < messages.length; i++) {
 				Message message = messages[i];
-				form.addMessage(message);
+				Message copy = new Message(message.getSender(), "r_" + round + message.getMessage());
+				form.addMessage(copy);
+			}
 			}
 			messageForm = form;
 		}
 		messageForm.addCommand(this.cmdBack);
 		messageForm.addCommand(this.cmdMessageShowSource);
 		messageForm.setCommandListener(this);
-		UiAccess.init(messageForm);
-		messageForm.scrollToBottom();
+//		UiAccess.init(messageForm);
+//		messageForm.scrollToBottom();
 		this.screenHistory.show(messageForm);
 	}
 

@@ -127,89 +127,115 @@ public class SourcedLazyContainer extends SourcedContainer {
 				{
 					// the user scrolls upwards to/over the first item, so now is a good time
 					// to ask for more items:
-					try {
-						this.isIgnoreScrollOffsetChange = true;
-						IndexRange indexRange = this.wrappedItemSource.indexRange;
-						this.previousScrollYOffset = offset;
-						if (indexRange.canMoveUp())
-						{
-							setInitialized(false);
-							int startIndex = indexRange.getIndexStart() - 1;
-							int endIndex = Math.max(startIndex - this.initialNumberOfItems + 1, 0);
-							//System.out.println("adding " + number + " items from " + startIndex + " to " + endIndex);
-							//this.wrappedItemSource.currentNumberOfItems += number;
-							Item previousFirstItem = get(0);
-							int previousRelativeY = previousFirstItem.relativeY;
-							for (int itemIndex = startIndex; itemIndex >= endIndex; itemIndex--)
-							{
-								Item item = this.realItemSource.createItem(itemIndex);
-								add(0, item);
-								if (indexRange.moveRangeUpRequiresDeleteAtEnd())
-								{
-									remove(size() - 1);
-								}
-							}
-							init(this.availableWidth, this.availableWidth, this.availableHeight);
-							int currentRelativeY = previousFirstItem.relativeY;
-							int newOffset = previousRelativeY - currentRelativeY + offset;
-							//System.out.println("changing offset from " + offset + " to " + newOffset + " for " + this);
-							setScrollYOffset( newOffset, false);
-							this.lastPointerPressY = this.currentPointerDragY;
-							this.lastPointerPressYOffset = newOffset;
-							this.previousScrollYOffset = newOffset;
-							//System.out.println("up: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
-							//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
-						}
-					} 
-					finally
-					{
-						this.isIgnoreScrollOffsetChange = false;
-					}
+					moveUpwards(offset);
 				} // if (offset >= triggerOffset && offset > this.previousScrollYOffset && size() > 0)
 				else if ((this.maxNumberOfItems > 1) && (size() >= this.maxNumberOfItems) && (offset <= this.scrollHeight - getItemAreaHeight()))
 				{
 					// the user scrolls down to items that have been cleared previously:
-					try 
-					{
-						this.isIgnoreScrollOffsetChange = true;
-						IndexRange indexRange = this.wrappedItemSource.indexRange;
-						this.previousScrollYOffset = offset;
-						if (indexRange.canMoveDown())
-						{
-							setInitialized(false);
-							Item previousLastItem = get(size() - 1);
-							int previousRelativeY = previousLastItem.relativeY;
-	
-							int itemIndex = indexRange.getIndexEnd() + 1;
-							int maxIndex = itemIndex + this.initialNumberOfItems;
-							while (indexRange.canMoveDown() && itemIndex < maxIndex)
-							{
-								Item item = this.realItemSource.createItem(itemIndex);
-								add(item);
-								if (indexRange.moveRangeDownRequiresDeleteAtStart())
-								{
-									remove(0);
-								}
-								itemIndex++;
-							}
-							//System.out.println("down: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
-							init(this.availableWidth, this.availableWidth, this.availableHeight);
-							int currentRelativeY = previousLastItem.relativeY;
-							int newOffset = previousRelativeY - currentRelativeY + offset;
-							//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
-							setScrollYOffset( newOffset, false);
-							this.lastPointerPressY = this.currentPointerDragY;
-							this.lastPointerPressYOffset = newOffset;
-							this.previousScrollYOffset = newOffset;
-						}
-					} 
-					finally
-					{
-						this.isIgnoreScrollOffsetChange = false;
-					}
+					moveDownwards(offset);
 				}
 			}
 		}
+	}
+
+	private void moveDownwards(int offset) {
+		try 
+		{
+			this.isIgnoreScrollOffsetChange = true;
+			IndexRange indexRange = this.wrappedItemSource.indexRange;
+			this.previousScrollYOffset = offset;
+			if (indexRange.canMoveDown())
+			{
+				setInitialized(false);
+				Item previousLastItem = get(size() - 1);
+				int previousRelativeY = previousLastItem.relativeY;
+
+				int itemIndex = indexRange.getIndexEnd() + 1;
+				int maxIndex = itemIndex + this.initialNumberOfItems;
+				while (indexRange.canMoveDown() && itemIndex < maxIndex)
+				{
+					Item item = this.realItemSource.createItem(itemIndex);
+					add(item);
+					if (indexRange.moveRangeDownRequiresDeleteAtStart())
+					{
+						remove(0);
+					}
+					itemIndex++;
+				}
+				//System.out.println("down: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
+				init(this.availableWidth, this.availableWidth, this.availableHeight);
+				int currentRelativeY = previousLastItem.relativeY;
+				int newOffset = previousRelativeY - currentRelativeY + offset;
+				//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
+				setScrollYOffset( newOffset, false);
+				this.lastPointerPressY = this.currentPointerDragY;
+				this.lastPointerPressYOffset = newOffset;
+				this.previousScrollYOffset = newOffset;
+			}
+		} 
+		finally
+		{
+			this.isIgnoreScrollOffsetChange = false;
+		}
+	}
+
+	private void moveUpwards(int offset) {
+		try {
+			this.isIgnoreScrollOffsetChange = true;
+			IndexRange indexRange = this.wrappedItemSource.indexRange;
+			this.previousScrollYOffset = offset;
+			if (indexRange.canMoveUp())
+			{
+				setInitialized(false);
+				int startIndex = indexRange.getIndexStart() - 1;
+				int endIndex = Math.max(startIndex - this.initialNumberOfItems + 1, 0);
+				//System.out.println("adding " + number + " items from " + startIndex + " to " + endIndex);
+				//this.wrappedItemSource.currentNumberOfItems += number;
+				Item previousFirstItem = get(0);
+				int previousRelativeY = previousFirstItem.relativeY;
+				for (int itemIndex = startIndex; itemIndex >= endIndex; itemIndex--)
+				{
+					Item item = this.realItemSource.createItem(itemIndex);
+					add(0, item);
+					if (indexRange.moveRangeUpRequiresDeleteAtEnd())
+					{
+						remove(size() - 1);
+					}
+				}
+				init(this.availableWidth, this.availableWidth, this.availableHeight);
+				int currentRelativeY = previousFirstItem.relativeY;
+				int newOffset = previousRelativeY - currentRelativeY + offset;
+				//System.out.println("changing offset from " + offset + " to " + newOffset + " for " + this);
+				setScrollYOffset( newOffset, false);
+				this.lastPointerPressY = this.currentPointerDragY;
+				this.lastPointerPressYOffset = newOffset;
+				this.previousScrollYOffset = newOffset;
+				//System.out.println("up: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
+				//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
+			}
+		} 
+		finally
+		{
+			this.isIgnoreScrollOffsetChange = false;
+		}
+	}
+	
+	protected boolean handleNavigate(int keyCode, int gameAction) {
+		boolean handled = super.handleNavigate(keyCode, gameAction);
+		if (!handled)
+		{
+			if (gameAction == Canvas.UP && this.targetYOffset == 0)
+			{
+				moveUpwards(0);
+				handled = true;
+			}
+			else if (gameAction == Canvas.DOWN && this.targetYOffset <= getItemAreaHeight() - this.scrollHeight)
+			{
+				moveDownwards(this.targetYOffset);
+				handled = true;
+			}
+		}
+		return handled;
 	}
 
 	/*
