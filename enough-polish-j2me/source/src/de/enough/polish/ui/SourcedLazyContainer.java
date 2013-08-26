@@ -138,7 +138,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 		}
 	}
 
-	private void moveDownwards(int offset) {
+	private boolean moveDownwards(int offset) {
 		try 
 		{
 			this.isIgnoreScrollOffsetChange = true;
@@ -171,15 +171,17 @@ public class SourcedLazyContainer extends SourcedContainer {
 				this.lastPointerPressY = this.currentPointerDragY;
 				this.lastPointerPressYOffset = newOffset;
 				this.previousScrollYOffset = newOffset;
+				return true;
 			}
 		} 
 		finally
 		{
 			this.isIgnoreScrollOffsetChange = false;
 		}
+		return false;
 	}
 
-	private void moveUpwards(int offset) {
+	private boolean moveUpwards(int offset) {
 		try {
 			this.isIgnoreScrollOffsetChange = true;
 			IndexRange indexRange = this.wrappedItemSource.indexRange;
@@ -210,6 +212,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 				this.lastPointerPressY = this.currentPointerDragY;
 				this.lastPointerPressYOffset = newOffset;
 				this.previousScrollYOffset = newOffset;
+				return true;
 				//System.out.println("up: size=" + size() + ", startIndex=" + indexRange.getIndexStart() + ", endIndex=" + indexRange.getIndexEnd() );
 				//System.out.println("prev=" + previousRelativeY + ", curr=" + currentRelativeY + ", offset=" + offset + ", newOffset=" + newOffset);
 			}
@@ -218,6 +221,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 		{
 			this.isIgnoreScrollOffsetChange = false;
 		}
+		return false;
 	}
 	
 	protected boolean handleNavigate(int keyCode, int gameAction) {
@@ -226,13 +230,11 @@ public class SourcedLazyContainer extends SourcedContainer {
 		{
 			if (gameAction == Canvas.UP && this.targetYOffset == 0)
 			{
-				moveUpwards(0);
-				handled = true;
+				handled = moveUpwards(0);
 			}
 			else if (gameAction == Canvas.DOWN && this.targetYOffset <= getItemAreaHeight() - this.scrollHeight)
 			{
-				moveDownwards(this.targetYOffset);
-				handled = true;
+				handled = moveDownwards(this.targetYOffset);
 			}
 		}
 		return handled;
