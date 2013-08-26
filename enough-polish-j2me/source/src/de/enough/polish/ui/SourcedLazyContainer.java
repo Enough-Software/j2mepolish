@@ -225,18 +225,17 @@ public class SourcedLazyContainer extends SourcedContainer {
 	}
 	
 	protected boolean handleNavigate(int keyCode, int gameAction) {
-		boolean handled = super.handleNavigate(keyCode, gameAction);
-		if (!handled)
+		boolean handled = false;
+		if (gameAction == Canvas.UP && (this.targetYOffset == 0))
 		{
-			if (gameAction == Canvas.UP && this.targetYOffset == 0)
-			{
-				handled = moveUpwards(0);
-			}
-			else if (gameAction == Canvas.DOWN && this.targetYOffset <= getItemAreaHeight() - this.scrollHeight)
-			{
-				handled = moveDownwards(this.targetYOffset);
-			}
+			moveUpwards(0);
 		}
+		else if (gameAction == Canvas.DOWN && (this.targetYOffset <= this.scrollHeight + 10 - getItemAreaHeight()))
+		{
+			moveDownwards(this.targetYOffset);
+		} 
+		handled = super.handleNavigate(keyCode, gameAction);
+		this.isInitialized = true;
 		return handled;
 	}
 
