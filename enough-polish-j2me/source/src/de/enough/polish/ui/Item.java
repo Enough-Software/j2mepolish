@@ -50,6 +50,7 @@ import de.enough.polish.event.UiEventListener;
 import de.enough.polish.util.ArrayList;
 import de.enough.polish.util.Arrays;
 import de.enough.polish.util.DeviceControl;
+import de.enough.polish.util.DeviceInfo;
 import de.enough.polish.util.DrawUtil;
 import de.enough.polish.util.HashMap;
 import de.enough.polish.util.RgbImage;
@@ -809,7 +810,11 @@ public abstract class Item implements UiElement, Animatable
 	//#endif
 	protected Style focusedStyle;
 	protected boolean isPressed;
-	//#if polish.css.pressed-style
+	//#if (polish.isDynamic && !polish.Item.UseHoverStylesForTouchSystems) || (!polish.isDynamic && polish.hasPointerEvents && !polish.Item.UseHoverStylesForTouchSystems)
+		//#define tmp.dontUseHoverForTouchSystems
+	//#endif
+	//#if polish.css.pressed-style || tmp.dontUseHoverForTouchSystems
+		//#define tmp.pressedStyle
 		private Style normalStyle;
 		private Style pressedStyle;
 	//#endif
@@ -1302,6 +1307,12 @@ public abstract class Item implements UiElement, Animatable
 			if (pressed != null) {
 				this.pressedStyle = pressed;
 			}
+			//#if tmp.dontUseHoverForTouchSystems
+				if (this.pressedStyle == null && DeviceInfo.hasPointerEvents())
+				{
+					this.pressedStyle = this.focusedStyle;
+				}
+			//#endif
 		//#endif
 
 		//#if polish.css.complete-background
@@ -4454,7 +4465,7 @@ public abstract class Item implements UiElement, Animatable
 		System.out.println("notifyItemPressedStart for " + this);
 		this.isPressed = true;
 		boolean handled = false;
-		//#if polish.css.pressed-style
+		//#if tmp.pressedStyle
 			//System.out.println("notifyItemPressedStart for " + this + ", pressedStyle=" + (this.pressedStyle != null ? this.pressedStyle.name : "<null>") );
 			if (this.pressedStyle != null && this.style != this.pressedStyle) {
 				this.normalStyle = this.style;
@@ -4494,7 +4505,7 @@ public abstract class Item implements UiElement, Animatable
 		//#debug
 		System.out.println("notifyItemPressedEnd for " + this + ", normalStyle=" + (this.normalStyle == null ? "<none>" : this.normalStyle.name ) + ", current=" + (this.style == null ? "<none>" : this.style.name) );
 		this.isPressed = false;
-		//#if polish.css.pressed-style
+		//#if tmp.pressedStyle
 			Style previousStyle = this.normalStyle;
 			if (previousStyle != null && this.style == this.pressedStyle) {
 				//#ifdef polish.css.view-type
@@ -5115,6 +5126,13 @@ public abstract class Item implements UiElement, Animatable
 			//#endif
 		}
 		Style focStyle;
+		//#if tmp.dontUseHoverForTouchSystems
+		if (DeviceInfo.hasPointerEvents())
+		{
+			focStyle = this.style;
+		}
+		else 
+		//#endif
 		if (this.focusedStyle != null) {
 			focStyle = this.focusedStyle;
 		} else if (this.parent != null) {
@@ -5177,7 +5195,7 @@ public abstract class Item implements UiElement, Animatable
 			this.isJustFocused = true;
 			setStyle( newStyle );
 			
-			//#if polish.css.pressed-style
+			//#if tmp.pressedStyle
 				if (this.isPressed) {
 					this.normalStyle = newStyle;
 				}
@@ -6391,7 +6409,7 @@ public abstract class Item implements UiElement, Animatable
 				System.out.println("onScreenSizeChanged(): setting new style " + newStyle.name + " for " + this);
 				oldStyle = this.style; 
 				setStyle( newStyle );
-				//#if polish.css.pressed-style
+				//#if tmp.pressedStyle
 					if (this.isPressed) {
 						this.normalStyle = newStyle;
 					}

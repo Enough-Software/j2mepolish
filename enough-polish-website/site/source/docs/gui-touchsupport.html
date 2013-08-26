@@ -3,7 +3,7 @@
 <%define inDocumentationSection.css %>
 <%set title = J2ME Polish: Documentation: Touch Support %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
 	
 	<h1 id="top">Touch Support</h1>
 	
@@ -203,12 +203,19 @@ public class GlobalEventHandler implements EventListener {
 	With this preprocessing variable set to true, the focus remains on the last selected item when a scrollable area is dragged or scrolled.
 	</p>
 	
-	<h2 id="virtualkeyboard">Virtual keyboard</h2>
+	<h2 id="focused">:hover and :pressed on devices</h2>
 	<p>
-	When using TextFields in your Screens you can also use an <a href="gui-item-textfield.html#textfield-virtualkeyboard">virtual keyboard</a> to enter text. 
-	This allows you to edit text inline instead of opening up a native editor which might require more clicks or which might confuse the user. Please
-	have a look at the <a href="gui-item-textfield.html#textfield-virtualkeyboard">virtual keyboard documentation</a>.
+	If you are targeting touch enabled devices 
+	(or a dynamic device such as <i>Generic/AnyPhone</i> and run the app on a touch enabled device), then J2ME Polish will use the <code>:hover</code> style 
+	when no <code>:pressed</code> style is defined.<br />
+	If you don't want this behavior and only use <code>:pressed</code> when it is actually used and
+	want to apply <code>:hover</code> styles on touch enabled devices as well, then you set the 
+	preprocessing variable <code>polish.Item.UseHoverStylesForTouchSystems</code> to <code>true</code>:
 	</p>
+	<pre class="brush: xml">
+	&lt;variable name=&quot;polish.Item.UseHoverStylesForTouchSystems&quot; value=&quot;true&quot; /&gt;
+	</pre>
+	
 	
 	<h2 id="sample">Sample Application</h2>
 	<p>

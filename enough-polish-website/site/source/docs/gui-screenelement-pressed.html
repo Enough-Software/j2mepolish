@@ -2,7 +2,7 @@
 <%define inDocumentationSection.gui %>
 <%set title = J2ME Polish: Designing the Pressed Element %>
 <%set basedir = ../ %>
-<%include start_flash.txt %>
+<%include start_syntax.txt %>
 
 	<h1 id="top">Designing the Pressed Element</h1>
 	<ul class="relatedtechnologies">
@@ -17,7 +17,7 @@
 	In J2ME Polish you can give your user a visual feedback by defining a 
 	<code>[style-name]:pressed</code> style:
 	</p>
-<pre>
+<pre class="brush: css">
 menuItem {
 	padding: 2;
 	font-color: black;
@@ -28,10 +28,21 @@ menuItem:hover {
 	font-color: white;
 }
 
-<b>menuItem:pressed {
+menuItem:pressed {
 	background-color: #9f9;
 	font-color: #222;
-}</b>
+}
+</pre>
+<p>
+If you are targeting touch enabled devices 
+(or a dynamic device such as <i>Generic/AnyPhone</i> and run the app on a touch enabled device), then J2ME Polish will use the <code>:hover</code> style 
+when no <code>:pressed</code> style is defined.<br />
+If you don't want this behavior and only use <code>:pressed</code> when it is actually used and
+want to apply <code>:hover</code> styles on touch enabled devices as well, then you set the 
+preprocessing variable <code>polish.Item.UseHoverStylesForTouchSystems</code> to <code>true</code>:
+</p>
+<pre class="brush: xml">
+&lt;variable name=&quot;polish.Item.UseHoverStylesForTouchSystems&quot; value=&quot;true&quot; /&gt;
 </pre>
 	<p>You are not limited in the design, typically you will use a different background or a different border
 	for the pressed state of an item, but depending on the item you can also exchange icon-images, font-styles, 
@@ -72,7 +83,7 @@ menuItem:hover {
         </embed>
 	</object>
 	</p>
-<pre>
+<pre class="brush: css">
 .mainCommand {
 	padding: 0;
 	padding-vertical: 0;
@@ -88,9 +99,9 @@ menuItem:hover {
 	text-effect: shadow;
 }
 
-<b>.mainCommand:pressed {
+.mainCommand:pressed {
 	view-type: particle;
-}</b>
+}
 </pre>
 
 <%include end.txt %>

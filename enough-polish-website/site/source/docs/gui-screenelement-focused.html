@@ -2,7 +2,7 @@
 <%define inDocumentationSection.gui %>
 <%set title = J2ME Polish: Designing the Focused Element %>
 <%set basedir = ../ %>
-<%include start.txt %>
+<%include start_syntax.txt %>
 
 	<h1 id="top">Designing the Focused Element</h1>
 	<ul class="relatedtechnologies">
@@ -28,7 +28,7 @@
 	In the above screenshot we just exchange the orange border against a black border for the currently focused mail box by using
 	the <code>mailbox:hover</code> CSS style:
 	</p>
-<pre>
+<pre class="brush: css">
 colors {
 	focusedFontColor: #111;
 	focusedBorderColor: #444;
@@ -54,7 +54,7 @@ colors {
 	layout: expand | left;
 }
 
-<b>.mailBox:hover</b> {
+.mailBox:hover {
 	background-border-color: focusedBorderColor;
 }
 </pre>
@@ -83,16 +83,17 @@ colors {
 	<p>The following example shows the above example in which we increase the border width in the focused state. We accordingly adjust
 	the margins, so that there is no wobbling when the user moves to the next item:
 	</p>
-<pre>
+<pre class="brush: css">
 .mailBox {
-	<b>margin: 1;</b>
-	padding: 2;
-	padding-left: 9;
-	padding-right: 9;
+	margin: 1px;
+	padding: 2px;
+	padding-left: 9px;
+	padding-right: 9px;
 	background {
 		type: round-rect;
 		color: mailBoxBgColor;
 		border-color: mailBoxBorderColor;
+		border-width: 1px;
 	}
 	font {
 		style: bold;
@@ -103,8 +104,8 @@ colors {
 }
 
 .mailBox:hover {
-	<b>margin: 0;
-	background-border-width: 2;</b>
+	margin: 0px;
+	background-border-width: 2px;
 	background-border-color: focusedBorderColor;
 }
 </pre>
@@ -122,6 +123,19 @@ colors {
 	or  <code>UiAccess.setFocusedItem( Screen screen, Item item )</code>.
 	<br />You can focus an item and showing the corresponding screen at the same time by calling <code>Display.setCurrentItem( Item item )</code>.
 	</p>
+	
+	<h2 id="touch">Default Behavior on Touch Handsets</h2>
+	<p>
+	If you are targeting touch enabled devices 
+	(or a dynamic device such as <i>Generic/AnyPhone</i> and run the app on a touch enabled device), then J2ME Polish will use the <code>:hover</code> style 
+	when no <code>:pressed</code> style is defined.<br />
+	If you don't want this behavior and only use <code>:pressed</code> when it is actually used and
+	want to apply <code>:hover</code> styles on touch enabled devices as well, then you set the 
+	preprocessing variable <code>polish.Item.UseHoverStylesForTouchSystems</code> to <code>true</code>:
+	</p>
+	<pre class="brush: xml">
+	&lt;variable name=&quot;polish.Item.UseHoverStylesForTouchSystems&quot; value=&quot;true&quot; /&gt;
+	</pre>
 	
 	<h2 id="JavaDoc">JavaDoc</h2>
 	<ul>
