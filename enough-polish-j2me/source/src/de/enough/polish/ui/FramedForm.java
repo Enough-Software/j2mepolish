@@ -1080,6 +1080,7 @@ implements CycleListener
 			cont.isFocused = false;
 			cont.autoFocusEnabled = false;
 		}
+		cont.setCycleListener(this);
 	}
 
 
