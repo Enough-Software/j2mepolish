@@ -379,7 +379,7 @@ public class StringItem extends Item
 	 */
 	public void setText( String text)
 	{
-		setText( text, null );
+		setText( text, true, null );
 	}
 	
 	/**
@@ -394,6 +394,38 @@ public class StringItem extends Item
 	 */
 	public void setText( String text, Style style)
 	{
+		setText(text, true, style);
+	}
+	
+	/**
+	 * Sets the text contents of the <code>StringItem</code>. 
+	 * If text
+	 * is <code>null</code>,
+	 * the <code>StringItem</code>
+	 * is set to be empty.
+	 * 
+	 * @param text the new content
+	 * @param requestInit true when an initialization is required
+	 * @see #getText()
+	 */
+	public void setText( String text, boolean requestInit)
+	{
+		setText( text, requestInit, null );
+	}
+	
+	/**
+	 * Sets the text contents of the <code>StringItem</code> along with a style. 
+	 * If text is <code>null</code>,
+	 * the <code>StringItem</code>
+	 * is set to be empty.
+	 * 
+	 * @param text the new content
+	 * @param requestInit true when an initialization is required
+	 * @param style the new style, is ignored when null
+	 * @see #getText()
+	 */
+	public void setText( String text, boolean requestInit, Style style)
+	{
 		//#debug
 		System.out.println("StringItem: setText( \"" + text + "\" )");
 		if ( style != null ) {
@@ -405,7 +437,10 @@ public class StringItem extends Item
 				this.textLines.clear();
 			}
 			this.isTextInitializationRequired = true;
-			requestInit();
+			if (requestInit)
+			{
+				requestInit();
+			}
 		}
 		notifyValueChanged(text);
 	}

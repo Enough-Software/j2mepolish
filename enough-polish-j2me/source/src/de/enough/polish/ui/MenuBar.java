@@ -589,14 +589,17 @@ public class MenuBar extends Item {
 				Command command = (Command) this.commandsList.remove( 0 );
 				this.commandsContainer.focusChild(-1);
 				this.commandsContainer.remove( 0 );
+				CommandItem updateItem;
 				//System.out.println("MenuBar: moving command " + command.getLabel() + ", new currently focused index=" + this.commandsContainer.getFocusedIndex() );
 				//#if tmp.RightOptions
 					this.singleRightCommand = command;
-					this.singleRightCommandItem.setText( command.getLabel() );
+					updateItem = this.singleRightCommandItem;
 				//#else
 					this.singleLeftCommand = command;
-					this.singleLeftCommandItem.setText( command.getLabel() );
+					updateItem = this.singleLeftCommandItem;
 				//#endif
+				updateItem.setText( command.getLabel(), false );
+				updateItem.init(updateItem.availableWidth, updateItem.availableWidth, updateItem.availableHeight);
 			}
 		}
 		//#endif
