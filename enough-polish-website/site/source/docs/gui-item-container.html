@@ -1,0 +1,97 @@
+<%define inDocumentationSection %>
+<%define inDocumentationSection.gui %>
+<%set title = J2ME Polish: Item %>
+<%set basedir = ../ %>
+<%include start_syntax.txt %>
+
+	<h1 id="top">Container</h1>
+	<ul class="relatedtechnologies">
+		<li class="relatedtechnologiesheader">Related Topics:</li>
+		<li><a href="gui-item-tableitem.html">TableItem</a></li>
+		<li><a href="gui-item-treeitem.html">TreeItem</a></li>
+	</ul>
+	<%index %>
+	
+	<p>
+		<img src="<%= basedir%>images/gui-item-container.png" width="175" height="220" alt="Container can hold many items" />
+	
+	Container contain different items. They are the basis for all J2ME Polish screens like
+	<a href="gui-screen-form.html">Form</a>, <a href="gui-screen-framedform.html">FramedForm</a> 
+	or <a href="gui-screen-list.html">List</a>.
+	<br/>
+	You can create arbitrary complex items by nesting containers into each other.
+	<br />
+	You can also use columns and rows for containers or use any of the <a href="gui-visualguide-viewtypes.html#gui-viewtypes-container">view-type</a>s
+	available for Containers.
+	</p>
+	
+	<h2 id="Container-ItemSource">ItemSource</h2>
+	<p>
+	The following containers require an item source. An <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ItemSource.html">de.enough.polish.ui.ItemSource</a>
+	is responsible for translating underlying data into UI items. When an ItemSource is used, an 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/ItemConsumer.html">de.enough.polish.ui.ItemConsumer</a> will register
+	with the source, so that the ItemSource can inform the ItemConsumer when the underlying data has been updated.
+	</p>
+	
+	<h2 id="Container-UsingADifferentContainer">Using a Different Container</h2>
+	<p>
+	If you want to use a different container you can either use one of the provided convenience forms
+	such as <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UniformForm.html">UniformForm</a>
+	or <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SourcedForm.html">SourcedForm</a>
+	or you register the container as a root container using <code>Screen.setRootContainer(Container)</code>:
+	</p>
+<pre class="brush: java">
+public class MyFramedForm extends FramedForm
+{
+	public MyFramedForm()
+	{
+		super("title");
+		ItemSource mySource = new MyItemSource();
+		SourcedLazyContainer container = new SourcedLazyContainer(mySource, 5, 15);
+		setRootContainer(container);
+	}
+}
+</pre>
+
+	<h2 id="Container-SourcedContainer">SourcedContainer</h2>
+	<p>
+	A <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SourcedContainer.html">de.enough.polish.ui.SourcedContainer</a>
+	is a normal container that uses an ItemSource.
+	</p>
+	
+	<h2 id="Container-SourcedLazyContainer">SourcedLazyContainer</h2>
+	<p>
+	The <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/SourcedLazyContainer.html">de.enough.polish.ui.SourcedLazyContainer</a>
+	only loads items when they are required. In contrast to the UniformContainer those Items can vary in height,
+	a typical example include messages or news entries.
+	<br/> 
+	In combination with data storage like <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/io/ChunkedStorageCollection.html">de.enough.polish.io.ChunkedStorageCollection</a>,
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/io/ChunkedStorageRmsSystem.html">de.enough.polish.io.ChunkedStorageRmsSystem</a> 
+	and the like you can create endless scrolling screens.
+	</p>
+	
+	<h2 id="Container-UniformContainer">UniformContainer</h2>
+	<p>
+	The <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UniformContainer.html">de.enough.polish.ui.UniformContainer</a>
+	along with the convenience <a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UniformForm.html">de.enough.polish.ui.UniformForm</a>
+	allow you to show vast numbers of entries without using too much memory.
+	<br/>
+	For best memory efficiency the UniformContainer reuses items - for doing that you need to supply a 
+	<a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/UniformItemSource.html">de.enough.polish.ui.UniformItemSource</a>
+	instead of an ItemSource. The UniformItemSource additionally defines a <code>void populateItem(int itemIndex, Item item )</code>
+	method for reusing items.
+	<br/>
+	A UniformContainer only supports items that have the same height.
+	</p>
+	
+	<h2 id="Item-SampleApp">Sample App</h2>
+	<p>
+	Please compare the 'messaging' sample application for using ItemSource, UniformContainer and SourcedLazyContainer.
+	</p>
+	
+	<h2 id="Item-JavaDoc">JavaDoc</h2>
+	<ul>
+		<li><a href="<%= javadocdir %>/javadoc/j2me/de/enough/polish/ui/Container.html">de.enough.polish.ui.Container</a></li>
+	</ul>
+
+<%include end.txt %>

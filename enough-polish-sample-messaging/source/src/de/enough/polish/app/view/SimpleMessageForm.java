@@ -47,7 +47,6 @@ import de.enough.polish.util.Locale;
 public class SimpleMessageForm extends FramedForm {
 
 	TextField inputField;
-	private ArrayList messageList = new ArrayList();
 	private MessageItemSource itemSource;
 
 	/**
@@ -118,6 +117,7 @@ public class SimpleMessageForm extends FramedForm {
 				//#style simpleMessageFromYou
 				item = new StringItem(message.getSender() + ":", text);
 			};
+			//item.setDefaultCommand( new Command("Resend", Command.ITEM, 2));
 			return item;
 		}
 

@@ -178,9 +178,20 @@ info {
 	layout: vertical-center;
 }
 
+.messageFromMe:hover
+{
+	background-color: #fcc;
+}
+
 .messageFromUser extends messageFromMe {
 	background-color: red;
 }
+
+.messageFromUser:hover
+{
+	background-color: #fcc;
+}
+
 
 .simpleMessage {
 	text-effect: smiley-extended;
@@ -198,10 +209,20 @@ info {
 	background-color: silver;
 }
 
+.simpleMessageFromMe:hover
+{
+	background-color: #cfc;
+}
+
 .simpleMessageFromYou extends simpleMessage
 {
 	layout: right;
 	background-color: #faa;
+}
+
+.simpleMessageFromYou:hover
+{
+	background-color: #cfc;
 }
 
 /*********************   CONTACT FORM   ******************************************************************************************************/

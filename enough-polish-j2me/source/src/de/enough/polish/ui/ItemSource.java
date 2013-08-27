@@ -6,6 +6,9 @@ package de.enough.polish.ui;
  * 
  * @author Robert Virkus, j2mepolish@enough.de
  * @see UniformItemSource
+ * @see UniformContainer
+ * @see SourcedContainer
+ * @see SourcedLazyContainer
  */
 public interface ItemSource
 {

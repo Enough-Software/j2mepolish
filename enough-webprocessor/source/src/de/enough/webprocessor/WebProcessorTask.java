@@ -484,6 +484,11 @@ extends Task
 				int idStartPos = currentLine.indexOf(" id=\"");
 				if (idStartPos != -1) {
 					int idEndPos = currentLine.indexOf( '"', idStartPos + 6 );
+					if (idEndPos == -1)
+					{
+						String message = "Unable to process line " + currentLine  + " in " + path + ": id is not closed";
+						throw new BuildException(message);
+					}
 					String id = currentLine.substring( idStartPos + 5, idEndPos );
 					int headingStartPos = currentLine.indexOf( '>', idEndPos );
 					int headingEndPos = currentLine.indexOf('<', headingStartPos );
