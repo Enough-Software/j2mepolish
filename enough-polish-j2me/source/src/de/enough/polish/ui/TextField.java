@@ -79,7 +79,6 @@ import de.enough.polish.util.WrappedText;
 //#if polish.NokiaUiApiVersion >= 1.1b || polish.TextField.Nokia.forceNative
 	//#define tmp.useNokiaInput
 	//#define polish.TextField.suppressAddSymbolCommand=true
-	//#define tmp.suppressCommands=true
 	import com.nokia.mid.ui.TextEditor;
 	import com.nokia.mid.ui.TextEditorListener;
 //#endif
@@ -4697,30 +4696,7 @@ public class TextField extends StringItem
 			//#endif
 			//#ifndef tmp.suppressCommands
 				if ( cmd == DELETE_CMD ) {
-					if (this.text != null && this.text.length() > 0) {
-						//#ifdef tmp.directInput
-							//#ifdef tmp.allowDirectInput
-								if (this.enableDirectInput) {
-							//#endif
-									//#ifdef polish.key.ClearKey:defined
-										//#= handleKeyClear(${polish.key.ClearKey},0);
-									//#else
-										handleKeyClear(-8,0);
-									//#endif
-							//#ifdef tmp.allowDirectInput
-								} else {
-									String myText = getString();
-									setString( myText.substring(0, myText.length() - 1));
-									notifyStateChanged();
-								}
-							//#endif
-						//#else
-							String myText = getString();
-							setString( myText.substring(0, myText.length() - 1));
-							notifyStateChanged();
-						//#endif
-						return;
-					}
+					handleDeleteCommand();
 				} else if ( cmd == CLEAR_CMD ) {
 					setString( null );
 					notifyStateChanged();
@@ -5456,6 +5432,32 @@ public class TextField extends StringItem
 
 	public boolean isConstraintsPassword() {
 		return ((this.constraints & PASSWORD) == PASSWORD);
+	}
+	
+	public void handleDeleteCommand() {
+		if (this.text != null && this.text.length() > 0) {
+			//#ifdef tmp.directInput
+				//#ifdef tmp.allowDirectInput
+					if (this.enableDirectInput) {
+				//#endif
+						//#ifdef polish.key.ClearKey:defined
+							//#= handleKeyClear(${polish.key.ClearKey},0);
+						//#else
+							handleKeyClear(-8,0);
+						//#endif
+				//#ifdef tmp.allowDirectInput
+					} else {
+						String myText = getString();
+						setString( myText.substring(0, myText.length() - 1));
+						notifyStateChanged();
+					}
+				//#endif
+			//#else
+				String myText = getString();
+				setString( myText.substring(0, myText.length() - 1));
+				notifyStateChanged();
+			//#endif
+		}
 	}
 
 	
