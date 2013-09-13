@@ -120,6 +120,22 @@ public class HorizontalContainerView extends ContainerView {
 				int left = availItemWidth - ((items.length - 1)*this.paddingHorizontal);
 				availItemWidth = left / items.length;
 				availItemWidthWithPaddingShift8 = (availWidth << 8) / items.length;
+				// check if we have too many items for the available width:
+				if (items.length > 0)
+				{
+					Item child = items[0];
+					int childWidth = child.getItemWidth(availItemWidth, availItemWidth, availHeight);
+					if (child.getContentWidth() > childWidth)
+					{
+						childWidth = child.getContentWidth() + child.getPaddingLeft() + child.getPaddingRight();
+					}
+					//System.out.println("childWidth=" + childWidth + ", available=" + availItemWidth);
+					if (childWidth > availItemWidth)
+					{
+						availItemWidth = childWidth;
+						availItemWidthWithPaddingShift8 = (childWidth + this.paddingHorizontal) << 8;
+					}
+				}
 			}
 		//#endif
 		for (int i = 0; i < items.length; i++) {
