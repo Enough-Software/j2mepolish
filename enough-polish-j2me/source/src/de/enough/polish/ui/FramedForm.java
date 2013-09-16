@@ -1253,6 +1253,14 @@ implements CycleListener
 			handled = activeFrame.handlePointerDragged(x - activeFrame.relativeX, y - activeFrame.relativeY, repaintRegion);
 		} 
 		if (!handled && (activeFrame != this.container)) {
+			if (this.bottomFrame != null && y > this.bottomFrame.relativeY)
+			{
+				return false;
+			}
+			else if (this.topFrame != null && y < this.bottomFrame.itemHeight)
+			{
+				return false;
+			}
 			handled = this.container.handlePointerDragged(x - this.container.relativeX, y - this.container.relativeY, repaintRegion);
 		}
 		return handled;
@@ -1269,30 +1277,31 @@ implements CycleListener
 		if ( activeFrame != null 
 				&& activeFrame.handlePointerReleased(x - activeFrame.relativeX, y - activeFrame.relativeY)) 
 		{ 
-			newFrame = activeFrame;
-		} else if ( this.container != activeFrame 
-				&& this.container.handlePointerReleased(x - this.container.relativeX, y - this.container.relativeY)) 
-		{
-			newFrame = this.container;
-		} else if ( this.topFrame != null && this.topFrame != activeFrame 
-				&& this.topFrame.handlePointerReleased(x - this.topFrame.relativeX, y - this.topFrame.relativeY) ) 
-		{
-			newFrame = this.topFrame;
-		} else if ( this.bottomFrame != null && this.bottomFrame != activeFrame
-				&& this.bottomFrame.handlePointerReleased(x - this.bottomFrame.relativeX, y - this.bottomFrame.relativeY) ) 
-		{
-			newFrame = this.bottomFrame;
-		} else if ( this.leftFrame != null && this.leftFrame != activeFrame 
-				&& this.leftFrame.handlePointerReleased(x - this.leftFrame.relativeX, y - this.leftFrame.relativeY) ) 
-		{
-			newFrame = this.leftFrame;
-		} else if ( this.rightFrame != null && this.rightFrame != activeFrame 
-				&& this.rightFrame.handlePointerReleased(x - this.rightFrame.relativeX, y - this.rightFrame.relativeY) ) 
-		{
-			newFrame = this.rightFrame;
-		}
-		if (!this.keepContentFocused && newFrame != null && newFrame != activeFrame ) {
-			setActiveFrame(newFrame);
+			newFrame = activeFrame; 
+//		} else if ( this.container != activeFrame 
+//				&& this.container.handlePointerReleased(x - this.container.relativeX, y - this.container.relativeY)) 
+//		{
+//			newFrame = this.container;
+//			System.out.println("pointer release handled by container");
+//		} else if ( this.topFrame != null && this.topFrame != activeFrame 
+//				&& this.topFrame.handlePointerReleased(x - this.topFrame.relativeX, y - this.topFrame.relativeY) ) 
+//		{
+//			newFrame = this.topFrame;
+//		} else if ( this.bottomFrame != null && this.bottomFrame != activeFrame
+//				&& this.bottomFrame.handlePointerReleased(x - this.bottomFrame.relativeX, y - this.bottomFrame.relativeY) ) 
+//		{
+//			newFrame = this.bottomFrame;
+//		} else if ( this.leftFrame != null && this.leftFrame != activeFrame 
+//				&& this.leftFrame.handlePointerReleased(x - this.leftFrame.relativeX, y - this.leftFrame.relativeY) ) 
+//		{
+//			newFrame = this.leftFrame;
+//		} else if ( this.rightFrame != null && this.rightFrame != activeFrame 
+//				&& this.rightFrame.handlePointerReleased(x - this.rightFrame.relativeX, y - this.rightFrame.relativeY) ) 
+//		{
+//			newFrame = this.rightFrame;
+//		}
+//		if (!this.keepContentFocused && newFrame != null && newFrame != activeFrame ) {
+//			setActiveFrame(newFrame);
 		}
 		return (newFrame != null);
 	}
