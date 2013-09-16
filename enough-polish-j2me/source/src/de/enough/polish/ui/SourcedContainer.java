@@ -103,6 +103,7 @@ implements ItemConsumer
 		}
 		synchronized (getSynchronizationLock())
 		{
+			this.scrollHeight = -1;
 			//#debug
 			System.out.println("before setItemSource: " + this.itemsList.size());
 			try 
@@ -310,8 +311,9 @@ implements ItemConsumer
 	 * @see de.enough.polish.ui.Container#setScrollHeight(int)
 	 */
 	public void setScrollHeight( int height ) {
+		int prevHeight = this.scrollHeight;
 		super.setScrollHeight(height);
-		if (height != -1 && this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
+		if (height != -1 && prevHeight != height && this.distributionPreference == ItemSource.DISTRIBUTION_PREFERENCE_BOTTOM)
 		{
 			scrollToBottom(false);
 		}
