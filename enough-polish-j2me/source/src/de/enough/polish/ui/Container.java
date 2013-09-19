@@ -3674,6 +3674,12 @@ public class Container extends Item {
 				handledBySuperImplementation = true;
 			}
 		//#endif
+		//#if polish.css.press-all
+			if (!handledBySuperImplementation && this.isPressAllChildren)
+			{
+				handledBySuperImplementation = notifyItemPressedStart();
+			}
+		//#endif
 		return handledBySuperImplementation;
 	}
 	//#endif
