@@ -1257,7 +1257,7 @@ implements CycleListener
 			{
 				return false;
 			}
-			else if (this.topFrame != null && y < this.bottomFrame.itemHeight)
+			else if (this.topFrame != null && y < this.topFrame.itemHeight)
 			{
 				return false;
 			}
