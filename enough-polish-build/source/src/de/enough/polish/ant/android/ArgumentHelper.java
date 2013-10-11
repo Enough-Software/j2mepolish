@@ -118,6 +118,7 @@ public class ArgumentHelper {
 		return getRes(env) + File.separator + "raw";
 	}
 	
+	private static String homePath;
 	/**
 	 * Returns the android home folder
 	 * @param env the environment
@@ -125,23 +126,55 @@ public class ArgumentHelper {
 	 */
 	public static String getHome(Environment env)
 	{
-		String home = env.getVariable("android.home");
-		if (home == null || "".equals(home)) {
-			throw new BuildException("Please specify the \"android.home\" property in your build.xml script, ${polish.home}/global.properties or in ${user.name}.properties.");
+		if (homePath == null) {
+			String home = env.getVariable("android.home");
+			if (home == null || "".equals(home)) {
+				throw new BuildException("Please specify the \"android.home\" property in your build.xml script, ${polish.home}/global.properties or in ${user.name}.properties.");
+			}
+			homePath = home;
 		}
-		return home;
+		return homePath;
 	}
 	
+	private static String platformTools;
 	/**
-	 * Returns the /tools folder of the android installation
+	 * Returns the /build-tools/x, /platform-tools or /tools folder of the android installation
 	 * @param env the environment
 	 * @return the /tools folder of the android installation
 	 */
 	public static String getPlatformTools(Environment env)
 	{
-		String newPath = getHome(env) + File.separator + "platform-tools";
-		String oldPath = getPlatformHome(env) + File.separator + "tools"; 
-		return resolveValidPath(newPath, oldPath);
+		if (platformTools == null) {
+			File base = new File(getHome(env) + File.separator + "build-tools");
+			if (base.exists()) {
+				String[] fileNames = base.list();
+				Arrays.sort(fileNames);
+				// we assume the latest is the greatest:
+				for (int i = fileNames.length; --i >= 0;) {
+					File dir = new File(base, fileNames[i]);
+					if (dir.isDirectory()) {
+						File aapt;
+						if (OsUtil.isRunningWindows()) {
+							aapt = new File(dir, "aapt.exe");
+						} else {
+							aapt = new File(dir, "aapt");
+						}
+						if (aapt.exists()){
+							// found the correct build directory!
+							platformTools = dir.getAbsolutePath();
+							break;
+						}
+					}
+				}
+				
+			}
+			if (platformTools == null) {
+				String newPath = getHome(env) + File.separator + "platform-tools";
+				String oldPath = getPlatformHome(env) + File.separator + "tools";
+				platformTools = resolveValidPath(newPath, oldPath);
+			}
+		}
+		return platformTools;
 	}
 	
 	/**
@@ -301,21 +334,15 @@ public class ArgumentHelper {
 	public static String aapt(Environment env)
 	{
 		String path;
-		if(OsUtil.isRunningWindows())
-		{
-			path = getHome(env) + "\\platform-tools\\aapt.exe";
-		}
-		else
-		{
-			path = getHome(env) + "/platform-tools/aapt";
-		}
 		String alternativePath;
 		if(OsUtil.isRunningWindows())
 		{
+			path = getHome(env) + "\\platform-tools\\aapt.exe";
 			alternativePath = getPlatformTools(env) + "\\aapt.exe";
 		}
 		else
 		{
+			path = getHome(env) + "/platform-tools/aapt";
 			alternativePath = getPlatformTools(env) + "/aapt";
 		}
 		return resolveValidPath(path, alternativePath);
