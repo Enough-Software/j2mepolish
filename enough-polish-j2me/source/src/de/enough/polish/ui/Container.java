@@ -159,7 +159,7 @@ public class Container extends Item {
 	//#endif
 	private long lastAnimationTime;
 	private boolean isScrolling;
-	//#if polish.css.bounce && !(polish.Container.ScrollBounce:defined && polish.Container.ScrollBounce == false)
+	//#if polish.css.bounce || !(polish.Container.ScrollBounce:defined && polish.Container.ScrollBounce == false)
 		//#define tmp.checkBouncing
 		private boolean allowBouncing = true;
 	//#endif
@@ -4369,6 +4369,9 @@ public class Container extends Item {
 		boolean result = true;
 		//#if tmp.checkBouncing
 			result = this.allowBouncing;
+		//#endif
+		//#if !(polish.css.bounce || !(polish.Container.ScrollBounce:defined && polish.Container.ScrollBounce == false))
+			result = false;
 		//#endif
 		return result;
 	}
