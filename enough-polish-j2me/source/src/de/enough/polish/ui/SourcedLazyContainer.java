@@ -123,7 +123,7 @@ public class SourcedLazyContainer extends SourcedContainer {
 			}
 			synchronized (getSynchronizationLock())
 			{
-				if (offset >= triggerOffset && offset > this.previousScrollYOffset && size() > 0)
+				if (offset >= triggerOffset && offset >= this.previousScrollYOffset && size() > 0)
 				{
 					// the user scrolls upwards to/over the first item, so now is a good time
 					// to ask for more items:
