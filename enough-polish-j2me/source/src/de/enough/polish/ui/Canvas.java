@@ -1320,8 +1320,8 @@ implements Displayable
 		
 		boolean add = false;
 		
-		javax.microedition.lcdui.Command commandToAdd = cmd;
 		//#if tmp.useNokiaIconCommand
+			javax.microedition.lcdui.Command commandToAdd = cmd;
 			Style style = cmd.getStyle();
 			if (style != null) {
 				String url = style.getProperty("icon-image");
@@ -1340,7 +1340,11 @@ implements Displayable
 		add = !(this._commands.contains(cmd));
 		this._commands.add( cmd );
 		if (add && this._isShown) {
-			Display.getInstance().addCommand( commandToAdd );
+			//#if tmp.useNokiaIconCommand
+				Display.getInstance().addCommand( commandToAdd );
+			//#else
+				Display.getInstance().addCommand( cmd );
+			//#endif
 		} 
 	}
 	

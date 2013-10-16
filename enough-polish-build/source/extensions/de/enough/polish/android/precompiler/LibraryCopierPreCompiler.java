@@ -66,7 +66,16 @@ public class LibraryCopierPreCompiler extends PreCompiler {
 		System.out.println("libraries: Copying binary library classes to " + ArgumentHelper.getClasses(env) + "...");
 		File targetDir = new File( ArgumentHelper.getClasses(env) );
 		try {
-			FileUtil.copyDirectoryContents(sourceDir, targetDir, true);
+			boolean update = true;
+			FileUtil.copyDirectoryContents(sourceDir, targetDir, update);
+			// now check for native Android libraries:
+			File libs = new File(targetDir, "libs");
+			if (libs.exists()) {
+				File target = new File(ArgumentHelper.getActivity(env));
+				System.out.println("libraries: Copying native libraries to " + target.getAbsolutePath()  + File.separatorChar + "libs...");
+				FileUtil.move(libs, target);
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

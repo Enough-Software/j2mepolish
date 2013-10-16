@@ -920,5 +920,16 @@ public final class FileUtil {
             }
         }
     }
+
+	public static void move(File source, File target) 
+	throws FileNotFoundException, IOException 
+	{
+		if (source.isDirectory()){
+			copyDirectoryContents(source, new File(target, source.getName()), true);
+		} else {
+			copy(source, target);
+		}
+		delete(source);
+	}
 	
 }
