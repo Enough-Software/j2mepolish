@@ -301,7 +301,7 @@ public final class TextUtil {
 		}
 		// the given string does not fit on the first line:
 		if (!hasLineBreaks) {
-			wrap( value, font, completeWidth, firstLineWidth, lineWidth, result, maxLines, maxLinesAppendixPosition);
+			wrap( value, font, completeWidth, firstLineWidth, lineWidth, result, maxLines+1, maxLinesAppendixPosition);
 		} else {
 			// now the string will be split at the line-breaks and
 			// then each line is processed:
@@ -351,7 +351,13 @@ public final class TextUtil {
 			if (maxLinesAppendix == null) {
 				maxLinesAppendix = MAXLINES_APPENDIX;
 			}
-			addAppendix(font, firstLineWidth, maxLinesAppendix, maxLinesAppendixPosition, maxLines - 1, result  );
+			int appendixWidth = font.stringWidth(maxLinesAppendix);
+			String lastLine = result.getLine(maxLines-1);
+			if ( font.stringWidth(lastLine) + appendixWidth <= lineWidth ) {
+				result.setLine(maxLines-1, lastLine + maxLinesAppendix); 
+			} else {
+				addAppendix(font, firstLineWidth, maxLinesAppendix, maxLinesAppendixPosition, maxLines - 2, result  );
+			}
 			while (result.size() > maxLines) {
 				result.removeLine( result.size() -1 );
 			}
