@@ -1014,6 +1014,7 @@ public class TextField extends StringItem
 
 	//#if tmp.useNokiaInput
 		private TextEditor nokiaTextEditor;
+		private boolean nokiaTextfieldForceHide = false;
 		//#if polish.NokiaUiApiVersion >= 1.1b
 			private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
 		//#endif
@@ -2539,7 +2540,7 @@ public class TextField extends StringItem
 				if ( ! isFocused() || this.isUneditable ) {					
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
-					if ( this.nokiaTextEditor != null ) {
+					if ( this.nokiaTextEditor != null && this.nokiaTextfieldForceHide == false) {
 						try {
 							int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
 							this.nokiaTextEditor.setVisible(true);
@@ -4987,6 +4988,7 @@ public class TextField extends StringItem
 			{
 				this.nokiaTextEditor.setVisible(true);
 				this.nokiaTextEditor.setFocus(true);
+				this.nokiaTextfieldForceHide = false;
 			}
 		//#endif
 		
@@ -5022,6 +5024,7 @@ public class TextField extends StringItem
 				{
 					this.nokiaTextEditor.setVisible(false);
 					this.nokiaTextEditor.setFocus(false);
+					this.nokiaTextfieldForceHide = true;
 				}
 			//#else
 				if (this.caretChar != this.editingCaretChar) {
