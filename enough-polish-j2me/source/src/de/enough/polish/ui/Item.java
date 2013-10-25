@@ -2569,12 +2569,18 @@ public abstract class Item implements UiElement, Animatable
 		//#debug
 		System.out.println("set default command " + cmd.getLabel() + " for " + this);
 		//#if !polish.Item.suppressDefaultCommand
+			//#if polish.Item.supressDefaultCommandOnTouch && polish.isDynamic
+				if (!DeviceInfo.hasPointerEvents())
+			//#endif
 			if (this.defaultCommand != null && cmd != this.defaultCommand) {
 				addCommand(this.defaultCommand);
 			}
 		//#endif		
 		this.defaultCommand = cmd;
 		//#if !polish.Item.suppressDefaultCommand
+			//#if polish.Item.supressDefaultCommandOnTouch && polish.isDynamic
+				if (!DeviceInfo.hasPointerEvents())
+			//#endif
 			if (cmd != null) {
 				addCommand(cmd);
 			}
