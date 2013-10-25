@@ -1231,10 +1231,12 @@ public class MenuBar extends Item {
 			//#if polish.blackberry
 				this.screen.notifyFocusSet(this.screen.getCurrentItem());
 			//#endif
+			this.screen.showNotify();
 		} else if (open && !this.isOpened) {
 			if (this.commandsContainer.size() == 0) {
 				return;
 			}
+			this.screen.hideNotify();
 			//#if tmp.handleEvents
 				EventManager.fireEvent( EventManager.EVENT_MENU_OPEN, this.screen, null );
 			//#endif
