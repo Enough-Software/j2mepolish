@@ -356,7 +356,7 @@ public final class TextUtil {
 			if ( font.stringWidth(lastLine) + appendixWidth <= lineWidth ) {
 				result.setLine(maxLines-1, lastLine + maxLinesAppendix); 
 			} else {
-				addAppendix(font, firstLineWidth, maxLinesAppendix, maxLinesAppendixPosition, maxLines - 2, result  );
+				addAppendix(font, firstLineWidth, maxLinesAppendix, maxLinesAppendixPosition, maxLines-1, result  );
 			}
 			while (result.size() > maxLines) {
 				result.removeLine( result.size() -1 );
