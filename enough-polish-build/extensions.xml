@@ -937,6 +937,7 @@
 			polish.usePolishGui 
 			and polish.android
 		</autostart>
+		<classpath>${polish.home}/bin/extensions:${android.home}/tools/lib/sdklib.jar</classpath>
 	</extension>
 	
 	<!-- Finalizer -->

@@ -32,6 +32,7 @@ import java.util.Locale;
 import de.enough.polish.BuildException;
 import de.enough.polish.Device;
 import de.enough.polish.Environment;
+import de.enough.polish.android.packager.AntApkPackager;
 import de.enough.polish.android.packager.ApkPackager;
 import de.enough.polish.android.packager.DexConverter;
 import de.enough.polish.android.packager.ResourcesPackager;
@@ -56,7 +57,7 @@ public class AndroidPackager extends Packager{
 		
 		new ResourcesPackager().createPackage(sourceDir, targetFile, device, locale, env);
 		
-		new ApkPackager().createPackage(sourceDir, targetFile, device, locale, env);
+		new AntApkPackager().createPackage(sourceDir, targetFile, device, locale, env);
 	}
 
 	public String toString() {
