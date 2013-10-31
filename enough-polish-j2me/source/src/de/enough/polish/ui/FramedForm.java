@@ -919,10 +919,17 @@ implements CycleListener
 	{
 		Container newFrame = null;
 		if (this.currentlyActiveContainer == this.container ) {
-			newFrame = getFrameByGameAction(gameAction, new Container[]{ this.bottomFrame, this.leftFrame, this.rightFrame, this.topFrame }, 
-													new Container[]{ this.topFrame, this.leftFrame, this.rightFrame, this.bottomFrame }, 
-													new Container[]{ this.leftFrame, this.topFrame, this.bottomFrame, this.rightFrame },
-													new Container[]{ this.rightFrame, this.bottomFrame, this.topFrame, this.leftFrame });
+			//#if polish.FramedForm.allowCycling
+				newFrame = getFrameByGameAction(gameAction, new Container[]{ this.bottomFrame, this.leftFrame, this.rightFrame, this.topFrame }, 
+														new Container[]{ this.topFrame, this.leftFrame, this.rightFrame, this.bottomFrame }, 
+														new Container[]{ this.leftFrame, this.topFrame, this.bottomFrame, this.rightFrame },
+														new Container[]{ this.rightFrame, this.bottomFrame, this.topFrame, this.leftFrame });
+			//#else
+				newFrame = getFrameByGameAction(gameAction, new Container[]{ this.bottomFrame, this.leftFrame, this.rightFrame,}, 
+														new Container[]{ this.topFrame, this.leftFrame, this.rightFrame, }, 
+														new Container[]{ this.leftFrame, this.topFrame, this.rightFrame },
+														new Container[]{ this.rightFrame, this.bottomFrame, this.leftFrame });
+			//#endif
 		} 
 		//#if polish.FramedForm.allowCycling
 		else if(this.allowCycling)
