@@ -1015,6 +1015,8 @@ public class TextField extends StringItem
 	//#if tmp.useNokiaInput
 		private TextEditor nokiaTextEditor;
 		private boolean nokiaTextfieldForceHide = false;
+		private int nokiaManualCaretPosition = 0;
+		private boolean nokiaUseManualCaret = false;
 		//#if polish.NokiaUiApiVersion >= 1.1b
 			private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
 		//#endif
@@ -1992,7 +1994,11 @@ public class TextField extends StringItem
 		//#elif tmp.forceDirectInput
 			curPos = this.caretPosition;
 		//#elif tmp.useNokiaInput
-			curPos = this.nokiaTextEditor.getCaretPosition();
+			if ( this.nokiaUseManualCaret ) {
+				curPos = this.nokiaManualCaretPosition;
+			} else {
+				curPos = this.nokiaTextEditor.getCaretPosition();
+			}
 		//#else
 			//#ifdef tmp.useNativeTextBox
 				if (this.midpTextBox != null) {
@@ -2032,6 +2038,8 @@ public class TextField extends StringItem
 		//#elif tmp.useNokiaInput
 			synchronized ( this.nokiaTextEditor) {
 				this.nokiaTextEditor.setCaret(position);
+				this.nokiaManualCaretPosition = position;
+				this.nokiaUseManualCaret = true;
 			}
 		//#elif tmp.allowDirectInput || tmp.forceDirectInput
 			this.caretPosition = position;
@@ -2547,6 +2555,10 @@ public class TextField extends StringItem
 							this.nokiaTextEditor.setParent(Display.getInstance());
 							this.nokiaTextEditor.setPosition(x, y);
 							this.nokiaTextEditor.setSize(getAvailableContentWidth(), textFieldHeight);
+							if ( this.nokiaUseManualCaret ) {
+								this.nokiaTextEditor.setCaret(this.nokiaManualCaretPosition);
+								this.nokiaUseManualCaret = false;
+							}
 
 							// Register as a Nokia gesture listener to the canvas
 							// (used for e.g. to detect long presses on the TextEditor object, as there's no other way to achieve this)
