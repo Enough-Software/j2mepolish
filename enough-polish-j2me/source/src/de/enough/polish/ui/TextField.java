@@ -4996,7 +4996,7 @@ public class TextField extends StringItem
 	protected void showNotify() 
 	{	
 		//#if tmp.useNokiaInput
-			if ( this.nokiaTextEditor != null && this.isFocused && !this.nokiaTextEditor.hasFocus()) 
+			if ( this.nokiaTextEditor != null ) 
 			{
 				this.nokiaTextEditor.setVisible(true);
 				this.nokiaTextEditor.setFocus(true);
