@@ -102,7 +102,7 @@ public class ResourcesPackager extends Packager{
 		arguments.add(androidJar);
 		arguments.add("-F");
 		arguments.add(ArgumentHelper.getPackage(extension, env));
-		
+		System.out.println(ProcessUtil.toString(arguments));
 		return arguments;
 	}
 

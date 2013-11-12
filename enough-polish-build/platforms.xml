@@ -324,6 +324,7 @@
 		<capability name="javac.destdir" value="activity/bin/classes" />
 		<capability name="polish.java5" value="true" />
 		<capability name="build.Preverifier" value="none" />
+		<capability name="build.DescriptorCreator" value="none" />
 		<capability name="Emulator.Class" value="AndroidEmulator" />
 		<capability name="JavaPackage" value="mmapi,pdaapi,wmapi,location" />
 		<capability name="TextField.useDirectInput" value="true" />

@@ -510,6 +510,45 @@ public Form createForm() {
 <img src="<%= basedir%>images/gui-android-alert-ViewItem.png" width="480" height="705" alt="Combining native views with a J2ME Polish application" />
 </p>
 
+<h2 id="android-nativelibraries">Using Native Android Libraries in your App</h2>
+<p>
+You can use native libraries (*.so) files easily in J2ME Polish. 
+Integrate libraries as you would normally do using the &lt;libraries&gt; element in your <i>build.xml</i> script:
+</p>
+<pre class="brush: xml">
+&lt;libraries&gt;
+  &lt;library file=&quot;lib\nativejarwithsofiles.jar&quot; if=&quot;polish.android&quot;/&gt;
+&lt;/libraries&gt;
+</pre>
+<p>
+In case your JAR file does not contain the native *.so files meaning the *.so files are placed separately,
+you can integrate a complete directory:
+</p>
+<pre class="brush: xml">
+&lt;libraries&gt;
+  &lt;library dir=&quot;lib/android&quot; if=&quot;polish.android&quot;/&gt;
+&lt;/libraries&gt;
+</pre>
+<p>
+Please note that in this case you should place the native libraries within a folder that is called &quot;libs&quot;.
+In the above example, you will then end up with a folder hierarchy like this 
+(assuming your library files are called &quot;native.jar&quot; and &quot;libnative.so&quot;):
+</p>
+<pre>
++ lib
+  + android
+	+ libs
+	   native.jar
+	   + libs
+	      + armeabi
+	         libnative.so
+	      + armeabi-v7a
+	         libnative.so
+	      + mips
+	         libnative.so
+	      + x86	
+	         libnative.so
+</pre>
 <h2 id="android-troubleshooting">Troubleshooting</h2>
 <p>You might encounter some issues when building Android applications:</p>
 <h3 id="android-troubleshooting-dex">OutOfMemory for dex</h3>
