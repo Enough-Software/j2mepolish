@@ -1444,7 +1444,13 @@ implements Choice
 				//#endif
 			}
 		//#else
-			processed = super.handleKeyPressed(keyCode, gameAction);
+			//#if polish.Container.dontUseNumberKeys != true
+				if ( keyCode < Canvas.KEY_NUM0 || keyCode > Canvas.KEY_NUM9 ) {
+					processed = super.handleKeyPressed(keyCode, gameAction);
+				}
+			//#else
+				processed = super.handleKeyPressed(keyCode, gameAction);
+			//#endif
 		//#endif
 		//#debug
 		System.out.println("ChoiceGroup: container handled keyPressEvent: " + processed);
