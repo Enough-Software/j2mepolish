@@ -584,6 +584,22 @@ public class CommandItem extends IconItem {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * Convenience method for setting the text and image of this item
+	 * @param cmd the command from which the text and image should be used for this item
+	 */
+	public void applyCommand(Command cmd)
+	{
+		if (cmd == null) {
+			setText(null);
+			setImage((Image)null);
+		} else {
+			setText(cmd.getLabel());
+			setImage(cmd.getImage());
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see de.enough.polish.ui.IconItem#setStyle(de.enough.polish.ui.Style)

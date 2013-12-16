@@ -285,8 +285,7 @@ public class MenuBar extends Item {
 					//System.out.println("adding item/ok command " + cmd.getLabel() + " with prio " + priority + ", previous priority=" + (this.singleMiddleCommand == null ? "<none>" : (Integer.toString(this.singleMiddleCommand.getPriority())) ));
 					if (this.singleMiddleCommand == null) {
 						this.singleMiddleCommand = cmd;
-						this.singleMiddleCommandItem.setImage( (Image)null );
-						this.singleMiddleCommandItem.setText( cmd.getLabel() );
+						this.singleMiddleCommandItem.applyCommand( cmd );
 						if (this.isInitialized) {
 							setInitialized(false);
 							repaint();
@@ -295,7 +294,7 @@ public class MenuBar extends Item {
 					} else if ( this.singleMiddleCommand.getPriority() > priority ) {
 						Command oldMiddleCommand = this.singleMiddleCommand;
 						this.singleMiddleCommand = cmd;
-						this.singleMiddleCommandItem.setText( cmd.getLabel() );
+						this.singleMiddleCommandItem.applyCommand( cmd );
 						cmd = oldMiddleCommand;
 						item = (CommandItem) this.allCommands.get( cmd );
 						priority = oldMiddleCommand.getPriority();
@@ -307,8 +306,7 @@ public class MenuBar extends Item {
 				if (type == Command.OK || type == Command.ITEM || type == Command.SCREEN) {
 					if (this.singleLeftCommand == null) {
 						this.singleLeftCommand = cmd;
-						this.singleLeftCommandItem.setImage( (Image)null );
-						this.singleLeftCommandItem.setText( cmd.getLabel() );
+						this.singleLeftCommandItem.applyCommand( cmd );
 						if (this.isInitialized) {
 							setInitialized(false);
 							repaint();
@@ -317,7 +315,7 @@ public class MenuBar extends Item {
 					} else if ( this.singleLeftCommand.getPriority() > priority ) {
 						Command oldLeftCommand = this.singleLeftCommand;
 						this.singleLeftCommand = cmd;
-						this.singleLeftCommandItem.setText( cmd.getLabel() );
+						this.singleLeftCommandItem.applyCommand( cmd );
 						cmd = oldLeftCommand;
 						item = (CommandItem) this.allCommands.get( cmd );
 						priority = oldLeftCommand.getPriority();
@@ -329,8 +327,7 @@ public class MenuBar extends Item {
 					//#if tmp.RightOptions
 						if (this.singleLeftCommand == null) {
 							this.singleLeftCommand = cmd;
-							this.singleLeftCommandItem.setImage( (Image)null );
-							this.singleLeftCommandItem.setText( cmd.getLabel() );
+							this.singleLeftCommandItem.applyCommand( cmd );
 							if (this.isInitialized) {
 								setInitialized(false);
 								repaint();
@@ -339,7 +336,7 @@ public class MenuBar extends Item {
 						} else if ( this.singleLeftCommand.getPriority() > priority ) {
 							Command oldLeftCommand = this.singleLeftCommand;
 							this.singleLeftCommand = cmd;
-							this.singleLeftCommandItem.setText( cmd.getLabel() );
+							this.singleLeftCommandItem.applyCommand( cmd );
 							cmd = oldLeftCommand;
 							item = (CommandItem) this.allCommands.get( cmd );
 							priority = oldLeftCommand.getPriority();
@@ -349,8 +346,7 @@ public class MenuBar extends Item {
 							//#debug
 							System.out.println("Setting single right command " + cmd.getLabel() );
 							this.singleRightCommand = cmd;
-							this.singleRightCommandItem.setImage( (Image)null );
-							this.singleRightCommandItem.setText( cmd.getLabel() );
+							this.singleRightCommandItem.applyCommand( cmd );
 							if (this.isInitialized) {
 								setInitialized(false);
 								repaint();
@@ -359,7 +355,7 @@ public class MenuBar extends Item {
 						} else if ( this.singleRightCommand.getPriority() > priority ) {
 							Command oldRightCommand = this.singleRightCommand;
 							this.singleRightCommand = cmd;
-							this.singleRightCommandItem.setText( cmd.getLabel() );
+							this.singleRightCommandItem.applyCommand( cmd );
 							cmd = oldRightCommand;
 							item = (CommandItem) this.allCommands.get( cmd );
 							priority = oldRightCommand.getPriority();
@@ -381,7 +377,7 @@ public class MenuBar extends Item {
 					//#debug
 					System.out.println("Setting single right command " + cmd.getLabel() );
 					this.singleRightCommand = cmd;
-					this.singleRightCommandItem.setText( cmd.getLabel() );
+					this.singleRightCommandItem.applyCommand( cmd );
 					if (this.isInitialized) {
 						setInitialized(false);
 						repaint();
@@ -402,7 +398,7 @@ public class MenuBar extends Item {
 					//#debug
 					System.out.println("Setting single left command " + cmd.getLabel() );
 					this.singleLeftCommand = cmd;
-					this.singleLeftCommandItem.setText( cmd.getLabel() );
+					this.singleLeftCommandItem.applyCommand( cmd );
 					if (this.isInitialized) {
 						setInitialized(false);
 						repaint();
@@ -455,11 +451,7 @@ public class MenuBar extends Item {
 		if ( cmd == this.singleMiddleCommand ) {
 			Command newMiddleCommand = extractNextMiddleCommand();
 			this.singleMiddleCommand = newMiddleCommand;
-			if (newMiddleCommand == null) {
-				this.singleMiddleCommandItem.setText(null);
-			} else {
-				this.singleMiddleCommandItem.setText( newMiddleCommand.getLabel() );
-			}
+			this.singleMiddleCommandItem.applyCommand( newMiddleCommand );
 			if (this.isInitialized) {
 				setInitialized(false);
 				repaint();
@@ -481,7 +473,7 @@ public class MenuBar extends Item {
 						|| this.singleRightCommand.getCommandType() == Command.CANCEL ) 
 					{
 						this.singleLeftCommand = this.singleRightCommand;
-						this.singleLeftCommandItem.setText( this.singleLeftCommand.getLabel() );
+						this.singleLeftCommandItem.applyCommand( this.singleLeftCommand );
 						this.singleRightCommand = null;
 					}
 					if (this.isInitialized) {
@@ -504,7 +496,7 @@ public class MenuBar extends Item {
 						this.commandsContainer.focusChild(-1);
 					}
 					this.singleLeftCommand = (Command) this.commandsList.remove(newSingleLeftCommandIndex);
-					this.singleLeftCommandItem.setText( this.singleLeftCommand.getLabel() );
+					this.singleLeftCommandItem.applyCommand( this.singleLeftCommand );
 					this.commandsContainer.remove( newSingleLeftCommandIndex );
 				}	
 				// don't return here yet, since it could well be that there is only
@@ -527,7 +519,7 @@ public class MenuBar extends Item {
 						|| this.singleLeftCommand.getCommandType() == Command.CANCEL ) 
 					{
 						this.singleRightCommand = this.singleLeftCommand;
-						this.singleRightCommandItem.setText( this.singleLeftCommand.getLabel() );
+						this.singleRightCommandItem.applyCommand( this.singleLeftCommand );
 						this.singleLeftCommand = null;
 					}
 					if (this.isInitialized) {
@@ -559,7 +551,7 @@ public class MenuBar extends Item {
 						this.singleRightCommand = (Command) this.commandsList.remove(newSingleRightCommandIndex);
 						this.commandsContainer.remove( newSingleRightCommandIndex );
 					//#endif
-					this.singleRightCommandItem.setText( this.singleRightCommand.getLabel() );
+					this.singleRightCommandItem.applyCommand( this.singleRightCommand );
 				}	
 				// don't return here yet, since it could well be that there is only
 				// one remaining item in the commandsList. In such a case the 
@@ -599,6 +591,10 @@ public class MenuBar extends Item {
 					updateItem = this.singleLeftCommandItem;
 				//#endif
 				updateItem.setText( command.getLabel(), false );
+				Image image = command.getImage();
+				if (image != null || updateItem.getImage() != null) {
+					updateItem.setImage(image);
+				}
 				updateItem.init(updateItem.availableWidth, updateItem.availableWidth, updateItem.availableHeight);
 			}
 		}
@@ -634,21 +630,21 @@ public class MenuBar extends Item {
 		if (next != null) {
 			if (next == this.singleLeftCommand) {
 				this.singleLeftCommand = null;
-				this.singleLeftCommandItem.setText(null);
+				this.singleLeftCommandItem.applyCommand(null);
 				index = getNextNegativeOrPositiveCommandIndex(false);
 				if (index != -1) {
 					this.singleLeftCommand = (Command) this.commandsList.remove(index);
 					this.commandsContainer.remove( index );
-					this.singleLeftCommandItem.setText( this.singleLeftCommand.getLabel() );
+					this.singleLeftCommandItem.applyCommand( this.singleLeftCommand );
 				}
 			} else if (next == this.singleRightCommand) {
 				this.singleRightCommand = null;
-				this.singleRightCommandItem.setText(null);
+				this.singleRightCommandItem.applyCommand(null);
 				index = getNextNegativeOrPositiveCommandIndex(false);
 				if (index != -1) {
 					this.singleRightCommand = (Command) this.commandsList.remove(index);
 					this.commandsContainer.remove( index );
-					this.singleRightCommandItem.setText( this.singleRightCommand.getLabel() );
+					this.singleRightCommandItem.applyCommand( this.singleRightCommand );
 				}
 			} else {
 				if (index == this.commandsContainer.focusedIndex) {
@@ -663,10 +659,10 @@ public class MenuBar extends Item {
 					if (!remainingItem.hasChildren) {
 						//#if tmp.RightOptions
 							this.singleRightCommand = (Command)this.commandsList.get(0);
-							this.singleRightCommandItem.setText(this.singleRightCommand.getLabel());
+							this.singleRightCommandItem.applyCommand(this.singleRightCommand);
 						//#else
 							this.singleLeftCommand = (Command)this.commandsList.get(0);
-							this.singleLeftCommandItem.setText(this.singleLeftCommand.getLabel());
+							this.singleLeftCommandItem.applyCommand(this.singleLeftCommand);
 						//#endif
 						this.commandsList.clear();
 						this.commandsContainer.clear();
@@ -818,8 +814,7 @@ public class MenuBar extends Item {
 				//#endif
 				setupCommandMenuItem(item, getMenuSelectText(), this.selectImage);
 				//#if tmp.OkCommandOnLeft && !tmp.RightOptions
-					this.singleRightCommandItem.setText(null);
-					this.singleRightCommandItem.setImage( (Image)null );
+					this.singleRightCommandItem.applyCommand(null);
 				//#else
 					//#if tmp.OkCommandOnLeft && tmp.RightOptions
 						item = this.singleRightCommandItem;
@@ -859,10 +854,10 @@ public class MenuBar extends Item {
 						// this allows to change the text using UiAccess.setCommandLabel():
 						CommandItem item = (CommandItem) this.allCommands.get( this.singleLeftCommand );
 						this.singleLeftCommandItem.setText( item.getText() );
+						this.singleLeftCommandItem.setImage( item.getImage() );
 					} else {
-						this.singleLeftCommandItem.setText( null );
+						this.singleLeftCommandItem.applyCommand( null );
 					}
-					this.singleLeftCommandItem.setImage( (Image)null );
 				//#else
 					this.singleRightCommandItem.isInitialized = false;
 					if (this.singleRightCommand != null) {
@@ -870,11 +865,11 @@ public class MenuBar extends Item {
 						CommandItem item = (CommandItem) this.allCommands.get( this.singleRightCommand );
 						if ( item != null ) {
 							this.singleRightCommandItem.setText( item.getText() );
+							this.singleRightCommandItem.setImage( item.getImage() );
 						}
 					} else {
-						this.singleRightCommandItem.setText( null );
+						this.singleRightCommandItem.applyCommand(null);
 					}
-					this.singleRightCommandItem.setImage( (Image)null );
 				//#endif
 				if (this.commandsList.size() > 0) {
 					IconItem item;
@@ -1006,16 +1001,12 @@ public class MenuBar extends Item {
          */
         protected void setupCommandMenuItem(IconItem item, String text, Image img){
             item.isInitialized = false;
-            //Reset every thing
-            item.setImage( (Image)null );
-            item.setText( null );
-            //Show image if there was one.
-            if (img!= null) {
-                item.setImage( img );
-            }
+            item.setImage( img );
             //Show text if we have both images and text OR simply if there is no image.
-            if (this.showImageAndText || img ==null) {
+            if (this.showImageAndText || img == null) {
                     item.setText(text);
+            } else {
+                item.setText( null );            	
             }
         }
 
@@ -2182,13 +2173,10 @@ public class MenuBar extends Item {
 		this.commandsList.clear();
 		this.allCommands.clear();
 		this.commandsContainer.clear();
-		this.singleLeftCommandItem.setText(null);
-		this.singleLeftCommandItem.setImage( (Image)null);
-		this.singleRightCommandItem.setText(null);
-		this.singleRightCommandItem.setImage( (Image)null);
+		this.singleLeftCommandItem.applyCommand(null);
+		this.singleRightCommandItem.applyCommand(null);
 		//#if tmp.useMiddleCommand
-			this.singleMiddleCommandItem.setText(null);
-			this.singleMiddleCommandItem.setImage( (Image)null);
+			this.singleMiddleCommandItem.applyCommand(null);
 		//#endif
 		setOpen( false );
 		repaint();
@@ -2401,7 +2389,7 @@ public class MenuBar extends Item {
 					addCommand( tmpMiddleCommand );
 				}
 				this.singleMiddleCommand = cmd;
-				this.singleMiddleCommandItem.setText( cmd.getLabel() );
+				this.singleMiddleCommandItem.applyCommand( cmd );
 			}
 		//#endif
 	}

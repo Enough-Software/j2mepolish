@@ -2,8 +2,12 @@
 
 package de.enough.polish.ui;
 
+import java.io.IOException;
+
 import de.enough.polish.event.AsynchronousMultipleCommandListener;
 import de.enough.polish.util.IdentityArrayList;
+
+import javax.microedition.lcdui.Image;
 
 /**
  * The <code>Command</code> class is a construct that encapsulates the semantic information of an action. 
@@ -616,6 +620,25 @@ public class Command
 	 */
 	public void setStyle(Style style) {
 		this.style = style;
+	}
+	
+	public Image getImage()
+	{
+		Image image = null;
+		//#if polish.css.icon-image
+			if (this.style != null) {
+				String iconImageUrl = this.style.getProperty("icon-image");
+				if (iconImageUrl != null) {
+					try {
+						image = StyleSheet.getImage(iconImageUrl, this, true);
+					} catch (IOException ex) {
+						//#debug error
+						System.out.println("Unable to load image [" + iconImageUrl + "]" + ex);
+					}
+				}
+			}
+		//#endif
+		return image;
 	}
 	
 	/**
