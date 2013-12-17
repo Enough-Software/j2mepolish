@@ -347,6 +347,10 @@ public class MenuBar extends Item {
 							System.out.println("Setting single right command " + cmd.getLabel() );
 							this.singleRightCommand = cmd;
 							this.singleRightCommandItem.applyCommand( cmd );
+							CommandItem itemInAllCommands = (CommandItem) this.allCommands.get(cmd);
+							if ( itemInAllCommands != null ) {
+								itemInAllCommands.applyCommand(cmd);
+							}
 							if (this.isInitialized) {
 								setInitialized(false);
 								repaint();
