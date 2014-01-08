@@ -1017,6 +1017,8 @@ public class TextField extends StringItem
 		private boolean nokiaTextfieldForceHide = false;
 		private int nokiaManualCaretPosition = 0;
 		private boolean nokiaUseManualCaret = false;
+		private boolean wasNokiaTextfieldShownBeforeHide = false;
+		private boolean wasNokiaTextfieldFocusedBeforeHide = false;
 		//#if polish.NokiaUiApiVersion >= 1.1b
 			private GestureInteractiveZone editorZone = new GestureInteractiveZone(GestureInteractiveZone.GESTURE_ALL);
 		//#endif
@@ -4795,7 +4797,7 @@ public class TextField extends StringItem
 			//#debug info
 			System.out.println("focus tf != null: " + (this.nokiaTextEditor != null));
 			if ( this.nokiaTextEditor != null && direction != Canvas.FIRE && !this.nokiaTextEditor.hasFocus()) {
-				this.nokiaTextEditor.setFocus(true);				
+				this.nokiaTextEditor.setFocus(true);
 			}
 		//#endif
 		//#if polish.android
@@ -4996,10 +4998,12 @@ public class TextField extends StringItem
 	protected void showNotify() 
 	{	
 		//#if tmp.useNokiaInput
-			if ( this.nokiaTextEditor != null ) 
+			if ( this.nokiaTextEditor != null && this.wasNokiaTextfieldShownBeforeHide ) 
 			{
 				this.nokiaTextEditor.setVisible(true);
-				this.nokiaTextEditor.setFocus(true);
+				if ( this.wasNokiaTextfieldFocusedBeforeHide ) {
+					this.nokiaTextEditor.setFocus(true);
+				}
 				this.nokiaTextfieldForceHide = false;
 			}
 		//#endif
@@ -5034,6 +5038,8 @@ public class TextField extends StringItem
 				System.out.println("hideNotify: Display.isShown=" + Display.getInstance().isShown());
 				if ( this.nokiaTextEditor != null && Display.getInstance().isShown()) 
 				{
+					this.wasNokiaTextfieldShownBeforeHide = this.nokiaTextEditor.isVisible();
+					this.wasNokiaTextfieldFocusedBeforeHide = this.nokiaTextEditor.hasFocus();					
 					this.nokiaTextEditor.setVisible(false);
 					this.nokiaTextEditor.setFocus(false);
 					this.nokiaTextfieldForceHide = true;
