@@ -995,6 +995,20 @@ public class MenuBar extends Item {
 					this.windowsSipX = (availWidth - w) / 2;
 				}
 		//#endif
+				
+		//#if polish.MenuBar.hideSelectSoftkey == true
+			CommandItem commandItem;
+			//#if tmp.OkCommandOnLeft
+				commandItem = this.singleLeftCommandItem;
+			//#elif tmp.RightOptions
+				commandItem = this.singleRightCommandItem;
+			//#else
+				commandItem = this.singleLeftCommandItem;
+			//#endif
+			if ( this.isOpened ) {
+				commandItem.applyCommand(null);
+			}
+		//#endif
 	}
 
         /**
