@@ -39,7 +39,7 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
 //#if polish.android
-import android.view.View;
+	import android.view.View;
 	import android.view.View.MeasureSpec;
 //#endif
 
@@ -1546,7 +1546,11 @@ public class TextField extends StringItem
 				{
 					text = "";
 				}
-				this.nokiaTextEditor.setContent(text);				
+				try {
+					this.nokiaTextEditor.setContent(text);
+				} catch (Exception ex) {
+					// Do nothing
+				}
 			}
 		//#endif
 		//#if polish.blackberry
@@ -2001,6 +2005,7 @@ public class TextField extends StringItem
 			} else {
 				curPos = this.nokiaTextEditor.getCaretPosition();
 			}
+			curPos = Math.min( getString().length(), curPos);
 		//#else
 			//#ifdef tmp.useNativeTextBox
 				if (this.midpTextBox != null) {
