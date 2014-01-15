@@ -148,7 +148,7 @@ implements CycleListener
 	 * @return the frame of the specified position, might be null
 	 */
 	public  Container getFrame(int x, int y) {
-		if (this.topFrame != null && y < this.topFrame.relativeY + this.topFrame.itemHeight) {
+		if (this.topFrame != null && y < this.topFrame.relativeY + this.topFrame.itemHeight && y > this.topFrame.relativeY ) {
 			return this.topFrame;
 		}
 		if (this.bottomFrame != null && y > this.bottomFrame.relativeY) {
