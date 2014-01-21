@@ -1737,7 +1737,7 @@ public class MenuBar extends Item {
 	//#ifdef polish.hasPointerEvents
 	protected boolean handlePointerReleased(int relX, int relY) {
 		// check if one of the command buttons has been pressed:
-		//int leftCommandEndX = this.singleLeftCommandItem.relativeX + this.singleLeftCommandItem.itemWidth;
+		int leftCommandEndX = this.singleLeftCommandItem.relativeX + this.singleLeftCommandItem.itemWidth;
 		int rightCommandStartX = this.contentWidth/2; //this.singleRightCommandItem.relativeX;
 		//#debug
 		System.out.println("MenuBar: handlePointerReleased( relX=" + relX + ", relY=" + relY + " ), rightCommandStartXs = " + rightCommandStartX + " screenHeight=" + this.screenHeight);
@@ -1788,8 +1788,8 @@ public class MenuBar extends Item {
 				isOpenKeySelected = !isCloseKeySelected;
 				isSelectKeySelected = isOpenKeySelected;
 			//#else
-				isOpenKeySelected = relX < rightCommandStartX;
-				isCloseKeySelected = !isOpenKeySelected;
+				isOpenKeySelected = relX < leftCommandEndX;
+				isCloseKeySelected = relX > rightCommandStartX;
 				isSelectKeySelected = isOpenKeySelected;
 			//#endif
 			//System.out.println("isOpened=" + this.isOpened + ", isCloseKeySelected=" + isCloseKeySelected + ", isOpenKeySelected=" + isOpenKeySelected + ", isSelectKeySelected=" + isSelectKeySelected);
