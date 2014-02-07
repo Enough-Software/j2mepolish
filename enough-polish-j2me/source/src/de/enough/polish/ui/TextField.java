@@ -2552,8 +2552,13 @@ public class TextField extends StringItem
 						this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 					}
 				//#endif
-				if ( ! isFocused() || this.isUneditable ) {					
+				if ( ! isFocused() || this.isUneditable ) {
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
+		    		if ( this.nokiaTextEditor != null && this.nokiaTextEditor.getParent() != null ) {
+		    			this.nokiaTextEditor.setFocus(false);
+		    			this.nokiaTextEditor.setVisible(false);
+		    			this.nokiaTextEditor.setParent(null);
+		    		}
 				} else {
 					if ( this.nokiaTextEditor != null && this.nokiaTextfieldForceHide == false) {
 						try {
