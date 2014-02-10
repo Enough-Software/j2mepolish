@@ -2552,8 +2552,13 @@ public class TextField extends StringItem
 						this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 					}
 				//#endif
-				if ( ! isFocused() || this.isUneditable ) {					
+				if ( ! isFocused() || this.isUneditable ) {
 		    		super.paintContent(x, y, leftBorder, rightBorder, g);
+		    		if ( this.nokiaTextEditor != null && this.nokiaTextEditor.getParent() != null ) {
+		    			this.nokiaTextEditor.setFocus(false);
+		    			this.nokiaTextEditor.setVisible(false);
+		    			this.nokiaTextEditor.setParent(null);
+		    		}
 				} else {
 					if ( this.nokiaTextEditor != null && this.nokiaTextfieldForceHide == false) {
 						try {
@@ -5005,6 +5010,7 @@ public class TextField extends StringItem
 		//#if tmp.useNokiaInput
 			if ( this.nokiaTextEditor != null && this.wasNokiaTextfieldShownBeforeHide ) 
 			{
+				this.nokiaTextEditor.setParent( Display.getInstance() );
 				this.nokiaTextEditor.setVisible(true);
 				if ( this.wasNokiaTextfieldFocusedBeforeHide ) {
 					this.nokiaTextEditor.setFocus(true);
@@ -5047,6 +5053,7 @@ public class TextField extends StringItem
 					this.wasNokiaTextfieldFocusedBeforeHide = this.nokiaTextEditor.hasFocus();					
 					this.nokiaTextEditor.setVisible(false);
 					this.nokiaTextEditor.setFocus(false);
+					this.nokiaTextEditor.setParent( null );
 					this.nokiaTextfieldForceHide = true;
 				}
 			//#else
