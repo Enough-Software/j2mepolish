@@ -1,4 +1,4 @@
-//#condition polish.usePolishGui && polish.midp && polish.useNativeAlerts
+//#condition polish.usePolishGui && polish.midp && !polish.blackberry && polish.useNativeAlerts
 package de.enough.polish.midp.ui;
 
 import javax.microedition.lcdui.Displayable;
