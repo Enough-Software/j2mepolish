@@ -653,6 +653,8 @@ implements CycleListener
 		if (frame != null)
 		{
 			frame.add(index, item);
+		} else {
+			append(frameOrientation,item);
 		}
 	}
 	
@@ -915,7 +917,7 @@ implements CycleListener
 	 * @param gameAction the gameAction
 	 * @return the next frame
 	 */
-	Container getNextFrame(int gameAction)
+	protected Container getNextFrame(int gameAction)
 	{
 		Container newFrame = null;
 		if (this.currentlyActiveContainer == this.container ) {
