@@ -5617,6 +5617,15 @@ public final class UiAccess {
 	public static Image cast(de.enough.polish.ui.Image img) {
 		return (Image)img.getNativeImage();
 	}
+	
+	public static void defocusRecursive(Container c) {
+		for (int i=0;i<c.size();i++) {			
+			if ( c.get(i) instanceof Container ) {
+				defocusRecursive( (Container) (c.get(i)) );
+			}
+		}
+		c.focusChild(-1);
+	}
 //
 //	/**
 //	 * Casts a J2ME Polish font into a MIDP font
