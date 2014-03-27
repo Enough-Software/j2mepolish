@@ -182,7 +182,7 @@ implements ItemConsumer
 			for (int itemIndex=startIndex + 1; itemIndex < startIndex + numberOfRealItems; itemIndex++) {
 				item = this.itemSource.createItem(itemIndex);
 				item.parent = this;
-				item.getItemHeight(firstLineWidth, availWidth, availHeight);
+				rowHeight = item.getItemHeight(firstLineWidth, availWidth, availHeight);
 				item.relativeY = itemIndex * rowHeight;
 				this.itemsList.add(item);
 			}
