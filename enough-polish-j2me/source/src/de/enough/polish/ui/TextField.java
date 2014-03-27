@@ -4764,7 +4764,6 @@ public class TextField extends StringItem
 		//#if tmp.useNokiaInput
 			if (this.nokiaTextEditor != null) {
 				this.nokiaTextEditor.setFocus(false);
-				this.nokiaTextEditor.setParent(null);
 				
 				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
 				//#if polish.NokiaUiApiVersion >= 1.1b
