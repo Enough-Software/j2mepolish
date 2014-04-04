@@ -2399,6 +2399,11 @@ public class MenuBar extends Item {
 	public void informDefaultCommand(Command cmd)
 	{
 		//#if tmp.useMiddleCommand
+			if (cmd == null) {
+				this.singleMiddleCommand = null;
+				this.singleMiddleCommandItem.applyCommand(null);
+				return;
+			}
 			//#debug
 			System.out.println("setting default command " + cmd.getLabel());
 			if (cmd != this.singleMiddleCommand) {

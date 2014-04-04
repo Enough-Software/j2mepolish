@@ -4699,9 +4699,7 @@ implements UiElement, Animatable
 	public void notifyDefaultCommand(Command cmd) {
 		//#ifdef tmp.useExternalMenuBar
 			//#if ((polish.key.MiddleSoftKey:defined || polish.key.CenterSoftKey:defined) && (polish.MenuBar.useMiddleCommand != false) && polish.useScrollBar) || polish.MenuBar.useMiddleCommand || polish.MenuBar.useCenterCommand
-				if (cmd != null) {
-					this.menuBar.informDefaultCommand(cmd);
-				}
+				this.menuBar.informDefaultCommand(cmd);
 			//#endif
 		//#endif
 	}
