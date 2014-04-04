@@ -2507,7 +2507,14 @@ public class TextField extends StringItem
 	 * @see de.enough.polish.ui.Item#paintContent(int, int, int, int, javax.microedition.lcdui.Graphics)
 	 */
 	public void paintContent(int x, int y, int leftBorder, int rightBorder, Graphics g) {
-    	String myText = this.text;    	
+    	String myText = this.text;
+    	//#if tmp.useNokiaInput
+    		if ( this.nokiaTextEditor != null && this.nokiaTextEditor.getContent() != null && this.nokiaTextEditor.getContent().length() > 0 ) {
+    			myText = this.nokiaTextEditor.getContent();
+    			setString(myText);
+    			setText(myText);
+    		}
+    	//#endif
 		//#if polish.blackberry
 			if (this.isFocused && getScreen().isNativeUiShownFor(this)) {
         		x--; // blackberry paints a border around the text that is one pixel wide
@@ -2553,16 +2560,18 @@ public class TextField extends StringItem
 					}
 				//#endif
 				if ( ! isFocused() || this.isUneditable ) {
-		    		super.paintContent(x, y, leftBorder, rightBorder, g);
-		    		if ( this.nokiaTextEditor != null && this.nokiaTextEditor.getParent() != null ) {
+		    		if (this.nokiaTextEditor != null && this.nokiaTextEditor.getParent() != null ) 
+		    		{
+		    			this.isFocused = false;
 		    			this.nokiaTextEditor.setFocus(false);
 		    			this.nokiaTextEditor.setVisible(false);
 		    			this.nokiaTextEditor.setParent(null);
 		    		}
+		    		super.paintContent(x, y, leftBorder, rightBorder, g);
 				} else {
 					if ( this.nokiaTextEditor != null && this.nokiaTextfieldForceHide == false) {
 						try {
-							int textFieldHeight = getItemAreaHeight() - getPaddingBottom() - getPaddingTop();
+							int textFieldHeight = Math.max(this.nokiaTextEditor.getHeight(),getItemAreaHeight() - getPaddingBottom() - getPaddingTop());
 							this.nokiaTextEditor.setVisible(true);
 							this.nokiaTextEditor.setParent(Display.getInstance());
 							this.nokiaTextEditor.setPosition(x, y);
@@ -4755,7 +4764,6 @@ public class TextField extends StringItem
 		//#if tmp.useNokiaInput
 			if (this.nokiaTextEditor != null) {
 				this.nokiaTextEditor.setFocus(false);
-				this.nokiaTextEditor.setParent(null);
 				
 				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
 				//#if polish.NokiaUiApiVersion >= 1.1b
@@ -4764,6 +4772,7 @@ public class TextField extends StringItem
 				
 				String newText = this.nokiaTextEditor.getContent();
 				setString( newText );
+				setText( newText );
 				setInitialized(false);
 				repaint();
 				notifyStateChanged();
@@ -4912,31 +4921,28 @@ public class TextField extends StringItem
 			if ((actions & TextEditorListener.ACTION_CONTENT_CHANGE) != 0)
 			{
 				String content = textEditor.getContent();
-				if (!content.equals(this.text))
-				{
-					// If newline is not allowed, treat any newline as the activation of the textfield's default command (if any)
-					if ( isNoNewLine() && content.indexOf('\n') >= 0) {
-						content = TextUtil.replace(content, "\r", "");
-						content = TextUtil.replace(content, "\n", "");
-						textEditor.setContent(content);
-						if ( this.defaultCommand != null && this.itemCommandListener != null ) {
-							this.itemCommandListener.commandAction(this.defaultCommand, this);
-						}
-						return;
+				// If newline is not allowed, treat any newline as the activation of the textfield's default command (if any)
+				if ( isNoNewLine() && content.indexOf('\n') >= 0) {
+					content = TextUtil.replace(content, "\r", "");
+					content = TextUtil.replace(content, "\n", "");
+					textEditor.setContent(content);
+					if ( this.defaultCommand != null && this.itemCommandListener != null ) {
+						this.itemCommandListener.commandAction(this.defaultCommand, this);
 					}
-					
-					// Unregister all canvas gesture listeners, to prevent repeat events while updating the textfield.
-					// The paintContent() method takes care of re-registering after the update is completed
-					javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
-					//#if polish.NokiaUiApiVersion >= 1.1b
-						GestureRegistrationManager.unregisterAll(objs);
-					//#endif
-					
-					setString(content);
-					setText(content);
-					Display.getInstance().serviceRepaints();
-					notifyStateChanged();
+					return;
 				}
+				
+				// Unregister all canvas gesture listeners, to prevent repeat events while updating the textfield.
+				// The paintContent() method takes care of re-registering after the update is completed
+				javax.microedition.lcdui.Canvas objs = (javax.microedition.lcdui.Canvas) javax.microedition.lcdui.Display.getDisplay(Display.getInstance().getMidlet()).getCurrent();
+				//#if polish.NokiaUiApiVersion >= 1.1b
+					GestureRegistrationManager.unregisterAll(objs);
+				//#endif
+				
+				setString(content);
+				setText(content);
+				Display.getInstance().serviceRepaints();
+				notifyStateChanged();
 
 				multilineToggleFix(textEditor);
 			}
@@ -5015,8 +5021,8 @@ public class TextField extends StringItem
 				if ( this.wasNokiaTextfieldFocusedBeforeHide ) {
 					this.nokiaTextEditor.setFocus(true);
 				}
-				this.nokiaTextfieldForceHide = false;
 			}
+			this.nokiaTextfieldForceHide = false;
 		//#endif
 		
 		//#if tmp.updateDeleteCommand
