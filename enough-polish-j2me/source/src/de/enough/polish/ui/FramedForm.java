@@ -1171,7 +1171,7 @@ implements CycleListener
 			this.currentlyActiveContainer.defocus( this.currentlyActiveContainer.style );
 		}
 		if (newFrame.appearanceMode != Item.PLAIN) {
-			newFrame.focus( StyleSheet.focusedStyle, direction );
+			newFrame.focus( newFrame.getFocusedStyle(), direction );
 		}
 		this.currentlyActiveContainer = newFrame;
 		if (newFrame == this.container) {
