@@ -312,7 +312,7 @@ implements ItemConsumer
 							int index = this.childStartIndex - itemIndex - 1;
 							item.setInitialized(false);
 							this.itemSource.populateItem(index, item);
-							item.relativeY = index * this.childRowHeight;
+							item.relativeY = (index+1) * this.childRowHeight;
 							int cw = this.availContentWidth;
 							int ch = this.availContentHeight;
 							item.getItemHeight(cw, cw, ch);
