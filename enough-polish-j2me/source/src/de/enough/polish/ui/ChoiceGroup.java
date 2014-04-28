@@ -1627,6 +1627,8 @@ implements Choice
 				} else if (this.selectedIndex != this.focusedIndex){
 					setSelectedIndex(this.focusedIndex, true);
 					handled = true;
+				} else {
+					handled = true;
 				}
 				if ( handled && (this.choiceType != Choice.IMPLICIT) ) 
 				{
