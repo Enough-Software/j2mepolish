@@ -301,7 +301,7 @@ public final class TextUtil {
 		}
 		// the given string does not fit on the first line:
 		if (!hasLineBreaks) {
-			wrap( value, font, completeWidth, firstLineWidth, lineWidth, result, maxLines+1, maxLinesAppendixPosition);
+			wrap( value, font, completeWidth, firstLineWidth, lineWidth, result, maxLines, maxLinesAppendixPosition);
 		} else {
 			// now the string will be split at the line-breaks and
 			// then each line is processed:
@@ -574,50 +574,79 @@ public final class TextUtil {
 		try
 		{
 			int appendixWidth = font.stringWidth(appendix);
-			String line = result.getLine(index);
-			int lineWidth = result.getLineWidth(index);
-			int completeWidth = lineWidth +  appendixWidth;
-			if(availWidth < appendixWidth)
-			{
-				line = appendix;
+			String fullLine = result.getLine(index);
+			int fullLineWidth = result.getLineWidth(index);
+			int completeWidth = fullLineWidth +  appendixWidth;
+			if(availWidth < appendixWidth) {
+				// The appendix itself is too long.
+				fullLine = appendix;
 				completeWidth = appendixWidth;
 				while(completeWidth > availWidth)
 				{
 					if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
-						line = line.substring(0,line.length() - 1);
+						fullLine = fullLine.substring(0,fullLine.length() - 1);
 					} else if(position == TextUtil.MAXLINES_APPENDIX_POSITION_BEFORE) {
-						line = line.substring(1);
+						fullLine = fullLine.substring(1);
 					}
-					completeWidth = font.stringWidth(line);
+					completeWidth = font.stringWidth(fullLine);
 				}
-				result.setLine(index, line, completeWidth);
+				result.setLine(index, fullLine, completeWidth);
 				return;
 			}
-			else
-			{
-				if(lineWidth > availWidth) {
-					while(completeWidth > availWidth)
-					{
-						if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
-							line = line.substring(0,line.length() - 1);
-						} else if(position == TextUtil.MAXLINES_APPENDIX_POSITION_BEFORE) {
-							line = line.substring(1);
-						}
-
-						completeWidth = font.stringWidth(line) +  appendixWidth;
-					}
-
-					if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
-						result.setLine(index, line + appendix, completeWidth);
-						return;
-					} else {
-						result.setLine(index, appendix + line, completeWidth);
-						return;
-					}
+			
+			String resultLine = fullLine;
+			int resultLineWidth = fullLineWidth;
+			
+			if(resultLineWidth > availWidth) {
+				// The line is longer then it should.
+				
+				int numberOfCompleteCharacters = fullLine.length()+appendix.length();
+				int numberOfAvailableCharacterGuess = (int)((numberOfCompleteCharacters / (float) completeWidth) * availWidth);
+				int pivotIndex = numberOfAvailableCharacterGuess - 1;
+				
+				if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
+					resultLine = fullLine.substring(0,pivotIndex);
 				} else {
-					result.setLine(index, line, completeWidth);
+					resultLine = fullLine.substring(fullLine.length() - pivotIndex);
 				}
+				
+				completeWidth = font.stringWidth(resultLine) + appendixWidth;
+
+				if(completeWidth != availWidth) {
+					
+					if(completeWidth > availWidth) {
+						// We are still a bit too large. Run to the "left" to shrink the line.
+						while(completeWidth > availWidth) {
+							if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
+								resultLine = fullLine.substring(0,resultLine.length() - 1);
+							} else if(position == TextUtil.MAXLINES_APPENDIX_POSITION_BEFORE) {
+								//TODO richardn: Should the pivot element be used here somehow?
+								resultLine = fullLine.substring(1);
+							}
+							completeWidth = font.stringWidth(resultLine) + appendixWidth;
+						}
+					} else {
+						while(completeWidth < availWidth) {
+							if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
+								resultLine = fullLine.substring(0,resultLine.length() + 1);
+							} else if(position == TextUtil.MAXLINES_APPENDIX_POSITION_BEFORE) {
+								resultLine = fullLine.substring(1);
+							}
+							
+							completeWidth = font.stringWidth(resultLine) +  appendixWidth;
+						}
+						
+					}
+				}
+				if(position == TextUtil.MAXLINES_APPENDIX_POSITION_AFTER) {
+					resultLine = resultLine + appendix;
+				} else {
+					resultLine = appendix + resultLine;
+				}
+				resultLineWidth = completeWidth;
 			}
+			// TODO richardn: Rename the variables to be more meaningful.
+			result.setLine(index, resultLine, resultLineWidth);
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
