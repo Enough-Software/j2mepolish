@@ -55,6 +55,51 @@ public class ChunkedStorageCollectionTest extends TestCase
 		assertEquals( (testSize + toAdd - 1) % 20 + 20, collection.sizeTail() );
 	}
 	
+	public void testRemove()
+	{
+		TestChunkedStorageCollection collection = new TestChunkedStorageCollection();
+		int testSize = 1003;
+		for (int i=0; i<testSize; i++)
+		{
+			collection.add( new TestData(Integer.toString(i)));
+		}
+		assertEquals(testSize, collection.size());
+		System.out.println("------ before removal ------");
+		//System.out.println("now: internal of 9: " + collection.getInternalIndex(9) + " -> " + collection.get(9));
+		for (int i=0; i<30; i++)
+		{
+			System.out.print( collection.getInternalIndex(i) + ": " + collection.get(i) + ", ");
+		}
+		System.out.println();
+		int[] removeIndeces = new int[]{ 10, 0, 0, 999, 0, 26, 1, 767, 400, 0,  14, 7 };
+		for (int i = 0; i < removeIndeces.length; i++)
+		{
+			int removeIndex = removeIndeces[i];
+			System.out.print("removing " + removeIndex + ", internal=" + collection.getInternalIndex(removeIndex) + " -> " );
+			Object previous = collection.remove(removeIndex);
+			System.out.println(previous);
+			System.out.println("now: internal of 2: " + collection.getInternalIndex(2) + " -> " + collection.get(2));
+			System.out.println("now: internal of 3: " + collection.getInternalIndex(3) + " -> " + collection.get(3));
+			System.out.println("now: internal of 4: " + collection.getInternalIndex(4) + " -> " + collection.get(4));
+			assertNotNull(previous);
+			testSize--;
+			assertEquals( testSize, collection.size() );
+		}
+		System.out.println("------ after removal ------");
+		for (int i=0; i<30; i++)
+		{
+			System.out.print( i + "(" + collection.getInternalIndex(i) + "): " + collection.get(i) + ", ");
+		}
+		System.out.println();
+		for (int i=0; i<collection.size(); i++)
+		{
+			if (collection.get(i) == null)
+			{
+				fail("got null for index " + i + "->" + collection.getInternalIndex(i));
+			}
+		}
+	}
+	
 	static class TestData implements Mutable
 	{
 		private String data;
@@ -76,12 +121,17 @@ public class ChunkedStorageCollectionTest extends TestCase
 		
 		public void setData(String data)
 		{
-			this.data = data;
+			this.data = data; 
 			this.isDirty = true;
 		}
 
 		public boolean isDirty() {
 			return this.isDirty;
+		}
+		
+		public String toString()
+		{
+			return this.data;
 		}
 		
 	}
@@ -100,7 +150,12 @@ public class ChunkedStorageCollectionTest extends TestCase
 	static class ChunkedStorageMemorySystem implements ChunkedStorageSystem
 	{
 		
-		private static Hashtable listsPerIdentifier = new Hashtable();
+		private static Hashtable listsPerIdentifier;
+		
+		public ChunkedStorageMemorySystem()
+		{
+			listsPerIdentifier = new Hashtable();
+		}
 
 		public byte[] loadTailData(String identifier) throws IOException {
 			return loadData(-1, identifier);

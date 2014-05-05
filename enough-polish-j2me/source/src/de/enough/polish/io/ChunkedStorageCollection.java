@@ -32,6 +32,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import de.enough.polish.util.ArrayList;
+import de.enough.polish.util.IntList;
 
 /**
  * Allows to store lots of data that is retrieved lazily
@@ -45,12 +46,14 @@ implements Externalizable
 	public final static int STORAGE_STRATEGY_CHUNKED = 2;
 	//public final static int STORAGE_STRATEGY_MANUAL = 3;
 
-	private final static int PERSISTENCE_VERSION = 1;
+	private final static int PERSISTENCE_VERSION = 2;
 	
 	private int chunkSize;
 	private String identifier;
 	
 	private int completeSize;
+	private int numberOfDeletedEntries;
+	private IntList deletedIndecesList;
 	private int tailCollectionStartIndex;
 	private ArrayList tailCollection;
 	private boolean tailCollectionIsDirty;
@@ -79,6 +82,13 @@ implements Externalizable
 		out.writeInt(this.chunkSize);
 		out.writeInt(this.completeSize);
 		out.writeInt(this.tailCollectionStartIndex);
+		// persistence version 2+:
+		out.writeInt(this.numberOfDeletedEntries);
+		if (this.numberOfDeletedEntries > 0)
+		{
+			this.deletedIndecesList.write(out);
+		}
+		// persistence version 1+:
 		int tailSize = getTailCollection().size();
 		out.writeInt(tailSize);
 		Object[] internalObjects = getTailCollection().getInternalArray();
@@ -101,6 +111,17 @@ implements Externalizable
 		this.chunkSize = in.readInt();
 		this.completeSize = in.readInt();
 		this.tailCollectionStartIndex = in.readInt();
+		// persistence version 2+:
+		if (version >= 2)
+		{
+			this.numberOfDeletedEntries = in.readInt();
+			if (this.numberOfDeletedEntries > 0)
+			{
+				this.deletedIndecesList = new IntList();
+				this.deletedIndecesList.read(in);
+			}
+		}
+		// persistence version 1+:
 		int size = in.readInt();
 		if ( this.tailCollection == null ) {
 			this.tailCollection = new ArrayList(chunkSize*2);
@@ -119,7 +140,7 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		return this.completeSize;
+		return this.completeSize - this.numberOfDeletedEntries;
 	}
 	
 	public synchronized int sizeTail()
@@ -139,11 +160,58 @@ implements Externalizable
 			Mutable externalizable = createCollectionObject();
 			externalizable.read(in);
 			collection.add(externalizable);
-		}		
+		}
 	}
 
 	
 	protected abstract Mutable createCollectionObject();
+	
+	protected int getExternalIndex(int index)
+	{
+		if (this.numberOfDeletedEntries == 0)
+		{
+			return index;
+		}
+		int[] internal = this.deletedIndecesList.getInternalArray();
+		int internalSize = this.deletedIndecesList.size();
+		for (int i = 0; i < internalSize; i++)
+		{
+			int deletedIndex = internal[i];
+			if (deletedIndex <= index)
+			{
+				index--;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return index;
+	}
+	
+	protected int getInternalIndex(int index)
+	{
+		if (this.numberOfDeletedEntries == 0)
+		{
+			return index;
+		}
+		int[] internal = this.deletedIndecesList.getInternalArray();
+		int internalSize = this.deletedIndecesList.size();
+		for (int i = 0; i < internalSize; i++)
+		{
+			int deletedIndex = internal[i];
+			if (deletedIndex <= index)
+			{
+				index++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return index;
+	}
+	
 	
 	public synchronized Object get(int index)
 	{
@@ -151,6 +219,7 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
+		index = getInternalIndex(index);
 		if (index < 0 || index >= this.completeSize)
 		{
 			throw new ArrayIndexOutOfBoundsException("for index " + index + ", completeSize=" + this.completeSize);
@@ -185,14 +254,14 @@ implements Externalizable
 		int index = getTailCollection().indexOf(element);
 		if (index != -1)
 		{
-			return this.tailCollectionStartIndex + index;
+			return getExternalIndex(this.tailCollectionStartIndex + index);
 		}
 		if (this.currentCollection != null)
 		{
 			index = this.currentCollection.indexOf(element);
 			if (index != -1)
 			{
-				return index + (this.chunkSize * this.currentCollectionIndex);
+				return getExternalIndex(index + (this.chunkSize * this.currentCollectionIndex));
 			}
 		}
 		return -1;
@@ -304,15 +373,62 @@ implements Externalizable
 
 	public synchronized Object remove(int index)
 	{
-		if (!isRemovable(index))
+//		if (!isRemovable(index))
+//		{
+//			throw new IllegalArgumentException("cannot remove already chunked element " + index);
+//		}
+		if (index < 0)
 		{
-			throw new IllegalArgumentException("cannot remove already chunked element " + index);
+			throw new IndexOutOfBoundsException("for " + index);
 		}
-		index -= this.tailCollectionStartIndex;
-		Object removed = getTailCollection().remove(index);
-		this.tailCollectionIsDirty = true;
-		this.completeSize--;
-		return removed;
+		if (!this.tailCollectionIsLoaded)
+		{
+			loadTailCollection();
+		}
+		int internalIndex = getInternalIndex(index);
+		if (internalIndex >= this.completeSize)
+		{
+			throw new IndexOutOfBoundsException("for " + index);			
+		}
+		if (internalIndex >= this.tailCollectionStartIndex)
+		{
+			internalIndex -= this.tailCollectionStartIndex;
+			Object removed = getTailCollection().remove(internalIndex);
+			this.tailCollectionIsDirty = true;
+			this.completeSize--;
+			return removed;
+		}
+		else
+		{
+			Object removed = set(index, null);
+			if (this.deletedIndecesList == null)
+			{
+				this.deletedIndecesList = new IntList();
+				this.deletedIndecesList.add(internalIndex);
+			}
+			else
+			{
+				int[] internal = this.deletedIndecesList.getInternalArray();
+				int internalSize = this.deletedIndecesList.size();
+				boolean isInserted = false;
+				for (int i=0; i< internalSize; i++)
+				{
+					int deletedIndex = internal[i];
+					if (deletedIndex > internalIndex)
+					{
+						this.deletedIndecesList.add(i, internalIndex);
+						isInserted = true;
+						break;
+					}
+				}
+				if (!isInserted)
+				{
+					this.deletedIndecesList.add(internalIndex);
+				}
+			}
+			this.numberOfDeletedEntries++;
+			return removed;
+		}
 	}
 	
 	public synchronized boolean isRemovable(int index)
@@ -321,7 +437,7 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		return (index >= this.tailCollectionStartIndex);
+		return true; // (index >= this.tailCollectionStartIndex);
 	}
 
 	
@@ -331,13 +447,17 @@ implements Externalizable
 		{
 			loadTailCollection();
 		}
-		if (index >= this.tailCollectionStartIndex)
+		int internalIndex = getInternalIndex(index);
+		if (internalIndex >= this.tailCollectionStartIndex)
 		{
-			index -= this.tailCollectionStartIndex;
+			internalIndex -= this.tailCollectionStartIndex;
 			this.tailCollectionIsDirty = true;
-			return getTailCollection().set(index, element);
+			return getTailCollection().set(internalIndex, element);
 		}
-		throw new IllegalArgumentException("cannot set/replace already chunked element " + index);
+		Object previous = get(index);
+		int indexWithinChunk = internalIndex % this.chunkSize;
+		this.currentCollection.set(indexWithinChunk, element);
+		return previous;
 	}
 
 	private synchronized void loadTailCollection() {
@@ -389,6 +509,21 @@ implements Externalizable
 		this.currentCollectionIndex = chunkIndex;
 		fillCollection(this.currentCollection, this.chunkSize, in);
 		in.close();
+		// remove deleted elements to save memory:
+		if (this.numberOfDeletedEntries > 0)
+		{
+			int chunkStartIndex = chunkIndex * this.chunkSize;
+			int[] internal = this.deletedIndecesList.getInternalArray();
+			int internalSize = this.deletedIndecesList.size();
+			for (int i=0; i<internalSize; i++)
+			{
+				int index = internal[i];
+				if (index >= chunkStartIndex && index < chunkStartIndex + this.chunkSize)
+				{
+					this.currentCollection.set(index - chunkStartIndex, null);
+				}
+			}
+		}
 	}
 
 	private synchronized void saveCurrentCollection() {
@@ -516,7 +651,7 @@ implements Externalizable
 		for (int i=0; i < size; i++)
 		{
 			Mutable mutable = (Mutable) objects[i];
-			if (mutable.isDirty())
+			if ((mutable != null) && mutable.isDirty())
 			{
 				return true;
 			}
