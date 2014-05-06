@@ -400,7 +400,7 @@ implements Externalizable
 		}
 		else
 		{
-			Object removed = set(index, null);
+			Object removed = get(index);
 			if (this.deletedIndecesList == null)
 			{
 				this.deletedIndecesList = new IntList();
@@ -510,20 +510,21 @@ implements Externalizable
 		fillCollection(this.currentCollection, this.chunkSize, in);
 		in.close();
 		// remove deleted elements to save memory:
-		if (this.numberOfDeletedEntries > 0)
-		{
-			int chunkStartIndex = chunkIndex * this.chunkSize;
-			int[] internal = this.deletedIndecesList.getInternalArray();
-			int internalSize = this.deletedIndecesList.size();
-			for (int i=0; i<internalSize; i++)
-			{
-				int index = internal[i];
-				if (index >= chunkStartIndex && index < chunkStartIndex + this.chunkSize)
-				{
-					this.currentCollection.set(index - chunkStartIndex, null);
-				}
-			}
-		}
+		// (having a null in ArrayList apparently leads to other problems)
+//		if (this.numberOfDeletedEntries > 0)
+//		{
+//			int chunkStartIndex = chunkIndex * this.chunkSize;
+//			int[] internal = this.deletedIndecesList.getInternalArray();
+//			int internalSize = this.deletedIndecesList.size();
+//			for (int i=0; i<internalSize; i++)
+//			{
+//				int index = internal[i];
+//				if (index >= chunkStartIndex && index < chunkStartIndex + this.chunkSize)
+//				{
+//					this.currentCollection.set(index - chunkStartIndex, null);
+//				}
+//			}
+//		}
 	}
 
 	private synchronized void saveCurrentCollection() {
