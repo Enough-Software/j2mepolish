@@ -426,6 +426,7 @@ implements Externalizable
 					this.deletedIndecesList.add(internalIndex);
 				}
 			}
+			this.tailCollectionIsDirty = true;
 			this.numberOfDeletedEntries++;
 			return removed;
 		}
