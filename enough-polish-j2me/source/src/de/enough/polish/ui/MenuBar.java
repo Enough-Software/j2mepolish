@@ -1346,7 +1346,7 @@ public class MenuBar extends Item {
 					//#endif
 					if (keyCode >= Canvas.KEY_NUM1 && keyCode <= Canvas.KEY_NUM9) {
 						int index = keyCode - Canvas.KEY_NUM1;
-						if (index <= this.commandsContainer.size()) {
+						if (index < this.commandsContainer.size()) {
 							CommandItem item = (CommandItem) this.commandsContainer.get(index);
 							if (item.getAppearanceMode() != Item.PLAIN) {
 								if (!item.isFocused) {
@@ -1574,7 +1574,7 @@ public class MenuBar extends Item {
 				} else { 
 					if (keyCode >= Canvas.KEY_NUM1 && keyCode <= Canvas.KEY_NUM9) {
 						int index = keyCode - Canvas.KEY_NUM1;
-						if (index <= this.commandsContainer.size()) {
+						if (index < this.commandsContainer.size()) {
 							CommandItem item = (CommandItem) this.commandsContainer.get(index);
 							if (item.getAppearanceMode() != Item.PLAIN) {
 								if (!item.isFocused) {
